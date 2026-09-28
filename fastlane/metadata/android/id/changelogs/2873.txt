@@ -1,0 +1,3 @@
+Tampilan waktu Fix
+Uji cuplikan layar:
+Sembunyikan pemberitahuan changelog untuk cuplikan layar

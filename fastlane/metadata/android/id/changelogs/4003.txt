@@ -1,0 +1,3 @@
+Sync Google Play store metadata secara otomatis (# 333)
+Perbaikan: mempublikasikan kebijakan privasi compliant
+Perbaikan: mempertahankan kebijakan privasi dalam penyebaran Halaman

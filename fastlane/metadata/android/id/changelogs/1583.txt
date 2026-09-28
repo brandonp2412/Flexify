@@ -1,0 +1,4 @@
+- Tambah estimasi rep
+- Tambah estimasi durasi
+- Tambahkan pengaturan warp yang hilang
+- Perbaiki paket jendela

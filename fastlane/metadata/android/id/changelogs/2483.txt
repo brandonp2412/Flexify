@@ -1,0 +1,1 @@
+- Tambahkan dotnet ke ruang penyimpanan jendela

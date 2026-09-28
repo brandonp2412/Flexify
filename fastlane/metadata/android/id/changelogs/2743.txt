@@ -1,0 +1,4 @@
+Tambahkan baris trend bertitik ke grafik
+Tambahkan tombol kecil ke akhir dari lingkaran timer
+Hapus diffing dari migran. sh
+Set kategori ketika Anda memilih latihan

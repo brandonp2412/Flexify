@@ -1,0 +1,3 @@
+Tambahkan cuplikan layar ke alur kerja github [lewati ci]
+Perbaikan perizinan cache flutter
+Simpan set dari sejarah setelah mengirimkan berat badan

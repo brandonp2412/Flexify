@@ -1,0 +1,2 @@
+- Perbaiki rencana menghitung
+- Refactor strength & cardio lines

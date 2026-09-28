@@ -1,0 +1,2 @@
+- Strip akhiran nol dari menu berbagi
+- Perbaiki unit buggy ketika toggling cardio

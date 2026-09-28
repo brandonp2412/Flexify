@@ -1,0 +1,9 @@
+Ada kesalahan saat mengimpor data
+Perbaikan pengimpor data dengan memasukkan catatan Plan Exercises dan update plans _ list. panah untuk menggunakan operator sadar
+Perbaikan isu # 206 dengan memperbarui cara latihan disimpan dan disambung
+Perbaikan pelanggar berkedip ke tampilan
+Fix Migration breaking plan training
+Modifikasi logika untuk latihan penyertaan dalam rencana dengan membuat catatan PlanExercises hanya untuk latihan terpilih dan tidak menyimpannya dalam Rencana. Kolom Latihan
+Jeda pekerjaan untuk perjalanan
+Lakukan migrasi data untuk data yang ada sehingga hanya latihan tersebut yang dihapus dari rencana PlanExercses. diaktifkan = false
+perbarui berkas tes untuk memastikan semua tes sedang lewat

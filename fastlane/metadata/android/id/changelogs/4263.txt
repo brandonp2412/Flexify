@@ -1,0 +1,10 @@
+Tutup preferensi lokal Turki
+Revert sementara ikon redesign aset
+Averchore (l10n): Added LanageNameTurkish
+Orachore: ulasan lokalisasi Turki alamat
+Prestasi (l10n): Ditambah Lokalisasi Turki
+Prestasi: tambahkan konsep ikon bisep lentur
+Prestasi: tambahkan ikon 7 dan 8 set perbaikan
+removed duplicate entry
+fix (tests): tambahkan .gitignore untuk mengecualikan test _ bundle.panah
+fix (tests): tambahkan bahasa tr ke locale _ preference _ test

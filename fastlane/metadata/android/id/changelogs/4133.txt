@@ -1,0 +1,10 @@
+Pencari Nit
+Revisi projek deskripsi dalam README
+Update README untuk mengubah slogan projek
+Update nama projek dalam README
+Update versi ke 2.2.0 dalam pubspep.yaml
+Optici: stop flaky Patroli test rating release
+lexdocs: tambahkan teks alt ke gambar README
+confix: hindar Android path provider JNI crash
+fix: menghindari duplikasi pelatihan rute pemberitahuan
+reparasi: terikat screenshot CI hang

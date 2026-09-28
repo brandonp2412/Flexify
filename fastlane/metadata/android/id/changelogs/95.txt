@@ -1,0 +1,5 @@
+- Spasi deskripsi lengkap dengan benar
+- Spesifikasikan git tarik --tag setelah membuat rilis github
+- Re- enable google play displastments
+- Tambahkan miring ke ekspor / impor
+- Tambahkan miring ke tipe cardio

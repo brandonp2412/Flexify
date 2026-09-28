@@ -1,0 +1,1 @@
+Aprici: tambahkan pemindaian VirusTotal pada rilis APK

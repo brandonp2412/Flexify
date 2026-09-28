@@ -1,0 +1,5 @@
+- Perbaiki penghitung waktu
+- Optimasi penghitung waktu
+- Perbaiki backup otomatis
+- Tambahkan bergetar dan pengaturan suara alarm
+- Optimasi halaman grafik penyuntingan

@@ -1,0 +1,10 @@
+Betulkan banner debug yang ditampilkan dalam cuplikan layar
+Update cuplikan layar
+Gunakan tombol teks untuk + 1 menit
+Spongechore: tambahkan script screenshot Android dengan --profile flag
+Prestasi: improve UI for curve smootness, timers, plan trailing, input style
+Perbaikan: lingkaran timer tengah vertikal dan bergerak + 1 menit tombol di bawah lingkaran
+Perbaikan: non-aktifkan banner debug di MaterialApp
+Perbaikan: hapus anti- pola UniqueKey dalam widget lingkaran timer
+Perbaikan: mendesain ulang lingkaran timer dengan minimal, estetika modern
+replace runApp with tester.pumpWidget in screenshot test

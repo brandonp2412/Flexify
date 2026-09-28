@@ -1,0 +1,2 @@
+- Perbaiki kerusakan aplikasi pada waktu habis
+- Perbaiki latihan dari halaman sejarah

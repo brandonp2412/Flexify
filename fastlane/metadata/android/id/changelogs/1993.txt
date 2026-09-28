@@ -1,0 +1,2 @@
+- Perbaiki reps awal / berat menjadi nol pada rencana
+- Hapus nol utama setelah menyimpan rencana

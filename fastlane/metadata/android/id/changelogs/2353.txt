@@ -1,0 +1,7 @@
+- Update flutter
+- Perbaiki sumbu X konsistensi dalam grafik global
+- Hanya permintaan izin latar belakang sekali
+- Fix timer kemajuan logika
+- Tampilkan paling baru grafik bukan berat terbaik
+- Tampilkan kesalahan sebelum kotak pemuatan kosong dalam halaman grafik
+- Tambah pencarian dinamis

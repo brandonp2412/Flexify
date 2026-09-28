@@ -1,0 +1,5 @@
+- Perbaiki tes cuplikan layar
+- Membuat data mengimpor lebih kuat
+- Hapus rencana sebelum mengimpor
+- Cegah titik grafik pembukaan pada mencubit
+- Pasang mode rilis di ponsel saya setelah menyebarkan

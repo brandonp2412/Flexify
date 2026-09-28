@@ -1,0 +1,10 @@
+Tambahkan env untuk cuplikan web
+Hapus perubahan duplikat
+Masalah buildConfig Fix
+Port penggerak kromedriver fix
+Pengaturan kromedriver Fix
+Betulkan nama emulator dalam cuplikan android
+Tambahkan dir cepat seluruh untuk alur kerja
+Pasang & start kromedriver dalam arus kerja
+Pastikan cuplikan layar dalam commit
+Cegah duplikat dalam penyalinan changelog

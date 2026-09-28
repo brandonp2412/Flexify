@@ -1,0 +1,10 @@
+Atur tampilan changelog kosong
+Sembunyikan uji integrasi Linux pada dwl
+Orachore: menerapkan format Dart ke tes
+Prestasi: meningkatkan kontrol pemilihan grafik
+Prestasi: mengintegrasikan Talker log
+Prestasi: mendesain ulang antar muka desktop
+reparasi: paksa compliant tujuh inci screenshot
+reparasi: harden Linux latihan grafik dan timer mengalir
+memperbaiki: harden desktop navigasi dan pengujian
+Perbaikan: mengisolasi basis data integrasi

@@ -1,0 +1,1 @@
+Az bump minimum ios versi ke 14.0

@@ -1,0 +1,4 @@
+- Jungkitkan waktu per butir rencana
+- Tambahkan filter grup otot ke halaman grafik
+- Perbaiki satuan padding pada halaman pengaturan
+- Perbaiki gambar latihan tidak akan dihapus

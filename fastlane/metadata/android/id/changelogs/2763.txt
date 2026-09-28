@@ -1,0 +1,2 @@
+rekanan latihan memperbaharui setelah penyuntingan dari rencana
+Perbaiki tooltip pada titik data pertama / terakhir

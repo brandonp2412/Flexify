@@ -1,0 +1,12 @@
+- Perbaiki cuplikan layar
+- Perbaiki ekspor / mengimpor tipe cardio dan tersembunyi
+- Perbaiki mematikan cardio ketika mengedit sebuah set
+- Berhenti animasi ke tab setelah menghapus
+- Pindahkan pesan entri kosong ke puncak sejarah
+- Tambah tab riwayat
+- Mutakhirkan cuplikan layar
+- Perbarui cuplikan layar untuk perbandingan
+- Ditambahkan tabBarState ke setiap tes
+- Ditambah konteks global Tidak lagi tergantung pada PlansPage menjadi Halaman pertama
+- Ditambahkan cuplikan layar terbaru untuk dibandingkan
+- Sederhanakan cuplikan layar

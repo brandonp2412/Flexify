@@ -1,0 +1,10 @@
+Tambahkan config serena
+Fix bersulang selamanya
+Visual Impreve dari stepper
+Buat halaman penyuntingan lebih konsisten dengan padding
+Hapus labels duplikasi untuk gaya masukan
+Daerah stepper Simplify
+Update cuplikan layar
+Upgrade bergetar menjadi 3.44.1
+Versi Kotlin Upgrade
+Prestasi: tambahkan + / - steppers ke reps dan field berat badan

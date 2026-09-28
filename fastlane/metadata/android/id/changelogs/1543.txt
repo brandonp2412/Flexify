@@ -1,0 +1,5 @@
+- Perbaiki aplikasi crash setelah 1.1,36
+- Gunakan kotak pencarian dan tambahkan visibility toggle ke rencana
+- Aktifkan waktu istirahat pada platform desktop
+- Buat penghitung waktu berjalan pada desktop
+- Revert bekerja pada penghitung desktop

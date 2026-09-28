@@ -1,0 +1,4 @@
+- Aktifkan latihan pada cuplikan layar untuk rencana
+- Kurva grafik secara baku
+- Perbarui README.md
+- Menangani migrasi gagal

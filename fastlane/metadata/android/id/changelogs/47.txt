@@ -1,0 +1,1 @@
+Gunakan flutter daripada submodule dalam deplist.sh

@@ -1,0 +1,5 @@
+- Tambahkan dukungan untuk unit dalam cardio
+- Perbaiki pengelompokan oleh minggu untuk cardio baris
+- Perbaiki pengelompokan oleh minggu untuk grafik
+- Perbaiki pengelompokan oleh minggu
+- Reaktor rencana

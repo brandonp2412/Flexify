@@ -1,0 +1,4 @@
+Izinkan semua unit jenis untuk cardio
+Ubah gaya dari halaman pengaturan tab
+Fix menambahkan latihan cardio dari halaman Graphs
+Prevents Mengatakan changelog pada instalasi pertama

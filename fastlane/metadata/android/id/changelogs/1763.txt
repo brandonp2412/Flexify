@@ -1,0 +1,3 @@
+- Perbaiki backup otomatis
+- Perbaiki kerusakan alarm tidak konsisten
+- Meningkatkan perkiraan akurasi

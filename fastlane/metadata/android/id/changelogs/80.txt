@@ -1,0 +1,4 @@
+- Paginate olahraga set pada sejarah
+- Kapialisasi kalimat batang pencarian
+- Gunakan yang terakhir memasuki set gym sebagai baku
+- Order graphs by created date

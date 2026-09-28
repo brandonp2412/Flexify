@@ -1,0 +1,7 @@
+- Tambahkan catatan ke aktivasi rencana
+- Mencegah garis grafik akan keluar dari jangkauan
+- Hapus "Belum ada data" dari kemajuan global
+- Hapus garis putih di bawah batang pencarian pada gulungan
+- Pindahkan tombol jelas dari dropdown ke kiri batang pencarian
+- Perbaiki cuplikan layar dari rencana penyuntingan
+- Grafik garis melengkung dalam cuplikan layar

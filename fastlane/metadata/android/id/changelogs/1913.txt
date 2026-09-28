@@ -1,0 +1,5 @@
+- Gunakan tombol aksi mengambang extended
+- Perbaiki penyebaran ke repro github & f-droid
+- Cegah menampilkan halaman izin pada ios
+- Upgrade bergetar menjadi 3.24.0
+- Perbaiki grafik cardio tidak langsung memperbarui

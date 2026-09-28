@@ -1,0 +1,1 @@
+- Perbaiki bug dengan menambahkan latihan melalui rencana

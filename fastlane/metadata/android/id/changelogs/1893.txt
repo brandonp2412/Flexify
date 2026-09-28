@@ -1,0 +1,4 @@
+- Perbaiki kembali navigasi kadang-kadang tidak bekerja
+- Sembunyikan satu rep max perkiraan pada latihan cardio
+- Meningkatkan kinerja halaman kekuatan
+- Meningkatkan rencana kinerja

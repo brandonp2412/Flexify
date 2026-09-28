@@ -1,0 +1,2 @@
+Perbaikan: pertahankan identitas rilis F-Droid yang belum ditandatangani
+Ikhtifix: prevending Android signing drift

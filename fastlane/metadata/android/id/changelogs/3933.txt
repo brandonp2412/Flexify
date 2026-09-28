@@ -1,0 +1,10 @@
+Tambahkan flutter submodule untuk analisis daftar abaikan
+Tambahkan spasi yang hilang untuk menambah _ latihan _ page.panah
+Spasi cardio Fix
+Ada galat pada berat _ page.panah
+reparasi galat getSingle dalam latihan _ modal.panah
+Betulkan galat konteks aneh dalam main.dart
+Format:
+Membuat tombol bersinar sedikit kurang dalam halaman timer
+Hapus checkbox terkemuka dalam sejarah grup
+Hapus impor yang tidak digunakan

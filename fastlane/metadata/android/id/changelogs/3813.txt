@@ -1,0 +1,10 @@
+Tambahkan tes ke analisa panah
+Ijinkan daftar latihan untuk melewati batang navigasi ketika menyelesaikan rencana
+Ubah gaya halaman kekuatan
+Secara konsisten menggunakan bottomNavHeight
+Betulkan tinggi bawah
+Atur jarak grafik & sembunyikan catatan jika pengaturan dimatikan
+Tes unit Fix untuk batang Pencarian
+Gaya grafik Improve
+Buat rencana chip dengan konsisten
+Gaya Match dalam halaman cardio

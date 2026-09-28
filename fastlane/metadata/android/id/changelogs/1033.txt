@@ -1,0 +1,3 @@
+- Jalankan upgrade anak panah pub
+- Jangan gunakan warna sistem untuk cuplikan layar
+- Hanya membuat appbundle ketika mengirim ke toko bermain

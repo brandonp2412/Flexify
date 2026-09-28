@@ -1,0 +1,2 @@
+- Perbaiki impor dari ekspor Massive set
+- Perbaiki garis grafik kecelakaan untuk kekuatan relatif kosong

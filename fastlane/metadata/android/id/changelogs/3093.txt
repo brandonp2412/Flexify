@@ -1,0 +1,4 @@
+Diseduh Fix.
+Membuat lembar bawah lebih mudah untuk tekan
+Buat lebih mudah untuk melihat / tekan entri terakhir
+Gunakan bobot anak sebelumnya dalam halaman rencana

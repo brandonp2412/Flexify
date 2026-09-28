@@ -1,0 +1,1 @@
+Gunakan adb terinstal daripada setup-android dalam aliran kerja Waydroid

@@ -1,0 +1,3 @@
+- Aktifkan latihan pada cuplikan layar untuk rencana
+- Kurva grafik secara baku
+- Menangani migrasi gagal

@@ -1,0 +1,3 @@
+- Animate progress bar kiri ke kanan
+- Sorot rencana todays dengan judul gubahan
+- Kompres pemilih hari pada editor rencana

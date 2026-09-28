@@ -1,0 +1,3 @@
+- Pratilik suara alarm gubahan ketika mengatur itu
+- Refactor cardio graphs
+- Tambahkan tombol basis data berbagi ke pengaturan

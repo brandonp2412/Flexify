@@ -1,0 +1,3 @@
+Revert "ci: menggantikan konfigurasi sub-modul flutter dengan subosito / flutter-action"
+Revert sengaja menghapus .gitmodule
+Optici: ganti konfigurasi submodule flutter dengan subosito / flutter-action

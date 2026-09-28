@@ -1,0 +1,2 @@
+----ci: versi otomatis menabrak dan melepaskan pada push ke main
+fix: mencegah duplikasi alarm istirahat ketika dapat dijalankan dan AlarmManager baik api

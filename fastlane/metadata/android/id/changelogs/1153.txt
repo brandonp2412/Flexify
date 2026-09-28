@@ -1,0 +1,1 @@
+- Gunakan berbeda github token untuk rilis

@@ -1,0 +1,2 @@
+Perbaiki pencarian kosong pada halaman rencana
+Optimasi halaman rencana awal

@@ -1,0 +1,6 @@
+Tambahkan format tanggal baru (misalnya untuk Jerman)
+Tambahkan opsi x-axis berbasis waktu untuk grafik
+Sembuhkan masalah memori
+Rencana Fix akhiran rasio & hitung
+Biarkan pengguna memutuskan kapitalisasi judul rencana
+Pindahkan tombol riwayat ke baris nav

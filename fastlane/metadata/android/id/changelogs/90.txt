@@ -1,0 +1,10 @@
+- Perbaiki tes
+- Tambahkan metrik reps terbaik
+- Ubah nama AppGroupBy - > Periode
+- Meningkatkan kinerja cardio grafik
+- Tingkatkan versionCode pada rilis universal
+- Perbaiki menambah menit dari halaman timer
+- Komentar keluar pasokan cepat
+- Gunakan waktu lokal dimana relevan
+- Refactor setting logic
+- Refactor code

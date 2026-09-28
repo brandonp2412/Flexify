@@ -1,0 +1,5 @@
+Af: tambahkan Tinggalkan sebuah link tinjau ke Halaman Tentang
+reparasi: tambahkan padding bawah yang hilang di seluruh halaman scrolable (# 301)
+resume stopwatch ticker when app returns to foreground
+reparasi: gunakan waktu wall-clock untuk stopwatch untuk bertahan hidup screen- off
+reparasi: pengaturan latihan pada padding bawah dan label tab stopwatch

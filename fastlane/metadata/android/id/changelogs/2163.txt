@@ -1,0 +1,5 @@
+- Round bobot
+- Perbaiki navigasi tab berada di belakang nav sistem
+- Pindahkan kurva smootness label sebelum slider
+- Perbaiki warna trek hilang dengan warna sistem
+- Unit Normalize ketika mengubah mereka dari grafik

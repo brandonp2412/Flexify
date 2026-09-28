@@ -1,0 +1,9 @@
+Tambahkan galat penanganan ke pengimpor data
+Tambahkan lagi tes migrasi data
+Hapus komentar
+Aktifkan konfigurasi build dalam android / app / buildgradle
+Urutkan masalah linting dalam edit _ set _ page
+Hapus prefix garis bawah dalam beberapa metode dari halaman rencana awal
+Hapus pemilih unit dan perbaiki tes
+Pintas semua nama variabel
+Pecah segala sesuatu dalam mengedit set halaman lebih

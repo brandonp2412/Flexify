@@ -1,0 +1,2 @@
+- Update flutter & putspep.lock
+- Perbaiki penyebaran tidak berjalan

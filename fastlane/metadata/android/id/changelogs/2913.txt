@@ -1,0 +1,6 @@
+Gradle setup Copy dari fitbook
+Fix Google play deplistments
+Pindah Peek graph 1 item ke bawah
+Hapus tabel dari mendapatkannya di X readme [skip ci]
+Fitur re-order dalam README [lewati ci]
+Spasi luar lencana [melewatkan ci]

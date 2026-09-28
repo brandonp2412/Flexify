@@ -1,0 +1,5 @@
+- Tambahkan multidex ke android / app / build.gradle
+- Update flutter ke 3.22.0
+- Update pubspec.lock
+- Update pengaturan vscode
+- Perbaiki memasukkan catatan dari halaman sejarah

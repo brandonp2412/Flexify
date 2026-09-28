@@ -1,0 +1,5 @@
+Revisi projek deskripsi dalam README
+Update README untuk mengubah slogan projek
+Update nama projek dalam README
+Update versi ke 2.2.0 dalam pubspep.yaml
+Perbaikan: pecahkan sejarah dan rencana bug

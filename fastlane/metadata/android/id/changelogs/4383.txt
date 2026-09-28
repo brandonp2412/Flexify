@@ -1,0 +1,5 @@
+Prestasi (l10n): tambahkan terjemahan Bengali
+Prestasi (l10n): tambahkan terjemahan Melayu
+: tambahkan terjemahan Persia
+Prestasi (l10n): tambahkan terjemahan Thailand
+Prestasi (l10n): tambahkan terjemahan Urdu

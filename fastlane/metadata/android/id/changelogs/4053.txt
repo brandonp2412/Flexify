@@ -1,0 +1,2 @@
+Lebih suka pengajuan waktu yang nampak
+Refactor: hapus kode timer desktop yang mati

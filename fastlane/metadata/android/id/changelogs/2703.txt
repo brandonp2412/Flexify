@@ -1,0 +1,2 @@
+Perbaiki tahap perpindahan akhir dari baris pipa
+Betulkan artefak android-nya.

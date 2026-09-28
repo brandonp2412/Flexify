@@ -1,0 +1,3 @@
+- Clarify apa yang grafik penyuntingan tidak
+- Hapus ukuran batas ketika mencari riwayat
+- Ijinkan scrolling melewati akhir pada daftar

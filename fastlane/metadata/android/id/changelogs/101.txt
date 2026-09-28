@@ -1,0 +1,2 @@
+- Perlu tanda -p untuk deplist.sh untuk mengirim ke google play
+- Sederhanakan query hitungan untuk rencana

@@ -1,0 +1,1 @@
+Spesifikasikan versi flutter dalam .gitmodule

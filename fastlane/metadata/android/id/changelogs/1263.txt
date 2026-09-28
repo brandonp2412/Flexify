@@ -1,0 +1,6 @@
+- Perbaiki tes
+- Tambahkan menu berbagi
+- Perbaiki papan tik berkedip saat mengirimkan
+- Pratilik tanggal yang dibuat sebelumnya pada multi- edit
+- Gunakan pemilih unit baru untuk grafik cardio
+- Salin tata letak kekuatan grafik untuk cardio

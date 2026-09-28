@@ -1,0 +1,4 @@
+Isian padding di halaman grafik
+Roti panggang Fix tak pernah hilang.
+Perbaiki tooltip pada grafik
+Pertahankan ketertiban ketika bertukar latihan

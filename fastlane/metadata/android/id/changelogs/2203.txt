@@ -1,0 +1,1 @@
+- Perbaiki item pertama dari halaman grafik bersembunyi

@@ -1,0 +1,10 @@
+Betchore: tambahkan cuplikan layar Turkish Play
+Orachore: lokalisasi metadata rilis terbaru
+Prestasi: lengkap didukung lokal terjemahan
+Prestasi: mengekspos kontrol graphik di desktop
+Prestasi: lokalisasi sejarah rilis lengkap
+Fase: tampilan refine timer milidetik
+Perbaikan: tetap skala teks timer dalam lingkaran
+reparasi: menyelaraskan ujung grafik
+Test: harden lokalisasi completeness checks
+Tes: jaga pemetaan lokal toko dalam sinkronisasi

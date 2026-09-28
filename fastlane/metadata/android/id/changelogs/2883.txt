@@ -1,0 +1,10 @@
+Tambahkan garis kecil ke lingkaran timer
+Fix + 1 minute on linux
+Perbaikan changelogs
+Readme github styling [skip ci]
+Lencana lebar msstore Fix [melewatkan ci]
+Limit frekuensi Google play displashment [skip ci]
+Buat lencana lebih besar [melewatkan ci]
+Buat lencana konsisten [skip ci]
+Revert "Perbaiki lencana lebar msstore [melewatkan ci]"
+Gunakan github rilis bukan artefak [melewatkan ci]

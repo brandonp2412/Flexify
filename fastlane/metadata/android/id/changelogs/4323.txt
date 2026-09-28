@@ -1,0 +1,10 @@
+Update README.md
+Orachore (l10n): sinkronisasi terjemahan rilis saat ini
+Betchore: tambahkan cuplikan layar Turkish Play
+Prestasi (l10n): tambahkan terjemahan Cina Tradisional
+Prestasi (l10n): cakupan terjemahan lengkap (# 353)
+Prestasi: tambahkan manajemen kategori
+Prestasi: lengkap didukung lokal terjemahan
+Prestasi: lokalisasi sejarah rilis lengkap
+Perbaikan: kembalikan DevTools Flutter tertanam
+Perbaikan: menstabilkan Flutter debug dalam VS Code

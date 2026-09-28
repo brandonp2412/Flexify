@@ -1,0 +1,3 @@
+- Membuat mengedit set gym scrolable
+- Checkout untuk flutter main dalam ci _ post _ clone
+- Revert ke dropdown untuk perioda

@@ -1,0 +1,5 @@
+- Meningkatkan cuplikan layar
+- Sertakan cuplikan layar di rilis GitHub
+- Pemilihan unit Revamp
+- Hapus duplikat yang disebutkan dari satuan
+- Tambah multi- penyuntingan sejarah

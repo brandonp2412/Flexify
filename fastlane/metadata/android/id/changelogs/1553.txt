@@ -1,0 +1,2 @@
+- Aktifkan penghitung waktu pada ios
+- Fix selesai timers pada macos

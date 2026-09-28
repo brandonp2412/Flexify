@@ -1,0 +1,2 @@
+- Perbaiki tes unit
+- Hapus gaya dorong git dari deplist.sh

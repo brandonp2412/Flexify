@@ -1,0 +1,17 @@
+- Pisahkan penandaan dari melepaskan tindakan github
+- Hapus tahap tidak valid dari deplist.yml
+- Hapus pengiriman alur kerja
+- Decode toko kunci android di Depallo.yml
+- Sederhanakan halaman _ awal _ rencana
+- 2,0.21
+- Perbaiki penggunaan yq dalam .deplist.yml
+- Perbaiki masalah linting
+- Hapus aturan print linting
+- Jalankan format panah
+- Jalankan mengalir di utama
+- Tambahkan github mengalir
+- Perbaiki arus kerja GitHub untuk menangani pengujian aksi
+- Perbaiki sebagian besar dari generasi cuplikan layar desktop
+- Tambahkan setup untuk menjalankan tes integrasi untuk krom
+- Perbaiki halaman pengaturan pada web
+- Fix running on web

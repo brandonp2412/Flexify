@@ -1,0 +1,10 @@
+Ijinkan penataan waktu istirahat per-olahraga dari halaman pengaturan
+Animasi tombol di batang pencarian
+Checkbox Animate di pilih
+Animate fab pada halaman rencana
+Perbaikan bug ketika satuan penyuntingan untuk sebuah grafik
+Fix first / last tooltip pada hover graphs
+Perbaiki ikon terkemuka untuk rencana dengan judul
+Tes daftar rencana Fix
+Patch menghapus penghitung gubahan pada halaman pengaturan
+Membuat pilihan hari lebih gelap

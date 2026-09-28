@@ -1,0 +1,9 @@
+- Pastikan nilai Y adalah 2dp untuk baris cardio
+- Tambah tombol sunting ke kanan atas rencana
+- Tambahkan akhiran riwayat ke judul riwayat grafik
+- Tambah tipe cardio
+- Refactor tilikan halaman grafik
+- Perbaiki pencarian data impor / ekspor pada pengaturan
+- Refactor start _ plan _ page
+- Reaktor halaman rencana
+- Uji rencana penyimpanan

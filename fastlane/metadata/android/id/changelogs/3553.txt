@@ -1,0 +1,4 @@
+Set tinggi maksimal pada pengaturan format
+Prestasi: tambahkan tab Stopwatch (# 268)
+Prestasi: atur grafik per- latihan dan catatan latihan (# 257 # 267)
+perbaikan: lihat tooltip overlapping kotak pencarian dan keyboard meliputi catatan latihan

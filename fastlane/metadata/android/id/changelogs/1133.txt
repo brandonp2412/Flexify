@@ -1,0 +1,3 @@
+- Perbaiki tes unit
+- Kurangi ikon di halaman pengaturan
+- Gunakan tombol untuk pemilihan periode

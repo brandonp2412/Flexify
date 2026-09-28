@@ -1,0 +1,10 @@
+Tambahkan garis kecil ke lingkaran timer
+Ada Animasi tombol stop di halaman timer
+edit gambar Clarify
+Desplain Google play deplastments
+Fix + 1 minute on linux
+Betulkan cuplikan otomatis untuk rilis
+Perbaikan changelogs
+Readme github styling [skip ci]
+Betulkan rilis github download dalam penyebaran bermain Google
+Lencana lebar msstore Fix [melewatkan ci]

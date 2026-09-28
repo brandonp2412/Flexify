@@ -1,0 +1,3 @@
+Perbaiki instalasi baru tidak meminta pemberitahuan
+Tes unit Fix
+Matikan catatan untuk instalasi baru

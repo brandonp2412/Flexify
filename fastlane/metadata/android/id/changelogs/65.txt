@@ -1,0 +1,2 @@
+- Aktifkan penyuntingan nama graphik dalam kotak aplikasi
+- Navigator.of (context) .pop () = > Navigator.pop (context)

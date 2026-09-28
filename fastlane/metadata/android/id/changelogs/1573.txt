@@ -1,0 +1,4 @@
+- Tambah set warmap
+- Ubah gaya daftar latihan dalam rencana
+- Fix max set
+- Hanya tampilkan condong untuk nilai bukan-nol

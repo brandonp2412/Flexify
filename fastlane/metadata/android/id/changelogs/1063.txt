@@ -1,0 +1,3 @@
+- Perbaiki mendeteksi akhir rencana
+- Tambahkan lebih banyak tes unit pengaturan
+- Perbaiki saat deplist.sh gagal

@@ -1,0 +1,16 @@
+- Mutakhirkan cuplikan layar
+- Hapus nama projek memfaktorkan dalam github.sh
+- Perbaiki peringatan yang sudah ditinggalkan
+- Pass hilang pencarian ke plan _ list _ test
+- Pindahkan tampilan area yang aman ke tubuh perancah
+- Ambil semua cuplikan pada mode gelap
+- Taruh di X lencana berturut-turut
+- Perbaiki beberapa kesalahan android yang tidak jelas
+- Tambahkan nomor versi ke kebijakan privasi
+- Tambahkan versi kebijakan privasi ke privacy _ url
+- Tap untuk membuat pada rencana
+- Perbarui kata-kata pada halaman grafik tidak ditemukan
+- Tampilkan latihan terbaik dari halaman grafik
+- Perbaiki nol padding di halaman sejarah grafik belum ada data
+- Tinggi grafik pendek
+- Perbaiki grafik intip bug

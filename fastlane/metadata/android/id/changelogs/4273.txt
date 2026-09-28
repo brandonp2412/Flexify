@@ -1,0 +1,5 @@
+Update README.md
+Prestasi: tambahkan manajemen kategori
+Prestasi: mempromosikan ikon 2 sebagai ikon peluncur Flexify
+Perbaikan: kembalikan DevTools Flutter tertanam
+Perbaikan: menstabilkan Flutter debug dalam VS Code

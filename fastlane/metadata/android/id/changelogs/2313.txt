@@ -1,0 +1,7 @@
+- Mencegah penghapusan presets latihan
+- Timpa unit baku dengan pengaturan
+- Membuat grafik sedikit lebih pendek
+- Tambahkan batas slider ke grafik
+- Katakanlah # of set in collapse history
+- Improve style of day divider for history
+/ Pembagian label pada halaman grafik

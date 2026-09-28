@@ -1,0 +1,10 @@
+- Perbaiki tes unit
+- Perbaiki menyebar ke toko jendela
+- Tambahkan langkah debug ke daftar berkas yang diunduh dalam penyebaran Windows Store
+- Perbaiki penyebaran Windows Store: gunakan berkas MSIX lokal daripada URL rilis GitHub
+- Perbaiki penyebaran Windows Store: pastikan rilis GitHub dibuat sebelum penyebaran Windows Store
+- Mutakhirkan cuplikan layar desktop
+- Perbaiki semua cuplikan otomatis untuk desktop
+- Update pubspec.lock
+- Tambah skrip untuk memperbarui penggerak krom
+- Perbaiki halaman baru

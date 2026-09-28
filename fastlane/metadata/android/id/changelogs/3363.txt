@@ -1,0 +1,8 @@
+Tambahkan pengurutan sementara ke halaman grafik
+Kategori fix tidak memperbaharui setelah impor
+Perbaiki tooltip terakhir pada grafik
+Sistem Fix ui mengaburkan halaman
+Sistem Fix ui mengaburkan elemen pada halaman pengaturan
+Nama berkas backup otomatis
+Hapus animasi dari daftar riwayat
+Logika divider Dipindah dari halaman grafik

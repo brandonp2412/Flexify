@@ -1,0 +1,3 @@
+- Hapus cetakan debug dari tes migrasinya
+- Hapus tekan git --force dari deplist.sh
+- Perbaiki semua masalah migrasi basis data

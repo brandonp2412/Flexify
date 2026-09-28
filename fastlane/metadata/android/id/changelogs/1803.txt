@@ -1,0 +1,1 @@
+- Perbaiki kecelakaan aplikasi saat peluncuran

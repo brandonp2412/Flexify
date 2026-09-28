@@ -1,0 +1,4 @@
+Fix reps berubah secara default
+Ringankan akhir tombol timer
+Peningkatan ketergantungan flutter
+Upgrade bergetar menjadi 3.32.8

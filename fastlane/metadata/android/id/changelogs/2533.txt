@@ -1,0 +1,1 @@
+- Perbaiki referensi direktori build dalam pipeline deplove- windows

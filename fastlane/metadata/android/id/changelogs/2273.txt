@@ -1,0 +1,2 @@
+- Tambahkan kemampuan untuk menyembunyikan kemajuan global
+- Perbaiki satu - ulang-max perhitungan untuk negatif

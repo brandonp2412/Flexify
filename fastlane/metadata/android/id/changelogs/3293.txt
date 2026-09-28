@@ -1,0 +1,5 @@
+Susunan pengekspor rencana csvs
+Betulkan pengimpor berkas dari jendela
+Kesalahan Improve penanganan
+Simpan kemajuan timer bahkan jika halaman timer tersembunyi
+Pilih latihan pertama dengan benar dalam rencana

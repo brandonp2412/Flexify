@@ -1,0 +1,13 @@
+- Ubah ketinggian grafik
+- Tambah pengaturan untuk menyembunyikan kategori
+- Gunakan tombol ikon untuk menghapus modals
+- Tambahkan pemberitahuan ke catatan baru
+- Tambah pengaturan kecerahan kurva
+- Tingkatkan padding dalam batang pencarian
+- Perbarui grafik setelah penyuntingan dari sejarah mengintip
+- Perbaiki pengaturan reps / berat badan setelah menyelesaikan latihan
+- Kembali setelah menyimpan pengaturan tab
+- Blend sistem nav dengan tema aplikasi
+- Pratilik grafik di bawah pengaturan penampilan
+- Pengaturan kurva fix tidak diterapkan ke graph peek
+- Membuat grafik terlihat seksi

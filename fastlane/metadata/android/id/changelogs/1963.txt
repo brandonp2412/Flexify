@@ -1,0 +1,5 @@
+- Meningkatkan rencana penyuntingan kinerja
+- Perbaiki satu grafik maksimal
+- Perbaikan jumlah rencana menjadi global
+- Ijinkan condong untuk kosong
+- Impreve start-up kinerja

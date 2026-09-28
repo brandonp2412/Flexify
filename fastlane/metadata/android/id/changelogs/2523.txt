@@ -1,0 +1,1 @@
+- Tambahkan tahap debug untuk deplove- windows- store

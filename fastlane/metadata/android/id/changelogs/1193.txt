@@ -1,0 +1,2 @@
+- Ubah nama berkas makos zip
+- Perbaiki ios memeriksa untuk tes integrasi

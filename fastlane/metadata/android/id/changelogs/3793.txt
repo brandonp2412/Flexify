@@ -1,0 +1,6 @@
+Turunkan paralel untuk membangun gradle pada tindakan github
+Update cuplikan layar
+Prestasi: klarifikasi bidang kategori adalah untuk kelompok otot penandaan
+Perbaikan: menerapkan kategori pembibitan ketika log latihan untuk pertama kalinya
+fix: hanya tag rilis setelah semua platform membangun sukses
+reparasi: rilis pin membangun dan tag ke SHA tepat komit

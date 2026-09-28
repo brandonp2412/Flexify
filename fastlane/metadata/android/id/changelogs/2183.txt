@@ -1,0 +1,11 @@
+- Tambahkan grafik global
+- Update fastlane icon.png
+- Membuat latihan drag menangani lebih besar
+- Swap aneh jelas ikon
+- Pastikan iOS memiliki pilihan desimal untuk masukan nomor
+- Mencegah animasi timer setiap kali Anda swap tab
+- Buat ikon aplikasi gelap tema
+- Animasi penambahan / penghapusan dalam daftar riwayat
+- Tambahkan opsi waktu relatif untuk saat ini
+- Perbaiki sistem kembali pada halaman timer
+- Perbaiki nama grafik salah setelah update

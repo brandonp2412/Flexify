@@ -1,0 +1,2 @@
+- Perbaiki aplikasi crash setelah 1.1,36
+- Meningkatkan pengalaman mengedit cardio

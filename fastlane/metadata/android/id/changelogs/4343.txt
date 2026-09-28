@@ -1,0 +1,2 @@
+Prestasi (l10n): tambahkan terjemahan Rusia
+reparasi (l10n): sync 2.2.22 rilis sejarah

@@ -1,0 +1,4 @@
+- Perbaiki simpan rusak ketika timers istirahat diaktifkan
+- Perbaiki nama dari berkas data impor / ekspor
+- Refactor daftar latihan
+- Perbaiki catatan rilis

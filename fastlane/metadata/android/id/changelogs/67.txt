@@ -1,0 +1,11 @@
+- Meningkatkan cuplikan layar
+- Sembunyikan pemilih unit pada grafik jika unit dimatikan
+- Tambahkan grup per ruas untuk grafik (hari / minggu / bulan / tahun)
+- Animate ke tab grafik ketika melihat latihan dari rencana
+- Lihat grafik untuk latihan dari rencana
+- Hapus tag dari Deplist.sh - 1.0.59:
+- Tambah tombol hapus untuk menyunting halaman set gym
+- Sunting titik grafik dengan ketukan ganda
+- Pindahkan pengaturan tanggal teks pembantu ke label
+- Tambahkan konfigurasi format tanggal pendek
+- Reaktor garis grafik

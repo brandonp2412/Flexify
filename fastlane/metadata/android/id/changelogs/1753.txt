@@ -1,0 +1,3 @@
+- Tambah pengaturan tab
+- Tambah pengaturan rencana
+- Perbaiki grafik fab blok informasi

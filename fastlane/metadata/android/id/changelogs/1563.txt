@@ -1,0 +1,3 @@
+- Tambah kategori
+- Tambahkan grafik kecepatan condong dan disesuaikan
+- Hapus ubin duplikat dalam pengaturan timer

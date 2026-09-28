@@ -1,0 +1,4 @@
+- Tambahkan tombol stop ke waktu selesai
+- Perbaiki tanggal pembuatan di halaman sejarah untuk set baru
+- Perbaiki alarm tidak berhenti
+- Ganti penggunaan berlebihan MaterialStateProperty

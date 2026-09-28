@@ -1,0 +1,3 @@
+Ijinkan manual memicu aliran kerja github
+Downgrade ke ruby 3.3 untuk deplove- google- play
+Email Nama penerbit dalam pubspep.yaml

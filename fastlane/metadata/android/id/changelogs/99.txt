@@ -1,0 +1,2 @@
+- Lazily mendapatkan hitungan untuk latihan rencana
+- Pastikan _ set gym memiliki indeks

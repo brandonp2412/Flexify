@@ -1,0 +1,3 @@
+- Gunakan pengaturan tanggal panjang untuk mengedit set gym
+- Perbaiki memilih item pertama dalam sejarah olahraga
+- Perbaiki baris baru hilang dalam commit rilis

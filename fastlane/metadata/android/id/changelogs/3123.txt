@@ -1,0 +1,2 @@
+Selalu gulung 100% pada msstore
+Stop aplikasi mengubah ukuran untuk papan tik virtual

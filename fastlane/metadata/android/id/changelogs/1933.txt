@@ -1,0 +1,4 @@
+- Tambahkan pemilih hari suai
+- Perbaiki sejarah grafik pembukaan lag
+- Hitung ulang ORM ketika mengedit reps / berat
+- Tambahkan padding ke akhir dari halaman rencana penyuntingan

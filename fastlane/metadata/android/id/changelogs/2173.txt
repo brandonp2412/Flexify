@@ -1,0 +1,3 @@
+- Hentikan penerima backup jika backup otomatis dimatikan
+- Hapus rsync dari deplist.sh ke macos
+- Gunakan zsh dalam macos.sh

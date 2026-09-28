@@ -1,0 +1,3 @@
+- Double tap untuk membuka metrik apapun
+- Tampilkan ORM ketika mengedit sebuah set
+- Tambah toggle untuk suara alarm

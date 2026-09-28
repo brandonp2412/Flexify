@@ -1,0 +1,2 @@
+Chrisci: coba lagi kegagalan sementara Patroli picker
+Perbaikan: mengembalikan standar latihan StartPlan

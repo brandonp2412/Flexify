@@ -1,0 +1,10 @@
+Perbaiki bilah bawah tidak ditampilkan pada cuplikan layar bagi halaman sejarah
+Perbaiki bawah bar mengaburkan dalam cuplikan layar
+Sembunyikan ui dari cuplikan krom secara baku
+Mencegah penghitung ketika dinonaktifkan dari halaman rencana
+Hapus sqlite3 _ flutter _ libs redundan
+Update .serena
+Pemutakhiran flutter
+Update cuplikan layar
+Update serena
+McGREGOR: fix android build warning, upgrade gradle ke 8.14

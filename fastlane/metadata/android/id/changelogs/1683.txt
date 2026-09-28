@@ -1,0 +1,5 @@
+- Membuat perubahan pengaturan konsisten
+- Meningkatkan akurasi estimasi reps
+- Ijinkan membersihkan waktu istirahat suai per grafik
+- Fix kategori yang kosong untuk rencana
+- Perbaiki urutan rencana penyuntingan

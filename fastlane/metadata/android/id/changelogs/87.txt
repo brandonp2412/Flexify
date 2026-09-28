@@ -1,0 +1,5 @@
+- Perbaiki menggesek grafik untuk pergerakan tab
+- Hapus timers.webm
+- Perbaiki tanggal pembuatan salah ketika mengedit set gym
+- Perbaiki pengaturan / masukkan halaman berat yang dibuang
+- Nonaktifkan warna sistem dalam tes cuplikan layar

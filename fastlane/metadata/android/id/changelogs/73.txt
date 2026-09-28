@@ -1,0 +1,2 @@
+- Gunakan flutter submodule dalam penyebaran
+- Perbaiki ukuran grafik untuk layar lebih pendek

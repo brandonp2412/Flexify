@@ -1,0 +1,11 @@
+- Upgrade flutter
+- Dua penyadapan latihan membukanya
+- Clarify menghapus dari halaman grafik
+- Panjang tekan pada tab untuk menyembunyikan mereka
+- Otomatis memanfaatkan pencarian untuk latihan rencana
+- Perbaiki bug pada grafik kekuatan
+- Gunakan nested halaman pada grafik - > tambahkan
+- Gunakan rute nested pada waktu - > pengaturan
+- Tambah graph mengintip
+- Perbaiki bug pada halaman kekuatan
+- Tunggu untuk set gym untuk menyimpan sebelum memperbarui gambar

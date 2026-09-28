@@ -1,0 +1,5 @@
+Tambahkan konfigurasi build reproduksi untuk F- Droid
+Fix referensi ke jendela membangun msix
+Perbaikan ulang masalah membangun - menyelaraskan versi dengan Flutter 3.29.3
+Prevent crash setelah impor basis data
+Update pubspes.lock

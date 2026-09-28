@@ -1,0 +1,5 @@
+- Pergi ke latihan berikutnya setelah Anda mencapai max set
+- Reverse rencana hari ini pada halaman grafik
+- Berhenti beristirahat waktu sekali latihan selesai
+- Peningkatan pengaturan kinerja
+- Tambahkan setting maksimal

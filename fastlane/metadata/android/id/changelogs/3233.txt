@@ -1,0 +1,3 @@
+Fix rusak re- order pada Plan
+Greatly menyederhanakan pengaturan latihan dalam keadaan rencana
+Revert "Greatly menyederhanakan pengaturan latihan dalam keadaan rencana"

@@ -1,0 +1,6 @@
+- Hapus teks pada latihan rencana
+- Perbaiki penyelamatan dari rencana awal
+- Buat maksimal # set setiap latihan
+- Tambahkan akhiran koma
+- Sederhanakan inisialisasi dari pengaturan
+- Tarik dari git setelah membuat rilis GitHub

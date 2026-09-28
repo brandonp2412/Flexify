@@ -1,0 +1,9 @@
+- Ambil semua cuplikan pada mode gelap
+- Taruh di X lencana berturut-turut
+- Perbaiki beberapa kesalahan android yang tidak jelas
+- Tap untuk membuat pada rencana
+- Perbarui kata-kata pada halaman grafik tidak ditemukan
+- Tampilkan latihan terbaik dari halaman grafik
+- Perbaiki nol padding di halaman sejarah grafik belum ada data
+- Tinggi grafik pendek
+- Perbaiki grafik intip bug

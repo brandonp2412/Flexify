@@ -1,0 +1,1 @@
+Perbaiki perintah git komit dalam deplisty.sh

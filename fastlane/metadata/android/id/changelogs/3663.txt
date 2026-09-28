@@ -1,0 +1,5 @@
+Perbaikan menghubungkan link virustotal untuk rilis
+Appreat: tambahkan pratilik hidup ke pengaturan pickers dan format berat fix
+fix: tambahkan padding atas untuk memulai halaman rencana untuk mencegah kliping label outlined
+fix: konsisten jarak 8dp antara masukan pada halaman rencana awal
+refix: preview posisi kemajuan menggunakan TimerProgressIndicator nyata

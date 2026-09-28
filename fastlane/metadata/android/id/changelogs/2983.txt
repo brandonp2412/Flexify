@@ -1,0 +1,10 @@
+Tambahkan padding horisontal ke indikator proses bawah
+Tambahkan tombol reorder yang hilang untuk Android pada halaman Plan
+Animasi geser diantara tab
+Ubah indikator terpilih
+Istirahat default untuk salah
+Atur seprai bawah dibelakang nav
+baikan ketika telepon tersambung
+Betulkan lag berkelap-kelip antar tab setelah mengubahnya
+Perbaikan set penyimpanan
+Increase padding above collapse history page

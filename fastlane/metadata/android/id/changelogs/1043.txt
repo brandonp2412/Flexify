@@ -1,0 +1,3 @@
+- Perbaiki pembuangan set gym
+- Hapus panggilan buang ke pengaturan
+- Bersihkan pendengar pada membuang

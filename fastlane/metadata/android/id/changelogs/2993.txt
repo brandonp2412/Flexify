@@ -1,0 +1,4 @@
+Atur cuplikan otomatis
+Urutkan masalah ruang angkasa pada halaman set penyuntingan
+Buat sejarah baku tanpa grup
+Pull before final push

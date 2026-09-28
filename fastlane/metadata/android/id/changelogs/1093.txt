@@ -1,0 +1,3 @@
+- Perbaiki ujian halaman pengaturan
+- Gunakan unit yang benar untuk grafik secara baku
+- Tambahkan pengaturan untuk unit kekuatan & cardio

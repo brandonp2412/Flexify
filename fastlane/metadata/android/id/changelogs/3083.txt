@@ -1,0 +1,8 @@
+Betulkan batang kemajuan bawah tidak memperbarui
+Betulkan konsistensi padding pada Plan
+Navigasi kembali sistem Fix
+Tes unit Fix
+Link shields.io pada unduhan lencana
+Cocok dengan jarak dari set penyuntingan pada halaman berat sunting
+Prevents double- tap set penyuntingan yang belum dimasukkan belum
+Hapus pada spasi X

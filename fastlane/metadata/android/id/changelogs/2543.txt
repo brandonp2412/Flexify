@@ -1,0 +1,2 @@
+- Gunakan submodul flutter dan spesifikasikan versi kotlin
+- Perbaiki gudang - windows- store

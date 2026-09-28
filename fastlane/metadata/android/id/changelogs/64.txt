@@ -1,0 +1,7 @@
+- Sertakan semua pesan commit dalam catatan rilis
+- Ubah nama berkas data ekspor / impor
+- Reaktor halaman rencana
+- Tambah ikon penyuntingan untuk halaman grafik
+- Tambahkan pengaturan untuk grafik baris melengkung
+- Membuat garis grafik melengkung
+- Perbaiki tooltip pada grafik baris

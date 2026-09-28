@@ -1,0 +1,3 @@
+- Perbaiki gambar tidak diatur dari rencana
+- Perbaiki penghitung desktop masih menembak
+- Tambah kcal, meter ke unit jarak

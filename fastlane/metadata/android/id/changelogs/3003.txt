@@ -1,0 +1,2 @@
+Tambahkan logika untuk mencari tahu id emulator
+Perbaiki cuplikan layar

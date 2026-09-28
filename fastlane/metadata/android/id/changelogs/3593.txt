@@ -1,0 +1,3 @@
+Appreat: tambah ubin latihan permanen dalam rencana penyuntingan; kembalikan scroll graphs FAB
+Perbaikan: align tambahkan ikon latihan dengan tile latihan memimpin ikon
+reparasi: hapus toggle mata, tetap tambahkan tombol terlihat, perbaiki pemeriksaan rekaman cardio

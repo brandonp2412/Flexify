@@ -1,0 +1,4 @@
+Tambahkan pengaturan ke tampilan / sembunyikan batas dan sumbu x pada grafik
+Selalu mulai timer pada rencana yang diaktifkan
+Perbaiki tipe kardio baru yang tidak bekerja
+Long tekan x sumbu / batas slider untuk menyembunyikan

@@ -1,0 +1,5 @@
+- Perbaiki Deplast.sh
+- Hapus jendela + macos arus kerja setelah menyebarkan
+- Perbaiki halaman kosong setelah mengimpor basis data
+- Tambahkan unit ke cardio graphs
+- Atur ulang folder lib

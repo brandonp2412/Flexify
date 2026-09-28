@@ -1,0 +1,6 @@
+- Hapus tag dari deplist.sh
+- Tambah tombol hapus untuk menyunting halaman set gym
+- Sunting titik grafik dengan ketukan ganda
+- Pindahkan pengaturan tanggal teks pembantu ke label
+- Tambahkan konfigurasi format tanggal pendek
+- Reaktor garis grafik

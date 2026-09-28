@@ -1,0 +1,9 @@
+Tambahkan indikator ikon kardio / strength ke toggles dalam set / set penyuntingan
+Tambahkan pengaturan untuk posisi batang kemajuan
+Ijinkan membersihkan kategori
+Ubah ikon rencana di nav bawah
+Betulkan semua isu terkait
+Sistim penampilan sistem ui mengaburkan grafik
+Perbaikan backup otomatis terkadang merusak basis data
+& hapus tombol simpan
+Cegah teks petunjuk kosong pada kategori atau condong ketika multi- penyuntingan set

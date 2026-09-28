@@ -1,0 +1,4 @@
+Tambahkan swap latihan ke rencana
+Tambahkan pencarian swap untuk latihan
+Tambahkan tes unit untuk widget latihan swap
+Reparasi basis data impor pada desktop

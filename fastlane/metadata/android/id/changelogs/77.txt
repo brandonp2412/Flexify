@@ -1,0 +1,6 @@
+- Ijinkan penghapusan rencana multi
+- Ubah nama "Masukkan berat" sebagai "Berat" pada halaman grafik
+- Tambahkan tombol sunting ke halaman grafik dropdown
+- Jarak fokus setelah durasi submit
+- Fix crash dengan tipe cardio tidak konsisten
+- Hapus akhiran riwayat dari graph _ history

@@ -1,0 +1,3 @@
+Betulkan direktori kerja dari tahap java
+Pastikan tempat sampah bergetar selalu dapat dieksekusi
+Pindahkan setup java

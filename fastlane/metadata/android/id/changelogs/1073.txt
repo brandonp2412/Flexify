@@ -1,0 +1,2 @@
+- Perbaikan rencana menghitung
+- Perbaiki skema basis data menonton berhenti kadang-kadang

@@ -1,0 +1,11 @@
+- Perbaiki penyebaran
+- Fix Deplast.sh keluar tanpa perubahan
+- Revert "Ingat pengaturan grafik kekuatan"
+- Revert "Ingat pengaturan untuk cardio graphs"
+- Sembunyikan kemajuan timer ketika tab timer tersembunyi
+- Daftar latihan hari ini pertama pada halaman grafik
+- Ingat pengaturan untuk grafik cardio
+- Ingat pengaturan grafik kekuatan
+- Tambahkan setState hilang ke strength _ line
+Aktifkan penyuntingan massal unit untuk grafik
+- Perbaiki penyadapan grafik untuk latihan cardio

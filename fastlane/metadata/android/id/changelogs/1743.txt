@@ -1,0 +1,2 @@
+- Kustomisasi progress bar pada rencana
+- Tambahkan backup otomatis

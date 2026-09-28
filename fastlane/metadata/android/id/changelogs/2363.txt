@@ -1,0 +1,11 @@
+- Perbaiki penggunaan yq dalam .deplist.yml
+- Perbaiki masalah linting
+- Hapus aturan print linting
+- Jalankan format panah
+- Jalankan mengalir di utama
+- Tambahkan github mengalir
+- Perbaiki arus kerja GitHub untuk menangani pengujian aksi
+- Perbaiki sebagian besar dari generasi cuplikan layar desktop
+- Tambahkan setup untuk menjalankan tes integrasi untuk krom
+- Perbaiki halaman pengaturan pada web
+- Fix running on web

@@ -1,0 +1,3 @@
+Sertakan apprise.aab dalam ciptaan rilis github
+Membuat grafik dengan cara mengintip
+Gunakan catatan rilis yang benar

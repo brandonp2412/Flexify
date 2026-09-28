@@ -1,0 +1,6 @@
+Tambahkan sekelompok varian nav bawah
+Tambahkan skrip untuk ketika menjalankan linux gagal
+Hapus varian nav _ BAR _
+Perbarui nav bawah menjadi desain pil
+Perbaikan: hapus hardcode lokal JDK path dari gradle. properti
+fix: keheningan MSVC coroutine deprekasi error melanggar Windows CI build

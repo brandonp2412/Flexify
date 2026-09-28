@@ -1,0 +1,3 @@
+- Perbaiki latihan rencana pengaturan ulang
+- Ganti + tombol dengan masukan pencarian untuk rencana baru
+- Hapus blok info ketergantungan untuk f-droid

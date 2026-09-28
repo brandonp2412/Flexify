@@ -1,0 +1,6 @@
+- Tambahkan validasi
+- Peningkatan kinerja untuk basis data besar
+- Buat latihan tambahan & berat halaman scrolable
+- Tambahkan gambar ke halaman latihan baru
+- Perbaiki padding latihan
+- Permintaan pemberitahuan ketika mengaktifkan backup otomatis

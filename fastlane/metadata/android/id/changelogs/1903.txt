@@ -1,0 +1,5 @@
+- Meningkatkan kinerja grafik
+- Hapus "Berat" dari sunting cardio
+- Perbaiki kembali navigasi kadang-kadang tidak bekerja
+- Sembunyikan satu rep max perkiraan pada latihan cardio
+- Meningkatkan rencana kinerja

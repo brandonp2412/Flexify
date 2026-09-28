@@ -1,0 +1,10 @@
+Orachore: mendamaikan slice lokalisasi concurt
+Spongochore: segarkan berkas kunci ketergantungan Flutter
+Apridocs: tambahkan peta jalan terjemahan
+Apridocs: update keadaan pelengkapan lokalisasi
+Prestasi: tambahkan lokalisasi Portugis Brasil
+Prestasi: tambahkan lokalisasi CJK
+Prestasi: tambahkan lokalisasi Belanda
+Prestasi: tambahkan lokalisasi Perancis
+Prestasi: tambahkan lokalisasi Jerman
+Prestasi: tambahkan lokalisasi Italia

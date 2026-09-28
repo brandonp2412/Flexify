@@ -1,0 +1,2 @@
+- Tambahkan grafik reps terbaik
+- Komentar keluar pasokan cepat di deplaly.sh

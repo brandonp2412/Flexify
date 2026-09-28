@@ -1,0 +1,3 @@
+- Perlakukan durasi cardio sebagai menit: detik
+- Perbaiki max set semua menjadi 3 per latihan
+- Aktifkan waktu istirahat untuk Linux

@@ -1,0 +1,6 @@
+Subversion: auto- build PR APKs hanya untuk pemilik PRs, manual bagi orang lain
+Aptici: buat dan pasangkan APK pada permintaan tarik
+Supci: perbaiki 0.0.0-tidak diketahui versi Flutter dalam build PR APK
+----ci: perbaiki URL artefak yang dikutip dalam komentar PR APK
+Subversion: instal PR build side by side via .pr app id suffix
+Optici: sign PR builds dengan commited public testing keystore

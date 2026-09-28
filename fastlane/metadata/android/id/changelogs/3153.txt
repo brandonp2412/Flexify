@@ -1,0 +1,2 @@
+Tampilkan pratilik dari pemberitahuan
+Tampilkan bidang berat jika unit cardio adalah tipe bobot pada rencana

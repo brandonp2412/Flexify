@@ -1,0 +1,1 @@
+- Perbaiki menimpa bodyWeight dalam impor grafik

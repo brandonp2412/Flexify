@@ -1,0 +1,2 @@
+Galat tag pahlawan Fix
+Perbaikan batas tab terkadang terlalu lebar

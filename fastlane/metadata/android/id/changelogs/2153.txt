@@ -1,0 +1,3 @@
+- Tambah gambar memilih ke berat badan
+- Sembunyikan ruas tidak relevan pada entri berat
+- Buat kategori dinamis

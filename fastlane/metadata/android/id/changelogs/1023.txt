@@ -1,0 +1,8 @@
+- Tambahkan pengaturan untuk menyembunyikan pelacakan berat badan
+- Fix changelogs untuk rilis cepat
+- Hapus fitur backup otomatis
+- Tambahkan konfigurasi untuk maksimal # dari set
+- Tambahkan sisa menit / detik override global
+- Buat pengaturan ukuran padding konsisten
+- Stick batang pencarian ke atas dari pengaturan
+- Ubah nama WidgetSettings - > Garis Penyelesaian

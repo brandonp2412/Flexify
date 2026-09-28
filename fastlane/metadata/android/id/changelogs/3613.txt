@@ -1,0 +1,10 @@
+Tambahkan pesan untuk rencana kosong
+Buat layar tetap mati secara baku dan pindahkan toggle dalam pengaturan
+feat: tambahkan layar tetap pada konfigurasi untuk waktu istirahat
+feat: ganti dropdown tema dengan Tombol SegmentedButton + AMOLED toggle
+reparasi: jaga terhadap daftar latihan kosong dalam menyimpan StartPlanPage dan pilih
+Perbaikan: mencegah Segmentasi Label tombol dibungkus dengan mengoreksi padding
+fix: mengurangi ukuran teks yang tertinggal dari 16 sampai 14 dalam daftar riwayat dan grafik
+fix: rilis kunci bangun ketika timer berakhir atau tidak berjalan
+fix: tampilkan snackbar in- app dan pemberitahuan perbaikan ketika timer berakhir dengan layar di
+fix: shrink dan mute trailing text dalam sejarah dan daftar ubin grafik

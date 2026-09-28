@@ -1,0 +1,2 @@
+Fix daerah jarak menunjukkan cardio set dengan unit berat
+Atur tampilan daftar riwayat untuk latihan cardio dengan berat

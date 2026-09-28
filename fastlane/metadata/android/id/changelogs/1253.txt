@@ -1,0 +1,1 @@
+- Perbaiki pilihan pratinjau multiedit

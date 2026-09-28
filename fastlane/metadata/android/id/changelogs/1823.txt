@@ -1,0 +1,2 @@
+- Tambahkan tooltip ke pengaturan
+- Perbaiki backup otomatis terjadi setiap 15 menit

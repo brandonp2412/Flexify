@@ -1,0 +1,3 @@
+- Tambah tombol pengaturan ke rencana aktif
+- Perbaiki tombol reorder trailing di desktop
+- Nonaktifkan waktu istirahat pada set pemanasan

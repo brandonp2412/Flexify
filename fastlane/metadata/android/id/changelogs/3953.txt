@@ -1,0 +1,6 @@
+Ubah nama semua props internal dengan prefiks _
+Replicate automatically screenshot & e2e test from fit- book
+position-action
+usici: perbaikan Patroli dan Putar alur kerja penyebaran
+fix: align Android JVM kompilasi target
+reparasi: pertahankan berat cardio dalam sejarah berkelompok

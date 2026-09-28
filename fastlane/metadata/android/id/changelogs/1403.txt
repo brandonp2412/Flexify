@@ -1,0 +1,4 @@
+- Termasuk pengaturan dalam backup basis data
+- Perbaiki basis data ekspor pada desktop
+- Tambahkan rencana trailing ke halaman rumah
+- Tambah opsi untuk trailing rencana

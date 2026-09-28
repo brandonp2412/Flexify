@@ -1,0 +1,3 @@
+Downgrade agp ke 8.11.1
+Gambar di belakang sistem UI & toggle menggulung tab
+Perbaiki pre- populating reps / weight

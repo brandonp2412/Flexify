@@ -1,0 +1,7 @@
+Tambahkan halaman github hosting untuk web Flexify
+Tambahkan changelogs yang hilang
+Ijinkan pengguna untuk membersihkan set maksimal
+Hapus skrip yang tak terpakai
+Perbaiki salinan baru
+Hanya kembali ke satu file setiap kali
+Hapus reps dari grafik kekuatan

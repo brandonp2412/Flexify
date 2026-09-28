@@ -1,0 +1,4 @@
+- Update pubspec.lock
+- Menyetel penyebaran msstore
+- Mengkonfigurasi Google bermain rilis
+- Hapus .actrc dan MIGRASI _ GUIDE.md

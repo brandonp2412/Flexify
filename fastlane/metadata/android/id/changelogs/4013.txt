@@ -1,0 +1,10 @@
+perbaikan: jaga konteks navigasi cuplikan layar
+fix: membuka kembali folder picker setelah memberikan izin
+refix: retry transient screenshot emulator disconnect
+fix: urutan izin backup sebelum picker folder
+confix: menstabilkan Android folder picker test
+refix: menstabilkan automatically timer screenshot
+Uji: tambahkan fixtures basis data yang dapat digunakan ulang
+Uji coba: tambahkan harness uji widget bersama
+Tes: align Tes StartPlanPage dengan ruas saat ini
+assuse Android documents picker by package

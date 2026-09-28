@@ -1,0 +1,5 @@
+- Cadangan otomatis di akhir rencana
+- Mutakhirkan rencana awal setelah mengedit entri
+- Berat kelompok per minggu secara baku
+- Mutakhirkan ketergantungan
+- Perbaiki nama variabel dari halaman pengaturan

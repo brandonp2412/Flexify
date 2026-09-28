@@ -1,0 +1,4 @@
+Selalu tampilkan judul tab
+Perbaikan tidak dapat menggulung grafik global
+Perbaikan kategori pemutakhiran
+Kurangi clutter grafik global pada tooltip

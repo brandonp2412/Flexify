@@ -1,0 +1,4 @@
+- Combine "Show reorder" and "Show counts" setting
+- Reaktor rencana
+- Reaktor halaman grafik
+- Reaktor _ set gym

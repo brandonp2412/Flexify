@@ -1,0 +1,2 @@
+- Perbaiki perintah penerbit msstore
+- Garansi set olahraga sebelum menguji mereka di halaman grafik

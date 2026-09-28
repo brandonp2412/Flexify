@@ -1,0 +1,8 @@
+Atur tampilan changelog kosong
+Sembunyikan uji integrasi Linux pada dwl
+Prestasi: meningkatkan kontrol pemilihan grafik
+Prestasi: mengintegrasikan Talker log
+reparasi: paksa compliant tujuh inci screenshot
+memperbaiki: harden desktop navigasi dan pengujian
+Perbaikan: mengisolasi basis data integrasi
+Tes: render layar changelog sampul

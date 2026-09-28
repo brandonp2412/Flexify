@@ -1,0 +1,3 @@
+Ubah indikator pilihan
+Perbaiki latihan menghapus tidak membersihkan latihan rencana
+Perbaiki grafik tidak memperbaharui

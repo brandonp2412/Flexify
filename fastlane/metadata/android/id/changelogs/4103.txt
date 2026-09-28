@@ -1,0 +1,10 @@
+Tambahkan daftar akses aplikasi yang dapat dipakai ulang
+Pusat tampilan label dan keadaan menala dalam ikon
+Pusat perencanaan perencanaan label dan switchers
+Atur waktu pusat dan gunakan ikon aktif yang diisi
+Pusat pelatihan label dan gunakan ikon yang diisi aktif
+Daftar cek aplikasi Expose di dalam pengaturan
+baikan berkas kunci CI dan timer analyzer error
+Atur satu-waktu permintaan pemberitahuan
+Galat analisa dialog perizinan perizinan
+Buat pemberitahuan asal permission satu waktu

@@ -1,0 +1,2 @@
+- Update pubspec.lock
+- Pasang paket yang hilang di penyimpanan-jendela-store

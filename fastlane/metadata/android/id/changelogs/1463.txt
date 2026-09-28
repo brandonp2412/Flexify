@@ -1,0 +1,2 @@
+- Edit # dari latihan pada rencana bukan grafik
+- Peningkatan kinerja aplikasi

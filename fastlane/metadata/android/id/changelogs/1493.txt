@@ -1,0 +1,3 @@
+- Gracefully handle errors in image loading
+- Hapus tombol add / hapus dari penyunting gambar
+- Biarkan gambar saja jika pengguna membatalkan picker berkas

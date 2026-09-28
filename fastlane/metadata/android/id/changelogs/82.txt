@@ -1,0 +1,8 @@
+- Tambahkan pengaturan tab riwayat menyembunyikan
+- Ubah backup otomatis
+- Perbaiki nama tidak memperbarui untuk mengedit set gym
+- Tambahkan backup otomatis
+- Perbaiki set gym baru memiliki ID dan createds tidak valid
+- Format kode dalam impor _ data
+- Perbaiki bank ketika menambahkan satu set gym baru
+- Gunakan berkas _ picker untuk ekspor / impor data
