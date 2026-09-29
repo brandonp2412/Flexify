@@ -35,6 +35,25 @@ const selectableLocales = <Locale>[
 /// Returns the canonical identifier persisted for a supported [locale].
 String localeIdentifier(Locale locale) => locale.toLanguageTag();
 
+/// Resolves system locales while keeping English as the final fallback.
+///
+/// Flutter otherwise falls back to the first generated supported locale when
+/// none of the device locales match. Generated locale lists are alphabetical,
+/// so an unsupported system language can unexpectedly open the app in an
+/// unrelated language.
+Locale resolveSystemLocale(
+  List<Locale>? preferredLocales,
+  Iterable<Locale> supportedLocales,
+) {
+  final locales = supportedLocales.toList(growable: false);
+  final english = locales.where((locale) => locale.languageCode == 'en');
+
+  return basicLocaleListResolution(preferredLocales, [
+    ...english,
+    ...locales.where((locale) => locale.languageCode != 'en'),
+  ]);
+}
+
 /// Resolves a stored locale identifier to a currently supported locale.
 ///
 /// A null, empty, invalid, or no-longer-supported identifier means that the
