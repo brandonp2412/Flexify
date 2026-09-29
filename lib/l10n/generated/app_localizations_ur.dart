@@ -162,6 +162,15 @@ class AppLocalizationsUr extends AppLocalizations {
   String get actionCancel => 'منسوخ کریں';
 
   @override
+  String get actionDiscard => 'مسترد کریں';
+
+  @override
+  String get unsavedChanges => 'غیر محفوظ شدہ تبدیلیاں';
+
+  @override
+  String get discardUnsavedChanges => 'غیر محفوظ شدہ تبدیلیاں مسترد کر دیں؟';
+
+  @override
   String get actionDelete => 'حذف کریں';
 
   @override

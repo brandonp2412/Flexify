@@ -163,6 +163,16 @@ class AppLocalizationsDe extends AppLocalizations {
   String get actionCancel => 'Abbrechen';
 
   @override
+  String get actionDiscard => 'Verwerfen';
+
+  @override
+  String get unsavedChanges => 'Nicht gespeicherte Änderungen';
+
+  @override
+  String get discardUnsavedChanges =>
+      'Nicht gespeicherte Änderungen verwerfen?';
+
+  @override
   String get actionDelete => 'Löschen';
 
   @override

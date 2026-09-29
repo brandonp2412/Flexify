@@ -162,6 +162,15 @@ class AppLocalizationsHi extends AppLocalizations {
   String get actionCancel => 'रद्द करें';
 
   @override
+  String get actionDiscard => 'त्यागें';
+
+  @override
+  String get unsavedChanges => 'सहेजे न गए बदलाव';
+
+  @override
+  String get discardUnsavedChanges => 'क्या सहेजे न गए बदलावों को त्यागना है?';
+
+  @override
   String get actionDelete => 'हटाएँ';
 
   @override

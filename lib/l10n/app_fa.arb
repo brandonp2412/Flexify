@@ -204,6 +204,9 @@
   "@actionCancel": {
     "description": "Generic cancel action."
   },
+  "actionDiscard": "کنار گذاشتن",
+  "unsavedChanges": "تغییرات ذخیره‌نشده",
+  "discardUnsavedChanges": "تغییرات ذخیره‌نشده کنار گذاشته شوند؟",
   "actionDelete": "حذف",
   "@actionDelete": {
     "description": "Generic delete action."

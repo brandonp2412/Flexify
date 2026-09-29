@@ -529,5 +529,6 @@
   "1790392395": "• feat(l10n): aggiungere i metadati dello store per il portoghese europeo\n• feat(l10n): aggiungere i metadati dello store per lo spagnolo latinoamericano",
   "1790394970": "• fix(l10n): usare impostazioni locali valide per la scheda Play",
   "1790404468": "• Usare Brandon Dick nei riferimenti dell’app\n• fix(l10n): sincronizzare le note di rilascio tradotte più recenti",
-  "1790414297": "• fix(l10n): localizzare le note di rilascio più recenti"
+  "1790414297": "• fix(l10n): localizzare le note di rilascio più recenti",
+  "1790477503": "• Completate le traduzioni e le correzioni dell’icona dell’app"
 }

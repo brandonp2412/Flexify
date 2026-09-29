@@ -161,6 +161,15 @@ class AppLocalizationsVi extends AppLocalizations {
   String get actionCancel => 'Hủy bỏ';
 
   @override
+  String get actionDiscard => 'Hủy bỏ';
+
+  @override
+  String get unsavedChanges => 'Thay đổi chưa lưu';
+
+  @override
+  String get discardUnsavedChanges => 'Hủy bỏ các thay đổi chưa lưu?';
+
+  @override
   String get actionDelete => 'Xóa bỏ';
 
   @override

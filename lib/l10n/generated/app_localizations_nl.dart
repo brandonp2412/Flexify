@@ -162,6 +162,15 @@ class AppLocalizationsNl extends AppLocalizations {
   String get actionCancel => 'Annuleren';
 
   @override
+  String get actionDiscard => 'Verwerpen';
+
+  @override
+  String get unsavedChanges => 'Niet-opgeslagen wijzigingen';
+
+  @override
+  String get discardUnsavedChanges => 'Niet-opgeslagen wijzigingen verwerpen?';
+
+  @override
   String get actionDelete => 'Verwijderen';
 
   @override

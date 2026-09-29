@@ -161,6 +161,16 @@ class AppLocalizationsTh extends AppLocalizations {
   String get actionCancel => 'ยกเลิก';
 
   @override
+  String get actionDiscard => 'ละทิ้ง';
+
+  @override
+  String get unsavedChanges => 'การเปลี่ยนแปลงที่ยังไม่ได้บันทึก';
+
+  @override
+  String get discardUnsavedChanges =>
+      'ละทิ้งการเปลี่ยนแปลงที่ยังไม่ได้บันทึกหรือไม่?';
+
+  @override
   String get actionDelete => 'ลบ';
 
   @override

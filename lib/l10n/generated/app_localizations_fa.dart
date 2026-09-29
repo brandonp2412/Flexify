@@ -161,6 +161,15 @@ class AppLocalizationsFa extends AppLocalizations {
   String get actionCancel => 'لغو';
 
   @override
+  String get actionDiscard => 'کنار گذاشتن';
+
+  @override
+  String get unsavedChanges => 'تغییرات ذخیره‌نشده';
+
+  @override
+  String get discardUnsavedChanges => 'تغییرات ذخیره‌نشده کنار گذاشته شوند؟';
+
+  @override
   String get actionDelete => 'حذف';
 
   @override

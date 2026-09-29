@@ -204,6 +204,18 @@
   "@actionCancel": {
     "description": "Generic cancel action."
   },
+  "actionDiscard": "Discard",
+  "@actionDiscard": {
+    "description": "Generic action that discards pending changes."
+  },
+  "unsavedChanges": "Unsaved changes",
+  "@unsavedChanges": {
+    "description": "Title for a confirmation dialog shown before leaving an edited form."
+  },
+  "discardUnsavedChanges": "Discard your unsaved changes?",
+  "@discardUnsavedChanges": {
+    "description": "Confirmation message shown before leaving an edited form."
+  },
   "actionDelete": "Delete",
   "@actionDelete": {
     "description": "Generic delete action."

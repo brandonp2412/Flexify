@@ -160,6 +160,16 @@ class AppLocalizationsTr extends AppLocalizations {
   String get actionCancel => 'İptal';
 
   @override
+  String get actionDiscard => 'Vazgeç';
+
+  @override
+  String get unsavedChanges => 'Kaydedilmemiş değişiklikler';
+
+  @override
+  String get discardUnsavedChanges =>
+      'Kaydedilmemiş değişikliklerden vazgeçilsin mi?';
+
+  @override
   String get actionDelete => 'Sil';
 
   @override

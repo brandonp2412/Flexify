@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 
 class DaySelector extends StatefulWidget {
   final List<bool> daySwitches;
-  const DaySelector({super.key, required this.daySwitches});
+  final VoidCallback? onChanged;
+
+  const DaySelector({super.key, required this.daySwitches, this.onChanged});
 
   @override
   State<DaySelector> createState() => _DaySelectorState();
@@ -15,6 +17,7 @@ class _DaySelectorState extends State<DaySelector> {
     setState(() {
       widget.daySwitches[index] = !widget.daySwitches[index];
     });
+    widget.onChanged?.call();
   }
 
   @override

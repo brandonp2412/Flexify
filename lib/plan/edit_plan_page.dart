@@ -29,6 +29,8 @@ class _EditPlanPageState extends State<EditPlanPage> {
   late List<bool> _days;
   List<PlanExercisesCompanion> _exercises = [];
   bool _loadingExercises = true;
+  bool _hasUnsavedChanges = false;
+  bool _allowPop = false;
 
   String _search = '';
 
@@ -56,6 +58,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
         return a.exercise.value.compareTo(b.exercise.value);
       });
       _search = '';
+      _hasUnsavedChanges = true;
     });
     _searchCtrl.text = '';
   }
@@ -94,6 +97,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
           if (id == -1) return;
           setState(() {
             _exercises[id] = value;
+            _hasUnsavedChanges = true;
           });
         },
       ),
@@ -114,117 +118,130 @@ class _EditPlanPageState extends State<EditPlanPage> {
     final desktop = isDesktopLayout(context);
     final colors = Theme.of(context).colorScheme;
 
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        title: Text(title),
-        actions: [
-          if (desktop)
-            Padding(
-              padding: const EdgeInsets.only(right: 16),
-              child: FilledButton.icon(
-                onPressed: save,
-                icon: const Icon(Icons.save_rounded),
-                label: Text(context.l10n.savePlan),
-              ),
-            ),
-        ],
-      ),
-      body: ResponsiveContent(
-        maxWidth: 1040,
-        desktopPadding: const EdgeInsets.fromLTRB(32, 16, 32, 32),
-        mobilePadding: const EdgeInsets.symmetric(horizontal: 16),
-        child: ListView(
-          children: [
-            if (desktop)
-              Text(
-                context.l10n.planDetails,
-                style: Theme.of(
-                  context,
-                ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
-              ),
-            if (desktop) const SizedBox(height: 12),
-            Container(
-              padding: desktop ? const EdgeInsets.all(20) : EdgeInsets.zero,
-              decoration: desktop
-                  ? BoxDecoration(
-                      color: colors.surfaceContainerLow,
-                      borderRadius: BorderRadius.circular(20),
-                    )
-                  : null,
-              child: Column(
-                children: [
-                  TextField(
-                    decoration: InputDecoration(
-                      labelText: context.l10n.titleOptional,
-                    ),
-                    controller: _titleCtrl,
-                    textCapitalization: TextCapitalization.sentences,
-                  ),
-                  const SizedBox(height: 16),
-                  DaySelector(daySwitches: _days),
-                ],
-              ),
-            ),
-            SizedBox(height: desktop ? 24 : 8),
+    return PopScope(
+      canPop: _allowPop || !_hasUnsavedChanges,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop || _allowPop || !_hasUnsavedChanges) return;
+        unawaited(_confirmDiscard(result));
+      },
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        appBar: AppBar(
+          title: Text(title),
+          actions: [
             if (desktop)
               Padding(
-                padding: const EdgeInsets.only(bottom: 12),
-                child: Text(
-                  context.l10n.exercisesLabel,
+                padding: const EdgeInsets.only(right: 16),
+                child: FilledButton.icon(
+                  onPressed: save,
+                  icon: const Icon(Icons.save_rounded),
+                  label: Text(context.l10n.savePlan),
+                ),
+              ),
+          ],
+        ),
+        body: ResponsiveContent(
+          maxWidth: 1040,
+          desktopPadding: const EdgeInsets.fromLTRB(32, 16, 32, 32),
+          mobilePadding: const EdgeInsets.symmetric(horizontal: 16),
+          child: ListView(
+            children: [
+              if (desktop)
+                Text(
+                  context.l10n.planDetails,
                   style: Theme.of(
                     context,
                   ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
                 ),
-              ),
-            SearchBar(
-              controller: _searchCtrl,
-              leading: const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                child: Icon(Icons.search),
-              ),
-              textCapitalization: TextCapitalization.sentences,
-              hintText: context.l10n.searchExercises,
-              onChanged: (value) => setState(() {
-                _search = value;
-              }),
-            ),
-            const SizedBox(height: 10),
-            Material(
-              color: desktop ? colors.surfaceContainerLow : Colors.transparent,
-              borderRadius: desktop ? BorderRadius.circular(14) : null,
-              child: ListTile(
-                leading: const Icon(Icons.add_rounded),
-                title: Text(
-                  _search.isEmpty
-                      ? context.l10n.addExercise
-                      : context.l10n.addNamed(_search),
-                ),
-                trailing: desktop
-                    ? const Icon(Icons.chevron_right_rounded)
+              if (desktop) const SizedBox(height: 12),
+              Container(
+                padding: desktop ? const EdgeInsets.all(20) : EdgeInsets.zero,
+                decoration: desktop
+                    ? BoxDecoration(
+                        color: colors.surfaceContainerLow,
+                        borderRadius: BorderRadius.circular(20),
+                      )
                     : null,
-                onTap: addExercise,
+                child: Column(
+                  children: [
+                    TextField(
+                      decoration: InputDecoration(
+                        labelText: context.l10n.titleOptional,
+                      ),
+                      controller: _titleCtrl,
+                      textCapitalization: TextCapitalization.sentences,
+                      onChanged: (_) => _markDirty(),
+                    ),
+                    const SizedBox(height: 16),
+                    DaySelector(daySwitches: _days, onChanged: _markDirty),
+                  ],
+                ),
               ),
-            ),
-            const SizedBox(height: 6),
-            if (_loadingExercises)
-              const Padding(
-                padding: EdgeInsets.all(24),
-                child: Center(child: CircularProgressIndicator()),
-              )
-            else
-              ...List.generate(tiles.length, (index) => tiles.elementAt(index)),
-            SizedBox(height: desktop ? 40 : 176),
-          ],
+              SizedBox(height: desktop ? 24 : 8),
+              if (desktop)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 12),
+                  child: Text(
+                    context.l10n.exercisesLabel,
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+              SearchBar(
+                controller: _searchCtrl,
+                leading: const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: Icon(Icons.search),
+                ),
+                textCapitalization: TextCapitalization.sentences,
+                hintText: context.l10n.searchExercises,
+                onChanged: (value) => setState(() {
+                  _search = value;
+                }),
+              ),
+              const SizedBox(height: 10),
+              Material(
+                color: desktop
+                    ? colors.surfaceContainerLow
+                    : Colors.transparent,
+                borderRadius: desktop ? BorderRadius.circular(14) : null,
+                child: ListTile(
+                  leading: const Icon(Icons.add_rounded),
+                  title: Text(
+                    _search.isEmpty
+                        ? context.l10n.addExercise
+                        : context.l10n.addNamed(_search),
+                  ),
+                  trailing: desktop
+                      ? const Icon(Icons.chevron_right_rounded)
+                      : null,
+                  onTap: addExercise,
+                ),
+              ),
+              const SizedBox(height: 6),
+              if (_loadingExercises)
+                const Padding(
+                  padding: EdgeInsets.all(24),
+                  child: Center(child: CircularProgressIndicator()),
+                )
+              else
+                ...List.generate(
+                  tiles.length,
+                  (index) => tiles.elementAt(index),
+                ),
+              SizedBox(height: desktop ? 40 : 176),
+            ],
+          ),
         ),
+        floatingActionButton: desktop
+            ? null
+            : AnimatedFab(
+                onPressed: save,
+                label: Text(context.l10n.actionSave),
+                icon: const Icon(Icons.save),
+              ),
       ),
-      floatingActionButton: desktop
-          ? null
-          : AnimatedFab(
-              onPressed: save,
-              label: Text(context.l10n.actionSave),
-              icon: const Icon(Icons.save),
-            ),
     );
   }
 
@@ -240,7 +257,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
   void initState() {
     super.initState();
 
-    _titleCtrl.text = widget.plan.title.value ?? "";
+    _titleCtrl.text = widget.plan.title.value ?? '';
     final list = widget.plan.days.value.split(',');
     _days = weekdays.map((day) => list.contains(day)).toList();
     _loadExercises();
@@ -252,6 +269,36 @@ class _EditPlanPageState extends State<EditPlanPage> {
     setState(() {
       _exercises = exercises;
       _loadingExercises = false;
+    });
+  }
+
+  void _markDirty() {
+    if (_hasUnsavedChanges) return;
+    setState(() => _hasUnsavedChanges = true);
+  }
+
+  Future<void> _confirmDiscard(Object? result) async {
+    final discard = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog.adaptive(
+        title: Text(context.l10n.unsavedChanges),
+        content: Text(context.l10n.discardUnsavedChanges),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text(context.l10n.actionCancel),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: Text(context.l10n.actionDiscard),
+          ),
+        ],
+      ),
+    );
+    if (discard != true || !mounted) return;
+    setState(() => _allowPop = true);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) Navigator.of(context).pop(result);
     });
   }
 
@@ -308,6 +355,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
     );
 
     if (!mounted) return;
+    _allowPop = true;
     Navigator.pop(context);
   }
 }

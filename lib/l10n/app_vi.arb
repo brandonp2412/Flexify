@@ -204,6 +204,9 @@
   "@actionCancel": {
     "description": "Generic cancel action."
   },
+  "actionDiscard": "Hủy bỏ",
+  "unsavedChanges": "Thay đổi chưa lưu",
+  "discardUnsavedChanges": "Hủy bỏ các thay đổi chưa lưu?",
   "actionDelete": "Xóa bỏ",
   "@actionDelete": {
     "description": "Generic delete action."

@@ -158,6 +158,15 @@ class AppLocalizationsZh extends AppLocalizations {
   String get actionCancel => '取消';
 
   @override
+  String get actionDiscard => '放弃';
+
+  @override
+  String get unsavedChanges => '未保存的更改';
+
+  @override
+  String get discardUnsavedChanges => '放弃未保存的更改？';
+
+  @override
   String get actionDelete => '删除';
 
   @override
@@ -1643,6 +1652,15 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
   String get actionCancel => '取消';
 
   @override
+  String get actionDiscard => '放弃';
+
+  @override
+  String get unsavedChanges => '未保存的更改';
+
+  @override
+  String get discardUnsavedChanges => '放弃未保存的更改？';
+
+  @override
   String get actionDelete => '删除';
 
   @override
@@ -3126,6 +3144,15 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get actionCancel => '取消';
+
+  @override
+  String get actionDiscard => '捨棄';
+
+  @override
+  String get unsavedChanges => '未儲存的變更';
+
+  @override
+  String get discardUnsavedChanges => '要捨棄未儲存的變更嗎？';
 
   @override
   String get actionDelete => '刪除';

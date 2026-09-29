@@ -62,6 +62,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
               ),
               const SizedBox(height: 8),
               DropdownButtonFormField<String>(
+                key: ValueKey(_unit),
                 decoration: InputDecoration(labelText: context.l10n.unitLabel),
                 initialValue: _unit,
                 items: [
@@ -164,7 +165,15 @@ class _AddExercisePageState extends State<AddExercisePage> {
   void _setCardio(bool value) {
     setState(() {
       _cardio = value;
-      if (!value && !_isWeightUnit(_unit)) _unit = 'kg';
+      if (value && _isWeightUnit(_unit)) {
+        _unit = settings.value.cardioUnit == 'last-entry'
+            ? 'km'
+            : settings.value.cardioUnit;
+      } else if (!value && !_isWeightUnit(_unit)) {
+        _unit = settings.value.strengthUnit == 'last-entry'
+            ? 'kg'
+            : settings.value.strengthUnit;
+      }
     });
   }
 

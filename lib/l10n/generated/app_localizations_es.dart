@@ -162,6 +162,15 @@ class AppLocalizationsEs extends AppLocalizations {
   String get actionCancel => 'Cancelar';
 
   @override
+  String get actionDiscard => 'Descartar';
+
+  @override
+  String get unsavedChanges => 'Cambios sin guardar';
+
+  @override
+  String get discardUnsavedChanges => '¿Descartar los cambios sin guardar?';
+
+  @override
   String get actionDelete => 'Eliminar';
 
   @override
