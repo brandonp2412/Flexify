@@ -529,5 +529,6 @@
   "1790392395": "• feat(l10n): añadir metadatos de la tienda para portugués europeo\n• feat(l10n): añadir metadatos de la tienda para español latinoamericano",
   "1790394970": "• fix(l10n): usar configuraciones regionales válidas para la ficha de Play",
   "1790404468": "• Usar Brandon Dick en las referencias de la aplicación\n• fix(l10n): sincronizar las notas de la versión traducidas más recientes",
-  "1790414297": "• fix(l10n): traducir las últimas notas de la versión"
+  "1790414297": "• fix(l10n): traducir las últimas notas de la versión",
+  "1790477503": "• Se completaron las traducciones y las correcciones del icono de la aplicación"
 }
