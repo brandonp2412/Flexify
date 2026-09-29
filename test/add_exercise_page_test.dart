@@ -1,4 +1,5 @@
 import 'package:flexify/graph/add_exercise_page.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'support/test_app.dart';
@@ -15,5 +16,28 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.textContaining('Add exercise'), findsNothing);
+  });
+
+  testWidgets('new cardio exercise defaults to a distance unit', (
+    WidgetTester tester,
+  ) async {
+    final harness = await FlexifyTestHarness.create();
+    await harness.pump(tester, const AddExercisePage());
+
+    expect(find.text('Kilograms (kg)'), findsOneWidget);
+    await tester.tap(find.byType(Switch));
+    await tester.pump();
+
+    expect(find.text('Kilometers (km)'), findsOneWidget);
+
+    await tester.enterText(find.bySemanticsLabel('Name'), 'Treadmill walking');
+    await tester.tap(find.text('Save'));
+    await tester.pumpAndSettle();
+
+    final exercise = await (harness.database.select(
+      harness.database.gymSets,
+    )..where((table) => table.name.equals('Treadmill walking'))).getSingle();
+    expect(exercise.cardio, isTrue);
+    expect(exercise.unit, 'km');
   });
 }

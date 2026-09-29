@@ -204,6 +204,9 @@
   "@actionCancel": {
     "description": "Generic cancel action."
   },
+  "actionDiscard": "Buang",
+  "unsavedChanges": "Perubahan belum disimpan",
+  "discardUnsavedChanges": "Buang perubahan yang belum disimpan?",
   "actionDelete": "Padam",
   "@actionDelete": {
     "description": "Generic delete action."

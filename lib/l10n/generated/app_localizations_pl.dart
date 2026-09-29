@@ -166,6 +166,15 @@ class AppLocalizationsPl extends AppLocalizations {
   String get actionCancel => 'Anuluj';
 
   @override
+  String get actionDiscard => 'Odrzuć';
+
+  @override
+  String get unsavedChanges => 'Niezapisane zmiany';
+
+  @override
+  String get discardUnsavedChanges => 'Odrzucić niezapisane zmiany?';
+
+  @override
   String get actionDelete => 'Usuń';
 
   @override

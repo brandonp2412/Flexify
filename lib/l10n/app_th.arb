@@ -204,6 +204,9 @@
   "@actionCancel": {
     "description": "Generic cancel action."
   },
+  "actionDiscard": "ละทิ้ง",
+  "unsavedChanges": "การเปลี่ยนแปลงที่ยังไม่ได้บันทึก",
+  "discardUnsavedChanges": "ละทิ้งการเปลี่ยนแปลงที่ยังไม่ได้บันทึกหรือไม่?",
   "actionDelete": "ลบ",
   "@actionDelete": {
     "description": "Generic delete action."

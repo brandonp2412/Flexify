@@ -160,6 +160,15 @@ class AppLocalizationsAr extends AppLocalizations {
   String get actionCancel => 'إلغاء';
 
   @override
+  String get actionDiscard => 'تجاهل';
+
+  @override
+  String get unsavedChanges => 'تغييرات غير محفوظة';
+
+  @override
+  String get discardUnsavedChanges => 'هل تريد تجاهل تغييراتك غير المحفوظة؟';
+
+  @override
   String get actionDelete => 'حذف';
 
   @override

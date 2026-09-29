@@ -204,6 +204,9 @@
   "@actionCancel": {
     "description": "Generic cancel action."
   },
+  "actionDiscard": "বাতিল করুন",
+  "unsavedChanges": "সংরক্ষণ না করা পরিবর্তন",
+  "discardUnsavedChanges": "আপনার সংরক্ষণ না করা পরিবর্তনগুলি বাতিল করবেন?",
   "actionDelete": "মুছুন",
   "@actionDelete": {
     "description": "Generic delete action."

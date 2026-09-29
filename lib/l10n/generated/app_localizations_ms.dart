@@ -162,6 +162,15 @@ class AppLocalizationsMs extends AppLocalizations {
   String get actionCancel => 'Batal';
 
   @override
+  String get actionDiscard => 'Buang';
+
+  @override
+  String get unsavedChanges => 'Perubahan belum disimpan';
+
+  @override
+  String get discardUnsavedChanges => 'Buang perubahan yang belum disimpan?';
+
+  @override
   String get actionDelete => 'Padam';
 
   @override

@@ -204,6 +204,9 @@
   "@actionCancel": {
     "description": "Generic cancel action."
   },
+  "actionDiscard": "त्यागें",
+  "unsavedChanges": "सहेजे न गए बदलाव",
+  "discardUnsavedChanges": "क्या सहेजे न गए बदलावों को त्यागना है?",
   "actionDelete": "हटाएँ",
   "@actionDelete": {
     "description": "Generic delete action."

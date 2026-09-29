@@ -204,6 +204,9 @@
   "@actionCancel": {
     "description": "Generic cancel action."
   },
+  "actionDiscard": "مسترد کریں",
+  "unsavedChanges": "غیر محفوظ شدہ تبدیلیاں",
+  "discardUnsavedChanges": "غیر محفوظ شدہ تبدیلیاں مسترد کر دیں؟",
   "actionDelete": "حذف کریں",
   "@actionDelete": {
     "description": "Generic delete action."

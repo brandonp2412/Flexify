@@ -204,6 +204,9 @@
   "@actionCancel": {
     "description": "Generic cancel action."
   },
+  "actionDiscard": "تجاهل",
+  "unsavedChanges": "تغييرات غير محفوظة",
+  "discardUnsavedChanges": "هل تريد تجاهل تغييراتك غير المحفوظة؟",
   "actionDelete": "حذف",
   "@actionDelete": {
     "description": "Generic delete action."

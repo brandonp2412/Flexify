@@ -81,4 +81,59 @@ void main() {
     expect(find.text('Back extension'), findsNWidgets(2));
     expect(find.text('Arnold press'), findsNothing);
   });
+
+  testWidgets('EditPlanPage confirms before discarding changes', (
+    WidgetTester tester,
+  ) async {
+    final harness = await FlexifyTestHarness.create();
+    final database = harness.database;
+    final plan = planFixture(
+      id: 1,
+      days: 'Monday',
+      title: 'Test title',
+      sequence: 1,
+    );
+    await database.plans.deleteAll();
+    await database.planExercises.deleteAll();
+    await database.plans.insertOne(plan);
+    await database.planExercises.insertOne(
+      planExerciseFixture(planId: 1, exercise: 'Arnold press'),
+    );
+
+    await harness.pump(
+      tester,
+      Builder(
+        builder: (context) => Scaffold(
+          body: TextButton(
+            onPressed: () => Navigator.of(
+              context,
+            ).push(MaterialPageRoute(builder: (_) => EditPlanPage(plan: plan))),
+            child: const Text('Open editor'),
+          ),
+        ),
+      ),
+    );
+    await tester.tap(find.text('Open editor'));
+    await tester.pumpAndSettle();
+
+    await tester.enterText(find.byType(TextField).first, 'Changed title');
+    await tester.pump();
+    expect(find.text('Changed title'), findsOneWidget);
+    await Navigator.of(tester.element(find.byType(EditPlanPage))).maybePop();
+    await tester.pumpAndSettle();
+
+    expect(find.text('Unsaved changes'), findsOneWidget);
+    expect(find.text('Discard your unsaved changes?'), findsOneWidget);
+
+    await tester.tap(find.text('Cancel'));
+    await tester.pumpAndSettle();
+    expect(find.text('Changed title'), findsOneWidget);
+
+    await Navigator.of(tester.element(find.byType(EditPlanPage))).maybePop();
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Discard'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Open editor'), findsOneWidget);
+  });
 }

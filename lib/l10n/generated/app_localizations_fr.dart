@@ -162,6 +162,16 @@ class AppLocalizationsFr extends AppLocalizations {
   String get actionCancel => 'Annuler';
 
   @override
+  String get actionDiscard => 'Abandonner';
+
+  @override
+  String get unsavedChanges => 'Modifications non enregistrées';
+
+  @override
+  String get discardUnsavedChanges =>
+      'Abandonner les modifications non enregistrées ?';
+
+  @override
   String get actionDelete => 'Supprimer';
 
   @override

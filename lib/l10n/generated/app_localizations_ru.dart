@@ -165,6 +165,15 @@ class AppLocalizationsRu extends AppLocalizations {
   String get actionCancel => 'Отмена';
 
   @override
+  String get actionDiscard => 'Отбросить';
+
+  @override
+  String get unsavedChanges => 'Несохранённые изменения';
+
+  @override
+  String get discardUnsavedChanges => 'Отбросить несохранённые изменения?';
+
+  @override
   String get actionDelete => 'Удалить';
 
   @override

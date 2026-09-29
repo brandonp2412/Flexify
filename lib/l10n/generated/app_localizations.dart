@@ -411,6 +411,24 @@ abstract class AppLocalizations {
   /// **'Cancel'**
   String get actionCancel;
 
+  /// Generic action that discards pending changes.
+  ///
+  /// In en, this message translates to:
+  /// **'Discard'**
+  String get actionDiscard;
+
+  /// Title for a confirmation dialog shown before leaving an edited form.
+  ///
+  /// In en, this message translates to:
+  /// **'Unsaved changes'**
+  String get unsavedChanges;
+
+  /// Confirmation message shown before leaving an edited form.
+  ///
+  /// In en, this message translates to:
+  /// **'Discard your unsaved changes?'**
+  String get discardUnsavedChanges;
+
   /// Generic delete action.
   ///
   /// In en, this message translates to:

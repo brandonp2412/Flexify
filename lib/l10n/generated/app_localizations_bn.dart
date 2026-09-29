@@ -161,6 +161,16 @@ class AppLocalizationsBn extends AppLocalizations {
   String get actionCancel => 'বাতিল';
 
   @override
+  String get actionDiscard => 'বাতিল করুন';
+
+  @override
+  String get unsavedChanges => 'সংরক্ষণ না করা পরিবর্তন';
+
+  @override
+  String get discardUnsavedChanges =>
+      'আপনার সংরক্ষণ না করা পরিবর্তনগুলি বাতিল করবেন?';
+
+  @override
   String get actionDelete => 'মুছুন';
 
   @override

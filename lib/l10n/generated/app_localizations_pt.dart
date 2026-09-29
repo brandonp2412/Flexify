@@ -162,6 +162,15 @@ class AppLocalizationsPt extends AppLocalizations {
   String get actionCancel => 'Cancelar';
 
   @override
+  String get actionDiscard => 'Descartar';
+
+  @override
+  String get unsavedChanges => 'Alterações não salvas';
+
+  @override
+  String get discardUnsavedChanges => 'Descartar as alterações não salvas?';
+
+  @override
   String get actionDelete => 'Excluir';
 
   @override
@@ -1728,6 +1737,15 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get actionCancel => 'Cancelar';
+
+  @override
+  String get actionDiscard => 'Descartar';
+
+  @override
+  String get unsavedChanges => 'Alterações não salvas';
+
+  @override
+  String get discardUnsavedChanges => 'Descartar as alterações não salvas?';
 
   @override
   String get actionDelete => 'Excluir';

@@ -158,6 +158,15 @@ class AppLocalizationsJa extends AppLocalizations {
   String get actionCancel => 'キャンセル';
 
   @override
+  String get actionDiscard => '破棄';
+
+  @override
+  String get unsavedChanges => '未保存の変更';
+
+  @override
+  String get discardUnsavedChanges => '未保存の変更を破棄しますか？';
+
+  @override
   String get actionDelete => '削除';
 
   @override

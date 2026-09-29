@@ -158,6 +158,15 @@ class AppLocalizationsKo extends AppLocalizations {
   String get actionCancel => '취소';
 
   @override
+  String get actionDiscard => '버리기';
+
+  @override
+  String get unsavedChanges => '저장하지 않은 변경사항';
+
+  @override
+  String get discardUnsavedChanges => '저장하지 않은 변경사항을 버릴까요?';
+
+  @override
   String get actionDelete => '삭제';
 
   @override
