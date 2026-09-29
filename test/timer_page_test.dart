@@ -144,7 +144,7 @@ void main() {
     timerState.dispose();
   });
 
-  testWidgets('Timer and stopwatch show smaller muted milliseconds', (
+  testWidgets('Timer and stopwatch keep the same text size', (
     WidgetTester tester,
   ) async {
     final harness = await FlexifyTestHarness.create();
@@ -208,6 +208,11 @@ void main() {
     final timerTime = tester.widget<Text>(timerTimeFinder);
     final timerMilliseconds = tester.widget<Text>(timerMillisecondsFinder);
 
+    expect(timerTime.style!.fontSize, stopwatchTime.style!.fontSize);
+    expect(
+      timerMilliseconds.style!.fontSize,
+      stopwatchMilliseconds.style!.fontSize,
+    );
     expect(
       timerMilliseconds.style!.fontSize,
       lessThan(timerTime.style!.fontSize!),

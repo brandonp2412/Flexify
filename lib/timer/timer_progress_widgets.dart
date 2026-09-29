@@ -9,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 
+const double _timerFaceFontSize = 60;
+
 class TimerCircularProgressIndicator extends StatefulWidget {
   const TimerCircularProgressIndicator({super.key});
   @override
@@ -289,7 +291,7 @@ class _StopwatchProgressIndicatorState extends State<StopwatchProgressIndicator>
           maxCircleSize,
           math.min(availableHeight, availableWidth),
         );
-        final timeFontSize = math.min(46.0, math.max(20.0, circleSize * 0.16));
+        const timeFontSize = _timerFaceFontSize;
 
         return Column(
           mainAxisSize: MainAxisSize.min,
@@ -506,7 +508,7 @@ class _TimerCircularProgressIndicatorTile extends StatelessWidget {
               _TimeWithMilliseconds(
                 time: generateTitleText(remaining),
                 duration: remaining,
-                fontSize: 60,
+                fontSize: _timerFaceFontSize,
                 color: onSurface,
               ),
             ],
