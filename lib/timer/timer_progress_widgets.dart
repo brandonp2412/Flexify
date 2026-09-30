@@ -302,14 +302,17 @@ class _StopwatchProgressIndicatorState extends State<StopwatchProgressIndicator>
               child: Stack(
                 alignment: Alignment.center,
                 children: <Widget>[
-                  SizedBox.expand(
-                    child: CircularProgressIndicator(
-                      strokeCap: StrokeCap.round,
-                      value: 1,
-                      strokeWidth: strokeWidth,
-                      backgroundColor: onSurface.withValues(alpha: 0.08),
-                      valueColor: AlwaysStoppedAnimation<Color>(
-                        onSurface.withValues(alpha: 0.08),
+                  RepaintBoundary(
+                    key: const ValueKey('stopwatch-ring'),
+                    child: SizedBox.expand(
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: onSurface.withValues(alpha: 0.08),
+                            width: strokeWidth,
+                          ),
+                        ),
                       ),
                     ),
                   ),

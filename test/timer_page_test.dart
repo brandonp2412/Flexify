@@ -225,4 +225,50 @@ void main() {
     await timerState.stopTimer();
     timerState.dispose();
   });
+
+  testWidgets('stopwatch circle stays fixed across start and pause', (
+    WidgetTester tester,
+  ) async {
+    final harness = await FlexifyTestHarness.create();
+    final timerState = harness.timerState;
+
+    await harness.pump(tester, const TimerPage());
+
+    final circleFinder = find.byKey(const ValueKey('stopwatch-ring'));
+    expect(circleFinder, findsOneWidget);
+    expect(find.byType(CircularProgressIndicator), findsNothing);
+    final idleRect = tester.getRect(circleFinder);
+    final timeFinder = find.byWidgetPredicate(
+      (widget) =>
+          widget is Text &&
+          RegExp(r'^\d{2}:\d{2}$').hasMatch(widget.data ?? ''),
+    );
+    final millisFinder = find.byWidgetPredicate(
+      (widget) =>
+          widget is Text && RegExp(r'^\.\d{3}$').hasMatch(widget.data ?? ''),
+    );
+    final idleTimeRect = tester.getRect(timeFinder);
+    final idleMillisRect = tester.getRect(millisFinder);
+
+    await tester.tap(find.text('Start'));
+    await tester.pump(const Duration(milliseconds: 50));
+    final runningRect = tester.getRect(circleFinder);
+    final runningTimeRect = tester.getRect(timeFinder);
+    final runningMillisRect = tester.getRect(millisFinder);
+
+    await tester.tap(find.text('Pause'));
+    await tester.pump(const Duration(milliseconds: 50));
+    final pausedRect = tester.getRect(circleFinder);
+    final pausedTimeRect = tester.getRect(timeFinder);
+    final pausedMillisRect = tester.getRect(millisFinder);
+
+    expect(runningRect, idleRect);
+    expect(pausedRect, idleRect);
+    expect(runningTimeRect, idleTimeRect);
+    expect(pausedTimeRect, idleTimeRect);
+    expect(runningMillisRect, idleMillisRect);
+    expect(pausedMillisRect, idleMillisRect);
+
+    timerState.dispose();
+  });
 }
