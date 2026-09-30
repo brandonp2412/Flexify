@@ -92,8 +92,10 @@ android {
         coreLibraryDesugaringEnabled true
     }
 
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
+    kotlin {
+        compilerOptions {
+            jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
+        }
     }
 
     sourceSets {
@@ -143,21 +145,21 @@ android {
    buildTypes {
        profile {
            if (keystorePropertiesFile.exists()) {
-               signingConfig signingConfigs.release
+               signingConfig = signingConfigs.release
            }
            // Reproducible builds
            buildConfigField "long", "BUILD_TIME", "0L"
        }
        debug {
            if (keystorePropertiesFile.exists()) {
-               signingConfig signingConfigs.release
+               signingConfig = signingConfigs.release
            }
            // Reproducible builds
            buildConfigField "long", "BUILD_TIME", "0L"
        }
        release {
            if (keystorePropertiesFile.isFile()) {
-               signingConfig signingConfigs.release
+               signingConfig = signingConfigs.release
            }
            // Reproducible builds
            buildConfigField "long", "BUILD_TIME", "0L"
