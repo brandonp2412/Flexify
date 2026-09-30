@@ -226,6 +226,38 @@ void main() {
     timerState.dispose();
   });
 
+  testWidgets('countdown progress ring stays fixed while animating', (
+    WidgetTester tester,
+  ) async {
+    final harness = await FlexifyTestHarness.create();
+    final timerState = harness.timerState;
+
+    await timerState.startTimer(
+      'Test Timer',
+      const Duration(seconds: 10),
+      '',
+      false,
+      true,
+    );
+    await harness.pump(
+      tester,
+      const Scaffold(body: TimerCircularProgressIndicator()),
+    );
+
+    final ringFinder = find.byKey(const ValueKey('timer-progress-ring'));
+    expect(ringFinder, findsOneWidget);
+    final initialRect = tester.getRect(ringFinder);
+
+    await tester.pump(const Duration(milliseconds: 150));
+    expect(tester.getRect(ringFinder), initialRect);
+
+    await tester.pump(const Duration(milliseconds: 200));
+    expect(tester.getRect(ringFinder), initialRect);
+
+    await timerState.stopTimer();
+    timerState.dispose();
+  });
+
   testWidgets('stopwatch circle stays fixed across start and pause', (
     WidgetTester tester,
   ) async {
