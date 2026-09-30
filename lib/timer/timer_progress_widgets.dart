@@ -10,6 +10,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 
 const double _timerFaceFontSize = 60;
+const double _timerControlsSpacing = 8;
 
 class TimerCircularProgressIndicator extends StatefulWidget {
   const TimerCircularProgressIndicator({super.key});
@@ -325,7 +326,7 @@ class _StopwatchProgressIndicatorState extends State<StopwatchProgressIndicator>
                 ],
               ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: _timerControlsSpacing),
             TextButton(
               onPressed: started
                   ? widget.onRestart
@@ -458,6 +459,13 @@ class _TimerCircularProgressIndicatorTile extends StatelessWidget {
   Widget build(BuildContext context) {
     const double circleSize = 280;
     const double strokeWidth = 10;
+    const double dotSize = 16;
+    // Dot sits at the centreline of the stroke track.
+    const double dotRadius = circleSize / 2;
+
+    final angle = (-math.pi / 2) - (2 * math.pi * (1 - value));
+    final dotX = dotRadius * math.cos(angle);
+    final dotY = dotRadius * math.sin(angle);
 
     final primary = Theme.of(context).colorScheme.primary;
     final onSurface = Theme.of(context).colorScheme.onSurface;
@@ -471,19 +479,36 @@ class _TimerCircularProgressIndicatorTile extends StatelessWidget {
           height: circleSize,
           child: Stack(
             alignment: Alignment.center,
+            clipBehavior: Clip.none,
             children: <Widget>[
-              RepaintBoundary(
-                key: const ValueKey('timer-progress-ring'),
-                child: SizedBox.expand(
-                  child: CircularProgressIndicator(
-                    strokeCap: StrokeCap.round,
-                    value: value,
-                    strokeWidth: strokeWidth,
-                    backgroundColor: onSurface.withValues(alpha: 0.08),
-                    valueColor: AlwaysStoppedAnimation<Color>(primary),
-                  ),
+              SizedBox.expand(
+                child: CircularProgressIndicator(
+                  strokeCap: StrokeCap.round,
+                  value: value,
+                  strokeWidth: strokeWidth,
+                  backgroundColor: onSurface.withValues(alpha: 0.08),
+                  valueColor: AlwaysStoppedAnimation<Color>(primary),
                 ),
               ),
+              if (value > 0)
+                Transform.translate(
+                  offset: Offset(dotX, dotY),
+                  child: Container(
+                    width: dotSize,
+                    height: dotSize,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: primary,
+                      boxShadow: [
+                        BoxShadow(
+                          color: primary.withValues(alpha: 0.4),
+                          blurRadius: 10,
+                          spreadRadius: 2,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               _TimeWithMilliseconds(
                 time: generateTitleText(remaining),
                 duration: remaining,
@@ -493,7 +518,7 @@ class _TimerCircularProgressIndicatorTile extends StatelessWidget {
             ],
           ),
         ),
-        const SizedBox(height: 24),
+        const SizedBox(height: _timerControlsSpacing),
         TextButton(
           onPressed: () async {
             final settings = context.read<SettingsState>().value;
