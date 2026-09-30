@@ -20,6 +20,28 @@ import 'package:provider/provider.dart';
 final rootScaffoldMessenger = GlobalKey<ScaffoldMessengerState>();
 String? _lastSyncedBackupLocale;
 
+/// Gives touch input the same tap-outside behavior Flutter provides for
+/// mouse input: tapping away from an editable field releases its focus.
+class DismissKeyboardOnTapOutside extends StatelessWidget {
+  final Widget child;
+
+  const DismissKeyboardOnTapOutside({super.key, required this.child});
+
+  @override
+  Widget build(BuildContext context) => Actions(
+    actions: {
+      EditableTextTapOutsideIntent:
+          CallbackAction<EditableTextTapOutsideIntent>(
+            onInvoke: (intent) {
+              intent.focusNode.unfocus();
+              return null;
+            },
+          ),
+    },
+    child: child,
+  );
+}
+
 void _syncBackupLocalizations(AppLocalizations l10n) {
   if (kIsWeb || defaultTargetPlatform != TargetPlatform.android) return;
   if (_lastSyncedBackupLocale == l10n.localeName) return;
@@ -209,7 +231,9 @@ class App extends StatelessWidget {
               exactAlarmRequestUnavailable:
                   context.l10n.exactAlarmRequestUnavailable,
             );
-            return child ?? const SizedBox.shrink();
+            return DismissKeyboardOnTapOutside(
+              child: child ?? const SizedBox.shrink(),
+            );
           },
           onGenerateTitle: (context) => context.l10n.appTitle,
           theme: ThemeData(
