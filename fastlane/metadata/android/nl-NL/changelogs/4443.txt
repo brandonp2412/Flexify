@@ -1,1 +1,7 @@
-• Vertalingen en correcties aan het app-pictogram voltooid
+• fix(ci): geschiedenis van gelokaliseerde release-opmerkingen voltooien
+• fix(l10n): releasemetadata voor Braziliaans-Portugees voltooien
+• fix(l10n): releasemetadata voor Frans voltooien
+• fix(l10n): releasemetadata voor Duits voltooien
+• fix(l10n): releasemetadata voor Japans voltooien
+• fix(l10n): Spaanse releasemetadata synchroniseren
+• fix: app-pictogram met halter herstellen

@@ -1,3 +1,7 @@
-• feat(l10n): meer taalmetadata voor de store toevoegen
-• feat(l10n): storemetadata voor recent toegevoegde talen toevoegen
-• fix(l10n): release-opmerkingen van 2.2.27 synchroniseren
+• fix(ci): geschiedenis van gelokaliseerde release-opmerkingen voltooien
+• fix(l10n): releasemetadata voor Braziliaans-Portugees voltooien
+• fix(l10n): releasemetadata voor Frans voltooien
+• fix(l10n): releasemetadata voor Duits voltooien
+• fix(l10n): releasemetadata voor Japans voltooien
+• fix(l10n): Spaanse releasemetadata synchroniseren
+• fix: app-pictogram met halter herstellen

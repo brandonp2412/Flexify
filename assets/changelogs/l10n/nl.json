@@ -530,5 +530,5 @@
   "1790394970": "• fix(l10n): geldige landinstellingen voor de Play-vermelding gebruiken",
   "1790404468": "• Brandon Dick gebruiken in app-verwijzingen\n• fix(l10n): nieuwste vertaalde release-opmerkingen synchroniseren",
   "1790414297": "• fix(l10n): nieuwste release-opmerkingen lokaliseren",
-  "1790477503": "• Vertalingen en correcties aan het app-pictogram voltooid"
+  "1790477503": "• fix(ci): geschiedenis van gelokaliseerde release-opmerkingen voltooien\n• fix(l10n): releasemetadata voor Braziliaans-Portugees voltooien\n• fix(l10n): releasemetadata voor Frans voltooien\n• fix(l10n): releasemetadata voor Duits voltooien\n• fix(l10n): releasemetadata voor Japans voltooien\n• fix(l10n): Spaanse releasemetadata synchroniseren\n• fix: app-pictogram met halter herstellen"
 }
