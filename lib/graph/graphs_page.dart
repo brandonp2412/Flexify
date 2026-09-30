@@ -382,7 +382,7 @@ class GraphsPageState extends State<GraphsPage>
   }
 
   ListView graphList(List<GymSetsCompanion> gymSets, bool showGlobalProgress) {
-    var itemCount = gymSets.length + 1;
+    var itemCount = gymSets.length;
     final globalSearchTerms =
         '${context.l10n.globalProgress} ${context.l10n.navGraphs}'
             .toLowerCase();
@@ -400,7 +400,7 @@ class GraphsPageState extends State<GraphsPage>
       itemCount: itemCount,
       controller: _scroll,
       padding: EdgeInsets.only(
-        bottom: isDesktopLayout(context) ? 32 : 50,
+        bottom: isDesktopLayout(context) ? 32 : floatingActionButtonListPadding,
         top: appSearchHeight + 8,
       ),
       itemBuilder: (context, index) {
@@ -496,9 +496,6 @@ class GraphsPageState extends State<GraphsPage>
                 },
           );
         }
-
-        if (index == itemCount - 1)
-          return const SizedBox(height: bottomNavHeight);
 
         if (showPeekGraph && currentIdx > 0) {
           currentIdx--;

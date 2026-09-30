@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart';
+import 'package:flexify/bottom_nav.dart';
 import 'package:flexify/sets/history_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -30,6 +31,11 @@ void main() {
 
     expect(find.text('Bench press'), findsOne);
     expect(find.text('2 x 3 kg'), findsOne);
+    final list = tester.widget<ListView>(find.byType(ListView));
+    expect(
+      (list.padding! as EdgeInsets).bottom,
+      floatingActionButtonListPadding,
+    );
   });
 
   testWidgets('keeps leading avatar visible while selected', (

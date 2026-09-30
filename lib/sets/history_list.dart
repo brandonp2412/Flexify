@@ -238,7 +238,7 @@ class _HistoryListState extends State<HistoryList> {
 
     return ListView.builder(
       padding: EdgeInsets.only(
-        bottom: isDesktopLayout(context) ? 32 : bottomNavHeight,
+        bottom: isDesktopLayout(context) ? 32 : floatingActionButtonListPadding,
         top: appSearchHeight + 8,
       ),
       controller: widget.scroll,

@@ -1,4 +1,6 @@
+import 'package:flexify/bottom_nav.dart';
 import 'package:flexify/plan/plans_page.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'mock_tab_controller.dart';
@@ -19,6 +21,10 @@ void main() {
 
     expect(find.text('Search plans...'), findsOne);
     expect(find.textContaining('Barbell bench press'), findsOne);
+    final list = tester.widget<ReorderableListView>(
+      find.byType(ReorderableListView),
+    );
+    expect(list.padding!.bottom, floatingActionButtonListPadding);
   });
 
   testWidgets('PlansPage add button', (WidgetTester tester) async {

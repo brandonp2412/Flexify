@@ -4,6 +4,7 @@ import 'package:flexify/app_search.dart';
 import 'package:flexify/bottom_nav.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/l10n/l10n.dart';
+import 'package:flexify/responsive.dart';
 import 'package:flexify/sets/edit_set_page.dart';
 import 'package:flexify/sets/history_page.dart';
 import 'package:flexify/settings/settings_state.dart';
@@ -41,8 +42,8 @@ class _GroupHistoryState extends State<GroupHistory> {
 
     return ListView.builder(
       itemCount: widget.days.length,
-      padding: const EdgeInsets.only(
-        bottom: bottomNavHeight,
+      padding: EdgeInsets.only(
+        bottom: isDesktopLayout(context) ? 32 : floatingActionButtonListPadding,
         top: appSearchHeight + 8,
       ),
       controller: widget.scroll,

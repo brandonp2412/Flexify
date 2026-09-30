@@ -129,8 +129,10 @@ class _PlansListState extends State<PlansList> {
         scrollController: widget.scroll,
         buildDefaultDragHandles: !isDesktopLayout(context),
         itemCount: filteredPlans.length,
-        padding: const EdgeInsets.only(
-          bottom: bottomNavHeight,
+        padding: EdgeInsets.only(
+          bottom: isDesktopLayout(context)
+              ? 32
+              : floatingActionButtonListPadding,
           top: appSearchHeight + 8,
         ),
         itemBuilder: (context, index) {
@@ -169,8 +171,8 @@ class _PlansListState extends State<PlansList> {
     return ListView.builder(
       controller: widget.scroll,
       itemCount: filteredPlans.length,
-      padding: const EdgeInsets.only(
-        bottom: bottomNavHeight,
+      padding: EdgeInsets.only(
+        bottom: isDesktopLayout(context) ? 32 : floatingActionButtonListPadding,
         top: appSearchHeight + 8,
       ),
       itemBuilder: (context, index) {

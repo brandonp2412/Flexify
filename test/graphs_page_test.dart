@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart';
+import 'package:flexify/bottom_nav.dart';
 import 'package:flexify/graph/graphs_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -32,6 +33,11 @@ void main() {
 
     expect(find.text('Search graphs...'), findsOne);
     expect(find.text('Global progress'), findsOne);
+    final list = tester.widget<ListView>(find.byType(ListView));
+    expect(
+      (list.padding! as EdgeInsets).bottom,
+      floatingActionButtonListPadding,
+    );
   });
 
   testWidgets('GraphsPage taps barbell bench press', (
