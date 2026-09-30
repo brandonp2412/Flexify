@@ -1,0 +1,2 @@
+- যোগ করুন image support
+- যোগ করুন monochrome app icons

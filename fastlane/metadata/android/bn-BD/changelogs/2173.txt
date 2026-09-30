@@ -1,0 +1,3 @@
+- পরিবর্তন: Stop backup receiver if automatic backups are off
+- সরান rsync from ডেপ্লয়.sh to macos
+- ব্যবহার করুন zsh in macos.sh

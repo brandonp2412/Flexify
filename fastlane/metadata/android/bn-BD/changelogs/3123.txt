@@ -1,0 +1,2 @@
+• পরিবর্তন: Always rollout 100% on the msstore
+• পরিবর্তন: Stop app resizing for virtual keyboard

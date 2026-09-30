@@ -1,0 +1,5 @@
+- Round ওজন
+- ঠিক করুন tab navigation being behind the system nav
+- সরান curve smoothness label before slider
+- ঠিক করুন track color missing with system colors
+- Normalize ইউনিট when changing them from গ্রাফ

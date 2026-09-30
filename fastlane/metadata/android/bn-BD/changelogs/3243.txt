@@ -1,0 +1,4 @@
+• পরিবর্তন: Always show tab titles
+• ঠিক করুন not being able to scroll global গ্রাফ
+• ঠিক করুন updating categories
+• Reduce global গ্রাফ clutter on tooltip

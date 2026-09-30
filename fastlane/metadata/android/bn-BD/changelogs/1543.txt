@@ -1,0 +1,5 @@
+- ঠিক করুন app ক্র্যাশ after 1.1.36
+- ব্যবহার করুন অনুসন্ধান bar and add visibility toggle to প্ল্যান
+- সক্রিয় করুন rest টাইমার on desktop platforms
+- তৈরি করুন টাইমার run on desktop
+- Revert work on desktop টাইমার

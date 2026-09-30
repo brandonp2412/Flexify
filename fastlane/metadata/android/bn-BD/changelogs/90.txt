@@ -1,0 +1,10 @@
+- ঠিক করুন টেস্ট
+- যোগ করুন best রিপ metric
+- নাম পরিবর্তন করুন AppGroupBy -> Period
+- উন্নত করুন performance of কার্ডিও গ্রাফ
+- বাড়ান versionCode on universal রিলিজ
+- ঠিক করুন adding minutes from টাইমার পেজ
+- পরিবর্তন: Comment out fastlane supply
+- ব্যবহার করুন local time where relevant
+- পুনর্গঠন করুন সেটিংস logic
+- পুনর্গঠন করুন code

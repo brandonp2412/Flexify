@@ -1,0 +1,2 @@
+• ci: automate version bumping and রিলিজ on push to main
+• পরিবর্তন: fix: prevent duplicate rest alarm when runnable and AlarmManager both fire

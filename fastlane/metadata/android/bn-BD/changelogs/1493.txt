@@ -1,0 +1,3 @@
+- পরিবর্তন: Gracefully handle errors in image loading
+- সরান add/remove buttons from image editor
+- পরিবর্তন: Leave image alone if user cancels file picker

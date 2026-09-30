@@ -1,0 +1,9 @@
+• ঠিক করুন error ইমপোর্ট ডেটা
+• fix ইমপোর্ট of ডেটা by inserting planExercises records and update প্ল্যান_list.dart to use null-safe aware operator
+• fix issue #206 by updating the way ব্যায়াম are stored and splitted
+• ঠিক করুন loaders flicking into view
+• ঠিক করুন migration breaking প্ল্যান ব্যায়াম
+• Modify the logic for inclusion of ব্যায়াম in a প্ল্যান by creating PlanExercises records only for selected ব্যায়াম and not storing them in প্ল্যান.ব্যায়াম column
+• পরিবর্তন: Pause work for trip
+• Perform ডেটা migration for existing ডেটা such that only those ব্যায়াম are removed from the প্ল্যান for which PlanExercises.enabled = false
+• update টেস্ট files to make sure all টেস্ট are passing

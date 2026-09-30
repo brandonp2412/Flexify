@@ -1,0 +1,5 @@
+• পরিবর্তন: Revise project description in README
+• আপডেট করুন README to modify project tagline
+• আপডেট করুন project name in README
+• আপডেট করুন version to 2.2.0 in pubspec.yaml
+• fix: resolve open ইতিহাস and প্ল্যান বাগ

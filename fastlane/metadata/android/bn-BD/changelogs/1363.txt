@@ -1,0 +1,3 @@
+- Treat কার্ডিও সময়কাল as minutes:seconds
+- ঠিক করুন max সেট all being 3 per ব্যায়াম
+- সক্রিয় করুন rest টাইমার for Linux

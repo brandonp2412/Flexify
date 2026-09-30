@@ -1,0 +1,10 @@
+• আপডেট করুন README.md
+• chore(l10n): sync current রিলিজ translations
+• chore: add Turkish Play স্ক্রিনশট
+• পরিবর্তন: feat(l10n): add Traditional Chinese translations
+• পরিবর্তন: feat(l10n): complete current translation coverage (#353)
+• পরিবর্তন: feat: add category management
+• পরিবর্তন: feat: complete supported locale translations
+• feat: localize complete রিলিজ ইতিহাস
+• পরিবর্তন: fix: restore embedded Flutter DevTools
+• পরিবর্তন: fix: stabilize Flutter debugging in VS Code

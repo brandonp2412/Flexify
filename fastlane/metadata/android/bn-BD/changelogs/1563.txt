@@ -1,0 +1,3 @@
+- যোগ করুন categories
+- যোগ করুন incline & adjusted pace গ্রাফ
+- সরান duplicated tiles in টাইমার সেটিংস

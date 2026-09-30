@@ -1,0 +1,2 @@
+- ঠিক করুন app ক্র্যাশ after 1.1.36
+- উন্নত করুন কার্ডিও editing experience

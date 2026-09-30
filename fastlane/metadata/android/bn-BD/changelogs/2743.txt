@@ -1,0 +1,4 @@
+• যোগ করুন dotted trend line to গ্রাফ
+• যোগ করুন small বোতাম to end of টাইমার circle
+• সরান diffing from migrate.sh
+• সেট category when you select an ব্যায়াম

@@ -1,0 +1,10 @@
+• অনুমতি দিন configuring of per-ব্যায়াম rest টাইমার from সেটিংস পেজ
+• Animate buttons on অনুসন্ধান bars
+• পরিবর্তন: Animate checkboxes on select
+• Animate fab on প্ল্যান পেজ
+• ঠিক করুন বাগ when editing ইউনিট for a গ্রাফ
+• ঠিক করুন first/last tooltip on hover গ্রাফ
+• ঠিক করুন leading icons for প্ল্যান with titles
+• ঠিক করুন প্ল্যান list টেস্ট
+• ঠিক করুন removing custom টাইমার on সেটিংস পেজ
+• তৈরি করুন day selector darker

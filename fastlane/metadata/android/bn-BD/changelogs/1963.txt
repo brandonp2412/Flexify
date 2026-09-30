@@ -1,0 +1,5 @@
+- উন্নত করুন প্ল্যান edit performance
+- ঠিক করুন one-rep-max গ্রাফ
+- ঠিক করুন প্ল্যান counts being global
+- অনুমতি দিন incline to be empty
+- উন্নত করুন start-up performance

@@ -1,0 +1,10 @@
+• পরিবর্তন: Cover Turkish locale preferences
+• পরিবর্তন: Revert temporary icon redesign assets
+• পরিবর্তন: chore(l10n): Added languageNameTurkish
+• পরিবর্তন: chore: address Turkish localization review
+• পরিবর্তন: feat(l10n): Added Turkish Localization
+• পরিবর্তন: feat: add flexing bicep icon concepts
+• feat: add icon 7 and 8 refinement সেট
+• পরিবর্তন: fix(l10n): Removed duplicate entries
+• fix(টেস্ট): add .gitignore to exclude টেস্ট_bundle.dart
+• fix(টেস্ট): add tr language to the locale_preference_টেস্ট

@@ -1,0 +1,10 @@
+• ঠিক করুন bottom bar not showing on স্ক্রিনশট for ইতিহাস পেজ
+• ঠিক করুন bottom bar obscuring in স্ক্রিনশট
+• লুকান ui from chrome স্ক্রিনশট by ডিফল্ট
+• প্রতিরোধ করুন টাইমার running when disabled from প্ল্যান পেজ
+• সরান redundant sqlite3_Flutter_libs
+• আপডেট করুন .serena
+• আপডেট করুন Flutter
+• আপডেট করুন স্ক্রিনশট
+• আপডেট করুন serena
+• chore: fix Android বিল্ড warnings, upgrade gradle to 8.14

@@ -1,0 +1,2 @@
+- আপডেট করুন Flutter & pubspec.lock
+- ঠিক করুন ডেপ্লয় not running

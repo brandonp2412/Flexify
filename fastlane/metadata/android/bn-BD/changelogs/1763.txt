@@ -1,0 +1,3 @@
+- ঠিক করুন automatic backups
+- ঠিক করুন inconsistent alarm ক্র্যাশ
+- উন্নত করুন রিপ estimation accuracy

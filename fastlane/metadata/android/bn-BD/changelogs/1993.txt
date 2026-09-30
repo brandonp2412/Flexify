@@ -1,0 +1,2 @@
+- ঠিক করুন initial রিপ/ওজন being zero on প্ল্যান
+- সরান leading zeros after saving প্ল্যান

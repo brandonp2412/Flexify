@@ -1,0 +1,4 @@
+- অন্তর্ভুক্ত করুন সেটিংস in ডেটাবেস backups
+- ঠিক করুন ডেটাবেস exporting on desktop
+- যোগ করুন প্ল্যান trailing to home পেজ
+- যোগ করুন options for প্ল্যান trailing

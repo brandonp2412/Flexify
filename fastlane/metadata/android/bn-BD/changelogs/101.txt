@@ -1,0 +1,2 @@
+- Require -p flag for ডেপ্লয়.sh to send to google play
+- সরল করুন count query for প্ল্যান

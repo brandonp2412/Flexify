@@ -1,0 +1,4 @@
+- Toggle টাইমার per প্ল্যান item
+- যোগ করুন muscle group filter to গ্রাফ পেজ
+- ঠিক করুন ইউনিট padding on সেটিংস পেজ
+- ঠিক করুন ব্যায়াম images not being removed

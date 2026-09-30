@@ -1,0 +1,2 @@
+- যোগ করুন best রিপ গ্রাফ
+- Comment out fastlane supply in ডেপ্লয়.sh

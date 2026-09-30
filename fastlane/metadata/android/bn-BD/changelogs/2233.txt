@@ -1,0 +1,4 @@
+- সক্রিয় করুন ব্যায়াম on স্ক্রিনশট for প্ল্যান
+- Curve গ্রাফ by ডিফল্ট
+- আপডেট করুন README.md
+- পরিবর্তন: Handle failed migrations

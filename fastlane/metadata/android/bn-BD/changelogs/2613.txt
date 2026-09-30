@@ -1,0 +1,3 @@
+• যোগ করুন স্ক্রিনশট to github ওয়ার্কফ্লো [skip ci]
+• ঠিক করুন Flutter cache permissions
+• সংরক্ষণ করুন সেট from ইতিহাস after submitting ওজন

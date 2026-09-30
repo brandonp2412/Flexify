@@ -1,0 +1,4 @@
+• ঠিক করুন ডেপ্লয়.sh
+• তৈরি করুন bottom sheets easier to tap
+• তৈরি করুন it easier to see/tap last entries
+• ব্যবহার করুন previously entered boy ওজন in প্ল্যান পেজ

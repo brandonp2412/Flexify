@@ -1,0 +1,6 @@
+- অনুমতি দিন multi deleting of প্ল্যান
+- নাম পরিবর্তন করুন "Enter ওজন" as "ওজন" on গ্রাফ পেজ
+- যোগ করুন edit বোতাম to গ্রাফ পেজ dropdown
+- Focus দূরত্ব after submitting সময়কাল
+- ঠিক করুন ক্র্যাশ with inconsistent কার্ডিও types
+- সরান ইতিহাস suffix from গ্রাফ_ইতিহাস

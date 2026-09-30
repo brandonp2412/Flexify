@@ -1,0 +1,5 @@
+• ঠিক করুন exporting প্ল্যান csvs
+• ঠিক করুন ইমপোর্ট files from Windows
+• উন্নত করুন error handling
+• Keep টাইমার progress even if টাইমার পেজ is hidden
+• Select first ব্যায়াম correctly in প্ল্যান

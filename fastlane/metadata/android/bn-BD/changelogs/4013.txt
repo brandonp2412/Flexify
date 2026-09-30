@@ -1,0 +1,10 @@
+• fix: guard স্ক্রিনশট navigation context
+• পরিবর্তন: fix: reopen folder picker after permission grant
+• fix: retry transient স্ক্রিনশট emulator disconnects
+• পরিবর্তন: fix: sequence backup permission before folder picker
+• fix: stabilize Android folder picker টেস্ট
+• fix: stabilize automated টাইমার স্ক্রিনশট
+• টেস্ট: add reusable ডেটাবেস fixtures
+• টেস্ট: add shared widget টেস্ট harness
+• টেস্ট: align StartPlanPage টেস্ট with current fields
+• টেস্ট: assert Android document picker by package

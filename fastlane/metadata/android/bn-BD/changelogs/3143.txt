@@ -1,0 +1,4 @@
+• অনুমতি দিন all ইউনিট types for কার্ডিও
+• পরিবর্তন করুন style of tabs সেটিংস পেজ
+• ঠিক করুন adding a কার্ডিও ব্যায়াম from the গ্রাফ পেজ
+• প্রতিরোধ করুন saying the changelog on first install

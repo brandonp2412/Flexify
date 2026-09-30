@@ -1,0 +1,8 @@
+• ঠিক করুন bottom progress bar not updating
+• ঠিক করুন padding consistency on প্ল্যান
+• ঠিক করুন system back navigation
+• ঠিক করুন ইউনিট টেস্ট
+• পরিবর্তন: Link shields.io on downloads badge
+• Match spacing from edit সেট on edit ওজন পেজ
+• প্রতিরোধ করুন double-tap editing সেট that haven't been entered yet
+• সরান get it on X spacing

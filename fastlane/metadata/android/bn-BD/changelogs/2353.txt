@@ -1,0 +1,7 @@
+- আপডেট করুন Flutter
+- ঠিক করুন X axis consistency in global গ্রাফ
+- পরিবর্তন: Only request background permissions once
+- ঠিক করুন টাইমার progress logic
+- দেখান most recent গ্রাফ instead of best ওজন
+- দেখান error before blank loading box in গ্রাফ পেজ
+- যোগ করুন dynamic অনুসন্ধান

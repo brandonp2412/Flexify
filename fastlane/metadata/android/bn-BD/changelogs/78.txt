@@ -1,0 +1,5 @@
+- ঠিক করুন স্ক্রিনশট টেস্ট
+- তৈরি করুন ডেটা ইমপোর্ট more robust
+- Clear প্ল্যান before ইমপোর্ট
+- প্রতিরোধ করুন opening গ্রাফ point on pinch
+- Put রিলিজ mode on my phone after deploying

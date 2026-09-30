@@ -1,0 +1,2 @@
+- ঠিক করুন app ক্র্যাশ on timeout
+- ঠিক করুন selecting ব্যায়াম from ইতিহাস পেজ

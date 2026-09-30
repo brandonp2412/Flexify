@@ -1,0 +1,2 @@
+• Wrap টাইমার progress indicator in safe area
+• ঠিক করুন গ্রাফ not updating

@@ -1,0 +1,4 @@
+- যোগ করুন stop বোতাম to finished টাইমার
+- ঠিক করুন created dates on ইতিহাস পেজ for new সেট
+- ঠিক করুন alarms not stopping
+- প্রতিস্থাপন করুন redundant usage of MaterialStateProperty

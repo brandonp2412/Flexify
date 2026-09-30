@@ -1,0 +1,3 @@
+• অনুমতি দিন manual triggering of github ওয়ার্কফ্লো
+• Downgrade to ruby 3.3 for ডেপ্লয়-google-play
+• ঠিক করুন publisher name in pubspec.yaml

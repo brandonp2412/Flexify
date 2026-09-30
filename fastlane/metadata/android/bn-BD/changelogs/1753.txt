@@ -1,0 +1,3 @@
+- যোগ করুন tabs setting
+- যোগ করুন প্ল্যান সেটিংস
+- ঠিক করুন গ্রাফ fab blocking information

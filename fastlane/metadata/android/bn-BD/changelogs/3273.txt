@@ -1,0 +1,2 @@
+• অনুমতি দিন adding curve smoothness to fail
+• ঠিক করুন ইমপোর্ট প্ল্যান/গ্রাফ from Windows

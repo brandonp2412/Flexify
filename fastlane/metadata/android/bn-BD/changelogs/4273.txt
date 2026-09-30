@@ -1,0 +1,5 @@
+• আপডেট করুন README.md
+• পরিবর্তন: feat: add category management
+• পরিবর্তন: feat: promote icon 2 as Flexify launcher icon
+• পরিবর্তন: fix: restore embedded Flutter DevTools
+• পরিবর্তন: fix: stabilize Flutter debugging in VS Code

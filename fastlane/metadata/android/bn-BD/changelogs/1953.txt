@@ -1,0 +1,3 @@
+- পরিবর্তন: Animate progress bars left to right
+- Highlight todays প্ল্যান with custom titles
+- Compress day selector on প্ল্যান editor

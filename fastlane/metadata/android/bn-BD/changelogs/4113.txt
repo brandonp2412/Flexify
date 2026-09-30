@@ -1,0 +1,2 @@
+• Harden Patrol টেস্ট against timing
+• পরিবর্তন: fix: stabilize Android folder picker check

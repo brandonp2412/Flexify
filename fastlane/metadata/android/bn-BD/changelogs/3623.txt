@@ -1,0 +1,1 @@
+• ci: add VirusTotal scanning on রিলিজ APKs

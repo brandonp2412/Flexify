@@ -1,0 +1,1 @@
+ঠিক করুন git commit command in ডেপ্লয়.sh

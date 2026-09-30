@@ -1,0 +1,3 @@
+- যোগ করুন সেটিংস বোতাম to active প্ল্যান
+- ঠিক করুন trailing reorder buttons on desktop
+- নিষ্ক্রিয় করুন rest টাইমার on warmup সেট

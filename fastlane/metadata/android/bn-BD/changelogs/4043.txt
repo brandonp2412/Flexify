@@ -1,0 +1,6 @@
+• ঠিক করুন Microsoft Store rollout finalization checks
+• পরিবর্তন: Parse multiline Store rollout responses
+• পরিবর্তন: Polish empty states
+• পরিবর্তন: Target published Store submissions
+• পরিবর্তন: ci: retry transient Android picker failure
+• টেস্ট: align গ্রাফ ইতিহাস empty state

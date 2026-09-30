@@ -1,0 +1,3 @@
+• পরিবর্তন: Sync Google Play store metadata automatically (#333)
+• পরিবর্তন: fix: publish compliant privacy policy
+• fix: retain privacy policy in পেজ ডেপ্লয়মেন্ট

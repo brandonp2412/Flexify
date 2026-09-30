@@ -1,0 +1,7 @@
+• যোগ করুন github পেজ hosting for Flexify web
+• যোগ করুন missing changelogs
+• অনুমতি দিন user to clear max সেট
+• মুছুন unused scripts
+• ঠিক করুন what's new copying
+• পরিবর্তন: Only back up to a single file every time
+• সরান রিপ from strength গ্রাফ

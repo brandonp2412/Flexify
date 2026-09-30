@@ -1,0 +1,4 @@
+- Paginate gym সেট on ইতিহাস
+- Capitalize অনুসন্ধান bar sentences
+- ব্যবহার করুন the last entered gym সেট as the ডিফল্ট
+- Order গ্রাফ by created date

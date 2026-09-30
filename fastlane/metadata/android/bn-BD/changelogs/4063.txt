@@ -1,0 +1,4 @@
+• পরিবর্তন: Flatten tab content selection
+• পরিবর্তন: Prefer visible tab selector
+• সরল করুন early-return control flow
+• পরিবর্তন: refactor: prefer user-visible controls in Linux E2E

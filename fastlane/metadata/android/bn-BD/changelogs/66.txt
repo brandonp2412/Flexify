@@ -1,0 +1,6 @@
+- সরান tags from ডেপ্লয়.sh
+- যোগ করুন delete বোতাম to edit gym সেট পেজ
+- Edit গ্রাফ points by double tapping
+- সরান date সেটিংস helper text into the label
+- যোগ করুন short date format setting
+- পুনর্গঠন করুন line গ্রাফ

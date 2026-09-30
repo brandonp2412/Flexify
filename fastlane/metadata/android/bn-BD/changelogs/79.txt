@@ -1,0 +1,12 @@
+- ঠিক করুন স্ক্রিনশট
+- ঠিক করুন exporting/ইমপোর্ট hidden and কার্ডিও types
+- ঠিক করুন turning off কার্ডিও when editing a সেট
+- পরিবর্তন: Stop animating to tabs after deleting
+- সরান empty entries message to the top of ইতিহাস
+- যোগ করুন ইতিহাস tab
+- আপডেট করুন স্ক্রিনশট
+- আপডেট করুন স্ক্রিনশট for compare
+- Added tabBarState to every টেস্ট
+- Added global context No longer dependent on PlansPage being the first পেজ
+- Added updated স্ক্রিনশট to compare
+- সরল করুন স্ক্রিনশট

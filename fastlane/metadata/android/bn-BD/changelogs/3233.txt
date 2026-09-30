@@ -1,0 +1,3 @@
+• ঠিক করুন broken re-ordering on প্ল্যান
+• Greatly simplify setting ব্যায়াম in প্ল্যান state
+• Revert "Greatly simplify setting ব্যায়াম in প্ল্যান state"

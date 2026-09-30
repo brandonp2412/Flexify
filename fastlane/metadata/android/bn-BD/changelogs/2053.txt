@@ -1,0 +1,11 @@
+- Upgrade Flutter
+- Double tapping an ব্যায়াম opens it
+- Clarify deleting from গ্রাফ পেজ
+- পরিবর্তন: Long tap on tabs to hide them
+- Automatically capitalize অনুসন্ধান for প্ল্যান ব্যায়াম
+- ঠিক করুন বাগ on strength গ্রাফ
+- ব্যবহার করুন nested পেজ on গ্রাফ -> add
+- ব্যবহার করুন nested route on টাইমার -> সেটিংস
+- যোগ করুন গ্রাফ peeking
+- ঠিক করুন বাগ on strength পেজ
+- Wait for gym সেট to save before updating images

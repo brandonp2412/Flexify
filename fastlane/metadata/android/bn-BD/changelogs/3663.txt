@@ -1,0 +1,5 @@
+• ঠিক করুন attaching virustotal link to রিলিজ
+• feat: add live previews to সেটিংস pickers and fix ওজন formatting
+• fix: add top padding to start প্ল্যান পেজ to prevent outlined label clipping
+• fix: consistent 8dp spacing between inputs on start প্ল্যান পেজ
+• পরিবর্তন: fix: progress position preview uses real TimerProgressIndicator

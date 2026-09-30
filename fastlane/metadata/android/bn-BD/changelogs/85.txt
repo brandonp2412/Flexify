@@ -1,0 +1,5 @@
+- Backup automatically at the end of a প্ল্যান
+- আপডেট করুন start প্ল্যান after editing an entry
+- Group ওজন by week by ডিফল্ট
+- আপডেট করুন dependencies
+- ঠিক করুন variable name of সেটিংস পেজ

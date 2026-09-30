@@ -1,0 +1,5 @@
+• যোগ করুন reproducible বিল্ড configuration for F-Droid
+• ঠিক করুন references to Windows বিল্ড msix
+• ঠিক করুন reproducible বিল্ড issues - align versions with Flutter 3.29.3
+• প্রতিরোধ করুন ক্র্যাশ after ডেটাবেস ইমপোর্ট
+• আপডেট করুন pubspec.lock

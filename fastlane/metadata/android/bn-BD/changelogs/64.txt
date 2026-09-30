@@ -1,0 +1,7 @@
+- অন্তর্ভুক্ত করুন all commit messages in রিলিজ notes
+- নাম পরিবর্তন করুন এক্সপোর্ট/ইমপোর্ট ডেটা files
+- পুনর্গঠন করুন প্ল্যান পেজ
+- যোগ করুন edit icon for গ্রাফ পেজ
+- যোগ করুন setting for curved line গ্রাফ
+- তৈরি করুন line গ্রাফ curved
+- ঠিক করুন tooltips on line গ্রাফ

@@ -1,0 +1,4 @@
+- পরিবর্তন: Redesign day selector
+- ঠিক করুন lag opening গ্রাফ ইতিহাস
+- Re-calculate ORM when editing রিপ/ওজন
+- যোগ করুন padding to end of edit প্ল্যান পেজ

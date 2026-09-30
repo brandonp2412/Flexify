@@ -1,0 +1,2 @@
+- পরিবর্তন: Merge branch 'main' of github.com:brandonp2412/Flexify
+- প্রিভিউ করুন vibration when toggling the টাইমার setting

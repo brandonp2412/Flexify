@@ -1,0 +1,11 @@
+- ঠিক করুন usage of yq in .ডেপ্লয়.yml
+- ঠিক করুন linting issues
+- সরান avoid print linting rule
+- চালান dart format
+- চালান ওয়ার্কফ্লো on main
+- যোগ করুন github ওয়ার্কফ্লো
+- ঠিক করুন GitHub ওয়ার্কফ্লো to handle act পরীক্ষা
+- ঠিক করুন most of the desktop স্ক্রিনশট generations
+- যোগ করুন setup for running integration টেস্ট for chrome
+- ঠিক করুন সেটিংস পেজ on web
+- ঠিক করুন running on web

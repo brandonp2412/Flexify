@@ -1,0 +1,5 @@
+- Go to next ব্যায়াম once you hit max সেট
+- Reverse todays প্ল্যান on গ্রাফ পেজ
+- Stop rest টাইমার once a ওয়ার্কআউট is complete
+- উন্নত করুন সেটিংস performance
+- যোগ করুন max সেট setting

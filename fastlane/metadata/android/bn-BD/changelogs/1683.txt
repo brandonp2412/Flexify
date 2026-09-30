@@ -1,0 +1,5 @@
+- তৈরি করুন সেটিংস switches consistent
+- বাড়ান accuracy of রিপ estimation
+- অনুমতি দিন clearing custom rest times per গ্রাফ
+- ঠিক করুন category being empty for প্ল্যান
+- ঠিক করুন প্ল্যান editing order

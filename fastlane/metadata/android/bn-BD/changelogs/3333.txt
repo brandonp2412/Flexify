@@ -1,0 +1,2 @@
+• Ad report a বাগ বোতাম to about পেজ
+• ঠিক করুন alarm sound picker

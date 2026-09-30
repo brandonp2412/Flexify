@@ -1,0 +1,7 @@
+- যোগ করুন notes to প্ল্যান activation
+- প্রতিরোধ করুন গ্রাফ lines going out of bounds
+- সরান "No ডেটা yet" from global progress
+- সরান white line below searchbar on scroll
+- সরান clear বোতাম from dropdown to left of অনুসন্ধান bar
+- ঠিক করুন স্ক্রিনশট of edit প্ল্যান
+- Curve line গ্রাফ in স্ক্রিনশট

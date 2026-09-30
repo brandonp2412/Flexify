@@ -1,0 +1,10 @@
+• পরিবর্তন: chore: reconcile concurrent localization slice
+• পরিবর্তন: chore: refresh Flutter dependency lockfile
+• পরিবর্তন: docs: add translation roadmap
+• পরিবর্তন: docs: update localization completion state
+• পরিবর্তন: feat: add Brazilian Portuguese localization
+• পরিবর্তন: feat: add CJK localizations
+• পরিবর্তন: feat: add Dutch localization
+• পরিবর্তন: feat: add French localization
+• পরিবর্তন: feat: add German localization
+• পরিবর্তন: feat: add Italian localization

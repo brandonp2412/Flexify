@@ -1,0 +1,2 @@
+- নাম পরিবর্তন করুন macos zip file
+- ঠিক করুন ios checking for integration টেস্ট

@@ -1,0 +1,3 @@
+- ব্যবহার করুন long date setting for editing gym সেট
+- ঠিক করুন selecting first item in gym ইতিহাস
+- ঠিক করুন missing newline in রিলিজ commit

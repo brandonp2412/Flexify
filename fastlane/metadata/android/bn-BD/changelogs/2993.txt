@@ -1,0 +1,4 @@
+• ঠিক করুন automatic স্ক্রিনশট
+• ঠিক করুন spacing issues on edit সেট পেজ
+• তৈরি করুন ডিফল্ট ইতিহাস ungrouped
+• পরিবর্তন: Pull before final push

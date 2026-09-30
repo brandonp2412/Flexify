@@ -1,0 +1,6 @@
+• যোগ করুন a bunch of bottom nav variants
+• যোগ করুন script for when running linux fails
+• মুছুন nav variants
+• আপডেট করুন bottom nav to be a pill design
+• পরিবর্তন: fix: remove hardcoded local JDK path from gradle.properties
+• fix: silence MSVC coroutine deprecation error breaking Windows CI বিল্ড

@@ -1,0 +1,5 @@
+- ঠিক করুন ডেপ্লয়.sh
+- সরান Windows + macos ওয়ার্কফ্লো run after ডেপ্লয়
+- ঠিক করুন blank পেজ after ইমপোর্ট databases
+- যোগ করুন ইউনিট to কার্ডিও গ্রাফ
+- পরিবর্তন: Reorganize lib folder

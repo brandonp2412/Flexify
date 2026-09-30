@@ -1,0 +1,11 @@
+- যোগ করুন global গ্রাফ
+- আপডেট করুন fastlane icon.png
+- তৈরি করুন ব্যায়াম drag handles bigger
+- পরিবর্তন: Swap weird clear icons
+- তৈরি করুন sure iOS has decimal options for number inputs
+- প্রতিরোধ করুন টাইমার animation every time you swap tabs
+- তৈরি করুন app icon dark theme
+- Animate addition/removal in ইতিহাস list
+- যোগ করুন relative time option for date
+- ঠিক করুন system back on টাইমার পেজ
+- ঠিক করুন গ্রাফ name being wrong after update

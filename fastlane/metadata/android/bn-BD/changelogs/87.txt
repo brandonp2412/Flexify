@@ -1,0 +1,5 @@
+- ঠিক করুন swiping across গ্রাফ for tab movement
+- মুছুন টাইমার.webm
+- ঠিক করুন wrong created dates when editing gym সেট
+- ঠিক করুন সেটিংস/enter ওজন পেজ being discarded
+- নিষ্ক্রিয় করুন system colors in স্ক্রিনশট টেস্ট

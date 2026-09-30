@@ -1,0 +1,5 @@
+- যোগ করুন support for ইউনিট in কার্ডিও
+- ঠিক করুন grouping by week for কার্ডিও lines
+- ঠিক করুন grouping by weeks for গ্রাফ
+- ঠিক করুন grouping by week
+- পুনর্গঠন করুন প্ল্যান

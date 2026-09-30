@@ -1,0 +1,7 @@
+- প্রতিরোধ করুন deleting ব্যায়াম presets
+- Override ডিফল্ট ইউনিট with the setting
+- তৈরি করুন গ্রাফ slightly shorter
+- যোগ করুন limit slider to গ্রাফ
+- Say # of সেট in collapsed ইতিহাস
+- উন্নত করুন style of day dividers for ইতিহাস
+- Label dividers on গ্রাফ পেজ

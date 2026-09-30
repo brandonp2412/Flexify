@@ -1,0 +1,1 @@
+• fix: clear notes field when switching to ব্যায়াম with no prior note

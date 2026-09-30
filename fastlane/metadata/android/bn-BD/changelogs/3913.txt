@@ -1,0 +1,10 @@
+• যোগ করুন serena
+• পরিবর্তন করুন width of skeleton সেট card in start প্ল্যান
+• Clip chart ডেটা so lines dont fly off
+• মুছুন waydroid স্ক্রিনশট action
+• ঠিক করুন GitHub Actions runtime compatibility
+• ঠিক করুন pre-push hook
+• ঠিক করুন pre-push hooks
+• ঠিক করুন spacing between কার্ডিও and দূরত্ব field on edit ইতিহাস
+• লুকান global progress on স্ক্রিনশট
+• লুকান images on স্ক্রিনশট টেস্ট

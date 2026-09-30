@@ -1,0 +1,5 @@
+- ব্যবহার করুন extended floating action buttons
+- ঠিক করুন ডেপ্লয়মেন্ট to github & f-droid repro
+- প্রতিরোধ করুন showing permissions পেজ on ios
+- Upgrade Flutter to 3.24.0
+- ঠিক করুন কার্ডিও গ্রাফ not instantly updating

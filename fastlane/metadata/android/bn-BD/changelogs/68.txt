@@ -1,0 +1,4 @@
+- ঠিক করুন broken save when rest টাইমার are enabled
+- ঠিক করুন names of ইমপোর্ট/এক্সপোর্ট ডেটা files
+- পুনর্গঠন করুন ব্যায়াম list
+- ঠিক করুন রিলিজ notes

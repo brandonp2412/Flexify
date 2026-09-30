@@ -1,0 +1,3 @@
+- ঠিক করুন images not being সেট from প্ল্যান
+- ঠিক করুন desktop টাইমার still firing
+- যোগ করুন kcal, meters to দূরত্ব ইউনিট

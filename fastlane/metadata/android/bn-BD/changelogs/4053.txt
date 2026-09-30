@@ -1,0 +1,2 @@
+• Prefer user-visible টাইমার সেটিংস assertions
+• refactor: remove dead desktop টাইমার code

@@ -1,0 +1,6 @@
+• যোগ করুন new date formats (e.g. for German)
+• যোগ করুন time based x-axis option for গ্রাফ
+• ঠিক করুন out of memory issues
+• ঠিক করুন প্ল্যান trailing ratio & count
+• Let users decide the capitalization of প্ল্যান titles
+• সরান ইতিহাস বোতাম to the nav bar

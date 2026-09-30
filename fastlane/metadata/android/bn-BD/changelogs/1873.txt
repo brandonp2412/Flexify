@@ -1,0 +1,6 @@
+- যোগ করুন validation
+- উন্নত করুন performance for large databases
+- তৈরি করুন add ব্যায়াম & ওজন পেজ scrollable
+- যোগ করুন image to new ব্যায়াম পেজ
+- ঠিক করুন add ব্যায়াম padding
+- পরিবর্তন: Request notifications when enabling automatic backups

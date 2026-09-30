@@ -1,0 +1,3 @@
+- ঠিক করুন ইউনিট টেস্ট
+- Reduce icons in সেটিংস পেজ
+- ব্যবহার করুন buttons for period selector

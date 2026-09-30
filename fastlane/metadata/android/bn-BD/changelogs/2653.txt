@@ -1,0 +1,4 @@
+• পরিবর্তন করুন github ওয়ার্কফ্লো
+• ঠিক করুন github ওয়ার্কফ্লো
+• সরান redundant git pulls
+• Replicate fdroid বিল্ড system for Android বিল্ড রিলিজ

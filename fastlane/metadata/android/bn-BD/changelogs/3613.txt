@@ -1,0 +1,10 @@
+• যোগ করুন message for empty প্ল্যান
+• তৈরি করুন keep screen on off by ডিফল্ট and move toggle in সেটিংস
+• feat: add keep screen on setting for rest টাইমার
+• পরিবর্তন: feat: replace theme dropdown with SegmentedButton + AMOLED toggle
+• fix: guard against empty ব্যায়াম list in StartPlanPage save and select
+• পরিবর্তন: fix: prevent SegmentedButton label wrap by correcting padding
+• fix: reduce trailing text size from 16 to 14 in ইতিহাস and গ্রাফ lists
+• fix: রিলিজ wake lock when টাইমার expires or is not running
+• fix: show in-app snackbar and fix notification when টাইমার expires with screen on
+• fix: shrink and mute trailing text in ইতিহাস and গ্রাফ list tiles

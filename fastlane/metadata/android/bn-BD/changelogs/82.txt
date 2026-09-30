@@ -1,0 +1,8 @@
+- যোগ করুন hide ইতিহাস tab setting
+- পরিবর্তন করুন automatic backups
+- ঠিক করুন name not updating for edit gym সেট
+- যোগ করুন automatic backups
+- ঠিক করুন new gym সেট having invalid IDs and createds
+- Format code in ইমপোর্ট_ডেটা
+- ঠিক করুন jank when adding a new gym সেট
+- ব্যবহার করুন file_picker for এক্সপোর্ট/ইমপোর্ট ডেটা

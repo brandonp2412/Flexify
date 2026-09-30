@@ -1,0 +1,13 @@
+- পরিবর্তন করুন গ্রাফ heights
+- যোগ করুন setting to hide categories
+- ব্যবহার করুন icon buttons for delete modals
+- যোগ করুন notifications to new records
+- যোগ করুন curve smoothness setting
+- বাড়ান padding in অনুসন্ধান bar
+- আপডেট করুন গ্রাফ after editing from ইতিহাস peek
+- ঠিক করুন setting রিপ/ওজন after finishing an ব্যায়াম
+- Go back after saving tab সেটিংস
+- পরিবর্তন: Blend system nav with app themes
+- প্রিভিউ করুন গ্রাফ below appearance সেটিংস
+- ঠিক করুন curve setting not applying to গ্রাফ peek
+- তৈরি করুন গ্রাফ look sexy 😎

@@ -1,0 +1,11 @@
+- উন্নত করুন স্ক্রিনশট
+- লুকান ইউনিট selector on গ্রাফ if ইউনিট are turned off
+- যোগ করুন group by field for গ্রাফ (day/week/month/year)
+- Animate to গ্রাফ tab when viewing an ব্যায়াম from প্ল্যান
+- View গ্রাফ for an ব্যায়াম from প্ল্যান
+- সরান tags from ডেপ্লয়.sh - 1.0.59 🚀
+- যোগ করুন delete বোতাম to edit gym সেট পেজ
+- Edit গ্রাফ points by double tapping
+- সরান date সেটিংস helper text into the label
+- যোগ করুন short date format setting
+- পুনর্গঠন করুন line গ্রাফ

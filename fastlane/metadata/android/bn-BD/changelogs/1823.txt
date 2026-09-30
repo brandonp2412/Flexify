@@ -1,0 +1,2 @@
+- যোগ করুন tooltips to সেটিংস
+- ঠিক করুন automatic backups happening every 15 minutes

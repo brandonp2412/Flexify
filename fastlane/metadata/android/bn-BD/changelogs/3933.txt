@@ -1,0 +1,10 @@
+• যোগ করুন Flutter submodule to analysis ignore list
+• যোগ করুন missing spacing to add_ব্যায়াম_পেজ.dart
+• ঠিক করুন কার্ডিও fields spacing
+• ঠিক করুন dropdown error in ওজন_পেজ.dart
+• ঠিক করুন getSingle error in ব্যায়াম_modal.dart
+• ঠিক করুন weird context error in main.dart
+• পরিবর্তন: Format
+• তৈরি করুন বোতাম glow slightly less in টাইমার পেজ
+• সরান leading checkbox on group ইতিহাস
+• সরান unused ইমপোর্ট

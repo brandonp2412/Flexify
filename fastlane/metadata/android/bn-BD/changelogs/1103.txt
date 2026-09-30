@@ -1,0 +1,3 @@
+- Stop warning on missed taps for সেটিংস টেস্ট
+- পরিবর্তন: Merge branch 'main' of github.com:brandonp2412/Flexify
+- ঠিক করুন টেস্ট warnings for সেটিংস পেজ

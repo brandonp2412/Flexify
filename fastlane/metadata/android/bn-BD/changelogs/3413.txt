@@ -1,0 +1,4 @@
+• যোগ করুন সেটিংস to show/hide limit and x axis on গ্রাফ
+• Always start টাইমার on activated প্ল্যান
+• ঠিক করুন new কার্ডিও types not working
+• পরিবর্তন: Long press x axis / limit slider to hide

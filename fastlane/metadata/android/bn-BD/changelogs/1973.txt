@@ -1,0 +1,1 @@
+- Refresh ব্যায়াম list after adding from প্ল্যান

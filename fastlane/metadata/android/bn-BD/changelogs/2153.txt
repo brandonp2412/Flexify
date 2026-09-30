@@ -1,0 +1,3 @@
+- যোগ করুন image picking to ওজন
+- লুকান irrelevant fields on ওজন entries
+- তৈরি করুন categories dynamic

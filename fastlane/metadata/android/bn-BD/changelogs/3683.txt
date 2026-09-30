@@ -1,0 +1,10 @@
+• যোগ করুন serena config
+• ঠিক করুন toasts lasting forever
+• উন্নত করুন visuals of stepper
+• তৈরি করুন edit সেট পেজ more consistent with it's padding
+• সরান duplicated labels for input style
+• সরল করুন stepper field
+• আপডেট করুন স্ক্রিনশট
+• Upgrade Flutter to 3.44.1
+• পরিবর্তন: Upgrade kotlin version
+• feat: add +/- steppers to রিপ and ওজন fields

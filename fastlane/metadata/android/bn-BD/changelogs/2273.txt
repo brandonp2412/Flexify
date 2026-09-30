@@ -1,0 +1,2 @@
+- যোগ করুন ability to hide global progress
+- ঠিক করুন one-rep-max calculations for negatives

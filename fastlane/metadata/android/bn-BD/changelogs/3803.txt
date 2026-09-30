@@ -1,0 +1,10 @@
+• যোগ করুন টেস্ট to dart analyze
+• অনুমতি দিন ব্যায়াম list to scroll past the nav bar when completing a প্ল্যান
+• পরিবর্তন করুন style of strength পেজ
+• পরিবর্তন: Consistently use bottomNavHeight
+• ঠিক করুন bottom height
+• ঠিক করুন গ্রাফ spacing & hide notes if setting is off
+• ঠিক করুন ইউনিট টেস্ট for অনুসন্ধান bar
+• উন্নত করুন গ্রাফ style
+• তৈরি করুন প্ল্যান chips spacing consistent
+• Match style in কার্ডিও পেজ

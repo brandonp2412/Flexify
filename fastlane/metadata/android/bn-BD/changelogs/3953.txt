@@ -1,0 +1,6 @@
+• নাম পরিবর্তন করুন all internal props with prefix _
+• Replicate automated স্ক্রিনশট & e2e টেস্ট from fit-book
+• পরিবর্তন: chore: update repository automation checks
+• ci: repair Patrol and Play ডেপ্লয়মেন্ট ওয়ার্কফ্লো
+• পরিবর্তন: fix: align Android JVM compilation targets
+• fix: retain কার্ডিও ওজন in grouped ইতিহাস

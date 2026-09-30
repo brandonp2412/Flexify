@@ -1,0 +1,7 @@
+• যোগ করুন migration ডেটা টেস্ট
+• একত্র করুন ওয়ার্কফ্লো into one
+• মুছুন some pointless comments
+• পরিবর্তন: Link brzycki formula in comment
+• সরান more pointless comments
+• সরান some comments
+• পরিবর্তন: Shorten variable names

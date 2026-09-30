@@ -1,0 +1,1 @@
+- ব্যবহার করুন powershell instead of cmd in ডেপ্লয়.sh

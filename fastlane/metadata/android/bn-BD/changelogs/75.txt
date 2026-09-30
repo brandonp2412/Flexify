@@ -1,0 +1,11 @@
+- ঠিক করুন ডেপ্লয়মেন্ট
+- ঠিক করুন ডেপ্লয়.sh exiting with no changes
+- Revert "Remember strength গ্রাফ সেটিংস"
+- Revert "Remember সেটিংস for কার্ডিও গ্রাফ"
+- লুকান টাইমার progress when টাইমার tab is hidden
+- List todays ব্যায়াম first on গ্রাফ পেজ
+- Remember সেটিংস for কার্ডিও গ্রাফ
+- Remember strength গ্রাফ সেটিংস
+- যোগ করুন missing setState to strength_line
+- সক্রিয় করুন mass editing of ইউনিট for গ্রাফ
+- ঠিক করুন tapping গ্রাফ for কার্ডিও ব্যায়াম

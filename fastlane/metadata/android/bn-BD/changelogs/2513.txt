@@ -1,0 +1,2 @@
+- ঠিক করুন msstore publish command
+- নিশ্চিত করুন gym সেট before পরীক্ষা them in গ্রাফ পেজ

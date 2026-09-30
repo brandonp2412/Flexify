@@ -1,0 +1,4 @@
+- ঠিক করুন GitHub রিলিজ file paths to include Android APKs
+- পরিবর্তন: 2.0.27 🚀
+- আপডেট করুন pubspec.lock
+- সরান macOS/iOS builds from GitHub Actions ওয়ার্কফ্লো

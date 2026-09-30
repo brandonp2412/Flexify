@@ -1,0 +1,5 @@
+- ঠিক করুন টাইমার
+- Optimize টাইমার
+- ঠিক করুন automatic backups
+- যোগ করুন vibrate and alarm sound সেটিংস
+- Optimize edit গ্রাফ পেজ

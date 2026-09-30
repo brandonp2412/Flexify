@@ -1,0 +1,6 @@
+• Lower parallellism for gradle বিল্ড on github action
+• আপডেট করুন স্ক্রিনশট
+• পরিবর্তন: feat: clarify category field is for muscle group tagging
+• fix: apply seeded category when logging an ব্যায়াম for the first time
+• fix: only tag রিলিজ after all platform builds succeed
+• fix: pin রিলিজ builds and tag to an exact commit SHA

@@ -1,0 +1,5 @@
+- যোগ করুন multidex to Android/app/বিল্ড.gradle
+- আপডেট করুন Flutter to 3.22.0
+- আপডেট করুন pubspec.lock
+- আপডেট করুন vscode সেটিংস
+- ঠিক করুন inserting records from ইতিহাস পেজ

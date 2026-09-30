@@ -1,0 +1,5 @@
+• পরিবর্তন: feat(l10n): add Bengali translations
+• পরিবর্তন: feat(l10n): add Malay translations
+• পরিবর্তন: feat(l10n): add Persian translations
+• পরিবর্তন: feat(l10n): add Thai translations
+• পরিবর্তন: feat(l10n): add Urdu translations

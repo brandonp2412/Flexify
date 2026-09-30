@@ -1,0 +1,5 @@
+- পরিবর্তন: Space out full description properly
+- নির্দিষ্ট করুন git pull --tags after creating github রিলিজ
+- পরিবর্তন: Re-enable google play deployments
+- যোগ করুন incline to এক্সপোর্ট/ইমপোর্ট
+- যোগ করুন incline to কার্ডিও type

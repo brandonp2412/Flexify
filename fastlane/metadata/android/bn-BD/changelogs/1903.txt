@@ -1,0 +1,5 @@
+- উন্নত করুন গ্রাফ performance
+- সরান "ওজন" from কার্ডিও edit
+- ঠিক করুন back navigation sometimes not working
+- লুকান one rep max estimates on কার্ডিও ব্যায়াম
+- উন্নত করুন প্ল্যান performance

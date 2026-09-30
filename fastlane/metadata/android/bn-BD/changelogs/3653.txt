@@ -1,0 +1,10 @@
+• ঠিক করুন debug banners showing in স্ক্রিনশট
+• আপডেট করুন স্ক্রিনশট
+• ব্যবহার করুন text বোতাম for +1 minute
+• chore: add Android স্ক্রিনশট script with --profile flag
+• feat: improve UI for curve smoothness, টাইমার, প্ল্যান trailing, input style
+• fix: center টাইমার circle vertically and move +1 min বোতাম below circle
+• পরিবর্তন: fix: disable debug banner in MaterialApp
+• fix: eliminate UniqueKey anti-pattern in টাইমার circle widget
+• fix: redesign টাইমার circle with minimal, modern aesthetic
+• fix: replace runApp with tester.pumpWidget in স্ক্রিনশট টেস্ট

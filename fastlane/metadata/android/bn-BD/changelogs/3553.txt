@@ -1,0 +1,4 @@
+• সেট max height on format সেটিংস
+• পরিবর্তন: feat: add Stopwatch tab (#268)
+• feat: per-ব্যায়াম গ্রাফ সেটিংস and ব্যায়াম notes (#257 #267)
+• fix: peek tooltip overlapping অনুসন্ধান bar and keyboard covering ব্যায়াম notes

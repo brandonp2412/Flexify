@@ -1,0 +1,2 @@
+• দেখান preview of notifications
+• দেখান ওজন field if কার্ডিও ইউনিট is a ওজন type on প্ল্যান

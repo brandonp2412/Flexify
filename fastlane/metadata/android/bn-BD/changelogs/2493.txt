@@ -1,0 +1,2 @@
+- আপডেট করুন pubspec.lock
+- Install missing packages in ডেপ্লয়-Windows-store

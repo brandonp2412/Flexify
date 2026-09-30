@@ -1,0 +1,10 @@
+• যোগ করুন horizontal padding to the bottom progress indicator
+• যোগ করুন missing reorder বোতাম for Android on the প্ল্যান পেজ
+• পরিবর্তন: Animate sliding between tabs
+• পরিবর্তন করুন selected indicator
+• ডিফল্ট rest টাইমার to false
+• ঠিক করুন bottom sheets going behind nav
+• ঠিক করুন ডেপ্লয়.sh when phone is connected
+• ঠিক করুন lag flicking between tabs after changing them
+• ঠিক করুন saving সেট
+• বাড়ান padding above collapsed ইতিহাস পেজ

@@ -1,0 +1,16 @@
+- আপডেট করুন স্ক্রিনশট
+- সরান project name factoring in github.sh
+- ঠিক করুন deprecated warnings
+- Pass missing অনুসন্ধান to প্ল্যান_list_টেস্ট
+- সরান safe area view to the body of scaffold
+- Take all স্ক্রিনশট on dark mode
+- পরিবর্তন: Put get it on the X badges in a row
+- ঠিক করুন some obscure Android errors
+- যোগ করুন version number to privacy policy
+- যোগ করুন privacy policy version to privacy_url
+- Tap to create on প্ল্যান
+- আপডেট করুন wording on গ্রাফ পেজ none found
+- দেখান best ব্যায়াম from গ্রাফ পেজ
+- ঠিক করুন zero padding on গ্রাফ ইতিহাস পেজ no ডেটা yet
+- Shorten গ্রাফ heights
+- ঠিক করুন গ্রাফ peek বাগ

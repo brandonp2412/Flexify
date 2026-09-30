@@ -1,0 +1,6 @@
+• পরিবর্তন: Copy gradle setup from fitbook
+• ঠিক করুন google play deployments
+• সরান peek গ্রাফ 1 item down
+• সরান table from get it on X readme [skip ci]
+• পরিবর্তন: Re-order features in README [skip ci]
+• পরিবর্তন: Space out badges [skip ci]

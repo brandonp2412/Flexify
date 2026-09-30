@@ -1,0 +1,3 @@
+- চালান dart pub upgrade
+- Dont use system colors for স্ক্রিনশট
+- Only বিল্ড appbundle when sending to play store

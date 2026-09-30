@@ -1,0 +1,4 @@
+- যোগ করুন warmup সেট
+- পরিবর্তন করুন style of ব্যায়াম list in প্ল্যান
+- ঠিক করুন max সেট
+- পরিবর্তন: Only show incline for non-zero values

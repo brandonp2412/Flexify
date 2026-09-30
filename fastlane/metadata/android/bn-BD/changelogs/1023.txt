@@ -1,0 +1,8 @@
+- যোগ করুন setting to hide body ওজন tracking
+- ঠিক করুন changelogs for fastlane রিলিজ
+- সরান automatic backups feature
+- যোগ করুন setting for maximum # of সেট
+- যোগ করুন rest minutes/seconds global override
+- তৈরি করুন সেটিংস padding sizes consistent
+- Stick অনুসন্ধান bar to top of সেটিংস
+- নাম পরিবর্তন করুন WidgetSettings -> SettingsLine

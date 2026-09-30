@@ -1,0 +1,9 @@
+• যোগ করুন কার্ডিও/strength icon indicators to the toggles in edit সেট/সেট
+• যোগ করুন সেটিংস for progress bar position
+• অনুমতি দিন clearing of category
+• পরিবর্তন করুন প্ল্যান icon in bottom nav
+• ঠিক করুন appearance system ui obscuring গ্রাফ
+• ঠিক করুন automatic backups sometimes corrupting ডেটাবেস
+• ঠিক করুন ইউনিট টেস্ট
+• Instantly update tab সেটিংস & remove save বোতাম
+• প্রতিরোধ করুন null hint text on categories or incline when multi-editing সেট

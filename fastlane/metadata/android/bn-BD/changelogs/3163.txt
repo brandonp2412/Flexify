@@ -1,0 +1,2 @@
+• ঠিক করুন hero tag errors
+• ঠিক করুন tab border being too wide sometimes

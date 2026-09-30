@@ -1,0 +1,10 @@
+• যোগ করুন mild outline to টাইমার circle
+• ঠিক করুন +1 minute on linux
+• ঠিক করুন changelogs
+• ঠিক করুন github readme styling [skip ci]
+• ঠিক করুন msstore width badge [skip ci]
+• পরিবর্তন: Limit frequency of google play deployments [skip ci]
+• তৈরি করুন badges bigger [skip ci]
+• তৈরি করুন badges consistent [skip ci]
+• পরিবর্তন: Revert "Fix msstore width badge [skip ci]"
+• ব্যবহার করুন github রিলিজ instead of artifact [skip ci]

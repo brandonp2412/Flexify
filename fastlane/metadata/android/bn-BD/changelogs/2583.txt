@@ -1,0 +1,9 @@
+• যোগ করুন error handling to ডেটা ইমপোর্ট
+• যোগ করুন more ডেটা migration টেস্ট
+• মুছুন comments
+• সক্রিয় করুন বিল্ড config in Android/app/বিল্ড.gradle
+• ঠিক করুন linting issue in edit_সেট_পেজ
+• সরান underscore prefixes in some methods of start প্ল্যান পেজ
+• সরান ইউনিট selector and fix টেস্ট
+• পরিবর্তন: Shorten all variable names
+• Split out everything in edit সেট পেজ more

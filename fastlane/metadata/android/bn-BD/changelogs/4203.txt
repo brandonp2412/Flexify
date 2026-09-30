@@ -1,0 +1,2 @@
+• পরিবর্তন: ci: retry transient Patrol picker failure
+• fix: restore StartPlan ব্যায়াম defaults

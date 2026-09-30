@@ -1,0 +1,2 @@
+• পরিবর্তন: feat(l10n): add Russian translations
+• fix(l10n): sync 2.2.22 রিলিজ ইতিহাস

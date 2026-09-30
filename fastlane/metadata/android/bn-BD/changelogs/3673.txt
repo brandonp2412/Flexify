@@ -1,0 +1,1 @@
+• ci: make VirusTotal section collapsible in রিলিজ

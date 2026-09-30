@@ -1,0 +1,2 @@
+• অনুমতি দিন pipelines to trigger on ওয়ার্কফ্লো changes
+• পরিবর্তন: Try to fix msstore publish

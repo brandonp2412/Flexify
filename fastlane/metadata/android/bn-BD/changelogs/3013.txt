@@ -1,0 +1,3 @@
+• যোগ করুন logic for figuring out emulator id
+• ঠিক করুন স্ক্রিনশট
+• Try fix স্ক্রিনশট again

@@ -1,0 +1,10 @@
+• যোগ করুন mild outline to টাইমার circle
+• Animate existence of stop বোতাম in টাইমার পেজ
+• পরিবর্তন: Clarify image editing
+• পরিবর্তন: Explain google play deployments
+• ঠিক করুন +1 minute on linux
+• ঠিক করুন automatic স্ক্রিনশট for রিলিজ
+• ঠিক করুন changelogs
+• ঠিক করুন github readme styling [skip ci]
+• ঠিক করুন github রিলিজ downloading in google play ডেপ্লয়মেন্ট
+• ঠিক করুন msstore width badge [skip ci]

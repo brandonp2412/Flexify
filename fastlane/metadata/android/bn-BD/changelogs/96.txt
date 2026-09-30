@@ -1,0 +1,3 @@
+- প্রিভিউ করুন custom alarm sound when setting it
+- পুনর্গঠন করুন কার্ডিও গ্রাফ
+- যোগ করুন share ডেটাবেস বোতাম to সেটিংস

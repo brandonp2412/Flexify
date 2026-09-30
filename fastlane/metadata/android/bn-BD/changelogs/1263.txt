@@ -1,0 +1,6 @@
+- ঠিক করুন টেস্ট
+- যোগ করুন share menus
+- ঠিক করুন keyboard flickering on submit
+- প্রিভিউ করুন previous created dates on multi-edit
+- ব্যবহার করুন new ইউনিট selector for কার্ডিও গ্রাফ
+- Copy layout of strength গ্রাফ to কার্ডিও

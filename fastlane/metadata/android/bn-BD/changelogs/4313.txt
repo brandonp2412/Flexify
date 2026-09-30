@@ -1,0 +1,10 @@
+• chore: add Turkish Play স্ক্রিনশট
+• chore: localize latest রিলিজ metadata
+• পরিবর্তন: feat: complete supported locale translations
+• feat: expose গ্রাফ controls on desktop
+• feat: localize complete রিলিজ ইতিহাস
+• feat: refine টাইমার millisecond display
+• fix: keep scaled টাইমার text within circle
+• fix: soften line গ্রাফ edge clipping
+• টেস্ট: harden localization completeness checks
+• টেস্ট: keep store locale mappings in sync

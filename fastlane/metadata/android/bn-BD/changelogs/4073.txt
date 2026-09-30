@@ -1,0 +1,10 @@
+• Flatten সেটিংস audio initialization
+• পরিবর্তন: Flatten tab content selection
+• পরিবর্তন: Port portable backup system from FitBook
+• পরিবর্তন: Prefer labeled Flexify action selectors
+• Prefer labeled গ্রাফ action selectors
+• পরিবর্তন: Prefer visible tab selector
+• সরল করুন early-return control flow
+• fix: bound Android CI টেস্ট runtime
+• পরিবর্তন: fix: enable backups after folder selection
+• পরিবর্তন: refactor: prefer user-visible controls in Linux E2E

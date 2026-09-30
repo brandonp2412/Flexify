@@ -1,0 +1,1 @@
+• পরিবর্তন: fix: enforce one Flexify app and signing key

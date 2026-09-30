@@ -1,0 +1,10 @@
+- ঠিক করুন ইউনিট টেস্ট
+- ঠিক করুন deploying to Windows store
+- যোগ করুন debug step to list downloaded files in Windows Store ডেপ্লয়মেন্ট
+- ঠিক করুন Windows Store ডেপ্লয়মেন্ট: use local MSIX file instead of GitHub রিলিজ URL
+- ঠিক করুন Windows Store ডেপ্লয়মেন্ট: ensure GitHub রিলিজ is created before Windows Store ডেপ্লয়মেন্ট
+- আপডেট করুন desktop স্ক্রিনশট
+- ঠিক করুন all automated স্ক্রিনশট for desktop
+- আপডেট করুন pubspec.lock
+- যোগ করুন script for updating chromedriver
+- ঠিক করুন what's new পেজ

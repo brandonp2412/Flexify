@@ -1,0 +1,2 @@
+- Edit # of ব্যায়াম on প্ল্যান instead of গ্রাফ
+- উন্নত করুন app performance

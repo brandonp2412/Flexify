@@ -1,0 +1,5 @@
+• feat: add Leave a review link to About পেজ
+• fix: add missing bottom padding across all scrollable পেজ (#301)
+• পরিবর্তন: fix: resume stopwatch ticker when app returns to foreground
+• পরিবর্তন: fix: use wall-clock time for stopwatch to survive screen-off
+• fix: ওয়ার্কআউট সেটিংস bottom padding and stopwatch tab label

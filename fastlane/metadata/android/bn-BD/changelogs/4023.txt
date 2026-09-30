@@ -1,0 +1,8 @@
+• ঠিক করুন empty changelog view
+• লুকান Linux integration টেস্ট on dwl
+• feat: improve গ্রাফ selection controls
+• পরিবর্তন: feat: integrate Talker logging
+• fix: enforce compliant seven-inch স্ক্রিনশট
+• fix: harden desktop navigation and পরীক্ষা
+• fix: isolate integration টেস্ট databases
+• টেস্ট: cover changelog screen rendering

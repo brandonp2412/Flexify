@@ -1,0 +1,1 @@
+• ব্যবহার করুন preinstalled adb instead of setup-Android in Waydroid ওয়ার্কফ্লো

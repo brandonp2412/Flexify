@@ -1,0 +1,3 @@
+- সরান debug prints from migrations টেস্ট
+- সরান git push --force from ডেপ্লয়.sh
+- ঠিক করুন all ডেটাবেস migration issues

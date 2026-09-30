@@ -1,0 +1,5 @@
+- উন্নত করুন স্ক্রিনশট
+- অন্তর্ভুক্ত করুন স্ক্রিনশট in GitHub রিলিজ
+- Revamp ইউনিট selector
+- সরান duplicate mentions of ইউনিট
+- যোগ করুন multi-editing of ইতিহাস

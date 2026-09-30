@@ -1,0 +1,2 @@
+- পরিবর্তন: Strip trailing zeros from share menus
+- ঠিক করুন buggy ইউনিট when toggling কার্ডিও

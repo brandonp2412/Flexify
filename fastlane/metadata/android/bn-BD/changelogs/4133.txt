@@ -1,0 +1,10 @@
+• পরিবর্তন: Nit pickery
+• পরিবর্তন: Revise project description in README
+• আপডেট করুন README to modify project tagline
+• আপডেট করুন project name in README
+• আপডেট করুন version to 2.2.0 in pubspec.yaml
+• ci: stop flaky Patrol টেস্ট gating রিলিজ
+• পরিবর্তন: docs: add alt text to README images
+• fix: avoid Android path provider JNI ক্র্যাশ
+• fix: avoid duplicate ওয়ার্কআউট notification route
+• fix: bound স্ক্রিনশট CI hangs

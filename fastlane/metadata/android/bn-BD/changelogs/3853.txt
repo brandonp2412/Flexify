@@ -1,0 +1,9 @@
+• ci: auto-বিল্ড PR APKs only for owner PRs, manual for others
+• ci: বিল্ড and attach APK on pull requests
+• ci: fix 0.0.0-unknown Flutter version in PR APK বিল্ড
+• পরিবর্তন: ci: fix quoted artifact URL in PR APK comment
+• পরিবর্তন: ci: install PR builds side by side via .pr app id suffix
+• ci: sign PR builds with committed public পরীক্ষা keystore
+• fix: reset প্ল্যান সেট counts at local midnight
+• fix: stop rest টাইমার sound/vibrate when a new সেট starts
+• পরিবর্তন: refactor: use AlertDialog for Filters and the shared bottom nav constant

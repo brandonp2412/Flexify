@@ -1,0 +1,4 @@
+- ঠিক করুন back navigation sometimes not working
+- লুকান one rep max estimates on কার্ডিও ব্যায়াম
+- উন্নত করুন performance of strength পেজ
+- উন্নত করুন প্ল্যান performance

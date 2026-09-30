@@ -1,0 +1,1 @@
+- ঠিক করুন বিল্ড directory reference in ডেপ্লয়-Windows pipeline

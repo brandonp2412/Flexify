@@ -1,0 +1,2 @@
+• পরিবর্তন: docs: simplify readme setup
+• টেস্ট: improve স্ক্রিনশট sample states

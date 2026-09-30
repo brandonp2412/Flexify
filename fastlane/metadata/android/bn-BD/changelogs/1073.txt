@@ -1,0 +1,2 @@
+- ঠিক করুন প্ল্যান counting
+- ঠিক করুন ডেটাবেস schema watch stopping sometimes

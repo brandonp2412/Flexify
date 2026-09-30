@@ -1,0 +1,10 @@
+• যোগ করুন env for web স্ক্রিনশট
+• মুছুন duplicated changelogs
+• ঠিক করুন buildConfig issues
+• ঠিক করুন chromedriver port
+• ঠিক করুন chromedriver setup
+• ঠিক করুন emulator name in Android স্ক্রিনশট
+• Git add entire fastlane dir for ওয়ার্কফ্লো
+• Install & start chromedriver in ওয়ার্কফ্লো
+• তৈরি করুন sure স্ক্রিনশট are in the commit
+• প্রতিরোধ করুন duplicates in changelog copying

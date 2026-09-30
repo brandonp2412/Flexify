@@ -1,0 +1,2 @@
+• পরিবর্তন: Upgrade everything
+• পরিবর্তন: chore: auto-fix formatting/lint/generated client [pre-push]

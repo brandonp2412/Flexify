@@ -1,0 +1,4 @@
+- আপডেট করুন pubspec.lock
+- Setup msstore ডেপ্লয়মেন্ট
+- কনফিগার করুন google play রিলিজ
+- মুছুন .actrc and MIGRATION_GUIDE.md

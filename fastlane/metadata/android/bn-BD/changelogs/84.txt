@@ -1,0 +1,6 @@
+- সরান text on প্ল্যান ব্যায়াম
+- ঠিক করুন saving from start প্ল্যান
+- তৈরি করুন maximum # of সেট per ব্যায়াম
+- যোগ করুন trailing commas
+- সরল করুন initialization of সেটিংস
+- Pull from git after creating a GitHub রিলিজ

@@ -1,0 +1,2 @@
+• পরিবর্তন: feat(l10n): add Arabic translations
+• পরিবর্তন: feat(l10n): add Indonesian translations

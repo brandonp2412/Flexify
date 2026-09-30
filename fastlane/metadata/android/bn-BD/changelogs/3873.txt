@@ -1,0 +1,1 @@
+• fix: capture commit_sha from the correct step in রিলিজ ওয়ার্কফ্লো

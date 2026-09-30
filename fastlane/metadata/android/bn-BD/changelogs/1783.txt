@@ -1,0 +1,3 @@
+- পরিবর্তন: Double tap to open any metric
+- দেখান ORM while editing a সেট
+- যোগ করুন toggle for alarm sound

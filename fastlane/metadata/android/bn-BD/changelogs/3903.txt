@@ -1,0 +1,1 @@
+• পরিবর্তন: bump minimum ios version to 14.0
