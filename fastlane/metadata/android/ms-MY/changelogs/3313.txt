@@ -1,0 +1,4 @@
+• Baiki padding pada halaman graf
+• Baiki toast yang tidak pernah hilang
+• Baiki tooltip pada graf
+• Kekalkan susunan apabila menukar senaman

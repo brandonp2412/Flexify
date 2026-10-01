@@ -1,0 +1,6 @@
+- Tambah pengesahan
+- Tingkatkan prestasi untuk pangkalan data besar
+- Jadikan halaman tambah senaman & berat boleh ditatal
+- Tambah imej pada halaman senaman baharu
+- Baiki padding tambah senaman
+- Minta kebenaran pemberitahuan apabila mengaktifkan sandaran automatik

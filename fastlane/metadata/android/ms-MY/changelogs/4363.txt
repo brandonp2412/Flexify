@@ -1,0 +1,2 @@
+• feat(l10n): tambah terjemahan Arab
+• feat(l10n): tambah terjemahan Indonesia

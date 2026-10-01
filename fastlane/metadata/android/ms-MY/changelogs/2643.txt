@@ -1,0 +1,10 @@
+• Tambah env untuk tangkapan skrin web
+• Padam changelog berulang
+• Baiki isu buildConfig
+• Baiki port chromedriver
+• Baiki persediaan chromedriver
+• Baiki nama emulator dalam tangkapan skrin Android
+• Git add seluruh direktori fastlane untuk aliran kerja
+• Pasang & mulakan chromedriver dalam aliran kerja
+• Pastikan tangkapan skrin disertakan dalam commit
+• Elakkan duplikasi semasa menyalin changelog

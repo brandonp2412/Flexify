@@ -1,0 +1,10 @@
+• fix: lindungi context navigasi tangkapan skrin
+• fix: buka semula pemilih folder selepas kebenaran diberikan
+• fix: cuba semula apabila emulator tangkapan skrin terputus sementara
+• fix: minta kebenaran sandaran sebelum pemilih folder
+• fix: stabilkan ujian pemilih folder Android
+• fix: stabilkan tangkapan skrin pemasa automatik
+• test: tambah fixture pangkalan data boleh guna semula
+• test: tambah harness ujian widget dikongsi
+• test: selaraskan ujian StartPlanPage dengan medan semasa
+• test: sahkan pemilih dokumen Android mengikut package

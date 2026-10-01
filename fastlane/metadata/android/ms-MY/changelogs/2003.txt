@@ -1,0 +1,3 @@
+- Baiki senaman pelan yang menetap semula
+- Gantikan butang + dengan medan carian untuk pelan baharu
+- Alih keluar blok maklumat kebergantungan untuk F-Droid

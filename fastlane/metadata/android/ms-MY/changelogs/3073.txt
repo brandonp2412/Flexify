@@ -1,0 +1,2 @@
+• Seimbangkan padding di sekitar kemajuan global
+• Baiki deploy.sh [skip ci]

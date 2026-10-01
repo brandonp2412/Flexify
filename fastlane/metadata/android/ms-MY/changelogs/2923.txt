@@ -1,0 +1,3 @@
+• Tukar halaman edit set & halaman sejarah
+• Baiki deploy
+• Baiki ujian unit

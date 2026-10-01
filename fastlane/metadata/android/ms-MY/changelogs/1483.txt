@@ -1,0 +1,2 @@
+- Tambah sokongan imej
+- Tambah ikon aplikasi monokrom

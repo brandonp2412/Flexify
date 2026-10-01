@@ -1,0 +1,9 @@
+- Pastikan nilai Y ialah 2 tempat perpuluhan untuk garis kardio
+- Tambah butang edit di kanan atas pelan
+- Tambah akhiran sejarah pada tajuk sejarah graf
+- Tambah jenis kardio
+- Refaktor halaman paparan graf
+- Baiki carian data import/eksport dalam tetapan
+- Refaktor start_plan_page
+- Refaktor halaman pelan
+- Uji penyimpanan pelan

@@ -1,0 +1,8 @@
+• Tambah pengisihan sementara pada halaman graf
+• Baiki kategori yang tidak dikemas kini selepas import
+• Baiki tooltip terakhir pada graf
+• Baiki UI sistem yang menutupi halaman Perihal
+• Baiki UI sistem yang menutupi elemen pada halaman tetapan
+• Namakan fail sandaran automatik
+• Alih keluar animasi daripada senarai sejarah
+• Alih keluar logik pemisah daripada halaman graf

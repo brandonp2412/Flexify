@@ -1,0 +1,2 @@
+- Gunakan submodul Flutter dalam deploy
+- Baiki saiz graf untuk skrin lebih pendek

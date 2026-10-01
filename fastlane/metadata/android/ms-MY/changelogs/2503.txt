@@ -1,0 +1,1 @@
+- Gunakan runner Windows untuk deploy-windows-store

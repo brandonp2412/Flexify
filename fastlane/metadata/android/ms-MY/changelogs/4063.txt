@@ -1,0 +1,4 @@
+• Ratakan pemilihan kandungan tab
+• Utamakan pemilih tab yang kelihatan
+• Permudahkan aliran kawalan return awal
+• refactor: utamakan kawalan yang boleh dilihat pengguna dalam E2E Linux

@@ -1,0 +1,3 @@
+- Baiki ujian halaman tetapan
+- Gunakan unit yang betul untuk graf secara lalai
+- Tambah tetapan unit kekuatan & kardio

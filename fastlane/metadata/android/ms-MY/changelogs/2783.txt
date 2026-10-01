@@ -1,0 +1,4 @@
+• Tambah pertukaran senaman pada pelan
+• Tambah carian untuk menukar senaman
+• Tambah ujian unit untuk widget pertukaran senaman
+• Baiki import pangkalan data pada desktop

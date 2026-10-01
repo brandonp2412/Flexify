@@ -1,0 +1,1 @@
+• Gunakan adb sedia dipasang dan bukannya setup-android dalam aliran kerja Waydroid

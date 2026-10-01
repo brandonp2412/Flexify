@@ -1,0 +1,4 @@
+- Baiki laluan fail keluaran GitHub supaya merangkumi APK Android
+- 2.0.27 🚀
+- Kemas kini pubspec.lock
+- Alih keluar binaan macOS/iOS daripada aliran kerja GitHub Actions

@@ -1,0 +1,4 @@
+• Tetapkan ketinggian maksimum pada tetapan format
+• feat: tambah tab Stopwatch (#268)
+• feat: tetapan graf bagi setiap senaman dan nota senaman (#257 #267)
+• fix: baiki tooltip pratonton yang bertindih dengan bar carian dan papan kekunci yang menutupi nota senaman

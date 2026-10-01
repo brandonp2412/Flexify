@@ -1,0 +1,16 @@
+- Kemas kini tangkapan skrin
+- Alih keluar pemfaktoran nama projek dalam github.sh
+- Baiki amaran deprecated
+- Hantar parameter search yang tiada ke plan_list_test
+- Alihkan SafeArea ke body Scaffold
+- Ambil semua tangkapan skrin dalam mod gelap
+- Letakkan lencana Get it on X sebaris
+- Baiki beberapa ralat Android yang jarang berlaku
+- Tambah nombor versi pada polisi privasi
+- Tambah versi polisi privasi pada privacy_url
+- Ketik untuk mencipta pada pelan
+- Kemas kini teks tiada ditemui pada halaman graf
+- Paparkan senaman terbaik dari halaman graf
+- Baiki padding sifar pada halaman sejarah graf apabila belum ada data
+- Pendekkan ketinggian graf
+- Baiki pepijat pratonton graf

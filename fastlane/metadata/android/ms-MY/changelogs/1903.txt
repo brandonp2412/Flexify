@@ -1,0 +1,5 @@
+- Tingkatkan prestasi graf
+- Alih keluar "Berat" daripada edit kardio
+- Baiki navigasi kembali yang kadangkala tidak berfungsi
+- Sembunyikan anggaran one-rep-max pada senaman kardio
+- Tingkatkan prestasi pelan

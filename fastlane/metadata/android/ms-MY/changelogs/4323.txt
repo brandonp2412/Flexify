@@ -1,0 +1,10 @@
+• Kemas kini README.md
+• chore(l10n): segerakkan terjemahan keluaran semasa
+• chore: tambah tangkapan skrin Play bahasa Turki
+• feat(l10n): tambah terjemahan Cina Tradisional
+• feat(l10n): lengkapkan liputan terjemahan semasa (#353)
+• feat: tambah pengurusan kategori
+• feat: lengkapkan terjemahan locale yang disokong
+• feat: lokalkan keseluruhan sejarah keluaran
+• fix: pulihkan Flutter DevTools terbina dalam
+• fix: stabilkan debugging Flutter dalam VS Code

@@ -1,0 +1,3 @@
+• Baiki direktori kerja stage Java
+• Pastikan bin Flutter sentiasa boleh dilaksanakan
+• Alihkan persediaan Java

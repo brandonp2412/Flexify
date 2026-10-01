@@ -1,0 +1,5 @@
+- Tambah multidex pada android/app/build.gradle
+- Kemas kini Flutter ke 3.22.0
+- Kemas kini pubspec.lock
+- Kemas kini tetapan VS Code
+- Baiki memasukkan rekod dari halaman sejarah

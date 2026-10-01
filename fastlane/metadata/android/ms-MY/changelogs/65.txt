@@ -1,0 +1,2 @@
+- Dayakan pengeditan nama graf dalam app bar
+- Navigator.of(context).pop() => Navigator.pop(context)

@@ -1,0 +1,4 @@
+- Gabungkan tetapan "Show reorder" dan "Show counts"
+- Refaktor pelan
+- Refaktor halaman graf
+- Refaktor gym_sets

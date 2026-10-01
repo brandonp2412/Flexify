@@ -1,0 +1,2 @@
+- Baiki aplikasi ranap selepas 1.1.36
+- Tingkatkan pengalaman mengedit kardio

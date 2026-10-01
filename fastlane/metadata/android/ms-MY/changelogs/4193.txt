@@ -1,0 +1,10 @@
+• chore: selaraskan slice lokalisasi serentak
+• chore: segarkan lockfile kebergantungan Flutter
+• docs: tambah roadmap terjemahan
+• docs: kemas kini status kelengkapan lokalisasi
+• feat: tambah lokalisasi Portugis Brazil
+• feat: tambah lokalisasi CJK
+• feat: tambah lokalisasi Belanda
+• feat: tambah lokalisasi Perancis
+• feat: tambah lokalisasi Jerman
+• feat: tambah lokalisasi Itali

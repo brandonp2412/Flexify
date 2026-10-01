@@ -1,0 +1,4 @@
+- Tambah pemilih hari tersuai
+- Baiki lag ketika membuka sejarah graf
+- Kira semula ORM apabila mengedit ulangan/berat
+- Tambah padding di hujung halaman edit pelan

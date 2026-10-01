@@ -1,0 +1,9 @@
+• Baiki ralat mengimport data
+• Baiki import data dengan memasukkan rekod planExercises dan kemas kini plans_list.dart untuk menggunakan operator null-aware
+• Baiki isu #206 dengan mengemas kini cara senaman disimpan dan dipecahkan
+• Baiki pemuat yang berkelip muncul
+• Baiki migrasi yang merosakkan senaman pelan
+• Ubah logik penyertaan senaman dalam pelan dengan mencipta rekod PlanExercises hanya untuk senaman yang dipilih dan tidak menyimpannya dalam lajur Plan.Exercises
+• Jeda kerja untuk perjalanan
+• Laksanakan migrasi data sedia ada supaya hanya senaman dengan PlanExercises.enabled = false dibuang daripada pelan
+• Kemas kini fail ujian supaya semua ujian lulus

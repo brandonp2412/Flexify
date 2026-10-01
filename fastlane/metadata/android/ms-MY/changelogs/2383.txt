@@ -1,0 +1,2 @@
+- Kemas kini Flutter & pubspec.lock
+- Baiki deploy yang tidak berjalan

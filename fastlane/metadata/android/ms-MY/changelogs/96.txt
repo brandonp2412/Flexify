@@ -1,0 +1,3 @@
+- Pratonton bunyi penggera tersuai ketika menetapkannya
+- Refaktor graf kardio
+- Tambah butang kongsi pangkalan data pada tetapan

@@ -1,0 +1,10 @@
+- Baiki ujian
+- Tambah metrik ulangan terbaik
+- Namakan semula AppGroupBy -> Period
+- Tingkatkan prestasi graf kardio
+- Tingkatkan versionCode pada keluaran universal
+- Baiki penambahan minit dari halaman pemasa
+- Komenkan fastlane supply
+- Gunakan waktu tempatan apabila sesuai
+- Refaktor logik tetapan
+- Refaktor kod

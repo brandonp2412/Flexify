@@ -1,0 +1,2 @@
+- Edit bilangan senaman pada pelan dan bukannya graf
+- Tingkatkan prestasi aplikasi

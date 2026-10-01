@@ -1,0 +1,3 @@
+- Alih keluar output debug daripada ujian migrasi
+- Alih keluar git push --force daripada deploy.sh
+- Baiki semua isu migrasi pangkalan data

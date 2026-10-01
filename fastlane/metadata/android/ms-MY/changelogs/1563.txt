@@ -1,0 +1,3 @@
+- Tambah kategori
+- Tambah graf kecondongan & pace terlaras
+- Alih keluar jubin berulang dalam tetapan pemasa

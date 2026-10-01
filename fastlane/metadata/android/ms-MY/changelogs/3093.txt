@@ -1,0 +1,4 @@
+• Baiki deploy.sh
+• Jadikan bottom sheet lebih mudah diketuk
+• Jadikan entri terakhir lebih mudah dilihat/diketuk
+• Gunakan berat badan yang dimasukkan sebelum ini pada halaman pelan

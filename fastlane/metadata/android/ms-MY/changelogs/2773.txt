@@ -1,0 +1,4 @@
+• Baiki ulangan berubah secara lalai
+• Cerahkan butang hujung pemasa
+• Naik taraf kebergantungan Flutter
+• Naik taraf Flutter ke 3.32.8

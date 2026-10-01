@@ -1,0 +1,1 @@
+• fix: kosongkan medan nota apabila bertukar kepada senaman tanpa nota terdahulu

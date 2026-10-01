@@ -1,0 +1,2 @@
+• feat(l10n): tambah terjemahan Rusia
+• fix(l10n): segerakkan sejarah keluaran 2.2.22

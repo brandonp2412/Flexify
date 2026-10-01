@@ -1,0 +1,2 @@
+• ci: cuba semula kegagalan sementara pemilih Patrol
+• fix: pulihkan lalai senaman StartPlan

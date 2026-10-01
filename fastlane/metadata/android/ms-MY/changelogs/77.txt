@@ -1,0 +1,6 @@
+- Benarkan pemadaman berbilang pelan
+- Namakan semula "Enter weight" kepada "Weight" pada halaman graf
+- Tambah butang edit pada lungsur turun halaman graf
+- Fokus medan jarak selepas menghantar tempoh
+- Baiki ranap akibat jenis kardio tidak konsisten
+- Alih keluar akhiran sejarah daripada graph_history

@@ -1,0 +1,5 @@
+- Baiki ujian tangkapan skrin
+- Jadikan import data lebih kukuh
+- Kosongkan pelan sebelum mengimport
+- Elakkan titik graf dibuka ketika pinch
+- Pasang mod release pada telefon saya selepas deploy

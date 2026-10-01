@@ -1,0 +1,2 @@
+- Sesuaikan bar kemajuan pada pelan
+- Tambah sandaran automatik

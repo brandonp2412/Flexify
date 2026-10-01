@@ -1,0 +1,4 @@
+• Tambah tetapan untuk tunjuk/sembunyi had dan paksi X pada graf
+• Sentiasa mulakan pemasa pada pelan yang diaktifkan
+• Baiki jenis kardio baharu yang tidak berfungsi
+• Tekan lama paksi X / slider had untuk menyembunyikan

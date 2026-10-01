@@ -1,0 +1,8 @@
+• Baiki bar kemajuan bawah yang tidak dikemas kini
+• Baiki konsistensi padding pada Pelan
+• Baiki navigasi kembali sistem
+• Baiki ujian unit
+• Pautkan shields.io pada lencana muat turun
+• Padankan jarak halaman edit berat dengan edit set
+• Elakkan ketik dua kali mengedit set yang belum dimasukkan
+• Alih keluar jarak Get it on X

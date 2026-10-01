@@ -1,0 +1,10 @@
+• Tambah ujian kepada dart analyze
+• Benarkan senarai senaman ditatal melepasi bar navigasi ketika melengkapkan pelan
+• Tukar gaya halaman kekuatan
+• Gunakan bottomNavHeight secara konsisten
+• Baiki ketinggian bawah
+• Baiki jarak graf & sembunyikan nota jika tetapan dimatikan
+• Baiki ujian unit Search bar
+• Tingkatkan gaya graf
+• Seragamkan jarak chip pelan
+• Padankan gaya pada halaman kardio

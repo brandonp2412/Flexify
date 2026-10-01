@@ -1,0 +1,11 @@
+- Baiki deploy
+- Baiki deploy.sh keluar apabila tiada perubahan
+- Kembalikan "Remember strength graph settings"
+- Kembalikan "Remember settings for cardio graphs"
+- Sembunyikan kemajuan pemasa apabila tab pemasa disembunyikan
+- Senaraikan senaman hari ini dahulu pada halaman graf
+- Ingat tetapan graf kardio
+- Ingat tetapan graf kekuatan
+- Tambah setState yang tiada pada strength_line
+- Dayakan pengeditan unit secara pukal untuk graf
+- Baiki ketikan graf untuk senaman kardio

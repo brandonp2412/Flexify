@@ -1,0 +1,2 @@
+- Baiki pengiraan pelan
+- Baiki pemantauan skema pangkalan data yang kadangkala terhenti

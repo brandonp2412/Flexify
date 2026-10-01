@@ -1,0 +1,11 @@
+- Tambah graf global
+- Kemas kini fastlane icon.png
+- Besarkan pemegang seret senaman
+- Gantikan ikon kosong yang pelik
+- Pastikan iOS mempunyai pilihan perpuluhan untuk input nombor
+- Elakkan animasi pemasa setiap kali bertukar tab
+- Jadikan ikon aplikasi bertema gelap
+- Animasikan penambahan/pembuangan dalam senarai sejarah
+- Tambah pilihan masa relatif untuk tarikh
+- Baiki butang kembali sistem pada halaman pemasa
+- Baiki nama graf yang salah selepas kemas kini

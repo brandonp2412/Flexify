@@ -1,0 +1,5 @@
+- Tingkatkan prestasi pengeditan pelan
+- Baiki graf one-rep-max
+- Baiki kiraan pelan yang bersifat global
+- Benarkan kecondongan kosong
+- Tingkatkan prestasi permulaan

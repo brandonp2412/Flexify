@@ -1,0 +1,2 @@
+- Wajibkan bendera -p untuk deploy.sh menghantar ke Google Play
+- Permudahkan pertanyaan kiraan untuk pelan

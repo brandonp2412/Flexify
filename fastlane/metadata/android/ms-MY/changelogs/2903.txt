@@ -1,0 +1,3 @@
+• Sertakan app-release.aab dalam penciptaan keluaran GitHub
+• Jadikan pratonton graf boleh ditatal
+• Gunakan nota keluaran yang betul

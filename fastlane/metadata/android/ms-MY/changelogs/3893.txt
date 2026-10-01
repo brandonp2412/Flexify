@@ -1,0 +1,1 @@
+• ci: tetapkan retention-days pada langkah upload-artifact untuk mengurangkan penggunaan storan

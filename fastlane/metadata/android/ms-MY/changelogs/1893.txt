@@ -1,0 +1,4 @@
+- Baiki navigasi kembali yang kadangkala tidak berfungsi
+- Sembunyikan anggaran one-rep-max pada senaman kardio
+- Tingkatkan prestasi halaman kekuatan
+- Tingkatkan prestasi pelan

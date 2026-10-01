@@ -1,0 +1,7 @@
+- Sertakan semua mesej commit dalam nota keluaran
+- Namakan semula fail eksport/import data
+- Refaktor halaman pelan
+- Tambah ikon edit pada halaman graf
+- Tambah tetapan graf garis melengkung
+- Jadikan graf garis melengkung
+- Baiki tooltip pada graf garis

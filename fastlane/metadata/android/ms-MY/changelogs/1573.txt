@@ -1,0 +1,4 @@
+- Tambah set pemanasan
+- Tukar gaya senarai senaman dalam pelan
+- Baiki set maksimum
+- Paparkan kecondongan hanya untuk nilai bukan sifar

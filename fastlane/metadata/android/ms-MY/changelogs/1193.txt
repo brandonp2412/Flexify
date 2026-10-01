@@ -1,0 +1,2 @@
+- Namakan semula fail ZIP macOS
+- Baiki semakan iOS untuk ujian integrasi

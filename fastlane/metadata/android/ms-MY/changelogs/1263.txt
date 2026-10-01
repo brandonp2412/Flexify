@@ -1,0 +1,6 @@
+- Baiki ujian
+- Tambah menu kongsi
+- Baiki papan kekunci yang berkelip ketika menghantar
+- Pratonton tarikh ciptaan terdahulu semasa pengeditan berbilang
+- Gunakan pemilih unit baharu untuk graf kardio
+- Salin susun atur graf kekuatan ke kardio

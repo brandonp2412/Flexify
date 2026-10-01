@@ -1,0 +1,7 @@
+- Elakkan pemadaman preset senaman
+- Gantikan unit lalai dengan tetapan
+- Pendekkan sedikit graf
+- Tambah slider had pada graf
+- Paparkan bilangan set dalam sejarah yang diringkaskan
+- Tingkatkan gaya pemisah hari dalam sejarah
+- Labelkan pemisah pada halaman graf

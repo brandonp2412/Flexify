@@ -1,0 +1,2 @@
+- Gabung cabang 'main' dari github.com:brandonp2412/Flexify
+- Pratonton getaran apabila menukar tetapan pemasa

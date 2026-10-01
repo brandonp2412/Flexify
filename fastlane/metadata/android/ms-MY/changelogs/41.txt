@@ -1,0 +1,1 @@
+Baiki arahan git commit dalam deploy.sh

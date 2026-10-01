@@ -1,0 +1,4 @@
+- Baiki penyimpanan rosak apabila pemasa rehat diaktifkan
+- Baiki nama fail import/eksport data
+- Refaktor senarai senaman
+- Baiki nota keluaran

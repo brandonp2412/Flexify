@@ -1,0 +1,6 @@
+• Tambah pelbagai variasi navigasi bawah
+• Tambah skrip untuk kegagalan menjalankan Linux
+• Padam variasi navigasi
+• Kemas kini navigasi bawah kepada reka bentuk pil
+• fix: alih keluar laluan JDK tempatan hardcoded daripada gradle.properties
+• fix: senyapkan ralat deprecation coroutine MSVC yang memecahkan binaan Windows CI

@@ -1,0 +1,2 @@
+• Utamakan assertion tetapan pemasa yang boleh dilihat pengguna
+• refactor: alih keluar kod pemasa desktop yang mati

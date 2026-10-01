@@ -1,0 +1,10 @@
+• Tambah mesej untuk pelan kosong
+• Matikan kekalkan skrin hidup secara lalai dan pindahkan suis ke tetapan
+• feat: tambah tetapan kekalkan skrin hidup untuk pemasa rehat
+• feat: gantikan lungsur turun tema dengan SegmentedButton + suis AMOLED
+• fix: lindungi daripada senarai senaman kosong ketika menyimpan dan memilih dalam StartPlanPage
+• fix: elakkan label SegmentedButton membalut dengan membetulkan padding
+• fix: kecilkan saiz teks trailing daripada 16 kepada 14 dalam senarai sejarah dan graf
+• fix: lepaskan wake lock apabila pemasa tamat atau tidak berjalan
+• fix: paparkan snackbar dalam aplikasi dan baiki pemberitahuan apabila pemasa tamat semasa skrin hidup
+• fix: kecilkan dan redupkan teks trailing dalam jubin senarai sejarah dan graf

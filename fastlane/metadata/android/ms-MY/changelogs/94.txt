@@ -1,0 +1,2 @@
+- Tambah graf ulangan terbaik
+- Komenkan fastlane supply dalam deploy.sh

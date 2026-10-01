@@ -1,0 +1,6 @@
+• Namakan semula semua prop dalaman dengan awalan _
+• Tiru tangkapan skrin automatik & ujian E2E daripada fit-book
+• chore: kemas kini semakan automasi repositori
+• ci: baiki aliran kerja Patrol dan deploy Play
+• fix: selaraskan sasaran kompilasi JVM Android
+• fix: kekalkan berat kardio dalam sejarah berkumpulan

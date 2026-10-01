@@ -1,0 +1,7 @@
+• Tambah penunjuk ikon kardio/kekuatan pada suis dalam edit set/set
+• Tambah tetapan kedudukan bar kemajuan
+• Benarkan kategori dikosongkan
+• Tukar ikon pelan di navigasi bawah
+• Baiki UI sistem penampilan yang menutupi graf
+• Kemas kini tetapan tab serta-merta & alih keluar butang simpan
+• Elakkan hint text null pada kategori atau kecondongan ketika mengedit berbilang set

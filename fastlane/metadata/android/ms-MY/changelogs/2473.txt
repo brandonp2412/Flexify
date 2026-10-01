@@ -1,0 +1,10 @@
+- Baiki ujian unit
+- Baiki deploy ke Windows Store
+- Tambah langkah debug untuk menyenaraikan fail dimuat turun dalam deploy Windows Store
+- Baiki deploy Windows Store: gunakan fail MSIX tempatan dan bukannya URL keluaran GitHub
+- Baiki deploy Windows Store: pastikan keluaran GitHub dicipta sebelum deploy Windows Store
+- Kemas kini tangkapan skrin desktop
+- Baiki semua tangkapan skrin automatik desktop
+- Kemas kini pubspec.lock
+- Tambah skrip untuk mengemas kini chromedriver
+- Baiki halaman What's New

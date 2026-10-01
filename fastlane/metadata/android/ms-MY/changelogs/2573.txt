@@ -1,0 +1,5 @@
+• Tambah konfigurasi binaan reproducible untuk F-Droid
+• Baiki rujukan kepada MSIX binaan Windows
+• Baiki isu binaan reproducible - selaraskan versi dengan Flutter 3.29.3
+• Elakkan ranap selepas import pangkalan data
+• Kemas kini pubspec.lock

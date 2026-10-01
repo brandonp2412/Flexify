@@ -1,0 +1,5 @@
+• Semak semula penerangan projek dalam README
+• Kemas kini README untuk mengubah tagline projek
+• Kemas kini nama projek dalam README
+• Kemas kini versi kepada 2.2.0 dalam pubspec.yaml
+• fix: selesaikan pepijat sejarah dan pelan yang terbuka

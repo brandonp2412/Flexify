@@ -1,0 +1,5 @@
+- Baiki leretan merentasi graf untuk pergerakan tab
+- Padam timers.webm
+- Baiki tarikh dicipta yang salah ketika mengedit set gim
+- Baiki halaman settings/enter weight yang dibuang
+- Lumpuhkan warna sistem dalam ujian tangkapan skrin

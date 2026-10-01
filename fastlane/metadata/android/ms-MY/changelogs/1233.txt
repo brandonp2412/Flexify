@@ -1,0 +1,5 @@
+- Tingkatkan tangkapan skrin
+- Sertakan tangkapan skrin dalam keluaran GitHub
+- Rombak pemilih unit
+- Alih keluar sebutan unit yang berulang
+- Tambah pengeditan berbilang pada sejarah

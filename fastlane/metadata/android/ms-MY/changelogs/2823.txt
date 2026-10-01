@@ -1,0 +1,3 @@
+• Benarkan pencetus manual aliran kerja GitHub
+• Turunkan taraf ke Ruby 3.3 untuk deploy-google-play
+• Baiki nama penerbit dalam pubspec.yaml

@@ -1,0 +1,10 @@
+• Benarkan konfigurasi pemasa rehat bagi setiap senaman dari halaman tetapan
+• Animasikan butang pada bar carian
+• Animasikan kotak semak ketika memilih
+• Animasikan FAB pada halaman pelan
+• Baiki pepijat ketika mengedit unit graf
+• Baiki tooltip pertama/terakhir ketika hover pada graf
+• Baiki ikon hadapan untuk pelan bertajuk
+• Baiki ujian senarai pelan
+• Baiki pembuangan pemasa tersuai pada halaman tetapan
+• Gelapkan pemilih hari

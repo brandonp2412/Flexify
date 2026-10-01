@@ -1,0 +1,5 @@
+- Baiki deploy.sh
+- Alih keluar pelaksanaan aliran kerja Windows + macOS selepas deploy
+- Baiki halaman kosong selepas mengimport pangkalan data
+- Tambah unit pada graf kardio
+- Susun semula folder lib

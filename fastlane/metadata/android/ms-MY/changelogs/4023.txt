@@ -1,0 +1,8 @@
+• Baiki paparan changelog kosong
+• Sembunyikan ujian integrasi Linux pada dwl
+• feat: tingkatkan kawalan pemilihan graf
+• feat: integrasikan logging Talker
+• fix: kuatkuasakan tangkapan skrin tujuh inci yang mematuhi syarat
+• fix: kukuhkan navigasi dan ujian desktop
+• fix: asingkan pangkalan data ujian integrasi
+• test: liputi rendering skrin changelog

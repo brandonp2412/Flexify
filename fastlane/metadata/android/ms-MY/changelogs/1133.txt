@@ -1,0 +1,3 @@
+- Baiki ujian unit
+- Kurangkan ikon pada halaman tetapan
+- Gunakan butang untuk pemilih tempoh

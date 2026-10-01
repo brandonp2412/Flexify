@@ -1,0 +1,2 @@
+• docs: permudahkan persediaan README
+• test: tingkatkan keadaan contoh tangkapan skrin

@@ -1,0 +1,1 @@
+- Baiki deploy automatik macOS

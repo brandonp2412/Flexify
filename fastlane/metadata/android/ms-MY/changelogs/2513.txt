@@ -1,0 +1,2 @@
+- Baiki arahan penerbitan msstore
+- Pastikan set gim wujud sebelum mengujinya pada halaman graf

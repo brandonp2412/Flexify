@@ -1,0 +1,4 @@
+• WIP: pindahkan kerja senarai semak Flexify dari Nox
+• chore: segarkan konfigurasi projek Serena
+• test: liputi lalai opt-in
+• test: alih keluar harness integrasi Patrol

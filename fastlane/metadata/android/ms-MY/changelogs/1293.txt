@@ -1,0 +1,2 @@
+- Buang sifar hujung daripada menu kongsi
+- Baiki unit yang bermasalah apabila menukar kardio

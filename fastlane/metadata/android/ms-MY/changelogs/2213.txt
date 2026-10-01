@@ -1,0 +1,7 @@
+- Tambah nota pada pengaktifan pelan
+- Elakkan garis graf terkeluar dari sempadan
+- Alih keluar "No data yet" daripada kemajuan global
+- Alih keluar garis putih di bawah bar carian ketika menatal
+- Alihkan butang kosongkan dari lungsur turun ke kiri bar carian
+- Baiki tangkapan skrin edit pelan
+- Lengkungkan graf garis dalam tangkapan skrin

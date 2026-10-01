@@ -1,0 +1,10 @@
+• Baiki banner debug yang muncul dalam tangkapan skrin
+• Kemas kini tangkapan skrin
+• Gunakan butang teks untuk +1 minit
+• chore: tambah skrip tangkapan skrin Android dengan bendera --profile
+• feat: tingkatkan UI untuk kelicinan lengkung, pemasa, trailing pelan dan gaya input
+• fix: tengahkan bulatan pemasa secara menegak dan alihkan butang +1 minit ke bawah bulatan
+• fix: lumpuhkan banner debug dalam MaterialApp
+• fix: hapuskan anti-corak UniqueKey dalam widget bulatan pemasa
+• fix: reka semula bulatan pemasa dengan rupa minimal dan moden
+• fix: gantikan runApp dengan tester.pumpWidget dalam ujian tangkapan skrin

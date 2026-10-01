@@ -1,0 +1,5 @@
+• feat: tambah pautan Tinggalkan ulasan pada halaman Perihal
+• fix: tambah padding bawah yang tiada pada semua halaman boleh tatal (#301)
+• fix: sambung semula ticker stopwatch apabila aplikasi kembali ke latar hadapan
+• fix: gunakan masa jam sebenar untuk stopwatch supaya bertahan ketika skrin dimatikan
+• fix: baiki padding bawah tetapan senaman dan label tab stopwatch

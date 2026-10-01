@@ -1,0 +1,6 @@
+- Alih keluar teks pada senaman pelan
+- Baiki penyimpanan dari mula pelan
+- Jadikan bilangan maksimum set bagi setiap senaman
+- Tambah koma hujung
+- Permudahkan inisialisasi tetapan
+- Pull dari git selepas mencipta keluaran GitHub

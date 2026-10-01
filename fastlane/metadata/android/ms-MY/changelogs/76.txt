@@ -1,0 +1,5 @@
+- Pergi ke senaman seterusnya apabila set maksimum dicapai
+- Balikkan pelan hari ini pada halaman graf
+- Hentikan pemasa rehat selepas senaman selesai
+- Tingkatkan prestasi tetapan
+- Tambah tetapan set maksimum

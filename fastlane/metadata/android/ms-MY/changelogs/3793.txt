@@ -1,0 +1,6 @@
+• Kurangkan parallelism untuk binaan Gradle dalam GitHub Actions
+• Kemas kini tangkapan skrin
+• feat: jelaskan medan kategori digunakan untuk tag kumpulan otot
+• fix: gunakan kategori seed ketika merekod senaman kali pertama
+• fix: tag keluaran hanya selepas semua binaan platform berjaya
+• fix: pin binaan keluaran dan tag kepada SHA commit tepat

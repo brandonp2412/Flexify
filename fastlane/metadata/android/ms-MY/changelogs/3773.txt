@@ -1,0 +1,10 @@
+• Baiki bar bawah yang tidak muncul pada tangkapan skrin halaman sejarah
+• Baiki bar bawah yang menutupi kandungan dalam tangkapan skrin
+• Sembunyikan UI daripada tangkapan skrin Chrome secara lalai
+• Elakkan pemasa berjalan apabila dilumpuhkan dari halaman pelan
+• Alih keluar sqlite3_flutter_libs yang berlebihan
+• Kemas kini .serena
+• Kemas kini Flutter
+• Kemas kini tangkapan skrin
+• Kemas kini Serena
+• chore: baiki amaran binaan Android, naik taraf Gradle ke 8.14

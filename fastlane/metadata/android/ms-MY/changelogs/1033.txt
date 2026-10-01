@@ -1,0 +1,3 @@
+- Jalankan dart pub upgrade
+- Jangan gunakan warna sistem untuk tangkapan skrin
+- Bina appbundle hanya apabila menghantar ke Play Store

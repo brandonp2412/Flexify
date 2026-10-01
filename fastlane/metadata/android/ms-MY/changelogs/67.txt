@@ -1,0 +1,11 @@
+- Tingkatkan tangkapan skrin
+- Sembunyikan pemilih unit pada graf jika unit dimatikan
+- Tambah medan kumpulan untuk graf (hari/minggu/bulan/tahun)
+- Animasikan ke tab graf apabila melihat senaman dari pelan
+- Lihat graf senaman dari pelan
+- Alih keluar tag daripada deploy.sh - 1.0.59 🚀
+- Tambah butang padam pada halaman edit set gim
+- Edit titik graf dengan ketik dua kali
+- Alihkan teks bantuan tetapan tarikh ke dalam label
+- Tambah tetapan format tarikh pendek
+- Refaktor graf garis

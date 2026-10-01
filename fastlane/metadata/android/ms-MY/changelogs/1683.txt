@@ -1,0 +1,5 @@
+- Seragamkan suis tetapan
+- Tingkatkan ketepatan anggaran ulangan
+- Benarkan masa rehat tersuai dikosongkan bagi setiap graf
+- Baiki kategori kosong untuk pelan
+- Baiki susunan pengeditan pelan

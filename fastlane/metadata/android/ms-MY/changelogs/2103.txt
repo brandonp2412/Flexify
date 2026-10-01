@@ -1,0 +1,9 @@
+- Ambil semua tangkapan skrin dalam mod gelap
+- Letakkan lencana Get it on X sebaris
+- Baiki beberapa ralat Android yang jarang berlaku
+- Ketik untuk mencipta pada pelan
+- Kemas kini teks tiada ditemui pada halaman graf
+- Paparkan senaman terbaik dari halaman graf
+- Baiki padding sifar pada halaman sejarah graf apabila belum ada data
+- Pendekkan ketinggian graf
+- Baiki pepijat pratonton graf

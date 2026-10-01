@@ -1,0 +1,10 @@
+• Tambah konfigurasi Serena
+• Baiki toast yang kekal selamanya
+• Tingkatkan visual stepper
+• Seragamkan padding halaman edit set
+• Alih keluar label berulang untuk gaya input
+• Permudahkan medan stepper
+• Kemas kini tangkapan skrin
+• Naik taraf Flutter ke 3.44.1
+• Naik taraf versi Kotlin
+• feat: tambah stepper +/- pada medan ulangan dan berat

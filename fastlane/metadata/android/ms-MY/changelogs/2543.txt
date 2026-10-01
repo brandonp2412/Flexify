@@ -1,0 +1,2 @@
+- Gunakan submodul Flutter dan nyatakan versi Kotlin
+- Baiki deploy-windows-store

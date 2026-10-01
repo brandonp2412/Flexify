@@ -1,0 +1,7 @@
+• Tambah pengehosan GitHub Pages untuk Flexify web
+• Tambah changelog yang tiada
+• Benarkan pengguna mengosongkan set maksimum
+• Padam skrip tidak digunakan
+• Baiki penyalinan What's New
+• Sandarkan ke satu fail sahaja setiap kali
+• Alih keluar ulangan daripada graf kekuatan

@@ -1,0 +1,5 @@
+• Baiki lampiran pautan VirusTotal pada keluaran
+• feat: tambah pratonton langsung pada pemilih tetapan dan baiki pemformatan berat
+• fix: tambah padding atas pada halaman mula pelan untuk mengelakkan label outline terpotong
+• fix: seragamkan jarak 8dp antara input pada halaman mula pelan
+• fix: pratonton kedudukan kemajuan menggunakan TimerProgressIndicator sebenar

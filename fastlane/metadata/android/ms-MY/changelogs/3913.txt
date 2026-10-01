@@ -1,0 +1,10 @@
+• Tambah Serena
+• Tukar lebar kad set skeleton dalam halaman mula pelan
+• Klip data carta supaya garis tidak terkeluar
+• Padam action tangkapan skrin Waydroid
+• Baiki keserasian runtime GitHub Actions
+• Baiki hook pre-push
+• Baiki hook pre-push
+• Baiki jarak antara medan kardio dan jarak dalam edit sejarah
+• Sembunyikan kemajuan global dalam tangkapan skrin
+• Sembunyikan imej dalam ujian tangkapan skrin

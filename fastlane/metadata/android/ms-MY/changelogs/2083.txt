@@ -1,0 +1,13 @@
+- Tukar ketinggian graf
+- Tambah tetapan untuk menyembunyikan kategori
+- Gunakan butang ikon untuk dialog pemadaman
+- Tambah pemberitahuan untuk rekod baharu
+- Tambah tetapan kelicinan lengkung
+- Tingkatkan padding bar carian
+- Kemas kini graf selepas mengedit dari pratonton sejarah
+- Baiki penetapan ulangan/berat selepas menamatkan senaman
+- Kembali selepas menyimpan tetapan tab
+- Padankan navigasi sistem dengan tema aplikasi
+- Pratonton graf di bawah tetapan penampilan
+- Baiki tetapan lengkung yang tidak digunakan pada pratonton graf
+- Jadikan graf lebih menarik 😎

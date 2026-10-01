@@ -1,0 +1,5 @@
+• feat(l10n): tambah terjemahan Bengali
+• feat(l10n): tambah terjemahan Melayu
+• feat(l10n): tambah terjemahan Parsi
+• feat(l10n): tambah terjemahan Thai
+• feat(l10n): tambah terjemahan Urdu

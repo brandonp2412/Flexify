@@ -1,0 +1,2 @@
+• ci: automasikan peningkatan versi dan keluaran apabila push ke main
+• fix: elakkan penggera rehat berganda apabila runnable dan AlarmManager kedua-duanya tercetus

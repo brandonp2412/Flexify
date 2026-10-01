@@ -1,0 +1,5 @@
+- Bundarkan berat
+- Baiki navigasi tab yang berada di belakang navigasi sistem
+- Alihkan label kelicinan lengkung sebelum slider
+- Baiki warna trek yang hilang dengan warna sistem
+- Normalkan unit apabila menukarnya dari graf

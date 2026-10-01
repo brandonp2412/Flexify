@@ -1,0 +1,10 @@
+• Tambah senarai semak kebenaran aplikasi boleh guna semula
+• Tengahkan label penampilan dan gambarkan keadaan suis pada ikon
+• Tengahkan label tetapan pelan dan suis
+• Tengahkan tetapan pemasa dan gunakan ikon aktif berisi
+• Tengahkan label senaman dan gunakan ikon aktif berisi
+• Dedahkan senarai semak kebenaran aplikasi dalam tetapan
+• Baiki lockfile CI dan ralat analyzer pemasa
+• Baiki permintaan kebenaran pemberitahuan sekali sahaja
+• Baiki ralat analyzer dialog kebenaran
+• Jadikan prompt kebenaran pemberitahuan native sekali sahaja

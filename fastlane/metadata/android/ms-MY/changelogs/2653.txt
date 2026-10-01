@@ -1,0 +1,4 @@
+• Tukar aliran kerja GitHub
+• Baiki aliran kerja GitHub
+• Alih keluar git pull berlebihan
+• Tiru sistem binaan F-Droid untuk keluaran binaan Android

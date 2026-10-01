@@ -1,0 +1,2 @@
+• Kukuhkan ujian Patrol terhadap isu timing
+• fix: stabilkan semakan pemilih folder Android

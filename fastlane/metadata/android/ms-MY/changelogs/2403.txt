@@ -1,0 +1,2 @@
+- Kemas kini pubspec.lock
+- Baiki isu aliran kerja deploy GitHub Actions

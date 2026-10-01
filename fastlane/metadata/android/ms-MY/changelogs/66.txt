@@ -1,0 +1,6 @@
+- Alih keluar tag daripada deploy.sh
+- Tambah butang padam pada halaman edit set gim
+- Edit titik graf dengan ketik dua kali
+- Alihkan teks bantuan tetapan tarikh ke dalam label
+- Tambah tetapan format tarikh pendek
+- Refaktor graf garis

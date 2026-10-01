@@ -1,0 +1,3 @@
+- Jelaskan fungsi edit graf
+- Kosongkan had saiz ketika mencari sejarah
+- Benarkan tatal melepasi penghujung senarai

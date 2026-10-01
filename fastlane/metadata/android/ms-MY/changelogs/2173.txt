@@ -1,0 +1,3 @@
+- Hentikan penerima sandaran jika sandaran automatik dimatikan
+- Alih keluar rsync daripada deploy.sh ke macOS
+- Gunakan zsh dalam macos.sh

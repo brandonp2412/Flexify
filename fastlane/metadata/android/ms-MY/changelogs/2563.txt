@@ -1,0 +1,7 @@
+• Tambah ujian data migrasi
+• Gabungkan aliran kerja menjadi satu
+• Padam beberapa komen yang tidak berguna
+• Pautkan formula Brzycki dalam komen
+• Alih keluar lebih banyak komen yang tidak berguna
+• Alih keluar beberapa komen
+• Pendekkan nama pemboleh ubah

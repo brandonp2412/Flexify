@@ -1,0 +1,1 @@
+- Baiki pencetus aliran kerja deploy dengan menambah workflow_dispatch dan panggilan API

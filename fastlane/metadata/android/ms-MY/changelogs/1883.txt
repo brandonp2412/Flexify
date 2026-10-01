@@ -1,0 +1,4 @@
+- Togol pemasa bagi setiap item pelan
+- Tambah penapis kumpulan otot pada halaman graf
+- Baiki padding unit pada halaman tetapan
+- Baiki imej senaman yang tidak dibuang

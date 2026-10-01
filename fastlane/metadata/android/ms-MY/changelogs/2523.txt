@@ -1,0 +1,1 @@
+- Tambah stage debug untuk deploy-windows-store

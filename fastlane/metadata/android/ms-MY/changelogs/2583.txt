@@ -1,0 +1,9 @@
+• Tambah pengendalian ralat pada import data
+• Tambah lagi ujian migrasi data
+• Padam komen
+• Dayakan build config dalam android/app/build.gradle
+• Baiki isu lint dalam edit_set_page
+• Alih keluar awalan underscore dalam beberapa kaedah halaman mula pelan
+• Alih keluar pemilih unit dan baiki ujian
+• Pendekkan semua nama pemboleh ubah
+• Pecahkan lagi semua komponen dalam halaman edit set

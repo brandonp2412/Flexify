@@ -1,0 +1,5 @@
+- Jarakkan full description dengan betul
+- Nyatakan git pull --tags selepas mencipta keluaran GitHub
+- Aktifkan semula deploy Google Play
+- Tambah kecondongan pada eksport/import
+- Tambah kecondongan pada jenis kardio

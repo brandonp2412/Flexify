@@ -1,0 +1,4 @@
+• Sentiasa paparkan tajuk tab
+• Baiki graf global yang tidak boleh ditatal
+• Baiki kemas kini kategori
+• Kurangkan kekusutan tooltip graf global

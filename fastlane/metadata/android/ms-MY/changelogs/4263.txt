@@ -1,0 +1,10 @@
+• Liputi keutamaan locale Turki
+• Kembalikan aset reka bentuk semula ikon sementara
+• chore(l10n): tambah languageNameTurkish
+• chore: tangani semakan lokalisasi Turki
+• feat(l10n): tambah lokalisasi Turki
+• feat: tambah konsep ikon bisep melentur
+• feat: tambah set penghalusan ikon 7 dan 8
+• fix(l10n): alih keluar entri berulang
+• fix(tests): tambah .gitignore untuk mengecualikan test_bundle.dart
+• fix(tests): tambah bahasa tr pada locale_preference_test

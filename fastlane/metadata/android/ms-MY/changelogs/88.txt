@@ -1,0 +1,4 @@
+- Tambah butang berhenti pada pemasa yang selesai
+- Baiki tarikh dicipta pada halaman sejarah untuk set baharu
+- Baiki penggera yang tidak berhenti
+- Gantikan penggunaan MaterialStateProperty yang berlebihan

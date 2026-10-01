@@ -1,0 +1,3 @@
+- Baiki pengesanan penghujung pelan
+- Tambah lagi ujian unit tetapan
+- Baiki tindakan undur apabila deploy.sh gagal

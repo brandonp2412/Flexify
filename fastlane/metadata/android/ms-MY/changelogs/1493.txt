@@ -1,0 +1,3 @@
+- Tangani ralat pemuatan imej dengan baik
+- Alih keluar butang tambah/buang daripada editor imej
+- Kekalkan imej jika pengguna membatalkan pemilih fail

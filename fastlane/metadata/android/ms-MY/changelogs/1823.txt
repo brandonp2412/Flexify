@@ -1,0 +1,2 @@
+- Tambah tooltip pada tetapan
+- Baiki sandaran automatik yang berlaku setiap 15 minit

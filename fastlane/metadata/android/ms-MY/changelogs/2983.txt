@@ -1,0 +1,10 @@
+• Tambah padding mendatar pada penunjuk kemajuan bawah
+• Tambah butang susun semula Android yang tiada pada halaman Pelan
+• Animasikan peralihan antara tab
+• Tukar penunjuk dipilih
+• Tetapkan pemasa rehat kepada mati secara lalai
+• Baiki bottom sheet yang berada di belakang navigasi
+• Baiki deploy.sh apabila telefon disambungkan
+• Baiki lag ketika meleret antara tab selepas mengubahnya
+• Baiki penyimpanan set
+• Tingkatkan padding di atas halaman sejarah yang diringkaskan

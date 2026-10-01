@@ -1,0 +1,12 @@
+- Baiki tangkapan skrin
+- Baiki eksport/import tetapan tersembunyi dan jenis kardio
+- Baiki menutup kardio ketika mengedit set
+- Hentikan animasi ke tab selepas memadam
+- Alihkan mesej entri kosong ke bahagian atas sejarah
+- Tambah tab sejarah
+- Kemas kini tangkapan skrin
+- Kemas kini tangkapan skrin untuk perbandingan
+- Tambah tabBarState pada setiap ujian
+- Tambah context global; tidak lagi bergantung pada PlansPage sebagai halaman pertama
+- Tambah tangkapan skrin terkini untuk perbandingan
+- Permudahkan tangkapan skrin

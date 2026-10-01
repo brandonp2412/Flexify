@@ -1,0 +1,2 @@
+- Kemas kini pubspec.lock
+- Pasang pakej yang tiada dalam deploy-windows-store

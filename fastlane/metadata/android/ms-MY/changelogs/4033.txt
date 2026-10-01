@@ -1,0 +1,10 @@
+• Baiki paparan changelog kosong
+• Sembunyikan ujian integrasi Linux pada dwl
+• chore: gunakan pemformatan Dart pada ujian
+• feat: tingkatkan kawalan pemilihan graf
+• feat: integrasikan logging Talker
+• feat: reka semula antara muka desktop
+• fix: kuatkuasakan tangkapan skrin tujuh inci yang mematuhi syarat
+• fix: kukuhkan aliran graf senaman dan pemasa Linux
+• fix: kukuhkan navigasi dan ujian desktop
+• fix: asingkan pangkalan data ujian integrasi

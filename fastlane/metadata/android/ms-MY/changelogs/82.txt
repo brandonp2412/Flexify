@@ -1,0 +1,8 @@
+- Tambah tetapan sembunyikan tab sejarah
+- Tukar sandaran automatik
+- Baiki nama yang tidak dikemas kini untuk edit set gim
+- Tambah sandaran automatik
+- Baiki set gim baharu yang mempunyai ID dan created tidak sah
+- Format kod dalam import_data
+- Baiki jank ketika menambah set gim baharu
+- Gunakan file_picker untuk eksport/import data

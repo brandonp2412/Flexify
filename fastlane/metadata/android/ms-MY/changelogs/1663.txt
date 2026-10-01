@@ -1,0 +1,1 @@
+Deploy ke Windows Store secara automatik

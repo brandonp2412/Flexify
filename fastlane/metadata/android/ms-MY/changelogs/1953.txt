@@ -1,0 +1,3 @@
+- Animasikan bar kemajuan dari kiri ke kanan
+- Serlahkan pelan hari ini dengan tajuk tersuai
+- Padatkan pemilih hari dalam editor pelan

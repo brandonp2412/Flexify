@@ -1,0 +1,6 @@
+• Baiki semakan pemuktamadan rollout Microsoft Store
+• Parse respons rollout Store berbilang baris
+• Kemaskan empty state
+• Sasarkan submission Store yang diterbitkan
+• ci: cuba semula kegagalan sementara pemilih Android
+• test: selaraskan empty state sejarah graf

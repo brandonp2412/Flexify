@@ -1,0 +1,3 @@
+- Baiki pelupusan set gim ketika mengedit
+- Alih keluar panggilan dispose daripada tetapan
+- Bersihkan listener semasa dispose

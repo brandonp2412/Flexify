@@ -1,0 +1,9 @@
+• ci: bina APK PR secara automatik hanya untuk PR pemilik, manual untuk yang lain
+• ci: bina dan lampirkan APK pada pull request
+• ci: baiki versi Flutter 0.0.0-unknown dalam binaan APK PR
+• ci: baiki URL artefak berpetik dalam komen APK PR
+• ci: pasang binaan PR bersebelahan menggunakan akhiran ID aplikasi .pr
+• ci: tandatangani binaan PR dengan keystore ujian awam yang disertakan
+• fix: tetapkan semula kiraan set pelan pada tengah malam tempatan
+• fix: hentikan bunyi/getaran pemasa rehat apabila set baharu bermula
+• refactor: gunakan AlertDialog untuk Penapis dan pemalar navigasi bawah dikongsi

@@ -1,0 +1,10 @@
+• Kemasan kecil
+• Semak semula penerangan projek dalam README
+• Kemas kini README untuk mengubah tagline projek
+• Kemas kini nama projek dalam README
+• Kemas kini versi kepada 2.2.0 dalam pubspec.yaml
+• ci: hentikan ujian Patrol tidak stabil daripada menyekat keluaran
+• docs: tambah teks alternatif pada imej README
+• fix: elakkan ranap JNI Android path provider
+• fix: elakkan laluan pemberitahuan senaman berganda
+• fix: hadkan tangkapan skrin CI yang tergantung

@@ -1,0 +1,3 @@
+- Anggap tempoh kardio sebagai minit:saat
+- Baiki semua set maksimum yang menjadi 3 bagi setiap senaman
+- Dayakan pemasa rehat untuk Linux

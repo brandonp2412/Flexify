@@ -1,0 +1,3 @@
+• Segerakkan metadata Google Play Store secara automatik (#333)
+• fix: terbitkan polisi privasi yang mematuhi syarat
+• fix: kekalkan polisi privasi dalam deploy Pages

@@ -1,0 +1,10 @@
+• chore: tambah tangkapan skrin Play bahasa Turki
+• chore: lokalkan metadata keluaran terkini
+• feat: lengkapkan terjemahan locale yang disokong
+• feat: dedahkan kawalan graf pada desktop
+• feat: lokalkan keseluruhan sejarah keluaran
+• feat: kemaskan paparan milisaat pemasa
+• fix: pastikan teks pemasa berskala kekal dalam bulatan
+• fix: lembutkan pemotongan tepi graf garis
+• test: kukuhkan semakan kelengkapan lokalisasi
+• test: pastikan pemetaan locale gedung sentiasa segerak

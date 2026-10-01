@@ -1,0 +1,11 @@
+- Naik taraf Flutter
+- Ketik dua kali senaman untuk membukanya
+- Jelaskan pemadaman dari halaman graf
+- Tekan lama tab untuk menyembunyikannya
+- Gunakan huruf besar secara automatik dalam carian senaman pelan
+- Baiki pepijat pada graf kekuatan
+- Gunakan halaman bersarang pada graf -> tambah
+- Gunakan laluan bersarang pada pemasa -> tetapan
+- Tambah pratonton graf
+- Baiki pepijat pada halaman kekuatan
+- Tunggu set gim disimpan sebelum mengemas kini imej

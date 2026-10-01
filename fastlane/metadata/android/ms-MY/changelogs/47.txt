@@ -1,0 +1,1 @@
+Gunakan Flutter dan bukannya submodul dalam deploy.sh

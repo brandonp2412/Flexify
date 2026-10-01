@@ -1,0 +1,2 @@
+- Dapatkan kiraan senaman pelan hanya apabila diperlukan
+- Pastikan gym_sets mempunyai indeks

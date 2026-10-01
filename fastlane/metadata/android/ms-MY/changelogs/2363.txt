@@ -1,0 +1,11 @@
+- Baiki penggunaan yq dalam .deploy.yml
+- Baiki isu lint
+- Alih keluar peraturan lint avoid_print
+- Jalankan dart format
+- Jalankan aliran kerja pada main
+- Tambah aliran kerja GitHub
+- Baiki aliran kerja GitHub untuk menyokong ujian act
+- Baiki kebanyakan penjanaan tangkapan skrin desktop
+- Tambah persediaan untuk menjalankan ujian integrasi Chrome
+- Baiki halaman tetapan di web
+- Baiki aplikasi berjalan di web

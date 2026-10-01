@@ -1,0 +1,3 @@
+- Jadikan pengeditan set gim boleh ditatal
+- Checkout ke Flutter main dalam ci_post_clone
+- Kembalikan pemilih tempoh kepada lungsur turun

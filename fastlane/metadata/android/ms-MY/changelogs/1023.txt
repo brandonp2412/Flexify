@@ -1,0 +1,8 @@
+- Tambah tetapan untuk menyembunyikan penjejakan berat badan
+- Baiki changelog untuk keluaran Fastlane
+- Alih keluar ciri sandaran automatik
+- Tambah tetapan bilangan maksimum set
+- Tambah penggantian global minit/saat rehat
+- Seragamkan saiz padding tetapan
+- Lekatkan bar carian di bahagian atas tetapan
+- Namakan semula WidgetSettings -> SettingsLine

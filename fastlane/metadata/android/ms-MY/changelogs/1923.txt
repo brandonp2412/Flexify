@@ -1,0 +1,5 @@
+- Naik taraf Flutter ke 3.24.0
+- Gunakan floating action button lanjutan
+- Baiki deploy ke GitHub & binaan reproducible F-Droid
+- Elakkan halaman kebenaran dipaparkan pada iOS
+- Baiki graf kardio yang tidak dikemas kini serta-merta

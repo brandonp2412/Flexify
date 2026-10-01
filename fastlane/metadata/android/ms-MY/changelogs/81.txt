@@ -1,0 +1,3 @@
+- Gunakan tetapan tarikh panjang untuk mengedit set gim
+- Baiki pemilihan item pertama dalam sejarah gim
+- Baiki baris baharu yang tiada dalam commit keluaran

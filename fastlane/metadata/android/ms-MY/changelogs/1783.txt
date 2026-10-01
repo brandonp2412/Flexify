@@ -1,0 +1,3 @@
+- Ketik dua kali untuk membuka sebarang metrik
+- Paparkan ORM semasa mengedit set
+- Tambah suis untuk bunyi penggera

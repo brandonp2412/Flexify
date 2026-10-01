@@ -1,0 +1,5 @@
+- Baiki aplikasi ranap selepas 1.1.36
+- Gunakan bar carian dan tambah suis keterlihatan pada pelan
+- Dayakan pemasa rehat pada platform desktop
+- Jalankan pemasa pada desktop
+- Kembalikan perubahan pemasa desktop

@@ -1,0 +1,5 @@
+- Sandar secara automatik pada akhir pelan
+- Kemas kini mula pelan selepas mengedit entri
+- Kumpulkan berat mengikut minggu secara lalai
+- Kemas kini kebergantungan
+- Baiki nama pemboleh ubah halaman tetapan

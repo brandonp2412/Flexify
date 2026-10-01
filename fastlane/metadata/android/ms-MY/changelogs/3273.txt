@@ -1,0 +1,2 @@
+• Benarkan kegagalan ketika menambah kelicinan lengkung
+• Baiki import pelan/graf dari Windows

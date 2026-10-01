@@ -1,0 +1,4 @@
+- Sertakan tetapan dalam sandaran pangkalan data
+- Baiki eksport pangkalan data pada desktop
+- Tambah trailing pelan pada halaman utama
+- Tambah pilihan untuk trailing pelan

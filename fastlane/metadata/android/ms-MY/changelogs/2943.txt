@@ -1,0 +1,3 @@
+• Turunkan taraf AGP ke 8.11.1
+• Lukis di belakang UI sistem & togol tatal tab
+• Baiki pra-pengisian ulangan/berat

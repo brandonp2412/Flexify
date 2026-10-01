@@ -1,0 +1,4 @@
+• Tambah garis trend bertitik pada graf
+• Tambah butang kecil di hujung bulatan pemasa
+• Alih keluar diffing daripada migrate.sh
+• Tetapkan kategori apabila anda memilih senaman

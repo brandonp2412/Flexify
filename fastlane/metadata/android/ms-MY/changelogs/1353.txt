@@ -1,0 +1,2 @@
+- Baiki ujian unit
+- Alih keluar git push force daripada deploy.sh

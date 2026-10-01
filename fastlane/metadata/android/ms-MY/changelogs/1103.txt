@@ -1,0 +1,3 @@
+- Hentikan amaran ketikan terlepas dalam ujian tetapan
+- Gabung cabang 'main' dari github.com:brandonp2412/Flexify
+- Baiki amaran ujian halaman tetapan

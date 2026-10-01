@@ -1,0 +1,3 @@
+• feat: tambah jubin tambah senaman kekal dalam edit pelan; pulihkan tatal FAB graf
+• fix: sejajarkan ikon tambah senaman dengan ikon hadapan jubin senaman
+• fix: alih keluar suis mata, kekalkan butang tambah kelihatan, baiki semakan rekod kardio

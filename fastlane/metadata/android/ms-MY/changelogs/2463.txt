@@ -1,0 +1,4 @@
+- Kemas kini pubspec.lock
+- Sediakan deploy msstore
+- Konfigurasikan keluaran Google Play
+- Padam .actrc dan MIGRATION_GUIDE.md

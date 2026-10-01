@@ -1,0 +1,3 @@
+- Tambah butang tetapan pada pelan aktif
+- Baiki butang susun semula trailing pada desktop
+- Lumpuhkan pemasa rehat pada set pemanasan

@@ -1,0 +1,2 @@
+• Turunkan taraf AGP ke 8.11.1
+• Baiki pra-pengisian ulangan/berat

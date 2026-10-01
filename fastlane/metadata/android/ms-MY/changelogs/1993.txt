@@ -1,0 +1,2 @@
+- Baiki ulangan/berat awal yang menjadi sifar pada pelan
+- Buang sifar di hadapan selepas menyimpan pelan

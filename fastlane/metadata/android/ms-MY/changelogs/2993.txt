@@ -1,0 +1,4 @@
+• Baiki tangkapan skrin automatik
+• Baiki isu jarak pada halaman edit set
+• Jadikan sejarah lalai tidak dikumpulkan
+• Pull sebelum push akhir

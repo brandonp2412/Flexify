@@ -1,0 +1,2 @@
+• fix: kekalkan identiti keluaran unsigned F-Droid
+• fix: elakkan drift tandatangan Android

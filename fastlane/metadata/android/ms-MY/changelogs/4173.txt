@@ -1,0 +1,3 @@
+• Tambah aliran kerja tandatangan Android Kite (#347)
+• Baiki carian Android SDK penandatangan Kite (#348)
+• Baiki persekitaran NDK penandatangan Kite (#349)

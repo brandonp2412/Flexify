@@ -1,0 +1,4 @@
+• Benarkan semua jenis unit untuk kardio
+• Tukar gaya halaman tetapan tab
+• Baiki penambahan senaman kardio dari halaman Graf
+• Elakkan changelog dipaparkan pada pemasangan pertama

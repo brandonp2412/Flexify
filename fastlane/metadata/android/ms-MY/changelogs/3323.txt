@@ -1,0 +1,6 @@
+• Tambah format tarikh baharu (contohnya untuk bahasa Jerman)
+• Tambah pilihan paksi X berasaskan masa untuk graf
+• Baiki isu kehabisan memori
+• Baiki nisbah & kiraan trailing pelan
+• Benarkan pengguna menentukan huruf besar tajuk pelan
+• Alihkan butang sejarah ke bar navigasi

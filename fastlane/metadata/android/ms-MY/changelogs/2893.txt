@@ -1,0 +1,10 @@
+• Tambah garis luar lembut pada bulatan pemasa
+• Animasikan kemunculan butang berhenti pada halaman pemasa
+• Jelaskan pengeditan imej
+• Terangkan deploy Google Play
+• Baiki +1 minit pada Linux
+• Baiki tangkapan skrin automatik untuk keluaran
+• Baiki changelog
+• Baiki gaya README GitHub [skip ci]
+• Baiki muat turun keluaran GitHub dalam deploy Google Play
+• Baiki lebar lencana msstore [skip ci]

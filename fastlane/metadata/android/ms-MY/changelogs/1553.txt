@@ -1,0 +1,2 @@
+- Dayakan pemasa pada iOS
+- Baiki pemasa selesai pada macOS

@@ -1,0 +1,10 @@
+• Tambah submodul Flutter ke senarai abaian analisis
+• Tambah jarak yang tiada pada add_exercise_page.dart
+• Baiki jarak medan kardio
+• Baiki ralat dropdown dalam weight_page.dart
+• Baiki ralat getSingle dalam exercise_modal.dart
+• Baiki ralat context pelik dalam main.dart
+• Format
+• Kurangkan sedikit cahaya butang pada halaman pemasa
+• Alih keluar kotak semak hadapan pada sejarah berkumpulan
+• Alih keluar import tidak digunakan

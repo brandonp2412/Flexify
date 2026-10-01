@@ -1,0 +1,2 @@
+- Tambah keupayaan menyembunyikan kemajuan global
+- Baiki pengiraan one-rep-max untuk nilai negatif

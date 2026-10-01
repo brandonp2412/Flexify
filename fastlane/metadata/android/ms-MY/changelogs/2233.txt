@@ -1,0 +1,4 @@
+- Dayakan senaman dalam tangkapan skrin untuk pelan
+- Gunakan graf melengkung secara lalai
+- Kemas kini README.md
+- Tangani migrasi gagal

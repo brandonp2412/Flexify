@@ -1,0 +1,2 @@
+- Baiki import daripada eksport Massive sets
+- Baiki ranap graf garis untuk kekuatan relatif kosong

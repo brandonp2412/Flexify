@@ -1,0 +1,6 @@
+• Salin persediaan Gradle daripada FitBook
+• Baiki deploy Google Play
+• Alihkan pratonton graf satu item ke bawah
+• Alih keluar jadual Get it on X daripada README [skip ci]
+• Susun semula ciri dalam README [skip ci]
+• Tambah jarak antara lencana [skip ci]

@@ -1,0 +1,5 @@
+- Tambah sokongan unit dalam kardio
+- Baiki pengumpulan mengikut minggu untuk garis kardio
+- Baiki pengumpulan mengikut minggu untuk graf
+- Baiki pengumpulan mengikut minggu
+- Refaktor pelan

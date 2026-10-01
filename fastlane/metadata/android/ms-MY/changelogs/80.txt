@@ -1,0 +1,4 @@
+- Paginasikan set gim dalam sejarah
+- Gunakan huruf besar pada ayat bar carian
+- Gunakan set gim terakhir yang dimasukkan sebagai lalai
+- Susun graf mengikut tarikh dicipta

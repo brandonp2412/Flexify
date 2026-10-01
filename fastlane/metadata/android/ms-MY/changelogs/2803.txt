@@ -1,0 +1,4 @@
+• Baiki lint Flutter
+• Baiki deprecation perkongsian
+• Format Dart
+• Gunakan kotak semak untuk item dipilih

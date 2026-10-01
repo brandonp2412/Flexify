@@ -1,0 +1,2 @@
+• Tambah logik menentukan ID emulator
+• Baiki tangkapan skrin

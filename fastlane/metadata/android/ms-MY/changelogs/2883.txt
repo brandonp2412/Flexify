@@ -1,0 +1,10 @@
+• Tambah garis luar lembut pada bulatan pemasa
+• Baiki +1 minit pada Linux
+• Baiki changelog
+• Baiki gaya README GitHub [skip ci]
+• Baiki lebar lencana msstore [skip ci]
+• Hadkan kekerapan deploy Google Play [skip ci]
+• Besarkan lencana [skip ci]
+• Seragamkan lencana [skip ci]
+• Kembalikan "Fix msstore width badge [skip ci]"
+• Gunakan keluaran GitHub dan bukannya artefak [skip ci]

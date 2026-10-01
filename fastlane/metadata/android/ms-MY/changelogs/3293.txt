@@ -1,0 +1,5 @@
+• Baiki eksport CSV pelan
+• Baiki import fail dari Windows
+• Tingkatkan pengendalian ralat
+• Kekalkan kemajuan pemasa walaupun halaman pemasa disembunyikan
+• Pilih senaman pertama dengan betul dalam pelan

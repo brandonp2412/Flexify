@@ -1,0 +1,3 @@
+- Baiki imej yang tidak ditetapkan dari pelan
+- Baiki pemasa desktop yang masih tercetus
+- Tambah kcal, meter pada unit jarak

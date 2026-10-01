@@ -1,0 +1,5 @@
+- Baiki pemasa
+- Optimumkan pemasa
+- Baiki sandaran automatik
+- Tambah tetapan getaran dan bunyi penggera
+- Optimumkan halaman edit graf

@@ -1,0 +1,4 @@
+- Tambah anggaran ulangan
+- Tambah anggaran tempoh
+- Tambah tetapan pemanasan yang tiada
+- Baiki pakej Windows

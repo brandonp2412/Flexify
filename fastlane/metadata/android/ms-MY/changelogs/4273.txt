@@ -1,0 +1,5 @@
+• Kemas kini README.md
+• feat: tambah pengurusan kategori
+• feat: jadikan ikon 2 ikon pelancar Flexify
+• fix: pulihkan Flutter DevTools terbina dalam
+• fix: stabilkan debugging Flutter dalam VS Code

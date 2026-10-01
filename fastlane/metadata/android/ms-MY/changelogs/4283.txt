@@ -1,0 +1,4 @@
+• Tambah ruang di atas medan nama baharu edit graf
+• Jana semula pubspec.lock
+• Alih keluar jarak tersasar dalam edit_set_page
+• docs: selaraskan lencana muat turun README

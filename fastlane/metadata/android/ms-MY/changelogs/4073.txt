@@ -1,0 +1,10 @@
+• Ratakan inisialisasi audio tetapan
+• Ratakan pemilihan kandungan tab
+• Port sistem sandaran mudah alih daripada FitBook
+• Utamakan pemilih tindakan Flexify berlabel
+• Utamakan pemilih tindakan graf berlabel
+• Utamakan pemilih tab yang kelihatan
+• Permudahkan aliran kawalan return awal
+• fix: hadkan runtime ujian Android CI
+• fix: dayakan sandaran selepas pemilihan folder
+• refactor: utamakan kawalan yang boleh dilihat pengguna dalam E2E Linux

@@ -1,0 +1,1 @@
+- Gunakan PowerShell dan bukannya cmd dalam deploy.sh

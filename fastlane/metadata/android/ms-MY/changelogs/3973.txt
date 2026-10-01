@@ -1,0 +1,2 @@
+• fix: kecualikan submodul Flutter daripada formatter
+• fix: toleransi false negative teardown Patrol

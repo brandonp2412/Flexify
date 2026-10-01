@@ -1,0 +1,7 @@
+- Kemas kini Flutter
+- Baiki konsistensi paksi X dalam graf global
+- Minta kebenaran latar belakang sekali sahaja
+- Baiki logik kemajuan pemasa
+- Paparkan graf paling terkini dan bukannya berat terbaik
+- Paparkan ralat sebelum kotak pemuatan kosong pada halaman graf
+- Tambah carian dinamik
