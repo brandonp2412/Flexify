@@ -106,6 +106,10 @@ class _EditGraphPageState extends State<EditGraphPage> {
                   return StreamBuilder(
                     stream: getCategoriesStream(),
                     builder: (context, snapshot) {
+                      final categories = <String>{
+                        if (category != null && category!.isNotEmpty) category!,
+                        ...?snapshot.data,
+                      }.toList();
                       return Column(
                         children: [
                           DropdownButtonFormField(
@@ -113,8 +117,8 @@ class _EditGraphPageState extends State<EditGraphPage> {
                               labelText: context.l10n.categoryLabel,
                             ),
                             initialValue: category,
-                            items: snapshot.data
-                                ?.map(
+                            items: categories
+                                .map(
                                   (category) => DropdownMenuItem(
                                     value: category,
                                     child: Text(category),

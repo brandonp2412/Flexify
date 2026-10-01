@@ -141,11 +141,11 @@ class _SettingsPageState extends State<SettingsPage>
                   ? GridView.builder(
                       padding: const EdgeInsets.only(bottom: 24),
                       gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
+                          const SliverGridDelegateWithMaxCrossAxisExtent(
+                            maxCrossAxisExtent: 520,
                             crossAxisSpacing: 14,
                             mainAxisSpacing: 14,
-                            childAspectRatio: 4.0,
+                            mainAxisExtent: 112,
                           ),
                       itemCount: _categories.length,
                       itemBuilder: (context, index) {
@@ -182,6 +182,8 @@ class _SettingsPageState extends State<SettingsPage>
                                       children: [
                                         Text(
                                           category.$2,
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
                                           style: Theme.of(context)
                                               .textTheme
                                               .titleMedium

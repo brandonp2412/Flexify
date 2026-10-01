@@ -64,6 +64,14 @@ Future<void> _tapTab(WidgetTester tester, String tab) async {
     tester.element(find.byType(HomePage)),
     tab,
   );
+  final keyedTab = find.byKey(Key(tab));
+  if (keyedTab.evaluate().isNotEmpty) {
+    await tester.tap(keyedTab);
+    await tester.pumpAndSettle();
+    expect(tester.takeException(), isNull);
+    return;
+  }
+
   final textFinder = find.text(label);
   if (textFinder.evaluate().isNotEmpty) {
     await tester.tap(textFinder.last);
@@ -1465,8 +1473,44 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  testWidgets('Graph editor handles an unmanaged legacy category', (
+    tester,
+  ) async {
+    await _pumpIsolatedApp(tester, surfaceSize: const Size(900, 900));
+    await app.db.gymSets.insertOne(
+      GymSetsCompanion.insert(
+        name: 'Linux E2E legacy category',
+        reps: 5,
+        weight: 100,
+        unit: 'kg',
+        created: DateTime(2026, 8, 31, 12),
+        category: const Value('Legacy imported category'),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await _tapTab(tester, 'GraphsPage');
+    await tester.enterText(find.byType(SearchBar), 'Linux E2E legacy category');
+    await tester.pumpAndSettle();
+    await tester.tap(
+      find.widgetWithText(ListTile, 'Linux E2E legacy category'),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.byTooltip('Edit'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Legacy imported category'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('Graph bulk unit edit converts strength weight', (tester) async {
     await _pumpIsolatedApp(tester, surfaceSize: const Size(900, 900));
+    await app.db
+        .into(app.db.categories)
+        .insert(CategoriesCompanion.insert(name: 'Linux Original Category'));
+    await app.db
+        .into(app.db.categories)
+        .insert(CategoriesCompanion.insert(name: 'Linux Target Category'));
     await app.db.gymSets.insertAll([
       GymSetsCompanion.insert(
         name: 'Linux E2E strength conversion',
