@@ -1,0 +1,3 @@
+• GitHub release بناتے وقت app-release.aab شامل کریں
+• Graph peek کو scrollable بنائیں
+• درست release notes استعمال کریں

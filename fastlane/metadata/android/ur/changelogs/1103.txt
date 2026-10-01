@@ -1,0 +1,3 @@
+- Settings tests میں missed taps کی warning بند کریں
+- github.com:brandonp2412/Flexify کی 'main' branch merge کریں
+- Settings page کے test warnings درست کریں

@@ -1,0 +1,7 @@
+• Flexify web کے لیے GitHub Pages hosting شامل کریں
+• غائب changelogs شامل کریں
+• User کو max sets صاف کرنے دیں
+• Unused scripts حذف کریں
+• What's New کی copying درست کریں
+• ہر بار صرف ایک file میں backup کریں
+• Strength graph سے reps ہٹائیں

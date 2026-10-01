@@ -1,0 +1,10 @@
+• Screenshots میں debug banners دکھنا درست کریں
+• Screenshots اپ ڈیٹ کریں
+• +1 minute کے لیے text button استعمال کریں
+• chore: --profile flag کے ساتھ Android screenshot script شامل کریں
+• feat: Curve smoothness، timers، plan trailing اور input style کی UI بہتر کریں
+• fix: Timer circle کو عمودی طور پر center کریں اور +1 min button کو circle کے نیچے منتقل کریں
+• fix: MaterialApp میں debug banner غیر فعال کریں
+• fix: Timer circle widget میں UniqueKey anti-pattern ختم کریں
+• fix: Timer circle کو سادہ اور جدید انداز میں redesign کریں
+• fix: Screenshot tests میں runApp کی جگہ tester.pumpWidget استعمال کریں

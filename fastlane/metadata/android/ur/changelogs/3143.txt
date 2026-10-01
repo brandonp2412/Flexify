@@ -1,0 +1,4 @@
+• Cardio کے لیے تمام unit types کی اجازت دیں
+• Tabs settings page کا انداز تبدیل کریں
+• Graphs page سے cardio exercise شامل کرنا درست کریں
+• First install پر changelog دکھانے سے روکیں

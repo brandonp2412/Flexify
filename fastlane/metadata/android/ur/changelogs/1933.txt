@@ -1,0 +1,4 @@
+- Custom day selector شامل کریں
+- Graph history کھولنے میں lag درست کریں
+- Reps/weight ایڈٹ کرتے وقت ORM دوبارہ calculate کریں
+- Edit plan page کے آخر میں padding شامل کریں

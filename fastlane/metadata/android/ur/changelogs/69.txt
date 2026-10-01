@@ -1,0 +1,9 @@
+- Cardio line میں Y values کو 2 decimal places رکھیں
+- Plans کے اوپر دائیں edit button شامل کریں
+- Graph history title میں history suffix شامل کریں
+- Cardio types شامل کریں
+- View graph page ریفیکٹر کریں
+- Settings میں import/export data تلاش کرنا درست کریں
+- start_plan_page ریفیکٹر کریں
+- Plans page ریفیکٹر کریں
+- Plans save کرنے کا test کریں

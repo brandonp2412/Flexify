@@ -1,0 +1,2 @@
+- Global progress چھپانے کی سہولت شامل کریں
+- Negative values کے لیے one-rep-max calculations درست کریں

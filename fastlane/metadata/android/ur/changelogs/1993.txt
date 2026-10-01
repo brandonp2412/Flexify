@@ -1,0 +1,2 @@
+- Plans میں ابتدائی reps/weight کا صفر ہونا درست کریں
+- Plans save کرنے کے بعد leading zeros ہٹائیں

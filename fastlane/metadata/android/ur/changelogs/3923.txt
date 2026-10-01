@@ -1,0 +1,2 @@
+• سب کچھ اپ گریڈ کریں
+• chore: Formatting/lint/generated client خودکار طور پر درست کریں [pre-push]

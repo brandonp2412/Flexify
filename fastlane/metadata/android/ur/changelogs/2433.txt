@@ -1,0 +1,4 @@
+- GitHub release file paths میں Android APKs شامل کرنا درست کریں
+- 2.0.27 🚀
+- pubspec.lock اپ ڈیٹ کریں
+- GitHub Actions workflow سے macOS/iOS builds ہٹائیں

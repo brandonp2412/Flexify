@@ -1,0 +1,5 @@
+- Flutter کو 3.24.0 پر اپ گریڈ کریں
+- Extended floating action buttons استعمال کریں
+- GitHub اور F-Droid repro پر deployment درست کریں
+- iOS پر permissions page دکھنے سے روکیں
+- Cardio graphs کا فوراً اپ ڈیٹ نہ ہونا درست کریں

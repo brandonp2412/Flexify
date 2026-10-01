@@ -1,0 +1,4 @@
+• GitHub workflow تبدیل کریں
+• GitHub workflow درست کریں
+• غیر ضروری git pulls ہٹائیں
+• Android build releases کے لیے F-Droid build system replicate کریں

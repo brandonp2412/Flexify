@@ -1,0 +1,2 @@
+- iOS پر timers فعال کریں
+- macOS پر مکمل شدہ timers درست کریں

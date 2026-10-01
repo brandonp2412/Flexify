@@ -1,0 +1,1 @@
+• Debug بڑھائیں: LXC/Waydroid logs dump کریں

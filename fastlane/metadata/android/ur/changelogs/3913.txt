@@ -1,0 +1,10 @@
+• Serena شامل کریں
+• Start plan میں skeleton set card کی width تبدیل کریں
+• Chart data clip کریں تاکہ lines باہر نہ نکلیں
+• Waydroid screenshots action حذف کریں
+• GitHub Actions runtime compatibility درست کریں
+• Pre-push hook درست کریں
+• Pre-push hooks درست کریں
+• Edit history میں cardio اور distance field کے درمیان spacing درست کریں
+• Screenshots میں global progress چھپائیں
+• Screenshot tests میں images چھپائیں

@@ -1,0 +1,10 @@
+• chore: Turkish Play screenshots شامل کریں
+• chore: تازہ ترین release metadata localize کریں
+• feat: Supported locales کی translations مکمل کریں
+• feat: Desktop پر graph controls دکھائیں
+• feat: مکمل release history localize کریں
+• feat: Timer millisecond display بہتر کریں
+• fix: Scaled timer text کو circle کے اندر رکھیں
+• fix: Line graph edge clipping نرم کریں
+• test: Localization completeness checks مضبوط کریں
+• test: Store locale mappings sync میں رکھیں

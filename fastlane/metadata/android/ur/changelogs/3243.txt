@@ -1,0 +1,4 @@
+• Tab titles ہمیشہ دکھائیں
+• Global graphs scroll نہ ہونے کا مسئلہ درست کریں
+• Categories update ہونا درست کریں
+• Global graph tooltip میں clutter کم کریں

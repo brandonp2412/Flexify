@@ -1,0 +1,5 @@
+- Graphs پر swipe سے tab movement درست کریں
+- timers.webm حذف کریں
+- Gym sets edit کرتے وقت غلط created dates درست کریں
+- Settings/enter weight page کا discard ہونا درست کریں
+- Screenshot test میں system colors غیر فعال کریں

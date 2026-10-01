@@ -1,0 +1,10 @@
+• دوبارہ استعمال ہونے والی app permissions checklist شامل کریں
+• Appearance labels کو center کریں اور toggle state کو icons میں دکھائیں
+• Plan settings کے labels اور switchers center کریں
+• Timer settings کو center کریں اور active filled icons استعمال کریں
+• Workout labels center کریں اور active filled icons استعمال کریں
+• Settings میں app permissions checklist دکھائیں
+• CI lockfile اور timer analyzer error درست کریں
+• One-time notification permission request درست کریں
+• Permissions dialog analyzer error درست کریں
+• Native notification permission prompt صرف ایک بار دکھائیں

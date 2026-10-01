@@ -1,0 +1,4 @@
+- “Show reorder” اور “Show counts” settings کو یکجا کریں
+- Plans ریفیکٹر کریں
+- Graphs page ریفیکٹر کریں
+- gym_sets ریفیکٹر کریں

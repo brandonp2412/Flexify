@@ -1,0 +1,3 @@
+- Categories شامل کریں
+- Incline اور adjusted pace graphs شامل کریں
+- Timer settings میں duplicated tiles ہٹائیں

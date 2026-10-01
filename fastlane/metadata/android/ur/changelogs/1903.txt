@@ -1,0 +1,5 @@
+- Graph performance بہتر کریں
+- Cardio edit سے “Weight” ہٹائیں
+- Back navigation کا کبھی کبھار نہ چلنا درست کریں
+- Cardio exercises پر one-rep-max estimates چھپائیں
+- Plans performance بہتر کریں

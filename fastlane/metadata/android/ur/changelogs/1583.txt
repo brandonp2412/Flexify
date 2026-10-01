@@ -1,0 +1,4 @@
+- Rep estimation شامل کریں
+- Duration estimation شامل کریں
+- غائب warmup setting شامل کریں
+- Windows package درست کریں

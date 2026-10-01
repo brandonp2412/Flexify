@@ -1,0 +1,10 @@
+• Timer circle پر ہلکا outline شامل کریں
+• Linux پر +1 minute درست کریں
+• Changelogs درست کریں
+• GitHub README styling درست کریں [skip ci]
+• msstore width badge درست کریں [skip ci]
+• Google Play deployments کی frequency محدود کریں [skip ci]
+• Badges بڑے کریں [skip ci]
+• Badges یکساں کریں [skip ci]
+• “Fix msstore width badge [skip ci]” واپس لیں
+• Artifact کے بجائے GitHub release استعمال کریں [skip ci]

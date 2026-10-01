@@ -1,0 +1,2 @@
+• Curve smoothness add کرنے کی failure کو برداشت کریں
+• Windows سے plans/graphs import کرنا درست کریں

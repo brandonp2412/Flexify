@@ -1,0 +1,3 @@
+- Unit tests درست کریں
+- Settings page میں icons کم کریں
+- Period selector کے لیے buttons استعمال کریں

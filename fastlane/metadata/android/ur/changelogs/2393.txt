@@ -1,0 +1,1 @@
+- workflow_dispatch اور API call شامل کرکے deploy workflow trigger ہونا درست کریں

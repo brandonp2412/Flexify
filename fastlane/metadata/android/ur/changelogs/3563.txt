@@ -1,0 +1,3 @@
+• “ci: replace flutter submodule setup with subosito/flutter-action” واپس لیں
+• غلطی سے .gitmodules ہٹانا واپس لیں
+• ci: Flutter submodule setup کو subosito/flutter-action سے بدلیں

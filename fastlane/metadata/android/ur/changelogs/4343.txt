@@ -1,0 +1,2 @@
+• feat(l10n): Russian translations شامل کریں
+• fix(l10n): 2.2.22 release history sync کریں

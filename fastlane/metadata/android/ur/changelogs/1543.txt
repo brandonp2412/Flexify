@@ -1,0 +1,5 @@
+- 1.1.36 کے بعد app crashes درست کریں
+- Plans میں search bar اور visibility toggle استعمال کریں
+- Desktop platforms پر rest timers فعال کریں
+- Desktop پر timers چلائیں
+- Desktop timers پر کیا گیا کام واپس لیں

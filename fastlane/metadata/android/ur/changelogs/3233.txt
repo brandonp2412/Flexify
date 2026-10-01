@@ -1,0 +1,3 @@
+• Plans میں broken re-ordering درست کریں
+• Plan state میں exercises set کرنے کو بہت آسان بنائیں
+• “Greatly simplify setting exercises in plan state” واپس لیں

@@ -1,0 +1,2 @@
+- App bar میں graph names edit کرنا فعال کریں
+- Navigator.of(context).pop() => Navigator.pop(context)

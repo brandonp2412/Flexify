@@ -1,0 +1,2 @@
+- Plans کے progress bars customize کریں
+- Automatic backups شامل کریں

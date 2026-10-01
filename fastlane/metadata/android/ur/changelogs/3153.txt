@@ -1,0 +1,2 @@
+• Notifications کا preview دکھائیں
+• Plans میں اگر cardio unit weight type ہو تو weight field دکھائیں

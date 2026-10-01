@@ -1,0 +1,13 @@
+- Graph heights تبدیل کریں
+- Categories چھپانے کی setting شامل کریں
+- Delete modals کے لیے icon buttons استعمال کریں
+- نئے records کے لیے notifications شامل کریں
+- Curve smoothness setting شامل کریں
+- Search bar میں padding بڑھائیں
+- History peek سے edit کرنے کے بعد graphs اپ ڈیٹ کریں
+- Exercise مکمل کرنے کے بعد reps/weight set کرنا درست کریں
+- Tab settings save کرنے کے بعد واپس جائیں
+- System nav کو app themes کے ساتھ blend کریں
+- Appearance settings کے نیچے graph preview دکھائیں
+- Curve setting کا graph peek پر لاگو نہ ہونا درست کریں
+- Graphs کو مزید خوبصورت بنائیں 😎

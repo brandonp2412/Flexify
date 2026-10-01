@@ -1,0 +1,2 @@
+• Global progress کے اردگرد padding متوازن کریں
+• deploy.sh درست کریں [skip ci]

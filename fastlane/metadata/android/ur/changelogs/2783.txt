@@ -1,0 +1,4 @@
+• Plans میں exercise swap شامل کریں
+• Workout swap کرنے کے لیے search شامل کریں
+• Swap workout widget کے لیے unit test شامل کریں
+• Desktop پر database import درست کریں

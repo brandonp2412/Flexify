@@ -1,0 +1,8 @@
+• Empty changelog view درست کریں
+• dwl پر Linux integration tests چھپائیں
+• feat: Graph selection controls بہتر کریں
+• feat: Talker logging integrate کریں
+• fix: ضوابط کے مطابق seven-inch screenshots یقینی بنائیں
+• fix: Desktop navigation اور testing مضبوط کریں
+• fix: Integration test databases isolate کریں
+• test: Changelog screen rendering cover کریں

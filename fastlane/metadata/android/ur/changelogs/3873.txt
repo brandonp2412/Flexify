@@ -1,0 +1,1 @@
+• fix: Release workflow میں commit_sha درست step سے capture کریں

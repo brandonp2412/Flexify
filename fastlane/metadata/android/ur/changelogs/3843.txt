@@ -1,0 +1,7 @@
+• ci: Owner PRs کے لیے PR APKs خودکار بنائیں، دوسروں کے لیے manual
+• ci: Pull requests پر APK build اور attach کریں
+• ci: PR APK build میں 0.0.0-unknown Flutter version درست کریں
+• ci: PR APK comment میں quoted artifact URL درست کریں
+• ci: .pr app id suffix کے ساتھ PR builds کو side-by-side install کریں
+• ci: Committed public testing keystore سے PR builds sign کریں
+• fix: Local midnight پر plan set counts reset کریں

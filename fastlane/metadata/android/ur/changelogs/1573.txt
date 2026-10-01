@@ -1,0 +1,4 @@
+- Warmup sets شامل کریں
+- Plans میں exercise list کا انداز تبدیل کریں
+- Max sets درست کریں
+- Incline صرف non-zero values کے لیے دکھائیں

@@ -1,0 +1,9 @@
+• Data import میں error handling شامل کریں
+• مزید data migration tests شامل کریں
+• Comments حذف کریں
+• android/app/build.gradle میں build config فعال کریں
+• edit_set_page میں linting issue درست کریں
+• Start plan page کے کچھ methods سے underscore prefixes ہٹائیں
+• Unit selector ہٹائیں اور tests درست کریں
+• تمام variable names مختصر کریں
+• Edit set page کو مزید حصوں میں تقسیم کریں

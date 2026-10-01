@@ -1,0 +1,2 @@
+• Patrol tests کو timing کے خلاف مضبوط کریں
+• fix: Android folder picker check مستحکم کریں

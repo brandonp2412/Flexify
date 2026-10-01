@@ -1,0 +1,11 @@
+- Flutter اپ گریڈ کریں
+- Exercise پر double tap اسے کھولے
+- Graphs page سے delete کرنے کی وضاحت بہتر کریں
+- Tabs چھپانے کے لیے long tap کریں
+- Plan exercises کی search کو خودکار طور پر capitalize کریں
+- Strength graphs کے bugs درست کریں
+- Graphs -> add پر nested page استعمال کریں
+- Timer -> settings پر nested route استعمال کریں
+- Graph peeking شامل کریں
+- Strength page کا bug درست کریں
+- Images اپ ڈیٹ کرنے سے پہلے gym set کے save ہونے کا انتظار کریں

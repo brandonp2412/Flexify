@@ -1,0 +1,1 @@
+• ci: Storage usage کم کرنے کے لیے upload-artifact steps پر retention-days مقرر کریں

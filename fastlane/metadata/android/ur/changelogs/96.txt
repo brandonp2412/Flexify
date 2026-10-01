@@ -1,0 +1,3 @@
+- Custom alarm sound set کرتے وقت preview کریں
+- Cardio graphs ریفیکٹر کریں
+- Settings میں share database button شامل کریں

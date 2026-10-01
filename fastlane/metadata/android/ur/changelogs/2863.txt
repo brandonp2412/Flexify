@@ -1,0 +1,10 @@
+• Settings page سے ہر exercise کے rest timers configure کرنے دیں
+• Search bars کے buttons animate کریں
+• Select پر checkboxes animate کریں
+• Plans page پر FAB animate کریں
+• Graph کے units edit کرنے کا bug درست کریں
+• Hover graphs میں first/last tooltip درست کریں
+• Titles والے plans کے leading icons درست کریں
+• Plan list test درست کریں
+• Settings page پر custom timers ہٹانا درست کریں
+• Day selector کو گہرا کریں

@@ -1,0 +1,2 @@
+- Plan exercises کی counts lazily حاصل کریں
+- یقینی بنائیں کہ gym_sets کا index موجود ہے

@@ -1,0 +1,2 @@
+• fix: Formatter کو Flutter submodule سے باہر رکھیں
+• fix: Patrol teardown false negative برداشت کریں

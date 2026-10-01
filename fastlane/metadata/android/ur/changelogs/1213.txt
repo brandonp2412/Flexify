@@ -1,0 +1,5 @@
+- deploy.sh درست کریں
+- Deploy کے بعد Windows + macOS workflow run ہٹائیں
+- Databases import کرنے کے بعد blank page درست کریں
+- Cardio graphs میں units شامل کریں
+- lib folder دوبارہ منظم کریں

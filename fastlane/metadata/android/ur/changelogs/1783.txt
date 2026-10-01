@@ -1,0 +1,3 @@
+- کسی بھی metric کو کھولنے کے لیے double tap کریں
+- Set edit کرتے وقت ORM دکھائیں
+- Alarm sound کا toggle شامل کریں

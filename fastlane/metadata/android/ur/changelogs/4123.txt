@@ -1,0 +1,5 @@
+• README میں project description نظرثانی کریں
+• README کی project tagline اپ ڈیٹ کریں
+• README میں project name اپ ڈیٹ کریں
+• pubspec.yaml میں version کو 2.2.0 کریں
+• fix: کھلے history اور plan bugs درست کریں

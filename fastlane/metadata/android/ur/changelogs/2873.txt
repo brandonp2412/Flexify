@@ -1,0 +1,3 @@
+• Timer page screenshot درست کریں
+• Timer page screenshot tests درست کریں
+• Screenshots کے لیے changelog notification چھپائیں

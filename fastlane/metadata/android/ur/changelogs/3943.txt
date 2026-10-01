@@ -1,0 +1,3 @@
+• Fresh installs پر notification permission نہ مانگنا درست کریں
+• Unit test درست کریں
+• نئے installs کے لیے notes off کریں

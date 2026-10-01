@@ -1,0 +1,1 @@
+• Waydroid session کے لیے headless Weston compositor شامل کریں

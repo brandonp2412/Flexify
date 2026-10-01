@@ -1,0 +1,4 @@
+• Automatic screenshots درست کریں
+• Edit set page پر spacing issues درست کریں
+• Default history کو ungrouped بنائیں
+• Final push سے پہلے pull کریں

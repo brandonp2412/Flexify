@@ -1,0 +1,11 @@
+- Global graphs شامل کریں
+- Fastlane icon.png اپ ڈیٹ کریں
+- Exercise drag handles بڑے کریں
+- عجیب clear icons تبدیل کریں
+- یقینی بنائیں کہ iOS میں number inputs کے decimal options ہوں
+- Tabs بدلتے وقت timer animation بار بار چلنے سے روکیں
+- App icon کا dark theme بنائیں
+- History list میں add/remove کو animate کریں
+- Date کے لیے relative time option شامل کریں
+- Timer page پر system back درست کریں
+- Update کے بعد graph name غلط ہونا درست کریں

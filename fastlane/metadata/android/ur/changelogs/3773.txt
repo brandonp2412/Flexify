@@ -1,0 +1,10 @@
+• History page کے screenshots میں bottom bar نہ دکھنا درست کریں
+• Screenshots میں bottom bar obscuring درست کریں
+• Chrome screenshots میں UI بطور ڈیفالٹ چھپائیں
+• Plans page سے disabled timers کو چلنے سے روکیں
+• غیر ضروری sqlite3_flutter_libs ہٹائیں
+• .serena اپ ڈیٹ کریں
+• Flutter اپ ڈیٹ کریں
+• Screenshots اپ ڈیٹ کریں
+• Serena اپ ڈیٹ کریں
+• chore: Android build warnings درست کریں، Gradle کو 8.14 پر اپ گریڈ کریں

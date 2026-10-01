@@ -1,0 +1,5 @@
+- Screenshot tests درست کریں
+- Data import کو زیادہ مضبوط بنائیں
+- Import سے پہلے plans صاف کریں
+- Pinch gesture پر graph point کھلنے سے روکیں
+- آخری deployment کے بعد release mode منتخب کریں

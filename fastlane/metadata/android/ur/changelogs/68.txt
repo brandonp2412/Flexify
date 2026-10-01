@@ -1,0 +1,4 @@
+- Rest timers enabled ہونے پر broken save درست کریں
+- Import/export data files کے نام درست کریں
+- Exercise list ریفیکٹر کریں
+- Release notes درست کریں

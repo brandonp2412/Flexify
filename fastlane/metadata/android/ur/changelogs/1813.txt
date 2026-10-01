@@ -1,0 +1,3 @@
+- Active plans میں settings button شامل کریں
+- Desktop پر trailing reorder buttons درست کریں
+- Warmup sets پر rest timers غیر فعال کریں

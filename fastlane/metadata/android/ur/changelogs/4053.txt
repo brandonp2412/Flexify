@@ -1,0 +1,2 @@
+• User-visible timer settings assertions کو ترجیح دیں
+• refactor: Dead desktop timer code ہٹائیں

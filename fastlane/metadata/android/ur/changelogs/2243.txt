@@ -1,0 +1,3 @@
+- Plans کے screenshot میں exercises فعال کریں
+- Graphs کو بطور ڈیفالٹ curve کریں
+- Failed migrations سنبھالیں

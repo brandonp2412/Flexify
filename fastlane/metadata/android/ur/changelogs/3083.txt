@@ -1,0 +1,8 @@
+• Bottom progress bar کا update نہ ہونا درست کریں
+• Plans میں padding consistency درست کریں
+• System back navigation درست کریں
+• Unit tests درست کریں
+• Downloads badge پر shields.io link کریں
+• Edit weight page کی spacing کو edit set کے مطابق کریں
+• ایسے sets پر double-tap editing روکیں جو ابھی enter نہیں ہوئے
+• “Get it on X” کی spacing ہٹائیں

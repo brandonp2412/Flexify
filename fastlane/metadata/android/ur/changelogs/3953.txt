@@ -1,0 +1,6 @@
+• تمام internal props کو _ prefix کے ساتھ rename کریں
+• FitBook سے automated screenshots اور E2E tests replicate کریں
+• chore: Repository automation checks اپ ڈیٹ کریں
+• ci: Patrol اور Play deployment workflow درست کریں
+• fix: Android JVM compilation targets align کریں
+• fix: Grouped history میں cardio weight برقرار رکھیں

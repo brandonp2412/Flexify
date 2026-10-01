@@ -1,0 +1,5 @@
+- Full description کی spacing درست کریں
+- GitHub release بنانے کے بعد git pull --tags specify کریں
+- Google Play deployments دوبارہ فعال کریں
+- Export/import میں incline شامل کریں
+- Cardio type میں incline شامل کریں

@@ -1,0 +1,3 @@
+- Migration tests سے debug prints ہٹائیں
+- deploy.sh سے git push --force ہٹائیں
+- Database migration کے تمام مسائل درست کریں

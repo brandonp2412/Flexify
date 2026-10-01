@@ -1,0 +1,3 @@
+- Progress bars کو بائیں سے دائیں animate کریں
+- Custom titles کے ساتھ آج کے plan کو highlight کریں
+- Plan editor میں day selector کو compact کریں

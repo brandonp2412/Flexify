@@ -1,0 +1,10 @@
+- Tests درست کریں
+- Best reps metric شامل کریں
+- AppGroupBy کا نام بدل کر Period کریں
+- Cardio graphs کی performance بہتر کریں
+- Universal releases میں versionCode بڑھائیں
+- Timer page سے minutes add کرنا درست کریں
+- Fastlane supply کو comment out کریں
+- جہاں مناسب ہو local time استعمال کریں
+- Settings logic ریفیکٹر کریں
+- Code ریفیکٹر کریں

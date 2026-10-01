@@ -1,0 +1,2 @@
+• AGP کو 8.11.1 پر downgrade کریں
+• Reps/weight کی pre-population درست کریں

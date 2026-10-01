@@ -1,0 +1,2 @@
+- Image support شامل کریں
+- Monochrome app icons شامل کریں

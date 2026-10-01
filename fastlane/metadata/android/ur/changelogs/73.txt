@@ -1,0 +1,2 @@
+- Deployment میں Flutter submodule استعمال کریں
+- چھوٹی screens کے لیے graph sizes درست کریں

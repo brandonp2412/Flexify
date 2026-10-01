@@ -1,0 +1,10 @@
+• dart analyze میں test شامل کریں
+• Plan مکمل کرتے وقت exercise list کو nav bar سے آگے scroll کرنے دیں
+• Strength page کا style تبدیل کریں
+• ہر جگہ bottomNavHeight استعمال کریں
+• Bottom height درست کریں
+• Graphs spacing درست کریں اور setting off ہو تو notes چھپائیں
+• Search bar کے unit tests درست کریں
+• Graphs کا style بہتر کریں
+• Plan chips کی spacing یکساں کریں
+• Cardio page میں style match کریں

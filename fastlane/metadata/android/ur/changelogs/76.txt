@@ -1,0 +1,5 @@
+- Max sets تک پہنچنے پر اگلی exercise پر جائیں
+- Graphs page پر آج کا plan الٹ ترتیب میں دکھائیں
+- Workout مکمل ہونے پر rest timers روک دیں
+- Settings performance بہتر کریں
+- Max sets setting شامل کریں

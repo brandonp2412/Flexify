@@ -1,0 +1,2 @@
+• Weight unit والے cardio sets میں distance field دکھنے کا مسئلہ درست کریں
+• Weight والے cardio exercises کے لیے history list display درست کریں

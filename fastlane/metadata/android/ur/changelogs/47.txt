@@ -1,0 +1,1 @@
+deploy.sh میں submodule کے بجائے Flutter استعمال کریں

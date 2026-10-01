@@ -1,0 +1,4 @@
+- Plans کے screenshot میں exercises فعال کریں
+- Graphs کو بطور ڈیفالٹ curve کریں
+- README.md اپ ڈیٹ کریں
+- Failed migrations سنبھالیں

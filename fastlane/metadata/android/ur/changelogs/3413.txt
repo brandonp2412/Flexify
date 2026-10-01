@@ -1,0 +1,4 @@
+• Graphs میں limit اور x-axis show/hide کرنے کی settings شامل کریں
+• Activated plans پر timer ہمیشہ شروع کریں
+• نئے cardio types کا نہ چلنا درست کریں
+• X-axis / limit slider چھپانے کے لیے long press کریں

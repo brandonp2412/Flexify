@@ -1,0 +1,5 @@
+• feat(l10n): Bengali translations شامل کریں
+• feat(l10n): Malay translations شامل کریں
+• feat(l10n): Persian translations شامل کریں
+• feat(l10n): Thai translations شامل کریں
+• feat(l10n): Urdu translations شامل کریں

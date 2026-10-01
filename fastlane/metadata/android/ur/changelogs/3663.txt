@@ -1,0 +1,5 @@
+• Releases میں VirusTotal link attach کرنا درست کریں
+• feat: Settings pickers میں live previews شامل کریں اور weight formatting درست کریں
+• fix: Start plan page پر outlined label clipping روکنے کے لیے top padding شامل کریں
+• fix: Start plan page کے inputs کے درمیان یکساں 8dp spacing رکھیں
+• fix: Progress position preview میں اصل TimerProgressIndicator استعمال کریں

@@ -1,0 +1,2 @@
+- macOS zip فائل کا نام بدلیں
+- Integration tests کے لیے iOS کی جانچ درست کریں

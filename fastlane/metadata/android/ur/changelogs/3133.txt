@@ -1,0 +1,3 @@
+• Sample performance test شامل کریں
+• Performance بہتر کریں
+• Microsoft Store deployments درست کرنے کی کوشش کریں

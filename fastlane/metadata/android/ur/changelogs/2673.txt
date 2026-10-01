@@ -1,0 +1,3 @@
+• Java stage کی working directory درست کریں
+• یقینی بنائیں کہ Flutter bin ہمیشہ executable ہو
+• Java setup منتقل کریں

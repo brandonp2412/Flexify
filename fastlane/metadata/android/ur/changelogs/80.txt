@@ -1,0 +1,4 @@
+- History میں gym sets paginate کریں
+- Search bar sentences capitalize کریں
+- آخری درج gym set کو default کے طور پر استعمال کریں
+- Graphs کو created date کے لحاظ سے ترتیب دیں

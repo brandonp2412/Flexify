@@ -1,0 +1,6 @@
+- Tests درست کریں
+- Share menus شامل کریں
+- Submit پر keyboard flicker درست کریں
+- Multi-edit میں پہلے کی created dates کا preview دکھائیں
+- Cardio graphs کے لیے نیا unit selector استعمال کریں
+- Strength graphs کا layout cardio میں بھی استعمال کریں

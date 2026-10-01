@@ -1,0 +1,3 @@
+- Gym set ایڈٹ کرتے وقت disposal درست کریں
+- Settings سے dispose calls ہٹائیں
+- Dispose پر listeners صاف کریں

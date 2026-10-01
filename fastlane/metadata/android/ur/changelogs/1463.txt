@@ -1,0 +1,2 @@
+- Exercises کی تعداد graphs کے بجائے plans میں ایڈٹ کریں
+- App کی performance بہتر کریں

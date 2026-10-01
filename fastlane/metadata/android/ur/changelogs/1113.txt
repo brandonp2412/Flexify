@@ -1,0 +1,3 @@
+- About page شامل کریں
+- Settings page میں icons شامل کریں
+- Plans icon تبدیل کریں

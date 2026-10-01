@@ -1,0 +1,10 @@
+- Unit tests درست کریں
+- Windows Store deployment درست کریں
+- Windows Store deployment میں downloaded files list کرنے کا debug step شامل کریں
+- Windows Store deployment درست کریں: GitHub release URL کے بجائے local MSIX file استعمال کریں
+- Windows Store deployment درست کریں: یقینی بنائیں کہ Windows Store deployment سے پہلے GitHub release بن جائے
+- Desktop screenshots اپ ڈیٹ کریں
+- Desktop کے تمام automated screenshots درست کریں
+- pubspec.lock اپ ڈیٹ کریں
+- chromedriver اپ ڈیٹ کرنے کا script شامل کریں
+- What's New page درست کریں

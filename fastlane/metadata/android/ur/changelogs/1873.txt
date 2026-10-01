@@ -1,0 +1,6 @@
+- Validation شامل کریں
+- بڑے databases کے لیے performance بہتر کریں
+- Add exercise اور weight page کو scrollable بنائیں
+- New exercise page میں image شامل کریں
+- Add exercise padding درست کریں
+- Automatic backups فعال کرتے وقت notifications کی اجازت مانگیں

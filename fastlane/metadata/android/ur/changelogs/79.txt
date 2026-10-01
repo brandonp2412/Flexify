@@ -1,0 +1,12 @@
+- Screenshots درست کریں
+- Hidden اور cardio types export/import کرنا درست کریں
+- Set edit کرتے وقت cardio off کرنا درست کریں
+- Delete کے بعد tabs پر animation روکیں
+- Empty entries message کو history کے اوپر منتقل کریں
+- History tab شامل کریں
+- Screenshots اپ ڈیٹ کریں
+- Compare کے لیے screenshots اپ ڈیٹ کریں
+- ہر test میں tabBarState شامل کریں
+- Global context شامل کیا؛ اب PlansPage کے first page ہونے پر انحصار نہیں
+- Compare کے لیے updated screenshots شامل کریں
+- Screenshots آسان بنائیں

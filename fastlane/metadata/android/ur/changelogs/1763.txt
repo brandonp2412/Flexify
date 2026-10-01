@@ -1,0 +1,3 @@
+- Automatic backups درست کریں
+- Alarm کے inconsistent crashes درست کریں
+- Reps estimation کی accuracy بہتر کریں

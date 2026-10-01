@@ -1,0 +1,2 @@
+- Settings میں tooltips شامل کریں
+- Automatic backups کا ہر 15 منٹ بعد ہونا درست کریں

@@ -1,0 +1,3 @@
+- واضح کریں کہ edit graph کیا کرتا ہے
+- History search کرتے وقت limit size صاف کریں
+- Lists کے اختتام سے آگے scroll کرنے دیں

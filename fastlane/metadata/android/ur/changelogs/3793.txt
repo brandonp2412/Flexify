@@ -1,0 +1,6 @@
+• GitHub Action میں Gradle build کی parallelism کم کریں
+• Screenshots اپ ڈیٹ کریں
+• feat: واضح کریں کہ category field muscle group tagging کے لیے ہے
+• fix: Exercise پہلی بار log کرتے وقت seeded category apply کریں
+• fix: Releases کو صرف تب tag کریں جب تمام platform builds کامیاب ہوں
+• fix: Release builds اور tag کو ایک exact commit SHA پر pin کریں

@@ -1,0 +1,5 @@
+- Plans کی edit performance بہتر کریں
+- One-rep-max graphs درست کریں
+- Plan counts کا global ہونا درست کریں
+- Incline کو خالی رہنے دیں
+- Start-up performance بہتر کریں

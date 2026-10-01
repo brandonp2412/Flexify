@@ -1,0 +1,2 @@
+- pubspec.lock اپ ڈیٹ کریں
+- GitHub release کے artifact file paths درست کریں

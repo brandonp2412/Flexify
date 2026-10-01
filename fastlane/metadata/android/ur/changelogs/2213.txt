@@ -1,0 +1,7 @@
+- Plan activation میں notes شامل کریں
+- Graph lines کو bounds سے باہر جانے سے روکیں
+- Global progress سے “No data yet” ہٹائیں
+- Scroll پر search bar کے نیچے سفید لائن ہٹائیں
+- Clear button کو dropdown سے search bar کے بائیں منتقل کریں
+- Edit plan کا screenshot درست کریں
+- Screenshots میں line graphs کو curve کریں

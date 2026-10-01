@@ -1,0 +1,10 @@
+• Empty changelog view درست کریں
+• dwl پر Linux integration tests چھپائیں
+• chore: Tests پر Dart formatting لاگو کریں
+• feat: Graph selection controls بہتر کریں
+• feat: Talker logging integrate کریں
+• feat: Desktop interface redesign کریں
+• fix: ضوابط کے مطابق seven-inch screenshots یقینی بنائیں
+• fix: Linux workout graph اور timer flows مضبوط کریں
+• fix: Desktop navigation اور testing مضبوط کریں
+• fix: Integration test databases isolate کریں

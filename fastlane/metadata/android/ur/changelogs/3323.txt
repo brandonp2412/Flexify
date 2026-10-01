@@ -1,0 +1,6 @@
+• نئے date formats شامل کریں (مثلاً German کے لیے)
+• Graph کے لیے time-based x-axis option شامل کریں
+• Out-of-memory مسائل درست کریں
+• Plan trailing ratio اور count درست کریں
+• Users کو plan titles کی capitalization خود طے کرنے دیں
+• History button کو nav bar میں منتقل کریں

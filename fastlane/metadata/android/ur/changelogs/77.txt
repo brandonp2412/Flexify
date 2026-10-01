@@ -1,0 +1,6 @@
+- Plans کو multi-delete کرنے دیں
+- Graphs page پر “Enter weight” کا نام “Weight” کریں
+- Graphs page dropdown میں edit button شامل کریں
+- Duration submit کرنے کے بعد distance focus کریں
+- Inconsistent cardio types سے ہونے والے crashes درست کریں
+- graph_history سے history suffix ہٹائیں

@@ -1,0 +1,7 @@
+• fix(ci): مقامی release-note history مکمل کریں
+• fix(l10n): Brazilian Portuguese release metadata مکمل کریں
+• fix(l10n): French release metadata مکمل کریں
+• fix(l10n): German release metadata مکمل کریں
+• fix(l10n): Japanese release metadata مکمل کریں
+• fix(l10n): Spanish release metadata sync کریں
+• fix: Dumbbell app icon بحال کریں

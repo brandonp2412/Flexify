@@ -21,6 +21,7 @@ const _changelogCatalogByLocale = <String, String>{
   'tr': 'tr',
   'ru': 'ru',
   'bn': 'bn',
+  'ur': 'ur',
   'zh': 'zh_CN',
   'zh-CN': 'zh_CN',
   'zh-TW': 'zh_TW',

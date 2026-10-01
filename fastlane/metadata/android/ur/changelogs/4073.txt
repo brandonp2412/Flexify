@@ -1,0 +1,10 @@
+• Settings audio initialization کو flat کریں
+• Tab content selection کو flat کریں
+• FitBook سے portable backup system منتقل کریں
+• Labeled Flexify action selectors کو ترجیح دیں
+• Labeled graph action selectors کو ترجیح دیں
+• Visible tab selector کو ترجیح دیں
+• Early-return control flow آسان کریں
+• fix: Android CI test runtime محدود کریں
+• fix: Folder selection کے بعد backups فعال کریں
+• refactor: Linux E2E میں user-visible controls کو ترجیح دیں

@@ -1,0 +1,4 @@
+• Graphs میں dotted trend line شامل کریں
+• Timer circle کے آخر میں چھوٹا button شامل کریں
+• migrate.sh سے diffing ہٹائیں
+• Exercise منتخب کرتے وقت category set کریں

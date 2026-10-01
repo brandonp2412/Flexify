@@ -1,0 +1,4 @@
+- pubspec.lock اپ ڈیٹ کریں
+- Microsoft Store deployment setup کریں
+- Google Play releases configure کریں
+- .actrc اور MIGRATION_GUIDE.md حذف کریں

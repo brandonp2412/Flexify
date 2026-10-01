@@ -1,0 +1,2 @@
+• ci: عارضی Patrol picker failure پر retry کریں
+• fix: StartPlan exercise defaults بحال کریں

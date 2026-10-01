@@ -1,0 +1,9 @@
+- تمام screenshots dark mode میں لیں
+- X کے “Get it” badges ایک قطار میں رکھیں
+- کچھ غیر معمولی Android errors درست کریں
+- Plans میں tap کرکے create کریں
+- Graphs page پر “none found” کی wording اپ ڈیٹ کریں
+- Graphs page سے بہترین exercises دکھائیں
+- Graph history page پر “no data yet” کی zero padding درست کریں
+- Graph heights کم کریں
+- Graph peek bug درست کریں

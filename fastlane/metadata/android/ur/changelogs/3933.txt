@@ -1,0 +1,10 @@
+• Flutter submodule کو analysis ignore list میں شامل کریں
+• add_exercise_page.dart میں missing spacing شامل کریں
+• Cardio fields spacing درست کریں
+• weight_page.dart میں dropdown error درست کریں
+• exercise_modal.dart میں getSingle error درست کریں
+• main.dart میں عجیب context error درست کریں
+• Format کریں
+• Timer page میں button glow تھوڑا کم کریں
+• Group history میں leading checkbox ہٹائیں
+• Unused import ہٹائیں

@@ -1,0 +1,10 @@
+• Empty plan کے لیے message شامل کریں
+• Keep screen on کو بطور ڈیفالٹ off کریں اور toggle کو settings میں منتقل کریں
+• feat: Rest timers کے لیے keep screen on setting شامل کریں
+• feat: Theme dropdown کو SegmentedButton + AMOLED toggle سے بدلیں
+• fix: StartPlanPage save/select میں empty exercise list سے حفاظت کریں
+• fix: SegmentedButton label wrap روکنے کے لیے padding درست کریں
+• fix: History اور graph lists میں trailing text size 16 سے 14 کریں
+• fix: Timer ختم ہونے یا نہ چلنے پر wake lock release کریں
+• fix: Screen on ہونے پر timer ختم ہو تو in-app snackbar دکھائیں اور notification درست کریں
+• fix: History اور graph list tiles میں trailing text کو چھوٹا اور muted کریں

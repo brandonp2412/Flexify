@@ -1,0 +1,2 @@
+- Flutter submodule استعمال کریں اور Kotlin version specify کریں
+- deploy-windows-store درست کریں

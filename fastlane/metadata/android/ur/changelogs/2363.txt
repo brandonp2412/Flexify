@@ -1,0 +1,11 @@
+- .deploy.yml میں yq کا استعمال درست کریں
+- Linting issues درست کریں
+- avoid print linting rule ہٹائیں
+- dart format چلائیں
+- Workflows کو main پر چلائیں
+- GitHub workflows شامل کریں
+- act testing سنبھالنے کے لیے GitHub workflows درست کریں
+- Desktop screenshots generation کے زیادہ تر مسائل درست کریں
+- Chrome کے integration tests چلانے کا setup شامل کریں
+- Web پر Settings page درست کریں
+- Web پر چلنا درست کریں

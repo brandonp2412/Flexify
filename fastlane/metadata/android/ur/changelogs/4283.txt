@@ -1,0 +1,4 @@
+• Edit graphs کے new name field کے اوپر space شامل کریں
+• pubspec.lock دوبارہ generate کریں
+• edit_set_page میں غلط spacing ہٹائیں
+• docs: README download badges align کریں

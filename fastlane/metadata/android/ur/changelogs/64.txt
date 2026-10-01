@@ -1,0 +1,7 @@
+- Release notes میں تمام commit messages شامل کریں
+- Export/import data files کے نام بدلیں
+- Plans page ریفیکٹر کریں
+- Graphs page کے لیے edit icon شامل کریں
+- Curved line graphs کی setting شامل کریں
+- Line graphs کو curved بنائیں
+- Line graphs کے tooltips درست کریں

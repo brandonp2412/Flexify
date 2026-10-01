@@ -1,0 +1,3 @@
+• GitHub workflow میں screenshots شامل کریں [skip ci]
+• Flutter cache permissions درست کریں
+• Weight submit کرنے کے بعد history سے sets محفوظ کریں

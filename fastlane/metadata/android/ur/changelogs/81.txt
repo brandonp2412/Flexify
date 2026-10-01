@@ -1,0 +1,3 @@
+- Gym sets edit کرتے وقت long date setting استعمال کریں
+- Gym history میں پہلا item منتخب کرنا درست کریں
+- Release commit میں missing newline درست کریں

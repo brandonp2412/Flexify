@@ -1,0 +1,2 @@
+- pubspec.lock اپ ڈیٹ کریں
+- deploy-windows-store میں missing packages install کریں

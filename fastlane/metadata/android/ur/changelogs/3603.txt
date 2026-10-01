@@ -1,0 +1,5 @@
+• feat: About page میں “Leave a review” link شامل کریں
+• fix: تمام scrollable pages پر missing bottom padding شامل کریں (#301)
+• fix: App foreground میں واپس آئے تو stopwatch ticker resume کریں
+• fix: Stopwatch کو screen-off کے باوجود چلانے کے لیے wall-clock time استعمال کریں
+• fix: Workout settings bottom padding اور stopwatch tab label درست کریں

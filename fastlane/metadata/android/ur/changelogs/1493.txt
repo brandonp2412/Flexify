@@ -1,0 +1,3 @@
+- Image loading errors کو بہتر انداز سے سنبھالیں
+- Image editor سے add/remove buttons ہٹائیں
+- اگر صارف file picker منسوخ کرے تو image میں تبدیلی نہ کریں

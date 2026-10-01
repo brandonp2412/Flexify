@@ -1,0 +1,10 @@
+• fix: Screenshot navigation context کی حفاظت کریں
+• fix: Permission ملنے کے بعد folder picker دوبارہ کھولیں
+• fix: عارضی screenshot emulator disconnects پر retry کریں
+• fix: Folder picker سے پہلے backup permission sequence کریں
+• fix: Android folder picker test مستحکم کریں
+• fix: Automated timer screenshots مستحکم کریں
+• test: Reusable database fixtures شامل کریں
+• test: Shared widget test harness شامل کریں
+• test: StartPlanPage tests کو موجودہ fields کے مطابق کریں
+• test: Android document picker کو package کے ذریعے assert کریں

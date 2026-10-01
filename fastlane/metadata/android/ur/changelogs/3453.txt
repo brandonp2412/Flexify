@@ -1,0 +1,9 @@
+• Edit set/sets میں toggles پر cardio/strength icon indicators شامل کریں
+• Progress bar position کی settings شامل کریں
+• Category clear کرنے دیں
+• Bottom nav میں plans icon تبدیل کریں
+• تمام linting issues درست کریں
+• Appearance میں System UI کا graph obscure کرنا درست کریں
+• Automatic backups کا کبھی کبھار database corrupt کرنا درست کریں
+• Tab settings فوراً update کریں اور save button ہٹائیں
+• Sets multi-edit کرتے وقت categories یا incline میں null hint text روکیں

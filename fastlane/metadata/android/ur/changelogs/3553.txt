@@ -1,0 +1,4 @@
+• Format settings پر max height set کریں
+• feat: Stopwatch tab شامل کریں (#268)
+• feat: ہر exercise کے graph settings اور exercise notes شامل کریں (#257 #267)
+• fix: peek tooltip کا search bar پر overlap اور keyboard کا exercise notes کو cover کرنا درست کریں

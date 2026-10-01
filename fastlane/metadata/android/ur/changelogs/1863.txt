@@ -1,0 +1,3 @@
+- Plans سے images set نہ ہونا درست کریں
+- Desktop timers کا پھر بھی fire ہونا درست کریں
+- Distance units میں kcal اور meters شامل کریں

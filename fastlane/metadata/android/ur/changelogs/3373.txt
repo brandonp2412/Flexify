@@ -1,0 +1,3 @@
+• Selection indicators تبدیل کریں
+• Exercises delete کرنے پر plan exercises clean up نہ ہونا درست کریں
+• Graphs update نہ ہونا درست کریں

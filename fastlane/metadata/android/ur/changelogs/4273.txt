@@ -1,0 +1,5 @@
+• README.md اپ ڈیٹ کریں
+• feat: Category management شامل کریں
+• feat: Icon 2 کو Flexify launcher icon بنائیں
+• fix: Embedded Flutter DevTools بحال کریں
+• fix: VS Code میں Flutter debugging مستحکم کریں

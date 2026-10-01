@@ -1,0 +1,7 @@
+- Flutter اپ ڈیٹ کریں
+- Global graphs میں X axis consistency درست کریں
+- Background permissions صرف ایک بار مانگیں
+- Timer progress logic درست کریں
+- Best weight کے بجائے most recent graphs دکھائیں
+- Graphs page پر blank loading box سے پہلے error دکھائیں
+- Dynamic search شامل کریں

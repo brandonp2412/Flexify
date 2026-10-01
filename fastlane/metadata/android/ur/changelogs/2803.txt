@@ -1,0 +1,4 @@
+• Flutter linting درست کریں
+• Share deprecations درست کریں
+• Dart format کریں
+• Selected items کے لیے checkboxes استعمال کریں

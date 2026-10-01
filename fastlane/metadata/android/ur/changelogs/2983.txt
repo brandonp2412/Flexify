@@ -1,0 +1,10 @@
+• Bottom progress indicator میں horizontal padding شامل کریں
+• Plans page پر Android کے لیے missing reorder button شامل کریں
+• Tabs کے درمیان sliding animate کریں
+• Selected indicator تبدیل کریں
+• Rest timers کو بطور ڈیفالٹ false کریں
+• Bottom sheets کا nav کے پیچھے جانا درست کریں
+• Phone connected ہونے پر deploy.sh درست کریں
+• Tabs بدلنے کے بعد تیزی سے switch کرنے میں lag درست کریں
+• Sets save کرنا درست کریں
+• Collapsed history page کے اوپر padding بڑھائیں

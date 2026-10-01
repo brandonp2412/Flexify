@@ -1,0 +1,10 @@
+• chore: Concurrent localization slice reconcile کریں
+• chore: Flutter dependency lockfile refresh کریں
+• docs: Translation roadmap شامل کریں
+• docs: Localization completion state اپ ڈیٹ کریں
+• feat: Brazilian Portuguese localization شامل کریں
+• feat: CJK localizations شامل کریں
+• feat: Dutch localization شامل کریں
+• feat: French localization شامل کریں
+• feat: German localization شامل کریں
+• feat: Italian localization شامل کریں

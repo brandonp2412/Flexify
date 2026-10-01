@@ -1,0 +1,2 @@
+• fix: F-Droid unsigned release identity محفوظ رکھیں
+• fix: Android signing drift روکیں

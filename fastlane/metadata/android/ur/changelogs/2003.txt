@@ -1,0 +1,3 @@
+- Plan exercises کا reset ہونا درست کریں
+- نئے plans کے لیے + button کی جگہ search entry استعمال کریں
+- F-Droid کے لیے dependency info block ہٹائیں

@@ -1,0 +1,3 @@
+- Weight میں image picking شامل کریں
+- Weight entries میں غیر متعلقہ fields چھپائیں
+- Categories کو dynamic بنائیں

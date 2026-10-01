@@ -1,0 +1,10 @@
+• معمولی صفائی اور اصلاحات
+• README میں project description نظرثانی کریں
+• README کی project tagline اپ ڈیٹ کریں
+• README میں project name اپ ڈیٹ کریں
+• pubspec.yaml میں version کو 2.2.0 کریں
+• ci: Flaky Patrol test کو releases روکنے سے ہٹائیں
+• docs: README images میں alt text شامل کریں
+• fix: Android path provider JNI crash سے بچیں
+• fix: Duplicate workout notification route سے بچیں
+• fix: Screenshot CI hangs کو محدود کریں

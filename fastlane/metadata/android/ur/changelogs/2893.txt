@@ -1,0 +1,10 @@
+• Timer circle پر ہلکا outline شامل کریں
+• Timer page میں stop button کے ظاہر/غائب ہونے کو animate کریں
+• Image editing کی وضاحت بہتر کریں
+• Google Play deployments کی وضاحت کریں
+• Linux پر +1 minute درست کریں
+• Releases کے automatic screenshots درست کریں
+• Changelogs درست کریں
+• GitHub README styling درست کریں [skip ci]
+• Google Play deployment میں GitHub release downloading درست کریں
+• msstore width badge درست کریں [skip ci]

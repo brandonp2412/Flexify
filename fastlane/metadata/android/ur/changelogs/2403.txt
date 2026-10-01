@@ -1,0 +1,2 @@
+- pubspec.lock اپ ڈیٹ کریں
+- GitHub Actions deployment workflow کے مسائل درست کریں

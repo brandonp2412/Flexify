@@ -1,0 +1,3 @@
+- dart pub upgrade چلائیں
+- Screenshots کے لیے system colors استعمال نہ کریں
+- Play Store پر بھیجتے وقت ہی appbundle بنائیں

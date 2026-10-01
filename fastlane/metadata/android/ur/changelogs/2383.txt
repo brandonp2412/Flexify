@@ -1,0 +1,2 @@
+- Flutter اور pubspec.lock اپ ڈیٹ کریں
+- Deploy کا نہ چلنا درست کریں

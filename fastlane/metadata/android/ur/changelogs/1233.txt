@@ -1,0 +1,5 @@
+- Screenshots بہتر کریں
+- GitHub releases میں screenshots شامل کریں
+- Unit selector نئے سرے سے بنائیں
+- Units کے دہرے ذکر ہٹائیں
+- History کی multi-editing شامل کریں

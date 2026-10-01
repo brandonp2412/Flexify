@@ -1,0 +1,3 @@
+- Cardio duration کو minutes:seconds کے طور پر برتیں
+- ہر exercise کے max sets کا 3 ہو جانا درست کریں
+- Linux کے لیے rest timers فعال کریں

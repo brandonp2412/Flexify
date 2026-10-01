@@ -1,0 +1,6 @@
+• Gradle setup FitBook سے copy کریں
+• Google Play deployments درست کریں
+• Peek graph کو ایک item نیچے منتقل کریں
+• README کے “Get it on X” حصے سے table ہٹائیں [skip ci]
+• README میں features کی ترتیب بدلیں [skip ci]
+• Badges کے درمیان spacing بڑھائیں [skip ci]

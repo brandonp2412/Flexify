@@ -1,0 +1,3 @@
+• Google Play store metadata خودکار طور پر sync کریں (#333)
+• fix: ضوابط کے مطابق privacy policy شائع کریں
+• fix: Pages deployment میں privacy policy برقرار رکھیں

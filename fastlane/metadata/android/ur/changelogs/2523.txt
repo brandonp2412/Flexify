@@ -1,0 +1,1 @@
+- deploy-windows-store میں debug stage شامل کریں

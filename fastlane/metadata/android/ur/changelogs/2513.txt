@@ -1,0 +1,2 @@
+- Microsoft Store publish command درست کریں
+- Graphs page کے tests سے پہلے gym sets یقینی بنائیں

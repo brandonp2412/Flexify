@@ -1,0 +1,6 @@
+- Plan exercises سے text ہٹائیں
+- Start plan سے save کرنا درست کریں
+- ہر exercise کے لیے sets کی maximum تعداد بنائیں
+- Trailing commas شامل کریں
+- Settings کی initialization آسان بنائیں
+- GitHub release بنانے کے بعد git pull کریں

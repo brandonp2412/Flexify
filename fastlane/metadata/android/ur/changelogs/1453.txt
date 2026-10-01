@@ -1,0 +1,2 @@
+- Timeout پر app crash درست کریں
+- History page سے exercises منتخب کرنا درست کریں

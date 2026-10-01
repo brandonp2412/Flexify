@@ -1,0 +1,2 @@
+• ci: main پر push ہونے پر version bump اور release خودکار کریں
+• fix: Runnable اور AlarmManager دونوں fire ہونے پر duplicate rest alarm روکیں

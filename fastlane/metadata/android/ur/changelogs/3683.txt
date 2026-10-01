@@ -1,0 +1,10 @@
+• Serena config شامل کریں
+• Toasts کا ہمیشہ چلتے رہنا درست کریں
+• Stepper کی visuals بہتر کریں
+• Edit set page کی padding زیادہ یکساں کریں
+• Input style کے duplicate labels ہٹائیں
+• Stepper field آسان بنائیں
+• Screenshots اپ ڈیٹ کریں
+• Flutter کو 3.44.1 پر اپ گریڈ کریں
+• Kotlin version اپ گریڈ کریں
+• feat: Reps اور weight fields میں +/- steppers شامل کریں

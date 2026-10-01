@@ -1,0 +1,4 @@
+- Finished timers میں stop button شامل کریں
+- History page پر نئے sets کی created dates درست کریں
+- Alarms کا نہ رکنا درست کریں
+- MaterialStateProperty کے غیر ضروری استعمال کو بدلیں

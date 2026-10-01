@@ -1,0 +1,7 @@
+- Exercise presets delete ہونے سے روکیں
+- Setting کے ذریعے default units override کریں
+- Graph کو تھوڑا چھوٹا کریں
+- Graphs میں limit slider شامل کریں
+- Collapsed history میں sets کی تعداد دکھائیں
+- History کے day dividers کا انداز بہتر کریں
+- Graphs page پر dividers کو label کریں

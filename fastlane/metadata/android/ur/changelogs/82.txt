@@ -1,0 +1,8 @@
+- History tab چھپانے کی setting شامل کریں
+- Automatic backups تبدیل کریں
+- Edit gym set میں name update نہ ہونا درست کریں
+- Automatic backups شامل کریں
+- نئے gym sets کے invalid IDs اور created values درست کریں
+- import_data میں code format کریں
+- نیا gym set شامل کرتے وقت jank درست کریں
+- Export/import data کے لیے file_picker استعمال کریں

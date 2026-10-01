@@ -1,0 +1,3 @@
+- Tabs setting شامل کریں
+- Plan settings شامل کریں
+- Graph FAB کے information روکنے کا مسئلہ درست کریں

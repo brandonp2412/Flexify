@@ -1,0 +1,2 @@
+• Timer progress indicator کو SafeArea میں wrap کریں
+• Graphs کا update نہ ہونا درست کریں

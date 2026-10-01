@@ -1,0 +1,5 @@
+- Timers درست کریں
+- Timers optimize کریں
+- Automatic backups درست کریں
+- Vibrate اور alarm sound settings شامل کریں
+- Edit graph page optimize کریں

@@ -1,0 +1,2 @@
+- Unit tests درست کریں
+- deploy.sh سے git push force ہٹائیں

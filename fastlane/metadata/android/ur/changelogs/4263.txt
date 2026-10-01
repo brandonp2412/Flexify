@@ -1,0 +1,10 @@
+• Turkish locale preferences cover کریں
+• Temporary icon redesign assets واپس لیں
+• chore(l10n): languageNameTurkish شامل کیا
+• chore: Turkish localization review کی اصلاحات کریں
+• feat(l10n): Turkish localization شامل کیا
+• feat: Flexing bicep icon concepts شامل کریں
+• feat: Icon 7 اور 8 refinement sets شامل کریں
+• fix(l10n): Duplicate entries ہٹائیں
+• fix(tests): test_bundle.dart exclude کرنے کے لیے .gitignore شامل کریں
+• fix(tests): locale_preference_test میں tr language شامل کریں

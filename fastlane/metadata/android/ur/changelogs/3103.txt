@@ -1,0 +1,2 @@
+• deploy.sh درست کریں
+• Tab nav کا lists کے اوپر float نہ کرنا درست کریں

@@ -1,0 +1,3 @@
+- اگر automatic backups بند ہوں تو backup receiver روک دیں
+- macOS کے deploy.sh سے rsync ہٹائیں
+- macos.sh میں zsh استعمال کریں

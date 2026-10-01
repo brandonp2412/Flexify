@@ -1,0 +1,1 @@
+• fix: ایسی exercise پر switch کرتے وقت notes field صاف کریں جس کے لیے پہلے note نہ ہو

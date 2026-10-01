@@ -1,0 +1,4 @@
+• WIP: Flexify checklist کا کام Nox سے منتقل کریں
+• chore: Serena project config refresh کریں
+• test: Opt-in defaults cover کریں
+• test: Patrol integration harness ہٹائیں

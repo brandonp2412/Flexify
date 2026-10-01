@@ -1,0 +1,5 @@
+- Weights کو round کریں
+- Tab navigation کا system nav کے پیچھے ہونا درست کریں
+- Curve smoothness label کو slider سے پہلے منتقل کریں
+- System colors کے ساتھ track color غائب ہونا درست کریں
+- Graphs سے units تبدیل کرتے وقت انہیں normalize کریں

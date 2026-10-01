@@ -1,0 +1,2 @@
+- github.com:brandonp2412/Flexify کی 'main' branch merge کریں
+- Timer setting toggle کرتے وقت vibration preview کریں

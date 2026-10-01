@@ -1,0 +1,10 @@
+• Web screenshots کے لیے env شامل کریں
+• Duplicate changelogs حذف کریں
+• buildConfig issues درست کریں
+• chromedriver port درست کریں
+• chromedriver setup درست کریں
+• Android screenshots میں emulator name درست کریں
+• Workflow کے لیے پورا fastlane dir git add کریں
+• Workflows میں chromedriver install اور start کریں
+• یقینی بنائیں کہ screenshots commit میں شامل ہوں
+• Changelog copy کرتے وقت duplicates روکیں

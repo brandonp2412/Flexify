@@ -1,0 +1,1 @@
+• fix(l10n): موجودہ release history sync کریں

@@ -1,0 +1,2 @@
+• feat(l10n): Arabic translations شامل کریں
+• feat(l10n): Indonesian translations شامل کریں

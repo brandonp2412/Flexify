@@ -1,0 +1,5 @@
+- Settings switches کو یکساں بنائیں
+- Reps estimation کی درستگی بڑھائیں
+- ہر graph کے custom rest times صاف کرنے دیں
+- Plans میں category کا خالی ہونا درست کریں
+- Plan editing کی ترتیب درست کریں

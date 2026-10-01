@@ -1,0 +1,4 @@
+- Database backups میں settings شامل کریں
+- Desktop پر database export درست کریں
+- Home page میں plan trailing شامل کریں
+- Plan trailing کے options شامل کریں

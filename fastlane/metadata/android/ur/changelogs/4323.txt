@@ -1,0 +1,10 @@
+• README.md اپ ڈیٹ کریں
+• chore(l10n): موجودہ release translations sync کریں
+• chore: Turkish Play screenshots شامل کریں
+• feat(l10n): Traditional Chinese translations شامل کریں
+• feat(l10n): موجودہ translation coverage مکمل کریں (#353)
+• feat: Category management شامل کریں
+• feat: Supported locales کی translations مکمل کریں
+• feat: مکمل release history localize کریں
+• fix: Embedded Flutter DevTools بحال کریں
+• fix: VS Code میں Flutter debugging مستحکم کریں

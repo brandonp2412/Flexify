@@ -1,0 +1,3 @@
+- Gym sets کی editing کو scrollable بنائیں
+- ci_post_clone میں Flutter main checkout کریں
+- Period کے لیے دوبارہ dropdowns استعمال کریں

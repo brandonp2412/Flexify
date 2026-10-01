@@ -1,0 +1,2 @@
+• About page میں “Report a bug” button شامل کریں
+• Alarm sound picker درست کریں

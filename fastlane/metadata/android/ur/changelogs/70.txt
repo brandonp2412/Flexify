@@ -1,0 +1,2 @@
+- Massive sets export سے import کرنا درست کریں
+- Empty relative strengths پر line graph crash درست کریں

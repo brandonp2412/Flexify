@@ -1,0 +1,4 @@
+• Reps کا بطور ڈیفالٹ بدلنا درست کریں
+• Timer کے end button کو ہلکا کریں
+• Flutter dependencies اپ گریڈ کریں
+• Flutter کو 3.32.8 پر اپ گریڈ کریں

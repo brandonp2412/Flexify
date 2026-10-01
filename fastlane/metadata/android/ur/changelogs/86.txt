@@ -1,0 +1,5 @@
+- android/app/build.gradle میں multidex شامل کریں
+- Flutter کو 3.22.0 پر اپ ڈیٹ کریں
+- pubspec.lock اپ ڈیٹ کریں
+- VS Code settings اپ ڈیٹ کریں
+- History page سے records insert کرنا درست کریں

@@ -1,0 +1,11 @@
+- Screenshots بہتر کریں
+- Units بند ہوں تو graphs پر unit selector چھپائیں
+- Graphs کے لیے group-by field شامل کریں (day/week/month/year)
+- Plans سے exercise دیکھتے وقت graphs tab پر animate کریں
+- Plans سے exercise کے graphs دیکھیں
+- deploy.sh سے tags ہٹائیں - 1.0.59 🚀
+- Edit gym set page میں delete button شامل کریں
+- Double tap سے graph points edit کریں
+- Date settings کا helper text label میں منتقل کریں
+- Short date format setting شامل کریں
+- Line graphs ریفیکٹر کریں

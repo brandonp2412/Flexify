@@ -1,0 +1,4 @@
+• deploy.sh درست کریں
+• Bottom sheets کو tap کرنا آسان بنائیں
+• آخری entries کو دیکھنا/tap کرنا آسان بنائیں
+• Plans page میں پہلے درج body weights استعمال کریں

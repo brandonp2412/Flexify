@@ -1,0 +1,3 @@
+• Edit set page اور history page تبدیل کریں
+• Deployments درست کریں
+• Unit tests درست کریں

@@ -1,0 +1,8 @@
+• Graph page میں عارضی sorting شامل کریں
+• Imports کے بعد categories update نہ ہونا درست کریں
+• Graphs پر آخری tooltip درست کریں
+• System UI کا About page کو obscure کرنا درست کریں
+• System UI کا Settings page کے elements کو obscure کرنا درست کریں
+• Automatic backup files کو نام دیں
+• History list سے animations ہٹائیں
+• Graphs page سے divider logic ہٹائیں

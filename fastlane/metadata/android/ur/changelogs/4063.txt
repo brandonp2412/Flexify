@@ -1,0 +1,4 @@
+• Tab content selection کو flat کریں
+• Visible tab selector کو ترجیح دیں
+• Early-return control flow آسان کریں
+• refactor: Linux E2E میں user-visible controls کو ترجیح دیں

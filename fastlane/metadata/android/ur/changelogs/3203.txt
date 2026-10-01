@@ -1,0 +1,9 @@
+• Data import error درست کریں
+• Data import میں planExercises records insert کریں اور plans_list.dart میں null-safe aware operator استعمال کریں
+• Issue #206 درست کریں: exercises کو store اور split کرنے کا طریقہ اپ ڈیٹ کریں
+• Loaders کا اچانک flicker ہونا درست کریں
+• Migration کا plan exercises توڑنا درست کریں
+• Plan میں exercises شامل کرنے کی logic بدلیں: صرف selected exercises کے لیے PlanExercises records بنائیں اور انہیں Plan.Exercises column میں store نہ کریں
+• Trip کے لیے کام pause کریں
+• موجودہ data کی migration کریں تاکہ صرف وہ exercises plan سے ہٹیں جن کے لیے PlanExercises.enabled = false ہو
+• Test files اپ ڈیٹ کریں تاکہ تمام tests پاس ہوں

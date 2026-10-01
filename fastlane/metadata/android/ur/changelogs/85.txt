@@ -1,0 +1,5 @@
+- Plan کے اختتام پر خودکار backup کریں
+- Entry edit کرنے کے بعد start plan اپ ڈیٹ کریں
+- Weight کو بطور ڈیفالٹ week کے لحاظ سے group کریں
+- Dependencies اپ ڈیٹ کریں
+- Settings page کے variable name کو درست کریں

@@ -1,0 +1,11 @@
+- Deployment درست کریں
+- No changes ہونے پر deploy.sh کا exit ہونا درست کریں
+- “Remember strength graph settings” واپس لیں
+- “Remember settings for cardio graphs” واپس لیں
+- Timer tab hidden ہو تو timer progress چھپائیں
+- Graphs page پر آج کی exercises پہلے دکھائیں
+- Cardio graphs کی settings یاد رکھیں
+- Strength graph settings یاد رکھیں
+- strength_line میں missing setState شامل کریں
+- Graphs کے units کی mass editing فعال کریں
+- Cardio exercises کے graphs tap کرنا درست کریں

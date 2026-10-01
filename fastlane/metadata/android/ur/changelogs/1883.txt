@@ -1,0 +1,4 @@
+- ہر plan item کے لیے timers toggle کریں
+- Graphs page میں muscle group filter شامل کریں
+- Settings page پر unit padding درست کریں
+- Exercise images کا نہ ہٹنا درست کریں

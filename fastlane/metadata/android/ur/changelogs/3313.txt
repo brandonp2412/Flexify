@@ -1,0 +1,4 @@
+• Graph pages کی padding درست کریں
+• Toasts کا کبھی dismiss نہ ہونا درست کریں
+• Graphs کے tooltips درست کریں
+• Exercise swap کرتے وقت order برقرار رکھیں

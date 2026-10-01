@@ -1,0 +1,3 @@
+• GitHub workflow کو manual trigger کرنے دیں
+• deploy-google-play کے لیے Ruby کو 3.3 پر downgrade کریں
+• pubspec.yaml میں publisher name درست کریں

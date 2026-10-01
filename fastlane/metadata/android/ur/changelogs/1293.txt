@@ -1,0 +1,2 @@
+- Share menus سے آخر کے صفر ہٹائیں
+- Cardio toggle کرتے وقت غلط unit درست کریں

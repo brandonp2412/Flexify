@@ -1,0 +1,6 @@
+- deploy.sh سے tags ہٹائیں
+- Edit gym set page میں delete button شامل کریں
+- Double tap سے graph points edit کریں
+- Date settings کا helper text label میں منتقل کریں
+- Short date format setting شامل کریں
+- Line graphs ریفیکٹر کریں

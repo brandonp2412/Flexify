@@ -1,0 +1,5 @@
+• Plan CSVs export کرنا درست کریں
+• Windows سے files import کرنا درست کریں
+• Error handling بہتر کریں
+• Timer page hidden ہونے پر بھی timer progress برقرار رکھیں
+• Plans میں پہلا exercise درست منتخب کریں

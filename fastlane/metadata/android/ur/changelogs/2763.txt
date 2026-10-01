@@ -1,0 +1,2 @@
+• Plans سے edit کرنے کے بعد exercise update درست کریں
+• پہلے/آخری data points پر tooltip درست کریں

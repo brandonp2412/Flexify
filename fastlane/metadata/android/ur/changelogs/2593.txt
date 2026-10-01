@@ -1,0 +1,2 @@
+• Workflow changes پر pipelines trigger ہونے دیں
+• msstore publish درست کرنے کی کوشش کریں

@@ -1,0 +1,2 @@
+• docs: README setup آسان کریں
+• test: Screenshot sample states بہتر کریں
