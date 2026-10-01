@@ -206,16 +206,15 @@ class _TimerPageWidgetState extends State<_TimerPageWidget>
       body: Padding(
         padding: EdgeInsets.only(bottom: desktop ? 24 : 80),
         child: Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              timerVisual,
-              if (desktop && desktopAction != null) ...[
-                const SizedBox(height: 20),
-                desktopAction,
-              ],
-            ],
-          ),
+          child: desktop && desktopAction != null
+              ? Column(
+                  children: [
+                    Expanded(child: timerVisual),
+                    const SizedBox(height: 20),
+                    desktopAction,
+                  ],
+                )
+              : timerVisual,
         ),
       ),
       floatingActionButton: desktop
