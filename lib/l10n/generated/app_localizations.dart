@@ -132,6 +132,7 @@ abstract class AppLocalizations {
     Locale('pl'),
     Locale('pt'),
     Locale('pt', 'BR'),
+    Locale('pt', 'PT'),
     Locale('ru'),
     Locale('th'),
     Locale('tr'),
@@ -202,6 +203,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Português (Brasil)'**
   String get languageNamePortugueseBrazil;
+
+  /// Stable native display name for the European Portuguese locale.
+  ///
+  /// In en, this message translates to:
+  /// **'Português (Portugal)'**
+  String get languageNamePortuguesePortugal;
 
   /// Stable native display name for the Dutch locale.
   ///
@@ -2946,6 +2953,8 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
         switch (locale.countryCode) {
           case 'BR':
             return AppLocalizationsPtBr();
+          case 'PT':
+            return AppLocalizationsPtPt();
         }
         break;
       }

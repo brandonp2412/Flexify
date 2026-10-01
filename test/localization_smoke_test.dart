@@ -101,7 +101,7 @@ void main() {
     expect(find.text('Configurações'), findsOneWidget);
   });
 
-  testWidgets('loads Portuguese through language fallback', (tester) async {
+  testWidgets('loads European Portuguese localization', (tester) async {
     await tester.pumpWidget(
       MaterialApp(
         locale: const Locale('pt', 'PT'),
@@ -113,7 +113,24 @@ void main() {
       ),
     );
 
-    expect(find.text('Configurações'), findsOneWidget);
+    expect(find.text('Definições'), findsOneWidget);
+  });
+
+  testWidgets('loads European Portuguese through language fallback', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        locale: const Locale('pt'),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: Builder(
+          builder: (context) => Text(AppLocalizations.of(context).navSettings),
+        ),
+      ),
+    );
+
+    expect(find.text('Definições'), findsOneWidget);
   });
 
   testWidgets('loads Dutch localization', (tester) async {

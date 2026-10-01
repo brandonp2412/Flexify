@@ -48,6 +48,7 @@ const _alwaysEnglishEquivalentKeys = <String>{
   'languageNameGerman',
   'languageNameItalian',
   'languageNamePortugueseBrazil',
+  'languageNamePortuguesePortugal',
   'languageNameDutch',
   'languageNamePolish',
   'languageNameJapanese',
@@ -139,6 +140,7 @@ const _localeSpecificEnglishEquivalentKeys = <String, Set<String>>{
     'volume',
     'backupLabel',
   },
+  'pt_PT': {'stoneUnit', 'actionOk', 'cardio', 'minutesShort', 'volume'},
   'pt_BR': {
     'stoneUnit',
     'actionOk',
@@ -173,6 +175,7 @@ const _macOsEnglishEquivalentTitles = <String, Set<String>>{
   'ko': {},
   'nl': {'Spelling', 'Zoom', 'Help'},
   'pl': {},
+  'pt-PT': {'Zoom'},
   'pt-BR': {'Zoom'},
   'tr': {},
   'ru': {},
@@ -252,6 +255,7 @@ const _appOnlyLocales = <String>{
   'th',
   'ms',
   'uk',
+  'pt_PT',
 };
 
 const _playListingLocaleByAppLocale = <String, String>{
@@ -264,6 +268,7 @@ const _playListingLocaleByAppLocale = <String, String>{
   'th': 'th',
   'ms': 'ms-MY',
   'uk': 'uk',
+  'pt_PT': 'pt-PT',
 };
 
 const _appStoreListingLocaleByAppLocale = <String, String>{
@@ -273,6 +278,7 @@ const _appStoreListingLocaleByAppLocale = <String, String>{
   'th': 'th',
   'ms': 'ms',
   'uk': 'uk',
+  'pt_PT': 'pt-PT',
 };
 
 final _playStoreLocales = _playStoreLocaleByAppLocale.values.toSet();
@@ -281,7 +287,10 @@ final _playStoreLocales = _playStoreLocaleByAppLocale.values.toSet();
 // https://support.google.com/googleplay/android-developer/answer/9844778
 const _playStoreScreenshotFallbackLocales = <String>{'ar', 'zh-TW', 'hi-IN'};
 
-final _changelogCatalogLocales = _playStoreLocaleByAppLocale.keys.toSet();
+final _changelogCatalogLocales = <String>{
+  ..._playStoreLocaleByAppLocale.keys,
+  'pt_PT',
+};
 
 final _appStoreLocales = <String>{
   'en-AU',
@@ -431,8 +440,7 @@ void main() {
     expect(
       _playStoreLocaleByAppLocale.keys.toSet(),
       translatedAppLocales,
-      reason:
-          'Every shipped translated app locale must map to Google Play metadata.',
+      reason: 'Every shipped translated app locale must map to Google Play metadata.',
     );
     expect(
       _appStoreLocaleByAppLocale.keys.toSet(),
@@ -452,9 +460,9 @@ void main() {
       final directory = Directory('fastlane/metadata/android/${entry.value}');
       for (final fileEntry in playListingFiles.entries) {
         final localized = File('${directory.path}/${fileEntry.key}');
-        final english = File(
-          'fastlane/metadata/android/en-US/${fileEntry.key}',
-        ).readAsStringSync().trim();
+        final english = File('fastlane/metadata/android/en-US/${fileEntry.key}')
+            .readAsStringSync()
+            .trim();
         expect(
           localized.existsSync(),
           isTrue,
@@ -479,9 +487,9 @@ void main() {
         releaseNotes.readAsStringSync().trim(),
         isNot(
           equals(
-            File(
-              'fastlane/metadata/android/en-US/changelogs/4393.txt',
-            ).readAsStringSync().trim(),
+            File('fastlane/metadata/android/en-US/changelogs/4393.txt')
+                .readAsStringSync()
+                .trim(),
           ),
         ),
       );
@@ -514,9 +522,9 @@ void main() {
         File('${directory.path}/description.txt').readAsStringSync().trim(),
         isNot(
           equals(
-            File(
-              'fastlane/metadata/en-AU/description.txt',
-            ).readAsStringSync().trim(),
+            File('fastlane/metadata/en-AU/description.txt')
+                .readAsStringSync()
+                .trim(),
           ),
         ),
       );
@@ -524,9 +532,9 @@ void main() {
         File('${directory.path}/release_notes.txt').readAsStringSync().trim(),
         isNot(
           equals(
-            File(
-              'fastlane/metadata/en-AU/release_notes.txt',
-            ).readAsStringSync().trim(),
+            File('fastlane/metadata/en-AU/release_notes.txt')
+                .readAsStringSync()
+                .trim(),
           ),
         ),
       );
@@ -554,9 +562,9 @@ void main() {
           reason: 'Missing $filename for Play Store locale $locale.',
         );
         final localized = file.readAsStringSync().trim();
-        final english = File(
-          'fastlane/metadata/android/en-US/$filename',
-        ).readAsStringSync().trim();
+        final english = File('fastlane/metadata/android/en-US/$filename')
+            .readAsStringSync()
+            .trim();
         expect(
           localized,
           allOf(isNotEmpty, isNot(equals(english))),
@@ -639,17 +647,17 @@ void main() {
     ];
 
     for (final filename in translatedFiles) {
-      final english = File(
-        'fastlane/metadata/en-AU/$filename',
-      ).readAsStringSync().trim();
+      final english = File('fastlane/metadata/en-AU/$filename')
+          .readAsStringSync()
+          .trim();
       if (english.isEmpty) continue;
 
       for (final locale in _appStoreLocales.where(
         (locale) => locale != 'en-AU',
       )) {
-        final localized = File(
-          'fastlane/metadata/$locale/$filename',
-        ).readAsStringSync().trim();
+        final localized = File('fastlane/metadata/$locale/$filename')
+            .readAsStringSync()
+            .trim();
         expect(
           localized,
           allOf(isNotEmpty, isNot(equals(english))),
@@ -770,16 +778,16 @@ void main() {
   test(
     'App Store release notes are localized for every non-English locale',
     () {
-      final english = File(
-        'fastlane/metadata/en-AU/release_notes.txt',
-      ).readAsStringSync().trim();
+      final english = File('fastlane/metadata/en-AU/release_notes.txt')
+          .readAsStringSync()
+          .trim();
 
       for (final locale in _appStoreLocales.where(
         (locale) => locale != 'en-AU',
       )) {
-        final notes = File(
-          'fastlane/metadata/$locale/release_notes.txt',
-        ).readAsStringSync().trim();
+        final notes = File('fastlane/metadata/$locale/release_notes.txt')
+            .readAsStringSync()
+            .trim();
         expect(
           notes,
           allOf(isNotEmpty, isNot(equals(english))),
@@ -790,7 +798,7 @@ void main() {
   );
 
   test('regional fallback ARBs stay in sync', () {
-    const fallbackLocales = {'pt': 'pt_BR', 'zh': 'zh_CN'};
+    const fallbackLocales = {'pt': 'pt_PT', 'zh': 'zh_CN'};
 
     for (final entry in fallbackLocales.entries) {
       final fallback = Map<String, dynamic>.of(
@@ -848,8 +856,7 @@ void main() {
     expect(
       violations,
       isEmpty,
-      reason:
-          'Move user-facing literals into app_en.arb, or document a true non-translatable exception.',
+      reason: 'Move user-facing literals into app_en.arb, or document a true non-translatable exception.',
     );
   });
 
@@ -880,15 +887,13 @@ void main() {
     expect(
       violations,
       isEmpty,
-      reason:
-          'Pass Android user-visible text through localized Flutter/native values instead of hard-coded English.',
+      reason: 'Pass Android user-visible text through localized Flutter/native values instead of hard-coded English.',
     );
   });
 
   test('macOS native menu covers every supported non-English locale', () {
-    final baseMenu = File(
-      'macos/Runner/Base.lproj/MainMenu.xib',
-    ).readAsLinesSync();
+    final baseMenu = File('macos/Runner/Base.lproj/MainMenu.xib')
+        .readAsLinesSync();
     final idPattern = RegExp(r'\bid="([^"]+)"');
     final titlePattern = RegExp(r'\btitle="([^"]*)"');
     final baseTitles = <String, String>{};
@@ -905,6 +910,7 @@ void main() {
       'fr',
       'de',
       'it',
+      'pt-PT',
       'pt-BR',
       'nl',
       'pl',
@@ -961,12 +967,11 @@ void main() {
       );
     }
 
-    final project = File(
-      'macos/Runner.xcodeproj/project.pbxproj',
-    ).readAsStringSync();
-    final knownRegions = RegExp(
-      r'knownRegions = \(([\s\S]*?)\);',
-    ).firstMatch(project)?.group(1);
+    final project = File('macos/Runner.xcodeproj/project.pbxproj')
+        .readAsStringSync();
+    final knownRegions = RegExp(r'knownRegions = \(([\s\S]*?)\);')
+        .firstMatch(project)
+        ?.group(1);
     expect(knownRegions, isNotNull);
     for (final locale in localeFolders) {
       expect(project, contains('$locale.lproj/MainMenu.strings'));

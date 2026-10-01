@@ -24,6 +24,9 @@ void main() {
       expect(localeOverrideFromIdentifier('DE'), const Locale('de'));
       expect(localeOverrideFromIdentifier('it'), const Locale('it'));
       expect(localeOverrideFromIdentifier('IT'), const Locale('it'));
+      expect(localeOverrideFromIdentifier('pt-PT'), const Locale('pt', 'PT'));
+      expect(localeOverrideFromIdentifier('pt_PT'), const Locale('pt', 'PT'));
+      expect(localeOverrideFromIdentifier('PT-pt'), const Locale('pt', 'PT'));
       expect(localeOverrideFromIdentifier('pt-BR'), const Locale('pt', 'BR'));
       expect(localeOverrideFromIdentifier('pt_BR'), const Locale('pt', 'BR'));
       expect(localeOverrideFromIdentifier('PT-br'), const Locale('pt', 'BR'));
@@ -73,6 +76,7 @@ void main() {
       expect(canonicalLocaleOverride('fr'), 'fr');
       expect(canonicalLocaleOverride('de'), 'de');
       expect(canonicalLocaleOverride('it'), 'it');
+      expect(canonicalLocaleOverride('pt_PT'), 'pt-PT');
       expect(canonicalLocaleOverride('pt_BR'), 'pt-BR');
       expect(canonicalLocaleOverride('pt'), isNull);
       expect(canonicalLocaleOverride('nl'), 'nl');
@@ -101,6 +105,7 @@ void main() {
         'fr',
         'de',
         'it',
+        'pt-PT',
         'pt-BR',
         'nl',
         'pl',
@@ -165,6 +170,7 @@ void main() {
       'fr': const Locale('fr'),
       'de': const Locale('de'),
       'it': const Locale('it'),
+      'pt-PT': const Locale('pt', 'PT'),
       'pt-BR': const Locale('pt', 'BR'),
       'nl': const Locale('nl'),
       'pl': const Locale('pl'),

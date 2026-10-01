@@ -40,6 +40,10 @@
   "@languageNamePortugueseBrazil": {
     "description": "Stable native display name for the Brazilian Portuguese locale."
   },
+  "languageNamePortuguesePortugal": "Português (Portugal)",
+  "@languageNamePortuguesePortugal": {
+    "description": "Stable native display name for the European Portuguese locale."
+  },
   "languageNameDutch": "Nederlands",
   "@languageNameDutch": {
     "description": "Stable native display name for the Dutch locale."

@@ -1,0 +1,7 @@
+• fix(ci): concluir o histórico localizado das notas de versão
+• fix(l10n): concluir os metadados de versão em português do Brasil
+• fix(l10n): concluir os metadados de versão em francês
+• fix(l10n): concluir os metadados de versão em alemão
+• fix(l10n): concluir os metadados de versão em japonês
+• fix(l10n): sincronizar os metadados de versão em espanhol
+• fix: restaurar o ícone de haltere da aplicação

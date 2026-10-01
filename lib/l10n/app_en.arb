@@ -37,8 +37,12 @@
     "description": "Stable native display name for the Italian locale."
   },
   "languageNamePortugueseBrazil": "Português (Brasil)",
+  "languageNamePortuguesePortugal": "Português (Portugal)",
   "@languageNamePortugueseBrazil": {
     "description": "Stable native display name for the Brazilian Portuguese locale."
+  },
+  "@languageNamePortuguesePortugal": {
+    "description": "Stable native display name for the European Portuguese locale."
   },
   "languageNameDutch": "Nederlands",
   "@languageNameDutch": {

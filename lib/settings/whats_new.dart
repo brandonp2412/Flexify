@@ -16,7 +16,8 @@ const _changelogCatalogByLocale = <String, String>{
   'ko': 'ko',
   'nl': 'nl',
   'pl': 'pl',
-  'pt': 'pt_BR',
+  'pt': 'pt_PT',
+  'pt-PT': 'pt_PT',
   'pt-BR': 'pt_BR',
   'tr': 'tr',
   'ru': 'ru',
@@ -136,9 +137,8 @@ class _WhatsNewState extends State<WhatsNew> {
         result.add(
           Changelog(
             name: filename,
-            created: DateFormat.yMMMd(
-              localeTag,
-            ).format(DateTime.fromMillisecondsSinceEpoch(timestamp * 1000)),
+            created: DateFormat.yMMMd(localeTag)
+                .format(DateTime.fromMillisecondsSinceEpoch(timestamp * 1000)),
             content: content,
           ),
         );
