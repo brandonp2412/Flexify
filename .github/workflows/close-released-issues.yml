@@ -1,0 +1,48 @@
+name: Close released issues
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  close-awaiting-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Close issues awaiting this release
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+          RELEASE_URL: ${{ github.event.release.html_url }}
+        with:
+          script: |
+            const label = 'status: awaiting release';
+            const { owner, repo } = context.repo;
+            const issues = await github.paginate(github.rest.issues.listForRepo, {
+              owner,
+              repo,
+              state: 'open',
+              labels: label,
+              per_page: 100,
+            });
+
+            for (const issue of issues) {
+              if (issue.pull_request) continue;
+
+              await github.rest.issues.createComment({
+                owner,
+                repo,
+                issue_number: issue.number,
+                body: 'Released in [' + process.env.RELEASE_TAG + '](' + process.env.RELEASE_URL + '). Closing this issue.',
+              });
+              await github.rest.issues.update({
+                owner,
+                repo,
+                issue_number: issue.number,
+                state: 'closed',
+                state_reason: 'completed',
+              });
+            }
