@@ -30,6 +30,7 @@ const selectableLocales = <Locale>[
   Locale('fa'),
   Locale('th'),
   Locale('ms'),
+  Locale('uk'),
 ];
 
 /// Returns the canonical identifier persisted for a supported [locale].
@@ -99,6 +100,7 @@ String localeDisplayName(AppLocalizations l10n, Locale locale) {
     'fa' => l10n.languageNamePersian,
     'th' => l10n.languageNameThai,
     'ms' => l10n.languageNameMalay,
+    'uk' => l10n.languageNameUkrainian,
     _ => locale.toLanguageTag(),
   };
 }

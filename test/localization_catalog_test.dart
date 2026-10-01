@@ -65,6 +65,7 @@ const _alwaysEnglishEquivalentKeys = <String>{
   'languageNamePersian',
   'languageNameThai',
   'languageNameMalay',
+  'languageNameUkrainian',
   'stoneUnitShort',
 };
 
@@ -157,6 +158,7 @@ const _localeSpecificEnglishEquivalentKeys = <String, Set<String>>{
   'fa': {},
   'th': {},
   'ms': {'actionOk', 'importData'},
+  'uk': {},
   'zh': {},
   'zh_CN': {},
   'zh_TW': {},
@@ -183,6 +185,7 @@ const _macOsEnglishEquivalentTitles = <String, Set<String>>{
   'fa': {'APP_NAME'},
   'th': {'APP_NAME'},
   'ms': {'APP_NAME'},
+  'uk': {'APP_NAME'},
   'zh-Hans': {},
   'zh-Hant': {},
 };
@@ -240,7 +243,16 @@ const _storeFallbackOnlyAppLocales = <String>{'pt', 'zh'};
 
 // These locales currently ship in-app but do not yet have the complete
 // historical store assets required by the full store-localization checks.
-const _appOnlyLocales = <String>{'id', 'vi', 'bn', 'ur', 'fa', 'th', 'ms'};
+const _appOnlyLocales = <String>{
+  'id',
+  'vi',
+  'bn',
+  'ur',
+  'fa',
+  'th',
+  'ms',
+  'uk',
+};
 
 const _playListingLocaleByAppLocale = <String, String>{
   'ar': 'ar',
@@ -251,6 +263,7 @@ const _playListingLocaleByAppLocale = <String, String>{
   'fa': 'fa',
   'th': 'th',
   'ms': 'ms-MY',
+  'uk': 'uk',
 };
 
 const _appStoreListingLocaleByAppLocale = <String, String>{
@@ -259,6 +272,7 @@ const _appStoreListingLocaleByAppLocale = <String, String>{
   'vi': 'vi',
   'th': 'th',
   'ms': 'ms',
+  'uk': 'uk',
 };
 
 final _playStoreLocales = _playStoreLocaleByAppLocale.values.toSet();
@@ -909,6 +923,7 @@ void main() {
       'fa',
       'th',
       'ms',
+      'uk',
     ];
     final localizedTitlePattern = RegExp(r'^"([^"]+)\.title"\s*=\s*"(.*)";$');
 

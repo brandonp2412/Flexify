@@ -54,6 +54,10 @@
   "@languageNameMalay": {
     "description": "Stable native display name for the Malay locale."
   },
+  "languageNameUkrainian": "Українська",
+  "@languageNameUkrainian": {
+    "description": "Stable native display name for the Ukrainian locale."
+  },
   "navHistory": "历史",
   "navPlans": "计划",
   "navGraphs": "图表",

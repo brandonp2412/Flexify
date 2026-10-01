@@ -108,6 +108,10 @@
   "@languageNameRussian": {
     "description": "Stable native display name for the Russian locale."
   },
+  "languageNameUkrainian": "Українська",
+  "@languageNameUkrainian": {
+    "description": "Stable native display name for the Ukrainian locale."
+  },
   "navHistory": "ประวัติ",
   "@navHistory": {
     "description": "Navigation label for workout history."
