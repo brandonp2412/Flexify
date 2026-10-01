@@ -137,8 +137,9 @@ class _WhatsNewState extends State<WhatsNew> {
         result.add(
           Changelog(
             name: filename,
-            created: DateFormat.yMMMd(localeTag)
-                .format(DateTime.fromMillisecondsSinceEpoch(timestamp * 1000)),
+            created: DateFormat.yMMMd(
+              localeTag,
+            ).format(DateTime.fromMillisecondsSinceEpoch(timestamp * 1000)),
             content: content,
           ),
         );
