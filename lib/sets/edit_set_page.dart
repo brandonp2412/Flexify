@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
@@ -29,6 +30,39 @@ class EditSetPage extends StatefulWidget {
 }
 
 class _EditSetPageState extends State<EditSetPage> {
+  bool _hasUnsavedChanges = false;
+  bool _allowPop = false;
+
+  void _markDirty() {
+    if (_hasUnsavedChanges) return;
+    setState(() => _hasUnsavedChanges = true);
+  }
+
+  Future<void> _confirmDiscard(Object? result) async {
+    final discard = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog.adaptive(
+        title: Text(context.l10n.unsavedChanges),
+        content: Text(context.l10n.discardUnsavedChanges),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text(context.l10n.actionCancel),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: Text(context.l10n.actionDiscard),
+          ),
+        ],
+      ),
+    );
+    if (discard != true || !mounted) return;
+    setState(() => _allowPop = true);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) Navigator.of(context).pop(result);
+    });
+  }
+
   final _reps = TextEditingController();
   final _weight = TextEditingController();
   final _orm = TextEditingController();
@@ -111,11 +145,18 @@ class _EditSetPageState extends State<EditSetPage> {
       (settings) => settings.value.showBodyWeight,
     );
 
-    return Scaffold(
-      resizeToAvoidBottomInset: true,
-      appBar: buildAppBar(),
-      body: buildBody(showBodyWeight),
-      floatingActionButton: buildSaveButton(),
+    return PopScope(
+      canPop: _allowPop || !_hasUnsavedChanges,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop || _allowPop || !_hasUnsavedChanges) return;
+        unawaited(_confirmDiscard(result));
+      },
+      child: Scaffold(
+        resizeToAvoidBottomInset: true,
+        appBar: buildAppBar(),
+        body: buildBody(showBodyWeight),
+        floatingActionButton: buildSaveButton(),
+      ),
     );
   }
 
@@ -178,6 +219,7 @@ class _EditSetPageState extends State<EditSetPage> {
             final showImages = settings.showImages;
 
             return ListView(
+              padding: const EdgeInsets.only(bottom: 116.0),
               children: [
                 autocomplete(showBodyWeight),
                 const SizedBox(height: 12.0),
@@ -636,6 +678,18 @@ class _EditSetPageState extends State<EditSetPage> {
     setState(() {
       _created = widget.gymSet.created;
     });
+
+    _reps.addListener(_markDirty);
+    _weight.addListener(_markDirty);
+    _orm.addListener(_markDirty);
+    _body.addListener(_markDirty);
+    _distance.addListener(_markDirty);
+    _minutes.addListener(_markDirty);
+    _seconds.addListener(_markDirty);
+    _incline.addListener(_markDirty);
+    _notes.addListener(_markDirty);
+    _categoryCtrl.addListener(_markDirty);
+    _hasUnsavedChanges = false;
 
     (db.gymSets.selectOnly(
       distinct: true,

@@ -830,10 +830,12 @@ void main() {
         );
 
     for (final file in dartFiles) {
-      final relativePath = file.path.replaceFirst(
-        '${Directory.current.path}/',
-        '',
-      );
+      final relativePath = file.path
+          .replaceFirst(
+            '${Directory.current.path}${Platform.pathSeparator}',
+            '',
+          )
+          .replaceAll('\\', '/');
       final sourceText = file.readAsStringSync();
       for (final pattern in [
         _directTextPattern,
@@ -872,10 +874,12 @@ void main() {
         );
 
     for (final file in nativeFiles) {
-      final relativePath = file.path.replaceFirst(
-        '${Directory.current.path}/',
-        '',
-      );
+      final relativePath = file.path
+          .replaceFirst(
+            '${Directory.current.path}${Platform.pathSeparator}',
+            '',
+          )
+          .replaceAll('\\', '/');
       final sourceText = file.readAsStringSync();
       for (final pattern in _androidNativeLiteralPatterns) {
         for (final match in pattern.allMatches(sourceText)) {

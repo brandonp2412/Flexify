@@ -28,6 +28,7 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage>
     with AutomaticKeepAliveClientMixin {
   final _searchCtrl = TextEditingController();
+  final _focusNode = FocusNode();
 
   late final Setting _settings;
   late final TextEditingController _maxSets;
@@ -122,6 +123,8 @@ class _SettingsPageState extends State<SettingsPage>
             SearchBar(
               hintText: context.l10n.searchHint,
               controller: _searchCtrl,
+              focusNode: _focusNode,
+              onTap: () => _focusNode.requestFocus(),
               padding: WidgetStateProperty.all(
                 const EdgeInsets.symmetric(horizontal: 16.0),
               ),
@@ -284,6 +287,7 @@ class _SettingsPageState extends State<SettingsPage>
 
   @override
   void dispose() {
+    _focusNode.dispose();
     _searchCtrl.dispose();
     _maxSets.dispose();
     _warmupSets.dispose();
