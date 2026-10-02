@@ -33,6 +33,13 @@ class HistoryDay {
   });
 }
 
+class HistoryDayGroup {
+  final DateTime day;
+  final List<HistoryDay> exercises;
+
+  HistoryDayGroup({required this.day, required this.exercises});
+}
+
 class HistoryPage extends StatefulWidget {
   final TabController tabController;
 
@@ -157,12 +164,12 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
                                   );
 
                               if (groupHistory) {
-                                final historyDays = getHistoryDays(
+                                final dayGroups = getHistoryDayGroups(
                                   snapshot.data!,
                                 );
                                 return GroupHistory(
                                   scroll: scroll,
-                                  days: historyDays,
+                                  days: dayGroups,
                                   onSelect: (id) {
                                     setState(() {
                                       _selection.toggle(id);
@@ -374,6 +381,20 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
       }
     }
     return list;
+  }
+
+  List<HistoryDayGroup> getHistoryDayGroups(
+    List<ExerciseSetView> exerciseSets,
+  ) {
+    final groups = <HistoryDayGroup>[];
+    for (final exercise in getHistoryDays(exerciseSets)) {
+      if (groups.isNotEmpty && isSameDay(groups.last.day, exercise.day)) {
+        groups.last.exercises.add(exercise);
+      } else {
+        groups.add(HistoryDayGroup(day: exercise.day, exercises: [exercise]));
+      }
+    }
+    return groups;
   }
 
   @override
