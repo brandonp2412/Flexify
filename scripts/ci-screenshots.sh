@@ -13,6 +13,18 @@ drive_timeout="${SCREENSHOT_DRIVE_TIMEOUT:-12m}"
 drive_log="$(mktemp)"
 trap 'rm -f "$drive_log"' EXIT
 
+flutter_error_pattern='══╡ EXCEPTION CAUGHT BY .* LIBRARY ╞|Another exception was thrown:|A RenderFlex overflowed by|E/flutter \(|Flutter framework error|\[(error|exception)\][[:space:]]*\|'
+
+fail_if_flutter_errors() {
+  if ! grep -Eiq "$flutter_error_pattern" "$drive_log"; then
+    return 0
+  fi
+
+  echo "Flutter error output detected during screenshot test:" >&2
+  grep -Ein -C 2 "$flutter_error_pattern" "$drive_log" >&2 || true
+  return 1
+}
+
 wait_for_emulator() {
   timeout 60 adb -s "$device" wait-for-device >/dev/null 2>&1 || return 1
   local checks=0
@@ -93,6 +105,10 @@ for attempt in 1 2; do
     "${drive_args[@]}" >"$drive_log" 2>&1 || drive_status=$?
 
   cat "$drive_log"
+
+  if ! fail_if_flutter_errors; then
+    exit 1
+  fi
 
   if screenshots_complete && { [[ "$drive_status" -eq 0 ]] || grep -q "All tests passed!" "$drive_log"; }; then
     break
