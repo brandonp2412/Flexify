@@ -1166,6 +1166,13 @@ void main() {
               exercise: 'Unresolved Legacy Exercise',
               planId: 1,
             ),
+            v62.PlanExercisesCompanion.insert(
+              id: const Value(22),
+              enabled: 1,
+              exercise: 'Bench Press',
+              exerciseId: const Value(10),
+              planId: 999,
+            ),
           ]);
           batch.insert(
             oldDb.settings,

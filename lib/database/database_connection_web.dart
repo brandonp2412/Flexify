@@ -13,6 +13,10 @@ LazyDatabase createWebConnection() {
   });
 }
 
+QueryExecutor createConnectionForPath(String path) {
+  throw UnsupportedError('Path-based database connection not supported on web');
+}
+
 LazyDatabase createNativeConnection() {
   throw UnsupportedError('Native connection not supported on web');
 }

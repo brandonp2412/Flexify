@@ -29,6 +29,23 @@ LazyDatabase openConnection() {
   });
 }
 
+Future<void> _removeOrphanedPlanExercises(AppDatabase database) async {
+  await database.customStatement(r'''
+    DELETE FROM plan_exercises
+    WHERE exercise_id IS NULL
+       OR NOT EXISTS (
+         SELECT 1
+         FROM exercises
+         WHERE exercises.id = plan_exercises.exercise_id
+       )
+       OR NOT EXISTS (
+         SELECT 1
+         FROM plans
+         WHERE plans.id = plan_exercises.plan_id
+       )
+  ''');
+}
+
 Future<void> _backfillExerciseIdentity(AppDatabase database) async {
   await database.customStatement(r'''
     WITH ranked AS (
@@ -278,6 +295,9 @@ class AppDatabase extends _$AppDatabase {
   /// Creates a database backed by the provided [executor].
   AppDatabase(super.executor);
 
+  /// Opens a native database at [path], primarily for validating imports.
+  AppDatabase.forPath(String path) : super(createConnectionForPath(path));
+
   /// Opens Flexify's persistent application database.
   AppDatabase.persistent() : super(openConnection());
 
@@ -286,6 +306,9 @@ class AppDatabase extends _$AppDatabase {
     return MigrationStrategy(
       beforeOpen: (details) async {
         await customStatement('PRAGMA foreign_keys = ON');
+        if (details.versionNow >= 63) {
+          await _removeOrphanedPlanExercises(this);
+        }
         if (details.versionNow >= 59) {
           await customStatement(
             'CREATE INDEX IF NOT EXISTS exercise_sets_exercise_timestamp '
@@ -916,15 +939,7 @@ class AppDatabase extends _$AppDatabase {
             WHERE build_number IS NULL
           ''');
 
-              await customStatement('''
-            DELETE FROM plan_exercises
-            WHERE exercise_id IS NULL
-               OR NOT EXISTS (
-                 SELECT 1
-                 FROM exercises
-                 WHERE exercises.id = plan_exercises.exercise_id
-               )
-          ''');
+              await _removeOrphanedPlanExercises(this);
               await m.alterTable(TableMigration(schema.planExercises));
 
               await customStatement(

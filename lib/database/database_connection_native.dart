@@ -7,6 +7,14 @@ import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:sqlite3/sqlite3.dart';
 
+QueryExecutor createConnectionForPath(String path) {
+  return NativeDatabase.createInBackground(
+    File(path),
+    logStatements: kDebugMode,
+    setup: (database) => database.execute('PRAGMA foreign_keys = ON'),
+  );
+}
+
 LazyDatabase createNativeConnection() {
   return LazyDatabase(() async {
     final folder = await getApplicationDocumentsDirectory();

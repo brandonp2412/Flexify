@@ -165,12 +165,55 @@ $version
             )
           : selectedFile;
 
-      await db.close();
+      final candidateDatabase = File(
+        p.join(workingDirectory.path, 'candidate-$backupDatabaseName'),
+      );
+      await sourceFile.copy(candidateDatabase.path);
+
+      final candidateDb = AppDatabase.forPath(candidateDatabase.path);
       try {
-        await sourceFile.copy(p.join(dbFolder.path, backupDatabaseName));
+        // Opening the candidate performs every required migration and the
+        // migration strategy's foreign-key validation before the live
+        // database is touched.
+        await candidateDb.customSelect('SELECT 1').get();
+        final foreignKeyViolations = await candidateDb
+            .customSelect('PRAGMA foreign_key_check')
+            .get();
+        if (foreignKeyViolations.isNotEmpty) {
+          throw StateError('Foreign key violations in imported database');
+        }
       } finally {
-        db = AppDatabase.persistent();
+        await candidateDb.close();
       }
+
+      final liveDatabase = File(p.join(dbFolder.path, backupDatabaseName));
+      final rollbackDatabase = File(
+        p.join(workingDirectory.path, 'rollback-$backupDatabaseName'),
+      );
+
+      await db.close();
+      if (await liveDatabase.exists()) {
+        await liveDatabase.copy(rollbackDatabase.path);
+      }
+
+      try {
+        await candidateDatabase.copy(liveDatabase.path);
+        db = AppDatabase.persistent();
+        await db.customSelect('SELECT 1').get();
+      } catch (_) {
+        try {
+          await db.close();
+        } catch (_) {}
+        if (await rollbackDatabase.exists()) {
+          await rollbackDatabase.copy(liveDatabase.path);
+        } else if (await liveDatabase.exists()) {
+          await liveDatabase.delete();
+        }
+        db = AppDatabase.persistent();
+        await db.customSelect('SELECT 1').get();
+        rethrow;
+      }
+
       dbVersion.value++;
       talker.info('Imported Flexify data and image backup');
     } finally {
