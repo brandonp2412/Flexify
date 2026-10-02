@@ -16,6 +16,7 @@ import 'package:flexify/sets/group_history.dart';
 import 'package:flexify/sets/history_list.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
+import 'package:flexify/platform_page_route.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
@@ -57,7 +58,7 @@ class HistoryPageState extends State<HistoryPage>
       },
       child: Navigator(
         key: _navKey,
-        onGenerateRoute: (settings) => MaterialPageRoute(
+        onGenerateRoute: (settings) => FlexPageRoute(
           builder: (context) => _HistoryPageWidget(navigatorKey: _navKey),
           settings: settings,
         ),
@@ -270,7 +271,7 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
                     },
                     onSelectAll: selectAllFiltered,
                     onEdit: () => Navigator.of(context).push(
-                      MaterialPageRoute(
+                      FlexPageRoute(
                         builder: (context) =>
                             EditSetsPage(ids: _selection.toList()),
                       ),
@@ -334,9 +335,9 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
     }
 
     if (!mounted) return;
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => EditSetPage(gymSet: gymSet)),
-    );
+    Navigator.of(
+      context,
+    ).push(FlexPageRoute(builder: (context) => EditSetPage(gymSet: gymSet)));
   }
 
   List<HistoryDay> getHistoryDays(List<GymSet> gymSets) {

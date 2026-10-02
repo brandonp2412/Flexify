@@ -5,6 +5,7 @@ import 'package:flexify/main.dart';
 import 'package:flexify/plan/workout_sessions.dart';
 import 'package:flexify/sets/edit_set_page.dart';
 import 'package:flexify/utils.dart';
+import 'package:flexify/platform_page_route.dart';
 import 'package:flutter/material.dart';
 
 /// Strong/Hevy-style strip of the sets already logged in the active workout
@@ -256,7 +257,7 @@ class _SetChip extends StatelessWidget {
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
         onTap: () => Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => EditSetPage(gymSet: _gymSet)),
+          FlexPageRoute(builder: (context) => EditSetPage(gymSet: _gymSet)),
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),

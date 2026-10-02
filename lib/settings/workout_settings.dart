@@ -7,6 +7,7 @@ import 'package:flexify/responsive.dart';
 import 'package:flexify/settings/category_management_page.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
+import 'package:flexify/platform_page_route.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -126,9 +127,9 @@ List<Widget> getWorkoutSettings(
               : TextAlign.center,
         ),
         subtitle: Text(l10n.manageCategoriesDescription),
-        onTap: () => Navigator.of(context).push(
-          MaterialPageRoute(builder: (_) => const CategoryManagementPage()),
-        ),
+        onTap: () => Navigator.of(
+          context,
+        ).push(FlexPageRoute(builder: (_) => const CategoryManagementPage())),
       ),
     if (matches([l10n.showNotes, l10n.showNotesDescription]))
       Tooltip(

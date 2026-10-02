@@ -16,6 +16,7 @@ import 'package:flexify/responsive.dart';
 import 'package:flexify/sets/edit_set_page.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
+import 'package:flexify/platform_page_route.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -113,7 +114,7 @@ class _StrengthPageState extends State<StrengthPage> {
 
   Future<void> _editNotes() async {
     await Navigator.of(context, rootNavigator: true).push(
-      MaterialPageRoute(
+      FlexPageRoute(
         builder: (context) =>
             GraphNotesPage(controller: _notesCtrl, onChanged: _onNotesChanged),
       ),
@@ -253,7 +254,7 @@ class _StrengthPageState extends State<StrengthPage> {
               if (!context.mounted) return;
 
               await Navigator.of(context).push(
-                MaterialPageRoute(
+                FlexPageRoute(
                   builder: (context) => GraphHistoryPage(
                     name: name,
                     gymSets: gymSets,
@@ -263,7 +264,11 @@ class _StrengthPageState extends State<StrengthPage> {
                 ),
               );
               _refreshTimer?.cancel();
-              _refreshTimer = Timer(kThemeAnimationDuration, setData);
+              if (desktop) {
+                setData();
+              } else {
+                _refreshTimer = Timer(kThemeAnimationDuration, setData);
+              }
             },
             icon: const Icon(Icons.history),
             tooltip: context.l10n.navHistory,
@@ -272,7 +277,7 @@ class _StrengthPageState extends State<StrengthPage> {
             IconButton(
               onPressed: () async {
                 String? newName = await Navigator.of(context).push(
-                  MaterialPageRoute(
+                  FlexPageRoute(
                     builder: (context) => EditGraphPage(name: name),
                   ),
                 );
@@ -597,14 +602,19 @@ class _StrengthPageState extends State<StrengthPage> {
 
     if (widget.bodyWeight || index < 0 || index >= data.length) return;
     final row = data[index];
+    final desktop = isDesktopLayout(context);
     final gymSet = await getGraphPointSet(name, row.created);
     if (!mounted || gymSet == null) return;
 
-    await Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => EditSetPage(gymSet: gymSet)),
-    );
+    await Navigator.of(
+      context,
+    ).push(FlexPageRoute(builder: (context) => EditSetPage(gymSet: gymSet)));
     _refreshTimer?.cancel();
-    _refreshTimer = Timer(kThemeAnimationDuration, setData);
+    if (desktop) {
+      setData();
+    } else {
+      _refreshTimer = Timer(kThemeAnimationDuration, setData);
+    }
   }
 
   Future<void> _selectEnd() async {

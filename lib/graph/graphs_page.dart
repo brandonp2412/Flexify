@@ -18,6 +18,7 @@ import 'package:flexify/responsive.dart';
 import 'package:flexify/selection_controller.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
+import 'package:flexify/platform_page_route.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
@@ -68,7 +69,7 @@ class GraphsPageState extends State<GraphsPage>
       },
       child: Navigator(
         key: navKey,
-        onGenerateRoute: (settings) => MaterialPageRoute(
+        onGenerateRoute: (settings) => FlexPageRoute(
           builder: (context) => graphsPage(),
           settings: settings,
         ),
@@ -126,9 +127,7 @@ class GraphsPageState extends State<GraphsPage>
   Future<void> _editGraphSummary(GraphExerciseSummary summary) async {
     if (summary.bodyWeight) return;
     await Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => EditGraphPage(name: summary.name),
-      ),
+      FlexPageRoute(builder: (context) => EditGraphPage(name: summary.name)),
     );
   }
 
@@ -220,6 +219,7 @@ class GraphsPageState extends State<GraphsPage>
           tooltipText: (index) => tooltipText(data, gymSet.unit, format, index),
           hideBottom: true,
           hideLeft: true,
+          showTrendLine: false,
         ),
       ),
     );
@@ -240,7 +240,7 @@ class GraphsPageState extends State<GraphsPage>
                   padding: const EdgeInsets.only(right: 16),
                   child: FilledButton.icon(
                     onPressed: () => navKey.currentState!.push(
-                      MaterialPageRoute(
+                      FlexPageRoute(
                         builder: (context) => const AddExercisePage(),
                       ),
                     ),
@@ -335,7 +335,7 @@ class GraphsPageState extends State<GraphsPage>
                                       actionIcon: Icons.add_rounded,
                                       onAction: () =>
                                           Navigator.of(context).push(
-                                            MaterialPageRoute(
+                                            FlexPageRoute(
                                               builder: (context) =>
                                                   AddExercisePage(
                                                     name: _search,
@@ -391,7 +391,7 @@ class GraphsPageState extends State<GraphsPage>
                       );
                       if (summary.bodyWeight || !context.mounted) return;
                       await Navigator.of(context).push(
-                        MaterialPageRoute(
+                        FlexPageRoute(
                           builder: (context) =>
                               EditGraphPage(name: summary.name),
                         ),
@@ -411,9 +411,7 @@ class GraphsPageState extends State<GraphsPage>
           ? null
           : AnimatedFab(
               onPressed: () => navKey.currentState!.push(
-                MaterialPageRoute(
-                  builder: (context) => const AddExercisePage(),
-                ),
+                FlexPageRoute(builder: (context) => const AddExercisePage()),
               ),
               label: Text(context.l10n.actionAdd),
               scroll: _scroll,
@@ -535,7 +533,7 @@ class GraphsPageState extends State<GraphsPage>
                     subtitle: Text(context.l10n.chartGroupedByCategory),
                     trailing: const Icon(Icons.chevron_right_rounded),
                     onTap: () => Navigator.of(context).push(
-                      MaterialPageRoute(
+                      FlexPageRoute(
                         builder: (context) => GlobalProgressPage(
                           tabController: widget.tabController,
                         ),
@@ -683,7 +681,7 @@ class GraphsPageState extends State<GraphsPage>
                         ? const Icon(Icons.chevron_right_rounded)
                         : null,
                     onTap: () => Navigator.of(context).push(
-                      MaterialPageRoute(
+                      FlexPageRoute(
                         builder: (context) => GlobalProgressPage(
                           tabController: widget.tabController,
                         ),

@@ -8,6 +8,7 @@ import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/responsive.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
+import 'package:flexify/platform_page_route.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -155,7 +156,7 @@ class GraphTile extends StatelessWidget {
             );
             if (!context.mounted) return;
             Navigator.of(context).push(
-              MaterialPageRoute(
+              FlexPageRoute(
                 builder: (context) => StrengthPage(
                   name: gymSet.name,
                   unit: gymSet.unit,
@@ -181,7 +182,7 @@ class GraphTile extends StatelessWidget {
             );
             if (!context.mounted) return;
             Navigator.of(context).push(
-              MaterialPageRoute(
+              FlexPageRoute(
                 builder: (context) => CardioPage(
                   tabCtrl: tabCtrl,
                   name: gymSet.name,
@@ -205,7 +206,7 @@ class GraphTile extends StatelessWidget {
           if (!context.mounted) return;
 
           Navigator.of(context).push(
-            MaterialPageRoute(
+            FlexPageRoute(
               builder: (context) => StrengthPage(
                 name: gymSet.name,
                 unit: gymSet.unit,

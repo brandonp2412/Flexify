@@ -12,6 +12,7 @@ import 'package:flexify/sets/edit_set_page.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/foundation.dart' show listEquals;
+import 'package:flexify/platform_page_route.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -71,7 +72,7 @@ class _HistoryListState extends State<HistoryList> {
     switch (action) {
       case _HistoryContextAction.edit:
         await Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => EditSetPage(gymSet: gymSet)),
+          FlexPageRoute(builder: (context) => EditSetPage(gymSet: gymSet)),
         );
         break;
       case _HistoryContextAction.delete:
@@ -270,7 +271,7 @@ class _HistoryListState extends State<HistoryList> {
                     widget.onSelect(gymSet.id);
                   } else {
                     Navigator.of(context).push(
-                      MaterialPageRoute(
+                      FlexPageRoute(
                         builder: (context) => EditSetPage(gymSet: gymSet),
                       ),
                     );

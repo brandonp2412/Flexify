@@ -12,6 +12,7 @@ import 'package:flexify/sets/edit_set_page.dart';
 import 'package:flexify/sets/history_page.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
+import 'package:flexify/platform_page_route.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -69,7 +70,7 @@ class _GroupHistoryState extends State<GroupHistory> {
     switch (action) {
       case _GroupedHistoryContextAction.edit:
         await Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => EditSetPage(gymSet: gymSet)),
+          FlexPageRoute(builder: (context) => EditSetPage(gymSet: gymSet)),
         );
         break;
       case _GroupedHistoryContextAction.delete:
@@ -242,7 +243,7 @@ class _GroupHistoryState extends State<GroupHistory> {
                   widget.onSelect(gymSet.id);
                 else
                   Navigator.of(context).push(
-                    MaterialPageRoute(
+                    FlexPageRoute(
                       builder: (context) => EditSetPage(gymSet: gymSet),
                     ),
                   );

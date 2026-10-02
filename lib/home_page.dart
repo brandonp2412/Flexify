@@ -15,6 +15,7 @@ import 'package:flexify/timer/timer_page.dart';
 import 'package:flexify/timer/timer_progress_widgets.dart';
 import 'package:flexify/timer/timer_state.dart';
 import 'package:flexify/utils.dart';
+import 'package:flexify/platform_page_route.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
@@ -65,7 +66,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             label: context.l10n.changes,
             onPressed: () => Navigator.of(
               context,
-            ).push(MaterialPageRoute(builder: (context) => const WhatsNew())),
+            ).push(FlexPageRoute(builder: (context) => const WhatsNew())),
           ),
         );
     });
@@ -89,7 +90,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         }
       } else if (target == 'timer') {
         await navigator.push(
-          MaterialPageRoute(builder: (context) => const TimerPage()),
+          FlexPageRoute(builder: (context) => const TimerPage()),
         );
       }
       return;
@@ -121,7 +122,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     }
 
     await navigator.push(
-      MaterialPageRoute(
+      FlexPageRoute(
         settings: RouteSettings(name: 'start-plan:$planId'),
         builder: (context) => StartPlanPage(plan: plan),
       ),

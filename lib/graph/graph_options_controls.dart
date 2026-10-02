@@ -47,7 +47,7 @@ class GraphOptionsControls extends StatelessWidget {
 
     final colorScheme = Theme.of(context).colorScheme;
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: colorScheme.surfaceContainerLow,
         borderRadius: BorderRadius.circular(14),
@@ -56,13 +56,13 @@ class GraphOptionsControls extends StatelessWidget {
         ),
       ),
       child: Wrap(
-        spacing: 10,
-        runSpacing: 10,
+        spacing: 14,
+        runSpacing: 14,
         crossAxisAlignment: WrapCrossAlignment.center,
         children: [
           if (unitValue != null && unitItems.isNotEmpty)
             SizedBox(
-              width: 125,
+              width: 150,
               child: DropdownButtonFormField<String>(
                 key: ValueKey(unitValue),
                 initialValue: unitValue,
@@ -78,7 +78,7 @@ class GraphOptionsControls extends StatelessWidget {
               ),
             ),
           SizedBox(
-            width: 155,
+            width: 190,
             child: GraphDateField(
               label: context.l10n.startDate,
               value: startDate,
@@ -90,7 +90,7 @@ class GraphOptionsControls extends StatelessWidget {
             ),
           ),
           SizedBox(
-            width: 155,
+            width: 190,
             child: GraphDateField(
               label: context.l10n.stopDate,
               value: endDate,
@@ -102,7 +102,7 @@ class GraphOptionsControls extends StatelessWidget {
             ),
           ),
           SizedBox(
-            width: 170,
+            width: 220,
             child: _LimitControl(
               limit: limit,
               maxLimit: maxLimit,
@@ -112,14 +112,14 @@ class GraphOptionsControls extends StatelessWidget {
           ),
           if (timeBasedXAxis != null && onTimeBasedXAxisChanged != null)
             SizedBox(
-              width: 185,
+              width: 245,
               child: _CompactSwitch(
                 label: context.l10n.useTimeBasedXAxis,
                 value: timeBasedXAxis!,
                 onChanged: onTimeBasedXAxisChanged!,
               ),
             ),
-          const SizedBox(width: 235, child: GraphCurveSettings(compact: true)),
+          const SizedBox(width: 300, child: GraphCurveSettings(compact: true)),
         ],
       ),
     );

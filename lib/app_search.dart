@@ -4,6 +4,7 @@ import 'package:flexify/selection_controller.dart';
 import 'package:flexify/settings/settings_page.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/weight_page.dart';
+import 'package:flexify/platform_page_route.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -225,7 +226,7 @@ class _AppSearchState extends State<AppSearch> {
                             onTap: () async {
                               Navigator.pop(context);
                               await Navigator.of(context).push(
-                                MaterialPageRoute(
+                                FlexPageRoute(
                                   builder: (context) => const WeightPage(),
                                 ),
                               );
@@ -240,7 +241,7 @@ class _AppSearchState extends State<AppSearch> {
                             onTap: () async {
                               Navigator.pop(context);
                               await Navigator.of(context).push(
-                                MaterialPageRoute(
+                                FlexPageRoute(
                                   builder: (context) => const SettingsPage(),
                                 ),
                               );

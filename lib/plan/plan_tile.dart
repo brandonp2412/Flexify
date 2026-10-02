@@ -9,6 +9,7 @@ import 'package:flexify/responsive.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flexify/platform_page_route.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -225,7 +226,7 @@ class _PlanTileState extends State<PlanTile> {
           }
 
           widget.navigatorKey.currentState!.push(
-            MaterialPageRoute(
+            FlexPageRoute(
               settings: RouteSettings(name: 'start-plan:${widget.plan.id}'),
               builder: (context) => StartPlanPage(plan: widget.plan),
             ),

@@ -12,6 +12,7 @@ import 'package:flexify/plan/plan_tile.dart';
 import 'package:flexify/responsive.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flutter/foundation.dart' show listEquals;
+import 'package:flexify/platform_page_route.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -108,7 +109,7 @@ class _PlansListState extends State<PlansList> {
           );
           if (context.mounted)
             await Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => EditPlanPage(plan: plan)),
+              FlexPageRoute(builder: (context) => EditPlanPage(plan: plan)),
             );
         },
       ),

@@ -14,6 +14,7 @@ import 'package:flexify/plan/exercise_tile.dart';
 import 'package:flexify/plan/plan_queries.dart';
 import 'package:flexify/responsive.dart';
 import 'package:flexify/utils.dart';
+import 'package:flexify/platform_page_route.dart';
 import 'package:flutter/material.dart';
 
 class EditPlanPage extends StatefulWidget {
@@ -39,9 +40,9 @@ class _EditPlanPageState extends State<EditPlanPage> {
   final _titleCtrl = TextEditingController();
 
   Future<void> addExercise() async {
-    Exercise? exercise = await Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => AddExercisePage(name: _search)),
-    );
+    Exercise? exercise = await Navigator.of(
+      context,
+    ).push(FlexPageRoute(builder: (context) => AddExercisePage(name: _search)));
     if (exercise == null || !mounted) return;
 
     setState(() {

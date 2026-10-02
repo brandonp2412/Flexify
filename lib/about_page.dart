@@ -1,5 +1,6 @@
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/settings/whats_new.dart';
+import 'package:flexify/platform_page_route.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -42,7 +43,7 @@ class AboutPage extends StatelessWidget {
             leading: const Icon(Icons.change_circle_outlined),
             onTap: () => Navigator.of(
               context,
-            ).push(MaterialPageRoute(builder: (context) => const WhatsNew())),
+            ).push(FlexPageRoute(builder: (context) => const WhatsNew())),
           ),
           ListTile(
             leading: const Icon(Icons.info_outline),

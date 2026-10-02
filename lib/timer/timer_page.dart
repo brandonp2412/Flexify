@@ -9,6 +9,7 @@ import 'package:flexify/timer/timer_progress_widgets.dart';
 import 'package:flexify/timer/timer_state.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flexify/platform_page_route.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -47,7 +48,7 @@ class TimerPageState extends State<TimerPage>
       },
       child: Navigator(
         key: _navKey,
-        onGenerateRoute: (settings) => MaterialPageRoute(
+        onGenerateRoute: (settings) => FlexPageRoute(
           builder: (context) => _TimerPageWidget(
             timerState: timerState,
             total: widget.total,
@@ -194,9 +195,9 @@ class _TimerPageWidgetState extends State<_TimerPageWidget>
         actions: [
           IconButton(
             onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const SettingsPage()),
-              );
+              Navigator.of(
+                context,
+              ).push(FlexPageRoute(builder: (context) => const SettingsPage()));
             },
             tooltip: context.l10n.navSettings,
             icon: const Icon(Icons.settings),

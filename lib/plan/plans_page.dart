@@ -13,6 +13,7 @@ import 'package:flexify/plan/workout_sessions.dart';
 import 'package:flexify/responsive.dart';
 import 'package:flexify/selection_controller.dart';
 import 'package:flexify/settings/settings_state.dart';
+import 'package:flexify/platform_page_route.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
@@ -62,7 +63,7 @@ class PlansPageState extends State<PlansPage>
     if (_routeObserver.currentRouteName == routeName) return;
 
     await navigator.push(
-      MaterialPageRoute(
+      FlexPageRoute(
         settings: RouteSettings(name: routeName),
         builder: (context) => StartPlanPage(plan: plan),
       ),
@@ -82,7 +83,7 @@ class PlansPageState extends State<PlansPage>
       child: Navigator(
         key: navKey,
         observers: [_routeObserver],
-        onGenerateRoute: (settings) => MaterialPageRoute(
+        onGenerateRoute: (settings) => FlexPageRoute(
           builder: (context) => _PlansPageWidget(navKey: navKey),
           settings: settings,
         ),
@@ -157,9 +158,9 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
 
   Future<void> _addPlan() async {
     const plan = PlansCompanion(days: drift.Value(''));
-    await Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => const EditPlanPage(plan: plan)),
-    );
+    await Navigator.of(
+      context,
+    ).push(FlexPageRoute(builder: (context) => const EditPlanPage(plan: plan)));
   }
 
   @override
@@ -262,7 +263,7 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
                               .toCompanion(false);
                           if (!context.mounted) return;
                           await Navigator.of(context).push(
-                            MaterialPageRoute(
+                            FlexPageRoute(
                               builder: (context) => EditPlanPage(plan: plan),
                             ),
                           );

@@ -15,6 +15,7 @@ import 'package:flexify/settings/tab_settings.dart';
 import 'package:flexify/settings/timer_settings.dart';
 import 'package:flexify/settings/workout_settings.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flexify/platform_page_route.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -105,9 +106,9 @@ class _SettingsPageState extends State<SettingsPage>
             IconButton(
               tooltip: context.l10n.aboutTitle,
               onPressed: () async {
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => const AboutPage()),
-                );
+                Navigator.of(
+                  context,
+                ).push(FlexPageRoute(builder: (context) => const AboutPage()));
               },
               icon: const Icon(Icons.info_outline_rounded),
             ),
@@ -279,7 +280,7 @@ class _SettingsPageState extends State<SettingsPage>
   ];
 
   void _openCategory(Widget page) {
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => page));
+    Navigator.of(context).push(FlexPageRoute(builder: (context) => page));
   }
 
   @override

@@ -9,6 +9,7 @@ import 'package:flexify/selection_controller.dart';
 import 'package:flexify/sets/edit_sets_page.dart';
 import 'package:flexify/sets/history_list.dart';
 import 'package:flexify/settings/settings_state.dart';
+import 'package:flexify/platform_page_route.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -116,7 +117,7 @@ class _GraphHistoryPageState extends State<GraphHistoryPage> {
   Future<void> _editSelected() async {
     if (widget.bodyWeight) return;
     await Navigator.of(context).push(
-      MaterialPageRoute(
+      FlexPageRoute(
         builder: (context) => EditSetsPage(ids: _selection.toList()),
       ),
     );

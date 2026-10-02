@@ -9,6 +9,7 @@ import 'package:flexify/sets/edit_set_page.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/timer/timer_state.dart';
 import 'package:flexify/utils.dart';
+import 'package:flexify/platform_page_route.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -171,7 +172,7 @@ class _ExerciseModalState extends State<ExerciseModal> {
               if (gymSet == null) return;
               if (!context.mounted) return;
               await Navigator.of(context).push(
-                MaterialPageRoute(
+                FlexPageRoute(
                   builder: (context) => EditSetPage(gymSet: gymSet),
                 ),
               );
@@ -204,7 +205,7 @@ class _ExerciseModalState extends State<ExerciseModal> {
             onTap: () async {
               Navigator.pop(context);
               final result = await Navigator.of(context).push(
-                MaterialPageRoute(
+                FlexPageRoute(
                   builder: (context) =>
                       SwapWorkout(planExerciseId: widget.planExerciseId),
                 ),

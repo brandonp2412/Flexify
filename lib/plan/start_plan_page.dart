@@ -25,6 +25,7 @@ import 'package:flexify/stepper_field.dart';
 import 'package:flexify/timer/timer_state.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flexify/platform_page_route.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -90,7 +91,7 @@ class _StartPlanPageState extends State<StartPlanPage>
                       .getSingle();
               if (!context.mounted) return;
               await Navigator.of(context).push(
-                MaterialPageRoute(
+                FlexPageRoute(
                   builder: (context) =>
                       EditPlanPage(plan: plan.toCompanion(false)),
                 ),
@@ -751,7 +752,7 @@ class _StartPlanPageState extends State<StartPlanPage>
         mounted) {
       await Navigator.of(
         context,
-      ).push(MaterialPageRoute(builder: (context) => const PermissionsPage()));
+      ).push(FlexPageRoute(builder: (context) => const PermissionsPage()));
     }
 
     if (!mounted) return;

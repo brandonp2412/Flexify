@@ -11,6 +11,7 @@ import 'package:flexify/responsive.dart';
 import 'package:flexify/sets/edit_set_page.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
+import 'package:flexify/platform_page_route.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -67,9 +68,9 @@ class _StartListState extends State<StartList> {
     if (gymSet == null) return;
     if (!mounted) return;
 
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => EditSetPage(gymSet: gymSet)),
-    );
+    Navigator.of(
+      context,
+    ).push(FlexPageRoute(builder: (context) => EditSetPage(gymSet: gymSet)));
   }
 
   @override
