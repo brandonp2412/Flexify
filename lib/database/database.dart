@@ -1,15 +1,19 @@
 // ignore_for_file: experimental_member_use
 import 'package:drift/drift.dart';
 import 'package:flexify/constants.dart';
+import 'package:flexify/database/body_weights.dart';
 import 'package:flexify/database/categories.dart';
 import 'package:flexify/database/database.steps.dart';
 import 'package:flexify/database/defaults.dart';
+import 'package:flexify/database/exercise_sets.dart';
+import 'package:flexify/database/exercises.dart';
 import 'package:flexify/database/graph_preferences.dart';
 import 'package:flexify/database/gym_sets.dart';
 import 'package:flexify/database/metadata.dart';
 import 'package:flexify/database/plan_exercises.dart';
 import 'package:flexify/database/plans.dart';
 import 'package:flexify/database/settings.dart';
+import 'package:flexify/database/workouts.dart';
 import 'package:flexify/logging.dart';
 import 'package:flutter/foundation.dart';
 
@@ -31,6 +35,10 @@ LazyDatabase openConnection() {
     Categories,
     Plans,
     GymSets,
+    Exercises,
+    Workouts,
+    ExerciseSets,
+    BodyWeights,
     Settings,
     PlanExercises,
     Metadata,
@@ -571,10 +579,20 @@ class AppDatabase extends _$AppDatabase {
             WHERE category IS NOT NULL AND TRIM(category) != ''
           ''');
         },
+        from58To59: (Migrator m, Schema59 schema) async {
+          await m.createTable(schema.exercises);
+          await m.createTable(schema.workouts);
+          await m.createTable(schema.exerciseSets);
+          await m.createTable(schema.bodyWeights);
+          await m.addColumn(
+            schema.planExercises,
+            schema.planExercises.exerciseId,
+          );
+        },
       ),
     );
   }
 
   @override
-  int get schemaVersion => 58;
+  int get schemaVersion => 59;
 }
