@@ -38,16 +38,11 @@ void main() {
     WidgetTester tester,
   ) async {
     final harness = await FlexifyTestHarness.create();
-    await harness.database.gymSets.insertOne(
-      gymSetFixture(
-        'Running',
-        reps: 0,
-        weight: 0,
-        unit: 'km',
-        created: DateTime.now(),
-        hidden: true,
-        cardio: true,
-      ),
+    await ensureExerciseFixture(
+      harness.database,
+      'Running',
+      cardio: true,
+      unit: 'km',
     );
 
     await harness.pump(tester, EditSetPage(gymSet: gymSetModelFixture()));
@@ -136,21 +131,21 @@ void main() {
   ) async {
     final harness = await FlexifyTestHarness.create();
 
-    await harness.database.gymSets.insertAll([
-      gymSetFixture(
-        'Bench press',
-        reps: 10,
-        weight: 100,
-        created: DateTime.now(),
-        notes: 'bad shoulder',
-      ),
-      gymSetFixture(
-        'Squat',
-        reps: 5,
-        weight: 80,
-        created: DateTime.now().add(const Duration(seconds: 1)),
-      ),
-    ]);
+    await insertPerformedSetFixture(
+      harness.database,
+      'Bench press',
+      reps: 10,
+      weight: 100,
+      created: DateTime.now(),
+      notes: 'bad shoulder',
+    );
+    await insertPerformedSetFixture(
+      harness.database,
+      'Squat',
+      reps: 5,
+      weight: 80,
+      created: DateTime.now().add(const Duration(seconds: 1)),
+    );
     await harness.database.settings.update().write(
       testSettings(showNotes: true),
     );

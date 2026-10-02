@@ -20,6 +20,7 @@ library;
 
 import 'package:drift/drift.dart';
 import 'package:flexify/database/database.dart';
+import 'package:flexify/database/performed_sets.dart';
 import 'package:flexify/l10n/generated/app_localizations.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/sets/history_page.dart';
@@ -31,6 +32,7 @@ import 'package:provider/provider.dart';
 
 import 'mock_tab_controller.dart';
 import 'mock_tests.dart';
+import 'support/fixtures.dart';
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -75,9 +77,10 @@ Widget historyApp(Setting settings) {
   );
 }
 
-GymSetsCompanion makeSet(String name, {int minutesAgo = 0}) =>
-    GymSetsCompanion.insert(
-      name: name,
+Future<GymSet> insertSet(String name, {int minutesAgo = 0}) =>
+    insertPerformedSetFixture(
+      db,
+      name,
       reps: 5,
       weight: 100,
       unit: 'kg',
@@ -104,9 +107,9 @@ void main() {
   testWidgets('HistoryPage with 10 items settles within 6 frames', (
     tester,
   ) async {
-    await db.gymSets.insertAll(
-      List.generate(10, (i) => makeSet('Bench press', minutesAgo: i)),
-    );
+    for (var i = 0; i < 10; i++) {
+      await insertSet('Bench press', minutesAgo: i);
+    }
     await tester.pumpWidget(historyApp(await settings()));
     final frames = await countFramesToSettle(tester);
 
@@ -118,9 +121,9 @@ void main() {
   testWidgets(
     'HistoryPage with 100 items settles within 6 frames (same as 10 -- virtualized)',
     (tester) async {
-      await db.gymSets.insertAll(
-        List.generate(100, (i) => makeSet('Bench press', minutesAgo: i)),
-      );
+      for (var i = 0; i < 100; i++) {
+        await insertSet('Bench press', minutesAgo: i);
+      }
       await tester.pumpWidget(historyApp(await settings()));
       final frames = await countFramesToSettle(tester);
 
@@ -146,7 +149,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Triggers: DB stream emit -> StreamBuilder rebuild -> HistoryList.didUpdateWidget -> setState
-      await db.gymSets.insertOne(makeSet('Squat'));
+      await insertSet('Squat');
       final frames = await countFramesToSettle(tester);
 
       // Measured baseline: 2 frames (one for StreamBuilder, one for
@@ -163,11 +166,11 @@ void main() {
   );
 
   testWidgets('deleting a set settles in few frames', (tester) async {
-    final id = await db.gymSets.insertOne(makeSet('Romanian DL'));
+    final id = (await insertSet('Romanian DL')).id;
     await tester.pumpWidget(historyApp(await settings()));
     await tester.pumpAndSettle();
 
-    await (db.gymSets.deleteWhere((t) => t.id.equals(id)));
+    await deletePerformedSets(db, [id]);
     final frames = await countFramesToSettle(tester);
 
     // Measured baseline: 2 frames, same as insert.
@@ -180,7 +183,7 @@ void main() {
   testWidgets('entering selection mode settles within 45 frames', (
     tester,
   ) async {
-    await db.gymSets.insertOne(makeSet('Deadlift'));
+    await insertSet('Deadlift');
     await tester.pumpWidget(historyApp(await settings()));
     await tester.pumpAndSettle();
 
@@ -203,7 +206,7 @@ void main() {
   testWidgets('exiting selection mode settles within 45 frames', (
     tester,
   ) async {
-    await db.gymSets.insertOne(makeSet('OHP'));
+    await insertSet('OHP');
     await tester.pumpWidget(historyApp(await settings()));
     await tester.pumpAndSettle();
 

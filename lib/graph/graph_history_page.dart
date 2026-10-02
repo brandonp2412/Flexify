@@ -1,5 +1,5 @@
-import 'package:drift/drift.dart';
 import 'package:flexify/database/database.dart';
+import 'package:flexify/database/performed_sets.dart';
 import 'package:flexify/empty_state.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
@@ -143,7 +143,7 @@ class _GraphHistoryPageState extends State<GraphHistoryPage> {
     if (confirmed != true || !mounted) return;
 
     final ids = _selection.toList();
-    await (db.delete(db.gymSets)..where((tbl) => tbl.id.isIn(ids))).go();
+    await deletePerformedSets(db, ids);
     if (!mounted) return;
     setState(_selection.clear);
     await setSets();
@@ -163,21 +163,14 @@ class _GraphHistoryPageState extends State<GraphHistoryPage> {
   }
 
   Future<void> setSets() async {
-    final result =
-        await (db.gymSets.select()
-              ..orderBy([
-                (u) => OrderingTerm(
-                  expression: u.created,
-                  mode: OrderingMode.desc,
-                ),
-              ])
-              ..where((tbl) => tbl.name.equals(widget.name))
-              ..where((tbl) => tbl.hidden.equals(false))
-              ..limit(limit))
-            .get();
+    final result = await getPerformedSets(
+      db,
+      search: widget.name,
+      limit: limit,
+    );
     if (!mounted) return;
     setState(() {
-      sets = result;
+      sets = result.where((set) => set.name == widget.name).toList();
     });
   }
 

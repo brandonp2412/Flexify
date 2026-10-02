@@ -100,7 +100,6 @@ class GraphsPageState extends State<GraphsPage>
                 row.exercise.isIn(names) | row.exerciseId.isIn(exerciseIds),
           ))
           .go();
-      await (db.gymSets.delete()..where((set) => set.name.isIn(names))).go();
       if (exerciseIds.isNotEmpty) {
         await (db.exercises.delete()
               ..where((exercise) => exercise.id.isIn(exerciseIds)))

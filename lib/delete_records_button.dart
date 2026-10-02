@@ -50,9 +50,7 @@ class DeleteRecordsButton extends StatelessWidget {
                                 icon: const Icon(Icons.delete),
                                 onPressed: () async {
                                   Navigator.pop(context);
-                                  await (db.delete(
-                                    db.gymSets,
-                                  )..where((u) => u.hidden.equals(false))).go();
+                                  await db.delete(db.exerciseSets).go();
                                   if (!ctx.mounted) return;
                                   Navigator.pop(ctx);
                                 },

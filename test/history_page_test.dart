@@ -1,4 +1,3 @@
-import 'package:drift/drift.dart';
 import 'package:flexify/sets/history_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -6,6 +5,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'mock_tab_controller.dart';
 import 'support/fixtures.dart';
 import 'support/test_app.dart';
+
+import 'package:drift/drift.dart';
 
 Future<void> pumpHistoryPage(
   WidgetTester tester,
@@ -26,21 +27,26 @@ void main() {
 
   testWidgets('HistoryPage lists items', (WidgetTester tester) async {
     final harness = await FlexifyTestHarness.create();
-    await harness.database.gymSets.insertAll([
-      gymSetFixture('Bench press', reps: 1, weight: 90),
-      gymSetFixture(
-        'Bench press',
-        reps: 4,
-        weight: 80,
-        created: testNow.subtract(const Duration(minutes: 3)),
-      ),
-      gymSetFixture(
-        'Bench press',
-        reps: 8,
-        weight: 70,
-        created: testNow.subtract(const Duration(minutes: 6)),
-      ),
-    ]);
+    await insertPerformedSetFixture(
+      harness.database,
+      'Bench press',
+      reps: 1,
+      weight: 90,
+    );
+    await insertPerformedSetFixture(
+      harness.database,
+      'Bench press',
+      reps: 4,
+      weight: 80,
+      created: testNow.subtract(const Duration(minutes: 3)),
+    );
+    await insertPerformedSetFixture(
+      harness.database,
+      'Bench press',
+      reps: 8,
+      weight: 70,
+      created: testNow.subtract(const Duration(minutes: 6)),
+    );
 
     await pumpHistoryPage(tester, harness);
 
@@ -54,14 +60,13 @@ void main() {
     WidgetTester tester,
   ) async {
     final harness = await FlexifyTestHarness.create();
-    await harness.database.gymSets.insertOne(
-      gymSetFixture(
-        'Sled push',
-        reps: 0,
-        weight: 30,
-        cardio: true,
-        duration: 10,
-      ),
+    await insertPerformedSetFixture(
+      harness.database,
+      'Sled push',
+      reps: 0,
+      weight: 30,
+      cardio: true,
+      duration: 10,
     );
     await harness.database.settings.update().write(
       testSettings(groupHistory: true),
@@ -76,8 +81,11 @@ void main() {
 
   testWidgets('HistoryPage tap tile', (WidgetTester tester) async {
     final harness = await FlexifyTestHarness.create();
-    await harness.database.gymSets.insertOne(
-      gymSetFixture('Bench press', reps: 1, weight: 90),
+    await insertPerformedSetFixture(
+      harness.database,
+      'Bench press',
+      reps: 1,
+      weight: 90,
     );
 
     await pumpHistoryPage(tester, harness);
@@ -103,8 +111,11 @@ void main() {
 
   testWidgets('HistoryPage selects', (WidgetTester tester) async {
     final harness = await FlexifyTestHarness.create();
-    await harness.database.gymSets.insertOne(
-      gymSetFixture('Bench press', reps: 1, weight: 90),
+    await insertPerformedSetFixture(
+      harness.database,
+      'Bench press',
+      reps: 1,
+      weight: 90,
     );
 
     await pumpHistoryPage(tester, harness);
@@ -116,8 +127,11 @@ void main() {
 
   testWidgets('HistoryPage deletes', (WidgetTester tester) async {
     final harness = await FlexifyTestHarness.create();
-    await harness.database.gymSets.insertOne(
-      gymSetFixture('Bench press', reps: 1, weight: 90),
+    await insertPerformedSetFixture(
+      harness.database,
+      'Bench press',
+      reps: 1,
+      weight: 90,
     );
 
     await pumpHistoryPage(tester, harness);
@@ -138,22 +152,24 @@ void main() {
     'HistoryPage select all includes every filtered row, not just loaded rows',
     (WidgetTester tester) async {
       final harness = await FlexifyTestHarness.create();
-      await harness.database.gymSets.insertAll([
-        for (var i = 0; i < 150; i++)
-          gymSetFixture(
-            'Bench press',
-            reps: i + 1,
-            weight: 50,
-            created: testNow.subtract(Duration(minutes: i)),
-          ),
-        for (var i = 0; i < 10; i++)
-          gymSetFixture(
-            'Squat',
-            reps: i + 1,
-            weight: 100,
-            created: testNow.subtract(Duration(days: 1, minutes: i)),
-          ),
-      ]);
+      for (var i = 0; i < 150; i++) {
+        await insertPerformedSetFixture(
+          harness.database,
+          'Bench press',
+          reps: i + 1,
+          weight: 50,
+          created: testNow.subtract(Duration(minutes: i)),
+        );
+      }
+      for (var i = 0; i < 10; i++) {
+        await insertPerformedSetFixture(
+          harness.database,
+          'Squat',
+          reps: i + 1,
+          weight: 100,
+          created: testNow.subtract(Duration(days: 1, minutes: i)),
+        );
+      }
 
       await pumpHistoryPage(tester, harness);
       final searchField = find.descendant(
@@ -176,10 +192,18 @@ void main() {
     'HistoryPage can clear selection without clearing the search filter',
     (WidgetTester tester) async {
       final harness = await FlexifyTestHarness.create();
-      await harness.database.gymSets.insertAll([
-        gymSetFixture('Bench press', reps: 5, weight: 50),
-        gymSetFixture('Squat', reps: 5, weight: 100),
-      ]);
+      await insertPerformedSetFixture(
+        harness.database,
+        'Bench press',
+        reps: 5,
+        weight: 50,
+      );
+      await insertPerformedSetFixture(
+        harness.database,
+        'Squat',
+        reps: 5,
+        weight: 100,
+      );
 
       await pumpHistoryPage(tester, harness);
       final searchBar = find.byType(SearchBar);

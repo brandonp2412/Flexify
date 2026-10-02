@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart' hide Column;
 import 'package:flexify/database/database.dart';
+import 'package:flexify/database/performed_sets.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/swap_workout.dart';
@@ -189,10 +190,7 @@ class _ExerciseModalState extends State<ExerciseModal> {
                 exerciseId: widget.exerciseId,
               );
               if (gymSet == null) return;
-              await db.transaction(() async {
-                await deleteExerciseSetMirror(db, gymSet);
-                await db.gymSets.deleteOne(gymSet);
-              });
+              await deletePerformedSets(db, [gymSet.id]);
               if (!context.mounted) return;
               widget.onSelect();
               final timerState = context.read<TimerState>();

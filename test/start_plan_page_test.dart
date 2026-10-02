@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart' hide isNotNull, isNull;
 import 'package:flexify/bottom_nav.dart';
+import 'package:flexify/database/performed_sets.dart';
 import 'package:flexify/l10n/generated/app_localizations.dart';
 import 'package:flexify/l10n/locale_preferences.dart';
 import 'package:flexify/plan/start_plan_page.dart';
@@ -200,13 +201,11 @@ void main() {
       await tester.tap(find.text(l10n.actionSave));
       await tester.pumpAndSettle();
 
-      final saved =
-          await (database.gymSets.select()
-                ..where((set) => set.name.equals(exercise))
-                ..orderBy([(set) => OrderingTerm.desc(set.created)])
-                ..limit(1))
-              .getSingle();
-      expect(saved.name, exercise, reason: locale.toLanguageTag());
+      final saved = await getLatestPerformedSet(
+        database,
+        exerciseName: exercise,
+      );
+      expect(saved!.name, exercise, reason: locale.toLanguageTag());
       expect(saved.reps, 5, reason: locale.toLanguageTag());
       expect(saved.weight, 50, reason: locale.toLanguageTag());
       expect(tester.takeException(), isNull, reason: locale.toLanguageTag());
@@ -257,13 +256,8 @@ void main() {
     await tester.tap(find.text(l10n.actionSave));
     await tester.pumpAndSettle();
 
-    final saved =
-        await (database.gymSets.select()
-              ..where((set) => set.name.equals(exercise))
-              ..orderBy([(set) => OrderingTerm.desc(set.created)])
-              ..limit(1))
-            .getSingle();
-    expect(saved.name, exercise);
+    final saved = await getLatestPerformedSet(database, exerciseName: exercise);
+    expect(saved!.name, exercise);
     expect(saved.notes, note);
     expect(saved.weight, 50.5);
     expect(tester.takeException(), isNull);
@@ -463,22 +457,13 @@ void main() {
 
     expect(notes, findsOne);
     expect(tester.widget<EditableText>(notes).focusNode.hasFocus, isTrue);
-    expect(
-      await (database.gymSets.select()..where(
-            (set) => set.name.equals('Bench press') & set.hidden.equals(false),
-          ))
-          .get(),
-      isEmpty,
-    );
+    expect(await getPerformedSets(database, search: 'Bench press'), isEmpty);
 
     await tester.testTextInput.receiveAction(TextInputAction.done);
     await tester.pumpAndSettle();
 
     expect(
-      await (database.gymSets.select()..where(
-            (set) => set.name.equals('Bench press') & set.hidden.equals(false),
-          ))
-          .get(),
+      await getPerformedSets(database, search: 'Bench press'),
       hasLength(1),
     );
   });
@@ -536,11 +521,7 @@ void main() {
     await tester.testTextInput.receiveAction(TextInputAction.done);
     await tester.pumpAndSettle();
 
-    final saved =
-        await (database.gymSets.select()..where(
-              (set) => set.name.equals('Sled push') & set.hidden.equals(false),
-            ))
-            .get();
+    final saved = await getPerformedSets(database, search: 'Sled push');
     expect(saved, hasLength(1));
   });
 
@@ -590,11 +571,14 @@ void main() {
     await tester.tap(find.text('Save'));
     await tester.pumpAndSettle();
 
-    final gymSets =
-        await (database.gymSets.select()
-              ..where((set) => set.name.equals('Barbell bench press')))
-            .get();
-    expect(gymSets.length, equals(1));
+    final performedSets = await getPerformedSets(
+      database,
+      search: 'Barbell bench press',
+    );
+    expect(
+      performedSets.where((set) => set.name == 'Barbell bench press'),
+      hasLength(1),
+    );
 
     final exerciseSets = await database.exerciseSets.select().get();
     expect(exerciseSets, hasLength(1));

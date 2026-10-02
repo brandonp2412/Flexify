@@ -1,8 +1,8 @@
-import 'package:drift/drift.dart' hide Column;
 import 'package:flexify/animated_fab.dart';
 import 'package:flexify/app_search.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
+import 'package:flexify/database/performed_sets.dart';
 import 'package:flexify/empty_state.dart';
 import 'package:flexify/filters.dart';
 import 'package:flexify/l10n/l10n.dart';
@@ -257,9 +257,7 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
                     setStream();
                   },
                   onDelete: () async {
-                    (db.delete(
-                      db.gymSets,
-                    )..where((tbl) => tbl.id.isIn(_selection.selected))).go();
+                    await deletePerformedSets(db, _selection.selected);
                     setState(() {
                       _selection.clear();
                     });
@@ -362,73 +360,54 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
     setStream();
   }
 
-  SimpleSelectStatement<$GymSetsTable, GymSet> _filteredQuery({int? rowLimit}) {
-    final terms = search
-        .toLowerCase()
-        .split(" ")
-        .where((term) => term.isNotEmpty);
+  Stream<List<GymSet>> _filteredStream({int? rowLimit}) {
+    return watchPerformedSets(
+      db,
+      search: search,
+      category: category,
+      startDate: startDate,
+      endDate: endDate,
+      repsGt: repsGt.text.isEmpty
+          ? null
+          : parseDisplayNumber(context, repsGt.text),
+      repsLt: repsLt.text.isEmpty
+          ? null
+          : parseDisplayNumber(context, repsLt.text),
+      weightGt: weightGt.text.isEmpty
+          ? null
+          : parseDisplayNumber(context, weightGt.text),
+      weightLt: weightLt.text.isEmpty
+          ? null
+          : parseDisplayNumber(context, weightLt.text),
+      limit: rowLimit,
+    );
+  }
 
-    final query = db.gymSets.select()
-      ..orderBy([
-        (u) => OrderingTerm(expression: u.created, mode: OrderingMode.desc),
-      ])
-      ..where((tbl) => tbl.hidden.equals(false));
-
-    if (rowLimit != null) query.limit(rowLimit);
-
-    for (final term in terms) {
-      query.where((tbl) => tbl.name.contains(term));
-    }
-
-    if (category != null) query.where((tbl) => tbl.category.equals(category!));
-    if (startDate != null) {
-      query.where((tbl) => tbl.created.isBiggerOrEqualValue(startDate!));
-    }
-    if (endDate != null) {
-      query.where((tbl) => tbl.created.isSmallerOrEqualValue(endDate!));
-    }
-    if (repsGt.text.isNotEmpty) {
-      query.where(
-        (tbl) =>
-            tbl.reps.isBiggerThanValue(
-              parseDisplayNumber(context, repsGt.text) ?? 0,
-            ) &
-            tbl.cardio.equals(false),
-      );
-    }
-    if (repsLt.text.isNotEmpty) {
-      query.where(
-        (tbl) =>
-            tbl.reps.isSmallerThanValue(
-              parseDisplayNumber(context, repsLt.text) ?? 0,
-            ) &
-            tbl.cardio.equals(false),
-      );
-    }
-    if (weightGt.text.isNotEmpty) {
-      query.where(
-        (tbl) =>
-            tbl.weight.isBiggerThanValue(
-              parseDisplayNumber(context, weightGt.text) ?? 0,
-            ) &
-            tbl.cardio.equals(false),
-      );
-    }
-    if (weightLt.text.isNotEmpty) {
-      query.where(
-        (tbl) =>
-            tbl.weight.isSmallerThanValue(
-              parseDisplayNumber(context, weightLt.text) ?? 0,
-            ) &
-            tbl.cardio.equals(false),
-      );
-    }
-
-    return query;
+  Future<List<GymSet>> _filteredSets({int? rowLimit}) {
+    return getPerformedSets(
+      db,
+      search: search,
+      category: category,
+      startDate: startDate,
+      endDate: endDate,
+      repsGt: repsGt.text.isEmpty
+          ? null
+          : parseDisplayNumber(context, repsGt.text),
+      repsLt: repsLt.text.isEmpty
+          ? null
+          : parseDisplayNumber(context, repsLt.text),
+      weightGt: weightGt.text.isEmpty
+          ? null
+          : parseDisplayNumber(context, weightGt.text),
+      weightLt: weightLt.text.isEmpty
+          ? null
+          : parseDisplayNumber(context, weightLt.text),
+      limit: rowLimit,
+    );
   }
 
   Future<void> selectAllFiltered() async {
-    final gymSets = await _filteredQuery().get();
+    final gymSets = await _filteredSets();
     if (!mounted) return;
     setState(() {
       _selection.setAll(gymSets.map((gymSet) => gymSet.id));
@@ -436,9 +415,8 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
   }
 
   void setStream() {
-    final query = _filteredQuery(rowLimit: limit);
     setState(() {
-      stream = query.watch();
+      stream = _filteredStream(rowLimit: limit);
     });
   }
 }

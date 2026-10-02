@@ -1,7 +1,8 @@
 import 'package:drift/drift.dart';
 import 'package:flexify/animated_fab.dart';
 import 'package:flexify/constants.dart';
-import 'package:flexify/database/database.dart';
+import 'package:flexify/database/exercise_catalog.dart';
+import 'package:flexify/database/performed_sets.dart';
 import 'package:flexify/database/categories.dart';
 import 'package:flexify/database/gym_sets.dart';
 import 'package:flexify/l10n/l10n.dart';
@@ -80,9 +81,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
                         icon: const Icon(Icons.delete),
                         onPressed: () async {
                           Navigator.pop(dialogContext);
-                          await db.gymSets.deleteWhere(
-                            (u) => u.id.isIn(widget.ids),
-                          );
+                          await deletePerformedSets(db, widget.ids);
                           if (context.mounted) Navigator.pop(context);
                         },
                       ),
@@ -426,52 +425,51 @@ class _EditSetsPageState extends State<EditSetsPage> {
     super.initState();
     final settings = context.read<SettingsState>().value;
 
-    (db.gymSets.select()
-          ..where((u) => u.id.isIn(widget.ids))
-          ..limit(3))
-        .get()
-        .then((gymSets) {
-          setState(() {
-            _cardio = gymSets.first.cardio;
-            final units = gymSets.map((gymSet) => gymSet.unit).toSet();
-            _unit = units.length == 1 ? units.single : null;
-            _oldNames = gymSets.map((gymSet) => gymSet.name).join(', ');
-            _oldReps = gymSets.map((gymSet) => gymSet.reps).join(', ');
-            _oldWeights = gymSets.map((gymSet) => gymSet.weight).join(', ');
-            _oldBody = gymSets.map((gymSet) => gymSet.bodyWeight).join(', ');
-            if (settings.longDateFormat == 'timeago')
-              _oldCreated = gymSets
-                  .map((gymSet) => formatRelativeTime(context, gymSet.created))
-                  .join(', ');
-            else
-              _oldCreated = gymSets
-                  .map(
-                    (gymSet) => formatDisplayDate(
-                      context,
-                      gymSet.created,
-                      settings.longDateFormat,
-                    ),
-                  )
-                  .join(', ');
-            _oldDist = gymSets.map((gymSet) => gymSet.distance).join(', ');
-            _oldMin = gymSets
-                .map((gymSet) => gymSet.duration.floor())
-                .join(', ');
-            _oldSec = gymSets
-                .map((gymSet) => ((gymSet.duration * 60) % 60).floor())
-                .join(', ');
-            final incs = gymSets
-                .map((gymSet) => gymSet.incline)
-                .whereType<int>()
-                .join(', ');
-            _oldInc = incs.isEmpty ? null : incs;
-            final cats = gymSets
-                .map((gymSet) => gymSet.category)
-                .whereType<String>()
-                .join(', ');
-            _oldCat = cats.isEmpty ? null : cats;
-          });
-        });
+    getPerformedSets(db).then((allSets) {
+      final gymSets = allSets
+          .where((gymSet) => widget.ids.contains(gymSet.id))
+          .take(3)
+          .toList();
+      if (gymSets.isEmpty) return;
+      setState(() {
+        _cardio = gymSets.first.cardio;
+        final units = gymSets.map((gymSet) => gymSet.unit).toSet();
+        _unit = units.length == 1 ? units.single : null;
+        _oldNames = gymSets.map((gymSet) => gymSet.name).join(', ');
+        _oldReps = gymSets.map((gymSet) => gymSet.reps).join(', ');
+        _oldWeights = gymSets.map((gymSet) => gymSet.weight).join(', ');
+        _oldBody = gymSets.map((gymSet) => gymSet.bodyWeight).join(', ');
+        if (settings.longDateFormat == 'timeago')
+          _oldCreated = gymSets
+              .map((gymSet) => formatRelativeTime(context, gymSet.created))
+              .join(', ');
+        else
+          _oldCreated = gymSets
+              .map(
+                (gymSet) => formatDisplayDate(
+                  context,
+                  gymSet.created,
+                  settings.longDateFormat,
+                ),
+              )
+              .join(', ');
+        _oldDist = gymSets.map((gymSet) => gymSet.distance).join(', ');
+        _oldMin = gymSets.map((gymSet) => gymSet.duration.floor()).join(', ');
+        _oldSec = gymSets
+            .map((gymSet) => ((gymSet.duration * 60) % 60).floor())
+            .join(', ');
+        final incs = gymSets
+            .map((gymSet) => gymSet.incline)
+            .whereType<int>()
+            .join(', ');
+        _oldInc = incs.isEmpty ? null : incs;
+        final cats = gymSets
+            .map((gymSet) => gymSet.category)
+            .whereType<String>()
+            .join(', ');
+        _oldCat = cats.isEmpty ? null : cats;
+      });
+    });
   }
 
   Future<void> selectTime(DateTime pickedDate) async {
@@ -500,33 +498,77 @@ class _EditSetsPageState extends State<EditSetsPage> {
 
     _category = _category?.trim();
     if (_category?.isEmpty ?? false) _category = null;
-
-    final gymSet = GymSetsCompanion(
-      name: _name.text.isNotEmpty ? Value(_name.text) : const Value.absent(),
-      unit: Value.absentIfNull(_unit),
-      created: Value.absentIfNull(_created),
-      cardio: Value.absentIfNull(_cardio),
-      restMs: Value.absentIfNull(_restMs),
-      incline: Value.absentIfNull(int.tryParse(_incline.text)),
-      reps: Value.absentIfNull(parseDisplayNumber(context, _reps.text)),
-      weight: Value.absentIfNull(parseDisplayNumber(context, _weight.text)),
-      bodyWeight: Value.absentIfNull(parseDisplayNumber(context, _body.text)),
-      distance: Value.absentIfNull(parseDisplayNumber(context, _distance.text)),
-      duration:
-          int.tryParse(_seconds.text) == null &&
-              int.tryParse(_minutes.text) == null
-          ? const Value.absent()
-          : Value(
-              (int.tryParse(_seconds.text) ?? 0) / 60 +
-                  (int.tryParse(_minutes.text) ?? 0),
-            ),
-      category: Value.absentIfNull(_category),
-    );
-
+    final reps = _reps.text.isEmpty
+        ? null
+        : parseDisplayNumber(context, _reps.text);
+    final weight = _weight.text.isEmpty
+        ? null
+        : parseDisplayNumber(context, _weight.text);
+    final bodyWeight = _body.text.isEmpty
+        ? null
+        : parseDisplayNumber(context, _body.text);
+    final distance = _distance.text.isEmpty
+        ? null
+        : parseDisplayNumber(context, _distance.text);
     if (_category != null) await createCategory(_category!);
-    await (db.gymSets.update()..where((u) => u.id.isIn(widget.ids))).write(
-      gymSet,
-    );
+
+    final selected = (await getPerformedSets(
+      db,
+    )).where((set) => widget.ids.contains(set.id)).toList();
+
+    final changesExercise =
+        _name.text.isNotEmpty ||
+        _unit != null ||
+        _cardio != null ||
+        _restMs != null ||
+        _category != null;
+
+    for (final original in selected) {
+      final name = _name.text.isNotEmpty ? _name.text : original.name;
+      final unit = _unit ?? original.unit;
+      final cardio = _cardio ?? original.cardio;
+      final restMs = _restMs ?? original.restMs;
+      final category = _category ?? original.category;
+
+      final exercise = changesExercise
+          ? await syncExerciseDefinition(
+              name: name,
+              cardio: cardio,
+              displayUnit: unit,
+              category: category,
+              image: original.image,
+              defaultRestDurationMs: restMs,
+            )
+          : await getExerciseByName(original.name);
+      if (exercise == null) continue;
+
+      final updated = original.copyWith(
+        name: name,
+        unit: unit,
+        created: _created ?? original.created,
+        cardio: cardio,
+        restMs: Value(restMs),
+        reps: reps ?? original.reps,
+        weight: weight ?? original.weight,
+        bodyWeight: bodyWeight ?? original.bodyWeight,
+        distance: distance ?? original.distance,
+        duration: _seconds.text.isEmpty && _minutes.text.isEmpty
+            ? original.duration
+            : (int.tryParse(_seconds.text) ?? 0) / 60 +
+                  (int.tryParse(_minutes.text) ?? 0),
+        incline: _incline.text.isEmpty
+            ? Value(original.incline)
+            : Value(int.tryParse(_incline.text)),
+        category: Value(category),
+      );
+
+      await updatePerformedSet(
+        db,
+        id: original.id,
+        gymSet: updated,
+        exerciseId: exercise.id,
+      );
+    }
   }
 
   Future<void> _selectDate() async {

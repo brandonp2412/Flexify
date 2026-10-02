@@ -9,10 +9,10 @@ import 'package:flexify/database/categories.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/database/exercise_catalog.dart';
 import 'package:flexify/database/gym_sets.dart';
+import 'package:flexify/database/performed_sets.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/logging.dart';
 import 'package:flexify/main.dart';
-import 'package:flexify/plan/workout_sessions.dart';
 import 'package:flexify/settings/category_management_page.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/stepper_field.dart';
@@ -57,19 +57,7 @@ class _EditSetPageState extends State<EditSetPage> {
   late String _name;
 
   void onSelected(String option, bool showBodyWeight) async {
-    final last =
-        await (db.gymSets.select()
-              ..where(
-                (tbl) => tbl.name.equals(option) & tbl.hidden.equals(false),
-              )
-              ..orderBy([
-                (u) => OrderingTerm(
-                  expression: u.created,
-                  mode: OrderingMode.desc,
-                ),
-              ])
-              ..limit(1))
-            .getSingleOrNull();
+    final last = await getLatestPerformedSet(db, exerciseName: option);
     if (last == null) {
       final definition = await getExerciseByName(option);
       final categoryName = definition == null
@@ -92,9 +80,9 @@ class _EditSetPageState extends State<EditSetPage> {
     }
 
     if (!mounted) return;
-    if (showBodyWeight)
+    if (showBodyWeight) {
       updateFields(last);
-    else {
+    } else {
       final bodyWeight = await getBodyWeight();
       if (!mounted) return;
       updateFields(last.copyWith(bodyWeight: bodyWeight?.weight));
@@ -158,10 +146,7 @@ class _EditSetPageState extends State<EditSetPage> {
               icon: const Icon(Icons.delete),
               onPressed: () async {
                 Navigator.pop(dialogContext);
-                await db.transaction(() async {
-                  await deleteExerciseSetMirror(db, widget.gymSet);
-                  await db.delete(db.gymSets).delete(widget.gymSet);
-                });
+                await deletePerformedSets(db, [widget.gymSet.id]);
                 if (mounted) Navigator.pop(context);
               },
             ),
@@ -703,37 +688,29 @@ class _EditSetPageState extends State<EditSetPage> {
     final settings = context.read<SettingsState>().value;
     final messages = positiveReinforcementMessages(context.l10n);
 
+    if (exerciseDefinition == null) return;
+
     if (widget.gymSet.id > 0) {
-      await db.transaction(() async {
-        await db.update(db.gymSets).replace(gymSet);
-        if (exerciseDefinition != null) {
-          await updateExerciseSetMirror(
-            db,
-            originalGymSet: widget.gymSet,
-            gymSet: gymSet,
-            exerciseId: exerciseDefinition.id,
-          );
-        }
-      });
+      await updatePerformedSet(
+        db,
+        id: widget.gymSet.id,
+        gymSet: gymSet,
+        exerciseId: exerciseDefinition.id,
+      );
       if (!mounted) return;
       talker.info('Updated workout set');
       return Navigator.of(context).pop();
     }
 
-    final insert = gymSet.toCompanion(false).copyWith(id: const Value.absent());
-    final inserted = await db.into(db.gymSets).insertReturning(insert);
-    if (exerciseDefinition != null) {
-      await insertExerciseSetMirror(
-        db,
-        gymSet: inserted,
-        exerciseId: exerciseDefinition.id,
-        workoutId: null,
-      );
-    }
+    final inserted = await insertPerformedSet(
+      db,
+      gymSet: gymSet,
+      exerciseId: exerciseDefinition.id,
+    );
     talker.info('Created workout set');
 
     if (settings.notifications) {
-      final best = await isBest(gymSet);
+      final best = await isBestPerformedSet(db, inserted);
       if (best) {
         final random = Random();
         final randomMessage = messages[random.nextInt(messages.length)];

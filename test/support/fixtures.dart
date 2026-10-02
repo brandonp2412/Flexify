@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:flexify/database/database.dart';
+import 'package:flexify/database/performed_sets.dart';
 
 final testNow = DateTime(2026, 1, 15, 12);
 
@@ -56,6 +57,77 @@ GymSet gymSetModelFixture({
     duration: duration,
     distance: distance,
     cardio: cardio,
+  );
+}
+
+Future<GymSet> insertPerformedSetFixture(
+  AppDatabase database,
+  String name, {
+  double reps = 5,
+  double weight = 50,
+  String unit = 'kg',
+  DateTime? created,
+  bool cardio = false,
+  double duration = 0,
+  double distance = 0,
+  String? category,
+  String? notes,
+  int? planId,
+  double bodyWeight = 0,
+  int? incline,
+}) async {
+  final timestamp = created ?? testNow;
+  final exercise = await ensureExerciseFixture(
+    database,
+    name,
+    cardio: cardio,
+    unit: unit,
+  );
+
+  int? categoryId;
+  if (category != null) {
+    final existingCategory =
+        await (database.categories.select()
+              ..where((row) => row.name.equals(category)))
+            .getSingleOrNull();
+    categoryId =
+        existingCategory?.id ??
+        await database.categories.insertOne(
+          CategoriesCompanion.insert(name: category),
+        );
+    await (database.exercises.update()
+          ..where((row) => row.id.equals(exercise.id)))
+        .write(ExercisesCompanion(categoryId: Value(categoryId)));
+  }
+
+  int? workoutId;
+  if (planId != null) {
+    workoutId = await database.workouts.insertOne(
+      WorkoutsCompanion.insert(planId: Value(planId), startedAt: timestamp),
+    );
+  }
+
+  return insertPerformedSet(
+    database,
+    exerciseId: exercise.id,
+    workoutId: workoutId,
+    gymSet: GymSet(
+      id: 0,
+      name: name,
+      reps: reps,
+      weight: weight,
+      unit: unit,
+      created: timestamp,
+      hidden: false,
+      bodyWeight: bodyWeight,
+      duration: duration,
+      distance: distance,
+      cardio: cardio,
+      category: category,
+      notes: notes,
+      planId: planId,
+      incline: incline,
+    ),
   );
 }
 

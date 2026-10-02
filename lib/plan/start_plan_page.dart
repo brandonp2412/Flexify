@@ -9,6 +9,7 @@ import 'package:flexify/database/database.dart';
 import 'package:flexify/database/exercise_catalog.dart';
 import 'package:flexify/empty_state.dart';
 import 'package:flexify/database/gym_sets.dart';
+import 'package:flexify/database/performed_sets.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/permissions_page.dart';
@@ -593,14 +594,8 @@ class _StartPlanPageState extends State<StartPlanPage>
     super.dispose();
   }
 
-  Future<GymSet?> getLast(String exercise) async {
-    return (db.gymSets.select()
-          ..where((tbl) => db.gymSets.name.equals(exercise))
-          ..orderBy([
-            (u) => OrderingTerm(expression: u.created, mode: OrderingMode.desc),
-          ])
-          ..limit(1))
-        .getSingleOrNull();
+  Future<GymSet?> getLast(String exercise) {
+    return getLatestPerformedSet(db, exerciseName: exercise);
   }
 
   /// Returns the first set from the most recent training session for [exercise].
@@ -775,25 +770,26 @@ class _StartPlanPageState extends State<StartPlanPage>
     }
 
     final created = DateTime.now().toLocal();
-    final gymSetInsert = GymSetsCompanion.insert(
-      name: exercise,
-      unit: _unit,
+    final gymSetDraft = GymSet(
+      id: 0,
+      bodyWeight: bodyWeight ?? 0,
+      cardio: _cardio,
+      category: _category,
       created: created,
-      cardio: Value(_cardio),
-      duration: Value(
-        (int.tryParse(_seconds.text) ?? 0) / 60 +
-            (int.tryParse(_minutes.text) ?? 0),
-      ),
-      bodyWeight: Value.absentIfNull(bodyWeight),
-      restMs: Value(restMs?.toInt()),
-      planId: Value(widget.plan.id),
-      category: Value(_category),
-      image: Value(_image),
+      distance: parseDisplayNumber(context, _distance.text) ?? 0,
+      duration:
+          (int.tryParse(_seconds.text) ?? 0) / 60 +
+          (int.tryParse(_minutes.text) ?? 0),
+      hidden: false,
+      image: _image,
+      incline: int.tryParse(_incline.text),
+      name: exercise,
+      notes: _notes.text,
+      planId: widget.plan.id,
       reps: parseDisplayNumber(context, _reps.text) ?? 0,
+      restMs: restMs?.toInt(),
+      unit: _unit,
       weight: parseDisplayNumber(context, _weight.text) ?? 0,
-      incline: Value(int.tryParse(_incline.text)),
-      distance: Value(parseDisplayNumber(context, _distance.text) ?? 0),
-      notes: Value(_notes.text),
     );
 
     var count = 0;
@@ -817,17 +813,13 @@ class _StartPlanPageState extends State<StartPlanPage>
         count == (max ?? settings.maxSets) &&
         _selected < snapshot.data!.length - 1;
 
-    final gymSet = await db.transaction(() async {
-      final inserted = await db.into(db.gymSets).insertReturning(gymSetInsert);
-      await insertExerciseSetMirror(
-        db,
-        gymSet: inserted,
-        exerciseId: exerciseId,
-        workoutId: workout.id,
-        bodyWeightKg: bodyWeightKg,
-      );
-      return inserted;
-    });
+    final gymSet = await insertPerformedSet(
+      db,
+      gymSet: gymSetDraft,
+      exerciseId: exerciseId,
+      workoutId: workout.id,
+      bodyWeightKg: bodyWeightKg,
+    );
     if (!mounted) return;
     final messages = positiveReinforcementMessages(context.l10n);
     setState(() {
@@ -838,7 +830,7 @@ class _StartPlanPageState extends State<StartPlanPage>
 
     if (!settings.notifications) return;
 
-    final best = await isBest(gymSet);
+    final best = await isBestPerformedSet(db, gymSet);
     if (!best) return;
     final random = Random();
     final randomMessage = messages[random.nextInt(messages.length)];
