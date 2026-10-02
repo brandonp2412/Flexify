@@ -25,6 +25,7 @@ class CategoryManagementPage extends StatelessWidget {
             return Center(child: Text(l10n.noCategories));
           }
           return ListView.builder(
+            padding: const EdgeInsets.only(bottom: 116.0),
             itemCount: categories.length,
             itemBuilder: (context, index) {
               final summary = categories[index];
