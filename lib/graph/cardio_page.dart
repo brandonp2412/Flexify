@@ -1,12 +1,10 @@
 import 'dart:async';
 
-import 'package:drift/drift.dart' hide Column;
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flexify/bottom_nav.dart';
 import 'package:flexify/constants.dart';
-import 'package:flexify/database/database.dart';
 import 'package:flexify/database/exercise_catalog.dart';
-import 'package:flexify/database/gym_sets.dart';
+import 'package:flexify/database/exercise_analytics.dart';
 import 'package:flexify/empty_state.dart';
 import 'package:flexify/graph/cardio_data.dart';
 import 'package:flexify/graph/edit_graph_page.dart';
@@ -15,7 +13,6 @@ import 'package:flexify/graph/graph_options_controls.dart';
 import 'package:flexify/graph/graph_history_page.dart';
 import 'package:flexify/graph/graph_notes_page.dart';
 import 'package:flexify/l10n/l10n.dart';
-import 'package:flexify/main.dart';
 import 'package:flexify/responsive.dart';
 import 'package:flexify/sets/edit_set_page.dart';
 import 'package:flexify/settings/settings_state.dart';
@@ -204,24 +201,19 @@ class _CardioPageState extends State<CardioPage> {
   ) async {
     if (event is ScaleUpdateDetails) return;
     if (event is! FlPanDownEvent) return;
-    if (DateTime.now().difference(lastTap) >= const Duration(milliseconds: 300))
+    if (DateTime.now().difference(lastTap) >=
+        const Duration(milliseconds: 300)) {
       return setState(() {
         lastTap = DateTime.now();
       });
+    }
 
     final index = response?.lineBarSpots?[0].spotIndex;
     if (index == null) return;
     final row = data[index];
-    GymSet? gymSet =
-        await (db.gymSets.select()
-              ..where(
-                (tbl) =>
-                    tbl.created.equals(row.created) & tbl.name.equals(name),
-              )
-              ..limit(1))
-            .getSingle();
+    final gymSet = await getGraphPointSet(name, row.created);
+    if (!mounted || gymSet == null) return;
 
-    if (!mounted) return;
     await Navigator.of(context).push(
       MaterialPageRoute(builder: (context) => EditSetPage(gymSet: gymSet)),
     );
@@ -338,18 +330,7 @@ class _CardioPageState extends State<CardioPage> {
         actions: [
           IconButton(
             onPressed: () async {
-              final gymSets =
-                  await (db.gymSets.select()
-                        ..orderBy([
-                          (u) => OrderingTerm(
-                            expression: u.created,
-                            mode: OrderingMode.desc,
-                          ),
-                        ])
-                        ..where((tbl) => tbl.name.equals(name))
-                        ..where((tbl) => tbl.hidden.equals(false))
-                        ..limit(20))
-                      .get();
+              final gymSets = await getGraphHistory(name);
               if (!context.mounted) return;
 
               await Navigator.of(context).push(
@@ -375,15 +356,11 @@ class _CardioPageState extends State<CardioPage> {
                 ),
               );
               if (mounted && newName != null) {
-                final updated =
-                    await (db.gymSets.select()
-                          ..where((tbl) => tbl.name.equals(newName))
-                          ..limit(1))
-                        .getSingleOrNull();
+                final updated = await getExerciseByName(newName);
                 if (!mounted) return;
                 setState(() {
                   name = newName;
-                  if (updated != null) target = updated.unit;
+                  if (updated != null) target = updated.displayUnit;
                   if (_isWeightUnit(target) &&
                       !{
                         CardioMetric.weight,

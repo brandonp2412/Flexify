@@ -5,7 +5,7 @@ import 'package:flexify/app_search.dart';
 import 'package:flexify/bottom_nav.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
-import 'package:flexify/database/gym_sets.dart';
+import 'package:flexify/database/exercise_analytics.dart';
 import 'package:flexify/empty_state.dart';
 import 'package:flexify/graph/add_exercise_page.dart';
 import 'package:flexify/graph/cardio_data.dart';
@@ -36,7 +36,7 @@ class GraphsPage extends StatefulWidget {
 
 class GraphsPageState extends State<GraphsPage>
     with AutomaticKeepAliveClientMixin {
-  late final Stream<List<GymSetsCompanion>> _stream = watchGraphs();
+  late final Stream<List<GraphExerciseSummary>> _stream = watchGraphs();
 
   final _selection = SelectionController<String>();
   final GlobalKey<NavigatorState> navKey = GlobalKey<NavigatorState>();
@@ -140,7 +140,11 @@ class GraphsPageState extends State<GraphsPage>
     );
   }
 
-  Widget getPeek(GymSetsCompanion gymSet, List<dynamic> data, String format) {
+  Widget getPeek(
+    GraphExerciseSummary gymSet,
+    List<dynamic> data,
+    String format,
+  ) {
     List<FlSpot> spots = [];
     for (var index = 0; index < data.length; index++) {
       spots.add(FlSpot(index.toDouble(), data[index].value));
@@ -158,7 +162,7 @@ class GraphsPageState extends State<GraphsPage>
         child: FlexLine(
           data: data,
           spots: spots,
-          tooltipData: () => tooltipData(data, gymSet.unit.value, format),
+          tooltipData: () => tooltipData(data, gymSet.unit, format),
           hideBottom: true,
           hideLeft: true,
         ),
@@ -206,14 +210,14 @@ class GraphsPageState extends State<GraphsPage>
               .where((term) => term.isNotEmpty);
           var stream = snapshot.data!.where((gymSet) {
             if (_category != null) {
-              return gymSet.category.value == _category;
+              return gymSet.category == _category;
             }
             return true;
           });
 
           for (final term in terms) {
             stream = stream.where(
-              (gymSet) => gymSet.name.value.toLowerCase().contains(term),
+              (gymSet) => gymSet.name.toLowerCase().contains(term),
             );
           }
 
@@ -221,20 +225,20 @@ class GraphsPageState extends State<GraphsPage>
           switch (_sort) {
             case GraphSort.dateDesc:
               gymSets.sort(
-                (a, b) => b.created.value.compareTo(a.created.value),
+                (a, b) => b.created.compareTo(a.created),
               );
               break;
 
             case GraphSort.dateAsc:
               gymSets.sort(
-                (a, b) => a.created.value.compareTo(b.created.value),
+                (a, b) => a.created.compareTo(b.created),
               );
               break;
 
             case GraphSort.name:
               gymSets.sort(
-                (a, b) => a.name.value.toLowerCase().compareTo(
-                  b.name.value.toLowerCase(),
+                (a, b) => a.name.toLowerCase().compareTo(
+                  b.name.toLowerCase(),
                 ),
               );
               break;
@@ -316,9 +320,7 @@ class GraphsPageState extends State<GraphsPage>
                   },
                   onDelete: () async => onDelete(),
                   onSelectAll: () => setState(() {
-                    _selection.setAll(
-                      gymSets.map((gymSet) => gymSet.name.value),
-                    );
+                    _selection.setAll(gymSets.map((gymSet) => gymSet.name));
                   }),
                   onEdit: () => Navigator.of(context).push(
                     MaterialPageRoute(
@@ -357,12 +359,12 @@ class GraphsPageState extends State<GraphsPage>
       _selection.clear();
     });
     final sets = (await _stream.first)
-        .where((gymSet) => copy.contains(gymSet.name.value))
+        .where((gymSet) => copy.contains(gymSet.name))
         .toList();
     final text = sets
         .map(
           (gymSet) =>
-              "${formatDisplayNumber(context, gymSet.reps.value)}×${formatDisplayNumber(context, gymSet.weight.value)}${displayMeasurementUnit(l10n, gymSet.unit.value)} ${gymSet.name.value}",
+              "${formatDisplayNumber(context, gymSet.reps)}×${formatDisplayNumber(context, gymSet.weight)}${displayMeasurementUnit(l10n, gymSet.unit)} ${gymSet.name}",
         )
         .join(', ');
     await SharePlus.instance.share(ShareParams(text: l10n.shareWorkout(text)));
@@ -400,7 +402,10 @@ class GraphsPageState extends State<GraphsPage>
     );
   }
 
-  ListView graphList(List<GymSetsCompanion> gymSets, bool showGlobalProgress) {
+  ListView graphList(
+    List<GraphExerciseSummary> gymSets,
+    bool showGlobalProgress,
+  ) {
     var itemCount = gymSets.length;
     final globalSearchTerms =
         '${context.l10n.globalProgress} ${context.l10n.navGraphs}'
@@ -454,9 +459,8 @@ class GraphsPageState extends State<GraphsPage>
                     title: Text(
                       context.l10n.globalProgress,
                       style: isDesktopLayout(context)
-                          ? Theme.of(context).textTheme.titleMedium?.copyWith(
-                              fontWeight: FontWeight.w600,
-                            )
+                          ? Theme.of(context).textTheme.titleMedium
+                                ?.copyWith(fontWeight: FontWeight.w600)
                           : null,
                     ),
                     subtitle: Text(context.l10n.chartGroupedByCategory),
@@ -494,17 +498,17 @@ class GraphsPageState extends State<GraphsPage>
                             settings.value.shortDateFormat,
                           )
                         : const SizedBox(),
-                    future: gymSets.first.cardio.value
+                    future: gymSets.first.cardio
                         ? getCardioData(
-                            name: gymSets.first.name.value,
-                            target: gymSets.first.unit.value,
-                            metric: _isWeightUnit(gymSets.first.unit.value)
+                            name: gymSets.first.name,
+                            target: gymSets.first.unit,
+                            metric: _isWeightUnit(gymSets.first.unit)
                                 ? CardioMetric.weight
                                 : CardioMetric.pace,
                           )
                         : getStrengthData(
-                            target: gymSets.first.unit.value,
-                            name: gymSets.first.name.value,
+                            target: gymSets.first.unit,
+                            name: gymSets.first.name,
                             metric: StrengthMetric.bestWeight,
                             period: Period.day,
                             start: null,
@@ -531,14 +535,10 @@ class GraphsPageState extends State<GraphsPage>
               setState(() {
                 _selection.toggle(name);
               });
-              final result =
-                  await (db.gymSets.selectOnly()
-                        ..addColumns([db.gymSets.name.count()])
-                        ..where(db.gymSets.name.isIn(_selection.selected)))
-                      .getSingle();
+              final total = await countGraphSets(_selection.selected);
               if (!mounted) return;
               setState(() {
-                _total = result.read(db.gymSets.name.count()) ?? 0;
+                _total = total;
               });
             },
             tabCtrl: widget.tabController,

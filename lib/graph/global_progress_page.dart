@@ -1,7 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flexify/bottom_nav.dart';
 import 'package:flexify/constants.dart';
-import 'package:flexify/database/gym_sets.dart';
+import 'package:flexify/database/exercise_analytics.dart';
 import 'package:flexify/empty_state.dart';
 import 'package:flexify/graph/graph_options_controls.dart';
 import 'package:flexify/graph/strength_data.dart';

@@ -197,6 +197,68 @@ Future<List<GymSet>> getPerformedSets(
   );
 }
 
+Future<List<GymSet>> getPerformedSetsForExercise(
+  AppDatabase database, {
+  required String exerciseName,
+  DateTime? startDate,
+  DateTime? endDate,
+  int? limit,
+  OrderingMode order = OrderingMode.desc,
+}) async {
+  final query = _performedSetQuery(database, order: order)
+    ..where(database.exercises.name.equals(exerciseName));
+
+  if (startDate != null) {
+    query.where(
+      database.exerciseSets.timestamp.isBiggerOrEqualValue(startDate),
+    );
+  }
+  if (endDate != null) {
+    query.where(database.exerciseSets.timestamp.isSmallerThanValue(endDate));
+  }
+  if (limit != null) query.limit(limit);
+
+  final rows = await query.get();
+  return rows.map((row) => _toGymSet(database, row)).toList();
+}
+
+Future<GymSet?> getPerformedSetForExerciseAt(
+  AppDatabase database, {
+  required String exerciseName,
+  required DateTime timestamp,
+}) async {
+  final query = _performedSetQuery(database)
+    ..where(database.exercises.name.equals(exerciseName))
+    ..where(database.exerciseSets.timestamp.equals(timestamp))
+    ..limit(1);
+  final row = await query.getSingleOrNull();
+  return row == null ? null : _toGymSet(database, row);
+}
+
+Future<int> countPerformedSetsForExercises(
+  AppDatabase database,
+  Iterable<String> exerciseNames,
+) async {
+  final names = exerciseNames.toList();
+  if (names.isEmpty) return 0;
+
+  final count = database.exerciseSets.id.count();
+  final row =
+      await (database.selectOnly(database.exerciseSets)
+            ..join([
+              innerJoin(
+                database.exercises,
+                database.exercises.id.equalsExp(
+                  database.exerciseSets.exerciseId,
+                ),
+              ),
+            ])
+            ..addColumns([count])
+            ..where(database.exercises.name.isIn(names)))
+          .getSingle();
+  return row.read(count) ?? 0;
+}
+
 /// Loads one performed set by its exercise_sets identifier.
 Future<GymSet?> getPerformedSetById(AppDatabase database, int id) async {
   final query = _performedSetQuery(database)
@@ -317,10 +379,10 @@ Future<int> deletePerformedSets(AppDatabase database, Iterable<int> ids) {
 
 /// Compares a set against prior performed sets for positive reinforcement.
 Future<bool> isBestPerformedSet(AppDatabase database, GymSet gymSet) async {
-  final previous = (await getPerformedSets(
+  final previous = (await getPerformedSetsForExercise(
     database,
-    search: gymSet.name,
-  )).where((set) => set.name == gymSet.name && set.id != gymSet.id);
+    exerciseName: gymSet.name,
+  )).where((set) => set.id != gymSet.id);
 
   if (gymSet.cardio && const {'kg', 'lb', 'stone'}.contains(gymSet.unit)) {
     final candidates = previous.toList();

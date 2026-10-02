@@ -1,6 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:flexify/constants.dart';
-import 'package:flexify/database/gym_sets.dart';
+import 'package:flexify/database/exercise_analytics.dart';
 import 'package:flexify/graph/strength_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';

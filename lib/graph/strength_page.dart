@@ -1,12 +1,10 @@
 import 'dart:async';
 
-import 'package:drift/drift.dart' hide Column;
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flexify/bottom_nav.dart';
 import 'package:flexify/constants.dart';
-import 'package:flexify/database/database.dart';
 import 'package:flexify/database/exercise_catalog.dart';
-import 'package:flexify/database/gym_sets.dart';
+import 'package:flexify/database/exercise_analytics.dart';
 import 'package:flexify/empty_state.dart';
 import 'package:flexify/graph/edit_graph_page.dart';
 import 'package:flexify/graph/flex_line.dart';
@@ -15,7 +13,6 @@ import 'package:flexify/graph/graph_history_page.dart';
 import 'package:flexify/graph/graph_notes_page.dart';
 import 'package:flexify/graph/strength_data.dart';
 import 'package:flexify/l10n/l10n.dart';
-import 'package:flexify/main.dart';
 import 'package:flexify/responsive.dart';
 import 'package:flexify/sets/edit_set_page.dart';
 import 'package:flexify/settings/settings_state.dart';
@@ -249,18 +246,7 @@ class _StrengthPageState extends State<StrengthPage> {
         actions: [
           IconButton(
             onPressed: () async {
-              final gymSets =
-                  await (db.gymSets.select()
-                        ..orderBy([
-                          (u) => OrderingTerm(
-                            expression: u.created,
-                            mode: OrderingMode.desc,
-                          ),
-                        ])
-                        ..where((tbl) => tbl.name.equals(name))
-                        ..where((tbl) => tbl.hidden.equals(false))
-                        ..limit(20))
-                      .get();
+              final gymSets = await getGraphHistory(name);
               if (!context.mounted) return;
 
               await Navigator.of(context).push(
@@ -604,84 +590,21 @@ class _StrengthPageState extends State<StrengthPage> {
   ) async {
     if (event is ScaleUpdateDetails) return;
     if (event is! FlPanDownEvent) return;
-    if (DateTime.now().difference(lastTap) >= const Duration(milliseconds: 300))
+    if (DateTime.now().difference(lastTap) >=
+        const Duration(milliseconds: 300)) {
       return setState(() {
         lastTap = DateTime.now();
       });
+    }
 
     final index = touchResponse?.lineBarSpots?[0].spotIndex;
     if (index == null) return;
     final row = data[index];
-    GymSet? gymSet;
+    final gymSet = await getGraphPointSet(name, row.created);
+    if (!mounted || gymSet == null) return;
 
-    switch (metric) {
-      case StrengthMetric.oneRepMax:
-        final ormExpression =
-            db.gymSets.weight /
-            (const CustomExpression<double>('1.0278 - 0.0278 * reps'));
-        gymSet =
-            await (db.gymSets.select()
-                  ..where(
-                    (tbl) =>
-                        tbl.created.equals(row.created) &
-                        ormExpression.equals(row.value) &
-                        tbl.name.equals(name),
-                  )
-                  ..limit(1))
-                .getSingle();
-        break;
-      case StrengthMetric.volume:
-        gymSet =
-            await (db.gymSets.select()
-                  ..where(
-                    (tbl) =>
-                        tbl.created.equals(row.created) & tbl.name.equals(name),
-                  )
-                  ..limit(1))
-                .getSingle();
-        break;
-      case StrengthMetric.bestWeight:
-        gymSet =
-            await (db.gymSets.select()
-                  ..where(
-                    (tbl) =>
-                        tbl.created.equals(row.created) &
-                        tbl.weight.equals(row.value) &
-                        tbl.name.equals(name),
-                  )
-                  ..limit(1))
-                .getSingle();
-        break;
-      case StrengthMetric.relativeStrength:
-        gymSet =
-            await (db.gymSets.select()
-                  ..where(
-                    (tbl) =>
-                        tbl.created.equals(row.created) &
-                        ((tbl.weight / tbl.bodyWeight).equals(row.value) |
-                            (tbl.weight / tbl.bodyWeight).isNull()) &
-                        tbl.name.equals(name),
-                  )
-                  ..limit(1))
-                .getSingle();
-        break;
-      case StrengthMetric.bestReps:
-        gymSet =
-            await (db.gymSets.select()
-                  ..where(
-                    (tbl) =>
-                        tbl.created.equals(row.created) &
-                        tbl.reps.equals(row.value) &
-                        tbl.name.equals(name),
-                  )
-                  ..limit(1))
-                .getSingle();
-        break;
-    }
-
-    if (!mounted) return;
     await Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => EditSetPage(gymSet: gymSet!)),
+      MaterialPageRoute(builder: (context) => EditSetPage(gymSet: gymSet)),
     );
     _refreshTimer?.cancel();
     _refreshTimer = Timer(kThemeAnimationDuration, setData);

@@ -1,5 +1,4 @@
-import 'package:drift/drift.dart';
-import 'package:flexify/database/database.dart';
+import 'package:flexify/database/exercise_analytics.dart';
 import 'package:flexify/graph/graph_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -18,13 +17,16 @@ void main() {
           tabCtrl: MockTabController(),
           onSelect: (value) => null,
           selected: const {},
-          gymSet: GymSetsCompanion(
-            name: const Value('Bench press'),
-            created: Value(DateTime.now()),
-            reps: const Value(5),
-            weight: const Value(20),
-            cardio: const Value(false),
-            unit: const Value('kg'),
+          gymSet: GraphExerciseSummary(
+            exerciseId: 1,
+            name: 'Bench press',
+            created: DateTime.now(),
+            reps: 5,
+            weight: 20,
+            cardio: false,
+            unit: 'kg',
+            duration: 0,
+            distance: 0,
           ),
         ),
       ),

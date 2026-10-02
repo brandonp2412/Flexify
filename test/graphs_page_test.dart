@@ -44,14 +44,13 @@ void main() {
     WidgetTester tester,
   ) async {
     final harness = await FlexifyTestHarness.create();
-    await harness.database.gymSets.insertOne(
-      gymSetFixture(
-        'Barbell bench press',
-        reps: 10,
-        weight: 100,
-        created: DateTime.now().toLocal(),
-        category: 'Chest',
-      ),
+    await insertPerformedSetFixture(
+      harness.database,
+      'Barbell bench press',
+      reps: 10,
+      weight: 100,
+      created: DateTime.now().toLocal(),
+      category: 'Chest',
     );
 
     await pumpGraphsPage(tester, harness, withTabController: true);
@@ -117,14 +116,13 @@ void main() {
 
   testWidgets('GraphsPage selects', (WidgetTester tester) async {
     final harness = await FlexifyTestHarness.create();
-    await harness.database.gymSets.insertOne(
-      gymSetFixture(
-        'Barbell bent-over row',
-        reps: 8,
-        weight: 80,
-        created: DateTime.now().toLocal(),
-        category: 'Back',
-      ),
+    await insertPerformedSetFixture(
+      harness.database,
+      'Barbell bent-over row',
+      reps: 8,
+      weight: 80,
+      created: DateTime.now().toLocal(),
+      category: 'Back',
     );
 
     await pumpGraphsPage(tester, harness);
@@ -136,14 +134,13 @@ void main() {
 
   testWidgets('GraphsPage deletes', (WidgetTester tester) async {
     final harness = await FlexifyTestHarness.create();
-    await harness.database.gymSets.insertOne(
-      gymSetFixture(
-        'Back extension',
-        reps: 12,
-        weight: 50,
-        created: DateTime.now().toLocal(),
-        category: 'Back',
-      ),
+    await insertPerformedSetFixture(
+      harness.database,
+      'Back extension',
+      reps: 12,
+      weight: 50,
+      created: DateTime.now().toLocal(),
+      category: 'Back',
     );
 
     await pumpGraphsPage(tester, harness);
@@ -164,17 +161,13 @@ void main() {
     WidgetTester tester,
   ) async {
     final harness = await FlexifyTestHarness.create();
-    await harness.database.gymSets.insertOne(
-      gymSetFixture(
-        'Zz unique test exercise',
-        reps: 12,
-        weight: 30,
-        created: DateTime.now().toLocal().add(const Duration(seconds: 5)),
-        category: 'Chest',
-      ),
-    );
-    await harness.database.exercises.insertOne(
-      exerciseFixture('Zz unique test exercise'),
+    await insertPerformedSetFixture(
+      harness.database,
+      'Zz unique test exercise',
+      reps: 12,
+      weight: 30,
+      created: DateTime.now().toLocal().add(const Duration(seconds: 5)),
+      category: 'Chest',
     );
 
     final planId = await harness.database.plans.insertOne(planFixture());

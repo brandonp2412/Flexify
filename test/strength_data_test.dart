@@ -1,6 +1,5 @@
-import 'package:drift/drift.dart';
 import 'package:flexify/constants.dart';
-import 'package:flexify/database/gym_sets.dart';
+import 'package:flexify/database/exercise_analytics.dart';
 import 'package:flexify/main.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -13,9 +12,7 @@ void main() {
   });
 
   test('getStrengthData converts best weight to the requested unit', () async {
-    await db.gymSets.insertOne(
-      gymSetFixture('Bench press', reps: 5, weight: 100),
-    );
+    await insertPerformedSetFixture(db, 'Bench press', reps: 5, weight: 100);
 
     final data = await getStrengthData(
       target: 'lb',
@@ -32,15 +29,14 @@ void main() {
   });
 
   test('getStrengthData calculates daily volume in the query layer', () async {
-    await db.gymSets.insertAll([
-      gymSetFixture('Bench press', reps: 5, weight: 100),
-      gymSetFixture(
-        'Bench press',
-        reps: 10,
-        weight: 50,
-        created: testNow.add(const Duration(minutes: 1)),
-      ),
-    ]);
+    await insertPerformedSetFixture(db, 'Bench press', reps: 5, weight: 100);
+    await insertPerformedSetFixture(
+      db,
+      'Bench press',
+      reps: 10,
+      weight: 50,
+      created: testNow.add(const Duration(minutes: 1)),
+    );
 
     final data = await getStrengthData(
       target: 'kg',

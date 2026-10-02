@@ -1,0 +1,461 @@
+import 'dart:math' as math;
+
+import 'package:drift/drift.dart';
+import 'package:flexify/constants.dart';
+import 'package:flexify/database/database.dart';
+import 'package:flexify/database/performed_sets.dart';
+import 'package:flexify/graph/cardio_data.dart';
+import 'package:flexify/graph/strength_data.dart';
+import 'package:flexify/main.dart';
+
+class GraphExerciseSummary {
+  const GraphExerciseSummary({
+    required this.exerciseId,
+    required this.name,
+    required this.unit,
+    required this.cardio,
+    required this.weight,
+    required this.reps,
+    required this.duration,
+    required this.distance,
+    required this.created,
+    this.image,
+    this.category,
+  });
+
+  final int exerciseId;
+  final String name;
+  final String unit;
+  final bool cardio;
+  final double weight;
+  final double reps;
+  final double duration;
+  final double distance;
+  final DateTime created;
+  final String? image;
+  final String? category;
+}
+
+typedef Rpm = ({String name, double rpm, double weight});
+
+String _periodKey(DateTime value, Period period) {
+  final date = value.toLocal();
+  switch (period) {
+    case Period.day:
+      return '${date.year}-${date.month}-${date.day}';
+    case Period.month:
+      return '${date.year}-${date.month}';
+    case Period.year:
+      return '${date.year}';
+    case Period.week:
+      final jan1 = DateTime(date.year);
+      final dayOfYear = date.difference(jan1).inDays;
+      final firstMondayOffset = (8 - jan1.weekday) % 7;
+      final week = dayOfYear < firstMondayOffset
+          ? 0
+          : 1 + ((dayOfYear - firstMondayOffset) ~/ 7);
+      return '${date.year}-$week';
+  }
+}
+
+List<List<GymSet>> _groupSets(Iterable<GymSet> sets, Period period, int limit) {
+  final grouped = <String, List<GymSet>>{};
+  for (final set in sets) {
+    grouped.putIfAbsent(_periodKey(set.created, period), () => []).add(set);
+  }
+
+  final groups = grouped.values.toList();
+  for (final group in groups) {
+    group.sort((a, b) => a.created.compareTo(b.created));
+  }
+  groups.sort((a, b) => b.last.created.compareTo(a.last.created));
+  return groups.take(limit).toList().reversed.toList();
+}
+
+double _loadInUnit(GymSet set, String target) {
+  final kg = canonicalPerformedLoad(set.unit, set.weight);
+  return displayLoad(target, kg);
+}
+
+double _distanceInUnit(GymSet set, String target) {
+  final metres = canonicalPerformedDistance(set.unit, set.distance);
+  return displayDistance(target, metres);
+}
+
+double _oneRepMax(double weight, double reps) {
+  final factor = 1.0278 - 0.0278 * reps;
+  if (factor == 0) return 0;
+  return weight >= 0 ? weight / factor : weight * factor;
+}
+
+GymSet _latest(List<GymSet> sets) =>
+    sets.reduce((a, b) => a.created.isAfter(b.created) ? a : b);
+
+GymSet _bestWeightSet(List<GymSet> sets, String target) {
+  return sets.reduce((a, b) {
+    final aWeight = _loadInUnit(a, target);
+    final bWeight = _loadInUnit(b, target);
+    if (bWeight > aWeight) return b;
+    if (bWeight == aWeight && b.reps > a.reps) return b;
+    return a;
+  });
+}
+
+GymSet _bestRepsSet(List<GymSet> sets) {
+  return sets.reduce((a, b) {
+    if (b.reps > a.reps) return b;
+    if (b.reps == a.reps && b.weight > a.weight) return b;
+    return a;
+  });
+}
+
+GymSet _bestOneRepMaxSet(List<GymSet> sets, String target) {
+  return sets.reduce((a, b) {
+    final aOrm = _oneRepMax(_loadInUnit(a, target), a.reps);
+    final bOrm = _oneRepMax(_loadInUnit(b, target), b.reps);
+    return bOrm > aOrm ? b : a;
+  });
+}
+
+GymSet _bestRelativeSet(List<GymSet> sets) {
+  return sets.reduce((a, b) {
+    if (b.weight > a.weight) return b;
+    if (b.weight == a.weight && b.reps > a.reps) return b;
+    return a;
+  });
+}
+
+StrengthData _strengthBucket(
+  List<GymSet> sets, {
+  required StrengthMetric metric,
+  required String target,
+  String? category,
+}) {
+  late final GymSet representative;
+  late final double value;
+
+  switch (metric) {
+    case StrengthMetric.bestWeight:
+      representative = _bestWeightSet(sets, target);
+      value = _loadInUnit(representative, target);
+      break;
+    case StrengthMetric.bestReps:
+      representative = _bestRepsSet(sets);
+      value = representative.reps;
+      break;
+    case StrengthMetric.oneRepMax:
+      representative = _bestOneRepMaxSet(sets, target);
+      value = _oneRepMax(
+        _loadInUnit(representative, target),
+        representative.reps,
+      );
+      break;
+    case StrengthMetric.volume:
+      representative = _latest(sets);
+      final volume = sets.fold<double>(
+        0,
+        (sum, set) => sum + _loadInUnit(set, target) * set.reps,
+      );
+      value = double.parse(volume.toStringAsFixed(2));
+      break;
+    case StrengthMetric.relativeStrength:
+      representative = _bestRelativeSet(sets);
+      value = representative.bodyWeight == 0
+          ? 0
+          : representative.weight / representative.bodyWeight;
+      break;
+  }
+
+  return StrengthData(
+    created: representative.created,
+    value: value,
+    unit: target,
+    reps: representative.reps,
+    category: category,
+  );
+}
+
+Future<List<StrengthData>> getStrengthData({
+  required String target,
+  required String name,
+  required StrengthMetric metric,
+  required Period period,
+  required DateTime? start,
+  required DateTime? end,
+  required int limit,
+}) async {
+  final sets = await getPerformedSetsForExercise(
+    db,
+    exerciseName: name,
+    startDate: start,
+    endDate: end,
+    order: OrderingMode.asc,
+  );
+
+  return _groupSets(sets.where((set) => !set.cardio), period, limit)
+      .map(
+        (group) => _strengthBucket(
+          group,
+          metric: metric,
+          target: target,
+          category: group.first.category,
+        ),
+      )
+      .toList();
+}
+
+double _averageIncline(List<GymSet> sets) {
+  final values = sets
+      .where((set) => set.incline != null)
+      .map((set) => set.incline!.toDouble())
+      .toList();
+  if (values.isEmpty) return 0;
+  return values.reduce((a, b) => a + b) / values.length;
+}
+
+CardioData _cardioBucket(
+  List<GymSet> sets, {
+  required CardioMetric metric,
+  required String target,
+}) {
+  final representative = _latest(sets);
+  final duration = sets.fold<double>(0, (sum, set) => sum + set.duration);
+  final incline = _averageIncline(sets);
+  late final double value;
+
+  switch (metric) {
+    case CardioMetric.pace:
+      final distance = sets.fold<double>(
+        0,
+        (sum, set) => sum + _distanceInUnit(set, target),
+      );
+      value = duration == 0 ? 0 : distance / duration;
+      break;
+    case CardioMetric.distance:
+      value = sets.fold<double>(
+        0,
+        (sum, set) => sum + _distanceInUnit(set, target),
+      );
+      break;
+    case CardioMetric.duration:
+      value = duration;
+      break;
+    case CardioMetric.incline:
+      value = incline;
+      break;
+    case CardioMetric.inclineAdjustedPace:
+      final distance = sets.fold<double>(
+        0,
+        (sum, set) => sum + _distanceInUnit(set, target),
+      );
+      final pace = duration == 0 ? 0 : distance / duration;
+      value = pace * math.pow(1.1, incline).toDouble();
+      break;
+    case CardioMetric.weight:
+      value = sets
+          .map((set) => _loadInUnit(set, target))
+          .fold<double>(0, math.max);
+      break;
+  }
+
+  return CardioData(
+    created: representative.created,
+    value: double.parse(value.toStringAsFixed(2)),
+    unit: target,
+  );
+}
+
+Future<List<CardioData>> getCardioData({
+  Period period = Period.day,
+  String name = '',
+  CardioMetric metric = CardioMetric.pace,
+  String target = 'km',
+  DateTime? start,
+  DateTime? end,
+  int limit = 11,
+}) async {
+  final sets = await getPerformedSetsForExercise(
+    db,
+    exerciseName: name,
+    startDate: start ?? DateTime(0),
+    endDate: end ?? DateTime.now().toLocal().add(const Duration(days: 1)),
+    order: OrderingMode.asc,
+  );
+
+  return _groupSets(sets.where((set) => set.cardio), period, limit)
+      .map((group) => _cardioBucket(group, metric: metric, target: target))
+      .toList();
+}
+
+Future<List<String?>> getCategories() {
+  return (db.select(db.categories)
+        ..orderBy([(category) => OrderingTerm.asc(category.name)]))
+      .map((category) => category.name)
+      .get();
+}
+
+Future<List<StrengthData>> getGlobalData({
+  required String target,
+  required StrengthMetric metric,
+  required Period period,
+  required DateTime? start,
+  required DateTime? end,
+  required int limit,
+}) async {
+  final allSets = await getPerformedSets(db);
+  final filtered = allSets.where((set) {
+    if (set.category == null) return false;
+    if (start != null && set.created.isBefore(start)) return false;
+    if (end != null && !set.created.isBefore(end)) return false;
+    return true;
+  });
+
+  final buckets = <String, List<GymSet>>{};
+  for (final set in filtered) {
+    final key = '${set.category}\u0000${_periodKey(set.created, period)}';
+    buckets.putIfAbsent(key, () => []).add(set);
+  }
+
+  final groups = buckets.values.toList();
+  for (final group in groups) {
+    group.sort((a, b) => a.created.compareTo(b.created));
+  }
+  groups.sort((a, b) => b.last.created.compareTo(a.last.created));
+
+  return groups
+      .take(limit)
+      .toList()
+      .reversed
+      .map(
+        (group) => _strengthBucket(
+          group,
+          metric: metric,
+          target: target,
+          category: group.first.category,
+        ),
+      )
+      .toList();
+}
+
+Future<List<Rpm>> getRpms() async {
+  final cutoff = DateTime.now().subtract(const Duration(days: 30));
+  final sets =
+      (await getPerformedSets(
+          db,
+        )).where((set) => !set.cardio && !set.created.isBefore(cutoff)).toList()
+        ..sort((a, b) => a.created.compareTo(b.created));
+
+  final byName = <String, List<GymSet>>{};
+  for (final set in sets) {
+    byName.putIfAbsent(set.name, () => []).add(set);
+  }
+
+  final grouped = <String, List<double>>{};
+  final weights = <String, double>{};
+  for (final entry in byName.entries) {
+    GymSet? previous;
+    for (final set in entry.value) {
+      if (previous != null) {
+        final minutes =
+            set.created.difference(previous.created).inMilliseconds / 60000;
+        if (minutes > 0 && minutes <= 5) {
+          final rpm = set.reps / minutes;
+          if (rpm >= 0.1 && rpm <= 10) {
+            final key = '${entry.key}\u0000${set.weight}';
+            grouped.putIfAbsent(key, () => []).add(rpm);
+            weights[key] = set.weight;
+          }
+        }
+      }
+      previous = set;
+    }
+  }
+
+  return grouped.entries.map((entry) {
+    final split = entry.key.indexOf('\u0000');
+    final values = entry.value;
+    return (
+      name: entry.key.substring(0, split),
+      rpm: values.reduce((a, b) => a + b) / values.length,
+      weight: weights[entry.key]!,
+    );
+  }).toList();
+}
+
+Stream<List<GraphExerciseSummary>> watchGraphs() {
+  return db
+      .customSelect(
+        '''
+          SELECT
+            exercises.id AS exercise_id,
+            exercises.name AS name,
+            exercises.display_unit AS unit,
+            CASE WHEN exercises.kind = 'cardio' THEN 1 ELSE 0 END AS cardio,
+            exercises.image AS image,
+            categories.name AS category,
+            latest.load_kg AS load_kg,
+            COALESCE(latest.reps, 0) AS reps,
+            latest.duration_ms AS duration_ms,
+            latest.distance_metres AS distance_metres,
+            COALESCE(latest.timestamp, CAST(STRFTIME('%s', 'now') AS INTEGER)) AS timestamp
+          FROM exercises
+          LEFT JOIN categories ON categories.id = exercises.category_id
+          LEFT JOIN exercise_sets AS latest ON latest.id = (
+            SELECT exercise_sets.id
+            FROM exercise_sets
+            WHERE exercise_sets.exercise_id = exercises.id
+            ORDER BY exercise_sets.timestamp DESC, exercise_sets.id DESC
+            LIMIT 1
+          )
+          WHERE exercises.archived = 0
+          ORDER BY latest.timestamp DESC, exercises.name COLLATE NOCASE
+        ''',
+        readsFrom: {db.exercises, db.categories, db.exerciseSets},
+      )
+      .watch()
+      .map(
+        (results) => results.map((result) {
+          final unit = result.read<String>('unit');
+          final timestamp = result.readNullable<int>('timestamp');
+          return GraphExerciseSummary(
+            exerciseId: result.read<int>('exercise_id'),
+            name: result.read<String>('name'),
+            unit: unit,
+            cardio: result.read<int>('cardio') != 0,
+            weight: displayLoad(unit, result.readNullable<double>('load_kg')),
+            reps: result.read<double>('reps'),
+            duration: (result.readNullable<int>('duration_ms') ?? 0) / 60000,
+            distance: displayDistance(
+              unit,
+              result.readNullable<double>('distance_metres'),
+            ),
+            created: timestamp == null
+                ? DateTime.fromMillisecondsSinceEpoch(0).toLocal()
+                : DateTime.fromMillisecondsSinceEpoch(
+                    timestamp * 1000,
+                  ).toLocal(),
+            image: result.readNullable<String>('image'),
+            category: result.readNullable<String>('category'),
+          );
+        }).toList(),
+      );
+}
+
+Future<List<GymSet>> getGraphHistory(String exerciseName, {int limit = 20}) {
+  return getPerformedSetsForExercise(
+    db,
+    exerciseName: exerciseName,
+    limit: limit,
+  );
+}
+
+Future<GymSet?> getGraphPointSet(String exerciseName, DateTime timestamp) {
+  return getPerformedSetForExerciseAt(
+    db,
+    exerciseName: exerciseName,
+    timestamp: timestamp,
+  );
+}
+
+Future<int> countGraphSets(Iterable<String> exerciseNames) =>
+    countPerformedSetsForExercises(db, exerciseNames);

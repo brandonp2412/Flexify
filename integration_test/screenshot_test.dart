@@ -1,7 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
-import 'package:flexify/database/gym_sets.dart';
+import 'package:flexify/database/exercise_analytics.dart';
 import 'package:flexify/graph/graphs_page.dart';
 import 'package:flexify/graph/strength_page.dart';
 import 'package:flexify/main.dart' as app;
@@ -209,31 +209,28 @@ void main() {
 
       testWidgets('StartPlanPage', (tester) async {
         final today = DateTime.now().toLocal();
+        final seededSetIds = <int>[];
         for (var index = 0; index < 3; index++) {
-          await db
-              .into(db.gymSets)
-              .insert(
-                graphGymSet(
-                  'Barbell shoulder press',
-                  50 + (index * 2.5),
-                  reps: 8,
-                  date: today.subtract(Duration(minutes: index)),
-                  planId: 3,
-                ),
-              );
+          final set = await insertGraphSet(
+            db,
+            'Barbell shoulder press',
+            50 + (index * 2.5),
+            reps: 8,
+            date: today.subtract(Duration(minutes: index)),
+            planId: 3,
+          );
+          seededSetIds.add(set.id);
         }
         for (var index = 0; index < 2; index++) {
-          await db
-              .into(db.gymSets)
-              .insert(
-                graphGymSet(
-                  'Crunch',
-                  25,
-                  reps: 12,
-                  date: today.subtract(Duration(minutes: 10 + index)),
-                  planId: 3,
-                ),
-              );
+          final set = await insertGraphSet(
+            db,
+            'Crunch',
+            25,
+            reps: 12,
+            date: today.subtract(Duration(minutes: 10 + index)),
+            planId: 3,
+          );
+          seededSetIds.add(set.id);
         }
 
         try {
@@ -249,9 +246,12 @@ void main() {
             tabBarState: 'PlansPage',
           );
         } finally {
-          await (db.delete(
-            db.gymSets,
-          )..where((tbl) => tbl.planId.equals(3))).go();
+          await (db.exerciseSets.delete()
+                ..where((set) => set.id.isIn(seededSetIds)))
+              .go();
+          await (db.workouts.delete()
+                ..where((workout) => workout.planId.equals(3)))
+              .go();
         }
       }, skip: _skip('StartPlanPage'));
     });

@@ -1,14 +1,12 @@
 import 'dart:io';
 
-import 'package:drift/drift.dart' hide Column;
 import 'package:file_picker/file_picker.dart';
 import 'package:flexify/animated_fab.dart';
 import 'package:flexify/constants.dart';
-import 'package:flexify/database/database.dart';
+import 'package:flexify/database/exercise_analytics.dart';
 import 'package:flexify/database/exercise_catalog.dart';
 import 'package:flexify/database/gym_sets.dart';
 import 'package:flexify/l10n/l10n.dart';
-import 'package:flexify/main.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
@@ -259,14 +257,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
     );
   }
 
-  Future<int> getCount() async {
-    final result =
-        await (db.gymSets.selectOnly()
-              ..addColumns([db.gymSets.name.count()])
-              ..where(db.gymSets.name.equals(name.text)))
-            .getSingle();
-    return result.read(db.gymSets.name.count()) ?? 0;
-  }
+  Future<int> getCount() => countGraphSets([name.text]);
 
   @override
   void initState() {
@@ -292,22 +283,6 @@ class _EditGraphPageState extends State<EditGraphPage> {
         }
       });
     });
-  }
-
-  Future<List<String>> currentUnits() async {
-    final result =
-        await (db.gymSets.selectOnly(distinct: true)
-              ..addColumns([db.gymSets.unit])
-              ..where(db.gymSets.name.equals(widget.name)))
-            .get();
-    return result.map((row) => row.read(db.gymSets.unit)!).toList();
-  }
-
-  Future<bool> mixedUnits() async => (await currentUnits()).length > 1;
-
-  Future<bool> needsUnitConversion() async {
-    if (unit == null) return false;
-    return (await currentUnits()).any((current) => current != unit);
   }
 
   void pick() async {
@@ -356,16 +331,6 @@ class _EditGraphPageState extends State<EditGraphPage> {
       if (!confirmed) return;
     }
 
-    final shouldConvert = await needsUnitConversion();
-    if (shouldConvert && await mixedUnits()) {
-      final confirmed = await confirmUpdate(
-        l10n.unitsConflict,
-        l10n.unitsConflictDescription(unit ?? ''),
-      );
-      if (!confirmed) return;
-    }
-
-    if (shouldConvert) await convertUnits();
     await doUpdate();
 
     if (!mounted) return;
@@ -381,74 +346,4 @@ class _EditGraphPageState extends State<EditGraphPage> {
 
   bool _isWeightUnit(String value) =>
       value == 'kg' || value == 'lb' || value == 'stone';
-
-  bool _isDistanceUnit(String value) =>
-      value == 'km' || value == 'mi' || value == 'm';
-
-  double convertStrengthValue(double value, String source, String target) {
-    if (source == target) return value;
-    switch ('$source->$target') {
-      case 'kg->lb':
-        return value * 2.20462262185;
-      case 'kg->stone':
-        return value / 6.35029318;
-      case 'lb->kg':
-        return value * 0.45359237;
-      case 'lb->stone':
-        return value / 14;
-      case 'stone->kg':
-        return value * 6.35029318;
-      case 'stone->lb':
-        return value * 14;
-    }
-    return value;
-  }
-
-  double convertCardioValue(double value, String source, String target) {
-    if (source == target) return value;
-    switch ('$source->$target') {
-      case 'km->mi':
-        return value / 1.609344;
-      case 'km->m':
-        return value * 1000;
-      case 'mi->km':
-        return value * 1.609344;
-      case 'mi->m':
-        return value * 1609.344;
-      case 'm->km':
-        return value / 1000;
-      case 'm->mi':
-        return value / 1609.344;
-    }
-    return value;
-  }
-
-  Future<void> convertUnits() async {
-    final target = unit;
-    if (target == null) return;
-
-    final rows =
-        await (db.gymSets.select()
-              ..where((tbl) => tbl.name.equals(widget.name)))
-            .get();
-
-    await db.transaction(() async {
-      for (final row in rows) {
-        GymSetsCompanion companion;
-        if (_isWeightUnit(row.unit) && _isWeightUnit(target)) {
-          companion = GymSetsCompanion(
-            weight: Value(convertStrengthValue(row.weight, row.unit, target)),
-          );
-        } else if (_isDistanceUnit(row.unit) && _isDistanceUnit(target)) {
-          companion = GymSetsCompanion(
-            distance: Value(convertCardioValue(row.distance, row.unit, target)),
-          );
-        } else {
-          companion = const GymSetsCompanion();
-        }
-        await (db.gymSets.update()..where((tbl) => tbl.id.equals(row.id)))
-            .write(companion);
-      }
-    });
-  }
 }

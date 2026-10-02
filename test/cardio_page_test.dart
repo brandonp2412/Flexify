@@ -1,6 +1,5 @@
-import 'package:drift/drift.dart';
 import 'package:flexify/constants.dart';
-import 'package:flexify/database/gym_sets.dart';
+import 'package:flexify/database/exercise_analytics.dart';
 import 'package:flexify/graph/cardio_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -15,16 +14,16 @@ Future<void> pumpCardioPage(
   Size? surfaceSize,
 }) async {
   for (final element in graphData) {
-    await harness.database
-        .into(harness.database.gymSets)
-        .insert(
-          graphGymSet(
-            'Run',
-            element.weight,
-            reps: element.reps,
-            date: element.dateTime,
-          ).copyWith(cardio: const Value(true)),
-        );
+    await insertGraphSet(
+      harness.database,
+      'Run',
+      0,
+      date: element.dateTime,
+      cardio: true,
+      unit: 'km',
+      duration: element.reps,
+      distance: element.weight,
+    );
   }
 
   await harness.pump(

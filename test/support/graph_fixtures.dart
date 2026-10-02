@@ -1,6 +1,8 @@
 import 'package:drift/drift.dart';
 import 'package:flexify/database/database.dart';
 
+import 'fixtures.dart';
+
 final graphFixtureNow = DateTime(2026, 1, 15, 12);
 
 const exercisesToPopulateTestDb = <String, double>{
@@ -135,41 +137,48 @@ final screenshotPlans = <PlansCompanion>[
 
 const screenshotExercise = 'Dumbbell shoulder press';
 
-GymSetsCompanion graphGymSet(
+Future<GymSet> insertGraphSet(
+  AppDatabase database,
   String exercise,
   double weight, {
   double reps = 12,
   DateTime? date,
   int? planId,
+  bool cardio = false,
+  String unit = 'kg',
+  double duration = 0,
+  double distance = 0,
+  int? incline,
+  String category = 'Arms',
 }) {
-  return GymSetsCompanion.insert(
-    name: exercise,
-    reps: reps,
+  return insertPerformedSetFixture(
+    database,
+    exercise,
     weight: weight,
-    unit: 'kg',
+    reps: reps,
     created: date ?? graphFixtureNow,
-    category: const Value('Arms'),
-    planId: Value.absentIfNull(planId),
+    planId: planId,
+    cardio: cardio,
+    unit: unit,
+    duration: duration,
+    distance: distance,
+    incline: incline,
+    category: category,
   );
 }
 
 Future<void> seedGraphFixtures(AppDatabase database) async {
   for (final entry in exercisesToPopulateTestDb.entries) {
-    await database
-        .into(database.gymSets)
-        .insert(graphGymSet(entry.key, entry.value));
+    await insertGraphSet(database, entry.key, entry.value);
   }
 
   for (final element in graphData) {
-    await database
-        .into(database.gymSets)
-        .insert(
-          graphGymSet(
-            screenshotExercise,
-            element.weight,
-            reps: element.reps,
-            date: element.dateTime,
-          ),
-        );
+    await insertGraphSet(
+      database,
+      screenshotExercise,
+      element.weight,
+      reps: element.reps,
+      date: element.dateTime,
+    );
   }
 }
