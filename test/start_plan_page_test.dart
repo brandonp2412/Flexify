@@ -305,8 +305,16 @@ void main() {
     final planId = await database.plans.insertOne(
       planFixture(title: 'Chest day'),
     );
+    final originalExerciseId = await database.exercises.insertOne(
+      exerciseFixture(originalExercise),
+    );
+    await database.exercises.insertOne(exerciseFixture(replacementExercise));
     await database.planExercises.insertOne(
-      planExerciseFixture(planId: planId, exercise: originalExercise),
+      planExerciseFixture(
+        planId: planId,
+        exercise: originalExercise,
+        exerciseId: originalExerciseId,
+      ),
     );
     await database.gymSets.insertAll([
       gymSetFixture(
@@ -539,7 +547,7 @@ void main() {
         await (database.gymSets.select()
               ..where((set) => set.name.equals('Barbell bench press')))
             .get();
-    expect(gymSets.length, equals(2));
+    expect(gymSets.length, equals(1));
   });
 
   testWidgets(

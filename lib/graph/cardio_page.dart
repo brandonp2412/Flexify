@@ -5,6 +5,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flexify/bottom_nav.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
+import 'package:flexify/database/exercise_catalog.dart';
 import 'package:flexify/database/gym_sets.dart';
 import 'package:flexify/empty_state.dart';
 import 'package:flexify/graph/cardio_data.dart';
@@ -77,13 +78,11 @@ class _CardioPageState extends State<CardioPage> {
   }
 
   Future<void> _loadPreferences() async {
-    final pref =
-        await (db.graphPreferences.select()..where((t) => t.name.equals(name)))
-            .getSingleOrNull();
+    final pref = await getExerciseByName(name);
     if (pref == null || !mounted) return;
     setState(() {
       final savedMetric = CardioMetric.values.firstWhere(
-        (m) => m.name == pref.metric,
+        (m) => m.name == pref.graphMetric,
         orElse: () => metric,
       );
       metric =
@@ -96,27 +95,26 @@ class _CardioPageState extends State<CardioPage> {
           ? CardioMetric.weight
           : savedMetric;
       period = Period.values.firstWhere(
-        (p) => p.name == pref.period,
+        (p) => p.name == pref.graphPeriod,
         orElse: () => period,
       );
-      limit = pref.limit;
-      useTimeBasedXAxis = pref.timeBasedXAxis;
+      limit = pref.graphLimit;
+      useTimeBasedXAxis = pref.graphTimeBasedXAxis;
       _notesCtrl.text = pref.notes ?? '';
     });
     setData();
   }
 
   Future<void> _savePreferences() async {
-    await db.graphPreferences.insertOne(
-      GraphPreferencesCompanion.insert(
-        name: name,
-        metric: Value(metric.name),
-        period: Value(period.name),
-        limit: Value(limit),
-        timeBasedXAxis: Value(useTimeBasedXAxis),
-        notes: Value(_notesCtrl.text.isEmpty ? null : _notesCtrl.text),
-      ),
-      mode: InsertMode.insertOrReplace,
+    final exercise = await getExerciseByName(name);
+    if (exercise == null) return;
+    await updateExerciseGraphPreferences(
+      exerciseId: exercise.id,
+      metric: metric.name,
+      period: period.name,
+      limit: limit,
+      timeBasedXAxis: useTimeBasedXAxis,
+      notes: _notesCtrl.text.isEmpty ? null : _notesCtrl.text,
     );
   }
 

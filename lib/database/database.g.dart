@@ -5943,9 +5943,6 @@ class $PlanExercisesTable extends PlanExercises
     false,
     type: DriftSqlType.string,
     requiredDuringInsert: true,
-    defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'REFERENCES gym_sets (name)',
-    ),
   );
   static const VerificationMeta _exerciseIdMeta = const VerificationMeta(
     'exerciseId',
@@ -7737,29 +7734,6 @@ typedef $$GymSetsTableUpdateCompanionBuilder =
       Value<double> weight,
     });
 
-final class $$GymSetsTableReferences
-    extends BaseReferences<_$AppDatabase, $GymSetsTable, GymSet> {
-  $$GymSetsTableReferences(super.$_db, super.$_table, super.$_typedResult);
-
-  static MultiTypedResultKey<$PlanExercisesTable, List<PlanExercise>>
-  _planExercisesRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
-    db.planExercises,
-    aliasName: 'gym_sets__name__plan_exercises__exercise',
-  );
-
-  $$PlanExercisesTableProcessedTableManager get planExercisesRefs {
-    final manager = $$PlanExercisesTableTableManager(
-      $_db,
-      $_db.planExercises,
-    ).filter((f) => f.exercise.name.sqlEquals($_itemColumn<String>('name')!));
-
-    final cache = $_typedResult.readTableOrNull(_planExercisesRefsTable($_db));
-    return ProcessedTableManager(
-      manager.$state.copyWith(prefetchedData: cache),
-    );
-  }
-}
-
 class $$GymSetsTableFilterComposer
     extends Composer<_$AppDatabase, $GymSetsTable> {
   $$GymSetsTableFilterComposer({
@@ -7853,31 +7827,6 @@ class $$GymSetsTableFilterComposer
     column: $table.weight,
     builder: (column) => ColumnFilters(column),
   );
-
-  Expression<bool> planExercisesRefs(
-    Expression<bool> Function($$PlanExercisesTableFilterComposer f) f,
-  ) {
-    final $$PlanExercisesTableFilterComposer composer = $composerBuilder(
-      composer: this,
-      getCurrentColumn: (t) => t.name,
-      referencedTable: $db.planExercises,
-      getReferencedColumn: (t) => t.exercise,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$PlanExercisesTableFilterComposer(
-            $db: $db,
-            $table: $db.planExercises,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
-    );
-    return f(composer);
-  }
 }
 
 class $$GymSetsTableOrderingComposer
@@ -8036,31 +7985,6 @@ class $$GymSetsTableAnnotationComposer
 
   GeneratedColumn<double> get weight =>
       $composableBuilder(column: $table.weight, builder: (column) => column);
-
-  Expression<T> planExercisesRefs<T extends Object>(
-    Expression<T> Function($$PlanExercisesTableAnnotationComposer a) f,
-  ) {
-    final $$PlanExercisesTableAnnotationComposer composer = $composerBuilder(
-      composer: this,
-      getCurrentColumn: (t) => t.name,
-      referencedTable: $db.planExercises,
-      getReferencedColumn: (t) => t.exercise,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$PlanExercisesTableAnnotationComposer(
-            $db: $db,
-            $table: $db.planExercises,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
-    );
-    return f(composer);
-  }
 }
 
 class $$GymSetsTableTableManager
@@ -8074,9 +7998,9 @@ class $$GymSetsTableTableManager
           $$GymSetsTableAnnotationComposer,
           $$GymSetsTableCreateCompanionBuilder,
           $$GymSetsTableUpdateCompanionBuilder,
-          (GymSet, $$GymSetsTableReferences),
+          (GymSet, BaseReferences<_$AppDatabase, $GymSetsTable, GymSet>),
           GymSet,
-          PrefetchHooks Function({bool planExercisesRefs})
+          PrefetchHooks Function()
         > {
   $$GymSetsTableTableManager(_$AppDatabase db, $GymSetsTable table)
     : super(
@@ -8166,44 +8090,9 @@ class $$GymSetsTableTableManager
                 weight: weight,
               ),
           withReferenceMapper: (p0) => p0
-              .map(
-                (e) => (
-                  e.readTable(table),
-                  $$GymSetsTableReferences(db, table, e),
-                ),
-              )
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
               .toList(),
-          prefetchHooksCallback: ({planExercisesRefs = false}) {
-            return PrefetchHooks(
-              db: db,
-              explicitlyWatchedTables: [
-                if (planExercisesRefs) db.planExercises,
-              ],
-              addJoins: null,
-              getPrefetchedDataCallback: (items) async {
-                return [
-                  if (planExercisesRefs)
-                    await $_getPrefetchedData<
-                      GymSet,
-                      $GymSetsTable,
-                      PlanExercise
-                    >(
-                      currentTable: table,
-                      referencedTable: $$GymSetsTableReferences
-                          ._planExercisesRefsTable(db),
-                      managerFromTypedResult: (p0) => $$GymSetsTableReferences(
-                        db,
-                        table,
-                        p0,
-                      ).planExercisesRefs,
-                      referencedItemsForCurrentItem: (item, referencedItems) =>
-                          referencedItems.where((e) => e.exercise == item.name),
-                      typedResults: items,
-                    ),
-                ];
-              },
-            );
-          },
+          prefetchHooksCallback: null,
         ),
       );
 }
@@ -8218,9 +8107,9 @@ typedef $$GymSetsTableProcessedTableManager =
       $$GymSetsTableAnnotationComposer,
       $$GymSetsTableCreateCompanionBuilder,
       $$GymSetsTableUpdateCompanionBuilder,
-      (GymSet, $$GymSetsTableReferences),
+      (GymSet, BaseReferences<_$AppDatabase, $GymSetsTable, GymSet>),
       GymSet,
-      PrefetchHooks Function({bool planExercisesRefs})
+      PrefetchHooks Function()
     >;
 typedef $$ExercisesTableCreateCompanionBuilder =
     ExercisesCompanion Function({
@@ -11003,23 +10892,6 @@ final class $$PlanExercisesTableReferences
     super.$_typedResult,
   );
 
-  static $GymSetsTable _exerciseTable(_$AppDatabase db) =>
-      db.gymSets.createAlias('plan_exercises__exercise__gym_sets__name');
-
-  $$GymSetsTableProcessedTableManager get exercise {
-    final $_column = $_itemColumn<String>('exercise')!;
-
-    final manager = $$GymSetsTableTableManager(
-      $_db,
-      $_db.gymSets,
-    ).filter((f) => f.name.sqlEquals($_column));
-    final item = $_typedResult.readTableOrNull(_exerciseTable($_db));
-    if (item == null) return manager;
-    return ProcessedTableManager(
-      manager.$state.copyWith(prefetchedData: [item]),
-    );
-  }
-
   static $ExercisesTable _exerciseIdTable(_$AppDatabase db) =>
       db.exercises.createAlias('plan_exercises__exercise_id__exercises__id');
 
@@ -11074,6 +10946,11 @@ class $$PlanExercisesTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
+  ColumnFilters<String> get exercise => $composableBuilder(
+    column: $table.exercise,
+    builder: (column) => ColumnFilters(column),
+  );
+
   ColumnFilters<int> get id => $composableBuilder(
     column: $table.id,
     builder: (column) => ColumnFilters(column),
@@ -11093,29 +10970,6 @@ class $$PlanExercisesTableFilterComposer
     column: $table.sequence,
     builder: (column) => ColumnFilters(column),
   );
-
-  $$GymSetsTableFilterComposer get exercise {
-    final $$GymSetsTableFilterComposer composer = $composerBuilder(
-      composer: this,
-      getCurrentColumn: (t) => t.exercise,
-      referencedTable: $db.gymSets,
-      getReferencedColumn: (t) => t.name,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$GymSetsTableFilterComposer(
-            $db: $db,
-            $table: $db.gymSets,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
-    );
-    return composer;
-  }
 
   $$ExercisesTableFilterComposer get exerciseId {
     final $$ExercisesTableFilterComposer composer = $composerBuilder(
@@ -11183,6 +11037,11 @@ class $$PlanExercisesTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get exercise => $composableBuilder(
+    column: $table.exercise,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<int> get id => $composableBuilder(
     column: $table.id,
     builder: (column) => ColumnOrderings(column),
@@ -11202,29 +11061,6 @@ class $$PlanExercisesTableOrderingComposer
     column: $table.sequence,
     builder: (column) => ColumnOrderings(column),
   );
-
-  $$GymSetsTableOrderingComposer get exercise {
-    final $$GymSetsTableOrderingComposer composer = $composerBuilder(
-      composer: this,
-      getCurrentColumn: (t) => t.exercise,
-      referencedTable: $db.gymSets,
-      getReferencedColumn: (t) => t.name,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$GymSetsTableOrderingComposer(
-            $db: $db,
-            $table: $db.gymSets,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
-    );
-    return composer;
-  }
 
   $$ExercisesTableOrderingComposer get exerciseId {
     final $$ExercisesTableOrderingComposer composer = $composerBuilder(
@@ -11288,6 +11124,9 @@ class $$PlanExercisesTableAnnotationComposer
   GeneratedColumn<bool> get timers =>
       $composableBuilder(column: $table.timers, builder: (column) => column);
 
+  GeneratedColumn<String> get exercise =>
+      $composableBuilder(column: $table.exercise, builder: (column) => column);
+
   GeneratedColumn<int> get id =>
       $composableBuilder(column: $table.id, builder: (column) => column);
 
@@ -11301,29 +11140,6 @@ class $$PlanExercisesTableAnnotationComposer
 
   GeneratedColumn<int> get sequence =>
       $composableBuilder(column: $table.sequence, builder: (column) => column);
-
-  $$GymSetsTableAnnotationComposer get exercise {
-    final $$GymSetsTableAnnotationComposer composer = $composerBuilder(
-      composer: this,
-      getCurrentColumn: (t) => t.exercise,
-      referencedTable: $db.gymSets,
-      getReferencedColumn: (t) => t.name,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$GymSetsTableAnnotationComposer(
-            $db: $db,
-            $table: $db.gymSets,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
-    );
-    return composer;
-  }
 
   $$ExercisesTableAnnotationComposer get exerciseId {
     final $$ExercisesTableAnnotationComposer composer = $composerBuilder(
@@ -11385,7 +11201,7 @@ class $$PlanExercisesTableTableManager
           $$PlanExercisesTableUpdateCompanionBuilder,
           (PlanExercise, $$PlanExercisesTableReferences),
           PlanExercise,
-          PrefetchHooks Function({bool exercise, bool exerciseId, bool planId})
+          PrefetchHooks Function({bool exerciseId, bool planId})
         > {
   $$PlanExercisesTableTableManager(_$AppDatabase db, $PlanExercisesTable table)
     : super(
@@ -11450,80 +11266,60 @@ class $$PlanExercisesTableTableManager
                 ),
               )
               .toList(),
-          prefetchHooksCallback:
-              ({exercise = false, exerciseId = false, planId = false}) {
-                return PrefetchHooks(
-                  db: db,
-                  explicitlyWatchedTables: [],
-                  addJoins:
-                      <
-                        T extends TableManagerState<
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic
-                        >
-                      >(state) {
-                        if (exercise) {
-                          state =
-                              state.withJoin(
-                                    currentTable: table,
-                                    currentColumn: table.exercise,
-                                    referencedTable:
-                                        $$PlanExercisesTableReferences
-                                            ._exerciseTable(db),
-                                    referencedColumn:
-                                        $$PlanExercisesTableReferences
-                                            ._exerciseTable(db)
-                                            .name,
-                                  )
-                                  as T;
-                        }
-                        if (exerciseId) {
-                          state =
-                              state.withJoin(
-                                    currentTable: table,
-                                    currentColumn: table.exerciseId,
-                                    referencedTable:
-                                        $$PlanExercisesTableReferences
-                                            ._exerciseIdTable(db),
-                                    referencedColumn:
-                                        $$PlanExercisesTableReferences
-                                            ._exerciseIdTable(db)
-                                            .id,
-                                  )
-                                  as T;
-                        }
-                        if (planId) {
-                          state =
-                              state.withJoin(
-                                    currentTable: table,
-                                    currentColumn: table.planId,
-                                    referencedTable:
-                                        $$PlanExercisesTableReferences
-                                            ._planIdTable(db),
-                                    referencedColumn:
-                                        $$PlanExercisesTableReferences
-                                            ._planIdTable(db)
-                                            .id,
-                                  )
-                                  as T;
-                        }
+          prefetchHooksCallback: ({exerciseId = false, planId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (exerciseId) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.exerciseId,
+                                referencedTable: $$PlanExercisesTableReferences
+                                    ._exerciseIdTable(db),
+                                referencedColumn: $$PlanExercisesTableReferences
+                                    ._exerciseIdTable(db)
+                                    .id,
+                              )
+                              as T;
+                    }
+                    if (planId) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.planId,
+                                referencedTable: $$PlanExercisesTableReferences
+                                    ._planIdTable(db),
+                                referencedColumn: $$PlanExercisesTableReferences
+                                    ._planIdTable(db)
+                                    .id,
+                              )
+                              as T;
+                    }
 
-                        return state;
-                      },
-                  getPrefetchedDataCallback: (items) async {
-                    return [];
+                    return state;
                   },
-                );
+              getPrefetchedDataCallback: (items) async {
+                return [];
               },
+            );
+          },
         ),
       );
 }
@@ -11540,7 +11336,7 @@ typedef $$PlanExercisesTableProcessedTableManager =
       $$PlanExercisesTableUpdateCompanionBuilder,
       (PlanExercise, $$PlanExercisesTableReferences),
       PlanExercise,
-      PrefetchHooks Function({bool exercise, bool exerciseId, bool planId})
+      PrefetchHooks Function({bool exerciseId, bool planId})
     >;
 typedef $$MetadataTableCreateCompanionBuilder =
     MetadataCompanion Function({required int buildNumber, Value<int> rowid});

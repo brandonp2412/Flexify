@@ -6,6 +6,7 @@ import 'package:flexify/animated_fab.dart';
 import 'package:flexify/bottom_nav.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
+import 'package:flexify/database/exercise_catalog.dart';
 import 'package:flexify/empty_state.dart';
 import 'package:flexify/database/gym_sets.dart';
 import 'package:flexify/l10n/l10n.dart';
@@ -661,17 +662,11 @@ class _StartPlanPageState extends State<StartPlanPage>
   Future<GymSet?> getFirstOfLastSession(String exercise) =>
       getStartPlanPrefill(db, exercise, widget.plan.id);
 
-  Future<GymSet?> getExerciseTemplate(String exercise) =>
-      (db.gymSets.select()
-            ..where(
-              (tbl) => tbl.name.equals(exercise) & tbl.hidden.equals(true),
-            )
-            ..orderBy([
-              (u) =>
-                  OrderingTerm(expression: u.created, mode: OrderingMode.desc),
-            ])
-            ..limit(1))
-          .getSingleOrNull();
+  Future<Exercise?> getExerciseTemplate(PlanExercise planExercise) {
+    final exerciseId = planExercise.exerciseId;
+    if (exerciseId != null) return getExerciseById(exerciseId);
+    return getExerciseByName(planExercise.exercise);
+  }
 
   @override
   void initState() {
@@ -902,9 +897,18 @@ class _StartPlanPageState extends State<StartPlanPage>
     }
 
     final selected = index.clamp(0, exercises.length - 1);
-    final exercise = exercises[selected].exercise;
+    final planExercise = exercises[selected];
+    final exercise = planExercise.exercise;
     final last = await getFirstOfLastSession(exercise);
-    final template = last == null ? await getExerciseTemplate(exercise) : null;
+    final template = last == null
+        ? await getExerciseTemplate(planExercise)
+        : null;
+    final legacyTemplate = last == null && template == null
+        ? await getLast(exercise)
+        : null;
+    final templateCategory = template == null
+        ? null
+        : await getExerciseCategoryName(template);
     if (!mounted) return;
 
     setState(() {
@@ -912,7 +916,13 @@ class _StartPlanPageState extends State<StartPlanPage>
       if (last != null) {
         _updateGymSetTextFields(last);
       } else if (template != null) {
-        _updateGymSetTextFields(template);
+        _clearGymSetTextFields();
+        _cardio = template.kind == 'cardio';
+        _unit = template.displayUnit;
+        _category = templateCategory;
+        _image = template.image;
+      } else if (legacyTemplate != null) {
+        _updateGymSetTextFields(legacyTemplate);
       } else {
         _clearGymSetTextFields();
       }

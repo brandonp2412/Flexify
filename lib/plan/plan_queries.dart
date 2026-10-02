@@ -75,49 +75,59 @@ Stream<Plan?> watchPlan(int planId) =>
         .watchSingleOrNull();
 
 Stream<List<GymCount>> watchGymCounts(int planId) {
-  final count = CustomExpression<int>('''
-    COUNT(
-      CASE
-        WHEN DATE(created, 'unixepoch', 'localtime') = DATE('now', 'localtime')
-             AND hidden = 0
-             AND gym_sets.plan_id = $planId
-        THEN 1
-      END
-    )
-  ''');
-
-  final query = db.selectOnly(db.planExercises)
-    ..addColumns([
-      db.gymSets.name,
-      count,
-      db.planExercises.maxSets,
-      db.gymSets.restMs,
-      db.planExercises.warmupSets,
-      db.planExercises.timers,
-    ])
-    ..join([
-      innerJoin(
-        db.gymSets,
-        db.gymSets.name.equalsExp(db.planExercises.exercise),
-      ),
-    ])
-    ..where(db.planExercises.planId.equals(planId) & db.planExercises.enabled)
-    ..groupBy([db.gymSets.name]);
-
-  return query.watch().map(
-    (rows) => rows
-        .map(
-          (row) => (
-            count: row.read<int>(count)!,
-            name: row.read(db.gymSets.name)!,
-            maxSets: row.read(db.planExercises.maxSets),
-            restMs: row.read(db.gymSets.restMs),
-            warmupSets: row.read(db.planExercises.warmupSets),
-            timers: row.read(db.planExercises.timers)!,
-          ),
-        )
-        .toList(),
-  );
+  return db
+      .customSelect(
+        '''
+          SELECT
+            COALESCE(exercises.name, plan_exercises.exercise) AS name,
+            COUNT(
+              CASE
+                WHEN DATE(gym_sets.created, 'unixepoch', 'localtime') =
+                     DATE('now', 'localtime')
+                  AND gym_sets.hidden = 0
+                  AND gym_sets.plan_id = ?
+                THEN 1
+              END
+            ) AS todays_count,
+            plan_exercises.max_sets AS max_sets,
+            COALESCE(
+              exercises.default_rest_duration_ms,
+              MAX(gym_sets.rest_ms)
+            ) AS rest_ms,
+            plan_exercises.warmup_sets AS warmup_sets,
+            plan_exercises.timers AS timers
+          FROM plan_exercises
+          LEFT JOIN exercises
+            ON exercises.id = plan_exercises.exercise_id
+            OR (
+              plan_exercises.exercise_id IS NULL
+              AND exercises.name = plan_exercises.exercise
+            )
+          LEFT JOIN gym_sets
+            ON gym_sets.name = COALESCE(exercises.name, plan_exercises.exercise)
+          WHERE plan_exercises.plan_id = ?
+            AND plan_exercises.enabled = 1
+          GROUP BY plan_exercises.id, exercises.id
+          ORDER BY plan_exercises.sequence
+        ''',
+        variables: [Variable(planId), Variable(planId)],
+        readsFrom: {db.planExercises, db.exercises, db.gymSets},
+      )
+      .watch()
+      .map(
+        (rows) => rows
+            .map(
+              (row) => (
+                count: row.read<int>('todays_count'),
+                name: row.read<String>('name'),
+                maxSets: row.readNullable<int>('max_sets'),
+                restMs: row.readNullable<int>('rest_ms'),
+                warmupSets: row.readNullable<int>('warmup_sets'),
+                timers: row.read<int>('timers') != 0,
+              ),
+            )
+            .toList(),
+      );
 }
 
 Future<List<GymCount>> getGymCounts(int planId) => watchGymCounts(planId).first;
@@ -125,14 +135,16 @@ Future<List<GymCount>> getGymCounts(int planId) => watchGymCounts(planId).first;
 Future<List<PlanExercisesCompanion>> loadPlanExerciseDrafts(
   PlansCompanion plan,
 ) async {
-  final query = db.gymSets.selectOnly()
-    ..addColumns([db.gymSets.name])
-    ..groupBy([db.gymSets.name])
+  final query = db.exercises.selectOnly()
+    ..addColumns([db.exercises.id, db.exercises.name])
+    ..where(db.exercises.archived.equals(false))
     ..join([
       leftOuterJoin(
         db.planExercises,
         db.planExercises.planId.equals(plan.id.present ? plan.id.value : 0) &
-            db.planExercises.exercise.equalsExp(db.gymSets.name),
+                db.planExercises.exerciseId.equalsExp(db.exercises.id) |
+            (db.planExercises.exerciseId.isNull() &
+                db.planExercises.exercise.equalsExp(db.exercises.name)),
       ),
     ])
     ..addColumns(db.planExercises.$columns);
@@ -145,7 +157,8 @@ Future<List<PlanExercisesCompanion>> loadPlanExerciseDrafts(
     final exercise = PlanExercisesCompanion(
       planId: plan.id,
       id: Value.absentIfNull(row.read(db.planExercises.id)),
-      exercise: Value(row.read(db.gymSets.name)!),
+      exercise: Value(row.read(db.exercises.name)!),
+      exerciseId: Value(row.read(db.exercises.id)),
       enabled: Value(row.read(db.planExercises.enabled) ?? false),
       maxSets: Value(row.read(db.planExercises.maxSets)),
       warmupSets: Value(row.read(db.planExercises.warmupSets)),

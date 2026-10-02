@@ -29,9 +29,9 @@ Future<void> createCategory(String name) {
 /// Removes [category] and clears it from every workout entry using it.
 Future<void> deleteCategory(Category category) {
   return db.transaction(() async {
-    await (db.gymSets.update()
-          ..where((set) => set.category.equals(category.name)))
-        .write(const GymSetsCompanion(category: Value(null)));
+    await (db.exercises.update()
+          ..where((exercise) => exercise.categoryId.equals(category.id)))
+        .write(const ExercisesCompanion(categoryId: Value(null)));
     await (db.categories.delete()
           ..where((entry) => entry.id.equals(category.id)))
         .go();
@@ -41,9 +41,9 @@ Future<void> deleteCategory(Category category) {
 /// Moves entries using [source] to [target], then removes [source].
 Future<void> mergeCategory(Category source, Category target) {
   return db.transaction(() async {
-    await (db.gymSets.update()
-          ..where((set) => set.category.equals(source.name)))
-        .write(GymSetsCompanion(category: Value(target.name)));
+    await (db.exercises.update()
+          ..where((exercise) => exercise.categoryId.equals(source.id)))
+        .write(ExercisesCompanion(categoryId: Value(target.id)));
     await (db.categories.delete()..where((entry) => entry.id.equals(source.id)))
         .go();
   });
@@ -54,14 +54,9 @@ Future<void> renameCategory(Category category, String name) {
   final trimmedName = name.trim();
   if (trimmedName == category.name) return Future.value();
 
-  return db.transaction(() async {
-    await (db.gymSets.update()
-          ..where((set) => set.category.equals(category.name)))
-        .write(GymSetsCompanion(category: Value(trimmedName)));
-    await (db.categories.update()
-          ..where((entry) => entry.id.equals(category.id)))
-        .write(CategoriesCompanion(name: Value(trimmedName)));
-  });
+  return (db.categories.update()
+        ..where((entry) => entry.id.equals(category.id)))
+      .write(CategoriesCompanion(name: Value(trimmedName)));
 }
 
 /// Watches all categories together with their workout-entry usage counts.
@@ -69,13 +64,14 @@ Stream<List<CategorySummary>> watchCategorySummaries() {
   return db
       .customSelect(
         '''
-          SELECT categories.id, categories.name, COUNT(gym_sets.id) AS usage_count
+          SELECT categories.id, categories.name, COUNT(exercises.id) AS usage_count
           FROM categories
-          LEFT JOIN gym_sets ON gym_sets.category = categories.name
+          LEFT JOIN exercises ON exercises.category_id = categories.id
+            AND exercises.archived = 0
           GROUP BY categories.id, categories.name
           ORDER BY categories.name COLLATE NOCASE
         ''',
-        readsFrom: {db.categories, db.gymSets},
+        readsFrom: {db.categories, db.exercises},
       )
       .watch()
       .map(

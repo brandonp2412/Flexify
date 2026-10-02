@@ -35,9 +35,15 @@ void main() {
     await tester.pumpAndSettle();
 
     final exercise = await (harness.database.select(
-      harness.database.gymSets,
+      harness.database.exercises,
     )..where((table) => table.name.equals('Treadmill walking'))).getSingle();
-    expect(exercise.cardio, isTrue);
-    expect(exercise.unit, 'km');
+    expect(exercise.kind, 'cardio');
+    expect(exercise.displayUnit, 'km');
+    expect(
+      await (harness.database.select(
+        harness.database.gymSets,
+      )..where((table) => table.name.equals('Treadmill walking'))).get(),
+      isEmpty,
+    );
   });
 }

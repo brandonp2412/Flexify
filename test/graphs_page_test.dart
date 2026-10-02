@@ -173,6 +173,9 @@ void main() {
         category: 'Chest',
       ),
     );
+    await harness.database.exercises.insertOne(
+      exerciseFixture('Zz unique test exercise'),
+    );
 
     final planId = await harness.database.plans.insertOne(planFixture());
     await harness.database.planExercises.insertOne(

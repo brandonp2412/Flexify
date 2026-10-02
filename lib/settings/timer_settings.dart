@@ -408,7 +408,7 @@ class _TimerSettingsState extends State<TimerSettings> {
   );
 
   final SafeAudioPlayer _player = SafeAudioPlayer(enabled: !kIsWeb);
-  List<GymSetsCompanion> _exercisesWithCustomTimers = [];
+  List<Exercise> _exercisesWithCustomTimers = [];
   final Map<String, TextEditingController> _minuteControllers = {};
   final Map<String, TextEditingController> _secondControllers = {};
 
@@ -420,26 +420,22 @@ class _TimerSettingsState extends State<TimerSettings> {
 
   Future<void> _loadExercisesWithCustomTimers() async {
     final exercises =
-        await (db.selectOnly(db.gymSets)
-              ..addColumns([db.gymSets.name, db.gymSets.restMs])
-              ..where(db.gymSets.restMs.isNotNull())
-              ..groupBy([db.gymSets.name]))
+        await (db.exercises.select()
+              ..where(
+                (exercise) =>
+                    exercise.defaultRestDurationMs.isNotNull() &
+                    exercise.archived.equals(false),
+              )
+              ..orderBy([(exercise) => OrderingTerm.asc(exercise.name)]))
             .get();
     if (!mounted) return;
 
     setState(() {
-      _exercisesWithCustomTimers = exercises
-          .map(
-            (result) => GymSetsCompanion(
-              name: Value(result.read(db.gymSets.name)!),
-              restMs: Value(result.read(db.gymSets.restMs)),
-            ),
-          )
-          .toList();
+      _exercisesWithCustomTimers = exercises;
 
       for (final result in exercises) {
-        final exerciseName = result.read(db.gymSets.name)!;
-        final restMs = result.read(db.gymSets.restMs);
+        final exerciseName = result.name;
+        final restMs = result.defaultRestDurationMs;
         if (restMs != null) {
           final duration = Duration(milliseconds: restMs);
           _minuteControllers[exerciseName] = TextEditingController(
@@ -466,32 +462,34 @@ class _TimerSettingsState extends State<TimerSettings> {
       duration = Duration(minutes: mins, seconds: secs);
     }
 
-    await (db.gymSets.update()..where((tbl) => tbl.name.equals(exerciseName)))
-        .write(GymSetsCompanion(restMs: Value(duration?.inMilliseconds)));
+    await (db.exercises.update()
+          ..where((exercise) => exercise.name.equals(exerciseName)))
+        .write(
+          ExercisesCompanion(
+            defaultRestDurationMs: Value(duration?.inMilliseconds),
+          ),
+        );
 
     if (!mounted) return;
     if (duration == null) {
       _minuteControllers.remove(exerciseName)?.dispose();
       _secondControllers.remove(exerciseName)?.dispose();
       setState(() {
-        _exercisesWithCustomTimers.removeWhere(
-          (e) => e.name.value == exerciseName,
-        );
+        _exercisesWithCustomTimers.removeWhere((e) => e.name == exerciseName);
       });
     }
   }
 
   Future<void> _removeCustomTimer(String exerciseName) async {
-    await (db.gymSets.update()..where((tbl) => tbl.name.equals(exerciseName)))
-        .write(const GymSetsCompanion(restMs: Value(null)));
+    await (db.exercises.update()
+          ..where((exercise) => exercise.name.equals(exerciseName)))
+        .write(const ExercisesCompanion(defaultRestDurationMs: Value(null)));
     if (!mounted) return;
 
     _minuteControllers.remove(exerciseName)?.dispose();
     _secondControllers.remove(exerciseName)?.dispose();
     setState(() {
-      _exercisesWithCustomTimers.removeWhere(
-        (e) => e.name.value == exerciseName,
-      );
+      _exercisesWithCustomTimers.removeWhere((e) => e.name == exerciseName);
     });
   }
 
@@ -527,7 +525,7 @@ class _TimerSettingsState extends State<TimerSettings> {
           ),
           const SizedBox(height: 16),
           ..._exercisesWithCustomTimers.map((exercise) {
-            final exerciseName = exercise.name.value;
+            final exerciseName = exercise.name;
             if (_minuteControllers[exerciseName] == null ||
                 _secondControllers[exerciseName] == null)
               return const SizedBox();
@@ -595,7 +593,7 @@ class _TimerSettingsState extends State<TimerSettings> {
                                   int.tryParse(minController.text) ?? 0;
                               final seconds = int.tryParse(value) ?? 0;
                               _updateExerciseRestTime(
-                                exercise.name.value,
+                                exercise.name,
                                 minutes,
                                 seconds,
                               );

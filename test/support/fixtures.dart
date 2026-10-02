@@ -73,15 +73,29 @@ PlansCompanion planFixture({
   );
 }
 
+ExercisesCompanion exerciseFixture(
+  String name, {
+  bool cardio = false,
+  String unit = 'kg',
+}) {
+  return ExercisesCompanion.insert(
+    name: name,
+    kind: cardio ? 'cardio' : 'strength',
+    displayUnit: unit,
+  );
+}
+
 PlanExercisesCompanion planExerciseFixture({
   required int planId,
   required String exercise,
   bool enabled = true,
   int? sequence,
+  int? exerciseId,
 }) {
   return PlanExercisesCompanion.insert(
     planId: planId,
     exercise: exercise,
+    exerciseId: Value(exerciseId),
     enabled: enabled,
     sequence: sequence == null ? const Value.absent() : Value(sequence),
   );

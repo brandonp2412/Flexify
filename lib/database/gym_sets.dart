@@ -181,41 +181,54 @@ Future<List<Rpm>> getRpms() async {
 }
 
 Stream<List<GymSetsCompanion>> watchGraphs() {
-  return (db.gymSets.selectOnly()
-        ..addColumns([
-          db.gymSets.name,
-          db.gymSets.unit,
-          db.gymSets.weight,
-          db.gymSets.reps,
-          db.gymSets.cardio,
-          db.gymSets.duration,
-          db.gymSets.distance,
-          db.gymSets.created.max(),
-          db.gymSets.image,
-          db.gymSets.category,
-        ])
-        ..orderBy([
-          OrderingTerm(
-            expression: db.gymSets.created.max(),
-            mode: OrderingMode.desc,
-          ),
-        ])
-        ..groupBy([db.gymSets.name]))
+  return db
+      .customSelect(
+        '''
+          SELECT
+            exercises.name AS name,
+            exercises.display_unit AS unit,
+            CASE WHEN exercises.kind = 'cardio' THEN 1 ELSE 0 END AS cardio,
+            exercises.image AS image,
+            categories.name AS category,
+            COALESCE(latest.weight, 0) AS weight,
+            COALESCE(latest.reps, 0) AS reps,
+            COALESCE(latest.duration, 0) AS duration,
+            COALESCE(latest.distance, 0) AS distance,
+            COALESCE(latest.created, CAST(STRFTIME('%s', 'now') AS INTEGER)) AS created
+          FROM exercises
+          LEFT JOIN categories ON categories.id = exercises.category_id
+          LEFT JOIN gym_sets AS latest ON latest.id = (
+            SELECT gym_sets.id
+            FROM gym_sets
+            WHERE gym_sets.name = exercises.name
+              AND gym_sets.hidden = 0
+            ORDER BY gym_sets.created DESC, gym_sets.id DESC
+            LIMIT 1
+          )
+          WHERE exercises.archived = 0
+          ORDER BY created DESC, exercises.name COLLATE NOCASE
+        ''',
+        readsFrom: {db.exercises, db.categories, db.gymSets},
+      )
       .watch()
       .map(
         (results) => results
             .map(
               (result) => GymSetsCompanion(
-                name: Value(result.read(db.gymSets.name)!),
-                weight: Value(result.read(db.gymSets.weight)!),
-                unit: Value(result.read(db.gymSets.unit)!),
-                reps: Value(result.read(db.gymSets.reps)!),
-                cardio: Value(result.read(db.gymSets.cardio)!),
-                duration: Value(result.read(db.gymSets.duration)!),
-                distance: Value(result.read(db.gymSets.distance)!),
-                created: Value(result.read(db.gymSets.created.max())!),
-                image: Value(result.read(db.gymSets.image)),
-                category: Value(result.read(db.gymSets.category)),
+                name: Value(result.read<String>('name')),
+                weight: Value(result.read<double>('weight')),
+                unit: Value(result.read<String>('unit')),
+                reps: Value(result.read<double>('reps')),
+                cardio: Value(result.read<int>('cardio') != 0),
+                duration: Value(result.read<double>('duration')),
+                distance: Value(result.read<double>('distance')),
+                created: Value(
+                  DateTime.fromMillisecondsSinceEpoch(
+                    result.read<int>('created') * 1000,
+                  ).toLocal(),
+                ),
+                image: Value(result.readNullable<String>('image')),
+                category: Value(result.readNullable<String>('category')),
               ),
             )
             .toList(),

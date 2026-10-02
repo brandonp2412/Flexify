@@ -39,15 +39,16 @@ class _EditPlanPageState extends State<EditPlanPage> {
   final _titleCtrl = TextEditingController();
 
   Future<void> addExercise() async {
-    GymSetsCompanion? gymSet = await Navigator.of(context).push(
+    Exercise? exercise = await Navigator.of(context).push(
       MaterialPageRoute(builder: (context) => AddExercisePage(name: _search)),
     );
-    if (gymSet == null || !mounted) return;
+    if (exercise == null || !mounted) return;
 
     setState(() {
       _exercises.add(
         PlanExercisesCompanion(
-          exercise: Value(gymSet.name.value),
+          exercise: Value(exercise.name),
+          exerciseId: Value(exercise.id),
           enabled: const Value(true),
         ),
       );

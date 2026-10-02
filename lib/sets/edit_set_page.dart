@@ -7,6 +7,7 @@ import 'package:flexify/animated_fab.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/categories.dart';
 import 'package:flexify/database/database.dart';
+import 'package:flexify/database/exercise_catalog.dart';
 import 'package:flexify/database/gym_sets.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/logging.dart';
@@ -69,20 +70,22 @@ class _EditSetPageState extends State<EditSetPage> {
               ..limit(1))
             .getSingleOrNull();
     if (last == null) {
-      final template =
-          await (db.gymSets.select()
-                ..where((tbl) => tbl.name.equals(option))
-                ..limit(1))
-              .getSingleOrNull();
+      final definition = await getExerciseByName(option);
+      final categoryName = definition == null
+          ? null
+          : await getExerciseCategoryName(definition);
       if (!mounted) return;
       return setState(() {
         _name = option;
-        if (template != null) {
-          _cardio = template.cardio;
-          _unit = template.unit;
-          _category = template.category;
-          if (template.category != null && template.category!.isNotEmpty)
-            _categoryCtrl.text = template.category!;
+        if (definition != null) {
+          _cardio = definition.kind == 'cardio';
+          _unit = definition.displayUnit;
+          _category = categoryName;
+          _image = definition.image;
+          restMs = definition.defaultRestDurationMs;
+          if (categoryName != null && categoryName.isNotEmpty) {
+            _categoryCtrl.text = categoryName;
+          }
         }
       });
     }
@@ -637,12 +640,10 @@ class _EditSetPageState extends State<EditSetPage> {
       _created = widget.gymSet.created;
     });
 
-    (db.gymSets.selectOnly(
-      distinct: true,
-    )..addColumns([db.gymSets.name])).get().then((results) {
-      final names = results.map((result) => result.read(db.gymSets.name)!);
+    getExerciseNames().then((names) {
+      if (!mounted) return;
       setState(() {
-        _options = names.toList();
+        _options = names;
       });
     });
   }
@@ -682,6 +683,16 @@ class _EditSetPageState extends State<EditSetPage> {
     );
 
     if (_category != null) await createCategory(_category!);
+    if (_name != 'Weight') {
+      await syncExerciseDefinition(
+        name: _name,
+        cardio: _cardio,
+        displayUnit: _unit,
+        category: _category,
+        image: _image,
+        defaultRestDurationMs: restMs,
+      );
+    }
     if (!mounted) return;
 
     final settings = context.read<SettingsState>().value;
@@ -689,10 +700,6 @@ class _EditSetPageState extends State<EditSetPage> {
 
     if (widget.gymSet.id > 0) {
       await db.update(db.gymSets).replace(gymSet);
-      if (_image != null)
-        (db.update(db.gymSets)..where((u) => u.name.equals(_name))).write(
-          GymSetsCompanion(image: Value(_image)),
-        );
       if (!mounted) return;
       talker.info('Updated workout set');
       return Navigator.of(context).pop();

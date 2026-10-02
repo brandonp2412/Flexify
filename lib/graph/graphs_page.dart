@@ -78,15 +78,35 @@ class GraphsPageState extends State<GraphsPage>
   }
 
   void onDelete() async {
-    final copy = _selection.toList();
+    final names = _selection.toList();
     setState(() {
       _selection.clear();
     });
 
-    await (db.delete(db.gymSets)..where((tbl) => tbl.name.isIn(copy))).go();
-    await (db.delete(
-      db.planExercises,
-    )..where((x) => x.exercise.isIn(copy))).go();
+    final exercises =
+        await (db.exercises.select()
+              ..where((exercise) => exercise.name.isIn(names)))
+            .get();
+    final exerciseIds = exercises.map((exercise) => exercise.id).toList();
+
+    await db.transaction(() async {
+      if (exerciseIds.isNotEmpty) {
+        await (db.exerciseSets.delete()
+              ..where((set) => set.exerciseId.isIn(exerciseIds)))
+            .go();
+      }
+      await (db.planExercises.delete()..where(
+            (row) =>
+                row.exercise.isIn(names) | row.exerciseId.isIn(exerciseIds),
+          ))
+          .go();
+      await (db.gymSets.delete()..where((set) => set.name.isIn(names))).go();
+      if (exerciseIds.isNotEmpty) {
+        await (db.exercises.delete()
+              ..where((exercise) => exercise.id.isIn(exerciseIds)))
+            .go();
+      }
+    });
   }
 
   LineTouchTooltipData tooltipData(

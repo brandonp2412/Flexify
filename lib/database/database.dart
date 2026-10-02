@@ -320,17 +320,40 @@ class AppDatabase extends _$AppDatabase {
           ),
         );
 
+        for (final categoryName
+            in defaultExercises.map((entry) => entry.$2).toSet()) {
+          await categories.insertOne(
+            CategoriesCompanion.insert(name: categoryName),
+            mode: InsertMode.insertOrIgnore,
+          );
+        }
+        final defaultCategoryIds = {
+          for (final category in await categories.select().get())
+            category.name: category.id,
+        };
         await batch((batch) {
-          batch.insertAll(gymSets, defaultSets);
+          batch.insertAll(
+            exercises,
+            defaultExercises.map(
+              (entry) => ExercisesCompanion.insert(
+                name: entry.$1,
+                kind: 'strength',
+                displayUnit: 'kg',
+                categoryId: Value(defaultCategoryIds[entry.$2]),
+              ),
+            ),
+          );
           batch.insertAll(plans, defaultPlans);
           batch.insertAll(planExercises, defaultPlanExercises);
         });
         await customStatement('''
-          INSERT OR IGNORE INTO categories (name)
-          SELECT DISTINCT category FROM gym_sets
-          WHERE category IS NOT NULL AND TRIM(category) != ''
+          UPDATE plan_exercises
+          SET exercise_id = (
+            SELECT exercises.id
+            FROM exercises
+            WHERE exercises.name = plan_exercises.exercise
+          )
         ''');
-        await _backfillExerciseIdentity(this);
 
         await settings.insertOne(defaultSettings);
         talker.info(
@@ -830,10 +853,13 @@ class AppDatabase extends _$AppDatabase {
           await _backfillExerciseIdentity(this);
           await _backfillExerciseHistory(this);
         },
+        from61To62: (Migrator m, Schema62 schema) async {
+          await m.alterTable(TableMigration(schema.planExercises));
+        },
       ),
     );
   }
 
   @override
-  int get schemaVersion => 61;
+  int get schemaVersion => 62;
 }

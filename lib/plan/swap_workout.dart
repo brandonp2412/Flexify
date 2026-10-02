@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart' as drift;
 import 'package:flexify/database/database.dart';
+import 'package:flexify/database/exercise_catalog.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +16,7 @@ class SwapWorkout extends StatefulWidget {
 }
 
 class _SwapWorkoutState extends State<SwapWorkout> {
-  late Stream<List<String>> _distinctExercises;
+  late Stream<List<Exercise>> _distinctExercises;
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
 
@@ -28,13 +29,7 @@ class _SwapWorkoutState extends State<SwapWorkout> {
       });
     });
 
-    _distinctExercises =
-        (db.gymSets.selectOnly(distinct: true)
-              ..addColumns([db.gymSets.name])
-              ..orderBy([drift.OrderingTerm(expression: db.gymSets.name)]))
-            .map((row) => row.read(db.gymSets.name)!)
-            .watch()
-            .map((event) => event.where((name) => name.isNotEmpty).toList());
+    _distinctExercises = watchExerciseCatalog();
   }
 
   @override
@@ -62,7 +57,7 @@ class _SwapWorkoutState extends State<SwapWorkout> {
             ),
           ),
           Expanded(
-            child: StreamBuilder<List<String>>(
+            child: StreamBuilder<List<Exercise>>(
               stream: _distinctExercises,
               builder: (context, snapshot) {
                 if (snapshot.hasError) {
@@ -74,7 +69,7 @@ class _SwapWorkoutState extends State<SwapWorkout> {
 
                 final exercises = snapshot.data!
                     .where(
-                      (name) => name.toLowerCase().contains(
+                      (exercise) => exercise.name.toLowerCase().contains(
                         _searchQuery.toLowerCase(),
                       ),
                     )
@@ -85,7 +80,7 @@ class _SwapWorkoutState extends State<SwapWorkout> {
                   itemBuilder: (context, index) {
                     final exercise = exercises[index];
                     return ListTile(
-                      title: Text(exercise),
+                      title: Text(exercise.name),
                       onTap: () async {
                         final old =
                             await (db.planExercises.select()
@@ -100,7 +95,8 @@ class _SwapWorkoutState extends State<SwapWorkout> {
                               ..where((tbl) => tbl.id.equals(old.id)))
                             .write(
                               PlanExercisesCompanion(
-                                exercise: drift.Value(exercise),
+                                exercise: drift.Value(exercise.name),
+                                exerciseId: drift.Value(exercise.id),
                               ),
                             );
 

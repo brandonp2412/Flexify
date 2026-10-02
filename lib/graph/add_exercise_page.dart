@@ -1,11 +1,9 @@
 import 'dart:io';
 
-import 'package:drift/drift.dart' hide Column;
 import 'package:file_picker/file_picker.dart';
 import 'package:flexify/animated_fab.dart';
-import 'package:flexify/database/database.dart';
+import 'package:flexify/database/exercise_catalog.dart';
 import 'package:flexify/l10n/l10n.dart';
-import 'package:flexify/main.dart';
 import 'package:flexify/logging.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flutter/material.dart';
@@ -197,20 +195,15 @@ class _AddExercisePageState extends State<AddExercisePage> {
     else if (settings.value.cardioUnit != 'last-entry' && _cardio)
       _unit = settings.value.cardioUnit;
 
-    final insert = GymSetsCompanion.insert(
-      created: DateTime.now().toLocal(),
-      reps: 0,
-      weight: 0,
+    final exercise = await createExerciseDefinition(
       name: _nameCtrl.text,
-      unit: _unit,
-      cardio: Value(_cardio),
-      hidden: const Value(true),
-      image: Value(_image),
+      cardio: _cardio,
+      displayUnit: _unit,
+      image: _image,
     );
-    await db.gymSets.insertOne(insert);
-    talker.info('Created exercise template');
+    talker.info('Created exercise definition');
     if (!mounted) return;
 
-    Navigator.pop(context, insert);
+    Navigator.pop(context, exercise);
   }
 }

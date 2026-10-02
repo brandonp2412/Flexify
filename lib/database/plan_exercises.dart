@@ -1,12 +1,11 @@
 import 'package:drift/drift.dart';
 import 'package:flexify/database/exercises.dart';
-import 'package:flexify/database/gym_sets.dart';
 import 'package:flexify/database/plans.dart';
 
 class PlanExercises extends Table {
   BoolColumn get enabled => boolean()();
   BoolColumn get timers => boolean().withDefault(const Constant(true))();
-  TextColumn get exercise => text().references(GymSets, #name)();
+  TextColumn get exercise => text()();
   IntColumn get exerciseId => integer().nullable().references(
     Exercises,
     #id,

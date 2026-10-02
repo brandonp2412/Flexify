@@ -5,6 +5,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flexify/animated_fab.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
+import 'package:flexify/database/exercise_catalog.dart';
 import 'package:flexify/database/gym_sets.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
@@ -31,6 +32,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
   final key = GlobalKey<FormState>();
 
   bool? cardio;
+  int? _exerciseId;
   String? unit;
   String? image;
   String? category;
@@ -235,60 +237,26 @@ class _EditGraphPageState extends State<EditGraphPage> {
   Future<void> doUpdate() async {
     Duration? duration;
     if (int.tryParse(minutes.text) != null && int.tryParse(minutes.text)! > 0 ||
-        int.tryParse(seconds.text) != null && int.tryParse(seconds.text)! > 0)
+        int.tryParse(seconds.text) != null && int.tryParse(seconds.text)! > 0) {
       duration = Duration(
         minutes: int.tryParse(minutes.text) ?? 0,
         seconds: int.tryParse(seconds.text) ?? 0,
       );
-
-    await (db.gymSets.update()..where((tbl) => tbl.name.equals(widget.name)))
-        .write(
-          GymSetsCompanion(
-            name: name.text.isEmpty ? const Value.absent() : Value(name.text),
-            cardio: Value.absentIfNull(cardio),
-            unit: Value.absentIfNull(unit),
-            restMs: Value(duration?.inMilliseconds),
-            image: Value(image),
-            category: Value.absentIfNull(category),
-          ),
-        );
-
-    await (db.planExercises.update()
-          ..where((tbl) => tbl.exercise.equals(widget.name)))
-        .write(
-          PlanExercisesCompanion(
-            exercise: name.text.isEmpty
-                ? const Value.absent()
-                : Value(name.text),
-          ),
-        );
-
-    if (name.text.isNotEmpty && name.text != widget.name) {
-      await _migrateGraphPreferences(name.text);
-    }
-  }
-
-  Future<void> _migrateGraphPreferences(String newName) async {
-    final oldPreference =
-        await (db.graphPreferences.select()
-              ..where((tbl) => tbl.name.equals(widget.name)))
-            .getSingleOrNull();
-    if (oldPreference == null) return;
-
-    final targetPreference =
-        await (db.graphPreferences.select()
-              ..where((tbl) => tbl.name.equals(newName)))
-            .getSingleOrNull();
-    if (targetPreference != null) {
-      await (db.graphPreferences.delete()
-            ..where((tbl) => tbl.name.equals(widget.name)))
-          .go();
-      return;
     }
 
-    await (db.graphPreferences.update()
-          ..where((tbl) => tbl.name.equals(widget.name)))
-        .write(GraphPreferencesCompanion(name: Value(newName)));
+    final exerciseId =
+        _exerciseId ?? (await getExerciseByName(widget.name))?.id;
+    if (exerciseId == null || cardio == null || unit == null) return;
+
+    await updateExerciseDefinition(
+      exerciseId: exerciseId,
+      name: name.text.isEmpty ? widget.name : name.text,
+      cardio: cardio!,
+      displayUnit: unit!,
+      defaultRestDurationMs: duration?.inMilliseconds,
+      image: image,
+      category: category,
+    );
   }
 
   Future<int> getCount() async {
@@ -304,23 +272,26 @@ class _EditGraphPageState extends State<EditGraphPage> {
   void initState() {
     super.initState();
 
-    (db.gymSets.select()
-          ..where((tbl) => tbl.name.equals(widget.name))
-          ..limit(1))
-        .getSingle()
-        .then(
-          (gymSet) => setState(() {
-            image = gymSet.image;
-            cardio = gymSet.cardio;
-            category = gymSet.category;
+    getExerciseByName(widget.name).then((exercise) async {
+      if (exercise == null || !mounted) return;
+      final categoryName = await getExerciseCategoryName(exercise);
+      if (!mounted) return;
+      setState(() {
+        _exerciseId = exercise.id;
+        image = exercise.image;
+        cardio = exercise.kind == 'cardio';
+        unit = exercise.displayUnit;
+        category = categoryName;
 
-            if (gymSet.restMs != null) {
-              final duration = Duration(milliseconds: gymSet.restMs!);
-              minutes.text = duration.inMinutes.toString();
-              seconds.text = (duration.inSeconds % 60).toString();
-            }
-          }),
-        );
+        if (exercise.defaultRestDurationMs != null) {
+          final duration = Duration(
+            milliseconds: exercise.defaultRestDurationMs!,
+          );
+          minutes.text = duration.inMinutes.toString();
+          seconds.text = (duration.inSeconds % 60).toString();
+        }
+      });
+    });
   }
 
   Future<List<String>> currentUnits() async {
