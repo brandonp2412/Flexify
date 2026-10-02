@@ -76,7 +76,18 @@ class _StartPlanPageState extends State<StartPlanPage>
     return StreamBuilder(
       stream: _stream,
       builder: (context, snapshot) {
-        if (snapshot.data == null) return SizedBox();
+        if (snapshot.data == null || _workout == null) {
+          return Scaffold(
+            appBar: AppBar(
+              title: Text(_displayTitle(context)),
+              leading: IconButton(
+                icon: const Icon(Icons.arrow_back),
+                onPressed: () => Navigator.pop(context),
+              ),
+            ),
+            body: const Center(child: CircularProgressIndicator()),
+          );
+        }
 
         return StreamBuilder<List<GymCount>>(
           stream: _gymCountsStream,
@@ -622,8 +633,6 @@ class _StartPlanPageState extends State<StartPlanPage>
       _workout = workout;
       _gymCountsStream = watchGymCounts(widget.plan.id, workout.id);
     });
-    _bindPlanStream();
-    await _loadExercises();
   }
 
   @override
@@ -635,6 +644,8 @@ class _StartPlanPageState extends State<StartPlanPage>
     _titleFromDays = widget.plan.title?.isNotEmpty != true;
     _title = _titleFromDays ? widget.plan.days : widget.plan.title!;
 
+    _bindPlanStream();
+    unawaited(_loadExercises());
     unawaited(_initializeWorkout());
   }
 
@@ -669,16 +680,18 @@ class _StartPlanPageState extends State<StartPlanPage>
   }
 
   Future<void> _loadExercises() async {
-    if (_workout == null || !mounted) return;
-    final stream = watchPlanExerciseEntries(db, widget.plan.id).asyncMap((
+    if (!mounted) return;
+    final stream = watchPlanExerciseEntries(db, widget.plan.id).map((
       exercises,
-    ) async {
-      await _selectFromEntries(exercises, _selected);
+    ) {
+      unawaited(_selectFromEntries(exercises, _selected));
       return exercises;
     });
     setState(() {
       _stream = stream;
-      _gymCountsStream = watchGymCounts(widget.plan.id, _workout!.id);
+      if (_workout != null) {
+        _gymCountsStream = watchGymCounts(widget.plan.id, _workout!.id);
+      }
     });
 
     final settings = context.read<SettingsState>().value;

@@ -42,6 +42,25 @@ class RecordingTimerState extends TimerState {
 }
 
 void main() {
+  testWidgets('StartPlanPage shows its page chrome on the first frame', (
+    WidgetTester tester,
+  ) async {
+    final harness = await FlexifyTestHarness.create();
+    final database = harness.database;
+
+    final id = await database.plans.insertOne(
+      planFixture(title: 'Immediate plan'),
+    );
+    final plan =
+        await (database.plans.select()..where((plan) => plan.id.equals(id)))
+            .getSingle();
+
+    await harness.pump(tester, StartPlanPage(plan: plan));
+
+    expect(find.text('Immediate plan'), findsOneWidget);
+    expect(find.byType(AppBar), findsOneWidget);
+  });
+
   testWidgets(
     'StartPlanPage rep estimation does not crash when no RPM data for exercise',
     (WidgetTester tester) async {
