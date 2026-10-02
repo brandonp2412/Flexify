@@ -5,9 +5,9 @@ import 'package:csv/csv.dart';
 import 'package:drift/drift.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flexify/app_permissions_dialog.dart';
-import 'package:flexify/database/body_weight_repository.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/database/exercise_catalog.dart';
+import 'package:flexify/data_portability/graph_csv.dart';
 import 'package:flexify/l10n/generated/app_localizations.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
@@ -35,6 +35,7 @@ String _localizedImportError(Object error, AppLocalizations l10n) {
     return l10n.backupArchiveMissingDatabase;
   }
   if (error is _ImportValidationException) return error.message;
+  if (error is GraphCsvImportException) return error.message;
   return l10n.unexpectedError;
 }
 
@@ -220,144 +221,33 @@ $version
     Navigator.pop(context);
 
     try {
-      FilePickerResult? result = await FilePicker.pickFiles();
+      final result = await FilePicker.pickFiles();
       if (result == null) return;
 
-      String csvContent;
       final fileBytes = await result.files.single.readAsBytes();
+      String csvContent;
       if (kIsWeb) {
         csvContent = String.fromCharCodes(fileBytes);
       } else {
         try {
           csvContent = utf8.decode(fileBytes, allowMalformed: false);
-        } catch (e) {
+        } catch (_) {
           csvContent = latin1.decode(fileBytes);
         }
       }
 
-      final rows = CsvDecoder().convert(csvContent);
-
-      if (rows.isEmpty) throw _ImportValidationException(l10n.csvFileEmpty);
-      if (rows.length <= 1)
-        throw _ImportValidationException(l10n.csvNeedsDataRow);
-
-      final columns = rows.first;
-
-      final gymSets = rows.skip(1).map((row) {
-        if (row.length < 6) {
-          throw _ImportValidationException(
-            l10n.csvRowInsufficientColumns(rows.indexOf(row) + 1, row.length),
-          );
-        }
-
-        final reps = _parseDouble(
-          row[2],
-          l10n.repsLabel,
-          rows.indexOf(row) + 1,
-          l10n,
-        );
-        final weight = _parseDouble(
-          row[3],
-          l10n.weightLabel,
-          rows.indexOf(row) + 1,
-          l10n,
-        );
-
-        Value<bool> hidden;
-        var bodyWeight = const Value(0.0);
-
-        if (columns.elementAtOrNull(6) == 'hidden') {
-          hidden = Value(
-            row.elementAtOrNull(6) == 1.0 || row.elementAtOrNull(6) == "1",
-          );
-        } else {
-          hidden = const Value(false);
-          final bodyWeightValue = row.elementAtOrNull(6);
-          if (bodyWeightValue is num) {
-            bodyWeight = Value(bodyWeightValue.toDouble());
-          } else if (bodyWeightValue is String) {
-            bodyWeight = Value(double.tryParse(bodyWeightValue) ?? 0.0);
-          }
-        }
-
-        if (columns.elementAtOrNull(7) == 'bodyWeight') {
-          final bodyWeightValue = row.elementAtOrNull(7);
-          if (bodyWeightValue != null) {
-            bodyWeight = Value(
-              double.tryParse(bodyWeightValue.toString()) ?? 0,
-            );
-          }
-        }
-
-        if (columns.elementAtOrNull(10) == 'hidden') {
-          final hiddenValue = row.elementAtOrNull(10);
-          if (hiddenValue != null) {
-            hidden = Value(hiddenValue.toString().toLowerCase() == 'true');
-          }
-        }
-
-        return GymSetsCompanion(
-          name: Value(row[1]?.toString() ?? ''),
-          reps: reps,
-          weight: weight,
-          created: Value(_parseDate(row[4], rows.indexOf(row) + 1, l10n)),
-          unit: Value(row[5]?.toString() ?? ''),
-          hidden: hidden,
-          bodyWeight: bodyWeight,
-          duration: columns.elementAtOrNull(7) == 'duration'
-              ? Value(double.tryParse(row[7]?.toString() ?? '0') ?? 0)
-              : const Value(0),
-          distance: columns.elementAtOrNull(8) == 'distance'
-              ? Value(double.tryParse(row[8]?.toString() ?? '0') ?? 0)
-              : const Value(0),
-          cardio: columns.elementAtOrNull(9) == 'cardio'
-              ? Value(parseBool(row[9]))
-              : const Value(false),
-          incline: columns.elementAtOrNull(11) == 'incline'
-              ? Value(int.tryParse(row[11]?.toString() ?? ''))
-              : const Value(null),
-        );
-      });
-
-      final importedRows = gymSets.toList();
-      final legacyGymSets = <GymSetsCompanion>[];
-      final bodyWeights = <BodyWeightsCompanion>[];
-
-      for (final row in importedRows) {
-        if (row.name.value == 'Weight') {
-          if (!row.hidden.value) {
-            final weightKg = canonicalBodyWeightKg(
-              row.unit.value,
-              row.weight.value,
-            );
-            if (weightKg != null) {
-              bodyWeights.add(
-                BodyWeightsCompanion.insert(
-                  timestamp: row.created.value,
-                  weightKg: weightKg,
-                ),
-              );
-            }
-          }
-          continue;
-        }
-        legacyGymSets.add(row);
-      }
-
-      await db.transaction(() async {
-        await db.gymSets.deleteAll();
-        await db.bodyWeights.deleteAll();
-        await db.gymSets.insertAll(legacyGymSets);
-        await db.bodyWeights.insertAll(bodyWeights);
-      });
+      final imported = await importGraphCsv(db, csvContent);
+      final exercises = imported.exercises;
+      final workouts = imported.workouts;
+      final sets = imported.exerciseSets;
+      final bodyWeights = imported.bodyWeights;
       talker.info(
-        'Imported ${legacyGymSets.length} graph entries and '
-        '${bodyWeights.length} body-weight entries',
+        'Imported graph/history CSV: exercises=$exercises, '
+        'workouts=$workouts, sets=$sets, bodyWeights=$bodyWeights',
       );
 
       if (!ctx.mounted) return;
       Navigator.pop(ctx);
-
       toast(l10n.graphDataImported);
     } catch (e, stackTrace) {
       talker.handle(e, stackTrace, 'Failed to import graph data');
@@ -368,41 +258,6 @@ $version
         duration: Duration(seconds: 10),
       );
     }
-  }
-
-  DateTime _parseDate(dynamic value, int rowNumber, AppLocalizations l10n) {
-    try {
-      return parseDate(value.toString());
-    } on FormatException {
-      throw _ImportValidationException(
-        l10n.invalidCsvValue(l10n.createdDate, rowNumber, value.toString()),
-      );
-    }
-  }
-
-  Value<double> _parseDouble(
-    dynamic value,
-    String fieldName,
-    int rowNumber,
-    AppLocalizations l10n,
-  ) {
-    if (value is num) return Value(value.toDouble());
-    if (value is String) {
-      final parsed = double.tryParse(value);
-      if (parsed == null) {
-        throw _ImportValidationException(
-          l10n.invalidCsvValue(fieldName, rowNumber, value.toString()),
-        );
-      }
-      return Value(parsed);
-    }
-    throw _ImportValidationException(
-      l10n.invalidCsvDataType(
-        fieldName,
-        rowNumber,
-        value.runtimeType.toString(),
-      ),
-    );
   }
 
   Future<void> importPlans(BuildContext context) async {

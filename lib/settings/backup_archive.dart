@@ -7,7 +7,14 @@ import 'backup_database.dart';
 
 const backupDatabaseName = 'flexify.sqlite';
 
-const _imageColumns = <(String, String)>[('gym_sets', 'image')];
+const _imageColumns = <(String, String)>[
+  ('exercises', 'image'),
+  ('body_weights', 'photo'),
+  // Kept for old backups and any pre-release databases that stored an
+  // image directly against a performed set.
+  ('exercise_sets', 'image'),
+  ('gym_sets', 'image'),
+];
 
 /// Signals that an imported backup archive is missing the Flexify database.
 final class MissingBackupDatabaseException implements Exception {
