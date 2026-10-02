@@ -197,6 +197,8 @@ class _EditPlanPageState extends State<EditPlanPage> {
                 ),
               SearchBar(
                 controller: _searchCtrl,
+                focusNode: _node,
+                onTap: () => _node.requestFocus(),
                 leading: const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16),
                   child: Icon(Icons.search),
@@ -353,6 +355,14 @@ class _EditPlanPageState extends State<EditPlanPage> {
       await db.planExercises.deleteWhere((tbl) => tbl.planId.equals(planId));
       await db.planExercises.insertAll(_orderedExercises(planId).toList());
     } else {
+      final highest =
+          await (db.plans.select()
+                ..orderBy([(u) => OrderingTerm.desc(u.sequence)])
+                ..limit(1))
+              .getSingleOrNull();
+      final sequence = (highest?.sequence ?? 0) + 1;
+      newPlan = newPlan.copyWith(sequence: Value(sequence));
+
       final id = await db.into(db.plans).insert(newPlan);
       await db.planExercises.insertAll(
         _orderedExercises(

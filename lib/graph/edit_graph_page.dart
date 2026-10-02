@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
@@ -29,6 +30,39 @@ class _EditGraphPageState extends State<EditGraphPage> {
   final TextEditingController seconds = TextEditingController();
   final key = GlobalKey<FormState>();
 
+  bool _hasUnsavedChanges = false;
+  bool _allowPop = false;
+
+  void _markDirty() {
+    if (_hasUnsavedChanges) return;
+    setState(() => _hasUnsavedChanges = true);
+  }
+
+  Future<void> _confirmDiscard(Object? result) async {
+    final discard = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog.adaptive(
+        title: Text(context.l10n.unsavedChanges),
+        content: Text(context.l10n.discardUnsavedChanges),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text(context.l10n.actionCancel),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: Text(context.l10n.actionDiscard),
+          ),
+        ],
+      ),
+    );
+    if (discard != true || !mounted) return;
+    setState(() => _allowPop = true);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) Navigator.of(context).pop(result);
+    });
+  }
+
   bool? cardio;
   int? _exerciseId;
   String? unit;
@@ -37,189 +71,199 @@ class _EditGraphPageState extends State<EditGraphPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        title: Text(context.l10n.updateAllNamed(widget.name.toLowerCase())),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: Form(
-          key: key,
-          child: ListView(
-            padding: const EdgeInsets.only(bottom: 116),
-            children: [
-              const SizedBox(height: 8.0),
-              TextField(
-                controller: name,
-                textInputAction: TextInputAction.next,
-                decoration: InputDecoration(labelText: context.l10n.newName),
-                textCapitalization: TextCapitalization.sentences,
-              ),
-              const SizedBox(height: 12.0),
-              Row(
-                children: [
-                  Expanded(
-                    child: TextFormField(
-                      controller: minutes,
-                      textInputAction: TextInputAction.next,
-                      decoration: InputDecoration(
-                        labelText: context.l10n.restMinutes,
-                      ),
-                      keyboardType: TextInputType.number,
-                      onTap: () => selectAll(minutes),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) return null;
-                        if (int.tryParse(value) == null)
-                          return context.l10n.invalidNumber;
-                        return null;
-                      },
-                    ),
-                  ),
-                  const SizedBox(width: 8.0),
-                  Expanded(
-                    child: TextFormField(
-                      controller: seconds,
-                      textInputAction: TextInputAction.next,
-                      decoration: InputDecoration(
-                        labelText: context.l10n.restSeconds,
-                      ),
-                      keyboardType: TextInputType.number,
-                      onTap: () {
-                        selectAll(seconds);
-                      },
-                      validator: (value) {
-                        if (value == null || value.isEmpty) return null;
-                        if (int.tryParse(value) == null)
-                          return context.l10n.invalidNumber;
-                        return null;
-                      },
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 12.0),
-              Selector<SettingsState, bool>(
-                selector: (p0, settings) => settings.value.showCategories,
-                builder: (context, showCategories, child) {
-                  if (!showCategories) return const SizedBox();
-                  return StreamBuilder(
-                    stream: getCategoriesStream(),
-                    builder: (context, snapshot) {
-                      final categories = <String>{
-                        if (category != null && category!.isNotEmpty) category!,
-                        ...?snapshot.data,
-                      }.toList();
-                      return Column(
-                        children: [
-                          DropdownButtonFormField(
-                            decoration: InputDecoration(
-                              labelText: context.l10n.categoryLabel,
-                            ),
-                            initialValue: category,
-                            items: categories
-                                .map(
-                                  (category) => DropdownMenuItem(
-                                    value: category,
-                                    child: Text(category),
-                                  ),
-                                )
-                                .toList(),
-                            onChanged: (value) {
-                              setState(() {
-                                category = value!;
-                              });
-                            },
-                          ),
-                          const SizedBox(height: 12.0),
-                        ],
-                      );
-                    },
-                  );
-                },
-              ),
-              DropdownButtonFormField(
-                decoration: InputDecoration(labelText: context.l10n.unitLabel),
-                initialValue: unit,
-                items: [
-                  const DropdownMenuItem(value: null, child: Text("")),
-                  ...strengthUnitMenuItems(context.l10n),
-                  ...cardioUnitMenuItems(context.l10n),
-                ],
-                onChanged: (value) {
-                  setState(() {
-                    unit = value;
-                  });
-                },
-              ),
-              if (cardio != null) ...[
-                const SizedBox(height: 12.0),
-                ListTile(
-                  leading: cardio!
-                      ? const Icon(Icons.sports_gymnastics)
-                      : const Icon(Icons.fitness_center),
-                  title: Text(
-                    cardio! ? context.l10n.cardio : context.l10n.strength,
-                  ),
-                  onTap: () => _setCardio(!cardio!),
-                  trailing: Switch(value: cardio!, onChanged: _setCardio),
+    return PopScope(
+      canPop: _allowPop || !_hasUnsavedChanges,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop || _allowPop || !_hasUnsavedChanges) return;
+        unawaited(_confirmDiscard(result));
+      },
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        appBar: AppBar(
+          title: Text(context.l10n.updateAllNamed(widget.name.toLowerCase())),
+        ),
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Form(
+            key: key,
+            child: ListView(
+              padding: const EdgeInsets.only(bottom: 116),
+              children: [
+                const SizedBox(height: 8.0),
+                TextField(
+                  controller: name,
+                  textInputAction: TextInputAction.next,
+                  decoration: InputDecoration(labelText: context.l10n.newName),
+                  textCapitalization: TextCapitalization.sentences,
                 ),
                 const SizedBox(height: 12.0),
-              ] else
-                const SizedBox(height: 12.0),
-              Selector<SettingsState, bool>(
-                builder: (context, showImages, child) {
-                  return Visibility(
-                    visible: showImages,
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            TextButton.icon(
-                              onPressed: pick,
-                              label: Text(context.l10n.imageLabel),
-                              icon: const Icon(Icons.image),
-                            ),
-                            if (image != null)
-                              TextButton.icon(
-                                onPressed: () {
-                                  setState(() {
-                                    image = null;
-                                  });
-                                },
-                                label: Text(context.l10n.actionDelete),
-                                icon: const Icon(Icons.delete),
-                              ),
-                          ],
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextFormField(
+                        controller: minutes,
+                        textInputAction: TextInputAction.next,
+                        decoration: InputDecoration(
+                          labelText: context.l10n.restMinutes,
                         ),
-                        if (image != null) ...[
-                          const SizedBox(height: 8),
-                          Image.file(
-                            File(image!),
-                            cacheWidth: 400,
-                            errorBuilder: (context, error, stackTrace) =>
-                                TextButton.icon(
-                                  label: Text(context.l10n.imageError),
-                                  icon: const Icon(Icons.error),
-                                  onPressed: () => pick(),
-                                ),
-                          ),
-                        ],
-                      ],
+                        keyboardType: TextInputType.number,
+                        onTap: () => selectAll(minutes),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) return null;
+                          if (int.tryParse(value) == null)
+                            return context.l10n.invalidNumber;
+                          return null;
+                        },
+                      ),
                     ),
-                  );
-                },
-                selector: (context, settings) => settings.value.showImages,
-              ),
-            ],
+                    const SizedBox(width: 8.0),
+                    Expanded(
+                      child: TextFormField(
+                        controller: seconds,
+                        textInputAction: TextInputAction.next,
+                        decoration: InputDecoration(
+                          labelText: context.l10n.restSeconds,
+                        ),
+                        keyboardType: TextInputType.number,
+                        onTap: () {
+                          selectAll(seconds);
+                        },
+                        validator: (value) {
+                          if (value == null || value.isEmpty) return null;
+                          if (int.tryParse(value) == null)
+                            return context.l10n.invalidNumber;
+                          return null;
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12.0),
+                Selector<SettingsState, bool>(
+                  selector: (p0, settings) => settings.value.showCategories,
+                  builder: (context, showCategories, child) {
+                    if (!showCategories) return const SizedBox();
+                    return StreamBuilder(
+                      stream: getCategoriesStream(),
+                      builder: (context, snapshot) {
+                        final categories = <String>{
+                          if (category != null && category!.isNotEmpty)
+                            category!,
+                          ...?snapshot.data,
+                        }.toList();
+                        return Column(
+                          children: [
+                            DropdownButtonFormField(
+                              decoration: InputDecoration(
+                                labelText: context.l10n.categoryLabel,
+                              ),
+                              initialValue: category,
+                              items: categories
+                                  .map(
+                                    (category) => DropdownMenuItem(
+                                      value: category,
+                                      child: Text(category),
+                                    ),
+                                  )
+                                  .toList(),
+                              onChanged: (value) {
+                                setState(() {
+                                  category = value!;
+                                });
+                              },
+                            ),
+                            const SizedBox(height: 12.0),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                ),
+                DropdownButtonFormField(
+                  decoration: InputDecoration(
+                    labelText: context.l10n.unitLabel,
+                  ),
+                  initialValue: unit,
+                  items: [
+                    const DropdownMenuItem(value: null, child: Text("")),
+                    ...strengthUnitMenuItems(context.l10n),
+                    ...cardioUnitMenuItems(context.l10n),
+                  ],
+                  onChanged: (value) {
+                    setState(() {
+                      unit = value;
+                    });
+                  },
+                ),
+                if (cardio != null) ...[
+                  const SizedBox(height: 12.0),
+                  ListTile(
+                    leading: cardio!
+                        ? const Icon(Icons.sports_gymnastics)
+                        : const Icon(Icons.fitness_center),
+                    title: Text(
+                      cardio! ? context.l10n.cardio : context.l10n.strength,
+                    ),
+                    onTap: () => _setCardio(!cardio!),
+                    trailing: Switch(value: cardio!, onChanged: _setCardio),
+                  ),
+                  const SizedBox(height: 12.0),
+                ] else
+                  const SizedBox(height: 12.0),
+                Selector<SettingsState, bool>(
+                  builder: (context, showImages, child) {
+                    return Visibility(
+                      visible: showImages,
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              TextButton.icon(
+                                onPressed: pick,
+                                label: Text(context.l10n.imageLabel),
+                                icon: const Icon(Icons.image),
+                              ),
+                              if (image != null)
+                                TextButton.icon(
+                                  onPressed: () {
+                                    setState(() {
+                                      image = null;
+                                    });
+                                  },
+                                  label: Text(context.l10n.actionDelete),
+                                  icon: const Icon(Icons.delete),
+                                ),
+                            ],
+                          ),
+                          if (image != null) ...[
+                            const SizedBox(height: 8),
+                            Image.file(
+                              File(image!),
+                              cacheWidth: 400,
+                              errorBuilder: (context, error, stackTrace) =>
+                                  TextButton.icon(
+                                    label: Text(context.l10n.imageError),
+                                    icon: const Icon(Icons.error),
+                                    onPressed: () => pick(),
+                                  ),
+                            ),
+                          ],
+                        ],
+                      ),
+                    );
+                  },
+                  selector: (context, settings) => settings.value.showImages,
+                ),
+              ],
+            ),
           ),
         ),
-      ),
-      floatingActionButton: AnimatedFab(
-        onPressed: save,
-        label: Text(context.l10n.actionUpdate),
-        icon: const Icon(Icons.sync),
+        floatingActionButton: AnimatedFab(
+          onPressed: save,
+          label: Text(context.l10n.actionUpdate),
+          icon: const Icon(Icons.sync),
+        ),
       ),
     );
   }
@@ -233,6 +277,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
   }
 
   Future<void> doUpdate() async {
+    _hasUnsavedChanges = false;
     Duration? duration;
     if (int.tryParse(minutes.text) != null && int.tryParse(minutes.text)! > 0 ||
         int.tryParse(seconds.text) != null && int.tryParse(seconds.text)! > 0) {
@@ -262,6 +307,9 @@ class _EditGraphPageState extends State<EditGraphPage> {
   @override
   void initState() {
     super.initState();
+    name.addListener(_markDirty);
+    minutes.addListener(_markDirty);
+    seconds.addListener(_markDirty);
 
     getExerciseByName(widget.name).then((exercise) async {
       if (exercise == null || !mounted) return;
