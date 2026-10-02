@@ -36,4 +36,36 @@ void main() {
     expect(find.text('Bench press'), findsOne);
     expect(find.text('5 x 20 kg'), findsOne);
   });
+
+  testWidgets('GraphTile formats body weight value', (
+    WidgetTester tester,
+  ) async {
+    final harness = await FlexifyTestHarness.create();
+    await harness.pump(
+      tester,
+      Scaffold(
+        body: GraphTile(
+          tabCtrl: MockTabController(),
+          onSelect: (value) => null,
+          selected: const {},
+          gymSet: GraphExerciseSummary(
+            exerciseId: null,
+            bodyWeight: true,
+            name: 'Weight',
+            created: DateTime.now(),
+            reps: 1,
+            weight: 82.5,
+            cardio: false,
+            unit: 'kg',
+            duration: 0,
+            distance: 0,
+          ),
+        ),
+      ),
+    );
+
+    expect(find.text('Weight'), findsOneWidget);
+    expect(find.text('82.5 kg'), findsOneWidget);
+    expect(find.textContaining('formatDisplayNumber'), findsNothing);
+  });
 }

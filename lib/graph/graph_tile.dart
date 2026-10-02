@@ -36,7 +36,7 @@ class GraphTile extends StatelessWidget {
     );
 
     if (gymSet.bodyWeight) {
-      trailing = "\${formatDisplayNumber(context, gymSet.weight)} $unit";
+      trailing = "${formatDisplayNumber(context, gymSet.weight)} $unit";
     } else if (gymSet.cardio) {
       final minutes = gymSet.duration.floor();
       final seconds = ((gymSet.duration * 60) % 60).floor().toString().padLeft(
