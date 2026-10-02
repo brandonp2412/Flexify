@@ -12,11 +12,7 @@ Future<(FlexifyTestHarness, int)> pumpExerciseModal(WidgetTester tester) async {
   final id = await harness.database.plans.insertOne(planFixture());
   final exercise = await ensureExerciseFixture(harness.database, 'Bench press');
   final planExercise = await harness.database.planExercises.insertReturning(
-    planExerciseFixture(
-      planId: id,
-      exercise: exercise.name,
-      exerciseId: exercise.id,
-    ),
+    planExerciseFixture(planId: id, exerciseId: exercise.id),
   );
   final workout = await resumeOrStartWorkout(harness.database, id);
 

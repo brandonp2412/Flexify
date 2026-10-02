@@ -37,8 +37,7 @@ void main() async {
     await oldDb.planExercises.insertOne(
       PlanExercisesCompanion.insert(
         planId: 1,
-        exercise: oldBench.name,
-        exerciseId: Value(oldBench.id),
+        exerciseId: oldBench.id,
         enabled: true,
       ),
     );
@@ -91,8 +90,7 @@ void main() async {
     await newDb.planExercises.insertOne(
       PlanExercisesCompanion.insert(
         planId: 1,
-        exercise: newSquat.name,
-        exerciseId: Value(newSquat.id),
+        exerciseId: newSquat.id,
         enabled: true,
       ),
     );

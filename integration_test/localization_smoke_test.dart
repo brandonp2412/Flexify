@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart' hide isNull;
 import 'package:drift/native.dart';
 import 'package:flexify/database/database.dart';
+import 'package:flexify/database/performed_sets.dart';
 import 'package:flexify/home_page.dart';
 import 'package:flexify/l10n/generated/app_localizations.dart';
 import 'package:flexify/main.dart' as app;
@@ -103,8 +104,10 @@ void main() {
       planFixture(title: 'User integration plan'),
     );
     const exercise = 'User integration press';
-    await database.planExercises.insertOne(
-      planExerciseFixture(planId: planId, exercise: exercise),
+    await insertPlanExerciseFixture(
+      database,
+      planId: planId,
+      exercise: exercise,
     );
     final plan =
         await (database.plans.select()..where((row) => row.id.equals(planId)))
@@ -140,13 +143,9 @@ void main() {
     await tester.tap(find.text(l10n.saveSet));
     await tester.pumpAndSettle();
 
-    final saved =
-        await (database.gymSets.select()
-              ..where((row) => row.name.equals(exercise))
-              ..orderBy([(row) => OrderingTerm.desc(row.created)])
-              ..limit(1))
-            .getSingle();
-    expect(saved.name, exercise);
+    final saved = await getLatestPerformedSet(database, exerciseName: exercise);
+    expect(saved, isNot(equals(null)));
+    expect(saved!.name, exercise);
     expect(saved.reps, 5);
     expect(saved.weight, 50.5);
     expect(tester.takeException(), isNull);

@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart' hide isNull;
 import 'package:flexify/app_search.dart';
 import 'package:flexify/database/database.dart';
+import 'package:flexify/database/performed_sets.dart';
 import 'package:flexify/graph/strength_data.dart';
 import 'package:flexify/graph/strength_page.dart';
 import 'package:flexify/l10n/generated/app_localizations.dart';
@@ -274,18 +275,15 @@ void main() {
     final planId = await harness.database.plans.insertOne(planFixture());
     final definition = await ensureExerciseFixture(harness.database, exercise);
     final workout = await resumeOrStartWorkout(harness.database, planId);
-    final gymSet = await harness.database.gymSets.insertReturning(
-      gymSetFixture(
+    await insertPerformedSet(
+      harness.database,
+      gymSet: gymSetFixture(
         exercise,
         planId: planId,
         reps: 12,
         weight: 102.5,
         created: DateTime.now().toLocal(),
       ),
-    );
-    await insertExerciseSetMirror(
-      harness.database,
-      gymSet: gymSet,
       exerciseId: definition.id,
       workoutId: workout.id,
     );

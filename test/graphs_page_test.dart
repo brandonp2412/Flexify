@@ -171,8 +171,10 @@ void main() {
     );
 
     final planId = await harness.database.plans.insertOne(planFixture());
-    await harness.database.planExercises.insertOne(
-      planExerciseFixture(planId: planId, exercise: 'Zz unique test exercise'),
+    final planExercise = await insertPlanExerciseFixture(
+      harness.database,
+      planId: planId,
+      exercise: 'Zz unique test exercise',
     );
 
     await pumpGraphsPage(tester, harness);
@@ -185,7 +187,7 @@ void main() {
 
     final planExercises =
         await (harness.database.planExercises.select()
-              ..where((pe) => pe.exercise.equals('Zz unique test exercise')))
+              ..where((pe) => pe.id.equals(planExercise.id)))
             .get();
     expect(planExercises, isEmpty);
   });

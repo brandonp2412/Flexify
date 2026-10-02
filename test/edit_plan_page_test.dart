@@ -25,14 +25,16 @@ void main() {
       sequence: 1,
     );
 
-    await database.plans.deleteAll();
     await database.planExercises.deleteAll();
+    await database.plans.deleteAll();
     await database.plans.insertOne(plan);
-    await database.planExercises.insertAll([
-      planExerciseFixture(planId: 1, exercise: 'Arnold press'),
-      planExerciseFixture(planId: 1, exercise: 'Back extension'),
-      planExerciseFixture(planId: 1, exercise: 'Barbell bench press'),
-    ]);
+    for (final exercise in const [
+      'Arnold press',
+      'Back extension',
+      'Barbell bench press',
+    ]) {
+      await insertPlanExerciseFixture(database, planId: 1, exercise: exercise);
+    }
 
     await harness.pump(tester, EditPlanPage(plan: plan));
 
@@ -66,11 +68,13 @@ void main() {
     await database.planExercises.deleteAll();
     await database.plans.deleteAll();
     await database.plans.insertOne(plan);
-    await database.planExercises.insertAll([
-      planExerciseFixture(planId: 1, exercise: 'Arnold press'),
-      planExerciseFixture(planId: 1, exercise: 'Back extension'),
-      planExerciseFixture(planId: 1, exercise: 'Barbell bench press'),
-    ]);
+    for (final exercise in const [
+      'Arnold press',
+      'Back extension',
+      'Barbell bench press',
+    ]) {
+      await insertPlanExerciseFixture(database, planId: 1, exercise: exercise);
+    }
 
     await harness.pump(tester, EditPlanPage(plan: plan));
 
@@ -93,11 +97,13 @@ void main() {
       title: 'Test title',
       sequence: 1,
     );
-    await database.plans.deleteAll();
     await database.planExercises.deleteAll();
+    await database.plans.deleteAll();
     await database.plans.insertOne(plan);
-    await database.planExercises.insertOne(
-      planExerciseFixture(planId: 1, exercise: 'Arnold press'),
+    await insertPlanExerciseFixture(
+      database,
+      planId: 1,
+      exercise: 'Arnold press',
     );
 
     await harness.pump(

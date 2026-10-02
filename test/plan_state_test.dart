@@ -19,11 +19,7 @@ void main() {
       final planId = await db.plans.insertOne(planFixture());
       final exercise = await ensureExerciseFixture(db, 'Bench press');
       await db.planExercises.insertOne(
-        planExerciseFixture(
-          planId: planId,
-          exercise: 'stale legacy name',
-          exerciseId: exercise.id,
-        ),
+        planExerciseFixture(planId: planId, exerciseId: exercise.id),
       );
       final workout = await resumeOrStartWorkout(db, planId);
       await db.exerciseSets.insertOne(
@@ -49,11 +45,7 @@ void main() {
     final planId = await db.plans.insertOne(planFixture());
     final exercise = await ensureExerciseFixture(db, 'Bench press');
     await db.planExercises.insertOne(
-      planExerciseFixture(
-        planId: planId,
-        exercise: exercise.name,
-        exerciseId: exercise.id,
-      ),
+      planExerciseFixture(planId: planId, exerciseId: exercise.id),
     );
     final first = await db.workouts.insertReturning(
       WorkoutsCompanion.insert(
@@ -89,11 +81,7 @@ void main() {
       final planId = await db.plans.insertOne(planFixture(title: 'Push'));
       final exercise = await ensureExerciseFixture(db, 'Stable press');
       await db.planExercises.insertOne(
-        planExerciseFixture(
-          planId: planId,
-          exercise: 'old renamed text',
-          exerciseId: exercise.id,
-        ),
+        planExerciseFixture(planId: planId, exerciseId: exercise.id),
       );
 
       final drafts = await loadPlanExerciseDrafts(
@@ -101,10 +89,10 @@ void main() {
       );
 
       final draft = drafts.singleWhere(
-        (candidate) => candidate.exerciseId.value == exercise.id,
+        (candidate) => candidate.planExercise.exerciseId.value == exercise.id,
       );
-      expect(draft.enabled.value, isTrue);
-      expect(draft.exercise.value, exercise.name);
+      expect(draft.planExercise.enabled.value, isTrue);
+      expect(draft.exerciseName, exercise.name);
     },
   );
 }

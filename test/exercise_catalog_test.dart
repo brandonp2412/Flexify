@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/database/exercise_catalog.dart';
+import 'package:flexify/database/performed_sets.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/plan_queries.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -10,35 +11,32 @@ import 'mock_tests.dart';
 void main() {
   setUp(() => db = testDb());
 
-  test(
-    'creating an exercise writes the catalog without a hidden fake set',
-    () async {
-      final exercise = await createExerciseDefinition(
-        name: 'Catalog-only press',
-        cardio: false,
-        displayUnit: 'kg',
-        category: 'Chest',
-        image: '/tmp/press.png',
-        defaultRestDurationMs: 90000,
-      );
+  test('creating an exercise writes only catalog state', () async {
+    final exercise = await createExerciseDefinition(
+      name: 'Catalog-only press',
+      cardio: false,
+      displayUnit: 'kg',
+      category: 'Chest',
+      image: '/tmp/press.png',
+      defaultRestDurationMs: 90000,
+    );
 
-      expect(exercise.name, 'Catalog-only press');
-      expect(exercise.kind, 'strength');
-      expect(exercise.displayUnit, 'kg');
-      expect(exercise.image, '/tmp/press.png');
-      expect(exercise.defaultRestDurationMs, 90000);
-      expect(await getExerciseCategoryName(exercise), 'Chest');
-      expect(
-        await (db.gymSets.select()
-              ..where((set) => set.name.equals('Catalog-only press')))
-            .get(),
-        isEmpty,
-      );
-    },
-  );
+    expect(exercise.name, 'Catalog-only press');
+    expect(exercise.kind, 'strength');
+    expect(exercise.displayUnit, 'kg');
+    expect(exercise.image, '/tmp/press.png');
+    expect(exercise.defaultRestDurationMs, 90000);
+    expect(await getExerciseCategoryName(exercise), 'Chest');
+    expect(
+      await (db.exerciseSets.select()
+            ..where((set) => set.exerciseId.equals(exercise.id)))
+          .get(),
+      isEmpty,
+    );
+  });
 
   test(
-    'rename keeps performed history attached to the stable exercise id',
+    'rename keeps history and plans attached to the stable exercise id',
     () async {
       final exercise = await createExerciseDefinition(
         name: 'Stable lift',
@@ -46,15 +44,6 @@ void main() {
         displayUnit: 'kg',
       );
       final timestamp = DateTime(2026, 10, 1, 18, 30);
-      await db.gymSets.insertOne(
-        GymSetsCompanion.insert(
-          name: 'Stable lift',
-          reps: 5,
-          weight: 100,
-          unit: 'kg',
-          created: timestamp,
-        ),
-      );
       final historyId = await db.exerciseSets.insertOne(
         ExerciseSetsCompanion.insert(
           exerciseId: exercise.id,
@@ -69,8 +58,7 @@ void main() {
       await db.planExercises.insertOne(
         PlanExercisesCompanion.insert(
           planId: planId,
-          exercise: exercise.name,
-          exerciseId: Value(exercise.id),
+          exerciseId: exercise.id,
           enabled: true,
         ),
       );
@@ -91,25 +79,16 @@ void main() {
             .exerciseId,
         exercise.id,
       );
-      expect(
-        (await (db.gymSets.select()
-                  ..where((set) => set.created.equals(timestamp)))
-                .getSingle())
-            .name,
-        'Stable lift',
-      );
+      final history = await getPerformedSets(db, search: 'Renamed stable lift');
+      expect(history, hasLength(1));
+      expect(history.single.name, 'Renamed stable lift');
+      expect(history.single.created, timestamp);
       expect(
         (await (db.planExercises.select()
                   ..where((row) => row.planId.equals(planId)))
                 .getSingle())
-            .exercise,
-        'Renamed stable lift',
-      );
-      expect(
-        await (db.gymSets.select()
-              ..where((set) => set.name.equals('Renamed stable lift')))
-            .get(),
-        isEmpty,
+            .exerciseId,
+        exercise.id,
       );
     },
   );
@@ -150,11 +129,76 @@ void main() {
     expect(updated.graphTimeBasedXAxis, isTrue);
     expect(updated.notes, 'Keep elbows tucked');
     expect(
-      await (db.graphPreferences.select()
-            ..where((pref) => pref.name.equals(exercise.name)))
+      await db
+          .customSelect(
+            "SELECT name FROM sqlite_master "
+            "WHERE type = 'table' AND name = 'graph_preferences'",
+          )
           .get(),
       isEmpty,
     );
+  });
+
+  test('renaming onto an existing exercise merges stable references', () async {
+    final source = await createExerciseDefinition(
+      name: 'Merge source',
+      cardio: false,
+      displayUnit: 'kg',
+    );
+    final target = await createExerciseDefinition(
+      name: 'Merge target',
+      cardio: false,
+      displayUnit: 'kg',
+    );
+    final planId = await db.plans.insertOne(
+      PlansCompanion.insert(days: 'Friday'),
+    );
+    await db.planExercises.insertOne(
+      PlanExercisesCompanion.insert(
+        planId: planId,
+        exerciseId: source.id,
+        enabled: true,
+      ),
+    );
+    await db.exerciseSets.insertOne(
+      ExerciseSetsCompanion.insert(
+        exerciseId: source.id,
+        timestamp: DateTime(2026, 10, 2, 9),
+        reps: const Value(5),
+        loadKg: const Value(80),
+      ),
+    );
+    await db.exerciseSets.insertOne(
+      ExerciseSetsCompanion.insert(
+        exerciseId: target.id,
+        timestamp: DateTime(2026, 10, 2, 10),
+        reps: const Value(6),
+        loadKg: const Value(90),
+      ),
+    );
+
+    await updateExerciseDefinition(
+      exerciseId: source.id,
+      name: target.name,
+      cardio: false,
+      displayUnit: 'lb',
+      category: 'Merged',
+    );
+
+    expect(await getExerciseById(source.id), null);
+    final merged = await getExerciseById(target.id);
+    expect(merged, isA<Exercise>());
+    expect(merged!.displayUnit, 'lb');
+    expect(await getExerciseCategoryName(merged), 'Merged');
+
+    final sets = await db.exerciseSets.select().get();
+    expect(sets, hasLength(2));
+    expect(sets.every((set) => set.exerciseId == target.id), isTrue);
+    final planExercise =
+        await (db.planExercises.select()
+              ..where((row) => row.planId.equals(planId)))
+            .getSingle();
+    expect(planExercise.exerciseId, target.id);
   });
 
   test('plan editor discovers catalog exercises by stable id', () async {
@@ -170,27 +214,24 @@ void main() {
     var drafts = await loadPlanExerciseDrafts(
       PlansCompanion(id: Value(planId)),
     );
-    final draft = drafts.singleWhere(
-      (row) => row.exerciseId.value == exercise.id,
+    var draft = drafts.singleWhere(
+      (row) => row.planExercise.exerciseId.value == exercise.id,
     );
-    expect(draft.exercise.value, exercise.name);
-    expect(draft.enabled.value, isFalse);
+    expect(draft.exerciseName, exercise.name);
+    expect(draft.planExercise.enabled.value, isFalse);
 
     await db.planExercises.insertOne(
       PlanExercisesCompanion.insert(
         planId: planId,
-        exercise: exercise.name,
-        exerciseId: Value(exercise.id),
+        exerciseId: exercise.id,
         enabled: true,
       ),
     );
     drafts = await loadPlanExerciseDrafts(PlansCompanion(id: Value(planId)));
-    expect(
-      drafts
-          .singleWhere((row) => row.exerciseId.value == exercise.id)
-          .enabled
-          .value,
-      isTrue,
+    draft = drafts.singleWhere(
+      (row) => row.planExercise.exerciseId.value == exercise.id,
     );
+    expect(draft.planExercise.enabled.value, isTrue);
+    expect(draft.exerciseName, exercise.name);
   });
 }

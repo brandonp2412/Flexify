@@ -124,17 +124,48 @@ Future<void> updateExerciseDefinition({
 }) async {
   final trimmedName = name.trim();
   final categoryId = await _categoryId(category);
-  await (db.exercises.update()..where((row) => row.id.equals(exerciseId)))
-      .write(
-        ExercisesCompanion(
-          name: Value(trimmedName),
-          kind: Value(cardio ? 'cardio' : 'strength'),
-          displayUnit: Value(displayUnit),
-          categoryId: Value(categoryId),
-          image: Value(image),
-          defaultRestDurationMs: Value(defaultRestDurationMs),
-        ),
-      );
+  final target =
+      await (db.exercises.select()
+            ..where((row) => row.name.equals(trimmedName)))
+          .getSingleOrNull();
+
+  final definition = ExercisesCompanion(
+    name: Value(trimmedName),
+    kind: Value(cardio ? 'cardio' : 'strength'),
+    displayUnit: Value(displayUnit),
+    categoryId: Value(categoryId),
+    image: Value(image),
+    defaultRestDurationMs: Value(defaultRestDurationMs),
+  );
+
+  if (target == null || target.id == exerciseId) {
+    await (db.exercises.update()..where((row) => row.id.equals(exerciseId)))
+        .write(definition);
+    return;
+  }
+
+  await db.transaction(() async {
+    await (db.exerciseSets.update()
+          ..where((row) => row.exerciseId.equals(exerciseId)))
+        .write(ExerciseSetsCompanion(exerciseId: Value(target.id)));
+    await (db.planExercises.update()
+          ..where((row) => row.exerciseId.equals(exerciseId)))
+        .write(PlanExercisesCompanion(exerciseId: Value(target.id)));
+    await (db.exercises.update()..where((row) => row.id.equals(target.id)))
+        .write(
+          ExercisesCompanion(
+            name: Value(target.name),
+            kind: Value(cardio ? 'cardio' : 'strength'),
+            displayUnit: Value(displayUnit),
+            categoryId: Value(categoryId),
+            image: Value(image),
+            defaultRestDurationMs: Value(defaultRestDurationMs),
+            archived: const Value(false),
+          ),
+        );
+    await (db.exercises.delete()..where((row) => row.id.equals(exerciseId)))
+        .go();
+  });
 }
 
 Future<void> updateExerciseGraphPreferences({

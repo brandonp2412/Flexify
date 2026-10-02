@@ -1,86 +1,64 @@
-import 'package:drift/drift.dart';
+import 'package:drift/drift.dart' hide isNull;
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'mock_tests.dart';
+import 'support/fixtures.dart';
 
-void main() async {
-  db = testDb();
+void main() {
+  setUp(() => db = testDb());
 
-  test('gym sets can be created', () async {
-    final id = await db.gymSets.insertOne(
-      GymSetsCompanion.insert(
-        name: 'Bench press',
-        reps: 5,
-        weight: 20,
-        unit: 'kg',
-        created: DateTime.now(),
+  Future<int> insertSet() async {
+    final exercise = await ensureExerciseFixture(db, 'Bench press');
+    return db.exerciseSets.insertOne(
+      ExerciseSetsCompanion.insert(
+        exerciseId: exercise.id,
+        timestamp: DateTime(2026, 10, 3, 8),
+        reps: const Value(5),
+        loadKg: const Value(20),
       ),
     );
+  }
+
+  test('exercise sets can be created', () async {
+    final id = await insertSet();
     expect(id, greaterThan(0));
   });
 
-  test('gym sets can be read', () async {
-    final id = await db.gymSets.insertOne(
-      GymSetsCompanion.insert(
-        name: 'Bench press',
-        reps: 5,
-        weight: 20,
-        unit: 'kg',
-        created: DateTime.now(),
-      ),
-    );
-    final gymSet =
-        await (db.gymSets.select()
-              ..where((u) => u.id.equals(id))
+  test('exercise sets can be read', () async {
+    final id = await insertSet();
+    final set =
+        await (db.exerciseSets.select()
+              ..where((row) => row.id.equals(id))
               ..limit(1))
             .getSingle();
-    expect(gymSet.name, 'Bench press');
+    expect(set.reps, 5);
+    expect(set.loadKg, 20);
   });
 
-  test('gym sets can be updated', () async {
-    final id = await db.gymSets.insertOne(
-      GymSetsCompanion.insert(
-        name: 'Bench press',
-        reps: 5,
-        weight: 20,
-        unit: 'kg',
-        created: DateTime.now(),
-      ),
+  test('exercise sets can be updated', () async {
+    final id = await insertSet();
+    await (db.exerciseSets.update()..where((row) => row.id.equals(id))).write(
+      const ExerciseSetsCompanion(reps: Value(6), loadKg: Value(25)),
     );
-    final gymSet =
-        await (db.gymSets.select()
-              ..where((u) => u.id.equals(id))
+    final updated =
+        await (db.exerciseSets.select()
+              ..where((row) => row.id.equals(id))
               ..limit(1))
             .getSingle();
-    await (db.gymSets.update()..where((u) => u.id.equals(id))).write(
-      gymSet.copyWith(name: 'New name'),
-    );
-    final updatedSet =
-        await (db.gymSets.select()
-              ..where((u) => u.id.equals(id))
-              ..limit(1))
-            .getSingle();
-    expect(updatedSet.name, 'New name');
+    expect(updated.reps, 6);
+    expect(updated.loadKg, 25);
   });
 
-  test('gym sets can be deleted', () async {
-    final id = await db.gymSets.insertOne(
-      GymSetsCompanion.insert(
-        name: 'Bench press',
-        reps: 5,
-        weight: 20,
-        unit: 'kg',
-        created: DateTime.now(),
-      ),
-    );
-    await (db.gymSets.deleteWhere((tbl) => tbl.id.equals(id)));
-    final gymSet =
-        await (db.gymSets.select()
-              ..where((u) => u.id.equals(id))
+  test('exercise sets can be deleted', () async {
+    final id = await insertSet();
+    await db.exerciseSets.deleteWhere((row) => row.id.equals(id));
+    final set =
+        await (db.exerciseSets.select()
+              ..where((row) => row.id.equals(id))
               ..limit(1))
             .getSingleOrNull();
-    expect(gymSet, null);
+    expect(set, isNull);
   });
 }

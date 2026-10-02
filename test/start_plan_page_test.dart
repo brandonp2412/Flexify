@@ -102,11 +102,27 @@ void main() {
     final harness = await FlexifyTestHarness.create();
     final database = harness.database;
 
-    await database.gymSets.insertAll([
-      gymSetFixture('Bench press', reps: 2, weight: 90, category: 'Chest'),
-      gymSetFixture('Barbell row', reps: 5, weight: 60, category: 'Shoulders'),
-      gymSetFixture('Squat', reps: 7, weight: 100, category: 'Legs'),
-    ]);
+    await insertPerformedSetFixture(
+      database,
+      'Bench press',
+      reps: 2,
+      weight: 90,
+      category: 'Chest',
+    );
+    await insertPerformedSetFixture(
+      database,
+      'Barbell row',
+      reps: 5,
+      weight: 60,
+      category: 'Shoulders',
+    );
+    await insertPerformedSetFixture(
+      database,
+      'Squat',
+      reps: 7,
+      weight: 100,
+      category: 'Legs',
+    );
 
     final id = await database.plans.insertOne(
       planFixture(days: 'Monday,Tuesday,Wednesday'),
@@ -316,35 +332,27 @@ void main() {
       exerciseFixture(replacementExercise),
     );
     await database.planExercises.insertOne(
-      planExerciseFixture(
-        planId: planId,
-        exercise: originalExercise,
-        exerciseId: originalExerciseId,
-      ),
+      planExerciseFixture(planId: planId, exerciseId: originalExerciseId),
     );
-    final originalHistory = await database.gymSets.insertReturning(
-      gymSetFixture(
-        originalExercise,
-        reps: 10,
-        weight: 50,
-        planId: planId,
-        created: testNow.subtract(const Duration(days: 7)),
-      ),
+    final originalHistory = gymSetFixture(
+      originalExercise,
+      reps: 10,
+      weight: 50,
+      planId: planId,
+      created: testNow.subtract(const Duration(days: 7)),
     );
-    final replacementHistory = await database.gymSets.insertReturning(
-      gymSetFixture(
-        replacementExercise,
-        reps: 8,
-        weight: 30,
-        created: testNow.subtract(const Duration(days: 2)),
-      ),
+    final replacementHistory = gymSetFixture(
+      replacementExercise,
+      reps: 8,
+      weight: 30,
+      created: testNow.subtract(const Duration(days: 2)),
     );
     final oldWorkout = await resumeOrStartWorkout(
       database,
       planId,
       now: originalHistory.created,
     );
-    await insertExerciseSetMirror(
+    await insertPerformedSet(
       database,
       gymSet: originalHistory,
       exerciseId: originalExerciseId,
@@ -355,7 +363,7 @@ void main() {
       oldWorkout.id,
       now: originalHistory.created.add(const Duration(minutes: 30)),
     );
-    await insertExerciseSetMirror(
+    await insertPerformedSet(
       database,
       gymSet: replacementHistory,
       exerciseId: replacementExerciseId,
@@ -406,7 +414,7 @@ void main() {
         await (database.planExercises.select()
               ..where((exercise) => exercise.planId.equals(planId)))
             .getSingle();
-    expect(swapped.exercise, replacementExercise);
+    expect(swapped.exerciseId, replacementExerciseId);
     expect(find.text(replacementExercise), findsWidgets);
     expect(
       tester.widget<EditableText>(textFieldWithLabel('Reps')).controller.text,
@@ -482,16 +490,7 @@ void main() {
       cardio: true,
       unit: 'kg',
     );
-    await database.gymSets.insertOne(
-      gymSetFixture(
-        'Sled push',
-        hidden: true,
-        cardio: true,
-        unit: 'kg',
-        duration: 1,
-        weight: 20,
-      ),
-    );
+
     final plan =
         await (database.plans.select()..where((plan) => plan.id.equals(id)))
             .getSingle();

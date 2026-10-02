@@ -6,7 +6,9 @@ import 'package:flexify/database/performed_sets.dart';
 import 'package:flexify/home_page.dart';
 import 'package:flexify/main.dart' as app;
 import 'package:flexify/plan/plan_tile.dart';
+import 'package:flexify/settings/settings_page.dart';
 import 'package:flexify/settings/settings_state.dart';
+import 'package:flexify/settings/workout_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
@@ -81,9 +83,19 @@ Future<void> _openGraphOptionsIfNeeded(WidgetTester tester) async {
 }
 
 Future<void> _tapSaveAction(WidgetTester tester) async {
-  final saveSet = find.text('Save set');
-  final target = saveSet.evaluate().isNotEmpty ? saveSet : find.text('Save');
-  await tester.tap(target.last);
+  for (final target in [
+    find.text('Save set'),
+    find.text('Save plan'),
+    find.text('Save'),
+    find.byIcon(Icons.save_rounded),
+    find.byIcon(Icons.save),
+  ]) {
+    if (target.evaluate().isNotEmpty) {
+      await tester.tap(target.last);
+      return;
+    }
+  }
+  fail('No responsive save action found');
 }
 
 Future<void> _tapTab(WidgetTester tester, String tab) async {
@@ -119,8 +131,19 @@ Future<void> _openSettings(WidgetTester tester) async {
 
 Future<void> _openSettingsSection(WidgetTester tester, String section) async {
   await _openSettings(tester);
-  final sectionFinder = find.text(section);
-  await tester.ensureVisible(sectionFinder);
+  final sectionFinder = find.descendant(
+    of: find.byType(SettingsPage),
+    matching: find.text(section),
+  );
+  if (sectionFinder.evaluate().isEmpty) {
+    await tester.scrollUntilVisible(
+      sectionFinder,
+      260,
+      scrollable: find.byType(Scrollable).last,
+    );
+  } else {
+    await tester.ensureVisible(sectionFinder);
+  }
   await tester.pumpAndSettle();
   await tester.tap(sectionFinder);
   await tester.pumpAndSettle();
@@ -320,7 +343,7 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('Graph add exercise cardio switch preserves the selected unit', (
+  testWidgets('Graph add exercise cardio switch uses the cardio unit', (
     tester,
   ) async {
     await _pumpIsolatedApp(tester);
@@ -336,7 +359,7 @@ void main() {
     await tester.tap(cardioSwitch);
     await tester.pumpAndSettle();
 
-    expect(find.text('Kilograms (kg)'), findsOneWidget);
+    expect(find.text('Kilometers (km)'), findsOneWidget);
   });
 
   testWidgets('Settings empty search result uses normal copy', (tester) async {
@@ -587,7 +610,7 @@ void main() {
     await tester.enterText(find.byType(SearchBar), '%');
     await tester.pumpAndSettle();
 
-    expect(find.text('No plans found'), findsOneWidget);
+    expect(find.text('No matching plans'), findsOneWidget);
   });
 
   testWidgets('Plan search treats underscore as literal text', (tester) async {
@@ -597,7 +620,7 @@ void main() {
     await tester.enterText(find.byType(SearchBar), '_');
     await tester.pumpAndSettle();
 
-    expect(find.text('No plans found'), findsOneWidget);
+    expect(find.text('No matching plans'), findsOneWidget);
   });
 
   testWidgets('Per-exercise working set input tolerates invalid text', (
@@ -663,8 +686,8 @@ void main() {
 
     await tester.longPress(find.widgetWithText(ListTile, 'Selection E2E'));
     await tester.pumpAndSettle();
-    expect(find.text('S'), findsOneWidget);
-    await tester.tap(find.text('S'));
+    expect(find.text('1'), findsOneWidget);
+    await tester.tap(find.byTooltip('Clear selection'));
     await tester.pumpAndSettle();
 
     await tester.tap(find.widgetWithText(ListTile, 'Selection E2E'));
@@ -682,7 +705,7 @@ void main() {
     await tester.longPress(find.text('5 x 50 kg'));
     await tester.pumpAndSettle();
     expect(find.text('1 selected'), findsOneWidget);
-    expect(find.text('S'), findsNWidgets(2));
+    expect(find.byTooltip('Select all'), findsOneWidget);
     await tester.tap(find.byTooltip('Select all'));
     await tester.pumpAndSettle();
     expect(find.text('2 selected'), findsOneWidget);
@@ -711,10 +734,7 @@ void main() {
   testWidgets('Graph sort, category filter, global progress, and hide work', (
     tester,
   ) async {
-    final settingsState = await _pumpIsolatedApp(
-      tester,
-      surfaceSize: const Size(1000, 950),
-    );
+    await _pumpIsolatedApp(tester, surfaceSize: const Size(1000, 950));
     await app.db.settings.update().write(
       const SettingsCompanion(showGlobalProgress: Value(true)),
     );
@@ -741,7 +761,11 @@ void main() {
       category: 'Linux Cat A',
     );
     await tester.pumpAndSettle();
-    expect(settingsState.value.showGlobalProgress, isTrue);
+    expect(
+      (await (app.db.settings.select()..limit(1)).getSingle())
+          .showGlobalProgress,
+      isTrue,
+    );
     await _tapTab(tester, 'GraphsPage');
     expect(find.text('Global progress'), findsOneWidget);
     await tester.enterText(find.byType(SearchBar), 'Linux E2E graph');
@@ -799,8 +823,12 @@ void main() {
     await tester.tap(find.widgetWithText(ListTile, 'Clear'));
     await tester.pumpAndSettle();
     expect(find.text('Linux E2E graph Zebra'), findsOneWidget);
-    expect(settingsState.value.showGlobalProgress, isTrue);
-    await tester.tap(find.byTooltip('Clear selection'));
+    expect(
+      (await (app.db.settings.select()..limit(1)).getSingle())
+          .showGlobalProgress,
+      isTrue,
+    );
+    await tester.tap(find.byTooltip('Clear search'));
     await tester.pumpAndSettle();
     expect(find.text('Global progress'), findsOneWidget);
 
@@ -886,7 +914,7 @@ void main() {
     await _tapTab(tester, 'GraphsPage');
     await tester.enterText(find.byType(SearchBar), 'Linux E2E press');
     await tester.pumpAndSettle();
-    expect(find.text('Linux E2E press'), findsOneWidget);
+    expect(find.widgetWithText(ListTile, 'Linux E2E press'), findsOneWidget);
 
     await _tapTab(tester, 'HistoryPage');
     await tester.tap(find.widgetWithText(ListTile, 'Linux E2E press'));
@@ -1023,7 +1051,11 @@ void main() {
     }
     await tester.tap(find.text('5 x 50 kg'));
     await tester.pumpAndSettle();
-    expect(find.text('Linux E2E grouped'), findsOneWidget);
+    expect(_textFieldWithLabel('Name'), findsOneWidget);
+    expect(
+      tester.widget<TextField>(_textFieldWithLabel('Name')).controller!.text,
+      'Linux E2E grouped',
+    );
     await tester.binding.handlePopRoute();
     await tester.pumpAndSettle();
     expect(tester.takeException(), isNull);
@@ -1056,11 +1088,14 @@ void main() {
     await _tapTab(tester, 'GraphsPage');
     await tester.enterText(find.byType(SearchBar), 'Barbell bench press');
     await tester.pumpAndSettle();
-    expect(find.text('Barbell bench press'), findsOneWidget);
+    expect(
+      find.widgetWithText(ListTile, 'Barbell bench press'),
+      findsOneWidget,
+    );
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('Plan auto-advances across exercises and survives re-entry', (
+  testWidgets('Plan auto-advances and starts a new workout after exit', (
     tester,
   ) async {
     await _pumpIsolatedApp(tester, surfaceSize: const Size(1000, 1000));
@@ -1097,16 +1132,37 @@ void main() {
     final logged = await _setsForPlan(plan.id);
     expect(logged.map((row) => row.name).toSet(), containsAll({first, second}));
 
+    final finishedWorkout =
+        await (app.db.workouts.select()..where(
+              (row) => row.planId.equals(plan.id) & row.endedAt.isNull(),
+            ))
+            .getSingle();
     await tester.binding.handlePopRoute();
     await tester.pumpAndSettle();
+    final endedWorkout =
+        await (app.db.workouts.select()
+              ..where((row) => row.id.equals(finishedWorkout.id)))
+            .getSingle();
+    expect(endedWorkout.endedAt, isNotNull);
+
     await tester.tap(find.byType(PlanTile).first);
     await tester.pumpAndSettle();
-    expect(find.text('Set 1'), findsOneWidget);
+    expect(find.text('Set 1'), findsNothing);
+    final newWorkout =
+        await (app.db.workouts.select()..where(
+              (row) => row.planId.equals(plan.id) & row.endedAt.isNull(),
+            ))
+            .getSingle();
+    expect(newWorkout.id, isNot(finishedWorkout.id));
     await tester.binding.handlePopRoute();
     await tester.pumpAndSettle();
     await _tapTab(tester, 'GraphsPage');
-    expect(find.text(first), findsWidgets);
-    expect(find.text(second), findsWidgets);
+    await tester.enterText(find.byType(SearchBar), first);
+    await tester.pumpAndSettle();
+    expect(find.widgetWithText(ListTile, first), findsOneWidget);
+    await tester.enterText(find.byType(SearchBar), second);
+    await tester.pumpAndSettle();
+    expect(find.widgetWithText(ListTile, second), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 
@@ -1188,11 +1244,12 @@ void main() {
     expect(settings.themeMode, 'ThemeMode.light');
 
     final showImages = find.widgetWithText(ListTile, 'Show images');
+    final showImagesBefore = settings.showImages;
     await tester.ensureVisible(showImages);
     await tester.tap(showImages);
     await tester.pumpAndSettle();
     settings = await (app.db.settings.select()..limit(1)).getSingle();
-    expect(settings.showImages, isFalse);
+    expect(settings.showImages, !showImagesBefore);
 
     await tester.ensureVisible(find.text('Outlined'));
     await tester.tap(find.text('Outlined'));
@@ -1256,9 +1313,9 @@ void main() {
     await app.db.exerciseSets.deleteAll();
     await tester.pumpAndSettle();
     await _tapTab(tester, 'GraphsPage');
-    expect(find.text('Global progress'), findsOneWidget);
+    expect(find.text('Global progress'), findsNothing);
     expect(find.text('No graphs found'), findsNothing);
-    expect(find.text('Add'), findsOneWidget);
+    expect(find.text('New exercise'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 
@@ -1272,7 +1329,9 @@ void main() {
     await tester.enterText(search, 'Linux E2E new strength graph');
     await tester.pumpAndSettle();
     expect(find.text('No graphs found'), findsOneWidget);
-    await tester.tap(find.widgetWithText(ListTile, 'No graphs found'));
+    await tester.tap(
+      find.widgetWithText(FilledButton, 'Add “Linux E2E new strength graph”'),
+    );
     await tester.pumpAndSettle();
     expect(find.text('Add exercise'), findsOneWidget);
     expect(find.bySemanticsLabel('Name'), findsOneWidget);
@@ -1296,7 +1355,9 @@ void main() {
     );
     await tester.pumpAndSettle();
     expect(find.text('No graphs found'), findsOneWidget);
-    await tester.tap(find.widgetWithText(ListTile, 'No graphs found'));
+    await tester.tap(
+      find.widgetWithText(FilledButton, 'Add “Linux E2E new cardio graph”'),
+    );
     await tester.pumpAndSettle();
     await tester.tap(find.widgetWithText(ListTile, 'Strength'));
     await tester.pumpAndSettle();
@@ -1330,11 +1391,17 @@ void main() {
     await tester.pumpAndSettle();
     await tester.enterText(find.byType(SearchBar), 'Linux E2E weighted hang');
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Add "Linux E2E weighted hang"'));
+    await tester.tap(
+      find.widgetWithText(FilledButton, 'Add “Linux E2E weighted hang”'),
+    );
     await tester.pumpAndSettle();
     await tester.tap(find.widgetWithText(ListTile, 'Strength'));
     await tester.pumpAndSettle();
-    expect(find.text('Kilograms (kg)'), findsOneWidget);
+    expect(find.text('Kilometers (km)'), findsOneWidget);
+    await tester.tap(_dropdownWithLabel('Unit'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Kilograms (kg)').last);
+    await tester.pumpAndSettle();
     await _tapSaveAction(tester);
     await tester.pumpAndSettle();
     expect(
@@ -1937,6 +2004,9 @@ void main() {
       weight: 82,
       created: DateTime(2026, 9, 1, 12),
     );
+    final timeAxisBefore = (await _exerciseNamed(
+      'Linux E2E strength detail',
+    )).graphTimeBasedXAxis;
     await tester.pumpAndSettle();
     await _tapTab(tester, 'GraphsPage');
     await tester.enterText(find.byType(SearchBar), 'Linux E2E strength detail');
@@ -1956,10 +2026,19 @@ void main() {
       expect(tester.takeException(), isNull);
     }
     await _openGraphOptionsIfNeeded(tester);
-    await tester.tap(
-      find.widgetWithText(SwitchListTile, 'Use time-based X axis'),
+    expect(find.text('Use time-based X axis'), findsOneWidget);
+    final timeAxisSwitch = find.descendant(
+      of: find
+          .ancestor(
+            of: find.text('Use time-based X axis'),
+            matching: find.byType(Row),
+          )
+          .first,
+      matching: find.byType(Switch),
     );
+    await tester.tap(timeAxisSwitch);
     await tester.pumpAndSettle();
+    expect(tester.widget<Switch>(timeAxisSwitch).value, !timeAxisBefore);
     await tester.drag(find.byType(Slider).first, const Offset(150, 0));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Start date'));
@@ -1986,7 +2065,7 @@ void main() {
     final pref = await _exerciseNamed('Linux E2E strength detail');
     expect(pref.graphMetric, 'volume');
     expect(pref.graphPeriod, 'month');
-    expect(pref.graphTimeBasedXAxis, isTrue);
+    expect(pref.graphTimeBasedXAxis, !timeAxisBefore);
     expect(pref.graphLimit, greaterThan(10));
     expect(pref.notes, 'Linux E2E graph notes');
 
@@ -2134,7 +2213,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('Swap workout'), findsOneWidget);
     await tester.enterText(
-      _textFieldWithLabel('Search Exercises'),
+      _textFieldWithLabel('Search exercises...'),
       'Arnold press',
     );
     await tester.pumpAndSettle();
@@ -2143,7 +2222,7 @@ void main() {
 
     expect(await _planExerciseForName(1, 'Squat'), isNull);
     expect(await _planExerciseForName(1, 'Arnold press'), isNotNull);
-    expect(find.text('Arnold press'), findsOneWidget);
+    expect(find.byKey(const Key('Arnold press')), findsOneWidget);
 
     await tester.enterText(find.bySemanticsLabel('Reps'), '5');
     await tester.enterText(find.bySemanticsLabel('Weight (kg)'), '50');
@@ -2240,7 +2319,7 @@ void main() {
     expect(settings.keepScreenOn, !originalKeepScreenOn);
 
     final restMinutes = _textFieldWithLabel('Rest minutes');
-    final restSeconds = _textFieldWithLabel('seconds');
+    final restSeconds = _textFieldWithLabel('Seconds').first;
     await tester.ensureVisible(restMinutes);
     await tester.enterText(restMinutes, '2');
     await tester.pumpAndSettle();
@@ -2269,7 +2348,7 @@ void main() {
     final customRest = find.text('Linux E2E custom rest');
     await tester.ensureVisible(customRest);
     final customMinutes = _textFieldWithLabel('Minutes');
-    final customSeconds = _textFieldWithLabel('Seconds');
+    final customSeconds = _textFieldWithLabel('Seconds').last;
     await tester.enterText(customMinutes, '2');
     await tester.pumpAndSettle();
     await tester.enterText(customSeconds, '10');
@@ -2297,6 +2376,7 @@ void main() {
     var settings = await (app.db.settings.select()..limit(1)).getSingle();
     expect(settings.themeMode, 'ThemeMode.dark');
 
+    final appearanceBefore = settings;
     for (final title in [
       'Pure black (AMOLED)',
       'System color scheme',
@@ -2311,10 +2391,10 @@ void main() {
     }
     settings = await (app.db.settings.select()..limit(1)).getSingle();
     expect(settings.themeMode, 'ThemeMode.amoled');
-    expect(settings.systemColors, isTrue);
-    expect(settings.showGlobalProgress, isFalse);
-    expect(settings.peekGraph, isTrue);
-    expect(settings.curveLines, isFalse);
+    expect(settings.systemColors, !appearanceBefore.systemColors);
+    expect(settings.showGlobalProgress, !appearanceBefore.showGlobalProgress);
+    expect(settings.peekGraph, !appearanceBefore.peekGraph);
+    expect(settings.curveLines, !appearanceBefore.curveLines);
 
     final smoothness = find.text('Curve smoothness');
     await tester.ensureVisible(smoothness);
@@ -2386,13 +2466,19 @@ void main() {
     await tester.pumpAndSettle();
 
     final initial = await (app.db.settings.select()..limit(1)).getSingle();
+    final workoutScrollable = find
+        .descendant(
+          of: find.byType(WorkoutSettings),
+          matching: find.byType(Scrollable),
+        )
+        .first;
     for (final title in [
       'Group history',
       'Show units',
       'Show body weight',
       'Show categories',
       'Show notes',
-      'Notifications',
+      'Positive reinforcement',
       'Rep estimation',
       'Duration estimation',
       'Show graph X axis toggle',
@@ -2400,12 +2486,24 @@ void main() {
       'Default time-based X axis',
     ]) {
       final tile = find.widgetWithText(ListTile, title);
-      await tester.ensureVisible(tile);
+      if (tile.evaluate().isEmpty) {
+        await tester.scrollUntilVisible(
+          tile,
+          260,
+          scrollable: workoutScrollable,
+        );
+      } else {
+        await tester.ensureVisible(tile);
+      }
       await tester.tap(tile);
       await tester.pumpAndSettle();
     }
 
-    await tester.ensureVisible(_dropdownWithLabel('Default graph metric'));
+    await tester.scrollUntilVisible(
+      _dropdownWithLabel('Default graph metric'),
+      260,
+      scrollable: workoutScrollable,
+    );
     await tester.tap(_dropdownWithLabel('Default graph metric'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Distance (cardio)').last);

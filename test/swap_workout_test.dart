@@ -37,7 +37,11 @@ void main() {
     final swapped = updatedPlanExercises.singleWhere(
       (exercise) => exercise.id == original.id,
     );
-    expect(swapped.exercise, 'Arnold press');
+    final arnoldPress =
+        await (harness.database.exercises.select()
+              ..where((exercise) => exercise.name.equals('Arnold press')))
+            .getSingle();
+    expect(swapped.exerciseId, arnoldPress.id);
     expect(swapped.sequence, original.sequence);
     expect(swapped.enabled, original.enabled);
     expect(swapped.timers, original.timers);

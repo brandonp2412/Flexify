@@ -19,6 +19,7 @@ void main() {
           selected: const {},
           gymSet: GraphExerciseSummary(
             exerciseId: 1,
+            bodyWeight: false,
             name: 'Bench press',
             created: DateTime.now(),
             reps: 5,

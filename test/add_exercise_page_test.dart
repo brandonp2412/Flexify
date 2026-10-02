@@ -41,8 +41,8 @@ void main() {
     expect(exercise.displayUnit, 'km');
     expect(
       await (harness.database.select(
-        harness.database.gymSets,
-      )..where((table) => table.name.equals('Treadmill walking'))).get(),
+        harness.database.exerciseSets,
+      )..where((set) => set.exerciseId.equals(exercise.id))).get(),
       isEmpty,
     );
   });

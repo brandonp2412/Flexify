@@ -319,9 +319,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                 (tab) => NavigationRailDestination(
                                   icon: Icon(BottomNav.iconForTab(tab)),
                                   selectedIcon: Icon(BottomNav.iconForTab(tab)),
-                                  label: Text(
-                                    BottomNav.labelForTab(context, tab),
+                                  label: GestureDetector(
                                     key: Key(tab),
+                                    onLongPress: () => hideTab(context, tab),
+                                    child: Text(
+                                      BottomNav.labelForTab(context, tab),
+                                    ),
                                   ),
                                 ),
                               )
