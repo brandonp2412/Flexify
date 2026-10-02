@@ -20,28 +20,6 @@ import 'package:provider/provider.dart';
 final rootScaffoldMessenger = GlobalKey<ScaffoldMessengerState>();
 String? _lastSyncedBackupLocale;
 
-/// Gives touch input the same tap-outside behavior Flutter provides for
-/// mouse input: tapping away from an editable field releases its focus.
-class DismissKeyboardOnTapOutside extends StatelessWidget {
-  final Widget child;
-
-  const DismissKeyboardOnTapOutside({super.key, required this.child});
-
-  @override
-  Widget build(BuildContext context) => Actions(
-    actions: {
-      EditableTextTapOutsideIntent:
-          CallbackAction<EditableTextTapOutsideIntent>(
-            onInvoke: (intent) {
-              intent.focusNode.unfocus();
-              return null;
-            },
-          ),
-    },
-    child: child,
-  );
-}
-
 void _syncBackupLocalizations(AppLocalizations l10n) {
   if (kIsWeb || defaultTargetPlatform != TargetPlatform.android) return;
   if (_lastSyncedBackupLocale == l10n.localeName) return;
@@ -214,6 +192,7 @@ class App extends StatelessWidget {
           supportedLocales: AppLocalizations.supportedLocales,
           localeListResolutionCallback: resolveSystemLocale,
           locale: localeOverrideFromIdentifier(localeOverride),
+          navigatorObservers: [UnfocusObserver()],
           builder: (context, child) {
             _syncBackupLocalizations(context.l10n);
             context.read<TimerState>().setNotificationLocalizations(
@@ -231,7 +210,7 @@ class App extends StatelessWidget {
               exactAlarmRequestUnavailable:
                   context.l10n.exactAlarmRequestUnavailable,
             );
-            return DismissKeyboardOnTapOutside(
+            return KeyboardUnfocusWrapper(
               child: child ?? const SizedBox.shrink(),
             );
           },
@@ -254,6 +233,75 @@ class App extends StatelessWidget {
           home: HomePage(),
         );
       },
+    );
+  }
+}
+
+class UnfocusObserver extends NavigatorObserver {
+  @override
+  void didStartUserGesture(
+    Route<dynamic> route,
+    Route<dynamic>? previousRoute,
+  ) {
+    super.didStartUserGesture(route, previousRoute);
+    FocusManager.instance.primaryFocus?.unfocus();
+  }
+
+  @override
+  void didPop(Route<dynamic> route, Route<dynamic>? previousRoute) {
+    super.didPop(route, previousRoute);
+    FocusManager.instance.primaryFocus?.unfocus();
+  }
+}
+
+class KeyboardUnfocusWrapper extends StatefulWidget {
+  final Widget child;
+  const KeyboardUnfocusWrapper({super.key, required this.child});
+
+  @override
+  State<KeyboardUnfocusWrapper> createState() => _KeyboardUnfocusWrapperState();
+}
+
+class _KeyboardUnfocusWrapperState extends State<KeyboardUnfocusWrapper>
+    with WidgetsBindingObserver {
+  double _previousBottomInset = 0.0;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeMetrics() {
+    super.didChangeMetrics();
+    final bottomInset = WidgetsBinding
+        .instance
+        .platformDispatcher
+        .views
+        .first
+        .viewInsets
+        .bottom;
+    if (_previousBottomInset > 0.0 && bottomInset == 0.0) {
+      FocusManager.instance.primaryFocus?.unfocus();
+    }
+    _previousBottomInset = bottomInset;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        FocusManager.instance.primaryFocus?.unfocus();
+      },
+      behavior: HitTestBehavior.translucent,
+      child: widget.child,
     );
   }
 }
