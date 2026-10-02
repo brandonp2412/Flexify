@@ -62,6 +62,7 @@ import 'schema_v56.dart' as v56;
 import 'schema_v57.dart' as v57;
 import 'schema_v58.dart' as v58;
 import 'schema_v59.dart' as v59;
+import 'schema_v60.dart' as v60;
 
 class GeneratedHelper implements SchemaInstantiationHelper {
   @override
@@ -183,6 +184,8 @@ class GeneratedHelper implements SchemaInstantiationHelper {
         return v58.DatabaseAtV58(db);
       case 59:
         return v59.DatabaseAtV59(db);
+      case 60:
+        return v60.DatabaseAtV60(db);
       default:
         throw MissingSchemaException(version, versions);
     }
@@ -247,5 +250,6 @@ class GeneratedHelper implements SchemaInstantiationHelper {
     57,
     58,
     59,
+    60,
   ];
 }

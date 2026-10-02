@@ -30,6 +30,90 @@ LazyDatabase openConnection() {
   });
 }
 
+Future<void> _backfillExerciseIdentity(AppDatabase database) async {
+  await database.customStatement(r'''
+    WITH ranked AS (
+      SELECT
+        gym_sets.*,
+        ROW_NUMBER() OVER (
+          PARTITION BY gym_sets.name
+          ORDER BY gym_sets.hidden DESC, gym_sets.created DESC, gym_sets.id DESC
+        ) AS choice_rank
+      FROM gym_sets
+      WHERE gym_sets.name <> 'Weight'
+    ),
+    chosen AS (
+      SELECT *
+      FROM ranked
+      WHERE choice_rank = 1
+    )
+    INSERT INTO exercises (
+      name,
+      kind,
+      display_unit,
+      category_id,
+      image,
+      default_rest_duration_ms,
+      notes,
+      graph_metric,
+      graph_period,
+      graph_limit,
+      graph_time_based_x_axis,
+      archived
+    )
+    SELECT
+      chosen.name,
+      CASE WHEN chosen.cardio = 1 THEN 'cardio' ELSE 'strength' END,
+      chosen.unit,
+      categories.id,
+      chosen.image,
+      chosen.rest_ms,
+      COALESCE(
+        graph_preferences.notes,
+        CASE
+          WHEN chosen.hidden = 1 THEN NULLIF(chosen.notes, '')
+          ELSE NULL
+        END
+      ),
+      COALESCE(graph_preferences.metric, 'bestWeight'),
+      COALESCE(graph_preferences.period, 'day'),
+      COALESCE(graph_preferences."limit", 20),
+      COALESCE(graph_preferences.time_based_x_axis, 0),
+      0
+    FROM chosen
+    LEFT JOIN categories ON categories.name = chosen.category
+    LEFT JOIN graph_preferences ON graph_preferences.name = chosen.name
+    WHERE 1 = 1
+    ORDER BY chosen.name COLLATE BINARY
+    ON CONFLICT(name) DO UPDATE SET
+      kind = excluded.kind,
+      display_unit = excluded.display_unit,
+      category_id = excluded.category_id,
+      image = excluded.image,
+      default_rest_duration_ms = excluded.default_rest_duration_ms,
+      notes = excluded.notes,
+      graph_metric = excluded.graph_metric,
+      graph_period = excluded.graph_period,
+      graph_limit = excluded.graph_limit,
+      graph_time_based_x_axis = excluded.graph_time_based_x_axis,
+      archived = excluded.archived
+  ''');
+
+  await database.customStatement(r'''
+    UPDATE plan_exercises
+    SET exercise_id = (
+      SELECT exercises.id
+      FROM exercises
+      WHERE exercises.name = plan_exercises.exercise
+    )
+    WHERE EXISTS (
+      SELECT 1
+      FROM exercises
+      WHERE exercises.name = plan_exercises.exercise
+    )
+  ''');
+}
+
 @DriftDatabase(
   tables: [
     Categories,
@@ -97,6 +181,7 @@ class AppDatabase extends _$AppDatabase {
           SELECT DISTINCT category FROM gym_sets
           WHERE category IS NOT NULL AND TRIM(category) != ''
         ''');
+        await _backfillExerciseIdentity(this);
 
         await settings.insertOne(defaultSettings);
         talker.info(
@@ -589,10 +674,13 @@ class AppDatabase extends _$AppDatabase {
             schema.planExercises.exerciseId,
           );
         },
+        from59To60: (Migrator m, Schema60 schema) async {
+          await _backfillExerciseIdentity(this);
+        },
       ),
     );
   }
 
   @override
-  int get schemaVersion => 59;
+  int get schemaVersion => 60;
 }
