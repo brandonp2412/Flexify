@@ -45,6 +45,16 @@ void main() {
       expect(find.text('Data points'), findsOneWidget);
       expect(find.text('Use time-based X axis'), findsOneWidget);
       expect(find.text('Curve line graphs'), findsOneWidget);
+
+      final startY = tester.getTopLeft(find.text('Start date')).dy;
+      final stopY = tester.getTopLeft(find.text('Stop date')).dy;
+      final dataY = tester.getTopLeft(find.text('Data points')).dy;
+      expect((startY - stopY).abs(), lessThan(2));
+      expect((startY - dataY).abs(), lessThan(4));
+
+      final timeAxisY = tester.getCenter(find.text('Use time-based X axis')).dy;
+      final curveY = tester.getCenter(find.text('Curve line graphs')).dy;
+      expect((timeAxisY - curveY).abs(), lessThan(4));
     },
   );
 }

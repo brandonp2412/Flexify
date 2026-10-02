@@ -46,6 +46,47 @@ class GraphOptionsControls extends StatelessWidget {
     if (!compact) return _mobileLayout(context);
 
     final colorScheme = Theme.of(context).colorScheme;
+    final topControls = <Widget>[
+      if (unitValue != null && unitItems.isNotEmpty)
+        DropdownButtonFormField<String>(
+          key: ValueKey(unitValue),
+          initialValue: unitValue,
+          isExpanded: true,
+          decoration: InputDecoration(
+            labelText: context.l10n.unitLabel,
+            isDense: true,
+          ),
+          items: unitItems,
+          onChanged: (value) {
+            if (value != null) onUnitChanged?.call(value);
+          },
+        ),
+      GraphDateField(
+        label: context.l10n.startDate,
+        value: startDate,
+        hint: shortDateFormat,
+        onTap: onSelectStart,
+        onClear: onClearStart,
+        showClearButton: true,
+        compact: true,
+      ),
+      GraphDateField(
+        label: context.l10n.stopDate,
+        value: endDate,
+        hint: shortDateFormat,
+        onTap: onSelectEnd,
+        onClear: onClearEnd,
+        showClearButton: true,
+        compact: true,
+      ),
+      _LimitControl(
+        limit: limit,
+        maxLimit: maxLimit,
+        onChanged: onLimitChanged,
+        compact: true,
+      ),
+    ];
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -55,71 +96,43 @@ class GraphOptionsControls extends StatelessWidget {
           color: colorScheme.outlineVariant.withValues(alpha: .45),
         ),
       ),
-      child: Wrap(
-        spacing: 14,
-        runSpacing: 14,
-        crossAxisAlignment: WrapCrossAlignment.center,
+      child: Column(
         children: [
-          if (unitValue != null && unitItems.isNotEmpty)
-            SizedBox(
-              width: 150,
-              child: DropdownButtonFormField<String>(
-                key: ValueKey(unitValue),
-                initialValue: unitValue,
-                isExpanded: true,
-                decoration: InputDecoration(
-                  labelText: context.l10n.unitLabel,
-                  isDense: true,
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              for (var index = 0; index < topControls.length; index++) ...[
+                if (index > 0) const SizedBox(width: 12),
+                Expanded(
+                  child: SizedBox(height: 58, child: topControls[index]),
                 ),
-                items: unitItems,
-                onChanged: (value) {
-                  if (value != null) onUnitChanged?.call(value);
-                },
+              ],
+            ],
+          ),
+          const SizedBox(height: 12),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (timeBasedXAxis != null &&
+                  onTimeBasedXAxisChanged != null) ...[
+                Expanded(
+                  flex: 2,
+                  child: _CompactSwitch(
+                    label: context.l10n.useTimeBasedXAxis,
+                    value: timeBasedXAxis!,
+                    onChanged: onTimeBasedXAxisChanged!,
+                  ),
+                ),
+                const SizedBox(width: 12),
+              ],
+              Expanded(
+                flex: timeBasedXAxis != null && onTimeBasedXAxisChanged != null
+                    ? 5
+                    : 1,
+                child: const GraphCurveSettings(compact: true),
               ),
-            ),
-          SizedBox(
-            width: 190,
-            child: GraphDateField(
-              label: context.l10n.startDate,
-              value: startDate,
-              hint: shortDateFormat,
-              onTap: onSelectStart,
-              onClear: onClearStart,
-              showClearButton: true,
-              compact: true,
-            ),
+            ],
           ),
-          SizedBox(
-            width: 190,
-            child: GraphDateField(
-              label: context.l10n.stopDate,
-              value: endDate,
-              hint: shortDateFormat,
-              onTap: onSelectEnd,
-              onClear: onClearEnd,
-              showClearButton: true,
-              compact: true,
-            ),
-          ),
-          SizedBox(
-            width: 220,
-            child: _LimitControl(
-              limit: limit,
-              maxLimit: maxLimit,
-              onChanged: onLimitChanged,
-              compact: true,
-            ),
-          ),
-          if (timeBasedXAxis != null && onTimeBasedXAxisChanged != null)
-            SizedBox(
-              width: 245,
-              child: _CompactSwitch(
-                label: context.l10n.useTimeBasedXAxis,
-                value: timeBasedXAxis!,
-                onChanged: onTimeBasedXAxisChanged!,
-              ),
-            ),
-          const SizedBox(width: 300, child: GraphCurveSettings(compact: true)),
         ],
       ),
     );
@@ -224,21 +237,21 @@ class _LimitControl extends StatelessWidget {
             context.l10n.dataPoints,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: theme.textTheme.labelLarge?.copyWith(
+            style: theme.textTheme.labelSmall?.copyWith(
               color: colorScheme.onSurfaceVariant,
             ),
           ),
         ),
         const SizedBox(width: 8),
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
+          padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 2),
           decoration: BoxDecoration(
             color: colorScheme.primary.withValues(alpha: 0.12),
             borderRadius: BorderRadius.circular(10),
           ),
           child: Text(
             '$limit',
-            style: theme.textTheme.labelLarge?.copyWith(
+            style: theme.textTheme.labelMedium?.copyWith(
               color: colorScheme.primary,
               fontWeight: FontWeight.w600,
             ),
@@ -259,22 +272,31 @@ class _LimitControl extends StatelessWidget {
       return Column(mainAxisSize: MainAxisSize.min, children: [label, slider]);
     }
 
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        label,
-        SizedBox(
-          height: 30,
-          child: SliderTheme(
-            data: SliderTheme.of(context).copyWith(
-              trackHeight: 3,
-              thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 7),
-              overlayShape: const RoundSliderOverlayShape(overlayRadius: 14),
+    return Container(
+      height: 58,
+      padding: const EdgeInsets.fromLTRB(12, 6, 8, 4),
+      decoration: BoxDecoration(
+        color: colorScheme.surface,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: colorScheme.outlineVariant),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          label,
+          SizedBox(
+            height: 24,
+            child: SliderTheme(
+              data: SliderTheme.of(context).copyWith(
+                trackHeight: 3,
+                thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 7),
+                overlayShape: const RoundSliderOverlayShape(overlayRadius: 14),
+              ),
+              child: slider,
             ),
-            child: slider,
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
@@ -292,14 +314,31 @@ class _CompactSwitch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: Text(label, style: Theme.of(context).textTheme.labelLarge),
-        ),
-        const SizedBox(width: 8),
-        Switch(value: value, onChanged: onChanged),
-      ],
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
+    return Container(
+      height: 58,
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      decoration: BoxDecoration(
+        color: colorScheme.surface,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: colorScheme.outlineVariant),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              label,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: theme.textTheme.labelLarge,
+            ),
+          ),
+          const SizedBox(width: 8),
+          Switch(value: value, onChanged: onChanged),
+        ],
+      ),
     );
   }
 }

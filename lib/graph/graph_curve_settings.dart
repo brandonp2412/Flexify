@@ -30,77 +30,91 @@ class GraphCurveSettings extends StatelessWidget {
             : null;
 
         if (compact) {
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Row(
-                children: [
-                  Expanded(
-                    child: Tooltip(
-                      message: context.l10n.curveLineGraphsDescription,
-                      child: Text(
-                        context.l10n.curveLineGraphs,
-                        style: Theme.of(context).textTheme.labelLarge,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  Switch(value: settings.curveLines, onChanged: onCurveChanged),
-                ],
-              ),
-              Row(
-                children: [
-                  Flexible(
+          final theme = Theme.of(context);
+          final colorScheme = theme.colorScheme;
+
+          return Container(
+            height: 58,
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            decoration: BoxDecoration(
+              color: colorScheme.surface,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: colorScheme.outlineVariant),
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  flex: 2,
+                  child: Tooltip(
+                    message: context.l10n.curveLineGraphsDescription,
                     child: Text(
-                      context.l10n.curveSmoothness,
+                      context.l10n.curveLineGraphs,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                      ),
+                      style: theme.textTheme.labelLarge,
                     ),
                   ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: SizedBox(
-                      height: 30,
-                      child: SliderTheme(
-                        data: SliderTheme.of(context).copyWith(
-                          trackHeight: 3,
-                          thumbShape: const RoundSliderThumbShape(
-                            enabledThumbRadius: 7,
-                          ),
-                          overlayShape: const RoundSliderOverlayShape(
-                            overlayRadius: 14,
-                          ),
+                ),
+                const SizedBox(width: 8),
+                Switch(value: settings.curveLines, onChanged: onCurveChanged),
+                const SizedBox(width: 14),
+                Container(
+                  width: 1,
+                  height: 28,
+                  color: colorScheme.outlineVariant,
+                ),
+                const SizedBox(width: 14),
+                Text(
+                  context.l10n.curveSmoothness,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: theme.textTheme.labelMedium?.copyWith(
+                    color: colorScheme.onSurfaceVariant,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  flex: 3,
+                  child: SizedBox(
+                    height: 30,
+                    child: SliderTheme(
+                      data: SliderTheme.of(context).copyWith(
+                        trackHeight: 3,
+                        thumbShape: const RoundSliderThumbShape(
+                          enabledThumbRadius: 7,
                         ),
-                        child: Slider(
-                          value: smoothness,
-                          min: 0,
-                          max: 1,
-                          divisions: 20,
-                          inactiveColor: Theme.of(
-                            context,
-                          ).colorScheme.primary.withValues(alpha: 0.24),
-                          onChanged: onSmoothnessChanged,
+                        overlayShape: const RoundSliderOverlayShape(
+                          overlayRadius: 14,
                         ),
                       ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 38,
-                    child: Text(
-                      formatDisplayPercent(
-                        context,
-                        smoothness,
-                        maximumFractionDigits: 0,
+                      child: Slider(
+                        value: smoothness,
+                        min: 0,
+                        max: 1,
+                        divisions: 20,
+                        inactiveColor: colorScheme.primary.withValues(
+                          alpha: 0.24,
+                        ),
+                        onChanged: onSmoothnessChanged,
                       ),
-                      textAlign: TextAlign.end,
                     ),
                   ),
-                ],
-              ),
-            ],
+                ),
+                const SizedBox(width: 8),
+                SizedBox(
+                  width: 42,
+                  child: Text(
+                    formatDisplayPercent(
+                      context,
+                      smoothness,
+                      maximumFractionDigits: 0,
+                    ),
+                    textAlign: TextAlign.end,
+                    style: theme.textTheme.labelLarge,
+                  ),
+                ),
+              ],
+            ),
           );
         }
 
