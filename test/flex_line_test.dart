@@ -1,4 +1,4 @@
-import 'package:fl_chart/fl_chart.dart';
+import 'package:drafter/drafter.dart';
 import 'package:flexify/graph/flex_line.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -6,7 +6,17 @@ import 'package:flutter_test/flutter_test.dart';
 import 'support/test_app.dart';
 
 void main() {
-  testWidgets('line graph gives edge strokes controlled breathing room', (
+  test('line graph gives edge strokes controlled breathing room', () {
+    final bounds = FlexLine.calculateYBounds(const [
+      FlexChartPoint(0, 10),
+      FlexChartPoint(1, 20),
+    ]);
+
+    expect(bounds.$1, closeTo(9.8, 0.0001));
+    expect(bounds.$2, closeTo(20.2, 0.0001));
+  });
+
+  testWidgets('line graph renders through Drafter', (
     WidgetTester tester,
   ) async {
     final harness = await FlexifyTestHarness.create();
@@ -18,25 +28,17 @@ void main() {
           width: 300,
           height: 200,
           child: FlexLine(
-            spots: const [FlSpot(0, 10), FlSpot(1, 20)],
+            points: const [FlexChartPoint(0, 10), FlexChartPoint(1, 20)],
             data: const [],
             showTrendLine: false,
             hideBottom: true,
             hideLeft: true,
-            tooltipData: () => LineTouchTooltipData(),
+            tooltipText: (_) => '',
           ),
         ),
       ),
     );
 
-    final chart = tester.widget<LineChart>(find.byType(LineChart));
-    final chartData = chart.data;
-
-    expect(chartData.clipData.top, isTrue);
-    expect(chartData.clipData.bottom, isTrue);
-    expect(chartData.clipData.left, isFalse);
-    expect(chartData.clipData.right, isFalse);
-    expect(chartData.minY, closeTo(9.8, 0.0001));
-    expect(chartData.maxY, closeTo(20.2, 0.0001));
+    expect(find.byType(InteractiveChart), findsOneWidget);
   });
 }

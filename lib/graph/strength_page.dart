@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flexify/bottom_nav.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/exercise_catalog.dart';
@@ -224,18 +223,17 @@ class _StrengthPageState extends State<StrengthPage> {
       },
     );
 
-    final spots = <FlSpot>[];
+    final points = <FlexChartPoint>[];
     for (var index = 0; index < data.length; index++) {
-      if (useTimeBasedXAxis) {
-        spots.add(
-          FlSpot(
-            data[index].created.millisecondsSinceEpoch.toDouble(),
-            data[index].value,
-          ),
-        );
-      } else {
-        spots.add(FlSpot(index.toDouble(), data[index].value));
-      }
+      points.add(
+        FlexChartPoint(
+          useTimeBasedXAxis
+              ? data[index].created.millisecondsSinceEpoch.toDouble()
+              : index.toDouble(),
+          data[index].value,
+          column: index,
+        ),
+      );
     }
 
     return Scaffold(
@@ -420,9 +418,10 @@ class _StrengthPageState extends State<StrengthPage> {
                         padding: const EdgeInsets.only(top: 16.0, right: 45.0),
                         child: FlexLine(
                           data: data,
-                          spots: spots,
-                          tooltipData: () => tooltipData(shortDateFormat),
-                          touchLine: touchLine,
+                          points: points,
+                          tooltipText: (index) =>
+                              tooltipText(index, shortDateFormat),
+                          onPointSelected: touchLine,
                           timeBasedXAxis: useTimeBasedXAxis,
                         ),
                       ),
@@ -561,51 +560,34 @@ class _StrengthPageState extends State<StrengthPage> {
     });
   }
 
-  LineTouchTooltipData tooltipData(String format) {
-    return LineTouchTooltipData(
-      getTooltipColor: (touch) => Theme.of(context).colorScheme.surface,
-      getTooltipItems: (touchedSpots) {
-        return touchedSpots.map((spot) {
-          if (spot.barIndex != 0) return null;
-
-          final row = data.elementAt(spot.spotIndex);
-          final created = formatDisplayDate(context, row.created, format);
-          final value = formatDisplayNumber(
-            context,
-            row.value,
-            minimumFractionDigits: 2,
-          );
-          final displayUnit = displayMeasurementUnit(context.l10n, target);
-
-          String text = "$value$displayUnit $created";
-          switch (metric) {
-            case StrengthMetric.bestReps:
-            case StrengthMetric.relativeStrength:
-              text = "$value $created";
-              break;
-            case StrengthMetric.volume:
-            case StrengthMetric.oneRepMax:
-              text = "$value$displayUnit $created";
-              break;
-            case StrengthMetric.bestWeight:
-              break;
-          }
-
-          return LineTooltipItem(
-            text,
-            TextStyle(color: Theme.of(context).textTheme.bodyLarge!.color),
-          );
-        }).toList();
-      },
+  String tooltipText(int index, String format) {
+    final row = data.elementAt(index);
+    final created = formatDisplayDate(context, row.created, format);
+    final value = formatDisplayNumber(
+      context,
+      row.value,
+      minimumFractionDigits: 2,
     );
+    final displayUnit = displayMeasurementUnit(context.l10n, target);
+
+    String text = "$value$displayUnit $created";
+    switch (metric) {
+      case StrengthMetric.bestReps:
+      case StrengthMetric.relativeStrength:
+        text = "$value $created";
+        break;
+      case StrengthMetric.volume:
+      case StrengthMetric.oneRepMax:
+        text = "$value$displayUnit $created";
+        break;
+      case StrengthMetric.bestWeight:
+        break;
+    }
+
+    return text;
   }
 
-  Future<void> touchLine(
-    FlTouchEvent event,
-    LineTouchResponse? touchResponse,
-  ) async {
-    if (event is ScaleUpdateDetails) return;
-    if (event is! FlPanDownEvent) return;
+  Future<void> touchLine(int index) async {
     if (DateTime.now().difference(lastTap) >=
         const Duration(milliseconds: 300)) {
       return setState(() {
@@ -613,9 +595,7 @@ class _StrengthPageState extends State<StrengthPage> {
       });
     }
 
-    if (widget.bodyWeight) return;
-    final index = touchResponse?.lineBarSpots?[0].spotIndex;
-    if (index == null) return;
+    if (widget.bodyWeight || index < 0 || index >= data.length) return;
     final row = data[index];
     final gymSet = await getGraphPointSet(name, row.created);
     if (!mounted || gymSet == null) return;

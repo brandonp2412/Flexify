@@ -1,8 +1,8 @@
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flexify/bottom_nav.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/exercise_analytics.dart';
 import 'package:flexify/empty_state.dart';
+import 'package:flexify/graph/flex_line.dart';
 import 'package:flexify/graph/graph_options_controls.dart';
 import 'package:flexify/graph/strength_data.dart';
 import 'package:flexify/l10n/l10n.dart';
@@ -90,51 +90,40 @@ class _GlobalProgressPageState extends State<GlobalProgressPage> {
     final settings = context.watch<SettingsState>().value;
 
     final chartColors = generateChartColors(context, categories.length);
-    List<LineChartBarData> lineBarsData = [];
-
     final allDates = data.map((d) => d.created).toSet().toList()..sort();
-    final dateToXMap = <DateTime, double>{};
-    for (int i = 0; i < allDates.length; i++) {
-      dateToXMap[allDates[i]] = i.toDouble();
+    final dateToXMap = <DateTime, int>{};
+    for (var i = 0; i < allDates.length; i++) {
+      dateToXMap[allDates[i]] = i;
     }
 
-    var index = 0;
-    for (final category in categories) {
+    final chartSeries = <FlexLineSeries>[];
+    for (var index = 0; index < categories.length; index++) {
+      final category = categories[index];
       final categoryData = data.where((d) => d.category == category).toList();
-      lineBarsData.add(
-        LineChartBarData(
-          spots: categoryData
-              .map((d) => FlSpot(dateToXMap[d.created]!, d.value))
-              .toList(),
-          isCurved: settings.curveLines,
+      chartSeries.add(
+        FlexLineSeries(
+          name: category ?? context.l10n.none,
           color: chartColors[index],
-          barWidth: 3,
-          isStrokeCapRound: true,
-          curveSmoothness: settings.curveSmoothness ?? 0.35,
-          dotData: const FlDotData(show: false),
+          points: [
+            for (final row in categoryData)
+              FlexChartPoint(
+                dateToXMap[row.created]!.toDouble(),
+                row.value,
+                column: dateToXMap[row.created],
+              ),
+          ],
         ),
       );
-      index++;
     }
 
-    var lineChart = LineChart(
-      LineChartData(
-        borderData: FlBorderData(show: false),
-        titlesData: const FlTitlesData(
-          topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-          rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-          leftTitles: AxisTitles(
-            sideTitles: SideTitles(showTitles: true, reservedSize: 45),
-          ),
-          bottomTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-        ),
-        lineTouchData: LineTouchData(
-          enabled: true,
-          touchTooltipData: tooltipData(settings.shortDateFormat, chartColors),
-        ),
-        lineBarsData: lineBarsData,
-        gridData: const FlGridData(show: false),
-      ),
+    final lineChart = FlexGroupedLine(
+      series: chartSeries,
+      xLabels: [
+        for (final date in allDates)
+          formatDisplayDate(context, date, settings.shortDateFormat),
+      ],
+      tooltipText: (seriesIndex, xIndex) =>
+          tooltipText(seriesIndex, xIndex, allDates),
     );
 
     final desktop = isDesktopLayout(context);
@@ -487,55 +476,35 @@ class _GlobalProgressPageState extends State<GlobalProgressPage> {
     setData();
   }
 
-  LineTouchTooltipData tooltipData(String format, List<Color> chartColors) {
-    return LineTouchTooltipData(
-      getTooltipColor: (touch) => Theme.of(context).colorScheme.surface,
-      getTooltipItems: (touchedSpots) {
-        final allDates = data.map((d) => d.created).toSet().toList()..sort();
-        final xToDateMap = <double, DateTime>{};
-        for (int i = 0; i < allDates.length; i++) {
-          xToDateMap[i.toDouble()] = allDates[i];
-        }
+  String tooltipText(int seriesIndex, int xIndex, List<DateTime> allDates) {
+    if (seriesIndex < 0 ||
+        seriesIndex >= categories.length ||
+        xIndex < 0 ||
+        xIndex >= allDates.length) {
+      return '';
+    }
 
-        return touchedSpots.map((spot) {
-          var category = categories[spot.barIndex];
-          final color = chartColors[spot.barIndex];
-          final touchedDate = xToDateMap[spot.x];
-
-          final row = data.firstWhere(
-            (d) => d.category == category && d.created == touchedDate,
-          );
-
-          category ??= context.l10n.none;
-          final formattedValue = formatDisplayNumber(
-            context,
-            row.value,
-            minimumFractionDigits: 2,
-          );
-          final displayUnit = displayMeasurementUnit(context.l10n, targetUnit);
-
-          String value;
-          switch (metric) {
-            case StrengthMetric.bestReps:
-            case StrengthMetric.relativeStrength:
-              value = formattedValue;
-              break;
-            case StrengthMetric.volume:
-            case StrengthMetric.oneRepMax:
-              value = "$formattedValue$displayUnit";
-              break;
-            case StrengthMetric.bestWeight:
-              value =
-                  "${formatDisplayNumber(context, row.reps, maximumFractionDigits: 0)} × $formattedValue$displayUnit";
-              break;
-          }
-
-          return LineTooltipItem(
-            value,
-            Theme.of(context).textTheme.labelLarge!.copyWith(color: color),
-          );
-        }).toList();
-      },
+    final category = categories[seriesIndex];
+    final touchedDate = allDates[xIndex];
+    final row = data.firstWhere(
+      (d) => d.category == category && d.created == touchedDate,
     );
+    final formattedValue = formatDisplayNumber(
+      context,
+      row.value,
+      minimumFractionDigits: 2,
+    );
+    final displayUnit = displayMeasurementUnit(context.l10n, targetUnit);
+
+    switch (metric) {
+      case StrengthMetric.bestReps:
+      case StrengthMetric.relativeStrength:
+        return formattedValue;
+      case StrengthMetric.volume:
+      case StrengthMetric.oneRepMax:
+        return "$formattedValue$displayUnit";
+      case StrengthMetric.bestWeight:
+        return "${formatDisplayNumber(context, row.reps, maximumFractionDigits: 0)} × $formattedValue$displayUnit";
+    }
   }
 }

@@ -1,5 +1,4 @@
 import 'package:drift/drift.dart' hide Column;
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/graph/cardio_data.dart';
 import 'package:flexify/graph/flex_line.dart';
@@ -306,24 +305,15 @@ List<Widget> getAppearanceSettings(
           child: FlexLine(
             hideBottom: true,
             hideLeft: true,
-            spots: const [FlSpot(0, 0.13), FlSpot(1, 5), FlSpot(2, 2)],
-            tooltipData: () => LineTouchTooltipData(
-              getTooltipColor: (touchedSpot) =>
-                  Theme.of(context).colorScheme.surface,
-              getTooltipItems: (touchedSpots) => touchedSpots
-                  .map(
-                    (spot) => LineTooltipItem(
-                      formatDisplayNumber(
-                        context,
-                        spot.y,
-                        minimumFractionDigits: 2,
-                      ),
-                      TextStyle(
-                        color: Theme.of(context).textTheme.bodyLarge!.color,
-                      ),
-                    ),
-                  )
-                  .toList(),
+            points: const [
+              FlexChartPoint(0, 0.13),
+              FlexChartPoint(1, 5),
+              FlexChartPoint(2, 2),
+            ],
+            tooltipText: (index) => formatDisplayNumber(
+              context,
+              const [0.13, 5.0, 2.0][index],
+              minimumFractionDigits: 2,
             ),
             data: [
               CardioData(

@@ -1,5 +1,4 @@
 import 'package:drift/drift.dart' hide Column;
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flexify/animated_fab.dart';
 import 'package:flexify/app_search.dart';
 import 'package:flexify/bottom_nav.dart';
@@ -124,36 +123,20 @@ class GraphsPageState extends State<GraphsPage>
     return count;
   }
 
-  LineTouchTooltipData tooltipData(
+  String tooltipText(
     List<dynamic> data,
     String unit,
     String format,
+    int index,
   ) {
-    return LineTouchTooltipData(
-      fitInsideVertically: true,
-      getTooltipColor: (touch) => Theme.of(context).colorScheme.surface,
-      getTooltipItems: (touchedSpots) {
-        final row = data.elementAt(touchedSpots.last.spotIndex);
-        final created = formatDisplayDate(context, row.created, format);
+    final row = data.elementAt(index);
+    final created = formatDisplayDate(context, row.created, format);
 
-        String text;
-        if (row is CardioData) {
-          text =
-              "${formatDisplayNumber(context, row.value)} ${displayMeasurementUnit(context.l10n, row.unit)} / ${context.l10n.minutesShort}";
-        } else {
-          text =
-              "${formatDisplayNumber(context, row.reps, maximumFractionDigits: 0)} × ${formatDisplayNumber(context, row.value, minimumFractionDigits: 2)}${displayMeasurementUnit(context.l10n, unit)} $created";
-        }
+    if (row is CardioData) {
+      return "${formatDisplayNumber(context, row.value)} ${displayMeasurementUnit(context.l10n, row.unit)} / ${context.l10n.minutesShort}";
+    }
 
-        return [
-          LineTooltipItem(
-            text,
-            TextStyle(color: Theme.of(context).textTheme.bodyLarge!.color),
-          ),
-          if (touchedSpots.length > 1) null,
-        ];
-      },
-    );
+    return "${formatDisplayNumber(context, row.reps, maximumFractionDigits: 0)} × ${formatDisplayNumber(context, row.value, minimumFractionDigits: 2)}${displayMeasurementUnit(context.l10n, unit)} $created";
   }
 
   Widget getPeek(
@@ -161,10 +144,10 @@ class GraphsPageState extends State<GraphsPage>
     List<dynamic> data,
     String format,
   ) {
-    List<FlSpot> spots = [];
-    for (var index = 0; index < data.length; index++) {
-      spots.add(FlSpot(index.toDouble(), data[index].value));
-    }
+    final points = [
+      for (var index = 0; index < data.length; index++)
+        FlexChartPoint(index.toDouble(), data[index].value),
+    ];
 
     return SizedBox(
       height: MediaQuery.of(context).size.height * 0.15,
@@ -177,8 +160,8 @@ class GraphsPageState extends State<GraphsPage>
         ),
         child: FlexLine(
           data: data,
-          spots: spots,
-          tooltipData: () => tooltipData(data, gymSet.unit, format),
+          points: points,
+          tooltipText: (index) => tooltipText(data, gymSet.unit, format, index),
           hideBottom: true,
           hideLeft: true,
         ),

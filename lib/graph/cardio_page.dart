@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flexify/bottom_nav.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/exercise_catalog.dart';
@@ -149,58 +148,43 @@ class _CardioPageState extends State<CardioPage> {
     }
   }
 
-  LineTouchTooltipData tooltipData(String format) => LineTouchTooltipData(
-    getTooltipColor: (touch) => Theme.of(context).colorScheme.surface,
-    getTooltipItems: (touchedSpots) {
-      return touchedSpots.map((spot) {
-        if (spot.barIndex != 0) return null;
-
-        final row = data.elementAt(spot.spotIndex);
-        String text = formatDisplayNumber(
-          context,
-          row.value,
-          minimumFractionDigits: 2,
+  String tooltipText(int index, String format) {
+    final row = data.elementAt(index);
+    String text = formatDisplayNumber(
+      context,
+      row.value,
+      minimumFractionDigits: 2,
+    );
+    final created = formatDisplayDate(context, row.created, format);
+    switch (metric) {
+      case CardioMetric.pace:
+        text =
+            "${formatDisplayNumber(context, row.value)} ${displayMeasurementUnit(context.l10n, row.unit)} / ${context.l10n.minutesShort}";
+        break;
+      case CardioMetric.duration:
+        final minutes = row.value.floor();
+        final seconds = ((row.value * 60) % 60).floor().toString().padLeft(
+          2,
+          '0',
         );
-        final created = formatDisplayDate(context, row.created, format);
-        switch (metric) {
-          case CardioMetric.pace:
-            text =
-                "${formatDisplayNumber(context, row.value)} ${displayMeasurementUnit(context.l10n, row.unit)} / ${context.l10n.minutesShort}";
-            break;
-          case CardioMetric.duration:
-            final minutes = row.value.floor();
-            final seconds = ((row.value * 60) % 60).floor().toString().padLeft(
-              2,
-              '0',
-            );
-            text = "$minutes:$seconds";
-            break;
-          case CardioMetric.distance:
-            text += " ${displayMeasurementUnit(context.l10n, row.unit)}";
-            break;
-          case CardioMetric.incline:
-            text = formatDisplayPercent(context, row.value / 100);
-            break;
-          case CardioMetric.inclineAdjustedPace:
-            break;
-          case CardioMetric.weight:
-            text += " ${displayMeasurementUnit(context.l10n, row.unit)}";
-            break;
-        }
-        return LineTooltipItem(
-          "$text\n$created",
-          TextStyle(color: Theme.of(context).textTheme.bodyLarge!.color),
-        );
-      }).toList();
-    },
-  );
+        text = "$minutes:$seconds";
+        break;
+      case CardioMetric.distance:
+        text += " ${displayMeasurementUnit(context.l10n, row.unit)}";
+        break;
+      case CardioMetric.incline:
+        text = formatDisplayPercent(context, row.value / 100);
+        break;
+      case CardioMetric.inclineAdjustedPace:
+        break;
+      case CardioMetric.weight:
+        text += " ${displayMeasurementUnit(context.l10n, row.unit)}";
+        break;
+    }
+    return "$text\n$created";
+  }
 
-  Future<void> touchLine(
-    FlTouchEvent event,
-    LineTouchResponse? response,
-  ) async {
-    if (event is ScaleUpdateDetails) return;
-    if (event is! FlPanDownEvent) return;
+  Future<void> touchLine(int index) async {
     if (DateTime.now().difference(lastTap) >=
         const Duration(milliseconds: 300)) {
       return setState(() {
@@ -208,8 +192,7 @@ class _CardioPageState extends State<CardioPage> {
       });
     }
 
-    final index = response?.lineBarSpots?[0].spotIndex;
-    if (index == null) return;
+    if (index < 0 || index >= data.length) return;
     final row = data[index];
     final gymSet = await getGraphPointSet(name, row.created);
     if (!mounted || gymSet == null) return;
@@ -308,15 +291,19 @@ class _CardioPageState extends State<CardioPage> {
               : cardioDistanceUnitMenuItems(context.l10n))
         : <DropdownMenuItem<String>>[];
 
-    final spots = <FlSpot>[];
+    final points = <FlexChartPoint>[];
     for (var index = 0; index < data.length; index++) {
       final row = data[index];
       final value = double.parse(row.value.toStringAsFixed(1));
-      if (useTimeBasedXAxis) {
-        spots.add(FlSpot(row.created.millisecondsSinceEpoch.toDouble(), value));
-      } else {
-        spots.add(FlSpot(index.toDouble(), value));
-      }
+      points.add(
+        FlexChartPoint(
+          useTimeBasedXAxis
+              ? row.created.millisecondsSinceEpoch.toDouble()
+              : index.toDouble(),
+          value,
+          column: index,
+        ),
+      );
     }
 
     return Scaffold(
@@ -473,9 +460,10 @@ class _CardioPageState extends State<CardioPage> {
                     : Padding(
                         padding: const EdgeInsets.only(right: 32.0, top: 16.0),
                         child: FlexLine(
-                          spots: spots,
-                          tooltipData: () => tooltipData(shortDateFormat),
-                          touchLine: touchLine,
+                          points: points,
+                          tooltipText: (index) =>
+                              tooltipText(index, shortDateFormat),
+                          onPointSelected: touchLine,
                           data: data,
                           timeBasedXAxis: useTimeBasedXAxis,
                         ),
