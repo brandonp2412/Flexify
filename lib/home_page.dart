@@ -220,18 +220,41 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           children: tabs.map((tab) {
             if (tab == 'HistoryPage') {
               return HistoryPage(tabController: _controller);
-            }
-            if (tab == 'PlansPage')
+            } else if (tab == 'PlansPage') {
               return PlansPage(key: _plansPageKey, tabController: _controller);
-            if (tab == 'GraphsPage') {
+            } else if (tab == 'GraphsPage') {
               return GraphsPage(tabController: _controller);
-            }
-            if (tab == 'TimerPage')
+            } else if (tab == 'TimerPage') {
               return TimerPage(tabController: _controller);
-            if (tab == 'SettingsPage') return const SettingsPage();
-            return ErrorWidget(context.l10n.tabContentError);
+            } else if (tab == 'SettingsPage') {
+              return const SettingsPage();
+            } else {
+              return ErrorWidget(context.l10n.tabContentError);
+            }
           }).toList(),
         ),
+        if (!desktop && scrollableTabs) ...[
+          Positioned(
+            left: 0,
+            top: 0,
+            bottom: 0,
+            width: 30,
+            child: GestureDetector(
+              behavior: HitTestBehavior.translucent,
+              onHorizontalDragUpdate: (_) {},
+            ),
+          ),
+          Positioned(
+            right: 0,
+            top: 0,
+            bottom: 0,
+            width: 30,
+            child: GestureDetector(
+              behavior: HitTestBehavior.translucent,
+              onHorizontalDragUpdate: (_) {},
+            ),
+          ),
+        ],
         if (!desktop)
           Positioned(
             bottom: 0,
