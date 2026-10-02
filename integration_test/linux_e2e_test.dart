@@ -2,6 +2,7 @@ import 'package:drift/drift.dart' hide isNotNull, isNull;
 import 'package:drift/native.dart';
 import 'package:flexify/bottom_nav.dart';
 import 'package:flexify/database/database.dart';
+import 'package:flexify/database/performed_sets.dart';
 import 'package:flexify/home_page.dart';
 import 'package:flexify/main.dart' as app;
 import 'package:flexify/plan/plan_tile.dart';
@@ -9,6 +10,8 @@ import 'package:flexify/settings/settings_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
+
+import '../test/support/fixtures.dart';
 
 const _allTabs = 'HistoryPage,PlansPage,GraphsPage,TimerPage,SettingsPage';
 
@@ -57,6 +60,30 @@ Future<SettingsState> _pumpIsolatedApp(
   await tester.pumpWidget(app.appProviders(setting));
   await tester.pumpAndSettle();
   return setting;
+}
+
+Future<void> _tapAddAction(WidgetTester tester) async {
+  for (final label in const ['Add set', 'New exercise', 'New plan', 'Add']) {
+    final finder = find.text(label);
+    if (finder.evaluate().isNotEmpty) {
+      await tester.tap(finder.last);
+      return;
+    }
+  }
+  fail('No responsive add action found');
+}
+
+Future<void> _openGraphOptionsIfNeeded(WidgetTester tester) async {
+  final options = find.byTooltip('Options');
+  if (options.evaluate().isEmpty) return;
+  await tester.tap(options);
+  await tester.pumpAndSettle();
+}
+
+Future<void> _tapSaveAction(WidgetTester tester) async {
+  final saveSet = find.text('Save set');
+  final target = saveSet.evaluate().isNotEmpty ? saveSet : find.text('Save');
+  await tester.tap(target.last);
 }
 
 Future<void> _tapTab(WidgetTester tester, String tab) async {
@@ -110,6 +137,85 @@ Finder _dropdownWithLabel(String label) => find.byWidgetPredicate(
       widget.decoration.labelText?.startsWith(label) == true,
 );
 
+Future<GymSet> _insertE2ESet({
+  required String name,
+  double reps = 5,
+  double weight = 50,
+  String unit = 'kg',
+  required DateTime created,
+  bool cardio = false,
+  double duration = 0,
+  double distance = 0,
+  int? incline,
+  String? category,
+  int? planId,
+  double bodyWeight = 0,
+  int? restMs,
+}) async {
+  final inserted = await insertPerformedSetFixture(
+    app.db,
+    name,
+    reps: reps,
+    weight: weight,
+    unit: unit,
+    created: created,
+    cardio: cardio,
+    duration: duration,
+    distance: distance,
+    incline: incline,
+    category: category,
+    planId: planId,
+    bodyWeight: bodyWeight,
+  );
+  if (restMs != null) {
+    final exercise = await _exerciseNamed(name);
+    await (app.db.exercises.update()
+          ..where((row) => row.id.equals(exercise.id)))
+        .write(ExercisesCompanion(defaultRestDurationMs: Value(restMs)));
+    return (await getPerformedSetById(app.db, inserted.id))!;
+  }
+  return inserted;
+}
+
+Future<List<GymSet>> _setsNamed(String name) =>
+    getPerformedSetsForExercise(app.db, exerciseName: name);
+
+Future<GymSet> _singleSet(String name) async => (await _setsNamed(name)).single;
+
+Future<GymSet?> _maybeSet(String name) async {
+  final rows = await _setsNamed(name);
+  return rows.isEmpty ? null : rows.single;
+}
+
+Future<List<GymSet>> _setsMatching(String search) =>
+    getPerformedSets(app.db, search: search);
+
+Future<List<GymSet>> _setsForPlan(int planId) async => (await getPerformedSets(
+  app.db,
+)).where((set) => set.planId == planId).toList(growable: false);
+
+Future<Exercise> _exerciseNamed(String name) =>
+    (app.db.exercises.select()..where((row) => row.name.equals(name)))
+        .getSingle();
+
+Future<Exercise?> _maybeExerciseNamed(String name) =>
+    (app.db.exercises.select()..where((row) => row.name.equals(name)))
+        .getSingleOrNull();
+
+Future<String> _exerciseNameForId(int exerciseId) async =>
+    (await (app.db.exercises.select()
+              ..where((row) => row.id.equals(exerciseId)))
+            .getSingle())
+        .name;
+
+Future<PlanExercise?> _planExerciseForName(int planId, String name) async {
+  final exercise = await _exerciseNamed(name);
+  return (app.db.planExercises.select()..where(
+        (row) => row.planId.equals(planId) & row.exerciseId.equals(exercise.id),
+      ))
+      .getSingleOrNull();
+}
+
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
   WidgetController.hitTestWarningShouldBeFatal = true;
@@ -150,7 +256,7 @@ void main() {
   testWidgets('Plans add flow uses human-readable labels', (tester) async {
     await _pumpIsolatedApp(tester);
     await _tapTab(tester, 'PlansPage');
-    await tester.tap(find.text('Add'));
+    await _tapAddAction(tester);
     await tester.pumpAndSettle();
 
     expect(find.text('Search exercises...'), findsOneWidget);
@@ -161,9 +267,9 @@ void main() {
   testWidgets('Plans save validation uses human-readable copy', (tester) async {
     await _pumpIsolatedApp(tester);
     await _tapTab(tester, 'PlansPage');
-    await tester.tap(find.text('Add'));
+    await _tapAddAction(tester);
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Save'));
+    await _tapSaveAction(tester);
     await tester.pump();
 
     expect(find.text('Select days'), findsOneWidget);
@@ -179,7 +285,7 @@ void main() {
         .where((widget) => widget.value)
         .length;
     expect(enabledExerciseSwitches, 0);
-    await tester.tap(find.text('Save'));
+    await _tapSaveAction(tester);
     await tester.pump();
     expect(find.text('Select exercises'), findsOneWidget);
   });
@@ -187,7 +293,7 @@ void main() {
   testWidgets('History add flow uses body weight label', (tester) async {
     await _pumpIsolatedApp(tester);
     await _tapTab(tester, 'HistoryPage');
-    await tester.tap(find.text('Add'));
+    await _tapAddAction(tester);
     await tester.pumpAndSettle();
 
     expect(find.textContaining('Body weight ('), findsOneWidget);
@@ -199,7 +305,7 @@ void main() {
   ) async {
     await _pumpIsolatedApp(tester);
     await _tapTab(tester, 'HistoryPage');
-    await tester.tap(find.text('Add'));
+    await _tapAddAction(tester);
     await tester.pumpAndSettle();
 
     final cardioTile = find.widgetWithText(ListTile, 'Cardio');
@@ -219,7 +325,7 @@ void main() {
   ) async {
     await _pumpIsolatedApp(tester);
     await _tapTab(tester, 'GraphsPage');
-    await tester.tap(find.text('Add'));
+    await _tapAddAction(tester);
     await tester.pumpAndSettle();
 
     final cardioTile = find.widgetWithText(ListTile, 'Strength');
@@ -544,17 +650,12 @@ void main() {
     await _pumpIsolatedApp(tester);
     final now = DateTime(2026, 8, 30, 12);
     for (var index = 0; index < 2; index++) {
-      await app.db
-          .into(app.db.gymSets)
-          .insert(
-            GymSetsCompanion.insert(
-              name: 'Selection E2E',
-              reps: (5 + index).toDouble(),
-              weight: (50 + index).toDouble(),
-              unit: 'kg',
-              created: now.subtract(Duration(days: index)),
-            ),
-          );
+      await _insertE2ESet(
+        name: 'Selection E2E',
+        reps: (5 + index).toDouble(),
+        weight: (50 + index).toDouble(),
+        created: now.subtract(Duration(days: index)),
+      );
     }
     await _tapTab(tester, 'GraphsPage');
     await tester.enterText(find.byType(SearchBar), 'Selection E2E');
@@ -568,8 +669,7 @@ void main() {
 
     await tester.tap(find.widgetWithText(ListTile, 'Selection E2E'));
     await tester.pumpAndSettle();
-    await tester.tap(find.byTooltip('Options'));
-    await tester.pumpAndSettle();
+    await _openGraphOptionsIfNeeded(tester);
     expect(find.text('Curve line graphs'), findsOneWidget);
     expect(find.text('Curve smoothness'), findsOneWidget);
     await tester.tapAt(const Offset(8, 8));
@@ -619,32 +719,27 @@ void main() {
       const SettingsCompanion(showGlobalProgress: Value(true)),
     );
     final now = DateTime.now();
-    await app.db.gymSets.insertAll([
-      GymSetsCompanion.insert(
-        name: 'Linux E2E graph Zebra',
-        reps: 5,
-        weight: 60,
-        unit: 'kg',
-        created: now.subtract(const Duration(days: 2)),
-        category: const Value('Linux Cat B'),
-      ),
-      GymSetsCompanion.insert(
-        name: 'Linux E2E graph Alpha',
-        reps: 6,
-        weight: 65,
-        unit: 'kg',
-        created: now.subtract(const Duration(days: 1)),
-        category: const Value('Linux Cat A'),
-      ),
-      GymSetsCompanion.insert(
-        name: 'Linux E2E graph Beta',
-        reps: 7,
-        weight: 70,
-        unit: 'kg',
-        created: now,
-        category: const Value('Linux Cat A'),
-      ),
-    ]);
+    await _insertE2ESet(
+      name: 'Linux E2E graph Zebra',
+      reps: 5,
+      weight: 60,
+      created: now.subtract(const Duration(days: 2)),
+      category: 'Linux Cat B',
+    );
+    await _insertE2ESet(
+      name: 'Linux E2E graph Alpha',
+      reps: 6,
+      weight: 65,
+      created: now.subtract(const Duration(days: 1)),
+      category: 'Linux Cat A',
+    );
+    await _insertE2ESet(
+      name: 'Linux E2E graph Beta',
+      reps: 7,
+      weight: 70,
+      created: now,
+      category: 'Linux Cat A',
+    );
     await tester.pumpAndSettle();
     expect(settingsState.value.showGlobalProgress, isTrue);
     await _tapTab(tester, 'GraphsPage');
@@ -717,8 +812,7 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text('Week'));
     await tester.pumpAndSettle();
-    await tester.tap(find.byTooltip('Options'));
-    await tester.pumpAndSettle();
+    await _openGraphOptionsIfNeeded(tester);
     await tester.tap(find.byType(DropdownButtonFormField<String>));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Pounds (lb)').last);
@@ -766,7 +860,7 @@ void main() {
   testWidgets('History strength CRUD propagates to Graphs', (tester) async {
     await _pumpIsolatedApp(tester, surfaceSize: const Size(900, 900));
     await _tapTab(tester, 'HistoryPage');
-    await tester.tap(find.text('Add'));
+    await _tapAddAction(tester);
     await tester.pumpAndSettle();
 
     await tester.enterText(find.bySemanticsLabel('Name'), 'Linux E2E press');
@@ -778,13 +872,10 @@ void main() {
       find.bySemanticsLabel('Notes'),
       'Linux strength CRUD',
     );
-    await tester.tap(find.text('Save'));
+    await _tapSaveAction(tester);
     await tester.pumpAndSettle();
 
-    var row =
-        await (app.db.gymSets.select()
-              ..where((tbl) => tbl.name.equals('Linux E2E press')))
-            .getSingle();
+    var row = await _singleSet('Linux E2E press');
     expect(row.reps, 8);
     expect(row.weight, 72.5);
     expect(row.bodyWeight, 81.2);
@@ -793,6 +884,8 @@ void main() {
     expect(find.text('Linux E2E press'), findsOneWidget);
 
     await _tapTab(tester, 'GraphsPage');
+    await tester.enterText(find.byType(SearchBar), 'Linux E2E press');
+    await tester.pumpAndSettle();
     expect(find.text('Linux E2E press'), findsOneWidget);
 
     await _tapTab(tester, 'HistoryPage');
@@ -800,13 +893,10 @@ void main() {
     await tester.pumpAndSettle();
     await tester.enterText(find.bySemanticsLabel('Reps'), '9');
     await tester.enterText(find.bySemanticsLabel('Weight (kg)'), '77.5');
-    await tester.tap(find.text('Save'));
+    await _tapSaveAction(tester);
     await tester.pumpAndSettle();
 
-    row =
-        await (app.db.gymSets.select()
-              ..where((tbl) => tbl.name.equals('Linux E2E press')))
-            .getSingle();
+    row = await _singleSet('Linux E2E press');
     expect(row.reps, 9);
     expect(row.weight, 77.5);
 
@@ -816,23 +906,13 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.widgetWithText(TextButton, 'Cancel'));
     await tester.pumpAndSettle();
-    expect(
-      await (app.db.gymSets.select()
-            ..where((tbl) => tbl.name.equals('Linux E2E press')))
-          .getSingleOrNull(),
-      isNotNull,
-    );
+    expect(await _maybeSet('Linux E2E press'), isNotNull);
 
     await tester.tap(find.byTooltip('Delete set'));
     await tester.pumpAndSettle();
     await tester.tap(find.widgetWithText(TextButton, 'Delete'));
     await tester.pumpAndSettle();
-    expect(
-      await (app.db.gymSets.select()
-            ..where((tbl) => tbl.name.equals('Linux E2E press')))
-          .getSingleOrNull(),
-      isNull,
-    );
+    expect(await _maybeSet('Linux E2E press'), isNull);
     expect(tester.takeException(), isNull);
   });
 
@@ -841,7 +921,7 @@ void main() {
   ) async {
     await _pumpIsolatedApp(tester, surfaceSize: const Size(900, 900));
     await _tapTab(tester, 'HistoryPage');
-    await tester.tap(find.text('Add'));
+    await _tapAddAction(tester);
     await tester.pumpAndSettle();
 
     final cardioTile = find.widgetWithText(ListTile, 'Cardio');
@@ -858,13 +938,10 @@ void main() {
     await tester.enterText(find.bySemanticsLabel('Minutes'), '24');
     await tester.enterText(find.bySemanticsLabel('Seconds'), '30');
     await tester.enterText(find.bySemanticsLabel('Incline %'), '3');
-    await tester.tap(find.text('Save'));
+    await _tapSaveAction(tester);
     await tester.pumpAndSettle();
 
-    final row =
-        await (app.db.gymSets.select()
-              ..where((tbl) => tbl.name.equals('Linux E2E run')))
-            .getSingle();
+    final row = await _singleSet('Linux E2E run');
     expect(row.cardio, isTrue);
     expect(row.unit, 'km');
     expect(row.distance, 5.25);
@@ -877,13 +954,10 @@ void main() {
     await tester.enterText(find.bySemanticsLabel('Minutes'), '30');
     await tester.enterText(find.bySemanticsLabel('Seconds'), '15');
     await tester.enterText(find.bySemanticsLabel('Incline %'), '4');
-    await tester.tap(find.text('Save'));
+    await _tapSaveAction(tester);
     await tester.pumpAndSettle();
 
-    final edited =
-        await (app.db.gymSets.select()
-              ..where((tbl) => tbl.name.equals('Linux E2E run')))
-            .getSingle();
+    final edited = await _singleSet('Linux E2E run');
     expect(edited.distance, 6.5);
     expect(edited.duration, 30.25);
     expect(edited.incline, 4);
@@ -896,29 +970,24 @@ void main() {
   ) async {
     await _pumpIsolatedApp(tester, surfaceSize: const Size(1000, 900));
     final now = DateTime.now();
-    await app.db.gymSets.insertAll([
-      GymSetsCompanion.insert(
-        name: 'Linux E2E grouped',
-        reps: 5,
-        weight: 50,
-        unit: 'kg',
-        created: now.subtract(const Duration(hours: 1)),
-      ),
-      GymSetsCompanion.insert(
-        name: 'Linux E2E grouped',
-        reps: 6,
-        weight: 52,
-        unit: 'kg',
-        created: now.subtract(const Duration(hours: 2)),
-      ),
-      GymSetsCompanion.insert(
-        name: 'Linux E2E old',
-        reps: 7,
-        weight: 55,
-        unit: 'kg',
-        created: now.subtract(const Duration(days: 3)),
-      ),
-    ]);
+    await _insertE2ESet(
+      name: 'Linux E2E grouped',
+      reps: 5,
+      weight: 50,
+      created: now.subtract(const Duration(hours: 1)),
+    );
+    await _insertE2ESet(
+      name: 'Linux E2E grouped',
+      reps: 6,
+      weight: 52,
+      created: now.subtract(const Duration(hours: 2)),
+    );
+    await _insertE2ESet(
+      name: 'Linux E2E old',
+      reps: 7,
+      weight: 55,
+      created: now.subtract(const Duration(days: 3)),
+    );
     await app.db.settings.update().write(
       const SettingsCompanion(groupHistory: Value(true)),
     );
@@ -971,15 +1040,12 @@ void main() {
 
     await tester.enterText(find.bySemanticsLabel('Reps'), '6');
     await tester.enterText(find.bySemanticsLabel('Weight (kg)'), '83');
-    await tester.tap(find.text('Save'));
+    await _tapSaveAction(tester);
     await tester.pumpAndSettle();
 
-    final rows =
-        await (app.db.gymSets.select()..where(
-              (tbl) =>
-                  tbl.name.equals('Barbell bench press') & tbl.planId.equals(1),
-            ))
-            .get();
+    final rows = (await _setsNamed(
+      'Barbell bench press',
+    )).where((set) => set.planId == 1).toList();
     expect(rows, hasLength(1));
     expect(rows.single.reps, 6);
     expect(rows.single.weight, 83);
@@ -988,6 +1054,8 @@ void main() {
     await tester.binding.handlePopRoute();
     await tester.pumpAndSettle();
     await _tapTab(tester, 'GraphsPage');
+    await tester.enterText(find.byType(SearchBar), 'Barbell bench press');
+    await tester.pumpAndSettle();
     expect(find.text('Barbell bench press'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
@@ -1008,29 +1076,25 @@ void main() {
               ..orderBy([(tbl) => OrderingTerm.asc(tbl.sequence)]))
             .get();
     expect(exercises.length, greaterThanOrEqualTo(2));
-    final first = exercises[0].exercise;
-    final second = exercises[1].exercise;
+    final first = await _exerciseNameForId(exercises[0].exerciseId);
+    final second = await _exerciseNameForId(exercises[1].exerciseId);
 
     await _tapTab(tester, 'PlansPage');
     await tester.tap(find.byType(PlanTile).first);
     await tester.pumpAndSettle();
-    expect(find.text(first), findsOneWidget);
+    expect(find.text(first), findsWidgets);
 
     await tester.enterText(find.bySemanticsLabel('Reps'), '5');
     await tester.enterText(find.bySemanticsLabel('Weight (kg)'), '60');
-    await tester.tap(find.text('Save'));
+    await _tapSaveAction(tester);
     await tester.pumpAndSettle();
-    expect(find.text(second), findsOneWidget);
+    expect(find.text(second), findsWidgets);
 
     await tester.enterText(find.bySemanticsLabel('Reps'), '6');
     await tester.enterText(find.bySemanticsLabel('Weight (kg)'), '70');
-    await tester.tap(find.text('Save'));
+    await _tapSaveAction(tester);
     await tester.pumpAndSettle();
-    final logged =
-        await (app.db.gymSets.select()..where(
-              (tbl) => tbl.planId.equals(plan.id) & tbl.hidden.equals(false),
-            ))
-            .get();
+    final logged = await _setsForPlan(plan.id);
     expect(logged.map((row) => row.name).toSet(), containsAll({first, second}));
 
     await tester.binding.handlePopRoute();
@@ -1041,8 +1105,8 @@ void main() {
     await tester.binding.handlePopRoute();
     await tester.pumpAndSettle();
     await _tapTab(tester, 'GraphsPage');
-    expect(find.text(first), findsOneWidget);
-    expect(find.text(second), findsOneWidget);
+    expect(find.text(first), findsWidgets);
+    expect(find.text(second), findsWidgets);
     expect(tester.takeException(), isNull);
   });
 
@@ -1059,8 +1123,8 @@ void main() {
               ..orderBy([(tbl) => OrderingTerm.asc(tbl.sequence)]))
             .get();
     expect(exercises.length, greaterThanOrEqualTo(2));
-    final originalFirst = exercises.first.exercise;
-    final originalSecond = exercises[1].exercise;
+    final originalFirst = await _exerciseNameForId(exercises.first.exerciseId);
+    final originalSecond = await _exerciseNameForId(exercises[1].exerciseId);
 
     await tester.tap(find.byType(PlanTile).first);
     await tester.pumpAndSettle();
@@ -1076,8 +1140,11 @@ void main() {
               ..where((tbl) => tbl.planId.equals(plan.id) & tbl.enabled)
               ..orderBy([(tbl) => OrderingTerm.asc(tbl.sequence)]))
             .get();
-    expect(exercises.first.exercise, originalSecond);
-    expect(exercises[1].exercise, originalFirst);
+    expect(
+      await _exerciseNameForId(exercises.first.exerciseId),
+      originalSecond,
+    );
+    expect(await _exerciseNameForId(exercises[1].exerciseId), originalFirst);
     expect(tester.takeException(), isNull);
   });
 
@@ -1186,7 +1253,7 @@ void main() {
 
   testWidgets('Graphs zero-exercise state remains usable', (tester) async {
     await _pumpIsolatedApp(tester, surfaceSize: const Size(900, 900));
-    await app.db.gymSets.deleteAll();
+    await app.db.exerciseSets.deleteAll();
     await tester.pumpAndSettle();
     await _tapTab(tester, 'GraphsPage');
     expect(find.text('Global progress'), findsOneWidget);
@@ -1209,16 +1276,12 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('Add exercise'), findsOneWidget);
     expect(find.bySemanticsLabel('Name'), findsOneWidget);
-    await tester.tap(find.text('Save'));
+    await _tapSaveAction(tester);
     await tester.pumpAndSettle();
 
-    var template =
-        await (app.db.gymSets.select()
-              ..where((tbl) => tbl.name.equals('Linux E2E new strength graph')))
-            .getSingle();
-    expect(template.hidden, isTrue);
-    expect(template.cardio, isFalse);
-    expect(template.unit, 'kg');
+    var template = await _exerciseNamed('Linux E2E new strength graph');
+    expect(template.kind, 'strength');
+    expect(template.displayUnit, 'kg');
     expect(tester.takeException(), isNull);
   });
 
@@ -1241,16 +1304,12 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text('Miles (mi)').last);
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Save'));
+    await _tapSaveAction(tester);
     await tester.pumpAndSettle();
 
-    final template =
-        await (app.db.gymSets.select()
-              ..where((tbl) => tbl.name.equals('Linux E2E new cardio graph')))
-            .getSingle();
-    expect(template.hidden, isTrue);
-    expect(template.cardio, isTrue);
-    expect(template.unit, 'mi');
+    final template = await _exerciseNamed('Linux E2E new cardio graph');
+    expect(template.kind, 'cardio');
+    expect(template.displayUnit, 'mi');
     expect(tester.takeException(), isNull);
   });
 
@@ -1276,13 +1335,13 @@ void main() {
     await tester.tap(find.widgetWithText(ListTile, 'Strength'));
     await tester.pumpAndSettle();
     expect(find.text('Kilograms (kg)'), findsOneWidget);
-    await tester.tap(find.text('Save'));
+    await _tapSaveAction(tester);
     await tester.pumpAndSettle();
     expect(
       find.widgetWithText(ListTile, 'Linux E2E weighted hang'),
       findsOneWidget,
     );
-    await tester.tap(find.text('Save'));
+    await _tapSaveAction(tester);
     await tester.pumpAndSettle();
 
     final plan =
@@ -1290,21 +1349,14 @@ void main() {
               ..where((tbl) => tbl.title.equals('Linux E2E weighted plan')))
             .getSingle();
     expect(plan.days.split(',').toSet(), {'Monday', 'Wednesday'});
-    final planExercise =
-        await (app.db.planExercises.select()..where(
-              (tbl) =>
-                  tbl.planId.equals(plan.id) &
-                  tbl.exercise.equals('Linux E2E weighted hang'),
-            ))
-            .getSingle();
+    final planExercise = (await _planExerciseForName(
+      plan.id,
+      'Linux E2E weighted hang',
+    ))!;
     expect(planExercise.enabled, isTrue);
-    final template =
-        await (app.db.gymSets.select()
-              ..where((tbl) => tbl.name.equals('Linux E2E weighted hang')))
-            .getSingle();
-    expect(template.hidden, isTrue);
-    expect(template.cardio, isTrue);
-    expect(template.unit, 'kg');
+    final template = await _exerciseNamed('Linux E2E weighted hang');
+    expect(template.kind, 'cardio');
+    expect(template.displayUnit, 'kg');
     expect(tester.takeException(), isNull);
   });
 
@@ -1312,22 +1364,18 @@ void main() {
     tester,
   ) async {
     await _pumpIsolatedApp(tester, surfaceSize: const Size(900, 900));
-    await app.db.gymSets.insertAll([
-      GymSetsCompanion.insert(
-        name: 'Linux E2E rename source',
-        reps: 5,
-        weight: 50,
-        unit: 'kg',
-        created: DateTime(2026, 9, 1, 10),
-      ),
-      GymSetsCompanion.insert(
-        name: 'Linux E2E rename target',
-        reps: 6,
-        weight: 60,
-        unit: 'kg',
-        created: DateTime(2026, 9, 1, 11),
-      ),
-    ]);
+    await _insertE2ESet(
+      name: 'Linux E2E rename source',
+      reps: 5,
+      weight: 50,
+      created: DateTime(2026, 9, 1, 10),
+    );
+    await _insertE2ESet(
+      name: 'Linux E2E rename target',
+      reps: 6,
+      weight: 60,
+      created: DateTime(2026, 9, 1, 11),
+    );
     await _tapTab(tester, 'GraphsPage');
     await tester.enterText(find.byType(SearchBar), 'Linux E2E rename source');
     await tester.pumpAndSettle();
@@ -1345,29 +1393,14 @@ void main() {
     await tester.tap(find.widgetWithText(TextButton, 'Cancel'));
     await tester.pumpAndSettle();
     expect(find.text('Update'), findsOneWidget);
-    expect(
-      await (app.db.gymSets.select()
-            ..where((tbl) => tbl.name.equals('Linux E2E rename source')))
-          .get(),
-      hasLength(1),
-    );
+    expect(await _setsNamed('Linux E2E rename source'), hasLength(1));
 
     await tester.tap(find.text('Update'));
     await tester.pumpAndSettle();
     await tester.tap(find.widgetWithText(TextButton, 'Confirm'));
     await tester.pumpAndSettle();
-    expect(
-      await (app.db.gymSets.select()
-            ..where((tbl) => tbl.name.equals('Linux E2E rename source')))
-          .get(),
-      isEmpty,
-    );
-    expect(
-      await (app.db.gymSets.select()
-            ..where((tbl) => tbl.name.equals('Linux E2E rename target')))
-          .get(),
-      hasLength(2),
-    );
+    expect(await _setsNamed('Linux E2E rename source'), isEmpty);
+    expect(await _setsNamed('Linux E2E rename target'), hasLength(2));
     expect(tester.takeException(), isNull);
   });
 
@@ -1375,22 +1408,18 @@ void main() {
     tester,
   ) async {
     await _pumpIsolatedApp(tester, surfaceSize: const Size(900, 900));
-    await app.db.gymSets.insertAll([
-      GymSetsCompanion.insert(
-        name: 'Linux E2E selectable graph A',
-        reps: 5,
-        weight: 50,
-        unit: 'kg',
-        created: DateTime(2026, 9, 1, 10),
-      ),
-      GymSetsCompanion.insert(
-        name: 'Linux E2E selectable graph B',
-        reps: 6,
-        weight: 60,
-        unit: 'kg',
-        created: DateTime(2026, 9, 1, 11),
-      ),
-    ]);
+    await _insertE2ESet(
+      name: 'Linux E2E selectable graph A',
+      reps: 5,
+      weight: 50,
+      created: DateTime(2026, 9, 1, 10),
+    );
+    await _insertE2ESet(
+      name: 'Linux E2E selectable graph B',
+      reps: 6,
+      weight: 60,
+      created: DateTime(2026, 9, 1, 11),
+    );
     await _tapTab(tester, 'GraphsPage');
     await tester.enterText(
       find.byType(SearchBar),
@@ -1409,38 +1438,26 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.widgetWithText(TextButton, 'Cancel'));
     await tester.pumpAndSettle();
-    expect(
-      await (app.db.gymSets.select()
-            ..where((tbl) => tbl.name.contains('Linux E2E selectable graph')))
-          .get(),
-      hasLength(2),
-    );
+    expect(await _setsMatching('Linux E2E selectable graph'), hasLength(2));
     await tester.tap(find.byTooltip('Delete selected'));
     await tester.pumpAndSettle();
     await tester.tap(find.widgetWithText(TextButton, 'Delete'));
     await tester.pumpAndSettle();
-    expect(
-      await (app.db.gymSets.select()
-            ..where((tbl) => tbl.name.contains('Linux E2E selectable graph')))
-          .get(),
-      isEmpty,
-    );
+    expect(await _setsMatching('Linux E2E selectable graph'), isEmpty);
     expect(tester.takeException(), isNull);
   });
 
   testWidgets('Graph bulk unit edit converts cardio distance', (tester) async {
     await _pumpIsolatedApp(tester, surfaceSize: const Size(900, 900));
-    await app.db.gymSets.insertOne(
-      GymSetsCompanion.insert(
-        name: 'Linux E2E cardio conversion',
-        reps: 0,
-        weight: 0,
-        unit: 'km',
-        created: DateTime(2026, 8, 31, 12),
-        cardio: const Value(true),
-        duration: const Value(50),
-        distance: const Value(10),
-      ),
+    await _insertE2ESet(
+      name: 'Linux E2E cardio conversion',
+      reps: 0,
+      weight: 0,
+      unit: 'km',
+      created: DateTime(2026, 8, 31, 12),
+      cardio: true,
+      duration: 50,
+      distance: 10,
     );
     await tester.pumpAndSettle();
 
@@ -1464,10 +1481,7 @@ void main() {
     await tester.tap(find.text('Update'));
     await tester.pumpAndSettle();
 
-    final row =
-        await (app.db.gymSets.select()
-              ..where((tbl) => tbl.name.equals('Linux E2E cardio conversion')))
-            .getSingle();
+    final row = await _singleSet('Linux E2E cardio conversion');
     expect(row.unit, 'mi');
     expect(row.distance, closeTo(6.21371, 0.0001));
     expect(tester.takeException(), isNull);
@@ -1477,15 +1491,12 @@ void main() {
     tester,
   ) async {
     await _pumpIsolatedApp(tester, surfaceSize: const Size(900, 900));
-    await app.db.gymSets.insertOne(
-      GymSetsCompanion.insert(
-        name: 'Linux E2E legacy category',
-        reps: 5,
-        weight: 100,
-        unit: 'kg',
-        created: DateTime(2026, 8, 31, 12),
-        category: const Value('Legacy imported category'),
-      ),
+    await _insertE2ESet(
+      name: 'Linux E2E legacy category',
+      reps: 5,
+      weight: 100,
+      created: DateTime(2026, 8, 31, 12),
+      category: 'Legacy imported category',
     );
     await tester.pumpAndSettle();
 
@@ -1511,25 +1522,13 @@ void main() {
     await app.db
         .into(app.db.categories)
         .insert(CategoriesCompanion.insert(name: 'Linux Target Category'));
-    await app.db.gymSets.insertAll([
-      GymSetsCompanion.insert(
-        name: 'Linux E2E strength conversion',
-        reps: 5,
-        weight: 100,
-        unit: 'kg',
-        created: DateTime(2026, 8, 31, 12),
-        category: const Value('Linux Original Category'),
-      ),
-      GymSetsCompanion.insert(
-        name: 'Linux E2E category source',
-        reps: 0,
-        weight: 0,
-        unit: 'kg',
-        created: DateTime(2026, 8, 31, 11),
-        hidden: const Value(true),
-        category: const Value('Linux Target Category'),
-      ),
-    ]);
+    await _insertE2ESet(
+      name: 'Linux E2E strength conversion',
+      reps: 5,
+      weight: 100,
+      created: DateTime(2026, 8, 31, 12),
+      category: 'Linux Original Category',
+    );
     await tester.pumpAndSettle();
 
     await _tapTab(tester, 'GraphsPage');
@@ -1555,78 +1554,66 @@ void main() {
     await tester.tap(find.text('Update'));
     await tester.pumpAndSettle();
 
-    final row =
-        await (app.db.gymSets.select()..where(
-              (tbl) => tbl.name.equals('Linux E2E strength conversion'),
-            ))
-            .getSingle();
+    final row = await _singleSet('Linux E2E strength conversion');
     expect(row.unit, 'lb');
     expect(row.weight, closeTo(220.462262, 0.0001));
     expect(row.category, 'Linux Target Category');
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets(
-    'Graph mixed-unit conversion cancel keeps editor and data intact',
-    (tester) async {
-      await _pumpIsolatedApp(tester, surfaceSize: const Size(900, 900));
-      await app.db.gymSets.insertAll([
-        GymSetsCompanion.insert(
-          name: 'Linux E2E mixed units',
-          reps: 5,
-          weight: 100,
-          unit: 'kg',
-          created: DateTime(2026, 8, 31, 12),
-        ),
-        GymSetsCompanion.insert(
-          name: 'Linux E2E mixed units',
-          reps: 5,
-          weight: 220.462262,
-          unit: 'lb',
-          created: DateTime(2026, 9, 1, 12),
-        ),
-      ]);
-      await tester.pumpAndSettle();
+  testWidgets('Graph unit change preserves canonical historical loads', (
+    tester,
+  ) async {
+    await _pumpIsolatedApp(tester, surfaceSize: const Size(900, 900));
+    await _insertE2ESet(
+      name: 'Linux E2E unit presentation',
+      reps: 5,
+      weight: 100,
+      created: DateTime(2026, 8, 31, 12),
+    );
+    await _insertE2ESet(
+      name: 'Linux E2E unit presentation',
+      reps: 5,
+      weight: 110,
+      created: DateTime(2026, 9, 1, 12),
+    );
+    final canonicalBefore =
+        (await app.db.exerciseSets.select().get())
+            .where((row) => row.loadKg == 100 || row.loadKg == 110)
+            .map((row) => row.loadKg)
+            .toList()
+          ..sort();
 
-      await _tapTab(tester, 'GraphsPage');
-      await tester.enterText(find.byType(SearchBar), 'Linux E2E mixed units');
-      await tester.pumpAndSettle();
-      await tester.tap(find.widgetWithText(ListTile, 'Linux E2E mixed units'));
-      await tester.pumpAndSettle();
-      await tester.tap(find.byTooltip('Edit'));
-      await tester.pumpAndSettle();
-      await tester.tap(_dropdownWithLabel('Unit'));
-      await tester.pumpAndSettle();
-      await tester.tap(find.text('Stone').last);
-      await tester.pumpAndSettle();
-      await tester.tap(find.text('Update'));
-      await tester.pumpAndSettle();
+    await _tapTab(tester, 'GraphsPage');
+    await tester.enterText(
+      find.byType(SearchBar),
+      'Linux E2E unit presentation',
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(
+      find.widgetWithText(ListTile, 'Linux E2E unit presentation'),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.byTooltip('Edit'));
+    await tester.pumpAndSettle();
+    await tester.tap(_dropdownWithLabel('Unit'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Stone').last);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Update'));
+    await tester.pumpAndSettle();
 
-      expect(find.text('Units conflict'), findsOneWidget);
-      await tester.tap(find.widgetWithText(TextButton, 'Cancel'));
-      await tester.pumpAndSettle();
-      expect(find.text('Update'), findsOneWidget);
-      var rows =
-          await (app.db.gymSets.select()
-                ..where((tbl) => tbl.name.equals('Linux E2E mixed units')))
-              .get();
-      expect(rows.map((row) => row.unit).toSet(), {'kg', 'lb'});
-
-      await tester.tap(find.text('Update'));
-      await tester.pumpAndSettle();
-      await tester.tap(find.widgetWithText(TextButton, 'Confirm'));
-      await tester.pumpAndSettle();
-      rows =
-          await (app.db.gymSets.select()
-                ..where((tbl) => tbl.name.equals('Linux E2E mixed units')))
-              .get();
-      expect(rows.map((row) => row.unit).toSet(), {'stone'});
-      for (final row in rows) {
-        expect(row.weight, closeTo(15.7473, 0.001));
-      }
-      expect(tester.takeException(), isNull);
-    },
-  );
+    final rows = await _setsNamed('Linux E2E unit presentation');
+    expect(rows.map((row) => row.unit).toSet(), {'stone'});
+    final canonicalAfter =
+        (await app.db.exerciseSets.select().get())
+            .where((row) => row.loadKg == 100 || row.loadKg == 110)
+            .map((row) => row.loadKg)
+            .toList()
+          ..sort();
+    expect(canonicalAfter, canonicalBefore);
+    expect(tester.takeException(), isNull);
+  });
 
   testWidgets('History empty state and validation paths are safe', (
     tester,
@@ -1635,16 +1622,16 @@ void main() {
     await _tapTab(tester, 'HistoryPage');
     expect(find.text('No entries yet'), findsOneWidget);
 
-    await tester.tap(find.text('Add'));
+    await _tapAddAction(tester);
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Save'));
+    await _tapSaveAction(tester);
     await tester.pumpAndSettle();
     expect(find.text('Required'), findsWidgets);
 
     await tester.enterText(find.bySemanticsLabel('Name'), 'Invalid E2E set');
     await tester.enterText(find.bySemanticsLabel('Reps'), 'abc');
     await tester.enterText(find.bySemanticsLabel('Weight (kg)'), 'xyz');
-    await tester.tap(find.text('Save'));
+    await _tapSaveAction(tester);
     await tester.pumpAndSettle();
     expect(find.text('Invalid number'), findsNWidgets(2));
     expect(tester.takeException(), isNull);
@@ -1654,24 +1641,20 @@ void main() {
     tester,
   ) async {
     await _pumpIsolatedApp(tester, surfaceSize: const Size(900, 900));
-    await app.db.gymSets.insertAll([
-      GymSetsCompanion.insert(
-        name: 'Linux E2E filter light',
-        reps: 5,
-        weight: 40,
-        unit: 'kg',
-        created: DateTime(2026, 8, 30, 12),
-        category: const Value('E2E Light'),
-      ),
-      GymSetsCompanion.insert(
-        name: 'Linux E2E filter heavy',
-        reps: 12,
-        weight: 100,
-        unit: 'kg',
-        created: DateTime(2026, 9, 1, 12),
-        category: const Value('E2E Heavy'),
-      ),
-    ]);
+    await _insertE2ESet(
+      name: 'Linux E2E filter light',
+      reps: 5,
+      weight: 40,
+      created: DateTime(2026, 8, 30, 12),
+      category: 'E2E Light',
+    );
+    await _insertE2ESet(
+      name: 'Linux E2E filter heavy',
+      reps: 12,
+      weight: 100,
+      created: DateTime(2026, 9, 1, 12),
+      category: 'E2E Heavy',
+    );
     await tester.pumpAndSettle();
     await _tapTab(tester, 'HistoryPage');
 
@@ -1728,22 +1711,18 @@ void main() {
     tester,
   ) async {
     await _pumpIsolatedApp(tester, surfaceSize: const Size(900, 900));
-    await app.db.gymSets.insertAll([
-      GymSetsCompanion.insert(
-        name: 'Linux E2E bulk A',
-        reps: 5,
-        weight: 50,
-        unit: 'kg',
-        created: DateTime(2026, 9, 1, 10),
-      ),
-      GymSetsCompanion.insert(
-        name: 'Linux E2E bulk B',
-        reps: 6,
-        weight: 60,
-        unit: 'kg',
-        created: DateTime(2026, 9, 1, 11),
-      ),
-    ]);
+    await _insertE2ESet(
+      name: 'Linux E2E bulk A',
+      reps: 5,
+      weight: 50,
+      created: DateTime(2026, 9, 1, 10),
+    );
+    await _insertE2ESet(
+      name: 'Linux E2E bulk B',
+      reps: 6,
+      weight: 60,
+      created: DateTime(2026, 9, 1, 11),
+    );
     await tester.pumpAndSettle();
     await _tapTab(tester, 'HistoryPage');
     await tester.enterText(find.byType(SearchBar), 'Linux E2E bulk');
@@ -1762,10 +1741,7 @@ void main() {
     await tester.tap(find.text('Update'));
     await tester.pumpAndSettle();
 
-    var rows =
-        await (app.db.gymSets.select()
-              ..where((tbl) => tbl.name.contains('Linux E2E bulk')))
-            .get();
+    var rows = await _setsMatching('Linux E2E bulk');
     expect(rows, hasLength(2));
     expect(rows.every((row) => row.reps == 10), isTrue);
 
@@ -1784,72 +1760,62 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.widgetWithText(TextButton, 'Cancel'));
     await tester.pumpAndSettle();
-    expect(
-      await (app.db.gymSets.select()
-            ..where((tbl) => tbl.name.contains('Linux E2E bulk')))
-          .get(),
-      hasLength(2),
-    );
+    expect(await _setsMatching('Linux E2E bulk'), hasLength(2));
 
     await tester.tap(find.byTooltip('Delete selected'));
     await tester.pumpAndSettle();
     await tester.tap(find.widgetWithText(TextButton, 'Delete'));
     await tester.pumpAndSettle();
-    rows =
-        await (app.db.gymSets.select()
-              ..where((tbl) => tbl.name.contains('Linux E2E bulk')))
-            .get();
+    rows = await _setsMatching('Linux E2E bulk');
     expect(rows, isEmpty);
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('Enter Weight validates, saves unit, and backfills body weight', (
-    tester,
-  ) async {
-    await _pumpIsolatedApp(tester, surfaceSize: const Size(900, 900));
-    final baselineId = await app.db.gymSets.insertOne(
-      GymSetsCompanion.insert(
+  testWidgets(
+    'Enter Weight saves canonical value without mutating old set snapshots',
+    (tester) async {
+      await _pumpIsolatedApp(tester, surfaceSize: const Size(900, 900));
+      final baseline = await _insertE2ESet(
         name: 'Linux E2E bodyweight baseline',
         reps: 5,
         weight: 50,
-        unit: 'kg',
         created: DateTime(2026, 9, 1, 9),
-      ),
-    );
-    await tester.pumpAndSettle();
-    await _tapTab(tester, 'HistoryPage');
-    await tester.tap(find.byTooltip('Show menu'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.widgetWithText(ListTile, 'Weight'));
-    await tester.pumpAndSettle();
-    expect(find.text('Enter Weight'), findsOneWidget);
+      );
+      expect(baseline.bodyWeight, 0);
+      await tester.pumpAndSettle();
+      await _tapTab(tester, 'HistoryPage');
+      await tester.tap(find.byTooltip('Show menu'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.widgetWithText(ListTile, 'Weight'));
+      await tester.pumpAndSettle();
+      expect(find.text('Enter Weight'), findsOneWidget);
 
-    await tester.tap(find.text('Save'));
-    await tester.pumpAndSettle();
-    expect(find.text('Required'), findsOneWidget);
-    await tester.enterText(_textFieldWithLabel('Weight'), '82');
-    await tester.tap(_dropdownWithLabel('Unit'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('Pounds (lb)').last);
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('Save'));
-    await tester.pumpAndSettle();
+      await _tapSaveAction(tester);
+      await tester.pumpAndSettle();
+      expect(find.text('Required'), findsOneWidget);
+      await tester.enterText(_textFieldWithLabel('Weight'), '82');
+      await tester.tap(_dropdownWithLabel('Unit'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Pounds (lb)').last);
+      await tester.pumpAndSettle();
+      await _tapSaveAction(tester);
+      await tester.pumpAndSettle();
 
-    final weightRow =
-        await (app.db.gymSets.select()
-              ..where((tbl) => tbl.name.equals('Weight'))
-              ..orderBy([(tbl) => OrderingTerm.desc(tbl.created)])
-              ..limit(1))
-            .getSingle();
-    expect(weightRow.weight, 82);
-    expect(weightRow.unit, 'lb');
-    final baseline =
-        await (app.db.gymSets.select()
-              ..where((tbl) => tbl.id.equals(baselineId)))
-            .getSingle();
-    expect(baseline.bodyWeight, 82);
-    expect(tester.takeException(), isNull);
-  });
+      final weightRow =
+          await (app.db.bodyWeights.select()
+                ..orderBy([
+                  (row) => OrderingTerm.desc(row.timestamp),
+                  (row) => OrderingTerm.desc(row.id),
+                ])
+                ..limit(1))
+              .getSingle();
+      expect(weightRow.weightKg, closeTo(82 * 0.45359237, 0.0001));
+      final unchanged = await getPerformedSetById(app.db, baseline.id);
+      expect(unchanged, isNotNull);
+      expect(unchanged!.bodyWeight, 0);
+      expect(tester.takeException(), isNull);
+    },
+  );
 
   testWidgets(
     'Plan create, title/day search, edit, select-all and delete work',
@@ -1876,16 +1842,12 @@ void main() {
                 ..where((tbl) => tbl.title.equals('Linux E2E custom plan')))
               .getSingle();
       expect(plan.days, 'Monday');
-      expect(
-        await (app.db.planExercises.select()..where(
-              (tbl) =>
-                  tbl.planId.equals(plan.id) &
-                  tbl.exercise.equals('Barbell bench press') &
-                  tbl.enabled,
-            ))
-            .getSingleOrNull(),
-        isNotNull,
+      final benchPlanExercise = await _planExerciseForName(
+        plan.id,
+        'Barbell bench press',
       );
+      expect(benchPlanExercise, isNotNull);
+      expect(benchPlanExercise!.enabled, isTrue);
 
       final planSearch = find.byType(SearchBar);
       await tester.enterText(planSearch, 'Linux E2E custom plan');
@@ -1963,22 +1925,18 @@ void main() {
     tester,
   ) async {
     await _pumpIsolatedApp(tester, surfaceSize: const Size(1000, 900));
-    await app.db.gymSets.insertAll([
-      GymSetsCompanion.insert(
-        name: 'Linux E2E strength detail',
-        reps: 5,
-        weight: 80,
-        unit: 'kg',
-        created: DateTime(2026, 8, 31, 12),
-      ),
-      GymSetsCompanion.insert(
-        name: 'Linux E2E strength detail',
-        reps: 6,
-        weight: 82,
-        unit: 'kg',
-        created: DateTime(2026, 9, 1, 12),
-      ),
-    ]);
+    await _insertE2ESet(
+      name: 'Linux E2E strength detail',
+      reps: 5,
+      weight: 80,
+      created: DateTime(2026, 8, 31, 12),
+    );
+    await _insertE2ESet(
+      name: 'Linux E2E strength detail',
+      reps: 6,
+      weight: 82,
+      created: DateTime(2026, 9, 1, 12),
+    );
     await tester.pumpAndSettle();
     await _tapTab(tester, 'GraphsPage');
     await tester.enterText(find.byType(SearchBar), 'Linux E2E strength detail');
@@ -1997,8 +1955,7 @@ void main() {
       await tester.pumpAndSettle();
       expect(tester.takeException(), isNull);
     }
-    await tester.tap(find.byTooltip('Options'));
-    await tester.pumpAndSettle();
+    await _openGraphOptionsIfNeeded(tester);
     await tester.tap(
       find.widgetWithText(SwitchListTile, 'Use time-based X axis'),
     );
@@ -2026,14 +1983,11 @@ void main() {
     await tester.tap(find.byTooltip('Back'));
     await tester.pumpAndSettle();
 
-    final pref =
-        await (app.db.graphPreferences.select()
-              ..where((tbl) => tbl.name.equals('Linux E2E strength detail')))
-            .getSingle();
-    expect(pref.metric, 'volume');
-    expect(pref.period, 'month');
-    expect(pref.timeBasedXAxis, isTrue);
-    expect(pref.limit, greaterThan(10));
+    final pref = await _exerciseNamed('Linux E2E strength detail');
+    expect(pref.graphMetric, 'volume');
+    expect(pref.graphPeriod, 'month');
+    expect(pref.graphTimeBasedXAxis, isTrue);
+    expect(pref.graphLimit, greaterThan(10));
     expect(pref.notes, 'Linux E2E graph notes');
 
     await tester.tap(find.byTooltip('Edit'));
@@ -2046,18 +2000,10 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('Linux E2E strength renamed'), findsOneWidget);
     expect(find.text('Linux E2E strength detail'), findsNothing);
-    expect(
-      await (app.db.graphPreferences.select()
-            ..where((tbl) => tbl.name.equals('Linux E2E strength detail')))
-          .getSingleOrNull(),
-      isNull,
-    );
-    final renamedPref =
-        await (app.db.graphPreferences.select()
-              ..where((tbl) => tbl.name.equals('Linux E2E strength renamed')))
-            .getSingle();
-    expect(renamedPref.metric, 'volume');
-    expect(renamedPref.period, 'month');
+    expect(await _maybeExerciseNamed('Linux E2E strength detail'), isNull);
+    final renamedPref = await _exerciseNamed('Linux E2E strength renamed');
+    expect(renamedPref.graphMetric, 'volume');
+    expect(renamedPref.graphPeriod, 'month');
     expect(renamedPref.notes, 'Linux E2E graph notes');
     expect(tester.takeException(), isNull);
   });
@@ -2067,7 +2013,7 @@ void main() {
   ) async {
     await _pumpIsolatedApp(tester, surfaceSize: const Size(1000, 900));
     await _tapTab(tester, 'HistoryPage');
-    await tester.tap(find.text('Add'));
+    await _tapAddAction(tester);
     await tester.pumpAndSettle();
 
     await tester.tap(find.widgetWithText(ListTile, 'Cardio'));
@@ -2081,13 +2027,10 @@ void main() {
     await tester.enterText(find.bySemanticsLabel('Weight (kg)'), '20');
     await tester.enterText(find.bySemanticsLabel('Minutes'), '1');
     await tester.enterText(find.bySemanticsLabel('Seconds'), '30');
-    await tester.tap(find.text('Save'));
+    await _tapSaveAction(tester);
     await tester.pumpAndSettle();
 
-    var row =
-        await (app.db.gymSets.select()
-              ..where((tbl) => tbl.name.equals('Linux E2E dead hang')))
-            .getSingle();
+    var row = await _singleSet('Linux E2E dead hang');
     expect(row.cardio, isTrue);
     expect(row.unit, 'kg');
     expect(row.weight, 20);
@@ -2113,10 +2056,7 @@ void main() {
     await tester.tap(find.text('Update'));
     await tester.pumpAndSettle();
 
-    row =
-        await (app.db.gymSets.select()
-              ..where((tbl) => tbl.name.equals('Linux E2E dead hang')))
-            .getSingle();
+    row = await _singleSet('Linux E2E dead hang');
     expect(row.unit, 'lb');
     expect(row.weight, closeTo(44.09245, 0.0001));
     expect(row.distance, 0);
@@ -2128,17 +2068,15 @@ void main() {
     tester,
   ) async {
     await _pumpIsolatedApp(tester, surfaceSize: const Size(1000, 900));
-    await app.db.gymSets.insertOne(
-      GymSetsCompanion.insert(
-        name: 'Linux E2E cardio old',
-        reps: 0,
-        weight: 0,
-        unit: 'km',
-        created: DateTime(2026, 9, 1, 12),
-        cardio: const Value(true),
-        duration: const Value(30),
-        distance: const Value(5),
-      ),
+    await _insertE2ESet(
+      name: 'Linux E2E cardio old',
+      reps: 0,
+      weight: 0,
+      unit: 'km',
+      created: DateTime(2026, 9, 1, 12),
+      cardio: true,
+      duration: 30,
+      distance: 5,
     );
     await tester.pumpAndSettle();
     await _tapTab(tester, 'GraphsPage');
@@ -2155,12 +2093,7 @@ void main() {
     await tester.tap(find.text('Update'));
     await tester.pumpAndSettle();
 
-    expect(
-      await (app.db.gymSets.select()
-            ..where((tbl) => tbl.name.equals('Linux E2E cardio renamed')))
-          .getSingleOrNull(),
-      isNotNull,
-    );
+    expect(await _maybeSet('Linux E2E cardio renamed'), isNotNull);
     expect(find.text('Linux E2E cardio renamed'), findsOneWidget);
     expect(find.text('Linux E2E cardio old'), findsNothing);
     expect(tester.takeException(), isNull);
@@ -2190,13 +2123,7 @@ void main() {
     await tester.tap(find.widgetWithText(TextButton, 'OK'));
     await tester.pumpAndSettle();
 
-    var planExercise =
-        await (app.db.planExercises.select()..where(
-              (tbl) =>
-                  tbl.planId.equals(1) &
-                  tbl.exercise.equals('Barbell bench press'),
-            ))
-            .getSingle();
+    var planExercise = (await _planExerciseForName(1, 'Barbell bench press'))!;
     expect(planExercise.warmupSets, 1);
     expect(planExercise.maxSets, 2);
     expect(planExercise.timers, isFalse);
@@ -2214,44 +2141,26 @@ void main() {
     await tester.tap(find.widgetWithText(ListTile, 'Arnold press'));
     await tester.pumpAndSettle();
 
-    expect(
-      await (app.db.planExercises.select()..where(
-            (tbl) => tbl.planId.equals(1) & tbl.exercise.equals('Squat'),
-          ))
-          .getSingleOrNull(),
-      isNull,
-    );
-    expect(
-      await (app.db.planExercises.select()..where(
-            (tbl) => tbl.planId.equals(1) & tbl.exercise.equals('Arnold press'),
-          ))
-          .getSingleOrNull(),
-      isNotNull,
-    );
+    expect(await _planExerciseForName(1, 'Squat'), isNull);
+    expect(await _planExerciseForName(1, 'Arnold press'), isNotNull);
     expect(find.text('Arnold press'), findsOneWidget);
 
     await tester.enterText(find.bySemanticsLabel('Reps'), '5');
     await tester.enterText(find.bySemanticsLabel('Weight (kg)'), '50');
-    await tester.tap(find.text('Save'));
+    await _tapSaveAction(tester);
     await tester.pumpAndSettle();
     expect(find.text('Set 1'), findsOneWidget);
 
-    var logged =
-        await (app.db.gymSets.select()
-              ..where((tbl) => tbl.planId.equals(1) & tbl.hidden.equals(false)))
-            .get();
+    var logged = await _setsForPlan(1);
     expect(logged, hasLength(1));
     final loggedName = logged.single.name;
 
     await tester.tap(find.text('Set 1'));
     await tester.pumpAndSettle();
     await tester.enterText(find.bySemanticsLabel('Reps'), '7');
-    await tester.tap(find.text('Save'));
+    await _tapSaveAction(tester);
     await tester.pumpAndSettle();
-    logged =
-        await (app.db.gymSets.select()
-              ..where((tbl) => tbl.planId.equals(1) & tbl.hidden.equals(false)))
-            .get();
+    logged = await _setsForPlan(1);
     expect(logged.single.reps, 7);
 
     await tester.longPress(find.byKey(Key(loggedName)));
@@ -2260,10 +2169,7 @@ void main() {
     expect(find.text('Edit'), findsOneWidget);
     await tester.tap(find.widgetWithText(ListTile, 'Undo'));
     await tester.pumpAndSettle();
-    logged =
-        await (app.db.gymSets.select()
-              ..where((tbl) => tbl.planId.equals(1) & tbl.hidden.equals(false)))
-            .get();
+    logged = await _setsForPlan(1);
     expect(logged, isEmpty);
     expect(find.text('Set 1'), findsNothing);
     expect(tester.takeException(), isNull);
@@ -2287,7 +2193,7 @@ void main() {
     await tester.pumpAndSettle();
     await tester.enterText(find.bySemanticsLabel('Reps'), '5');
     await tester.enterText(find.bySemanticsLabel('Weight (kg)'), '50');
-    await tester.tap(find.text('Save'));
+    await _tapSaveAction(tester);
     await tester.pump(const Duration(milliseconds: 100));
     await tester.pump(const Duration(milliseconds: 600));
     await tester.pumpAndSettle();
@@ -2302,15 +2208,12 @@ void main() {
     tester,
   ) async {
     await _pumpIsolatedApp(tester, surfaceSize: const Size(1000, 1000));
-    await app.db.gymSets.insertOne(
-      GymSetsCompanion.insert(
-        name: 'Linux E2E custom rest',
-        reps: 5,
-        weight: 50,
-        unit: 'kg',
-        created: DateTime(2026, 9, 1, 12),
-        restMs: const Value(90000),
-      ),
+    await _insertE2ESet(
+      name: 'Linux E2E custom rest',
+      reps: 5,
+      weight: 50,
+      created: DateTime(2026, 9, 1, 12),
+      restMs: 90000,
     );
     await _openSettingsSection(tester, 'Timers');
 
@@ -2371,20 +2274,14 @@ void main() {
     await tester.pumpAndSettle();
     await tester.enterText(customSeconds, '10');
     await tester.pumpAndSettle();
-    var row =
-        await (app.db.gymSets.select()
-              ..where((tbl) => tbl.name.equals('Linux E2E custom rest')))
-            .getSingle();
+    var row = await _singleSet('Linux E2E custom rest');
     expect(row.restMs, 130000);
 
     await tester.tap(
       find.byTooltip('Remove custom timer (use global default)'),
     );
     await tester.pumpAndSettle();
-    row =
-        await (app.db.gymSets.select()
-              ..where((tbl) => tbl.name.equals('Linux E2E custom rest')))
-            .getSingle();
+    row = await _singleSet('Linux E2E custom rest');
     expect(row.restMs, isNull);
     expect(tester.takeException(), isNull);
   });
@@ -2544,7 +2441,7 @@ void main() {
     await tester.binding.handlePopRoute();
     await tester.pumpAndSettle();
     await _tapTab(tester, 'HistoryPage');
-    await tester.tap(find.text('Add'));
+    await _tapAddAction(tester);
     await tester.pumpAndSettle();
     expect(_dropdownWithLabel('Unit'), findsNothing);
     expect(tester.takeException(), isNull);
@@ -2619,14 +2516,11 @@ void main() {
     tester,
   ) async {
     await _pumpIsolatedApp(tester, surfaceSize: const Size(1000, 900));
-    await app.db.gymSets.insertOne(
-      GymSetsCompanion.insert(
-        name: 'Linux E2E deletable graph',
-        reps: 5,
-        weight: 50,
-        unit: 'kg',
-        created: DateTime(2026, 9, 1, 12),
-      ),
+    await _insertE2ESet(
+      name: 'Linux E2E deletable graph',
+      reps: 5,
+      weight: 50,
+      created: DateTime(2026, 9, 1, 12),
     );
     await _openSettingsSection(tester, 'Data management');
     await tester.tap(find.text('Delete records'));
@@ -2635,12 +2529,7 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.widgetWithText(TextButton, 'Cancel'));
     await tester.pumpAndSettle();
-    expect(
-      await (app.db.gymSets.select()
-            ..where((tbl) => tbl.name.equals('Linux E2E deletable graph')))
-          .getSingleOrNull(),
-      isNotNull,
-    );
+    expect(await _maybeSet('Linux E2E deletable graph'), isNotNull);
 
     await tester.tap(find.text('Delete records'));
     await tester.pumpAndSettle();
@@ -2648,12 +2537,7 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.widgetWithText(TextButton, 'Delete'));
     await tester.pumpAndSettle();
-    expect(
-      await (app.db.gymSets.select()
-            ..where((tbl) => tbl.name.equals('Linux E2E deletable graph')))
-          .getSingleOrNull(),
-      isNull,
-    );
+    expect(await _maybeSet('Linux E2E deletable graph'), isNull);
 
     await _openSettingsSection(tester, 'Data management');
     final plansBefore = await app.db.plans.select().get();

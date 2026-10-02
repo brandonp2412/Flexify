@@ -19,6 +19,7 @@ import 'package:integration_test/integration_test.dart';
 import 'package:provider/provider.dart';
 
 import '../test/mock_tab_controller.dart';
+import '../test/support/fixtures.dart';
 import '../test/support/graph_fixtures.dart';
 import 'test_database.dart';
 
@@ -147,13 +148,22 @@ void main() {
     IntegrationTestWidgetsFlutterBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(app.androidChannel, (message) => null);
 
-    await app.db.delete(app.db.gymSets).go();
-    await app.db.delete(app.db.plans).go();
+    await app.db.delete(app.db.exerciseSets).go();
+    await app.db.delete(app.db.workouts).go();
     await app.db.delete(app.db.planExercises).go();
+    await app.db.delete(app.db.plans).go();
 
     await seedGraphFixtures(app.db);
     await db.plans.insertAll(screenshotPlans);
-    await db.planExercises.insertAll(screenshotPlanExercises);
+    for (final entry in screenshotPlanExercises.entries) {
+      for (final exercise in entry.value) {
+        await insertPlanExerciseFixture(
+          db,
+          planId: entry.key,
+          exercise: exercise,
+        );
+      }
+    }
   });
 
   tearDownAll(() async {
@@ -310,22 +320,20 @@ void main() {
           title: const Value('Upper body strength'),
         );
         await db.into(db.plans).insert(plan);
-        await db.planExercises.insertAll(
-          [
-            'Barbell bench press',
-            'Barbell bent-over row',
-            'Dumbbell chest press',
-            'Dumbbell lateral raise',
-            'Barbell biceps curl',
-            'Triceps dip',
-          ].map(
-            (exercise) => PlanExercisesCompanion.insert(
-              planId: planId,
-              enabled: true,
-              exercise: exercise,
-            ),
-          ),
-        );
+        for (final exercise in const [
+          'Barbell bench press',
+          'Barbell bent-over row',
+          'Dumbbell chest press',
+          'Dumbbell lateral raise',
+          'Barbell biceps curl',
+          'Triceps dip',
+        ]) {
+          await insertPlanExerciseFixture(
+            db,
+            planId: planId,
+            exercise: exercise,
+          );
+        }
 
         try {
           await generateScreenshot(

@@ -49,68 +49,17 @@ final graphData = <GraphSetInfo>[
   GraphSetInfo(36, 6, 1),
 ];
 
-final screenshotPlanExercises = <PlanExercisesCompanion>[
-  PlanExercisesCompanion.insert(
-    planId: 1,
-    enabled: true,
-    exercise: 'Triceps dip',
-  ),
-  PlanExercisesCompanion.insert(planId: 1, enabled: true, exercise: 'Squat'),
-  PlanExercisesCompanion.insert(
-    planId: 1,
-    enabled: true,
-    exercise: 'Standing calf raise',
-  ),
-  PlanExercisesCompanion.insert(planId: 1, enabled: true, exercise: 'Pull-up'),
-  PlanExercisesCompanion.insert(
-    planId: 2,
-    enabled: true,
-    exercise: 'Barbell bench press',
-  ),
-  PlanExercisesCompanion.insert(
-    planId: 2,
-    enabled: true,
-    exercise: 'Barbell bent-over row',
-  ),
-  PlanExercisesCompanion.insert(
-    planId: 2,
-    enabled: true,
-    exercise: 'Dumbbell lateral raise',
-  ),
-  PlanExercisesCompanion.insert(
-    planId: 2,
-    enabled: true,
-    exercise: 'Barbell biceps curl',
-  ),
-  PlanExercisesCompanion.insert(
-    planId: 3,
-    enabled: true,
-    exercise: 'Barbell shoulder press',
-  ),
-  PlanExercisesCompanion.insert(planId: 3, enabled: true, exercise: 'Crunch'),
-  PlanExercisesCompanion.insert(planId: 3, enabled: true, exercise: 'Chin-up'),
-  PlanExercisesCompanion.insert(
-    planId: 3,
-    enabled: true,
-    exercise: 'Romanian deadlift',
-  ),
-  PlanExercisesCompanion.insert(
-    planId: 4,
-    enabled: true,
-    exercise: 'Barbell shoulder press',
-  ),
-  PlanExercisesCompanion.insert(
-    planId: 4,
-    enabled: true,
-    exercise: 'Neck curl',
-  ),
-  PlanExercisesCompanion.insert(planId: 4, enabled: true, exercise: 'Chin-up'),
-  PlanExercisesCompanion.insert(
-    planId: 4,
-    enabled: true,
-    exercise: 'Romanian deadlift',
-  ),
-];
+const screenshotPlanExercises = <int, List<String>>{
+  1: ['Triceps dip', 'Squat', 'Standing calf raise', 'Pull-up'],
+  2: [
+    'Barbell bench press',
+    'Barbell bent-over row',
+    'Dumbbell lateral raise',
+    'Barbell biceps curl',
+  ],
+  3: ['Barbell shoulder press', 'Crunch', 'Chin-up', 'Romanian deadlift'],
+  4: ['Barbell shoulder press', 'Neck curl', 'Chin-up', 'Romanian deadlift'],
+};
 
 final screenshotPlans = <PlansCompanion>[
   PlansCompanion.insert(
