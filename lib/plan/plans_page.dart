@@ -9,6 +9,7 @@ import 'package:flexify/plan/edit_plan_page.dart';
 import 'package:flexify/plan/plan_queries.dart';
 import 'package:flexify/plan/plans_list.dart';
 import 'package:flexify/plan/start_plan_page.dart';
+import 'package:flexify/plan/workout_sessions.dart';
 import 'package:flexify/responsive.dart';
 import 'package:flexify/selection_controller.dart';
 import 'package:flexify/settings/settings_state.dart';
@@ -102,7 +103,7 @@ class _PlansPageWidget extends StatefulWidget {
 class _PlansPageWidgetState extends State<_PlansPageWidget> {
   String _search = '';
   late Stream<List<Plan>> _plansStream;
-  late Stream<List<PlanExercise>> _planExercisesStream;
+  late Stream<List<PlanExerciseEntry>> _planExercisesStream;
 
   final _selection = SelectionController<int>();
   final _scroll = ScrollController();
@@ -123,7 +124,7 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
 
   void _createStreams() {
     _plansStream = watchPlans();
-    _planExercisesStream = db.planExercises.select().watch();
+    _planExercisesStream = watchAllPlanExerciseEntries(db);
   }
 
   void _onDatabaseChanged() {
@@ -131,13 +132,13 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
     setState(_createStreams);
   }
 
-  List<Plan> _filterPlans(List<Plan> plans, List<PlanExercise> exercises) {
+  List<Plan> _filterPlans(List<Plan> plans, List<PlanExerciseEntry> exercises) {
     if (_search.isEmpty) return plans;
 
     final search = _search.toLowerCase();
     final matchingPlanIds = exercises
-        .where((exercise) => exercise.exercise.toLowerCase().contains(search))
-        .map((exercise) => exercise.planId)
+        .where((entry) => entry.exercise.name.toLowerCase().contains(search))
+        .map((entry) => entry.planExercise.planId)
         .toSet();
 
     return plans.where((plan) {
@@ -167,129 +168,120 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
 
     return StreamBuilder<List<Plan>>(
       stream: _plansStream,
-      builder: (context, plansSnapshot) => StreamBuilder<List<PlanExercise>>(
-        stream: _planExercisesStream,
-        builder: (context, exercisesSnapshot) {
-          final plans = plansSnapshot.data ?? const <Plan>[];
-          final exercises = exercisesSnapshot.data ?? const <PlanExercise>[];
-          final filtered = _filterPlans(plans, exercises);
+      builder: (context, plansSnapshot) =>
+          StreamBuilder<List<PlanExerciseEntry>>(
+            stream: _planExercisesStream,
+            builder: (context, exercisesSnapshot) {
+              final plans = plansSnapshot.data ?? const <Plan>[];
+              final exercises =
+                  exercisesSnapshot.data ?? const <PlanExerciseEntry>[];
+              final filtered = _filterPlans(plans, exercises);
 
-          return Scaffold(
-            resizeToAvoidBottomInset: false,
-            appBar: desktop
-                ? AppBar(
-                    title: Text(context.l10n.navPlans),
-                    actions: [
-                      Padding(
-                        padding: const EdgeInsets.only(right: 16),
-                        child: FilledButton.icon(
-                          onPressed: _addPlan,
-                          icon: const Icon(Icons.add_rounded),
-                          label: Text(context.l10n.newPlan),
-                        ),
+              return Scaffold(
+                resizeToAvoidBottomInset: false,
+                appBar: desktop
+                    ? AppBar(
+                        title: Text(context.l10n.navPlans),
+                        actions: [
+                          Padding(
+                            padding: const EdgeInsets.only(right: 16),
+                            child: FilledButton.icon(
+                              onPressed: _addPlan,
+                              icon: const Icon(Icons.add_rounded),
+                              label: Text(context.l10n.newPlan),
+                            ),
+                          ),
+                        ],
+                      )
+                    : null,
+                body: Stack(
+                  children: [
+                    Positioned.fill(
+                      child: PlansList(
+                        scroll: _scroll,
+                        plans: plansSnapshot.hasData ? filtered : null,
+                        navKey: widget.navKey,
+                        selected: _selection.selected,
+                        search: _search,
+                        onSelect: (id) {
+                          setState(() => _selection.toggle(id));
+                        },
                       ),
-                    ],
-                  )
-                : null,
-            body: Stack(
-              children: [
-                Positioned.fill(
-                  child: PlansList(
-                    scroll: _scroll,
-                    plans: plansSnapshot.hasData ? filtered : null,
-                    navKey: widget.navKey,
-                    selected: _selection.selected,
-                    search: _search,
-                    onSelect: (id) {
-                      setState(() => _selection.toggle(id));
-                    },
-                  ),
-                ),
-                Positioned(
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  child: AppSearch(
-                    hintText: context.l10n.searchPlans,
-                    controller: _selection,
-                    onShare: () async {
-                      final l10n = context.l10n;
-                      final selectedPlans = plans
-                          .where((plan) => _selection.contains(plan.id))
-                          .toList();
+                    ),
+                    Positioned(
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      child: AppSearch(
+                        hintText: context.l10n.searchPlans,
+                        controller: _selection,
+                        onShare: () async {
+                          final l10n = context.l10n;
+                          final selectedPlans = plans
+                              .where((plan) => _selection.contains(plan.id))
+                              .toList();
 
-                      final summaries = await Future.wait(
-                        selectedPlans.map((plan) async {
-                          final days = plan.days
-                              .split(',')
-                              .where((day) => day.isNotEmpty)
-                              .map((day) => localizedWeekday(l10n, day))
-                              .join(', ');
-                          final planExercises =
-                              await (db.planExercises.select()
-                                    ..where(
-                                      (tbl) =>
-                                          tbl.planId.equals(plan.id) &
-                                          tbl.enabled,
-                                    )
-                                    ..orderBy([
-                                      (u) => drift.OrderingTerm(
-                                        expression: u.sequence,
-                                      ),
-                                    ]))
-                                  .get();
-                          final exerciseSummary = planExercises
-                              .map((exercise) => '- ${exercise.exercise}')
-                              .join('\n');
-                          return '$days:\n$exerciseSummary';
+                          final summaries = await Future.wait(
+                            selectedPlans.map((plan) async {
+                              final days = plan.days
+                                  .split(',')
+                                  .where((day) => day.isNotEmpty)
+                                  .map((day) => localizedWeekday(l10n, day))
+                                  .join(', ');
+                              final planExercises =
+                                  await getPlanExerciseEntries(db, plan.id);
+                              final exerciseSummary = planExercises
+                                  .map((entry) => '- ${entry.exercise.name}')
+                                  .join('\n');
+                              return '$days:\n$exerciseSummary';
+                            }),
+                          );
+
+                          await SharePlus.instance.share(
+                            ShareParams(text: summaries.join('\n\n')),
+                          );
+                          if (mounted) setState(_selection.clear);
+                        },
+                        onChange: (value) => setState(() => _search = value),
+                        onDelete: () async {
+                          final selectedIds = _selection.toList();
+                          setState(_selection.clear);
+                          await db.planExercises.deleteWhere(
+                            (tbl) => tbl.planId.isIn(selectedIds),
+                          );
+                          await db.plans.deleteWhere(
+                            (tbl) => tbl.id.isIn(selectedIds),
+                          );
+                        },
+                        onSelectAll: () => setState(() {
+                          _selection.setAll(filtered.map((plan) => plan.id));
                         }),
-                      );
-
-                      await SharePlus.instance.share(
-                        ShareParams(text: summaries.join('\n\n')),
-                      );
-                      if (mounted) setState(_selection.clear);
-                    },
-                    onChange: (value) => setState(() => _search = value),
-                    onDelete: () async {
-                      final selectedIds = _selection.toList();
-                      setState(_selection.clear);
-                      await db.planExercises.deleteWhere(
-                        (tbl) => tbl.planId.isIn(selectedIds),
-                      );
-                      await db.plans.deleteWhere(
-                        (tbl) => tbl.id.isIn(selectedIds),
-                      );
-                    },
-                    onSelectAll: () => setState(() {
-                      _selection.setAll(filtered.map((plan) => plan.id));
-                    }),
-                    onEdit: () async {
-                      final plan = plans
-                          .firstWhere((plan) => plan.id == _selection.first)
-                          .toCompanion(false);
-                      if (!context.mounted) return;
-                      await Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => EditPlanPage(plan: plan),
-                        ),
-                      );
-                    },
-                  ),
+                        onEdit: () async {
+                          final plan = plans
+                              .firstWhere((plan) => plan.id == _selection.first)
+                              .toCompanion(false);
+                          if (!context.mounted) return;
+                          await Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => EditPlanPage(plan: plan),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-            floatingActionButton: desktop
-                ? null
-                : AnimatedFab(
-                    onPressed: _addPlan,
-                    label: Text(context.l10n.actionAdd),
-                    icon: const Icon(Icons.add),
-                    scroll: _scroll,
-                  ),
-          );
-        },
-      ),
+                floatingActionButton: desktop
+                    ? null
+                    : AnimatedFab(
+                        onPressed: _addPlan,
+                        label: Text(context.l10n.actionAdd),
+                        icon: const Icon(Icons.add),
+                        scroll: _scroll,
+                      ),
+              );
+            },
+          ),
     );
   }
 }

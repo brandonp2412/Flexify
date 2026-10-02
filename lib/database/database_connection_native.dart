@@ -14,7 +14,11 @@ LazyDatabase createNativeConnection() {
 
     final cache = (await getTemporaryDirectory()).path;
     sqlite3.tempDirectory = cache;
-    return NativeDatabase.createInBackground(file, logStatements: kDebugMode);
+    return NativeDatabase.createInBackground(
+      file,
+      logStatements: kDebugMode,
+      setup: (database) => database.execute('PRAGMA foreign_keys = ON'),
+    );
   });
 }
 

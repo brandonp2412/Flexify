@@ -25,6 +25,7 @@ class StrengthPage extends StatefulWidget {
   final String unit;
   final List<StrengthData> data;
   final TabController tabCtrl;
+  final bool bodyWeight;
 
   const StrengthPage({
     super.key,
@@ -32,6 +33,7 @@ class StrengthPage extends StatefulWidget {
     required this.unit,
     required this.data,
     required this.tabCtrl,
+    this.bodyWeight = false,
   });
 
   @override
@@ -69,7 +71,7 @@ class _StrengthPageState extends State<StrengthPage> {
       orElse: () => Period.day,
     );
     widget.tabCtrl.addListener(_onTabChanged);
-    _loadPreferences();
+    if (!widget.bodyWeight) _loadPreferences();
   }
 
   Future<void> _loadPreferences() async {
@@ -92,6 +94,7 @@ class _StrengthPageState extends State<StrengthPage> {
   }
 
   Future<void> _savePreferences() async {
+    if (widget.bodyWeight) return;
     final exercise = await getExerciseByName(name);
     if (exercise == null) return;
     await updateExerciseGraphPreferences(
@@ -246,7 +249,9 @@ class _StrengthPageState extends State<StrengthPage> {
         actions: [
           IconButton(
             onPressed: () async {
-              final gymSets = await getGraphHistory(name);
+              final gymSets = widget.bodyWeight
+                  ? await getBodyWeightGraphHistory()
+                  : await getGraphHistory(name);
               if (!context.mounted) return;
 
               await Navigator.of(context).push(
@@ -255,6 +260,7 @@ class _StrengthPageState extends State<StrengthPage> {
                     name: name,
                     gymSets: gymSets,
                     tabController: widget.tabCtrl,
+                    bodyWeight: widget.bodyWeight,
                   ),
                 ),
               );
@@ -264,7 +270,7 @@ class _StrengthPageState extends State<StrengthPage> {
             icon: const Icon(Icons.history),
             tooltip: context.l10n.navHistory,
           ),
-          if (name != 'Weight')
+          if (!widget.bodyWeight)
             IconButton(
               onPressed: () async {
                 String? newName = await Navigator.of(context).push(
@@ -297,15 +303,15 @@ class _StrengthPageState extends State<StrengthPage> {
               if (desktop)
                 Row(
                   children: [
-                    if (name != 'Weight') Expanded(child: metricSelector),
-                    if (name != 'Weight') const SizedBox(width: 16),
+                    if (!widget.bodyWeight) Expanded(child: metricSelector),
+                    if (!widget.bodyWeight) const SizedBox(width: 16),
                     Expanded(flex: 2, child: periodSelector),
                   ],
                 )
               else ...[
                 Row(
                   children: [
-                    if (name != 'Weight')
+                    if (!widget.bodyWeight)
                       Expanded(child: metricSelector)
                     else
                       const Spacer(),
@@ -532,15 +538,23 @@ class _StrengthPageState extends State<StrengthPage> {
 
   Future<void> setData() async {
     if (!mounted) return;
-    final strengthData = await getStrengthData(
-      target: target,
-      name: name,
-      metric: metric,
-      period: period,
-      start: start,
-      end: end,
-      limit: limit,
-    );
+    final strengthData = widget.bodyWeight
+        ? await getBodyWeightData(
+            target: target,
+            period: period,
+            start: start,
+            end: end,
+            limit: limit,
+          )
+        : await getStrengthData(
+            target: target,
+            name: name,
+            metric: metric,
+            period: period,
+            start: start,
+            end: end,
+            limit: limit,
+          );
     if (!mounted) return;
     setState(() {
       data = strengthData;
@@ -599,6 +613,7 @@ class _StrengthPageState extends State<StrengthPage> {
       });
     }
 
+    if (widget.bodyWeight) return;
     final index = touchResponse?.lineBarSpots?[0].spotIndex;
     if (index == null) return;
     final row = data[index];

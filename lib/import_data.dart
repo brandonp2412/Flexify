@@ -317,8 +317,7 @@ $version
           planExercisesToInsert.add(
             PlanExercisesCompanion.insert(
               planId: id,
-              exercise: exercise.name,
-              exerciseId: Value(exercise.id),
+              exerciseId: exercise.id,
               enabled: true,
               timers: const Value(true),
             ),
@@ -326,8 +325,8 @@ $version
         }
       }
 
-      await db.plans.deleteAll();
       await db.planExercises.deleteAll();
+      await db.plans.deleteAll();
       await db.plans.insertAll(plansToInsert);
       await db.planExercises.insertAll(planExercisesToInsert);
       talker.info(

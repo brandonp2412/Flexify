@@ -124,24 +124,17 @@ Future<void> updateExerciseDefinition({
 }) async {
   final trimmedName = name.trim();
   final categoryId = await _categoryId(category);
-  await db.transaction(() async {
-    await (db.exercises.update()..where((row) => row.id.equals(exerciseId)))
-        .write(
-          ExercisesCompanion(
-            name: Value(trimmedName),
-            kind: Value(cardio ? 'cardio' : 'strength'),
-            displayUnit: Value(displayUnit),
-            categoryId: Value(categoryId),
-            image: Value(image),
-            defaultRestDurationMs: Value(defaultRestDurationMs),
-          ),
-        );
-
-    // Keep the legacy text column coherent for readers not yet cut over.
-    await (db.planExercises.update()
-          ..where((row) => row.exerciseId.equals(exerciseId)))
-        .write(PlanExercisesCompanion(exercise: Value(trimmedName)));
-  });
+  await (db.exercises.update()..where((row) => row.id.equals(exerciseId)))
+      .write(
+        ExercisesCompanion(
+          name: Value(trimmedName),
+          kind: Value(cardio ? 'cardio' : 'strength'),
+          displayUnit: Value(displayUnit),
+          categoryId: Value(categoryId),
+          image: Value(image),
+          defaultRestDurationMs: Value(defaultRestDurationMs),
+        ),
+      );
 }
 
 Future<void> updateExerciseGraphPreferences({

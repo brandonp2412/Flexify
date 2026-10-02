@@ -308,7 +308,6 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
           cardio: false,
           duration: 0,
           distance: 0,
-          hidden: false,
         );
     gymSet = gymSet.copyWith(
       id: 0,

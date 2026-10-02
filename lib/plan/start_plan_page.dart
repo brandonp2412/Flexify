@@ -781,7 +781,6 @@ class _StartPlanPageState extends State<StartPlanPage>
       duration:
           (int.tryParse(_seconds.text) ?? 0) / 60 +
           (int.tryParse(_minutes.text) ?? 0),
-      hidden: false,
       image: _image,
       incline: int.tryParse(_incline.text),
       name: exercise,

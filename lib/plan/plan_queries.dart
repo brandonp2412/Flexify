@@ -2,6 +2,19 @@ import 'package:drift/drift.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
 
+class PlanExerciseDraft {
+  const PlanExerciseDraft({
+    required this.planExercise,
+    required this.exerciseName,
+  });
+
+  final PlanExercisesCompanion planExercise;
+  final String exerciseName;
+
+  PlanExerciseDraft copyWithPlanExercise(PlanExercisesCompanion value) =>
+      PlanExerciseDraft(planExercise: value, exerciseName: exerciseName);
+}
+
 class PlanCount {
   final int planId;
   final int total;
@@ -139,7 +152,7 @@ Stream<List<GymCount>> watchGymCounts(int planId, int workoutId) {
 Future<List<GymCount>> getGymCounts(int planId, int workoutId) =>
     watchGymCounts(planId, workoutId).first;
 
-Future<List<PlanExercisesCompanion>> loadPlanExerciseDrafts(
+Future<List<PlanExerciseDraft>> loadPlanExerciseDrafts(
   PlansCompanion plan,
 ) async {
   final query = db.exercises.selectOnly()
@@ -155,24 +168,30 @@ Future<List<PlanExercisesCompanion>> loadPlanExerciseDrafts(
     ..addColumns(db.planExercises.$columns);
 
   final rows = await query.get();
-  final enabled = <PlanExercisesCompanion>[];
-  final disabled = <PlanExercisesCompanion>[];
+  final enabled = <PlanExerciseDraft>[];
+  final disabled = <PlanExerciseDraft>[];
 
   for (final row in rows) {
-    final exercise = PlanExercisesCompanion(
+    final planExercise = PlanExercisesCompanion(
       planId: plan.id,
       id: Value.absentIfNull(row.read(db.planExercises.id)),
-      exercise: Value(row.read(db.exercises.name)!),
-      exerciseId: Value(row.read(db.exercises.id)),
+      exerciseId: Value(row.read(db.exercises.id)!),
       enabled: Value(row.read(db.planExercises.enabled) ?? false),
       maxSets: Value(row.read(db.planExercises.maxSets)),
       warmupSets: Value(row.read(db.planExercises.warmupSets)),
       timers: Value(row.read(db.planExercises.timers) ?? true),
       sequence: Value(row.read(db.planExercises.sequence) ?? 0),
     );
-    (exercise.enabled.value ? enabled : disabled).add(exercise);
+    final draft = PlanExerciseDraft(
+      planExercise: planExercise,
+      exerciseName: row.read(db.exercises.name)!,
+    );
+    (planExercise.enabled.value ? enabled : disabled).add(draft);
   }
 
-  enabled.sort((a, b) => a.sequence.value.compareTo(b.sequence.value));
+  enabled.sort(
+    (a, b) =>
+        a.planExercise.sequence.value.compareTo(b.planExercise.sequence.value),
+  );
   return [...enabled, ...disabled];
 }

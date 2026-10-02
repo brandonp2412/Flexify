@@ -8,6 +8,7 @@ import 'package:flexify/data_portability/graph_csv.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/logging.dart';
+import 'package:flexify/plan/workout_sessions.dart';
 import 'package:flexify/settings/backup_archive.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
@@ -60,17 +61,16 @@ class _ExportDataState extends State<ExportData> {
                         ['id', 'days', 'title', 'sequence', 'exercises'],
                       ];
                       for (var plan in plans) {
-                        final planExercises =
-                            await (db.planExercises.select()..where(
-                                  (u) => u.planId.equals(plan.id) & u.enabled,
-                                ))
-                                .get();
+                        final planExercises = await getPlanExerciseEntries(
+                          db,
+                          plan.id,
+                        );
                         data.add([
                           plan.id,
                           plan.days,
                           plan.title ?? '',
                           plan.sequence ?? '',
-                          planExercises.map((e) => e.exercise).join(';'),
+                          planExercises.map((e) => e.exercise.name).join(';'),
                         ]);
                       }
 

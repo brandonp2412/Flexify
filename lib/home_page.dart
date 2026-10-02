@@ -46,17 +46,17 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
     final info = PackageInfo.fromPlatform();
     info.then((pkg) async {
-      final meta = await (db.metadata.select()..limit(1)).getSingleOrNull();
-      if (meta == null)
-        return db.metadata.insertOne(
-          MetadataCompanion(buildNumber: Value(int.parse(pkg.buildNumber))),
-        );
-      else
-        db.metadata.update().write(
-          MetadataCompanion(buildNumber: Value(int.parse(pkg.buildNumber))),
-        );
+      final buildNumber = int.tryParse(pkg.buildNumber);
+      if (buildNumber == null) return;
+      final settings = await (db.settings.select()..limit(1)).getSingle();
+      final previousBuildNumber = settings.buildNumber;
+      await db.settings.update().write(
+        SettingsCompanion(buildNumber: Value(buildNumber)),
+      );
 
-      if (int.parse(pkg.buildNumber) == meta.buildNumber) return null;
+      if (previousBuildNumber == null || buildNumber == previousBuildNumber) {
+        return;
+      }
 
       if (mounted)
         toast(

@@ -9,7 +9,6 @@ import 'package:flexify/database/body_weight_repository.dart';
 import 'package:flexify/database/categories.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/database/exercise_catalog.dart';
-import 'package:flexify/database/gym_sets.dart';
 import 'package:flexify/database/performed_sets.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/logging.dart';
@@ -182,7 +181,7 @@ class _EditSetPageState extends State<EditSetPage> {
                 const SizedBox(height: 12.0),
                 ...exerciseFields(),
                 const SizedBox(height: 12.0),
-                if (showBodyWeight && _name != 'Weight') ...[
+                if (showBodyWeight) ...[
                   bodyFields(showBodyWeight),
                   const SizedBox(height: 12.0),
                 ],
@@ -190,9 +189,7 @@ class _EditSetPageState extends State<EditSetPage> {
                   unitSelector(),
                   const SizedBox(height: 12.0),
                 ],
-                if (showCategories && _name != 'Weight') ...[
-                  categorySelector(),
-                ],
+                if (showCategories) ...[categorySelector()],
                 if (showNotes) ...[notesField(), const SizedBox(height: 12.0)],
                 dateSelector(),
                 ListTile(
@@ -227,12 +224,11 @@ class _EditSetPageState extends State<EditSetPage> {
 
   List<Widget> buildStrengthFields() {
     return [
-      if (_name != 'Weight') ...[
-        buildRepsField(),
-        const SizedBox(height: 12.0),
-      ],
+      buildRepsField(),
+      const SizedBox(height: 12.0),
       buildWeightField(),
-      if (_name != 'Weight') ...[const SizedBox(height: 12.0), buildORMField()],
+      const SizedBox(height: 12.0),
+      buildORMField(),
     ];
   }
 
@@ -257,9 +253,7 @@ class _EditSetPageState extends State<EditSetPage> {
   Widget buildWeightField() {
     return StepperField(
       controller: _weight,
-      labelText: _name == 'Weight'
-          ? context.l10n.valueLabel
-          : context.l10n.weightWithUnit(_unit),
+      labelText: context.l10n.weightWithUnit(_unit),
       step: weightStep(_name, _unit),
       onFieldSubmitted: (value) => save(),
       onChanged: (value) => setORM(),
@@ -331,7 +325,7 @@ class _EditSetPageState extends State<EditSetPage> {
 
   Widget bodyFields(bool showBodyWeight) {
     return Visibility(
-      visible: showBodyWeight && _name != 'Weight',
+      visible: showBodyWeight,
       child: TextFormField(
         controller: _body,
         decoration: InputDecoration(
@@ -372,7 +366,7 @@ class _EditSetPageState extends State<EditSetPage> {
     return Selector<SettingsState, bool>(
       selector: (context, settings) => settings.value.showCategories,
       builder: (context, showCategories, child) {
-        if (!showCategories || _name == 'Weight') {
+        if (!showCategories) {
           return const SizedBox();
         }
 
@@ -679,23 +673,18 @@ class _EditSetPageState extends State<EditSetPage> {
     );
 
     if (_category != null) await createCategory(_category!);
-    Exercise? exerciseDefinition;
-    if (_name != 'Weight') {
-      exerciseDefinition = await syncExerciseDefinition(
-        name: _name,
-        cardio: _cardio,
-        displayUnit: _unit,
-        category: _category,
-        image: _image,
-        defaultRestDurationMs: restMs,
-      );
-    }
+    final exerciseDefinition = await syncExerciseDefinition(
+      name: _name,
+      cardio: _cardio,
+      displayUnit: _unit,
+      category: _category,
+      image: _image,
+      defaultRestDurationMs: restMs,
+    );
     if (!mounted) return;
 
     final settings = context.read<SettingsState>().value;
     final messages = positiveReinforcementMessages(context.l10n);
-
-    if (exerciseDefinition == null) return;
 
     if (widget.gymSet.id > 0) {
       await updatePerformedSet(

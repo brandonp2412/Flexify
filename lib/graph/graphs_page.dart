@@ -78,41 +78,50 @@ class GraphsPageState extends State<GraphsPage>
   }
 
   void onDelete() async {
-    final names = _selection.toList();
-    final exerciseNames = names.where((name) => name != 'Weight').toList();
-    setState(() {
-      _selection.clear();
-    });
+    final keys = _selection.toList();
+    final summaries = (await _stream.first)
+        .where((summary) => keys.contains(summary.selectionKey))
+        .toList();
+    final exerciseIds = summaries
+        .where((summary) => !summary.bodyWeight)
+        .map((summary) => summary.exerciseId!)
+        .toList();
+    final deleteBodyWeight = summaries.any((summary) => summary.bodyWeight);
 
-    final exercises =
-        await (db.exercises.select()
-              ..where((exercise) => exercise.name.isIn(exerciseNames)))
-            .get();
-    final exerciseIds = exercises.map((exercise) => exercise.id).toList();
+    setState(_selection.clear);
 
     await db.transaction(() async {
-      if (names.contains('Weight')) {
+      if (deleteBodyWeight) {
         await db.bodyWeights.deleteAll();
       }
       if (exerciseIds.isNotEmpty) {
         await (db.exerciseSets.delete()
               ..where((set) => set.exerciseId.isIn(exerciseIds)))
             .go();
-      }
-      if (exerciseNames.isNotEmpty || exerciseIds.isNotEmpty) {
-        await (db.planExercises.delete()..where(
-              (row) =>
-                  row.exercise.isIn(exerciseNames) |
-                  row.exerciseId.isIn(exerciseIds),
-            ))
+        await (db.planExercises.delete()
+              ..where((row) => row.exerciseId.isIn(exerciseIds)))
             .go();
-      }
-      if (exerciseIds.isNotEmpty) {
         await (db.exercises.delete()
               ..where((exercise) => exercise.id.isIn(exerciseIds)))
             .go();
       }
     });
+  }
+
+  Future<int> _countSelectedGraphRecords() async {
+    final keys = _selection.toList();
+    final summaries = (await _stream.first)
+        .where((summary) => keys.contains(summary.selectionKey))
+        .toList();
+    var count = await countGraphSets(
+      summaries
+          .where((summary) => !summary.bodyWeight)
+          .map((summary) => summary.name),
+    );
+    if (summaries.any((summary) => summary.bodyWeight)) {
+      count += await db.bodyWeights.count().getSingle();
+    }
+    return count;
   }
 
   LineTouchTooltipData tooltipData(
@@ -321,14 +330,19 @@ class GraphsPageState extends State<GraphsPage>
                   },
                   onDelete: () async => onDelete(),
                   onSelectAll: () => setState(() {
-                    _selection.setAll(gymSets.map((gymSet) => gymSet.name));
+                    _selection.setAll(
+                      gymSets.map((gymSet) => gymSet.selectionKey),
+                    );
                   }),
                   onEdit: () async {
-                    if (_selection.contains('Weight')) return;
+                    final key = _selection.first;
+                    final summary = (await _stream.first).firstWhere(
+                      (entry) => entry.selectionKey == key,
+                    );
+                    if (summary.bodyWeight || !context.mounted) return;
                     await Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) =>
-                            EditGraphPage(name: _selection.first),
+                        builder: (context) => EditGraphPage(name: summary.name),
                       ),
                     );
                   },
@@ -363,7 +377,7 @@ class GraphsPageState extends State<GraphsPage>
       _selection.clear();
     });
     final sets = (await _stream.first)
-        .where((gymSet) => copy.contains(gymSet.name))
+        .where((gymSet) => copy.contains(gymSet.selectionKey))
         .toList();
     final text = sets
         .map(
@@ -503,7 +517,15 @@ class GraphsPageState extends State<GraphsPage>
                             settings.value.shortDateFormat,
                           )
                         : const SizedBox(),
-                    future: gymSets.first.cardio
+                    future: gymSets.first.bodyWeight
+                        ? getBodyWeightData(
+                            target: gymSets.first.unit,
+                            period: Period.day,
+                            start: null,
+                            end: null,
+                            limit: 20,
+                          )
+                        : gymSets.first.cardio
                         ? getCardioData(
                             name: gymSets.first.name,
                             target: gymSets.first.unit,
@@ -536,11 +558,11 @@ class GraphsPageState extends State<GraphsPage>
           child: GraphTile(
             selected: _selection.selected,
             gymSet: gymSet,
-            onSelect: (name) async {
+            onSelect: (key) async {
               setState(() {
-                _selection.toggle(name);
+                _selection.toggle(key);
               });
-              final total = await countGraphSets(_selection.selected);
+              final total = await _countSelectedGraphRecords();
               if (!mounted) return;
               setState(() {
                 _total = total;

@@ -41,6 +41,33 @@ Stream<List<PlanExerciseEntry>> watchPlanExerciseEntries(
   );
 }
 
+Stream<List<PlanExerciseEntry>> watchAllPlanExerciseEntries(
+  AppDatabase database,
+) {
+  final query =
+      database.select(database.planExercises).join([
+        innerJoin(
+          database.exercises,
+          database.exercises.id.equalsExp(database.planExercises.exerciseId),
+        ),
+      ])..orderBy([
+        OrderingTerm.asc(database.planExercises.planId),
+        OrderingTerm.asc(database.planExercises.sequence),
+        OrderingTerm.asc(database.planExercises.id),
+      ]);
+
+  return query.watch().map(
+    (rows) => rows
+        .map(
+          (row) => PlanExerciseEntry(
+            planExercise: row.readTable(database.planExercises),
+            exercise: row.readTable(database.exercises),
+          ),
+        )
+        .toList(),
+  );
+}
+
 Future<List<PlanExerciseEntry>> getPlanExerciseEntries(
   AppDatabase database,
   int planId,

@@ -68,31 +68,17 @@ const defaultPlans = [
   PlansCompanion(id: Value(3), days: Value('Friday')),
 ];
 
-final defaultPlanExercises = [
-  ...['Barbell bench press', 'Squat', 'Lat pull-down', 'Leg press'].map(
-    (e) => PlanExercisesCompanion.insert(planId: 1, exercise: e, enabled: true),
-  ),
-  ...[
-    'Deadlift',
-    'Overhead triceps extension',
-    'Dumbbell biceps curl',
-    'Barbell bent-over row',
-  ].map(
-    (e) => PlanExercisesCompanion.insert(planId: 2, exercise: e, enabled: true),
-  ),
-  ...['Leg press', 'Pull-up', 'Push-up', 'Crunch'].map(
-    (e) => PlanExercisesCompanion.insert(planId: 3, exercise: e, enabled: true),
-  ),
+const defaultPlanExerciseNames = <(int, String)>[
+  (1, 'Barbell bench press'),
+  (1, 'Squat'),
+  (1, 'Lat pull-down'),
+  (1, 'Leg press'),
+  (2, 'Deadlift'),
+  (2, 'Overhead triceps extension'),
+  (2, 'Dumbbell biceps curl'),
+  (2, 'Barbell bent-over row'),
+  (3, 'Leg press'),
+  (3, 'Pull-up'),
+  (3, 'Push-up'),
+  (3, 'Crunch'),
 ];
-
-final defaultSets = defaultExercises.map(
-  (exercise) => GymSetsCompanion(
-    created: Value(DateTime.now().toLocal()),
-    name: Value(exercise.$1),
-    reps: const Value(0),
-    weight: const Value(0),
-    hidden: const Value(true),
-    unit: const Value('kg'),
-    category: Value(exercise.$2),
-  ),
-);

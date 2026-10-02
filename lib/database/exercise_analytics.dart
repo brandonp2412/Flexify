@@ -12,6 +12,7 @@ import 'package:flexify/main.dart';
 class GraphExerciseSummary {
   const GraphExerciseSummary({
     required this.exerciseId,
+    required this.bodyWeight,
     required this.name,
     required this.unit,
     required this.cardio,
@@ -24,8 +25,12 @@ class GraphExerciseSummary {
     this.category,
   });
 
-  final int exerciseId;
+  final int? exerciseId;
+  final bool bodyWeight;
   final String name;
+
+  String get selectionKey =>
+      bodyWeight ? 'body-weight' : 'exercise:$exerciseId';
   final String unit;
   final bool cardio;
   final double weight;
@@ -176,7 +181,7 @@ StrengthData _strengthBucket(
   );
 }
 
-Future<List<StrengthData>> _getBodyWeightData({
+Future<List<StrengthData>> getBodyWeightData({
   required String target,
   required Period period,
   required DateTime? start,
@@ -223,16 +228,6 @@ Future<List<StrengthData>> getStrengthData({
   required DateTime? end,
   required int limit,
 }) async {
-  if (name == 'Weight') {
-    return _getBodyWeightData(
-      target: target,
-      period: period,
-      start: start,
-      end: end,
-      limit: limit,
-    );
-  }
-
   final sets = await getPerformedSetsForExercise(
     db,
     exerciseName: name,
@@ -437,6 +432,7 @@ Stream<List<GraphExerciseSummary>> watchGraphs() {
         '''
           SELECT
             exercises.id AS exercise_id,
+            0 AS body_weight,
             exercises.name AS name,
             exercises.display_unit AS unit,
             CASE WHEN exercises.kind = 'cardio' THEN 1 ELSE 0 END AS cardio,
@@ -464,7 +460,8 @@ Stream<List<GraphExerciseSummary>> watchGraphs() {
           UNION ALL
 
           SELECT
-            -1 AS exercise_id,
+            NULL AS exercise_id,
+            1 AS body_weight,
             'Weight' AS name,
             'kg' AS unit,
             0 AS cardio,
@@ -498,7 +495,8 @@ Stream<List<GraphExerciseSummary>> watchGraphs() {
           final unit = result.read<String>('unit');
           final timestamp = result.readNullable<int>('timestamp');
           return GraphExerciseSummary(
-            exerciseId: result.read<int>('exercise_id'),
+            exerciseId: result.readNullable<int>('exercise_id'),
+            bodyWeight: result.read<int>('body_weight') != 0,
             name: result.read<String>('name'),
             unit: unit,
             cardio: result.read<int>('cardio') != 0,
@@ -521,32 +519,7 @@ Stream<List<GraphExerciseSummary>> watchGraphs() {
       );
 }
 
-Future<List<GymSet>> getGraphHistory(
-  String exerciseName, {
-  int limit = 20,
-}) async {
-  if (exerciseName == 'Weight') {
-    final rows = await getBodyWeightHistory(db, limit: limit);
-    return rows
-        .map(
-          (row) => GymSet(
-            id: row.id,
-            bodyWeight: 0,
-            cardio: false,
-            created: row.timestamp.toLocal(),
-            distance: 0,
-            duration: 0,
-            hidden: false,
-            image: row.photo,
-            name: 'Weight',
-            reps: 1,
-            unit: 'kg',
-            weight: row.weightKg,
-          ),
-        )
-        .toList();
-  }
-
+Future<List<GymSet>> getGraphHistory(String exerciseName, {int limit = 20}) {
   return getPerformedSetsForExercise(
     db,
     exerciseName: exerciseName,
@@ -554,8 +527,28 @@ Future<List<GymSet>> getGraphHistory(
   );
 }
 
+Future<List<GymSet>> getBodyWeightGraphHistory({int limit = 20}) async {
+  final rows = await getBodyWeightHistory(db, limit: limit);
+  return rows
+      .map(
+        (row) => GymSet(
+          id: row.id,
+          bodyWeight: 0,
+          cardio: false,
+          created: row.timestamp.toLocal(),
+          distance: 0,
+          duration: 0,
+          image: row.photo,
+          name: 'Weight',
+          reps: 1,
+          unit: 'kg',
+          weight: row.weightKg,
+        ),
+      )
+      .toList();
+}
+
 Future<GymSet?> getGraphPointSet(String exerciseName, DateTime timestamp) {
-  if (exerciseName == 'Weight') return Future.value();
   return getPerformedSetForExerciseAt(
     db,
     exerciseName: exerciseName,
@@ -563,14 +556,6 @@ Future<GymSet?> getGraphPointSet(String exerciseName, DateTime timestamp) {
   );
 }
 
-Future<int> countGraphSets(Iterable<String> exerciseNames) async {
-  final names = exerciseNames.toList();
-  final performedNames = names.where((name) => name != 'Weight').toList();
-  var count = performedNames.isEmpty
-      ? 0
-      : await countPerformedSetsForExercises(db, performedNames);
-  if (names.contains('Weight')) {
-    count += await db.bodyWeights.count().getSingle();
-  }
-  return count;
+Future<int> countGraphSets(Iterable<String> exerciseNames) {
+  return countPerformedSetsForExercises(db, exerciseNames);
 }

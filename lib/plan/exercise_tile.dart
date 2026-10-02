@@ -8,12 +8,14 @@ import 'package:provider/provider.dart';
 
 class ExerciseTile extends StatefulWidget {
   final PlanExercisesCompanion planExercise;
+  final String exerciseName;
   final Function(PlanExercisesCompanion) onChange;
 
   const ExerciseTile({
     super.key,
     required this.onChange,
     required this.planExercise,
+    required this.exerciseName,
   });
 
   @override
@@ -50,7 +52,7 @@ class _ExerciseTileState extends State<ExerciseTile> {
                   : true;
 
               return AlertDialog.adaptive(
-                title: Text(widget.planExercise.exercise.value),
+                title: Text(widget.exerciseName),
                 content: SingleChildScrollView(
                   child: Column(
                     children: [
@@ -138,7 +140,7 @@ class _ExerciseTileState extends State<ExerciseTile> {
           );
         },
       ),
-      title: Text(widget.planExercise.exercise.value),
+      title: Text(widget.exerciseName),
       trailing: Switch(
         value: widget.planExercise.enabled.value,
         onChanged: (value) {

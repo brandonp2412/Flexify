@@ -4,7 +4,6 @@ import 'package:flexify/constants.dart';
 import 'package:flexify/database/exercise_catalog.dart';
 import 'package:flexify/database/performed_sets.dart';
 import 'package:flexify/database/categories.dart';
-import 'package:flexify/database/gym_sets.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/settings/settings_state.dart';
@@ -247,9 +246,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
                 TextFormField(
                   controller: _weight,
                   decoration: InputDecoration(
-                    labelText: _name.text == 'Weight'
-                        ? l10n.valueLabel
-                        : l10n.weightLabel,
+                    labelText: l10n.weightLabel,
                     hintText: _oldWeights,
                   ),
                   keyboardType: const TextInputType.numberWithOptions(
@@ -264,32 +261,30 @@ class _EditSetsPageState extends State<EditSetsPage> {
                   },
                 ),
               ],
-              if (_name.text != 'Weight') const SizedBox(height: 12),
-              if (_name.text != 'Weight')
-                Selector<SettingsState, bool>(
-                  builder: (context, showBodyWeight, child) => Visibility(
-                    visible: showBodyWeight,
-                    child: TextFormField(
-                      controller: _body,
-                      decoration: InputDecoration(
-                        labelText: l10n.bodyWeightLabel,
-                        hintText: _oldBody,
-                      ),
-                      keyboardType: const TextInputType.numberWithOptions(
-                        decimal: true,
-                      ),
-                      onTap: () => selectAll(_body),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) return null;
-                        if (parseDisplayNumber(context, value) == null)
-                          return l10n.invalidNumber;
-                        return null;
-                      },
+              const SizedBox(height: 12),
+              Selector<SettingsState, bool>(
+                builder: (context, showBodyWeight, child) => Visibility(
+                  visible: showBodyWeight,
+                  child: TextFormField(
+                    controller: _body,
+                    decoration: InputDecoration(
+                      labelText: l10n.bodyWeightLabel,
+                      hintText: _oldBody,
                     ),
+                    keyboardType: const TextInputType.numberWithOptions(
+                      decimal: true,
+                    ),
+                    onTap: () => selectAll(_body),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) return null;
+                      if (parseDisplayNumber(context, value) == null)
+                        return l10n.invalidNumber;
+                      return null;
+                    },
                   ),
-                  selector: (context, settings) =>
-                      settings.value.showBodyWeight,
                 ),
+                selector: (context, settings) => settings.value.showBodyWeight,
+              ),
               const SizedBox(height: 12),
               Selector<SettingsState, bool>(
                 builder: (context, showUnits, child) => Visibility(

@@ -71,7 +71,6 @@ GymSet _toGymSet(AppDatabase database, TypedResult row) {
     created: set.timestamp.toLocal(),
     distance: displayDistance(unit, set.distanceMetres),
     duration: (set.durationMs ?? 0) / 60000,
-    hidden: false,
     image: exercise.image,
     incline: set.incline?.round(),
     name: exercise.name,

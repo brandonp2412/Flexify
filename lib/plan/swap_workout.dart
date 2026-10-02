@@ -86,7 +86,6 @@ class _SwapWorkoutState extends State<SwapWorkout> {
                             ))
                             .write(
                               PlanExercisesCompanion(
-                                exercise: drift.Value(exercise.name),
                                 exerciseId: drift.Value(exercise.id),
                               ),
                             );

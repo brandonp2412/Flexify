@@ -8,6 +8,7 @@ LazyDatabase createWebConnection() {
     return WebDatabase.withStorage(
       await DriftWebStorage.indexedDbIfSupported('flexify_db'),
       logStatements: kDebugMode,
+      setup: (database) => database.run('PRAGMA foreign_keys = ON'),
     );
   });
 }

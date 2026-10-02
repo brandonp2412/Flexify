@@ -27,7 +27,7 @@ class EditPlanPage extends StatefulWidget {
 
 class _EditPlanPageState extends State<EditPlanPage> {
   late List<bool> _days;
-  List<PlanExercisesCompanion> _exercises = [];
+  List<PlanExerciseDraft> _exercises = [];
   bool _loadingExercises = true;
   bool _hasUnsavedChanges = false;
   bool _allowPop = false;
@@ -46,17 +46,19 @@ class _EditPlanPageState extends State<EditPlanPage> {
 
     setState(() {
       _exercises.add(
-        PlanExercisesCompanion(
-          exercise: Value(exercise.name),
-          exerciseId: Value(exercise.id),
-          enabled: const Value(true),
+        PlanExerciseDraft(
+          exerciseName: exercise.name,
+          planExercise: PlanExercisesCompanion(
+            exerciseId: Value(exercise.id),
+            enabled: const Value(true),
+          ),
         ),
       );
       _exercises.sort((a, b) {
-        if (a.enabled.value != b.enabled.value) {
-          return b.enabled.value ? 1 : -1;
+        if (a.planExercise.enabled.value != b.planExercise.enabled.value) {
+          return b.planExercise.enabled.value ? 1 : -1;
         }
-        return a.exercise.value.compareTo(b.exercise.value);
+        return a.exerciseName.compareTo(b.exerciseName);
       });
       _search = '';
       _hasUnsavedChanges = true;
@@ -66,7 +68,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
 
   Iterable<Widget> get tiles {
     final match = _exercises.where(
-      (pe) => pe.exercise.value.toLowerCase().contains(_search.toLowerCase()),
+      (pe) => pe.exerciseName.toLowerCase().contains(_search.toLowerCase()),
     );
 
     if (match.isEmpty)
@@ -90,14 +92,17 @@ class _EditPlanPageState extends State<EditPlanPage> {
 
     return match.toList().map(
       (pe) => ExerciseTile(
-        planExercise: pe,
+        planExercise: pe.planExercise,
+        exerciseName: pe.exerciseName,
         onChange: (value) {
           final id = _exercises.indexWhere(
-            (exercise) => exercise.exercise == pe.exercise,
+            (exercise) =>
+                exercise.planExercise.exerciseId.value ==
+                pe.planExercise.exerciseId.value,
           );
           if (id == -1) return;
           setState(() {
-            _exercises[id] = value;
+            _exercises[id] = pe.copyWithPlanExercise(value);
             _hasUnsavedChanges = true;
           });
         },
@@ -305,16 +310,16 @@ class _EditPlanPageState extends State<EditPlanPage> {
 
   Iterable<PlanExercisesCompanion> _orderedExercises(int planId) sync* {
     var sequence = 0;
-    for (final exercise in _exercises) {
-      if (!exercise.enabled.value) continue;
-      yield exercise.copyWith(
+    for (final draft in _exercises) {
+      if (!draft.planExercise.enabled.value) continue;
+      yield draft.planExercise.copyWith(
         planId: Value(planId),
         sequence: Value(sequence++),
       );
     }
-    for (final exercise in _exercises) {
-      if (exercise.enabled.value) continue;
-      yield exercise.copyWith(
+    for (final draft in _exercises) {
+      if (draft.planExercise.enabled.value) continue;
+      yield draft.planExercise.copyWith(
         planId: Value(planId),
         sequence: Value(sequence++),
       );
@@ -329,7 +334,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
     if (selected.isEmpty && _titleCtrl.text.isEmpty)
       return toast(context.l10n.selectDays);
 
-    if (_exercises.where((exercise) => exercise.enabled.value).isEmpty)
+    if (_exercises.where((draft) => draft.planExercise.enabled.value).isEmpty)
       return toast(context.l10n.selectExercises);
 
     var newPlan = PlansCompanion.insert(

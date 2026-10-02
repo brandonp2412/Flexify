@@ -88,3 +88,11 @@ Stream<List<CategorySummary>> watchCategorySummaries() {
             .toList(),
       );
 }
+
+Stream<List<String>> getCategoriesStream() {
+  return (db.select(
+    db.categories,
+  )..orderBy([(category) => OrderingTerm.asc(category.name)])).watch().map(
+    (categories) => categories.map((category) => category.name).toList(),
+  );
+}

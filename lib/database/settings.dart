@@ -5,6 +5,7 @@ class Settings extends Table {
   BoolColumn get automaticBackups =>
       boolean().withDefault(const Constant(false))();
   TextColumn get backupPath => text().nullable()();
+  IntColumn get buildNumber => integer().nullable()();
   TextColumn get cardioUnit => text()();
   BoolColumn get curveLines => boolean()();
   RealColumn get curveSmoothness => real().nullable()();

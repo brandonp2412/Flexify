@@ -35,7 +35,9 @@ class GraphTile extends StatelessWidget {
       (settings) => settings.value.showImages,
     );
 
-    if (gymSet.cardio) {
+    if (gymSet.bodyWeight) {
+      trailing = "\${formatDisplayNumber(context, gymSet.weight)} $unit";
+    } else if (gymSet.cardio) {
       final minutes = gymSet.duration.floor();
       final seconds = ((gymSet.duration * 60) % 60).floor().toString().padLeft(
         2,
@@ -55,7 +57,7 @@ class GraphTile extends StatelessWidget {
 
     if (showImages && gymSet.image?.isNotEmpty == true) {
       leading = GestureDetector(
-        onTap: () => onSelect(gymSet.name),
+        onTap: () => onSelect(gymSet.selectionKey),
         child: Image.file(
           File(gymSet.image!),
           cacheWidth: 64,
@@ -64,7 +66,7 @@ class GraphTile extends StatelessWidget {
       );
     } else if (showImages) {
       leading = GestureDetector(
-        onTap: () => onSelect(gymSet.name),
+        onTap: () => onSelect(gymSet.selectionKey),
         child: Container(
           width: 24,
           height: 24,
@@ -90,7 +92,7 @@ class GraphTile extends StatelessWidget {
     final desktop = isDesktopLayout(context);
     final colors = Theme.of(context).colorScheme;
     final tile = Material(
-      color: selected.contains(gymSet.name)
+      color: selected.contains(gymSet.selectionKey)
           ? colors.primary.withValues(alpha: .18)
           : desktop
           ? colors.surfaceContainerLow
@@ -105,8 +107,9 @@ class GraphTile extends StatelessWidget {
         title: Text(
           gymSet.name,
           style: desktop
-              ? Theme.of(context).textTheme.titleMedium
-                    ?.copyWith(fontWeight: FontWeight.w600)
+              ? Theme.of(
+                  context,
+                ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600)
               : null,
         ),
         subtitle: Selector<SettingsState, String>(
@@ -117,19 +120,45 @@ class GraphTile extends StatelessWidget {
               dateFormat == 'timeago'
                   ? formatRelativeTime(context, gymSet.created)
                   : formatDisplayDate(context, gymSet.created, dateFormat),
-              style: Theme.of(context).textTheme.bodySmall
-                  ?.copyWith(color: colors.onSurfaceVariant),
+              style: Theme.of(
+                context,
+              ).textTheme.bodySmall?.copyWith(color: colors.onSurfaceVariant),
             ),
           ),
         ),
         trailing: Text(
           trailing,
-          style: Theme.of(context).textTheme.bodyLarge
-              ?.copyWith(fontWeight: FontWeight.w600, color: colors.onSurface),
+          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+            fontWeight: FontWeight.w600,
+            color: colors.onSurface,
+          ),
         ),
         onTap: () async {
           if (selected.isNotEmpty) {
-            onSelect(gymSet.name);
+            onSelect(gymSet.selectionKey);
+            return;
+          }
+
+          if (gymSet.bodyWeight) {
+            final data = await getBodyWeightData(
+              target: gymSet.unit,
+              period: Period.day,
+              start: null,
+              end: null,
+              limit: 20,
+            );
+            if (!context.mounted) return;
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => StrengthPage(
+                  name: gymSet.name,
+                  unit: gymSet.unit,
+                  data: data,
+                  tabCtrl: tabCtrl,
+                  bodyWeight: true,
+                ),
+              ),
+            );
             return;
           }
 
@@ -181,7 +210,7 @@ class GraphTile extends StatelessWidget {
           );
         },
         onLongPress: () {
-          onSelect(gymSet.name);
+          onSelect(gymSet.selectionKey);
         },
       ),
     );

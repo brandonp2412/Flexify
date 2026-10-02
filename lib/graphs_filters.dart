@@ -1,4 +1,4 @@
-import 'package:flexify/database/gym_sets.dart';
+import 'package:flexify/database/categories.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 

@@ -16,12 +16,14 @@ class GraphHistoryPage extends StatefulWidget {
   final String name;
   final List<GymSet> gymSets;
   final TabController tabController;
+  final bool bodyWeight;
 
   const GraphHistoryPage({
     super.key,
     required this.name,
     required this.gymSets,
     required this.tabController,
+    this.bodyWeight = false,
   });
 
   @override
@@ -94,7 +96,7 @@ class _GraphHistoryPageState extends State<GraphHistoryPage> {
             () => _selection.setAll(sets.map((gymSet) => gymSet.id)),
           ),
         ),
-        if (widget.name != 'Weight')
+        if (!widget.bodyWeight)
           IconButton(
             key: const ValueKey('editGraphHistorySelection'),
             tooltip: context.l10n.editSelected,
@@ -112,7 +114,7 @@ class _GraphHistoryPageState extends State<GraphHistoryPage> {
   }
 
   Future<void> _editSelected() async {
-    if (widget.name == 'Weight') return;
+    if (widget.bodyWeight) return;
     await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => EditSetsPage(ids: _selection.toList()),
@@ -147,7 +149,7 @@ class _GraphHistoryPageState extends State<GraphHistoryPage> {
     if (confirmed != true || !mounted) return;
 
     final ids = _selection.toList();
-    if (widget.name == 'Weight') {
+    if (widget.bodyWeight) {
       await (db.bodyWeights.delete()..where((row) => row.id.isIn(ids))).go();
     } else {
       await deletePerformedSets(db, ids);
@@ -171,8 +173,8 @@ class _GraphHistoryPageState extends State<GraphHistoryPage> {
   }
 
   Future<void> setSets() async {
-    final result = widget.name == 'Weight'
-        ? await getGraphHistory(widget.name, limit: limit)
+    final result = widget.bodyWeight
+        ? await getBodyWeightGraphHistory(limit: limit)
         : (await getPerformedSets(
             db,
             search: widget.name,

@@ -17,6 +17,7 @@ import 'generated/schema_v5.dart' as v5;
 import 'generated/schema_v53.dart' as v53;
 import 'generated/schema_v59.dart' as v59;
 import 'generated/schema_v60.dart' as v60;
+import 'generated/schema_v62.dart' as v62;
 
 void main() {
   driftRuntimeOptions.dontWarnAboutMultipleDatabases = true;
@@ -541,35 +542,45 @@ void main() {
         expect(plans.first.title, 'Deadlift Day');
         expect(plans.first.sequence, 1);
 
-        final gymSets = await newDb.select(newDb.gymSets).get();
+        final gymSets = await newDb
+            .customSelect('SELECT * FROM gym_sets')
+            .get();
         expect(gymSets.length, 2);
 
-        final deadlift = gymSets.firstWhere((set) => set.name == 'Deadlift');
-        expect(deadlift.weight, 120.0);
-        expect(deadlift.reps, 5.0);
-        expect(deadlift.bodyWeight, 75.0);
-        expect(deadlift.restMs, 180000);
-        expect(deadlift.planId, 1);
-        expect(deadlift.cardio, false);
+        final deadlift = gymSets.firstWhere(
+          (row) => row.read<String>('name') == 'Deadlift',
+        );
+        expect(deadlift.read<double>('weight'), 120.0);
+        expect(deadlift.read<double>('reps'), 5.0);
+        expect(deadlift.read<double>('body_weight'), 75.0);
+        expect(deadlift.read<int>('rest_ms'), 180000);
+        expect(deadlift.read<int>('plan_id'), 1);
+        expect(deadlift.read<int>('cardio'), 0);
 
         final romanianDeadlift = gymSets.firstWhere(
-          (set) => set.name == 'Romanian Deadlift',
+          (row) => row.read<String>('name') == 'Romanian Deadlift',
         );
-        expect(romanianDeadlift.weight, 80.0);
-        expect(romanianDeadlift.reps, 8.0);
-        expect(romanianDeadlift.restMs, 120000);
+        expect(romanianDeadlift.read<double>('weight'), 80.0);
+        expect(romanianDeadlift.read<double>('reps'), 8.0);
+        expect(romanianDeadlift.read<int>('rest_ms'), 120000);
 
-        final planExercises = await newDb.select(newDb.planExercises).get();
+        final planExercises = await newDb
+            .customSelect('SELECT * FROM plan_exercises')
+            .get();
         expect(planExercises.length, 2);
         expect(
           planExercises.any(
-            (pe) => pe.exercise == 'Deadlift' && pe.maxSets == 3,
+            (row) =>
+                row.read<String>('exercise') == 'Deadlift' &&
+                row.read<int>('max_sets') == 3,
           ),
           true,
         );
         expect(
           planExercises.any(
-            (pe) => pe.exercise == 'Romanian Deadlift' && pe.maxSets == 4,
+            (row) =>
+                row.read<String>('exercise') == 'Romanian Deadlift' &&
+                row.read<int>('max_sets') == 4,
           ),
           true,
         );
@@ -848,23 +859,29 @@ void main() {
             isEmpty,
           );
 
-          final planExercises = await newDb.select(newDb.planExercises).get();
+          final planExercises = await newDb
+              .customSelect('SELECT * FROM plan_exercises')
+              .get();
           final benchPlan = planExercises.singleWhere(
-            (exercise) => exercise.exercise == 'Bench Press',
+            (row) => row.read<String>('exercise') == 'Bench Press',
           );
           final rowingPlan = planExercises.singleWhere(
-            (exercise) => exercise.exercise == 'Rowing',
+            (row) => row.read<String>('exercise') == 'Rowing',
           );
           final weightPlan = planExercises.singleWhere(
-            (exercise) => exercise.exercise == 'Weight',
+            (row) => row.read<String>('exercise') == 'Weight',
           );
-          expect(benchPlan.exerciseId, bench.id);
-          expect(rowingPlan.exerciseId, rowing.id);
-          expect(weightPlan.exerciseId, null);
-          expect(benchPlan.exercise, 'Bench Press');
-          expect(rowingPlan.exercise, 'Rowing');
+          expect(benchPlan.read<int?>('exercise_id'), bench.id);
+          expect(rowingPlan.read<int?>('exercise_id'), rowing.id);
+          expect(weightPlan.read<int?>('exercise_id'), null);
 
-          expect(await newDb.select(newDb.gymSets).get(), hasLength(6));
+          expect(
+            (await newDb
+                    .customSelect('SELECT COUNT(*) AS amount FROM gym_sets')
+                    .getSingle())
+                .read<int>('amount'),
+            6,
+          );
           expect(await newDb.select(newDb.exerciseSets).get(), hasLength(4));
           final migratedBodyWeights = await newDb
               .select(newDb.bodyWeights)
@@ -1033,7 +1050,13 @@ void main() {
 
           expect(migratedSets, hasLength(legacyCount));
           expect(bodyWeights, hasLength(legacyWeightCount));
-          expect(await newDb.select(newDb.gymSets).get(), hasLength(10));
+          expect(
+            (await newDb
+                    .customSelect('SELECT COUNT(*) AS amount FROM gym_sets')
+                    .getSingle())
+                .read<int>('amount'),
+            10,
+          );
           expect(
             migratedSets
                 .map((set) => exercisesById[set.exerciseId]!.name)
@@ -1113,6 +1136,111 @@ void main() {
             bodyWeights.where((entry) => entry.photo == 'hidden-weight.jpg'),
             isEmpty,
           );
+        },
+      );
+    },
+  );
+  test(
+    'migration from v62 to v63 removes legacy storage and enforces foreign keys',
+    () async {
+      await verifier.testWithDataIntegrity(
+        oldVersion: 62,
+        newVersion: 63,
+        createOld: v62.DatabaseAtV62.new,
+        createNew: AppDatabase.new,
+        openTestedDatabase: AppDatabase.new,
+        createItems: (batch, oldDb) {
+          batch.insert(
+            oldDb.plans,
+            v62.PlansCompanion.insert(
+              id: const Value(1),
+              days: 'Monday',
+              title: const Value('Stable IDs'),
+            ),
+          );
+          batch.insert(
+            oldDb.exercises,
+            v62.ExercisesCompanion.insert(
+              id: const Value(10),
+              name: 'Bench Press',
+              kind: 'strength',
+              displayUnit: 'kg',
+            ),
+          );
+          batch.insertAll(oldDb.planExercises, [
+            v62.PlanExercisesCompanion.insert(
+              id: const Value(20),
+              enabled: 1,
+              exercise: 'Bench Press',
+              exerciseId: const Value(10),
+              planId: 1,
+            ),
+            v62.PlanExercisesCompanion.insert(
+              id: const Value(21),
+              enabled: 1,
+              exercise: 'Unresolved Legacy Exercise',
+              planId: 1,
+            ),
+          ]);
+          batch.insert(
+            oldDb.settings,
+            v62.SettingsCompanion.insert(
+              alarmSound: '',
+              cardioUnit: 'last-entry',
+              curveLines: 1,
+              explainedPermissions: 0,
+              groupHistory: 0,
+              longDateFormat: 'timeago',
+              maxSets: 3,
+              planTrailing: 'PlanTrailing.reorder',
+              restTimers: 0,
+              shortDateFormat: 'd/M/yy',
+              showUnits: 0,
+              strengthUnit: 'last-entry',
+              systemColors: 0,
+              themeMode: 'ThemeMode.system',
+              timerDuration: 210000,
+              vibrate: 1,
+            ),
+          );
+          batch.insert(
+            oldDb.metadata,
+            v62.MetadataCompanion.insert(buildNumber: 777),
+          );
+        },
+        validateItems: (newDb) async {
+          final settings = await newDb.select(newDb.settings).getSingle();
+          expect(settings.buildNumber, 777);
+
+          final planExercises = await newDb.select(newDb.planExercises).get();
+          expect(planExercises, hasLength(1));
+          expect(planExercises.single.id, 20);
+          expect(planExercises.single.exerciseId, 10);
+
+          final legacyTables = await newDb
+              .customSelect(
+                "SELECT name FROM sqlite_master WHERE type = 'table' "
+                "AND name IN ('gym_sets', 'graph_preferences', 'metadata')",
+              )
+              .get();
+          expect(legacyTables, isEmpty);
+
+          final planColumns = await newDb
+              .customSelect('PRAGMA table_info(plan_exercises)')
+              .get();
+          expect(
+            planColumns.where((row) => row.read<String>('name') == 'exercise'),
+            isEmpty,
+          );
+          final exerciseIdColumn = planColumns.singleWhere(
+            (row) => row.read<String>('name') == 'exercise_id',
+          );
+          expect(exerciseIdColumn.read<int>('notnull'), 1);
+
+          final foreignKeyViolations = await newDb
+              .customSelect('PRAGMA foreign_key_check')
+              .get();
+          expect(foreignKeyViolations, isEmpty);
         },
       );
     },

@@ -250,7 +250,6 @@ Future<GraphCsvImportResult> _importV2(
     await database.exerciseSets.deleteAll();
     await database.workouts.deleteAll();
     await database.bodyWeights.deleteAll();
-    await database.gymSets.deleteAll();
 
     for (final row in records.where(
       (row) => row.string('recordType') == 'exercise',
@@ -413,7 +412,6 @@ Future<GraphCsvImportResult> _importLegacy(
     await database.exerciseSets.deleteAll();
     await database.workouts.deleteAll();
     await database.bodyWeights.deleteAll();
-    await database.gymSets.deleteAll();
 
     for (final weight in legacyWeights) {
       final kg = canonicalPerformedLoad(weight.unit, weight.value);

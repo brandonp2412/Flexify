@@ -5,7 +5,7 @@ import 'package:flexify/animated_fab.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/exercise_analytics.dart';
 import 'package:flexify/database/exercise_catalog.dart';
-import 'package:flexify/database/gym_sets.dart';
+import 'package:flexify/database/categories.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
