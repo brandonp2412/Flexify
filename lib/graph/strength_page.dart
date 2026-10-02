@@ -264,21 +264,23 @@ class _StrengthPageState extends State<StrengthPage> {
             icon: const Icon(Icons.history),
             tooltip: context.l10n.navHistory,
           ),
-          IconButton(
-            onPressed: () async {
-              String? newName = await Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => EditGraphPage(name: name),
-                ),
-              );
-              if (mounted && newName != null)
-                setState(() {
-                  name = newName;
-                });
-            },
-            icon: const Icon(Icons.edit),
-            tooltip: context.l10n.actionEdit,
-          ),
+          if (name != 'Weight')
+            IconButton(
+              onPressed: () async {
+                String? newName = await Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => EditGraphPage(name: name),
+                  ),
+                );
+                if (mounted && newName != null) {
+                  setState(() {
+                    name = newName;
+                  });
+                }
+              },
+              icon: const Icon(Icons.edit),
+              tooltip: context.l10n.actionEdit,
+            ),
         ],
       ),
       body: SafeArea(

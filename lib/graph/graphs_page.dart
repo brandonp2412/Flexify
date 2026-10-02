@@ -79,27 +79,34 @@ class GraphsPageState extends State<GraphsPage>
 
   void onDelete() async {
     final names = _selection.toList();
+    final exerciseNames = names.where((name) => name != 'Weight').toList();
     setState(() {
       _selection.clear();
     });
 
     final exercises =
         await (db.exercises.select()
-              ..where((exercise) => exercise.name.isIn(names)))
+              ..where((exercise) => exercise.name.isIn(exerciseNames)))
             .get();
     final exerciseIds = exercises.map((exercise) => exercise.id).toList();
 
     await db.transaction(() async {
+      if (names.contains('Weight')) {
+        await db.bodyWeights.deleteAll();
+      }
       if (exerciseIds.isNotEmpty) {
         await (db.exerciseSets.delete()
               ..where((set) => set.exerciseId.isIn(exerciseIds)))
             .go();
       }
-      await (db.planExercises.delete()..where(
-            (row) =>
-                row.exercise.isIn(names) | row.exerciseId.isIn(exerciseIds),
-          ))
-          .go();
+      if (exerciseNames.isNotEmpty || exerciseIds.isNotEmpty) {
+        await (db.planExercises.delete()..where(
+              (row) =>
+                  row.exercise.isIn(exerciseNames) |
+                  row.exerciseId.isIn(exerciseIds),
+            ))
+            .go();
+      }
       if (exerciseIds.isNotEmpty) {
         await (db.exercises.delete()
               ..where((exercise) => exercise.id.isIn(exerciseIds)))
@@ -224,22 +231,16 @@ class GraphsPageState extends State<GraphsPage>
           final gymSets = stream.toList();
           switch (_sort) {
             case GraphSort.dateDesc:
-              gymSets.sort(
-                (a, b) => b.created.compareTo(a.created),
-              );
+              gymSets.sort((a, b) => b.created.compareTo(a.created));
               break;
 
             case GraphSort.dateAsc:
-              gymSets.sort(
-                (a, b) => a.created.compareTo(b.created),
-              );
+              gymSets.sort((a, b) => a.created.compareTo(b.created));
               break;
 
             case GraphSort.name:
               gymSets.sort(
-                (a, b) => a.name.toLowerCase().compareTo(
-                  b.name.toLowerCase(),
-                ),
+                (a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()),
               );
               break;
           }
@@ -322,12 +323,15 @@ class GraphsPageState extends State<GraphsPage>
                   onSelectAll: () => setState(() {
                     _selection.setAll(gymSets.map((gymSet) => gymSet.name));
                   }),
-                  onEdit: () => Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          EditGraphPage(name: _selection.first),
-                    ),
-                  ),
+                  onEdit: () async {
+                    if (_selection.contains('Weight')) return;
+                    await Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            EditGraphPage(name: _selection.first),
+                      ),
+                    );
+                  },
                   confirmText: context.l10n.deleteGraphRecordsConfirmation(
                     _total,
                   ),
@@ -459,8 +463,9 @@ class GraphsPageState extends State<GraphsPage>
                     title: Text(
                       context.l10n.globalProgress,
                       style: isDesktopLayout(context)
-                          ? Theme.of(context).textTheme.titleMedium
-                                ?.copyWith(fontWeight: FontWeight.w600)
+                          ? Theme.of(context).textTheme.titleMedium?.copyWith(
+                              fontWeight: FontWeight.w600,
+                            )
                           : null,
                     ),
                     subtitle: Text(context.l10n.chartGroupedByCategory),

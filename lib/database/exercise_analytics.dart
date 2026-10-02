@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:drift/drift.dart';
 import 'package:flexify/constants.dart';
+import 'package:flexify/database/body_weight_repository.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/database/performed_sets.dart';
 import 'package:flexify/graph/cardio_data.dart';
@@ -175,6 +176,44 @@ StrengthData _strengthBucket(
   );
 }
 
+Future<List<StrengthData>> _getBodyWeightData({
+  required String target,
+  required Period period,
+  required DateTime? start,
+  required DateTime? end,
+  required int limit,
+}) async {
+  final query = db.bodyWeights.select()
+    ..orderBy([
+      (row) => OrderingTerm.asc(row.timestamp),
+      (row) => OrderingTerm.asc(row.id),
+    ]);
+  if (start != null) {
+    query.where((row) => row.timestamp.isBiggerOrEqualValue(start));
+  }
+  if (end != null) {
+    query.where((row) => row.timestamp.isSmallerThanValue(end));
+  }
+
+  final rows = await query.get();
+  final grouped = <String, List<BodyWeight>>{};
+  for (final row in rows) {
+    grouped.putIfAbsent(_periodKey(row.timestamp, period), () => []).add(row);
+  }
+
+  final groups = grouped.values.toList()
+    ..sort((a, b) => b.last.timestamp.compareTo(a.last.timestamp));
+  return groups.take(limit).toList().reversed.map((group) {
+    final row = group.last;
+    return StrengthData(
+      created: row.timestamp.toLocal(),
+      value: displayBodyWeight(target, row.weightKg),
+      unit: target,
+      reps: 1,
+    );
+  }).toList();
+}
+
 Future<List<StrengthData>> getStrengthData({
   required String target,
   required String name,
@@ -184,6 +223,16 @@ Future<List<StrengthData>> getStrengthData({
   required DateTime? end,
   required int limit,
 }) async {
+  if (name == 'Weight') {
+    return _getBodyWeightData(
+      target: target,
+      period: period,
+      start: start,
+      end: end,
+      limit: limit,
+    );
+  }
+
   final sets = await getPerformedSetsForExercise(
     db,
     exerciseName: name,
@@ -397,7 +446,10 @@ Stream<List<GraphExerciseSummary>> watchGraphs() {
             COALESCE(latest.reps, 0) AS reps,
             latest.duration_ms AS duration_ms,
             latest.distance_metres AS distance_metres,
-            COALESCE(latest.timestamp, CAST(STRFTIME('%s', 'now') AS INTEGER)) AS timestamp
+            COALESCE(
+              latest.timestamp,
+              CAST(STRFTIME('%s', 'now') AS INTEGER)
+            ) AS timestamp
           FROM exercises
           LEFT JOIN categories ON categories.id = exercises.category_id
           LEFT JOIN exercise_sets AS latest ON latest.id = (
@@ -408,9 +460,37 @@ Stream<List<GraphExerciseSummary>> watchGraphs() {
             LIMIT 1
           )
           WHERE exercises.archived = 0
-          ORDER BY latest.timestamp DESC, exercises.name COLLATE NOCASE
+
+          UNION ALL
+
+          SELECT
+            -1 AS exercise_id,
+            'Weight' AS name,
+            'kg' AS unit,
+            0 AS cardio,
+            latest_weight.photo AS image,
+            NULL AS category,
+            latest_weight.weight_kg AS load_kg,
+            1.0 AS reps,
+            NULL AS duration_ms,
+            NULL AS distance_metres,
+            latest_weight.timestamp AS timestamp
+          FROM body_weights AS latest_weight
+          WHERE latest_weight.id = (
+            SELECT body_weights.id
+            FROM body_weights
+            ORDER BY body_weights.timestamp DESC, body_weights.id DESC
+            LIMIT 1
+          )
+
+          ORDER BY timestamp DESC, name COLLATE NOCASE
         ''',
-        readsFrom: {db.exercises, db.categories, db.exerciseSets},
+        readsFrom: {
+          db.exercises,
+          db.categories,
+          db.exerciseSets,
+          db.bodyWeights,
+        },
       )
       .watch()
       .map(
@@ -441,7 +521,32 @@ Stream<List<GraphExerciseSummary>> watchGraphs() {
       );
 }
 
-Future<List<GymSet>> getGraphHistory(String exerciseName, {int limit = 20}) {
+Future<List<GymSet>> getGraphHistory(
+  String exerciseName, {
+  int limit = 20,
+}) async {
+  if (exerciseName == 'Weight') {
+    final rows = await getBodyWeightHistory(db, limit: limit);
+    return rows
+        .map(
+          (row) => GymSet(
+            id: row.id,
+            bodyWeight: 0,
+            cardio: false,
+            created: row.timestamp.toLocal(),
+            distance: 0,
+            duration: 0,
+            hidden: false,
+            image: row.photo,
+            name: 'Weight',
+            reps: 1,
+            unit: 'kg',
+            weight: row.weightKg,
+          ),
+        )
+        .toList();
+  }
+
   return getPerformedSetsForExercise(
     db,
     exerciseName: exerciseName,
@@ -450,6 +555,7 @@ Future<List<GymSet>> getGraphHistory(String exerciseName, {int limit = 20}) {
 }
 
 Future<GymSet?> getGraphPointSet(String exerciseName, DateTime timestamp) {
+  if (exerciseName == 'Weight') return Future.value();
   return getPerformedSetForExerciseAt(
     db,
     exerciseName: exerciseName,
@@ -457,5 +563,14 @@ Future<GymSet?> getGraphPointSet(String exerciseName, DateTime timestamp) {
   );
 }
 
-Future<int> countGraphSets(Iterable<String> exerciseNames) =>
-    countPerformedSetsForExercises(db, exerciseNames);
+Future<int> countGraphSets(Iterable<String> exerciseNames) async {
+  final names = exerciseNames.toList();
+  final performedNames = names.where((name) => name != 'Weight').toList();
+  var count = performedNames.isEmpty
+      ? 0
+      : await countPerformedSetsForExercises(db, performedNames);
+  if (names.contains('Weight')) {
+    count += await db.bodyWeights.count().getSingle();
+  }
+  return count;
+}

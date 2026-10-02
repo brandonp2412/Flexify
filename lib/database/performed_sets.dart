@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart';
+import 'package:flexify/database/body_weight_repository.dart';
 import 'package:flexify/database/database.dart';
 
 /// Converts a stored canonical load to the exercise display unit.
@@ -319,6 +320,11 @@ Future<GymSet> insertPerformedSet(
   int? workoutId,
   double? bodyWeightKg,
 }) async {
+  final resolvedBodyWeightKg =
+      bodyWeightKg ??
+      _canonicalBodyWeight(gymSet.unit, gymSet.bodyWeight) ??
+      (await getLatestBodyWeight(database))?.weightKg;
+
   final id = await database.exerciseSets.insertOne(
     ExerciseSetsCompanion.insert(
       exerciseId: exerciseId,
@@ -331,9 +337,7 @@ Future<GymSet> insertPerformedSet(
         canonicalPerformedDistance(gymSet.unit, gymSet.distance),
       ),
       incline: Value(gymSet.incline?.toDouble()),
-      bodyWeightKg: Value(
-        bodyWeightKg ?? _canonicalBodyWeight(gymSet.unit, gymSet.bodyWeight),
-      ),
+      bodyWeightKg: Value(resolvedBodyWeightKg),
       notes: Value(gymSet.notes),
     ),
   );

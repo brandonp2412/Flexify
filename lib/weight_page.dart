@@ -1,9 +1,9 @@
 import 'dart:io';
 
-import 'package:drift/drift.dart' as drift;
 import 'package:file_picker/file_picker.dart';
 import 'package:flexify/animated_fab.dart';
 import 'package:flexify/constants.dart';
+import 'package:flexify/database/body_weight_repository.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
@@ -21,7 +21,7 @@ class WeightPage extends StatefulWidget {
 
 class _WeightPageState extends State<WeightPage> {
   final TextEditingController _ctrl = TextEditingController();
-  GymSet? _previousWeight;
+  BodyWeight? _previousWeight;
   bool _previousWeightLoaded = false;
   String? _unit;
   String? _image;
@@ -38,11 +38,12 @@ class _WeightPageState extends State<WeightPage> {
 
   @override
   Widget build(BuildContext context) {
+    final displayUnit = _unit ?? 'kg';
     final previousWeightText = !_previousWeightLoaded
         ? ''
         : _previousWeight == null
         ? context.l10n.noWeightEnteredYet
-        : '${formatDisplayNumber(context, _previousWeight!.weight)} ${displayMeasurementUnit(context.l10n, _previousWeight!.unit)}';
+        : '${formatDisplayNumber(context, displayBodyWeight(displayUnit, _previousWeight!.weightKg))} ${displayMeasurementUnit(context.l10n, displayUnit)}';
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -147,18 +148,15 @@ class _WeightPageState extends State<WeightPage> {
             _unit = settings.strengthUnit;
 
           final value = parseDisplayNumber(context, _ctrl.text)!;
-          await db.gymSets.insertOne(
-            GymSetsCompanion.insert(
-              created: DateTime.now().toLocal(),
-              name: "Weight",
-              reps: 1,
-              unit: _unit ?? 'kg',
-              weight: value,
-              image: drift.Value(_image),
-            ),
+          final unit = _unit ?? 'kg';
+          final weightKg = canonicalBodyWeightKg(unit, value);
+          if (weightKg == null) return;
+          await recordBodyWeight(
+            db,
+            timestamp: DateTime.now().toLocal(),
+            weightKg: weightKg,
+            photo: _image,
           );
-          await (db.gymSets.update()..where((tbl) => tbl.bodyWeight.equals(0)))
-              .write(GymSetsCompanion(bodyWeight: drift.Value(value)));
 
           if (context.mounted) Navigator.pop(context);
         },
@@ -186,10 +184,9 @@ class _WeightPageState extends State<WeightPage> {
         _previousWeight = value;
         _previousWeightLoaded = true;
 
-        if (settings.strengthUnit == 'last-entry')
-          _unit = value?.unit;
-        else
-          _unit = settings.strengthUnit;
+        _unit = settings.strengthUnit == 'last-entry'
+            ? 'kg'
+            : settings.strengthUnit;
       });
     });
   }

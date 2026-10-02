@@ -1,4 +1,6 @@
+import 'package:drift/drift.dart' hide Column;
 import 'package:flexify/database/database.dart';
+import 'package:flexify/database/exercise_analytics.dart';
 import 'package:flexify/database/performed_sets.dart';
 import 'package:flexify/empty_state.dart';
 import 'package:flexify/l10n/l10n.dart';
@@ -92,12 +94,13 @@ class _GraphHistoryPageState extends State<GraphHistoryPage> {
             () => _selection.setAll(sets.map((gymSet) => gymSet.id)),
           ),
         ),
-        IconButton(
-          key: const ValueKey('editGraphHistorySelection'),
-          tooltip: context.l10n.editSelected,
-          icon: const Icon(Icons.edit),
-          onPressed: _editSelected,
-        ),
+        if (widget.name != 'Weight')
+          IconButton(
+            key: const ValueKey('editGraphHistorySelection'),
+            tooltip: context.l10n.editSelected,
+            icon: const Icon(Icons.edit),
+            onPressed: _editSelected,
+          ),
         IconButton(
           key: const ValueKey('deleteGraphHistorySelection'),
           tooltip: context.l10n.deleteSelected,
@@ -109,6 +112,7 @@ class _GraphHistoryPageState extends State<GraphHistoryPage> {
   }
 
   Future<void> _editSelected() async {
+    if (widget.name == 'Weight') return;
     await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => EditSetsPage(ids: _selection.toList()),
@@ -143,7 +147,11 @@ class _GraphHistoryPageState extends State<GraphHistoryPage> {
     if (confirmed != true || !mounted) return;
 
     final ids = _selection.toList();
-    await deletePerformedSets(db, ids);
+    if (widget.name == 'Weight') {
+      await (db.bodyWeights.delete()..where((row) => row.id.isIn(ids))).go();
+    } else {
+      await deletePerformedSets(db, ids);
+    }
     if (!mounted) return;
     setState(_selection.clear);
     await setSets();
@@ -163,14 +171,16 @@ class _GraphHistoryPageState extends State<GraphHistoryPage> {
   }
 
   Future<void> setSets() async {
-    final result = await getPerformedSets(
-      db,
-      search: widget.name,
-      limit: limit,
-    );
+    final result = widget.name == 'Weight'
+        ? await getGraphHistory(widget.name, limit: limit)
+        : (await getPerformedSets(
+            db,
+            search: widget.name,
+            limit: limit,
+          )).where((set) => set.name == widget.name).toList();
     if (!mounted) return;
     setState(() {
-      sets = result.where((set) => set.name == widget.name).toList();
+      sets = result;
     });
   }
 

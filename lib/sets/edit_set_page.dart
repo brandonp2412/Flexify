@@ -5,6 +5,7 @@ import 'package:drift/drift.dart' hide Column;
 import 'package:file_picker/file_picker.dart';
 import 'package:flexify/animated_fab.dart';
 import 'package:flexify/constants.dart';
+import 'package:flexify/database/body_weight_repository.dart';
 import 'package:flexify/database/categories.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/database/exercise_catalog.dart';
@@ -81,11 +82,17 @@ class _EditSetPageState extends State<EditSetPage> {
 
     if (!mounted) return;
     if (showBodyWeight) {
-      updateFields(last);
-    } else {
       final bodyWeight = await getBodyWeight();
       if (!mounted) return;
-      updateFields(last.copyWith(bodyWeight: bodyWeight?.weight));
+      updateFields(
+        bodyWeight == null
+            ? last
+            : last.copyWith(
+                bodyWeight: displayBodyWeight(last.unit, bodyWeight.weightKg),
+              ),
+      );
+    } else {
+      updateFields(last.copyWith(bodyWeight: 0));
     }
 
     if (_cardio) {

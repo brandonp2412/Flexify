@@ -5,6 +5,7 @@ import 'package:drift/drift.dart' hide Column;
 import 'package:flexify/animated_fab.dart';
 import 'package:flexify/bottom_nav.dart';
 import 'package:flexify/constants.dart';
+import 'package:flexify/database/body_weight_repository.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/database/exercise_catalog.dart';
 import 'package:flexify/empty_state.dart';
@@ -728,10 +729,10 @@ class _StartPlanPageState extends State<StartPlanPage>
     final settings = context.read<SettingsState>().value;
     final timerState = context.read<TimerState>();
     if (settings.showBodyWeight) {
-      final weightSet = await getBodyWeight();
-      bodyWeight = weightSet?.weight;
-      if (weightSet != null) {
-        bodyWeightKg = canonicalLoadKg(weightSet.unit, weightSet.weight);
+      final weightEntry = await getBodyWeight();
+      if (weightEntry != null) {
+        bodyWeightKg = weightEntry.weightKg;
+        bodyWeight = displayBodyWeight(_unit, weightEntry.weightKg);
       }
     }
     if (settings.showBodyWeight && bodyWeight == null) {
@@ -906,6 +907,6 @@ class _StartPlanPageState extends State<StartPlanPage>
       toast(context.l10n.noWeightEnteredYet);
       return;
     }
-    _weight.text = toString(weightSet.weight);
+    _weight.text = toString(displayBodyWeight(_unit, weightSet.weightKg));
   }
 }

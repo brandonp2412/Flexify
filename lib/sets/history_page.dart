@@ -1,6 +1,7 @@
 import 'package:flexify/animated_fab.dart';
 import 'package:flexify/app_search.dart';
 import 'package:flexify/constants.dart';
+import 'package:flexify/database/body_weight_repository.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/database/performed_sets.dart';
 import 'package:flexify/empty_state.dart';
@@ -289,15 +290,15 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
   void onAdd() async {
     final settings = context.read<SettingsState>().value;
     final gymSets = await stream.first;
-    var bodyWeight = 0.0;
-    if (settings.showBodyWeight)
-      bodyWeight = (await getBodyWeight())?.weight ?? 0.0;
+    final latestBodyWeight = settings.showBodyWeight
+        ? await getBodyWeight()
+        : null;
 
     GymSet gymSet =
         gymSets.firstOrNull ??
         GymSet(
           id: 0,
-          bodyWeight: bodyWeight,
+          bodyWeight: 0,
           restMs: const Duration(minutes: 3, seconds: 30).inMilliseconds,
           name: '',
           reps: 0,
@@ -311,14 +312,21 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
         );
     gymSet = gymSet.copyWith(
       id: 0,
-      bodyWeight: bodyWeight,
+      bodyWeight: 0,
       created: DateTime.now().toLocal(),
     );
 
-    if (settings.strengthUnit != 'last-entry' && !gymSet.cardio)
+    if (settings.strengthUnit != 'last-entry' && !gymSet.cardio) {
       gymSet = gymSet.copyWith(unit: settings.strengthUnit);
-    else if (settings.cardioUnit != 'last-entry' && gymSet.cardio)
+    } else if (settings.cardioUnit != 'last-entry' && gymSet.cardio) {
       gymSet = gymSet.copyWith(unit: settings.cardioUnit);
+    }
+
+    if (latestBodyWeight != null) {
+      gymSet = gymSet.copyWith(
+        bodyWeight: displayBodyWeight(gymSet.unit, latestBodyWeight.weightKg),
+      );
+    }
 
     if (!mounted) return;
     Navigator.of(context).push(

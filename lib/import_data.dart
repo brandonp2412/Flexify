@@ -5,6 +5,7 @@ import 'package:csv/csv.dart';
 import 'package:drift/drift.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flexify/app_permissions_dialog.dart';
+import 'package:flexify/database/body_weight_repository.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/database/exercise_catalog.dart';
 import 'package:flexify/l10n/generated/app_localizations.dart';
@@ -318,16 +319,41 @@ $version
         );
       });
 
-      await db.gymSets.deleteAll();
-      await db.gymSets.insertAll(gymSets);
-      talker.info('Imported ${gymSets.length} graph entries');
+      final importedRows = gymSets.toList();
+      final legacyGymSets = <GymSetsCompanion>[];
+      final bodyWeights = <BodyWeightsCompanion>[];
 
-      final weightSet = await getBodyWeight();
-      if (weightSet != null) {
-        (db.gymSets.update()..where((tbl) => tbl.bodyWeight.equals(0))).write(
-          GymSetsCompanion(bodyWeight: Value(weightSet.weight)),
-        );
+      for (final row in importedRows) {
+        if (row.name.value == 'Weight') {
+          if (!row.hidden.value) {
+            final weightKg = canonicalBodyWeightKg(
+              row.unit.value,
+              row.weight.value,
+            );
+            if (weightKg != null) {
+              bodyWeights.add(
+                BodyWeightsCompanion.insert(
+                  timestamp: row.created.value,
+                  weightKg: weightKg,
+                ),
+              );
+            }
+          }
+          continue;
+        }
+        legacyGymSets.add(row);
       }
+
+      await db.transaction(() async {
+        await db.gymSets.deleteAll();
+        await db.bodyWeights.deleteAll();
+        await db.gymSets.insertAll(legacyGymSets);
+        await db.bodyWeights.insertAll(bodyWeights);
+      });
+      talker.info(
+        'Imported ${legacyGymSets.length} graph entries and '
+        '${bodyWeights.length} body-weight entries',
+      );
 
       if (!ctx.mounted) return;
       Navigator.pop(ctx);

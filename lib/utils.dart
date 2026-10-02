@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart';
+import 'package:flexify/database/body_weight_repository.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flutter/foundation.dart';
@@ -20,18 +21,7 @@ void toast(String message, {SnackBarAction? action, Duration? duration}) {
   );
 }
 
-Future<GymSet?> getBodyWeight() async {
-  final gymSet =
-      await (db.gymSets.select()
-            ..where((tbl) => tbl.name.equals('Weight'))
-            ..orderBy([
-              (u) =>
-                  OrderingTerm(expression: u.created, mode: OrderingMode.desc),
-            ])
-            ..limit(1))
-          .getSingleOrNull();
-  return gymSet;
-}
+Future<BodyWeight?> getBodyWeight() => getLatestBodyWeight(db);
 
 bool isSameDay(DateTime date1, DateTime date2) {
   return date1.year == date2.year &&
