@@ -29,7 +29,6 @@ void main() {
       );
 
       expect(await db.bodyWeights.count().getSingle(), 1);
-      expect(await db.gymSets.count().getSingle(), 0);
       expect(await db.exerciseSets.count().getSingle(), 0);
 
       final latest = await getLatestBodyWeight(db);
@@ -51,20 +50,18 @@ void main() {
       final weightSummary = (await watchGraphs().first).singleWhere(
         (summary) => summary.name == 'Weight',
       );
-      expect(weightSummary.exerciseId, -1);
+      expect(weightSummary.exerciseId, isNull);
       expect(weightSummary.weight, closeTo(81.25, 0.0001));
       expect(weightSummary.image, '/tmp/weight.jpg');
 
-      final graphHistory = await getGraphHistory('Weight');
+      final graphHistory = await getBodyWeightGraphHistory();
       expect(graphHistory, hasLength(1));
       expect(graphHistory.single.id, latest.id);
       expect(graphHistory.single.image, '/tmp/weight.jpg');
       expect(graphHistory.single.weight, 81.25);
 
-      final graphData = await getStrengthData(
+      final graphData = await getBodyWeightData(
         target: 'lb',
-        name: 'Weight',
-        metric: StrengthMetric.bestWeight,
         period: Period.day,
         start: null,
         end: null,
@@ -100,7 +97,6 @@ void main() {
           created: setAt,
           distance: 0,
           duration: 0,
-          hidden: false,
           name: 'Snapshot bench',
           reps: 5,
           unit: 'kg',

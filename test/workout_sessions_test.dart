@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart' hide isNotNull, isNull;
 import 'package:flexify/database/database.dart';
+import 'package:flexify/database/performed_sets.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/workout_sessions.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -14,22 +15,18 @@ Future<GymSet> addMirroredSet({
   required int? workoutId,
   required DateTime created,
   required double weight,
-}) async {
-  final gymSet = await db.gymSets.insertReturning(
-    gymSetFixture(
+}) {
+  return insertPerformedSet(
+    db,
+    gymSet: gymSetFixture(
       exerciseName,
       planId: planId,
       created: created,
       weight: weight,
     ),
-  );
-  await insertExerciseSetMirror(
-    db,
-    gymSet: gymSet,
     exerciseId: exerciseId,
     workoutId: workoutId,
   );
-  return gymSet;
 }
 
 void main() {

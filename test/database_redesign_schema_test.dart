@@ -18,7 +18,7 @@ void main() {
   tearDown(() => database.close());
 
   test(
-    'redesign foundation keeps legacy data and canonical set columns',
+    'redesign cutover removes legacy tables and keeps canonical set columns',
     () async {
       final legacyColumns = await database
           .customSelect('PRAGMA table_info(gym_sets)')
@@ -27,7 +27,7 @@ void main() {
           .customSelect('PRAGMA table_info(exercise_sets)')
           .get();
 
-      expect(legacyColumns, isNotEmpty);
+      expect(legacyColumns, isEmpty);
       expect(
         setColumns.map((row) => row.read<String>('name')),
         containsAll(<String>[
@@ -41,6 +41,22 @@ void main() {
           'incline',
           'body_weight_kg',
           'notes',
+        ]),
+      );
+
+      final indexes = await database
+          .customSelect(
+            "SELECT name FROM sqlite_master WHERE type = 'index' AND name NOT LIKE 'sqlite_%'",
+          )
+          .get();
+      expect(
+        indexes.map((row) => row.read<String>('name')),
+        containsAll(<String>[
+          'plan_exercises_plan_id',
+          'exercise_sets_exercise_timestamp',
+          'exercise_sets_workout_exercise',
+          'workouts_plan_ended_started',
+          'body_weights_timestamp',
         ]),
       );
     },

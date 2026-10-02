@@ -16,7 +16,6 @@ void main() {
     await database.workouts.deleteAll();
     await database.bodyWeights.deleteAll();
     await database.planExercises.deleteAll();
-    await database.gymSets.deleteAll();
     await database.exercises.deleteAll();
     await database.categories.deleteAll();
     await database.plans.deleteAll();
@@ -127,7 +126,6 @@ void main() {
       final bodyWeight = await target.bodyWeights.select().getSingle();
       expect(bodyWeight.weightKg, 81.75);
       expect(bodyWeight.photo, '/images/weight.jpg');
-      expect(await target.gymSets.select().get(), isEmpty);
     },
   );
 
@@ -149,7 +147,6 @@ void main() {
     expect(result.workouts, 0);
     expect(result.exerciseSets, 2);
     expect(result.bodyWeights, 1);
-    expect(await database.gymSets.select().get(), isEmpty);
 
     final weight = await database.bodyWeights.select().getSingle();
     expect(weight.weightKg, closeTo(80, 0.0001));

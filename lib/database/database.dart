@@ -286,6 +286,24 @@ class AppDatabase extends _$AppDatabase {
     return MigrationStrategy(
       beforeOpen: (details) async {
         await customStatement('PRAGMA foreign_keys = ON');
+        if (details.versionNow >= 59) {
+          await customStatement(
+            'CREATE INDEX IF NOT EXISTS exercise_sets_exercise_timestamp '
+            'ON exercise_sets(exercise_id, timestamp)',
+          );
+          await customStatement(
+            'CREATE INDEX IF NOT EXISTS exercise_sets_workout_exercise '
+            'ON exercise_sets(workout_id, exercise_id)',
+          );
+          await customStatement(
+            'CREATE INDEX IF NOT EXISTS workouts_plan_ended_started '
+            'ON workouts(plan_id, ended_at, started_at)',
+          );
+          await customStatement(
+            'CREATE INDEX IF NOT EXISTS body_weights_timestamp '
+            'ON body_weights(timestamp)',
+          );
+        }
         talker.debug('Opening Flexify database schema v${details.versionNow}');
         if (kDebugMode) await validateDatabaseSchema();
       },

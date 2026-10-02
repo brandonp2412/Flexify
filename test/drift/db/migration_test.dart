@@ -542,47 +542,52 @@ void main() {
         expect(plans.first.title, 'Deadlift Day');
         expect(plans.first.sequence, 1);
 
-        final gymSets = await newDb
-            .customSelect('SELECT * FROM gym_sets')
-            .get();
-        expect(gymSets.length, 2);
-
-        final deadlift = gymSets.firstWhere(
-          (row) => row.read<String>('name') == 'Deadlift',
+        final exercises = await newDb.select(newDb.exercises).get();
+        final exerciseByName = {
+          for (final exercise in exercises) exercise.name: exercise,
+        };
+        expect(
+          exerciseByName.keys,
+          containsAll(<String>['Deadlift', 'Romanian Deadlift']),
         );
-        expect(deadlift.read<double>('weight'), 120.0);
-        expect(deadlift.read<double>('reps'), 5.0);
-        expect(deadlift.read<double>('body_weight'), 75.0);
-        expect(deadlift.read<int>('rest_ms'), 180000);
-        expect(deadlift.read<int>('plan_id'), 1);
-        expect(deadlift.read<int>('cardio'), 0);
-
-        final romanianDeadlift = gymSets.firstWhere(
-          (row) => row.read<String>('name') == 'Romanian Deadlift',
+        expect(exerciseByName['Deadlift']!.defaultRestDurationMs, 180000);
+        expect(
+          exerciseByName['Romanian Deadlift']!.defaultRestDurationMs,
+          120000,
         );
-        expect(romanianDeadlift.read<double>('weight'), 80.0);
-        expect(romanianDeadlift.read<double>('reps'), 8.0);
-        expect(romanianDeadlift.read<int>('rest_ms'), 120000);
 
-        final planExercises = await newDb
-            .customSelect('SELECT * FROM plan_exercises')
-            .get();
-        expect(planExercises.length, 2);
+        final exerciseSets = await newDb.select(newDb.exerciseSets).get();
+        expect(exerciseSets, hasLength(2));
+        final deadlift = exerciseSets.singleWhere(
+          (set) => set.exerciseId == exerciseByName['Deadlift']!.id,
+        );
+        expect(deadlift.loadKg, 120.0);
+        expect(deadlift.reps, 5.0);
+        expect(deadlift.bodyWeightKg, 75.0);
+
+        final romanianDeadlift = exerciseSets.singleWhere(
+          (set) => set.exerciseId == exerciseByName['Romanian Deadlift']!.id,
+        );
+        expect(romanianDeadlift.loadKg, 80.0);
+        expect(romanianDeadlift.reps, 8.0);
+
+        final planExercises = await newDb.select(newDb.planExercises).get();
+        expect(planExercises, hasLength(2));
         expect(
           planExercises.any(
             (row) =>
-                row.read<String>('exercise') == 'Deadlift' &&
-                row.read<int>('max_sets') == 3,
+                row.exerciseId == exerciseByName['Deadlift']!.id &&
+                row.maxSets == 3,
           ),
-          true,
+          isTrue,
         );
         expect(
           planExercises.any(
             (row) =>
-                row.read<String>('exercise') == 'Romanian Deadlift' &&
-                row.read<int>('max_sets') == 4,
+                row.exerciseId == exerciseByName['Romanian Deadlift']!.id &&
+                row.maxSets == 4,
           ),
-          true,
+          isTrue,
         );
 
         // Verify settings table exists (added in v16)
@@ -862,25 +867,17 @@ void main() {
           final planExercises = await newDb
               .customSelect('SELECT * FROM plan_exercises')
               .get();
-          final benchPlan = planExercises.singleWhere(
-            (row) => row.read<String>('exercise') == 'Bench Press',
+          expect(
+            planExercises.map((row) => row.read<int>('exercise_id')),
+            containsAll(<int>[bench.id, rowing.id]),
           );
-          final rowingPlan = planExercises.singleWhere(
-            (row) => row.read<String>('exercise') == 'Rowing',
-          );
-          final weightPlan = planExercises.singleWhere(
-            (row) => row.read<String>('exercise') == 'Weight',
-          );
-          expect(benchPlan.read<int?>('exercise_id'), bench.id);
-          expect(rowingPlan.read<int?>('exercise_id'), rowing.id);
-          expect(weightPlan.read<int?>('exercise_id'), null);
+          expect(planExercises, hasLength(2));
 
           expect(
-            (await newDb
-                    .customSelect('SELECT COUNT(*) AS amount FROM gym_sets')
-                    .getSingle())
-                .read<int>('amount'),
-            6,
+            await newDb.customSelect(
+              "SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'gym_sets'",
+            ).get(),
+            isEmpty,
           );
           expect(await newDb.select(newDb.exerciseSets).get(), hasLength(4));
           final migratedBodyWeights = await newDb
@@ -1029,17 +1026,6 @@ void main() {
           batch.insertAll(oldDb.gymSets, oldGymSets);
         },
         validateItems: (newDb) async {
-          final legacyCount = (await newDb.customSelect('''
-                SELECT COUNT(*) AS amount
-                FROM gym_sets
-                WHERE hidden = 0 AND name <> 'Weight'
-                ''').getSingle()).read<int>('amount');
-          final legacyWeightCount = (await newDb.customSelect('''
-                SELECT COUNT(*) AS amount
-                FROM gym_sets
-                WHERE hidden = 0 AND name = 'Weight'
-                ''').getSingle()).read<int>('amount');
-
           final exercises = await newDb.select(newDb.exercises).get();
           final exercisesById = {
             for (final exercise in exercises) exercise.id: exercise,
@@ -1048,14 +1034,13 @@ void main() {
           final bodyWeights = await newDb.select(newDb.bodyWeights).get();
           final workouts = await newDb.select(newDb.workouts).get();
 
-          expect(migratedSets, hasLength(legacyCount));
-          expect(bodyWeights, hasLength(legacyWeightCount));
+          expect(migratedSets, hasLength(6));
+          expect(bodyWeights, hasLength(2));
           expect(
-            (await newDb
-                    .customSelect('SELECT COUNT(*) AS amount FROM gym_sets')
-                    .getSingle())
-                .read<int>('amount'),
-            10,
+            await newDb.customSelect(
+              "SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'gym_sets'",
+            ).get(),
+            isEmpty,
           );
           expect(
             migratedSets

@@ -4,7 +4,7 @@ import 'package:flexify/database/performed_sets.dart';
 
 final testNow = DateTime(2026, 1, 15, 12);
 
-GymSetsCompanion gymSetFixture(
+GymSet gymSetFixture(
   String name, {
   double reps = 5,
   double weight = 50,
@@ -17,18 +17,20 @@ GymSetsCompanion gymSetFixture(
   int? planId,
   bool hidden = false,
 }) {
-  return GymSetsCompanion.insert(
+  return GymSet(
+    id: 0,
     name: name,
     reps: reps,
     weight: weight,
     unit: unit,
     created: created ?? testNow,
-    cardio: Value(cardio),
-    duration: duration == null ? const Value.absent() : Value(duration),
-    category: category == null ? const Value.absent() : Value(category),
-    notes: notes == null ? const Value.absent() : Value(notes),
-    planId: planId == null ? const Value.absent() : Value(planId),
-    hidden: Value(hidden),
+    bodyWeight: 0,
+    duration: duration ?? 0,
+    distance: 0,
+    cardio: cardio,
+    category: category,
+    notes: notes,
+    planId: planId,
   );
 }
 
@@ -52,7 +54,6 @@ GymSet gymSetModelFixture({
     weight: weight,
     unit: unit,
     created: created ?? testNow,
-    hidden: hidden,
     bodyWeight: bodyWeight,
     duration: duration,
     distance: distance,
@@ -118,7 +119,6 @@ Future<GymSet> insertPerformedSetFixture(
       weight: weight,
       unit: unit,
       created: timestamp,
-      hidden: false,
       bodyWeight: bodyWeight,
       duration: duration,
       distance: distance,
@@ -159,15 +159,13 @@ ExercisesCompanion exerciseFixture(
 
 PlanExercisesCompanion planExerciseFixture({
   required int planId,
-  required String exercise,
+  required int exerciseId,
   bool enabled = true,
   int? sequence,
-  int? exerciseId,
 }) {
   return PlanExercisesCompanion.insert(
     planId: planId,
-    exercise: exercise,
-    exerciseId: Value(exerciseId),
+    exerciseId: exerciseId,
     enabled: enabled,
     sequence: sequence == null ? const Value.absent() : Value(sequence),
   );
@@ -218,10 +216,9 @@ Future<PlanExercise> insertPlanExerciseFixture(
   return database.planExercises.insertReturning(
     planExerciseFixture(
       planId: planId,
-      exercise: exercise,
+      exerciseId: definition.id,
       enabled: enabled,
       sequence: sequence,
-      exerciseId: definition.id,
     ),
   );
 }

@@ -64,7 +64,6 @@ void main() {
       created: created,
       distance: distance,
       duration: duration,
-      hidden: false,
       incline: incline,
       name: name,
       notes: notes,
@@ -83,13 +82,15 @@ void main() {
       image: '/tmp/bench.png',
       restMs: 90000,
     );
+    final planId = await database.plans.insertOne(
+      PlansCompanion.insert(days: 'Friday'),
+    );
     final workoutId = await database.workouts.insertOne(
       WorkoutsCompanion.insert(
-        planId: const Value(7),
+        planId: Value(planId),
         startedAt: DateTime(2026, 10, 2, 18),
       ),
     );
-    final legacyCountBefore = await database.gymSets.count().getSingle();
 
     final inserted = await insertPerformedSet(
       database,
@@ -118,7 +119,6 @@ void main() {
     expect(stored.durationMs, 90000);
     expect(stored.bodyWeightKg, closeTo(81.6466266, 0.000001));
     expect(stored.notes, 'working set');
-    expect(await database.gymSets.count().getSingle(), legacyCountBefore);
 
     expect(inserted.name, 'Cutover Bench');
     expect(inserted.category, 'Push');
@@ -127,7 +127,7 @@ void main() {
     expect(inserted.unit, 'lb');
     expect(inserted.weight, closeTo(220, 0.000001));
     expect(inserted.bodyWeight, closeTo(180, 0.000001));
-    expect(inserted.planId, 7);
+    expect(inserted.planId, planId);
 
     await updatePerformedSet(
       database,
@@ -146,7 +146,6 @@ void main() {
     expect(updated.weight, closeTo(225, 0.000001));
     expect(updated.notes, 'top set');
     expect(updated.category, 'Push');
-    expect(await database.gymSets.count().getSingle(), legacyCountBefore);
 
     expect(await deletePerformedSets(database, [inserted.id]), 1);
     expect(await getPerformedSetById(database, inserted.id), isNull);
