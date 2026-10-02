@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:flexify/plan/exercise_modal.dart';
+import 'package:flexify/plan/workout_sessions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -9,17 +10,25 @@ import 'support/test_app.dart';
 Future<(FlexifyTestHarness, int)> pumpExerciseModal(WidgetTester tester) async {
   final harness = await FlexifyTestHarness.create();
   final id = await harness.database.plans.insertOne(planFixture());
-  await harness.database.planExercises.insertOne(
-    planExerciseFixture(planId: id, exercise: 'Bench press'),
+  final exercise = await ensureExerciseFixture(harness.database, 'Bench press');
+  final planExercise = await harness.database.planExercises.insertReturning(
+    planExerciseFixture(
+      planId: id,
+      exercise: exercise.name,
+      exerciseId: exercise.id,
+    ),
   );
+  final workout = await resumeOrStartWorkout(harness.database, id);
 
   await harness.pump(
     tester,
     Scaffold(
       body: ExerciseModal(
-        exercise: 'Bench press',
+        planExerciseId: planExercise.id,
+        exerciseId: exercise.id,
+        exerciseName: exercise.name,
+        workoutId: workout.id,
         hasData: true,
-        planId: id,
         onSelect: () {},
       ),
     ),

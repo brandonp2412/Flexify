@@ -6,6 +6,7 @@ import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/exercise_modal.dart';
 import 'package:flexify/plan/plan_queries.dart';
+import 'package:flexify/plan/workout_sessions.dart';
 import 'package:flexify/responsive.dart';
 import 'package:flexify/sets/edit_set_page.dart';
 import 'package:flexify/settings/settings_state.dart';
@@ -14,11 +15,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class StartList extends StatefulWidget {
-  final List<PlanExercise> exercises;
+  final List<PlanExerciseEntry> exercises;
   final int selected;
   final Future<void> Function(int) onSelect;
   final List<GymCount> counts;
   final Plan plan;
+  final int workoutId;
 
   const StartList({
     super.key,
@@ -27,6 +29,7 @@ class StartList extends StatefulWidget {
     required this.onSelect,
     required this.counts,
     required this.plan,
+    required this.workoutId,
   });
 
   @override
@@ -56,19 +59,12 @@ class _StartListState extends State<StartList> {
         lastTap = (index: index, dateTime: DateTime.now());
       });
 
-    final gymSet =
-        await (db.gymSets.select()
-              ..where(
-                (tbl) => tbl.name.equals(widget.exercises[index].exercise),
-              )
-              ..orderBy([
-                (u) => OrderingTerm(
-                  expression: u.created,
-                  mode: OrderingMode.desc,
-                ),
-              ])
-              ..limit(1))
-            .getSingle();
+    final gymSet = await getLatestLegacyWorkoutSet(
+      db,
+      workoutId: widget.workoutId,
+      exerciseId: widget.exercises[index].exercise.id,
+    );
+    if (gymSet == null) return;
     if (!mounted) return;
 
     Navigator.of(context).push(
@@ -105,7 +101,8 @@ class _StartListState extends State<StartList> {
               batch.update(
                 db.planExercises,
                 PlanExercisesCompanion(sequence: Value(i)),
-                where: (pe) => pe.id.equals(widget.exercises[i].id),
+                where: (pe) =>
+                    pe.id.equals(widget.exercises[i].planExercise.id),
               );
             }
           });
@@ -129,7 +126,7 @@ class _StartListState extends State<StartList> {
   ) {
     final exercise = widget.exercises[index];
     final idx = counts.indexWhere(
-      (element) => element.name == exercise.exercise,
+      (element) => element.exerciseId == exercise.exercise.id,
     );
     var count = 0;
     int max = maxSets;
@@ -183,8 +180,10 @@ class _StartListState extends State<StartList> {
       context: context,
       builder: (context) => SafeArea(
         child: ExerciseModal(
-          planId: widget.plan.id,
-          exercise: exercise.exercise,
+          planExerciseId: exercise.planExercise.id,
+          exerciseId: exercise.exercise.id,
+          exerciseName: exercise.exercise.name,
+          workoutId: widget.workoutId,
           hasData: count > 0,
           onSelect: () => widget.onSelect(index),
         ),
@@ -193,7 +192,7 @@ class _StartListState extends State<StartList> {
 
     final content = desktop
         ? Padding(
-            key: Key(exercise.exercise),
+            key: Key(exercise.exercise.name),
             padding: const EdgeInsets.symmetric(vertical: 4),
             child: Material(
               color: selected
@@ -225,7 +224,7 @@ class _StartListState extends State<StartList> {
                           const SizedBox(width: 12),
                           Expanded(
                             child: Text(
-                              exercise.exercise,
+                              exercise.exercise.name,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: Theme.of(context).textTheme.titleMedium
@@ -278,7 +277,7 @@ class _StartListState extends State<StartList> {
                       },
                       child: Radio<bool>(value: selected),
                     ),
-                    Flexible(child: Text(exercise.exercise)),
+                    Flexible(child: Text(exercise.exercise.name)),
                   ],
                 ),
               ),
@@ -288,7 +287,7 @@ class _StartListState extends State<StartList> {
 
     if (desktop) return content;
     return GestureDetector(
-      key: Key(exercise.exercise),
+      key: Key(exercise.exercise.name),
       onLongPress: showActions,
       child: content,
     );

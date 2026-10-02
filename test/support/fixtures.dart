@@ -101,6 +101,59 @@ PlanExercisesCompanion planExerciseFixture({
   );
 }
 
+Future<Exercise> ensureExerciseFixture(
+  AppDatabase database,
+  String name, {
+  bool cardio = false,
+  String unit = 'kg',
+}) async {
+  final existing =
+      await (database.exercises.select()..where((row) => row.name.equals(name)))
+          .getSingleOrNull();
+  if (existing != null) {
+    await (database.exercises.update()
+          ..where((row) => row.id.equals(existing.id)))
+        .write(
+          ExercisesCompanion(
+            kind: Value(cardio ? 'cardio' : 'strength'),
+            displayUnit: Value(unit),
+          ),
+        );
+    return (database.exercises.select()
+          ..where((row) => row.id.equals(existing.id)))
+        .getSingle();
+  }
+  return database.exercises.insertReturning(
+    exerciseFixture(name, cardio: cardio, unit: unit),
+  );
+}
+
+Future<PlanExercise> insertPlanExerciseFixture(
+  AppDatabase database, {
+  required int planId,
+  required String exercise,
+  bool enabled = true,
+  int? sequence,
+  bool cardio = false,
+  String unit = 'kg',
+}) async {
+  final definition = await ensureExerciseFixture(
+    database,
+    exercise,
+    cardio: cardio,
+    unit: unit,
+  );
+  return database.planExercises.insertReturning(
+    planExerciseFixture(
+      planId: planId,
+      exercise: exercise,
+      enabled: enabled,
+      sequence: sequence,
+      exerciseId: definition.id,
+    ),
+  );
+}
+
 SettingsCompanion testSettings({
   bool? explainedPermissions,
   bool? notificationPermissionRequested,

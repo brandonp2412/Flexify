@@ -17,9 +17,7 @@ void main() {
 
     await harness.pump(
       tester,
-      Scaffold(
-        body: SwapWorkout(exercise: original.exercise, planId: plan.id),
-      ),
+      Scaffold(body: SwapWorkout(planExerciseId: original.id)),
     );
 
     expect(find.text('Swap workout'), findsOne);

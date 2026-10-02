@@ -1,8 +1,9 @@
-import 'package:drift/drift.dart' hide isNull;
+import 'package:drift/drift.dart' hide isNotNull, isNull;
 import 'package:flexify/bottom_nav.dart';
 import 'package:flexify/l10n/generated/app_localizations.dart';
 import 'package:flexify/l10n/locale_preferences.dart';
 import 'package:flexify/plan/start_plan_page.dart';
+import 'package:flexify/plan/workout_sessions.dart';
 import 'package:flexify/stepper_field.dart';
 import 'package:flexify/timer/timer_state.dart';
 import 'package:flutter/material.dart';
@@ -47,8 +48,10 @@ void main() {
       final database = harness.database;
 
       final id = await database.plans.insertOne(planFixture());
-      await database.planExercises.insertOne(
-        planExerciseFixture(planId: id, exercise: 'Bench press'),
+      await insertPlanExerciseFixture(
+        database,
+        planId: id,
+        exercise: 'Bench press',
       );
       await database.settings.update().write(
         testSettings(
@@ -107,11 +110,24 @@ void main() {
     final id = await database.plans.insertOne(
       planFixture(days: 'Monday,Tuesday,Wednesday'),
     );
-    await database.planExercises.insertAll([
-      planExerciseFixture(planId: id, exercise: 'Bench press'),
-      planExerciseFixture(planId: id, exercise: 'Barbell row'),
-      planExerciseFixture(planId: id, exercise: 'Squat'),
-    ]);
+    await insertPlanExerciseFixture(
+      database,
+      planId: id,
+      exercise: 'Bench press',
+      sequence: 0,
+    );
+    await insertPlanExerciseFixture(
+      database,
+      planId: id,
+      exercise: 'Barbell row',
+      sequence: 1,
+    );
+    await insertPlanExerciseFixture(
+      database,
+      planId: id,
+      exercise: 'Squat',
+      sequence: 2,
+    );
     final plan =
         await (database.plans.select()..where((plan) => plan.id.equals(id)))
             .getSingle();
@@ -155,9 +171,7 @@ void main() {
       final l10n = lookupAppLocalizations(locale);
       final exercise = 'User lift ${locale.toLanguageTag()}';
       final id = await database.plans.insertOne(planFixture());
-      await database.planExercises.insertOne(
-        planExerciseFixture(planId: id, exercise: exercise),
-      );
+      await insertPlanExerciseFixture(database, planId: id, exercise: exercise);
       await database.settings.update().write(
         testSettings(
           explainedPermissions: true,
@@ -211,9 +225,7 @@ void main() {
     final database = harness.database;
 
     final id = await database.plans.insertOne(planFixture(title: planTitle));
-    await database.planExercises.insertOne(
-      planExerciseFixture(planId: id, exercise: exercise),
-    );
+    await insertPlanExerciseFixture(database, planId: id, exercise: exercise);
     await database.settings.update().write(
       testSettings(
         explainedPermissions: true,
@@ -267,9 +279,7 @@ void main() {
       final database = harness.database;
 
       final id = await database.plans.insertOne(planFixture());
-      await database.planExercises.insertOne(
-        planExerciseFixture(planId: id, exercise: exercise),
-      );
+      await insertPlanExerciseFixture(database, planId: id, exercise: exercise);
       await database.settings.update().write(
         testSettings(explainedPermissions: true),
       );
@@ -308,7 +318,9 @@ void main() {
     final originalExerciseId = await database.exercises.insertOne(
       exerciseFixture(originalExercise),
     );
-    await database.exercises.insertOne(exerciseFixture(replacementExercise));
+    final replacementExerciseId = await database.exercises.insertOne(
+      exerciseFixture(replacementExercise),
+    );
     await database.planExercises.insertOne(
       planExerciseFixture(
         planId: planId,
@@ -316,7 +328,7 @@ void main() {
         exerciseId: originalExerciseId,
       ),
     );
-    await database.gymSets.insertAll([
+    final originalHistory = await database.gymSets.insertReturning(
       gymSetFixture(
         originalExercise,
         reps: 10,
@@ -324,20 +336,37 @@ void main() {
         planId: planId,
         created: testNow.subtract(const Duration(days: 7)),
       ),
+    );
+    final replacementHistory = await database.gymSets.insertReturning(
       gymSetFixture(
         replacementExercise,
         reps: 8,
         weight: 30,
         created: testNow.subtract(const Duration(days: 2)),
       ),
-      gymSetFixture(
-        replacementExercise,
-        reps: 0,
-        weight: 0,
-        hidden: true,
-        created: testNow.subtract(const Duration(days: 1)),
-      ),
-    ]);
+    );
+    final oldWorkout = await resumeOrStartWorkout(
+      database,
+      planId,
+      now: originalHistory.created,
+    );
+    await insertExerciseSetMirror(
+      database,
+      gymSet: originalHistory,
+      exerciseId: originalExerciseId,
+      workoutId: oldWorkout.id,
+    );
+    await finishWorkout(
+      database,
+      oldWorkout.id,
+      now: originalHistory.created.add(const Duration(minutes: 30)),
+    );
+    await insertExerciseSetMirror(
+      database,
+      gymSet: replacementHistory,
+      exerciseId: replacementExerciseId,
+      workoutId: null,
+    );
     await database.settings.update().write(
       testSettings(
         explainedPermissions: true,
@@ -347,6 +376,13 @@ void main() {
     final plan =
         await (database.plans.select()..where((p) => p.id.equals(planId)))
             .getSingle();
+    final initialPrefill = await getStartPlanPrefillById(
+      database,
+      exerciseId: originalExerciseId,
+      planId: planId,
+    );
+    expect(initialPrefill?.reps, 10);
+    expect(initialPrefill?.weight, 50);
 
     await harness.pump(tester, StartPlanPage(plan: plan));
     await tester.pumpAndSettle();
@@ -398,8 +434,10 @@ void main() {
     final database = harness.database;
 
     final id = await database.plans.insertOne(planFixture());
-    await database.planExercises.insertOne(
-      planExerciseFixture(planId: id, exercise: 'Bench press'),
+    await insertPlanExerciseFixture(
+      database,
+      planId: id,
+      exercise: 'Bench press',
     );
     await database.settings.update().write(testSettings(showNotes: true));
     final plan =
@@ -452,8 +490,12 @@ void main() {
     final database = harness.database;
 
     final id = await database.plans.insertOne(planFixture());
-    await database.planExercises.insertOne(
-      planExerciseFixture(planId: id, exercise: 'Sled push'),
+    await insertPlanExerciseFixture(
+      database,
+      planId: id,
+      exercise: 'Sled push',
+      cardio: true,
+      unit: 'kg',
     );
     await database.gymSets.insertOne(
       gymSetFixture(
@@ -513,19 +555,24 @@ void main() {
         await (database.plans.select()..where((plan) => plan.id.equals(id)))
             .getSingle();
 
-    await database.planExercises.insertAll([
-      planExerciseFixture(
-        planId: plan.id,
-        exercise: 'Barbell bench press',
-        sequence: 0,
-      ),
-      planExerciseFixture(
-        planId: plan.id,
-        exercise: 'Barbell bent-over row',
-        sequence: 1,
-      ),
-      planExerciseFixture(planId: plan.id, exercise: 'Crunch', sequence: 2),
-    ]);
+    await insertPlanExerciseFixture(
+      database,
+      planId: plan.id,
+      exercise: 'Barbell bench press',
+      sequence: 0,
+    );
+    await insertPlanExerciseFixture(
+      database,
+      planId: plan.id,
+      exercise: 'Barbell bent-over row',
+      sequence: 1,
+    );
+    await insertPlanExerciseFixture(
+      database,
+      planId: plan.id,
+      exercise: 'Crunch',
+      sequence: 2,
+    );
     await database.settings.update().write(
       testSettings(
         explainedPermissions: true,
@@ -548,6 +595,15 @@ void main() {
               ..where((set) => set.name.equals('Barbell bench press')))
             .get();
     expect(gymSets.length, equals(1));
+
+    final exerciseSets = await database.exerciseSets.select().get();
+    expect(exerciseSets, hasLength(1));
+    expect(exerciseSets.single.workoutId, isNotNull);
+    final workout =
+        await (database.workouts.select()
+              ..where((row) => row.id.equals(exerciseSets.single.workoutId!)))
+            .getSingle();
+    expect(workout.planId, plan.id);
   });
 
   testWidgets(
@@ -561,8 +617,10 @@ void main() {
       final plan =
           await (database.plans.select()..where((plan) => plan.id.equals(id)))
               .getSingle();
-      await database.planExercises.insertOne(
-        planExerciseFixture(planId: plan.id, exercise: 'Dumbbell rows'),
+      await insertPlanExerciseFixture(
+        database,
+        planId: plan.id,
+        exercise: 'Dumbbell rows',
       );
       await database.settings.update().write(
         testSettings(
@@ -600,8 +658,10 @@ void main() {
     final plan =
         await (database.plans.select()..where((plan) => plan.id.equals(id)))
             .getSingle();
-    await database.planExercises.insertOne(
-      planExerciseFixture(planId: plan.id, exercise: 'Bench press'),
+    await insertPlanExerciseFixture(
+      database,
+      planId: plan.id,
+      exercise: 'Bench press',
     );
     await database.settings.update().write(
       testSettings(
@@ -626,127 +686,5 @@ void main() {
 
     expect(find.text('Set 1'), findsOne);
     expect(find.text('5 × 50 kg'), findsOne);
-  });
-
-  test(
-    'StartPlanPage prefill uses standalone history only before plan history',
-    () async {
-      final harness = await FlexifyTestHarness.create();
-      final database = harness.database;
-
-      final currentPlanId = await database.plans.insertOne(
-        planFixture(title: 'Current plan'),
-      );
-      final otherPlanId = await database.plans.insertOne(
-        planFixture(title: 'Other plan'),
-      );
-      const exercise = 'Dumbbell chest press';
-      await database.gymSets.insertAll([
-        gymSetFixture(
-          exercise,
-          reps: 8,
-          weight: 30,
-          created: testNow.subtract(const Duration(days: 4)),
-        ),
-        gymSetFixture(
-          exercise,
-          reps: 0,
-          weight: 0,
-          hidden: true,
-          created: testNow.subtract(const Duration(days: 3)),
-        ),
-        gymSetFixture(
-          exercise,
-          reps: 1,
-          weight: 100,
-          planId: otherPlanId,
-          created: testNow.subtract(const Duration(days: 2)),
-        ),
-      ]);
-
-      final initial = await getStartPlanPrefill(
-        database,
-        exercise,
-        currentPlanId,
-      );
-      expect(initial == null, false);
-      expect(initial!.planId, isNull);
-      expect(initial.reps, 8);
-      expect(initial.weight, 30);
-
-      await database.gymSets.insertAll([
-        gymSetFixture(
-          exercise,
-          reps: 6,
-          weight: 35,
-          planId: currentPlanId,
-          created: testNow.subtract(const Duration(days: 1)),
-        ),
-        gymSetFixture(
-          exercise,
-          reps: 5,
-          weight: 37.5,
-          planId: currentPlanId,
-          created: testNow.subtract(const Duration(days: 1, minutes: -5)),
-        ),
-      ]);
-
-      final planned = await getStartPlanPrefill(
-        database,
-        exercise,
-        currentPlanId,
-      );
-      expect(planned == null, false);
-      expect(planned!.planId, currentPlanId);
-      expect(planned.reps, 6);
-      expect(planned.weight, 35);
-    },
-  );
-
-  test('StartPlanPage prefill lookup uses the same plan only', () async {
-    final harness = await FlexifyTestHarness.create();
-    final database = harness.database;
-
-    final currentPlanId = await database.plans.insertOne(
-      planFixture(title: 'Current plan'),
-    );
-    final otherPlanId = await database.plans.insertOne(
-      planFixture(title: 'Other plan'),
-    );
-    final currentSessionStart = testNow.subtract(const Duration(days: 2));
-    await database.gymSets.insertAll([
-      gymSetFixture(
-        'Bench press',
-        reps: 5,
-        weight: 50,
-        planId: currentPlanId,
-        created: currentSessionStart,
-      ),
-      gymSetFixture(
-        'Bench press',
-        reps: 4,
-        weight: 55,
-        planId: currentPlanId,
-        created: currentSessionStart.add(const Duration(minutes: 5)),
-      ),
-      gymSetFixture(
-        'Bench press',
-        reps: 1,
-        weight: 100,
-        planId: otherPlanId,
-        created: testNow.subtract(const Duration(days: 1)),
-      ),
-    ]);
-
-    final first = await getFirstOfLastPlanSession(
-      database,
-      'Bench press',
-      currentPlanId,
-    );
-
-    expect(first == null, false);
-    expect(first!.planId, currentPlanId);
-    expect(first.reps, 5);
-    expect(first.weight, 50);
   });
 }

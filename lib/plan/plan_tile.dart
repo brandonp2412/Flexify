@@ -1,10 +1,10 @@
-import 'package:drift/drift.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/plan_queries.dart';
 import 'package:flexify/plan/start_plan_page.dart';
+import 'package:flexify/plan/workout_sessions.dart';
 import 'package:flexify/responsive.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
@@ -37,7 +37,7 @@ class PlanTile extends StatefulWidget {
 }
 
 class _PlanTileState extends State<PlanTile> {
-  late Stream<List<PlanExercise>> _exercisesStream;
+  late Stream<List<PlanExerciseEntry>> _exercisesStream;
 
   @override
   void initState() {
@@ -56,14 +56,8 @@ class _PlanTileState extends State<PlanTile> {
     setState(() => _exercisesStream = _getExercises());
   }
 
-  Stream<List<PlanExercise>> _getExercises() {
-    return (db.planExercises.select()
-          ..where((tbl) => tbl.planId.equals(widget.plan.id) & tbl.enabled)
-          ..orderBy([
-            (u) => OrderingTerm(expression: u.sequence, mode: OrderingMode.asc),
-          ]))
-        .watch();
-  }
+  Stream<List<PlanExerciseEntry>> _getExercises() =>
+      watchPlanExerciseEntries(db, widget.plan.id);
 
   @override
   Widget build(BuildContext context) {
@@ -157,7 +151,7 @@ class _PlanTileState extends State<PlanTile> {
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 return Text(
-                  snapshot.data!.map((e) => e.exercise).join('  •  '),
+                  snapshot.data!.map((e) => e.exercise.name).join('  •  '),
                   maxLines: desktop ? 2 : null,
                   overflow: desktop ? TextOverflow.ellipsis : null,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(

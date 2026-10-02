@@ -14,8 +14,10 @@ void main() {
     await harness.database.plans.deleteAll();
 
     final planId = await harness.database.plans.insertOne(planFixture(id: 1));
-    await harness.database.planExercises.insertOne(
-      planExerciseFixture(planId: planId, exercise: 'Bench press'),
+    await insertPlanExerciseFixture(
+      harness.database,
+      planId: planId,
+      exercise: 'Bench press',
     );
 
     final scroll = ScrollController();

@@ -6,10 +6,9 @@ import 'package:flexify/main.dart';
 import 'package:flutter/material.dart';
 
 class SwapWorkout extends StatefulWidget {
-  final String exercise;
-  final int planId;
+  final int planExerciseId;
 
-  const SwapWorkout({super.key, required this.exercise, required this.planId});
+  const SwapWorkout({super.key, required this.planExerciseId});
 
   @override
   State<SwapWorkout> createState() => _SwapWorkoutState();
@@ -82,17 +81,9 @@ class _SwapWorkoutState extends State<SwapWorkout> {
                     return ListTile(
                       title: Text(exercise.name),
                       onTap: () async {
-                        final old =
-                            await (db.planExercises.select()
-                                  ..where(
-                                    (tbl) =>
-                                        tbl.planId.equals(widget.planId) &
-                                        tbl.exercise.equals(widget.exercise),
-                                  )
-                                  ..limit(1))
-                                .getSingle();
-                        await (db.planExercises.update()
-                              ..where((tbl) => tbl.id.equals(old.id)))
+                        await (db.planExercises.update()..where(
+                              (tbl) => tbl.id.equals(widget.planExerciseId),
+                            ))
                             .write(
                               PlanExercisesCompanion(
                                 exercise: drift.Value(exercise.name),

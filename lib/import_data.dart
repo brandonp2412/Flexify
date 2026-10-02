@@ -6,6 +6,7 @@ import 'package:drift/drift.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flexify/app_permissions_dialog.dart';
 import 'package:flexify/database/database.dart';
+import 'package:flexify/database/exercise_catalog.dart';
 import 'package:flexify/l10n/generated/app_localizations.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
@@ -423,16 +424,25 @@ $version
         );
 
         final exerciseNames = row[4].toString().trim().split(';');
-        planExercisesToInsert.addAll(
-          exerciseNames.map((exerciseName) {
-            return PlanExercisesCompanion.insert(
+        for (final rawExerciseName in exerciseNames) {
+          final exerciseName = rawExerciseName.trim();
+          if (exerciseName.isEmpty) continue;
+          var exercise = await getExerciseByName(exerciseName);
+          exercise ??= await createExerciseDefinition(
+            name: exerciseName,
+            cardio: false,
+            displayUnit: 'kg',
+          );
+          planExercisesToInsert.add(
+            PlanExercisesCompanion.insert(
               planId: id,
-              exercise: exerciseName.trim(),
+              exercise: exercise.name,
+              exerciseId: Value(exercise.id),
               enabled: true,
               timers: const Value(true),
-            );
-          }),
-        );
+            ),
+          );
+        }
       }
 
       await db.plans.deleteAll();

@@ -1,28 +1,23 @@
-import 'package:drift/drift.dart' hide Column;
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
+import 'package:flexify/plan/workout_sessions.dart';
 import 'package:flexify/sets/edit_set_page.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
 
-/// Strong/Hevy-style strip of the sets already logged this session for the
-/// selected exercise.
-///
-/// "This session" matches the plan's set-count window (the last 24 hours of
-/// non-hidden sets for this plan) so the chips stay in sync with the count
-/// shown on the exercise tile. Tap a chip to edit that set; the strip refreshes
-/// reactively as sets are saved or edited.
+/// Strong/Hevy-style strip of the sets already logged in the active workout
+/// for the selected exercise.
 class SessionSets extends StatefulWidget {
-  final String exercise;
-  final int planId;
+  final int exerciseId;
+  final int workoutId;
   final bool compact;
 
   const SessionSets({
     super.key,
-    required this.exercise,
-    required this.planId,
+    required this.exerciseId,
+    required this.workoutId,
     this.compact = false,
   });
 
@@ -44,8 +39,8 @@ class _SessionSetsState extends State<SessionSets> {
   @override
   void didUpdateWidget(SessionSets oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.exercise != widget.exercise ||
-        oldWidget.planId != widget.planId) {
+    if (oldWidget.exerciseId != widget.exerciseId ||
+        oldWidget.workoutId != widget.workoutId) {
       _lastSetCount = 0;
       _watch();
     }
@@ -58,21 +53,11 @@ class _SessionSetsState extends State<SessionSets> {
   }
 
   void _watch() {
-    final cutoff = DateTime.now().subtract(const Duration(hours: 24));
-    _stream =
-        (db.gymSets.select()
-              ..where(
-                (tbl) =>
-                    tbl.name.equals(widget.exercise) &
-                    tbl.planId.equals(widget.planId) &
-                    tbl.hidden.equals(false) &
-                    tbl.created.isBiggerOrEqualValue(cutoff),
-              )
-              ..orderBy([
-                (u) =>
-                    OrderingTerm(expression: u.created, mode: OrderingMode.asc),
-              ]))
-            .watch();
+    _stream = watchLegacyWorkoutSets(
+      db,
+      workoutId: widget.workoutId,
+      exerciseId: widget.exerciseId,
+    );
   }
 
   void _scrollToNewest(int setCount) {

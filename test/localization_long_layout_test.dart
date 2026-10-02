@@ -6,6 +6,7 @@ import 'package:flexify/graph/strength_page.dart';
 import 'package:flexify/l10n/generated/app_localizations.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/session_sets.dart';
+import 'package:flexify/plan/workout_sessions.dart';
 import 'package:flexify/selection_controller.dart';
 import 'package:flexify/settings/appearance_settings.dart';
 import 'package:flexify/settings/plan_settings.dart';
@@ -271,7 +272,9 @@ void main() {
     final harness = await FlexifyTestHarness.create();
     const exercise = 'User entered exercise';
     final planId = await harness.database.plans.insertOne(planFixture());
-    await harness.database.gymSets.insertOne(
+    final definition = await ensureExerciseFixture(harness.database, exercise);
+    final workout = await resumeOrStartWorkout(harness.database, planId);
+    final gymSet = await harness.database.gymSets.insertReturning(
       gymSetFixture(
         exercise,
         planId: planId,
@@ -280,11 +283,17 @@ void main() {
         created: DateTime.now().toLocal(),
       ),
     );
+    await insertExerciseSetMirror(
+      harness.database,
+      gymSet: gymSet,
+      exerciseId: definition.id,
+      workoutId: workout.id,
+    );
 
     await harness.pump(
       tester,
       Scaffold(
-        body: SessionSets(exercise: exercise, planId: planId),
+        body: SessionSets(exerciseId: definition.id, workoutId: workout.id),
       ),
       locale: locale,
       surfaceSize: _narrowSurface,

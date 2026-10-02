@@ -23,10 +23,22 @@ void main() async {
     await oldDb.plans.insertOne(
       PlansCompanion.insert(id: const Value(1), days: 'Monday'),
     );
+    final oldBench =
+        await (oldDb.exercises.select()
+              ..where((exercise) => exercise.name.equals('Bench press')))
+            .getSingleOrNull() ??
+        await oldDb.exercises.insertReturning(
+          ExercisesCompanion.insert(
+            name: 'Bench press',
+            kind: 'strength',
+            displayUnit: 'kg',
+          ),
+        );
     await oldDb.planExercises.insertOne(
       PlanExercisesCompanion.insert(
         planId: 1,
-        exercise: 'Bench press',
+        exercise: oldBench.name,
+        exerciseId: Value(oldBench.id),
         enabled: true,
       ),
     );
@@ -65,10 +77,22 @@ void main() async {
     await newDb.plans.insertOne(
       PlansCompanion.insert(id: const Value(1), days: 'Monday'),
     );
+    final newSquat =
+        await (newDb.exercises.select()
+              ..where((exercise) => exercise.name.equals('Squat')))
+            .getSingleOrNull() ??
+        await newDb.exercises.insertReturning(
+          ExercisesCompanion.insert(
+            name: 'Squat',
+            kind: 'strength',
+            displayUnit: 'kg',
+          ),
+        );
     await newDb.planExercises.insertOne(
       PlanExercisesCompanion.insert(
         planId: 1,
-        exercise: 'Squat',
+        exercise: newSquat.name,
+        exerciseId: Value(newSquat.id),
         enabled: true,
       ),
     );

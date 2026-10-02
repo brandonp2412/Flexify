@@ -16,6 +16,7 @@ import 'package:flexify/plan/edit_plan_page.dart';
 import 'package:flexify/plan/plan_queries.dart';
 import 'package:flexify/plan/session_sets.dart';
 import 'package:flexify/plan/start_list.dart';
+import 'package:flexify/plan/workout_sessions.dart';
 import 'package:flexify/responsive.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/stepper_field.dart';
@@ -24,70 +25,6 @@ import 'package:flexify/utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-Future<GymSet?> _getFirstOfLastSession(
-  AppDatabase database,
-  String exercise,
-  int? planId,
-) async {
-  final mostRecent =
-      await (database.gymSets.select()
-            ..where((tbl) {
-              final planScope = planId == null
-                  ? tbl.planId.isNull()
-                  : tbl.planId.equals(planId);
-              return tbl.name.equals(exercise) &
-                  planScope &
-                  tbl.hidden.equals(false);
-            })
-            ..orderBy([
-              (u) =>
-                  OrderingTerm(expression: u.created, mode: OrderingMode.desc),
-            ])
-            ..limit(1))
-          .getSingleOrNull();
-  if (mostRecent == null) return null;
-
-  final date = mostRecent.created.toLocal();
-  final startOfDay = DateTime(date.year, date.month, date.day);
-  final endOfDay = startOfDay.add(const Duration(days: 1));
-
-  return (database.gymSets.select()
-        ..where((tbl) {
-          final planScope = planId == null
-              ? tbl.planId.isNull()
-              : tbl.planId.equals(planId);
-          return tbl.name.equals(exercise) &
-              planScope &
-              tbl.hidden.equals(false) &
-              tbl.created.isBiggerOrEqualValue(startOfDay.toUtc()) &
-              tbl.created.isSmallerThanValue(endOfDay.toUtc());
-        })
-        ..orderBy([
-          (u) => OrderingTerm(expression: u.created, mode: OrderingMode.asc),
-        ])
-        ..limit(1))
-      .getSingleOrNull();
-}
-
-/// Returns the first set from the most recent session for [exercise] in [planId].
-Future<GymSet?> getFirstOfLastPlanSession(
-  AppDatabase database,
-  String exercise,
-  int planId,
-) => _getFirstOfLastSession(database, exercise, planId);
-
-/// Returns the best StartPlan prefill without borrowing another plan's targets.
-///
-/// Existing history from [planId] wins. Before an exercise has ever been saved
-/// in that plan, standalone history is used as its initial baseline.
-Future<GymSet?> getStartPlanPrefill(
-  AppDatabase database,
-  String exercise,
-  int planId,
-) async =>
-    await getFirstOfLastPlanSession(database, exercise, planId) ??
-    await _getFirstOfLastSession(database, exercise, null);
 
 class StartPlanPage extends StatefulWidget {
   final Plan plan;
@@ -123,8 +60,9 @@ class _StartPlanPageState extends State<StartPlanPage>
   String? _category;
   String? _image;
 
-  late Stream<List<PlanExercise>> _stream;
-  late Stream<List<GymCount>> _gymCountsStream;
+  Stream<List<PlanExerciseEntry>>? _stream;
+  Stream<List<GymCount>>? _gymCountsStream;
+  Workout? _workout;
   StreamSubscription<Plan?>? _planSub;
   late String _unit = 'kg';
   late String _title = widget.plan.days;
@@ -174,6 +112,7 @@ class _StartPlanPageState extends State<StartPlanPage>
                     onSelect: select,
                     counts: counts,
                     plan: widget.plan,
+                    workoutId: _workout!.id,
                   );
 
             return Scaffold(
@@ -228,7 +167,10 @@ class _StartPlanPageState extends State<StartPlanPage>
                                         snapshot.data!.isNotEmpty &&
                                                 _selected <
                                                     snapshot.data!.length
-                                            ? snapshot.data![_selected].exercise
+                                            ? snapshot
+                                                  .data![_selected]
+                                                  .exercise
+                                                  .name
                                             : context.l10n.setDetails,
                                         style: Theme.of(context)
                                             .textTheme
@@ -249,10 +191,11 @@ class _StartPlanPageState extends State<StartPlanPage>
                                               snapshot.data!.length) ...[
                                         const SizedBox(height: 16),
                                         SessionSets(
-                                          exercise: snapshot
+                                          exerciseId: snapshot
                                               .data![_selected]
-                                              .exercise,
-                                          planId: widget.plan.id,
+                                              .exercise
+                                              .id,
+                                          workoutId: _workout!.id,
                                         ),
                                       ],
                                     ],
@@ -306,8 +249,8 @@ class _StartPlanPageState extends State<StartPlanPage>
                           Expanded(
                             child: SessionSets(
                               key: const Key('start-plan-set-preview'),
-                              exercise: snapshot.data![_selected].exercise,
-                              planId: widget.plan.id,
+                              exerciseId: snapshot.data![_selected].exercise.id,
+                              workoutId: _workout!.id,
                               compact: true,
                             ),
                           ),
@@ -329,7 +272,7 @@ class _StartPlanPageState extends State<StartPlanPage>
   }
 
   List<Widget> strengthFields(
-    AsyncSnapshot<List<PlanExercise>> snapshot,
+    AsyncSnapshot<List<PlanExerciseEntry>> snapshot,
     List<GymCount> counts,
   ) {
     return [
@@ -353,7 +296,7 @@ class _StartPlanPageState extends State<StartPlanPage>
   }
 
   List<Widget> cardioFields(
-    AsyncSnapshot<List<PlanExercise>> snapshot,
+    AsyncSnapshot<List<PlanExerciseEntry>> snapshot,
     List<GymCount> counts,
   ) {
     final showNotes = context.read<SettingsState>().value.showNotes;
@@ -470,12 +413,12 @@ class _StartPlanPageState extends State<StartPlanPage>
   }
 
   StepperField _weightField(
-    AsyncSnapshot<List<PlanExercise>> snapshot,
+    AsyncSnapshot<List<PlanExerciseEntry>> snapshot,
     List<GymCount> counts,
   ) {
     final exerciseName =
         snapshot.data!.isNotEmpty && _selected < snapshot.data!.length
-        ? snapshot.data![_selected].exercise
+        ? snapshot.data![_selected].exercise.name
         : '';
     final showNotes = context.read<SettingsState>().value.showNotes;
     final hasNextTextField = _cardio || showNotes;
@@ -544,7 +487,7 @@ class _StartPlanPageState extends State<StartPlanPage>
   }
 
   Widget notesField(
-    AsyncSnapshot<List<PlanExercise>> snapshot,
+    AsyncSnapshot<List<PlanExerciseEntry>> snapshot,
     List<GymCount> counts,
   ) {
     return Selector<SettingsState, bool>(
@@ -589,10 +532,10 @@ class _StartPlanPageState extends State<StartPlanPage>
     } else if (!_cardio && settings.repEstimation) {
       final parsedWeight = parseDisplayNumber(context, _weight.text);
       if (parsedWeight == null) return;
-      _stream.first.then((planExercises) {
+      _stream?.first.then((planExercises) {
         if (!mounted) return;
         final matches = _rpms!.where(
-          (rpm) => rpm.name == planExercises[_selected].exercise,
+          (rpm) => rpm.name == planExercises[_selected].exercise.name,
         );
         if (matches.isEmpty) return;
 
@@ -621,7 +564,13 @@ class _StartPlanPageState extends State<StartPlanPage>
   }
 
   @override
+  @override
   void dispose() {
+    final workout = _workout;
+    if (workout != null) {
+      unawaited(finishWorkout(db, workout.id));
+    }
+
     _reps.dispose();
     _weight.dispose();
     _distance.dispose();
@@ -659,13 +608,25 @@ class _StartPlanPageState extends State<StartPlanPage>
   /// "Most recent session" = the calendar day of the latest recorded set.
   /// Showing the first set (rather than the last) gives a better baseline for
   /// progressive overload when weights decrease across sets.
-  Future<GymSet?> getFirstOfLastSession(String exercise) =>
-      getStartPlanPrefill(db, exercise, widget.plan.id);
+  Future<GymSet?> getFirstOfLastSession(int exerciseId) =>
+      getStartPlanPrefillById(
+        db,
+        exerciseId: exerciseId,
+        planId: widget.plan.id,
+      );
 
-  Future<Exercise?> getExerciseTemplate(PlanExercise planExercise) {
-    final exerciseId = planExercise.exerciseId;
-    if (exerciseId != null) return getExerciseById(exerciseId);
-    return getExerciseByName(planExercise.exercise);
+  Future<Exercise?> getExerciseTemplate(PlanExerciseEntry entry) async =>
+      entry.exercise;
+
+  Future<void> _initializeWorkout() async {
+    final workout = await resumeOrStartWorkout(db, widget.plan.id);
+    if (!mounted) return;
+    setState(() {
+      _workout = workout;
+      _gymCountsStream = watchGymCounts(widget.plan.id, workout.id);
+    });
+    _bindPlanStream();
+    await _loadExercises();
   }
 
   @override
@@ -677,16 +638,13 @@ class _StartPlanPageState extends State<StartPlanPage>
     _titleFromDays = widget.plan.title?.isNotEmpty != true;
     _title = _titleFromDays ? widget.plan.days : widget.plan.title!;
 
-    _gymCountsStream = watchGymCounts(widget.plan.id);
-    _bindPlanStream();
-    _loadExercises();
+    unawaited(_initializeWorkout());
   }
 
   void _reloadDatabaseStreams() {
-    if (!mounted) return;
-    _gymCountsStream = watchGymCounts(widget.plan.id);
+    if (!mounted || _workout == null) return;
     _bindPlanStream();
-    _loadExercises();
+    unawaited(_loadExercises());
   }
 
   void _bindPlanStream() {
@@ -714,33 +672,24 @@ class _StartPlanPageState extends State<StartPlanPage>
   }
 
   Future<void> _loadExercises() async {
+    if (_workout == null || !mounted) return;
+    final stream = watchPlanExerciseEntries(db, widget.plan.id).asyncMap((
+      exercises,
+    ) async {
+      await _selectFromEntries(exercises, _selected);
+      return exercises;
+    });
     setState(() {
-      _stream =
-          (db.planExercises.select()
-                ..where((pe) => pe.planId.equals(widget.plan.id) & pe.enabled)
-                ..orderBy([
-                  (u) => OrderingTerm(
-                    expression: u.sequence,
-                    mode: OrderingMode.asc,
-                  ),
-                ]))
-              .watch();
+      _stream = stream;
+      _gymCountsStream = watchGymCounts(widget.plan.id, _workout!.id);
     });
 
-    select(0);
-    if (!mounted) return;
     final settings = context.read<SettingsState>().value;
     if (settings.repEstimation) {
       getRpms().then((value) {
         if (!mounted) return;
         setState(() => _rpms = value);
       });
-    }
-
-    if (settings.strengthUnit != 'last-entry' && !_cardio) {
-      setState(() => _unit = settings.strengthUnit);
-    } else if (settings.cardioUnit != 'last-entry' && _cardio) {
-      setState(() => _unit = settings.cardioUnit);
     }
   }
 
@@ -767,21 +716,28 @@ class _StartPlanPageState extends State<StartPlanPage>
   }
 
   Future<void> save(
-    AsyncSnapshot<List<PlanExercise>> snapshot,
+    AsyncSnapshot<List<PlanExerciseEntry>> snapshot,
     List<GymCount> counts,
   ) async {
     if (!_key.currentState!.validate()) return;
     if (snapshot.data == null || snapshot.data!.isEmpty) return;
     if (_selected >= snapshot.data!.length) return;
+    final workout = _workout;
+    if (workout == null || !mounted) return;
 
-    if (!mounted) return;
-
-    final exercise = snapshot.data![_selected].exercise;
+    final entry = snapshot.data![_selected];
+    final exerciseId = entry.exercise.id;
+    final exercise = entry.exercise.name;
     double? bodyWeight;
+    double? bodyWeightKg;
     final settings = context.read<SettingsState>().value;
     final timerState = context.read<TimerState>();
     if (settings.showBodyWeight) {
-      bodyWeight = (await getBodyWeight())?.weight;
+      final weightSet = await getBodyWeight();
+      bodyWeight = weightSet?.weight;
+      if (weightSet != null) {
+        bodyWeightKg = canonicalLoadKg(weightSet.unit, weightSet.weight);
+      }
     }
     if (settings.showBodyWeight && bodyWeight == null) {
       final lastSet = await getLast(exercise);
@@ -803,7 +759,9 @@ class _StartPlanPageState extends State<StartPlanPage>
     }
 
     if (!mounted) return;
-    final index = counts.indexWhere((element) => element.name == exercise);
+    final index = counts.indexWhere(
+      (element) => element.exerciseId == exerciseId,
+    );
 
     int? max;
     double? restMs;
@@ -816,10 +774,11 @@ class _StartPlanPageState extends State<StartPlanPage>
       peTimers = counts[index].timers;
     }
 
-    var gymSetInsert = GymSetsCompanion.insert(
+    final created = DateTime.now().toLocal();
+    final gymSetInsert = GymSetsCompanion.insert(
       name: exercise,
       unit: _unit,
-      created: DateTime.now().toLocal(),
+      created: created,
       cardio: Value(_cardio),
       duration: Value(
         (int.tryParse(_seconds.text) ?? 0) / 60 +
@@ -843,7 +802,7 @@ class _StartPlanPageState extends State<StartPlanPage>
 
     restMs ??= settings.timerDuration.toDouble();
 
-    if (settings.restTimers && count > warmupSets && peTimers)
+    if (settings.restTimers && count > warmupSets && peTimers) {
       timerState.startTimer(
         "$exercise ($count/${max ?? settings.maxSets})",
         Duration(milliseconds: restMs.toInt()),
@@ -852,12 +811,23 @@ class _StartPlanPageState extends State<StartPlanPage>
         settings.enableSound,
         "plan:${widget.plan.id}",
       );
+    }
 
     final finishedExercise =
         count == (max ?? settings.maxSets) &&
         _selected < snapshot.data!.length - 1;
 
-    var gymSet = await db.into(db.gymSets).insertReturning(gymSetInsert);
+    final gymSet = await db.transaction(() async {
+      final inserted = await db.into(db.gymSets).insertReturning(gymSetInsert);
+      await insertExerciseSetMirror(
+        db,
+        gymSet: inserted,
+        exerciseId: exerciseId,
+        workoutId: workout.id,
+        bodyWeightKg: bodyWeightKg,
+      );
+      return inserted;
+    });
     if (!mounted) return;
     final messages = positiveReinforcementMessages(context.l10n);
     setState(() {
@@ -875,17 +845,10 @@ class _StartPlanPageState extends State<StartPlanPage>
     if (mounted && random.nextDouble() < 0.3) toast(randomMessage);
   }
 
-  Future<void> select(int index) async {
-    final exercises =
-        await (db.planExercises.select()
-              ..where((pe) => pe.planId.equals(widget.plan.id) & pe.enabled)
-              ..orderBy([
-                (u) => OrderingTerm(
-                  expression: u.sequence,
-                  mode: OrderingMode.asc,
-                ),
-              ]))
-            .get();
+  Future<void> _selectFromEntries(
+    List<PlanExerciseEntry> exercises,
+    int index,
+  ) async {
     if (!mounted) return;
 
     if (exercises.isEmpty) {
@@ -897,15 +860,10 @@ class _StartPlanPageState extends State<StartPlanPage>
     }
 
     final selected = index.clamp(0, exercises.length - 1);
-    final planExercise = exercises[selected];
-    final exercise = planExercise.exercise;
-    final last = await getFirstOfLastSession(exercise);
-    final template = last == null
-        ? await getExerciseTemplate(planExercise)
-        : null;
-    final legacyTemplate = last == null && template == null
-        ? await getLast(exercise)
-        : null;
+    final entry = exercises[selected];
+    final exercise = entry.exercise;
+    final last = await getFirstOfLastSession(exercise.id);
+    final template = last == null ? await getExerciseTemplate(entry) : null;
     final templateCategory = template == null
         ? null
         : await getExerciseCategoryName(template);
@@ -921,12 +879,15 @@ class _StartPlanPageState extends State<StartPlanPage>
         _unit = template.displayUnit;
         _category = templateCategory;
         _image = template.image;
-      } else if (legacyTemplate != null) {
-        _updateGymSetTextFields(legacyTemplate);
       } else {
         _clearGymSetTextFields();
       }
     });
+  }
+
+  Future<void> select(int index) async {
+    final exercises = await getPlanExerciseEntries(db, widget.plan.id);
+    await _selectFromEntries(exercises, index);
   }
 
   void _clearGymSetTextFields() {

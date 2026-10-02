@@ -15,6 +15,7 @@ class PlanCount {
 }
 
 typedef GymCount = ({
+  int exerciseId,
   int count,
   String name,
   int? maxSets,
@@ -33,28 +34,40 @@ Stream<List<PlanCount>> watchPlanCounts() {
   return db
       .customSelect(
         '''
-          SELECT id, SUM(max_sets) AS max_sets,
-            SUM(todays_count) AS todays_count FROM (
-              SELECT p.id, pe.exercise AS name,
-                COALESCE(pe.max_sets, settings.max_sets) AS max_sets,
-                COUNT(
-                  CASE WHEN gs.id IS NOT NULL
-                    AND DATE(gs.created, 'unixepoch', 'localtime') = DATE('now', 'localtime')
-                    AND gs.hidden = 0
-                  THEN 1
-                  END
-                ) AS todays_count
-              FROM plans p
-              LEFT JOIN plan_exercises pe ON p.id = pe.plan_id
-                AND pe.enabled = true
-              LEFT JOIN settings
-              LEFT JOIN gym_sets gs ON pe.exercise = gs.name
-                AND gs.plan_id = p.id
-              GROUP BY pe.exercise, p.id
+          SELECT
+            plans.id AS id,
+            COALESCE(
+              (
+                SELECT SUM(COALESCE(pe.max_sets, settings.max_sets))
+                FROM plan_exercises AS pe
+                CROSS JOIN settings
+                WHERE pe.plan_id = plans.id
+                  AND pe.enabled = 1
+              ),
+              0
+            ) AS max_sets,
+            COUNT(exercise_sets.id) AS session_count
+          FROM plans
+          LEFT JOIN workouts
+            ON workouts.id = (
+              SELECT active.id
+              FROM workouts AS active
+              WHERE active.plan_id = plans.id
+                AND active.ended_at IS NULL
+              ORDER BY active.started_at DESC, active.id DESC
+              LIMIT 1
             )
-          GROUP BY id
+          LEFT JOIN exercise_sets
+            ON exercise_sets.workout_id = workouts.id
+          GROUP BY plans.id
         ''',
-        readsFrom: {db.plans, db.gymSets, db.planExercises, db.settings},
+        readsFrom: {
+          db.plans,
+          db.planExercises,
+          db.settings,
+          db.workouts,
+          db.exerciseSets,
+        },
       )
       .watch()
       .map(
@@ -63,7 +76,7 @@ Stream<List<PlanCount>> watchPlanCounts() {
               (row) => PlanCount(
                 maxSets: row.read<int>('max_sets'),
                 planId: row.read<int>('id'),
-                total: row.read<int>('todays_count'),
+                total: row.read<int>('session_count'),
               ),
             )
             .toList(),
@@ -74,51 +87,44 @@ Stream<Plan?> watchPlan(int planId) =>
     (db.plans.select()..where((plan) => plan.id.equals(planId)))
         .watchSingleOrNull();
 
-Stream<List<GymCount>> watchGymCounts(int planId) {
+Stream<List<GymCount>> watchGymCounts(int planId, int workoutId) {
   return db
       .customSelect(
         '''
           SELECT
-            COALESCE(exercises.name, plan_exercises.exercise) AS name,
-            COUNT(
-              CASE
-                WHEN DATE(gym_sets.created, 'unixepoch', 'localtime') =
-                     DATE('now', 'localtime')
-                  AND gym_sets.hidden = 0
-                  AND gym_sets.plan_id = ?
-                THEN 1
-              END
-            ) AS todays_count,
+            exercises.id AS exercise_id,
+            exercises.name AS name,
+            COUNT(exercise_sets.id) AS session_count,
             plan_exercises.max_sets AS max_sets,
-            COALESCE(
-              exercises.default_rest_duration_ms,
-              MAX(gym_sets.rest_ms)
-            ) AS rest_ms,
+            exercises.default_rest_duration_ms AS rest_ms,
             plan_exercises.warmup_sets AS warmup_sets,
             plan_exercises.timers AS timers
           FROM plan_exercises
-          LEFT JOIN exercises
+          INNER JOIN exercises
             ON exercises.id = plan_exercises.exercise_id
-            OR (
-              plan_exercises.exercise_id IS NULL
-              AND exercises.name = plan_exercises.exercise
-            )
-          LEFT JOIN gym_sets
-            ON gym_sets.name = COALESCE(exercises.name, plan_exercises.exercise)
+          LEFT JOIN exercise_sets
+            ON exercise_sets.exercise_id = exercises.id
+            AND exercise_sets.workout_id = ?
           WHERE plan_exercises.plan_id = ?
             AND plan_exercises.enabled = 1
           GROUP BY plan_exercises.id, exercises.id
-          ORDER BY plan_exercises.sequence
+          ORDER BY plan_exercises.sequence, plan_exercises.id
         ''',
-        variables: [Variable(planId), Variable(planId)],
-        readsFrom: {db.planExercises, db.exercises, db.gymSets},
+        variables: [Variable(workoutId), Variable(planId)],
+        readsFrom: {
+          db.planExercises,
+          db.exercises,
+          db.exerciseSets,
+          db.workouts,
+        },
       )
       .watch()
       .map(
         (rows) => rows
             .map(
               (row) => (
-                count: row.read<int>('todays_count'),
+                exerciseId: row.read<int>('exercise_id'),
+                count: row.read<int>('session_count'),
                 name: row.read<String>('name'),
                 maxSets: row.readNullable<int>('max_sets'),
                 restMs: row.readNullable<int>('rest_ms'),
@@ -130,7 +136,8 @@ Stream<List<GymCount>> watchGymCounts(int planId) {
       );
 }
 
-Future<List<GymCount>> getGymCounts(int planId) => watchGymCounts(planId).first;
+Future<List<GymCount>> getGymCounts(int planId, int workoutId) =>
+    watchGymCounts(planId, workoutId).first;
 
 Future<List<PlanExercisesCompanion>> loadPlanExerciseDrafts(
   PlansCompanion plan,
@@ -142,9 +149,7 @@ Future<List<PlanExercisesCompanion>> loadPlanExerciseDrafts(
       leftOuterJoin(
         db.planExercises,
         db.planExercises.planId.equals(plan.id.present ? plan.id.value : 0) &
-                db.planExercises.exerciseId.equalsExp(db.exercises.id) |
-            (db.planExercises.exerciseId.isNull() &
-                db.planExercises.exercise.equalsExp(db.exercises.name)),
+            db.planExercises.exerciseId.equalsExp(db.exercises.id),
       ),
     ])
     ..addColumns(db.planExercises.$columns);

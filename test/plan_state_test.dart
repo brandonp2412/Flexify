@@ -1,6 +1,8 @@
 import 'package:drift/drift.dart';
+import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/plan_queries.dart';
+import 'package:flexify/plan/workout_sessions.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'mock_tests.dart';
@@ -11,90 +13,98 @@ void main() {
     db = testDb();
   });
 
-  test('getGymCounts only counts sets from the current calendar day', () async {
+  test(
+    'plan runtime identity comes from exercise_id, not compatibility text',
+    () async {
+      final planId = await db.plans.insertOne(planFixture());
+      final exercise = await ensureExerciseFixture(db, 'Bench press');
+      await db.planExercises.insertOne(
+        planExerciseFixture(
+          planId: planId,
+          exercise: 'stale legacy name',
+          exerciseId: exercise.id,
+        ),
+      );
+      final workout = await resumeOrStartWorkout(db, planId);
+      await db.exerciseSets.insertOne(
+        ExerciseSetsCompanion.insert(
+          exerciseId: exercise.id,
+          workoutId: Value(workout.id),
+          timestamp: testNow,
+          reps: const Value(5),
+          loadKg: const Value(100),
+        ),
+      );
+
+      final counts = await getGymCounts(planId, workout.id);
+
+      expect(counts, hasLength(1));
+      expect(counts.single.exerciseId, exercise.id);
+      expect(counts.single.name, 'Bench press');
+      expect(counts.single.count, 1);
+    },
+  );
+
+  test('session counts are isolated to the actual workout', () async {
     final planId = await db.plans.insertOne(planFixture());
+    final exercise = await ensureExerciseFixture(db, 'Bench press');
     await db.planExercises.insertOne(
-      planExerciseFixture(planId: planId, exercise: 'Bench press'),
-    );
-
-    final now = DateTime.now();
-    final startOfToday = DateTime(now.year, now.month, now.day);
-    final lateLastNight = startOfToday.subtract(const Duration(hours: 1));
-
-    await db.gymSets.insertOne(
-      gymSetFixture('Bench press', weight: 100, created: now, planId: planId),
-    );
-    await db.gymSets.insertOne(
-      gymSetFixture(
-        'Bench press',
-        weight: 100,
-        created: lateLastNight,
+      planExerciseFixture(
         planId: planId,
+        exercise: exercise.name,
+        exerciseId: exercise.id,
       ),
     );
-    await db.gymSets.insertOne(
-      gymSetFixture(
-        'Bench press',
-        weight: 100,
-        created: now,
-        planId: planId,
-        hidden: true,
+    final first = await db.workouts.insertReturning(
+      WorkoutsCompanion.insert(
+        planId: Value(planId),
+        startedAt: testNow.subtract(const Duration(hours: 2)),
+        endedAt: Value(testNow.subtract(const Duration(hours: 1))),
       ),
     );
-    await db.gymSets.insertOne(
-      gymSetFixture('Bench press', weight: 100, created: now),
-    );
+    final active = await resumeOrStartWorkout(db, planId, now: testNow);
+    await db.exerciseSets.insertAll([
+      ExerciseSetsCompanion.insert(
+        exerciseId: exercise.id,
+        workoutId: Value(first.id),
+        timestamp: first.startedAt,
+        reps: const Value(5),
+      ),
+      ExerciseSetsCompanion.insert(
+        exerciseId: exercise.id,
+        workoutId: Value(active.id),
+        timestamp: active.startedAt,
+        reps: const Value(6),
+      ),
+    ]);
 
-    final counts = await getGymCounts(planId);
+    final counts = await getGymCounts(planId, active.id);
 
-    expect(counts, hasLength(1));
-    expect(counts.single.name, 'Bench press');
     expect(counts.single.count, 1);
   });
 
   test(
-    'setExercises keeps enabled plan order before available exercises',
+    'loadPlanExerciseDrafts matches an existing plan row by exercise_id',
     () async {
-      await db.planExercises.deleteAll();
-      await db.plans.deleteAll();
-      await db.gymSets.deleteAll();
-
-      final planId = await db.plans.insertOne(
-        planFixture(id: 1, title: 'Push day'),
+      final planId = await db.plans.insertOne(planFixture(title: 'Push'));
+      final exercise = await ensureExerciseFixture(db, 'Stable press');
+      await db.planExercises.insertOne(
+        planExerciseFixture(
+          planId: planId,
+          exercise: 'old renamed text',
+          exerciseId: exercise.id,
+        ),
       );
-      final plan = await (db.plans.select()..where((p) => p.id.equals(planId)))
-          .getSingle();
 
-      await db.gymSets.insertAll([
-        gymSetFixture('Arnold press'),
-        gymSetFixture('Back extension'),
-        gymSetFixture('Barbell biceps curl'),
-      ]);
-      await db.planExercises.insertAll([
-        planExerciseFixture(
-          planId: planId,
-          exercise: 'Arnold press',
-          sequence: 1,
-        ),
-        planExerciseFixture(
-          planId: planId,
-          exercise: 'Back extension',
-          sequence: 0,
-        ),
-      ]);
+      final drafts = await loadPlanExerciseDrafts(
+        PlansCompanion(id: Value(planId)),
+      );
 
-      final exercises = await loadPlanExerciseDrafts(plan.toCompanion(false));
-
-      expect(exercises.map((exercise) => exercise.exercise.value), [
-        'Back extension',
-        'Arnold press',
-        'Barbell biceps curl',
-      ]);
-      expect(exercises.map((exercise) => exercise.enabled.value), [
-        true,
-        true,
-        false,
-      ]);
+      final draft = drafts.singleWhere(
+        (candidate) => candidate.exerciseId.value == exercise.id,
+      );
+      expect(draft.enabled.value, isTrue);
+      expect(draft.exercise.value, exercise.name);
     },
   );
 }

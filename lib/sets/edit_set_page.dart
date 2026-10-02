@@ -12,6 +12,7 @@ import 'package:flexify/database/gym_sets.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/logging.dart';
 import 'package:flexify/main.dart';
+import 'package:flexify/plan/workout_sessions.dart';
 import 'package:flexify/settings/category_management_page.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/stepper_field.dart';
@@ -157,7 +158,10 @@ class _EditSetPageState extends State<EditSetPage> {
               icon: const Icon(Icons.delete),
               onPressed: () async {
                 Navigator.pop(dialogContext);
-                await db.delete(db.gymSets).delete(widget.gymSet);
+                await db.transaction(() async {
+                  await deleteExerciseSetMirror(db, widget.gymSet);
+                  await db.delete(db.gymSets).delete(widget.gymSet);
+                });
                 if (mounted) Navigator.pop(context);
               },
             ),
@@ -683,8 +687,9 @@ class _EditSetPageState extends State<EditSetPage> {
     );
 
     if (_category != null) await createCategory(_category!);
+    Exercise? exerciseDefinition;
     if (_name != 'Weight') {
-      await syncExerciseDefinition(
+      exerciseDefinition = await syncExerciseDefinition(
         name: _name,
         cardio: _cardio,
         displayUnit: _unit,
@@ -699,14 +704,32 @@ class _EditSetPageState extends State<EditSetPage> {
     final messages = positiveReinforcementMessages(context.l10n);
 
     if (widget.gymSet.id > 0) {
-      await db.update(db.gymSets).replace(gymSet);
+      await db.transaction(() async {
+        await db.update(db.gymSets).replace(gymSet);
+        if (exerciseDefinition != null) {
+          await updateExerciseSetMirror(
+            db,
+            originalGymSet: widget.gymSet,
+            gymSet: gymSet,
+            exerciseId: exerciseDefinition.id,
+          );
+        }
+      });
       if (!mounted) return;
       talker.info('Updated workout set');
       return Navigator.of(context).pop();
     }
 
-    var insert = gymSet.toCompanion(false).copyWith(id: const Value.absent());
-    await db.into(db.gymSets).insert(insert);
+    final insert = gymSet.toCompanion(false).copyWith(id: const Value.absent());
+    final inserted = await db.into(db.gymSets).insertReturning(insert);
+    if (exerciseDefinition != null) {
+      await insertExerciseSetMirror(
+        db,
+        gymSet: inserted,
+        exerciseId: exerciseDefinition.id,
+        workoutId: null,
+      );
+    }
     talker.info('Created workout set');
 
     if (settings.notifications) {
