@@ -20,6 +20,42 @@ import 'package:provider/provider.dart';
 final rootScaffoldMessenger = GlobalKey<ScaffoldMessengerState>();
 String? _lastSyncedBackupLocale;
 
+class _NoAnimationPageTransitionsBuilder extends PageTransitionsBuilder {
+  const _NoAnimationPageTransitionsBuilder();
+
+  @override
+  Widget buildTransitions<T>(
+    PageRoute<T> route,
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) => child;
+}
+
+PageTransitionsTheme _pageTransitionsTheme() {
+  final desktopPlatform =
+      !kIsWeb &&
+      {
+        TargetPlatform.linux,
+        TargetPlatform.macOS,
+        TargetPlatform.windows,
+      }.contains(defaultTargetPlatform);
+  if (!desktopPlatform) return const PageTransitionsTheme();
+
+  const noAnimation = _NoAnimationPageTransitionsBuilder();
+  return const PageTransitionsTheme(
+    builders: {
+      TargetPlatform.android: noAnimation,
+      TargetPlatform.fuchsia: noAnimation,
+      TargetPlatform.iOS: noAnimation,
+      TargetPlatform.linux: noAnimation,
+      TargetPlatform.macOS: noAnimation,
+      TargetPlatform.windows: noAnimation,
+    },
+  );
+}
+
 /// Gives touch input the same tap-outside behavior Flutter provides for
 /// mouse input: tapping away from an editable field releases its focus.
 class DismissKeyboardOnTapOutside extends StatelessWidget {
@@ -241,6 +277,7 @@ class App extends StatelessWidget {
             fontFamily: 'Manrope',
             useMaterial3: true,
             inputDecorationTheme: _inputDecorationTheme(inputStyle),
+            pageTransitionsTheme: _pageTransitionsTheme(),
           ),
           darkTheme: ThemeData(
             colorScheme: (colors ? darkDynamic : _darkScheme)?.copyWith(
@@ -249,6 +286,7 @@ class App extends StatelessWidget {
             fontFamily: 'Manrope',
             useMaterial3: true,
             inputDecorationTheme: _inputDecorationTheme(inputStyle),
+            pageTransitionsTheme: _pageTransitionsTheme(),
           ),
           themeMode: mode,
           home: HomePage(),

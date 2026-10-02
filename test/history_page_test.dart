@@ -1,4 +1,5 @@
 import 'package:flexify/sets/history_page.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -10,9 +11,14 @@ import 'package:drift/drift.dart';
 
 Future<void> pumpHistoryPage(
   WidgetTester tester,
-  FlexifyTestHarness harness,
-) async {
-  await harness.pump(tester, HistoryPage(tabController: MockTabController()));
+  FlexifyTestHarness harness, {
+  Size? surfaceSize,
+}) async {
+  await harness.pump(
+    tester,
+    HistoryPage(tabController: MockTabController()),
+    surfaceSize: surfaceSize,
+  );
   await tester.pumpAndSettle();
 }
 
@@ -107,6 +113,34 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Settings'), findsOne);
+  });
+
+  testWidgets('HistoryPage exposes desktop row actions on secondary click', (
+    WidgetTester tester,
+  ) async {
+    final harness = await FlexifyTestHarness.create();
+    tester.view.devicePixelRatio = 1;
+    tester.view.physicalSize = const Size(1200, 800);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    addTearDown(tester.view.resetPhysicalSize);
+    await insertPerformedSetFixture(
+      harness.database,
+      'Desktop row',
+      reps: 5,
+      weight: 90,
+    );
+
+    await pumpHistoryPage(tester, harness, surfaceSize: const Size(1200, 800));
+    final gesture = await tester.startGesture(
+      tester.getCenter(find.text('5 x 90 kg')),
+      kind: PointerDeviceKind.mouse,
+      buttons: kSecondaryMouseButton,
+    );
+    await gesture.up();
+    await tester.pumpAndSettle();
+
+    expect(find.text('Edit'), findsOneWidget);
+    expect(find.text('Delete'), findsOneWidget);
   });
 
   testWidgets('HistoryPage selects', (WidgetTester tester) async {

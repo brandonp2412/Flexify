@@ -231,14 +231,18 @@ class _PlanTileState extends State<PlanTile> {
             ),
           );
         },
-        onLongPress: () => widget.onSelect(widget.plan.id),
+        onLongPress: desktop ? null : () => widget.onSelect(widget.plan.id),
       ),
     );
 
     if (!desktop) return tile;
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
-      child: tile,
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onSecondaryTapDown: (_) => widget.onSelect(widget.plan.id),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
+        child: tile,
+      ),
     );
   }
 

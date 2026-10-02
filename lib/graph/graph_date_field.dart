@@ -1,9 +1,11 @@
 import 'package:flexify/l10n/l10n.dart';
+import 'package:flexify/responsive.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
 
 /// A tappable filled control that displays a labelled date, showing the
-/// formatted value or a placeholder hint. Long-press clears the date.
+/// formatted value or a placeholder hint. Mobile can long-press to clear;
+/// desktop always exposes a clear button when a date is set.
 ///
 /// Used by graph controls to pick a start/stop date range.
 class GraphDateField extends StatelessWidget {
@@ -31,11 +33,12 @@ class GraphDateField extends StatelessWidget {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final hasValue = value != null;
+    final desktop = isDesktopLayout(context);
 
     return InkWell(
       borderRadius: BorderRadius.circular(12),
       onTap: onTap,
-      onLongPress: onClear,
+      onLongPress: desktop ? null : onClear,
       child: Container(
         padding: EdgeInsets.symmetric(
           horizontal: compact ? 10 : 12,
@@ -81,7 +84,7 @@ class GraphDateField extends StatelessWidget {
                 ],
               ),
             ),
-            if (showClearButton && hasValue) ...[
+            if ((showClearButton || desktop) && hasValue) ...[
               const SizedBox(width: 4),
               IconButton(
                 visualDensity: VisualDensity.compact,

@@ -4,7 +4,9 @@ import 'package:flexify/app_search.dart';
 import 'package:flexify/bottom_nav.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
+import 'package:flexify/database/performed_sets.dart';
 import 'package:flexify/l10n/l10n.dart';
+import 'package:flexify/main.dart';
 import 'package:flexify/responsive.dart';
 import 'package:flexify/sets/edit_set_page.dart';
 import 'package:flexify/settings/settings_state.dart';
@@ -12,6 +14,8 @@ import 'package:flexify/utils.dart';
 import 'package:flutter/foundation.dart' show listEquals;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+enum _HistoryContextAction { edit, delete }
 
 class HistoryList extends StatefulWidget {
   final List<GymSet> sets;
@@ -36,6 +40,66 @@ class HistoryList extends StatefulWidget {
 class _HistoryListState extends State<HistoryList> {
   bool _goingNext = false;
   List<GymSet> _current = [];
+
+  Future<void> _showContextMenu(
+    BuildContext context,
+    TapDownDetails details,
+    GymSet gymSet,
+  ) async {
+    final action = await showDesktopContextMenu<_HistoryContextAction>(
+      context,
+      details.globalPosition,
+      [
+        PopupMenuItem(
+          value: _HistoryContextAction.edit,
+          child: ListTile(
+            leading: const Icon(Icons.edit_outlined),
+            title: Text(context.l10n.actionEdit),
+          ),
+        ),
+        PopupMenuItem(
+          value: _HistoryContextAction.delete,
+          child: ListTile(
+            leading: const Icon(Icons.delete_outline),
+            title: Text(context.l10n.actionDelete),
+          ),
+        ),
+      ],
+    );
+    if (!context.mounted) return;
+
+    switch (action) {
+      case _HistoryContextAction.edit:
+        await Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => EditSetPage(gymSet: gymSet)),
+        );
+        break;
+      case _HistoryContextAction.delete:
+        final confirmed = await showDialog<bool>(
+          context: context,
+          builder: (dialogContext) => AlertDialog(
+            title: Text(context.l10n.confirmDelete),
+            content: Text(context.l10n.deleteSetConfirmation(gymSet.name)),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(dialogContext, false),
+                child: Text(context.l10n.actionCancel),
+              ),
+              FilledButton(
+                onPressed: () => Navigator.pop(dialogContext, true),
+                child: Text(context.l10n.actionDelete),
+              ),
+            ],
+          ),
+        );
+        if (confirmed == true) {
+          await deletePerformedSets(db, [gymSet.id]);
+        }
+        break;
+      case null:
+        break;
+    }
+  }
 
   @override
   void initState() {
@@ -200,7 +264,7 @@ class _HistoryListState extends State<HistoryList> {
                     context,
                   ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w600),
                 ),
-                onLongPress: () => widget.onSelect(gymSet.id),
+                onLongPress: desktop ? null : () => widget.onSelect(gymSet.id),
                 onTap: () {
                   if (widget.selected.isNotEmpty) {
                     widget.onSelect(gymSet.id);
@@ -216,12 +280,18 @@ class _HistoryListState extends State<HistoryList> {
             );
             if (!desktop) return tile;
             return ResponsiveContent(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 5,
+              maxWidth: desktopDataContentMaxWidth,
+              child: GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onSecondaryTapDown: (details) =>
+                    _showContextMenu(context, details, gymSet),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 5,
+                  ),
+                  child: tile,
                 ),
-                child: tile,
               ),
             );
           },

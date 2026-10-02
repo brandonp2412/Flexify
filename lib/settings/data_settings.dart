@@ -10,6 +10,7 @@ import 'package:flexify/import_data.dart';
 import 'package:flexify/l10n/generated/app_localizations.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
+import 'package:flexify/responsive.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -105,7 +106,12 @@ List<Widget> getDataSettings(
         Platform.isAndroid)
       ListTile(
         key: const Key('automaticBackupTile'),
-        title: Text(l10n.automaticBackup, textAlign: TextAlign.center),
+        title: Text(
+          l10n.automaticBackup,
+          textAlign: isDesktopLayout(context)
+              ? TextAlign.start
+              : TextAlign.center,
+        ),
         leading: settings.value.automaticBackups
             ? const Icon(Icons.timer)
             : const Icon(Icons.timer_outlined),
@@ -120,10 +126,17 @@ List<Widget> getDataSettings(
         !kIsWeb &&
         Platform.isAndroid)
       ListTile(
-        title: Text(l10n.appPermissions, textAlign: TextAlign.center),
+        title: Text(
+          l10n.appPermissions,
+          textAlign: isDesktopLayout(context)
+              ? TextAlign.start
+              : TextAlign.center,
+        ),
         subtitle: Text(
           l10n.appPermissionsDescription,
-          textAlign: TextAlign.center,
+          textAlign: isDesktopLayout(context)
+              ? TextAlign.start
+              : TextAlign.center,
         ),
         leading: const Icon(Icons.admin_panel_settings_outlined),
         onTap: () => showAppPermissionsDialog(context),
@@ -154,8 +167,7 @@ class DataSettings extends StatelessWidget {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(title: Text(context.l10n.dataManagement)),
-      body: ListView(
-        padding: const EdgeInsets.only(bottom: 116),
+      body: ResponsiveSettingsList(
         children: getDataSettings('', settings, context),
       ),
     );

@@ -7,6 +7,7 @@ import 'package:flexify/database/body_weight_repository.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
+import 'package:flexify/responsive.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
@@ -113,9 +114,11 @@ class _WeightPageState extends State<WeightPage> {
                             message: context.l10n.longPressToDelete,
                             child: GestureDetector(
                               onTap: () => pick(),
-                              onLongPress: () => setState(() {
-                                _image = null;
-                              }),
+                              onLongPress: isDesktopLayout(context)
+                                  ? null
+                                  : () => setState(() {
+                                      _image = null;
+                                    }),
                               child: Image.file(
                                 File(_image!),
                                 cacheWidth: 400,
@@ -128,6 +131,14 @@ class _WeightPageState extends State<WeightPage> {
                               ),
                             ),
                           ),
+                          if (isDesktopLayout(context))
+                            TextButton.icon(
+                              onPressed: () => setState(() {
+                                _image = null;
+                              }),
+                              icon: const Icon(Icons.delete_outline),
+                              label: Text(context.l10n.actionRemove),
+                            ),
                         ],
                       ],
                     ),

@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:flexify/bottom_nav.dart';
+import 'package:flexify/graph/graph_tile.dart';
 import 'package:flexify/graph/graphs_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -100,6 +101,33 @@ void main() {
     expect(find.text('Data points'), findsOne);
     expect(find.text('Curve line graphs'), findsOne);
     expect(tester.takeException(), null);
+  });
+
+  testWidgets('GraphsPage uses a desktop grid for exercise summaries', (
+    WidgetTester tester,
+  ) async {
+    final harness = await FlexifyTestHarness.create();
+    tester.view.devicePixelRatio = 1;
+    tester.view.physicalSize = const Size(1400, 900);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    addTearDown(tester.view.resetPhysicalSize);
+    await harness.database.settings.update().write(
+      testSettings(showGlobalProgress: false),
+    );
+    for (final name in ['Bench', 'Squat', 'Deadlift']) {
+      await insertPerformedSetFixture(
+        harness.database,
+        name,
+        reps: 5,
+        weight: 100,
+        created: DateTime.now().toLocal(),
+      );
+    }
+
+    await pumpGraphsPage(tester, harness, surfaceSize: const Size(1400, 900));
+
+    expect(find.byType(SliverGrid), findsOneWidget);
+    expect(find.byType(GraphTile), findsWidgets);
   });
 
   testWidgets('GraphsPage settings', (WidgetTester tester) async {

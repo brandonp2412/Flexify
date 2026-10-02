@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 const double desktopBreakpoint = 900;
 const double desktopContentMaxWidth = 1040;
 const double desktopWideContentMaxWidth = 1240;
+const double desktopDataContentMaxWidth = 1440;
 
 /// Whether the current window should use Flexify's desktop layout.
 bool isDesktopLayout(BuildContext context) =>
@@ -75,4 +76,79 @@ class DesktopSurface extends StatelessWidget {
       ),
     );
   }
+}
+
+/// Presents settings as a compact two-column card surface on desktop while
+/// preserving the existing mobile list layout.
+class ResponsiveSettingsList extends StatelessWidget {
+  final List<Widget> children;
+  final double maxWidth;
+
+  const ResponsiveSettingsList({
+    super.key,
+    required this.children,
+    this.maxWidth = desktopWideContentMaxWidth,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    if (!isDesktopLayout(context)) {
+      return ListView(
+        padding: const EdgeInsets.only(bottom: 116),
+        children: children,
+      );
+    }
+
+    final colors = Theme.of(context).colorScheme;
+    return ResponsiveContent(
+      maxWidth: maxWidth,
+      desktopPadding: const EdgeInsets.fromLTRB(32, 12, 32, 32),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          const gap = 16.0;
+          final tileWidth = (constraints.maxWidth - gap) / 2;
+          return SingleChildScrollView(
+            padding: const EdgeInsets.only(bottom: 24),
+            child: Wrap(
+              spacing: gap,
+              runSpacing: gap,
+              children: children
+                  .map(
+                    (child) => SizedBox(
+                      width: tileWidth,
+                      child: Card(
+                        margin: EdgeInsets.zero,
+                        color: colors.surfaceContainerLow,
+                        clipBehavior: Clip.antiAlias,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 4),
+                          child: child,
+                        ),
+                      ),
+                    ),
+                  )
+                  .toList(),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+/// Shows a native-feeling popup menu at a desktop secondary-click position.
+Future<T?> showDesktopContextMenu<T>(
+  BuildContext context,
+  Offset globalPosition,
+  List<PopupMenuEntry<T>> items,
+) {
+  final overlay = Overlay.of(context).context.findRenderObject()! as RenderBox;
+  return showMenu<T>(
+    context: context,
+    position: RelativeRect.fromRect(
+      globalPosition & const Size(1, 1),
+      Offset.zero & overlay.size,
+    ),
+    items: items,
+  );
 }

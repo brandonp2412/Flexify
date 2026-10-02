@@ -82,7 +82,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       final tab = target == 'history' ? 'HistoryPage' : 'TimerPage';
       final index = tabs.indexOf(tab);
       if (index >= 0 && index < _controller.length) {
-        _controller.animateTo(index);
+        if (isDesktopLayout(context)) {
+          _controller.index = index;
+        } else {
+          _controller.animateTo(index);
+        }
       } else if (target == 'timer') {
         await navigator.push(
           MaterialPageRoute(builder: (context) => const TimerPage()),
@@ -101,7 +105,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
     final plansIndex = tabs.indexOf('PlansPage');
     if (plansIndex >= 0 && plansIndex < _controller.length) {
-      _controller.animateTo(plansIndex);
+      if (isDesktopLayout(context)) {
+        _controller.index = plansIndex;
+      } else {
+        _controller.animateTo(plansIndex);
+      }
       await WidgetsBinding.instance.endOfFrame;
       if (!mounted) return;
 
@@ -214,7 +222,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       children: [
         TabBarView(
           controller: _controller,
-          physics: scrollableTabs
+          physics: desktop
+              ? const NeverScrollableScrollPhysics()
+              : scrollableTabs
               ? const AlwaysScrollableScrollPhysics()
               : const NeverScrollableScrollPhysics(),
           children: tabs.map((tab) {
@@ -296,7 +306,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                             0,
                             tabs.length - 1,
                           ),
-                          onDestinationSelected: _controller.animateTo,
+                          onDestinationSelected: (index) {
+                            _controller.index = index;
+                          },
                           leading: Padding(
                             padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
                             child: Row(
@@ -321,7 +333,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                   selectedIcon: Icon(BottomNav.iconForTab(tab)),
                                   label: GestureDetector(
                                     key: Key(tab),
-                                    onLongPress: () => hideTab(context, tab),
+                                    onSecondaryTapDown: (_) =>
+                                        hideTab(context, tab),
                                     child: Text(
                                       BottomNav.labelForTab(context, tab),
                                     ),

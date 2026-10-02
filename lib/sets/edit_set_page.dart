@@ -13,6 +13,7 @@ import 'package:flexify/database/performed_sets.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/logging.dart';
 import 'package:flexify/main.dart';
+import 'package:flexify/responsive.dart';
 import 'package:flexify/settings/category_management_page.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/stepper_field.dart';
@@ -446,6 +447,7 @@ class _EditSetPageState extends State<EditSetPage> {
   Widget dateSelector() {
     return Selector<SettingsState, String>(
       builder: (context, longDateFormat, child) => ListTile(
+        contentPadding: EdgeInsets.zero,
         title: Text(context.l10n.createdDate),
         subtitle: Text(
           longDateFormat == 'timeago'
@@ -486,9 +488,11 @@ class _EditSetPageState extends State<EditSetPage> {
                   message: context.l10n.longPressToDelete,
                   child: GestureDetector(
                     onTap: () => pick(),
-                    onLongPress: () => setState(() {
-                      _image = null;
-                    }),
+                    onLongPress: isDesktopLayout(context)
+                        ? null
+                        : () => setState(() {
+                            _image = null;
+                          }),
                     child: Image.file(
                       File(_image!),
                       cacheWidth: 400,
@@ -501,6 +505,14 @@ class _EditSetPageState extends State<EditSetPage> {
                     ),
                   ),
                 ),
+                if (isDesktopLayout(context))
+                  TextButton.icon(
+                    onPressed: () => setState(() {
+                      _image = null;
+                    }),
+                    icon: const Icon(Icons.delete_outline),
+                    label: Text(context.l10n.actionRemove),
+                  ),
               ],
             ],
           ),

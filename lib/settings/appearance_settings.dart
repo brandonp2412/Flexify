@@ -6,6 +6,7 @@ import 'package:flexify/graph/flex_line.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/l10n/locale_preferences.dart';
 import 'package:flexify/main.dart';
+import 'package:flexify/responsive.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
@@ -37,10 +38,17 @@ List<Widget> getAppearanceSettings(
           children: [
             ListTile(
               leading: const Icon(Icons.language_rounded),
-              title: Text(l10n.settingsLanguage, textAlign: TextAlign.center),
+              title: Text(
+                l10n.settingsLanguage,
+                textAlign: isDesktopLayout(context)
+                    ? TextAlign.start
+                    : TextAlign.center,
+              ),
               subtitle: Text(
                 l10n.settingsLanguageDescription,
-                textAlign: TextAlign.center,
+                textAlign: isDesktopLayout(context)
+                    ? TextAlign.start
+                    : TextAlign.center,
               ),
             ),
             DropdownButtonFormField<String>(
@@ -115,7 +123,12 @@ List<Widget> getAppearanceSettings(
           leading: settings.value.themeMode == 'ThemeMode.amoled'
               ? const Icon(Icons.contrast)
               : const Icon(Icons.contrast_outlined),
-          title: Text(l10n.pureBlackAmoled, textAlign: TextAlign.center),
+          title: Text(
+            l10n.pureBlackAmoled,
+            textAlign: isDesktopLayout(context)
+                ? TextAlign.start
+                : TextAlign.center,
+          ),
           onTap: () => db.settings.update().write(
             SettingsCompanion(
               themeMode: Value(
@@ -141,7 +154,12 @@ List<Widget> getAppearanceSettings(
         child: Tooltip(
           message: l10n.systemColorSchemeDescription,
           child: ListTile(
-            title: Text(l10n.systemColorScheme, textAlign: TextAlign.center),
+            title: Text(
+              l10n.systemColorScheme,
+              textAlign: isDesktopLayout(context)
+                  ? TextAlign.start
+                  : TextAlign.center,
+            ),
             leading: settings.value.systemColors
                 ? const Icon(Icons.color_lens)
                 : const Icon(Icons.color_lens_outlined),
@@ -163,7 +181,12 @@ List<Widget> getAppearanceSettings(
       Tooltip(
         message: l10n.showImagesDescription,
         child: ListTile(
-          title: Text(l10n.showImages, textAlign: TextAlign.center),
+          title: Text(
+            l10n.showImages,
+            textAlign: isDesktopLayout(context)
+                ? TextAlign.start
+                : TextAlign.center,
+          ),
           leading: settings.value.showImages
               ? const Icon(Icons.image)
               : const Icon(Icons.image_outlined),
@@ -182,7 +205,12 @@ List<Widget> getAppearanceSettings(
       Tooltip(
         message: l10n.showGlobalProgressDescription,
         child: ListTile(
-          title: Text(l10n.showGlobalProgress, textAlign: TextAlign.center),
+          title: Text(
+            l10n.showGlobalProgress,
+            textAlign: isDesktopLayout(context)
+                ? TextAlign.start
+                : TextAlign.center,
+          ),
           leading: settings.value.showGlobalProgress
               ? const Icon(Icons.public)
               : const Icon(Icons.public_outlined),
@@ -203,7 +231,12 @@ List<Widget> getAppearanceSettings(
       Tooltip(
         message: l10n.peekGraphDescription,
         child: ListTile(
-          title: Text(l10n.peekGraph, textAlign: TextAlign.center),
+          title: Text(
+            l10n.peekGraph,
+            textAlign: isDesktopLayout(context)
+                ? TextAlign.start
+                : TextAlign.center,
+          ),
           leading: settings.value.peekGraph
               ? const Icon(Icons.visibility)
               : const Icon(Icons.visibility_outlined),
@@ -222,7 +255,12 @@ List<Widget> getAppearanceSettings(
       Tooltip(
         message: l10n.curveLineGraphsDescription,
         child: ListTile(
-          title: Text(l10n.curveLineGraphs, textAlign: TextAlign.center),
+          title: Text(
+            l10n.curveLineGraphs,
+            textAlign: isDesktopLayout(context)
+                ? TextAlign.start
+                : TextAlign.center,
+          ),
           leading: settings.value.curveLines
               ? const Icon(Icons.insights)
               : const Icon(Icons.insights_outlined),
@@ -242,7 +280,9 @@ List<Widget> getAppearanceSettings(
         children: [
           Text(
             l10n.curveSmoothness,
-            textAlign: TextAlign.center,
+            textAlign: isDesktopLayout(context)
+                ? TextAlign.start
+                : TextAlign.center,
             style: Theme.of(context).textTheme.bodyLarge,
           ),
           Slider(
@@ -358,14 +398,8 @@ class AppearanceSettings extends StatelessWidget {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(title: Text(context.l10n.appearance)),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: ListView(
-          children: [
-            ...getAppearanceSettings(context, '', settings),
-            const SizedBox(height: 116),
-          ],
-        ),
+      body: ResponsiveSettingsList(
+        children: getAppearanceSettings(context, '', settings),
       ),
     );
   }

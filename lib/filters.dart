@@ -1,5 +1,6 @@
 import 'package:flexify/database/categories.dart';
 import 'package:flexify/l10n/l10n.dart';
+import 'package:flexify/responsive.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -226,10 +227,23 @@ class _FiltersState extends State<Filters> {
                     ListTile(
                       leading: const Icon(Icons.calendar_today),
                       title: Text(context.l10n.startDate),
-                      onLongPress: () {
-                        widget.setStart(null);
-                        Navigator.pop(context);
-                      },
+                      onLongPress: isDesktopLayout(context)
+                          ? null
+                          : () {
+                              widget.setStart(null);
+                              Navigator.pop(context);
+                            },
+                      trailing:
+                          isDesktopLayout(context) && widget.startDate != null
+                          ? IconButton(
+                              tooltip: context.l10n.actionClear,
+                              onPressed: () {
+                                widget.setStart(null);
+                                Navigator.pop(context);
+                              },
+                              icon: const Icon(Icons.close),
+                            )
+                          : null,
                       subtitle: Selector<SettingsState, String>(
                         selector: (p0, settings) =>
                             settings.value.shortDateFormat,
@@ -286,10 +300,23 @@ class _FiltersState extends State<Filters> {
                         if (pickedDate != null)
                           widget.setEnd(pickedDate.toLocal());
                       },
-                      onLongPress: () {
-                        widget.setEnd(null);
-                        Navigator.pop(context);
-                      },
+                      onLongPress: isDesktopLayout(context)
+                          ? null
+                          : () {
+                              widget.setEnd(null);
+                              Navigator.pop(context);
+                            },
+                      trailing:
+                          isDesktopLayout(context) && widget.endDate != null
+                          ? IconButton(
+                              tooltip: context.l10n.actionClear,
+                              onPressed: () {
+                                widget.setEnd(null);
+                                Navigator.pop(context);
+                              },
+                              icon: const Icon(Icons.close),
+                            )
+                          : null,
                     ),
                   ],
                 ),

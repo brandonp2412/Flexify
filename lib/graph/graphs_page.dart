@@ -77,7 +77,7 @@ class GraphsPageState extends State<GraphsPage>
     );
   }
 
-  void onDelete() async {
+  Future<void> onDelete() async {
     final keys = _selection.toList();
     final summaries = (await _stream.first)
         .where((summary) => keys.contains(summary.selectionKey))
@@ -122,6 +122,62 @@ class GraphsPageState extends State<GraphsPage>
       count += await db.bodyWeights.count().getSingle();
     }
     return count;
+  }
+
+  Future<void> _editGraphSummary(GraphExerciseSummary summary) async {
+    if (summary.bodyWeight) return;
+    await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => EditGraphPage(name: summary.name),
+      ),
+    );
+  }
+
+  Future<void> _deleteGraphSummary(GraphExerciseSummary summary) async {
+    final count = summary.bodyWeight
+        ? await db.bodyWeights.count().getSingle()
+        : await countGraphSets([summary.name]);
+    if (!mounted) return;
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: Text(context.l10n.confirmDelete),
+        content: Text(context.l10n.deleteGraphRecordsConfirmation(count)),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext, false),
+            child: Text(context.l10n.actionCancel),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(dialogContext, true),
+            child: Text(context.l10n.actionDelete),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true || !mounted) return;
+
+    setState(() {
+      _selection.setAll([summary.selectionKey]);
+    });
+    await onDelete();
+  }
+
+  Future<void> _hideGlobalProgressAt(Offset position) async {
+    final hide = await showDesktopContextMenu<bool>(context, position, [
+      PopupMenuItem(
+        value: true,
+        child: ListTile(
+          leading: const Icon(Icons.visibility_off_outlined),
+          title: Text(context.l10n.hideGlobalProgress),
+        ),
+      ),
+    ]);
+    if (hide == true) {
+      await db.settings.update().write(
+        const SettingsCompanion(showGlobalProgress: Value(false)),
+      );
+    }
   }
 
   LineTouchTooltipData tooltipData(
@@ -212,148 +268,161 @@ class GraphsPageState extends State<GraphsPage>
               ],
             )
           : null,
-      body: StreamBuilder(
-        stream: _stream,
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return ErrorWidget(context.l10n.unexpectedError);
-          }
-          if (!snapshot.hasData) return const SizedBox();
-
-          final terms = _search
-              .toLowerCase()
-              .split(" ")
-              .where((term) => term.isNotEmpty);
-          var stream = snapshot.data!.where((gymSet) {
-            if (_category != null) {
-              return gymSet.category == _category;
+      body: ResponsiveContent(
+        maxWidth: desktopDataContentMaxWidth,
+        desktopPadding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
+        child: StreamBuilder(
+          stream: _stream,
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              return ErrorWidget(context.l10n.unexpectedError);
             }
-            return true;
-          });
+            if (!snapshot.hasData) return const SizedBox();
 
-          for (final term in terms) {
-            stream = stream.where(
-              (gymSet) => gymSet.name.toLowerCase().contains(term),
-            );
-          }
+            final terms = _search
+                .toLowerCase()
+                .split(" ")
+                .where((term) => term.isNotEmpty);
+            var stream = snapshot.data!.where((gymSet) {
+              if (_category != null) {
+                return gymSet.category == _category;
+              }
+              return true;
+            });
 
-          final gymSets = stream.toList();
-          switch (_sort) {
-            case GraphSort.dateDesc:
-              gymSets.sort((a, b) => b.created.compareTo(a.created));
-              break;
-
-            case GraphSort.dateAsc:
-              gymSets.sort((a, b) => a.created.compareTo(b.created));
-              break;
-
-            case GraphSort.name:
-              gymSets.sort(
-                (a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()),
+            for (final term in terms) {
+              stream = stream.where(
+                (gymSet) => gymSet.name.toLowerCase().contains(term),
               );
-              break;
-          }
-          return Stack(
-            children: [
-              Positioned.fill(
-                child: Column(
-                  children: [
-                    Selector<SettingsState, bool>(
-                      selector: (p0, settingsState) =>
-                          settingsState.value.showGlobalProgress,
-                      builder: (context, showGlobal, child) {
-                        final showEmpty =
-                            gymSets.isEmpty &&
-                            !context.l10n.globalProgress.toLowerCase().contains(
-                              _search.toLowerCase(),
-                            );
-                        return Expanded(
-                          child: showEmpty
-                              ? Padding(
-                                  padding: const EdgeInsets.only(
-                                    top: appSearchHeight,
-                                  ),
-                                  child: AppEmptyState(
-                                    icon: Icons.search_off_rounded,
-                                    title: context.l10n.noGraphsFound,
-                                    message: _search.trim().isEmpty
-                                        ? context.l10n.completeSetForFirstGraph
-                                        : context.l10n
-                                              .nothingMatchesGraphSearch(
-                                                _search.trim(),
-                                              ),
-                                    actionLabel: _search.trim().isEmpty
-                                        ? context.l10n.addExercise
-                                        : context.l10n.addNamed(_search.trim()),
-                                    actionIcon: Icons.add_rounded,
-                                    onAction: () => Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            AddExercisePage(name: _search),
-                                      ),
+            }
+
+            final gymSets = stream.toList();
+            switch (_sort) {
+              case GraphSort.dateDesc:
+                gymSets.sort((a, b) => b.created.compareTo(a.created));
+                break;
+
+              case GraphSort.dateAsc:
+                gymSets.sort((a, b) => a.created.compareTo(b.created));
+                break;
+
+              case GraphSort.name:
+                gymSets.sort(
+                  (a, b) =>
+                      a.name.toLowerCase().compareTo(b.name.toLowerCase()),
+                );
+                break;
+            }
+            return Stack(
+              children: [
+                Positioned.fill(
+                  child: Column(
+                    children: [
+                      Selector<SettingsState, bool>(
+                        selector: (p0, settingsState) =>
+                            settingsState.value.showGlobalProgress,
+                        builder: (context, showGlobal, child) {
+                          final showEmpty =
+                              gymSets.isEmpty &&
+                              !context.l10n.globalProgress
+                                  .toLowerCase()
+                                  .contains(_search.toLowerCase());
+                          return Expanded(
+                            child: showEmpty
+                                ? Padding(
+                                    padding: const EdgeInsets.only(
+                                      top: appSearchHeight,
                                     ),
-                                  ),
-                                )
-                              : graphList(gymSets, showGlobal),
-                        );
+                                    child: AppEmptyState(
+                                      icon: Icons.search_off_rounded,
+                                      title: context.l10n.noGraphsFound,
+                                      message: _search.trim().isEmpty
+                                          ? context
+                                                .l10n
+                                                .completeSetForFirstGraph
+                                          : context.l10n
+                                                .nothingMatchesGraphSearch(
+                                                  _search.trim(),
+                                                ),
+                                      actionLabel: _search.trim().isEmpty
+                                          ? context.l10n.addExercise
+                                          : context.l10n.addNamed(
+                                              _search.trim(),
+                                            ),
+                                      actionIcon: Icons.add_rounded,
+                                      onAction: () =>
+                                          Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  AddExercisePage(
+                                                    name: _search,
+                                                  ),
+                                            ),
+                                          ),
+                                    ),
+                                  )
+                                : graphList(gymSets, showGlobal),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+                Positioned(
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  child: AppSearch(
+                    hintText: context.l10n.searchGraphs,
+                    controller: _selection,
+                    filter: GraphsFilters(
+                      category: _category,
+                      setCategory: (value) {
+                        setState(() {
+                          _category = value;
+                        });
+                      },
+                      sort: _sort,
+                      setSort: (value) {
+                        setState(() {
+                          _sort = value;
+                        });
                       },
                     ),
-                  ],
-                ),
-              ),
-              Positioned(
-                top: 0,
-                left: 0,
-                right: 0,
-                child: AppSearch(
-                  hintText: context.l10n.searchGraphs,
-                  controller: _selection,
-                  filter: GraphsFilters(
-                    category: _category,
-                    setCategory: (value) {
+                    onShare: onShare,
+                    onChange: (value) {
                       setState(() {
-                        _category = value;
+                        _search = value;
                       });
                     },
-                    sort: _sort,
-                    setSort: (value) {
-                      setState(() {
-                        _sort = value;
-                      });
+                    onDelete: () async => onDelete(),
+                    onSelectAll: () => setState(() {
+                      _selection.setAll(
+                        gymSets.map((gymSet) => gymSet.selectionKey),
+                      );
+                    }),
+                    onEdit: () async {
+                      final key = _selection.first;
+                      final summary = (await _stream.first).firstWhere(
+                        (entry) => entry.selectionKey == key,
+                      );
+                      if (summary.bodyWeight || !context.mounted) return;
+                      await Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              EditGraphPage(name: summary.name),
+                        ),
+                      );
                     },
-                  ),
-                  onShare: onShare,
-                  onChange: (value) {
-                    setState(() {
-                      _search = value;
-                    });
-                  },
-                  onDelete: () async => onDelete(),
-                  onSelectAll: () => setState(() {
-                    _selection.setAll(
-                      gymSets.map((gymSet) => gymSet.selectionKey),
-                    );
-                  }),
-                  onEdit: () async {
-                    final key = _selection.first;
-                    final summary = (await _stream.first).firstWhere(
-                      (entry) => entry.selectionKey == key,
-                    );
-                    if (summary.bodyWeight || !context.mounted) return;
-                    await Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => EditGraphPage(name: summary.name),
-                      ),
-                    );
-                  },
-                  confirmText: context.l10n.deleteGraphRecordsConfirmation(
-                    _total,
+                    confirmText: context.l10n.deleteGraphRecordsConfirmation(
+                      _total,
+                    ),
                   ),
                 ),
-              ),
-            ],
-          );
-        },
+              ],
+            );
+          },
+        ),
       ),
       floatingActionButton: desktop
           ? null
@@ -420,10 +489,154 @@ class GraphsPageState extends State<GraphsPage>
     );
   }
 
-  ListView graphList(
+  Widget _desktopGraphList(
     List<GraphExerciseSummary> gymSets,
     bool showGlobalProgress,
   ) {
+    final globalSearchTerms =
+        '${context.l10n.globalProgress} ${context.l10n.navGraphs}'
+            .toLowerCase();
+    final showGlobal =
+        globalSearchTerms.contains(_search.toLowerCase()) &&
+        _category == null &&
+        showGlobalProgress;
+    final settings = context.read<SettingsState>().value;
+    final showPeekGraph = settings.peekGraph && gymSets.firstOrNull != null;
+
+    Widget graphTile(GraphExerciseSummary gymSet) => GraphTile(
+      selected: _selection.selected,
+      gymSet: gymSet,
+      onSelect: (key) async {
+        setState(() {
+          _selection.toggle(key);
+        });
+        final total = await _countSelectedGraphRecords();
+        if (!mounted) return;
+        setState(() {
+          _total = total;
+        });
+      },
+      tabCtrl: widget.tabController,
+      onEdit: gymSet.bodyWeight ? null : () => _editGraphSummary(gymSet),
+      onDelete: () => _deleteGraphSummary(gymSet),
+    );
+
+    return CustomScrollView(
+      controller: _scroll,
+      slivers: [
+        const SliverToBoxAdapter(child: SizedBox(height: appSearchHeight + 8)),
+        if (showGlobal)
+          SliverPadding(
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 10),
+            sliver: SliverToBoxAdapter(
+              child: GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onSecondaryTapDown: (details) =>
+                    _hideGlobalProgressAt(details.globalPosition),
+                child: Material(
+                  color: Theme.of(context).colorScheme.surfaceContainerLow,
+                  borderRadius: BorderRadius.circular(16),
+                  clipBehavior: Clip.antiAlias,
+                  child: ListTile(
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 9,
+                    ),
+                    leading: const Icon(Icons.language),
+                    title: Text(
+                      context.l10n.globalProgress,
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    subtitle: Text(context.l10n.chartGroupedByCategory),
+                    trailing: const Icon(Icons.chevron_right_rounded),
+                    onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => GlobalProgressPage(
+                          tabController: widget.tabController,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        if (showPeekGraph)
+          SliverToBoxAdapter(
+            child: Consumer<SettingsState>(
+              builder:
+                  (
+                    BuildContext context,
+                    SettingsState settings,
+                    Widget? child,
+                  ) {
+                    if (!settings.value.peekGraph ||
+                        gymSets.firstOrNull == null) {
+                      return const SizedBox();
+                    }
+                    return FutureBuilder(
+                      builder: (context, snapshot) => snapshot.data != null
+                          ? getPeek(
+                              gymSets.first,
+                              snapshot.data!,
+                              settings.value.shortDateFormat,
+                            )
+                          : const SizedBox(),
+                      future: gymSets.first.bodyWeight
+                          ? getBodyWeightData(
+                              target: gymSets.first.unit,
+                              period: Period.day,
+                              start: null,
+                              end: null,
+                              limit: 20,
+                            )
+                          : gymSets.first.cardio
+                          ? getCardioData(
+                              name: gymSets.first.name,
+                              target: gymSets.first.unit,
+                              metric: _isWeightUnit(gymSets.first.unit)
+                                  ? CardioMetric.weight
+                                  : CardioMetric.pace,
+                            )
+                          : getStrengthData(
+                              target: gymSets.first.unit,
+                              name: gymSets.first.name,
+                              metric: StrengthMetric.bestWeight,
+                              period: Period.day,
+                              start: null,
+                              end: null,
+                              limit: 20,
+                            ),
+                    );
+                  },
+            ),
+          ),
+        SliverPadding(
+          padding: const EdgeInsets.fromLTRB(0, 4, 0, 32),
+          sliver: SliverGrid.builder(
+            gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+              maxCrossAxisExtent: 620,
+              mainAxisExtent: 94,
+              crossAxisSpacing: 4,
+              mainAxisSpacing: 2,
+            ),
+            itemCount: gymSets.length,
+            itemBuilder: (context, index) => graphTile(gymSets[index]),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget graphList(
+    List<GraphExerciseSummary> gymSets,
+    bool showGlobalProgress,
+  ) {
+    if (isDesktopLayout(context)) {
+      return _desktopGraphList(gymSets, showGlobalProgress);
+    }
     var itemCount = gymSets.length;
     final globalSearchTerms =
         '${context.l10n.globalProgress} ${context.l10n.navGraphs}'
@@ -569,6 +782,8 @@ class GraphsPageState extends State<GraphsPage>
               });
             },
             tabCtrl: widget.tabController,
+            onEdit: gymSet.bodyWeight ? null : () => _editGraphSummary(gymSet),
+            onDelete: () => _deleteGraphSummary(gymSet),
           ),
         );
       },

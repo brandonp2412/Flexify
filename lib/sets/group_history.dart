@@ -3,7 +3,10 @@ import 'dart:io';
 import 'package:flexify/app_search.dart';
 import 'package:flexify/bottom_nav.dart';
 import 'package:flexify/constants.dart';
+import 'package:flexify/database/database.dart';
+import 'package:flexify/database/performed_sets.dart';
 import 'package:flexify/l10n/l10n.dart';
+import 'package:flexify/main.dart';
 import 'package:flexify/responsive.dart';
 import 'package:flexify/sets/edit_set_page.dart';
 import 'package:flexify/sets/history_page.dart';
@@ -11,6 +14,8 @@ import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+enum _GroupedHistoryContextAction { edit, delete }
 
 class GroupHistory extends StatefulWidget {
   final List<HistoryDay> days;
@@ -33,6 +38,66 @@ class GroupHistory extends StatefulWidget {
 
 class _GroupHistoryState extends State<GroupHistory> {
   bool _goingNext = false;
+
+  Future<void> _showContextMenu(
+    BuildContext context,
+    TapDownDetails details,
+    GymSet gymSet,
+  ) async {
+    final action = await showDesktopContextMenu<_GroupedHistoryContextAction>(
+      context,
+      details.globalPosition,
+      [
+        PopupMenuItem(
+          value: _GroupedHistoryContextAction.edit,
+          child: ListTile(
+            leading: const Icon(Icons.edit_outlined),
+            title: Text(context.l10n.actionEdit),
+          ),
+        ),
+        PopupMenuItem(
+          value: _GroupedHistoryContextAction.delete,
+          child: ListTile(
+            leading: const Icon(Icons.delete_outline),
+            title: Text(context.l10n.actionDelete),
+          ),
+        ),
+      ],
+    );
+    if (!context.mounted) return;
+
+    switch (action) {
+      case _GroupedHistoryContextAction.edit:
+        await Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => EditSetPage(gymSet: gymSet)),
+        );
+        break;
+      case _GroupedHistoryContextAction.delete:
+        final confirmed = await showDialog<bool>(
+          context: context,
+          builder: (dialogContext) => AlertDialog(
+            title: Text(context.l10n.confirmDelete),
+            content: Text(context.l10n.deleteSetConfirmation(gymSet.name)),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(dialogContext, false),
+                child: Text(context.l10n.actionCancel),
+              ),
+              FilledButton(
+                onPressed: () => Navigator.pop(dialogContext, true),
+                child: Text(context.l10n.actionDelete),
+              ),
+            ],
+          ),
+        );
+        if (confirmed == true) {
+          await deletePerformedSets(db, [gymSet.id]);
+        }
+        break;
+      case null:
+        break;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -152,7 +217,7 @@ class _GroupHistoryState extends State<GroupHistory> {
             title = "$distance $unit / $minutes:$seconds $incline";
           }
 
-          return Material(
+          final tile = Material(
             color: widget.selected.contains(gymSet.id)
                 ? Theme.of(context).colorScheme.primary.withValues(alpha: .18)
                 : Colors.transparent,
@@ -167,9 +232,11 @@ class _GroupHistoryState extends State<GroupHistory> {
                       : formatDisplayDate(context, gymSet.created, dateFormat),
                 ),
               ),
-              onLongPress: () {
-                widget.onSelect(gymSet.id);
-              },
+              onLongPress: isDesktopLayout(context)
+                  ? null
+                  : () {
+                      widget.onSelect(gymSet.id);
+                    },
               onTap: () {
                 if (widget.selected.isNotEmpty)
                   widget.onSelect(gymSet.id);
@@ -181,6 +248,13 @@ class _GroupHistoryState extends State<GroupHistory> {
                   );
               },
             ),
+          );
+          if (!isDesktopLayout(context)) return tile;
+          return GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onSecondaryTapDown: (details) =>
+                _showContextMenu(context, details, gymSet),
+            child: tile,
           );
         }).toList(),
       ),

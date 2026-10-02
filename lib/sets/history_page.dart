@@ -111,170 +111,176 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
               ],
             )
           : null,
-      body: StreamBuilder(
-        stream: stream,
-        builder: (context, snapshot) {
-          return Stack(
-            children: [
-              Positioned.fill(
-                child: Column(
-                  children: [
-                    if (snapshot.data?.isEmpty == true)
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: appSearchHeight),
-                          child: AppEmptyState(
-                            icon: Icons.history_rounded,
-                            title: context.l10n.noEntriesYet,
-                            message: context.l10n.historyEmptyMessage,
-                            actionLabel: context.l10n.addSet,
-                            actionIcon: Icons.add_rounded,
-                            onAction: onAdd,
+      body: ResponsiveContent(
+        maxWidth: desktopDataContentMaxWidth,
+        desktopPadding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
+        child: StreamBuilder(
+          stream: stream,
+          builder: (context, snapshot) {
+            return Stack(
+              children: [
+                Positioned.fill(
+                  child: Column(
+                    children: [
+                      if (snapshot.data?.isEmpty == true)
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                              top: appSearchHeight,
+                            ),
+                            child: AppEmptyState(
+                              icon: Icons.history_rounded,
+                              title: context.l10n.noEntriesYet,
+                              message: context.l10n.historyEmptyMessage,
+                              actionLabel: context.l10n.addSet,
+                              actionIcon: Icons.add_rounded,
+                              onAction: onAdd,
+                            ),
                           ),
                         ),
-                      ),
-                    if (snapshot.hasError)
-                      Expanded(
-                        child: ErrorWidget(context.l10n.unexpectedError),
-                      ),
-                    if (snapshot.hasData && snapshot.data!.isNotEmpty)
-                      Expanded(
-                        child: Builder(
-                          builder: (context) {
-                            final groupHistory = context
-                                .select<SettingsState, bool>(
-                                  (settings) => settings.value.groupHistory,
-                                );
-
-                            if (groupHistory) {
-                              final historyDays = getHistoryDays(
-                                snapshot.data!,
-                              );
-                              return GroupHistory(
-                                scroll: scroll,
-                                days: historyDays,
-                                onSelect: (id) {
-                                  setState(() {
-                                    _selection.toggle(id);
-                                  });
-                                },
-                                selected: _selection.selected,
-                                onNext: () {
-                                  setState(() {
-                                    limit += 100;
-                                  });
-                                  setStream();
-                                },
-                              );
-                            } else
-                              return HistoryList(
-                                scroll: scroll,
-                                sets: snapshot.data!,
-                                onSelect: (id) {
-                                  setState(() {
-                                    _selection.toggle(id);
-                                  });
-                                },
-                                selected: _selection.selected,
-                                onNext: () {
-                                  setState(() {
-                                    limit += 100;
-                                  });
-                                  setStream();
-                                },
-                              );
-                          },
+                      if (snapshot.hasError)
+                        Expanded(
+                          child: ErrorWidget(context.l10n.unexpectedError),
                         ),
-                      ),
-                  ],
-                ),
-              ),
-              Positioned(
-                top: 0,
-                left: 0,
-                right: 0,
-                child: AppSearch(
-                  hintText: context.l10n.searchHistory,
-                  controller: _selection,
-                  filter: Filters(
-                    repsGtCtrl: repsGt,
-                    repsLtCtrl: repsLt,
-                    weightGtCtrl: weightGt,
-                    weightLtCtrl: weightLt,
-                    setStream: () {
-                      setState(() {
-                        limit = 100;
-                      });
-                      setStream();
-                    },
-                    endDate: endDate,
-                    startDate: startDate,
-                    setEnd: (value) {
-                      setState(() {
-                        endDate = value;
-                        limit = 100;
-                      });
-                      setStream();
-                    },
-                    setStart: (value) {
-                      setState(() {
-                        startDate = value;
-                        limit = 100;
-                      });
-                      setStream();
-                    },
-                    category: category,
-                    setCategory: (value) {
-                      setState(() {
-                        category = value;
-                        limit = 100;
-                      });
-                      setStream();
-                    },
+                      if (snapshot.hasData && snapshot.data!.isNotEmpty)
+                        Expanded(
+                          child: Builder(
+                            builder: (context) {
+                              final groupHistory = context
+                                  .select<SettingsState, bool>(
+                                    (settings) => settings.value.groupHistory,
+                                  );
+
+                              if (groupHistory) {
+                                final historyDays = getHistoryDays(
+                                  snapshot.data!,
+                                );
+                                return GroupHistory(
+                                  scroll: scroll,
+                                  days: historyDays,
+                                  onSelect: (id) {
+                                    setState(() {
+                                      _selection.toggle(id);
+                                    });
+                                  },
+                                  selected: _selection.selected,
+                                  onNext: () {
+                                    setState(() {
+                                      limit += 100;
+                                    });
+                                    setStream();
+                                  },
+                                );
+                              } else
+                                return HistoryList(
+                                  scroll: scroll,
+                                  sets: snapshot.data!,
+                                  onSelect: (id) {
+                                    setState(() {
+                                      _selection.toggle(id);
+                                    });
+                                  },
+                                  selected: _selection.selected,
+                                  onNext: () {
+                                    setState(() {
+                                      limit += 100;
+                                    });
+                                    setStream();
+                                  },
+                                );
+                            },
+                          ),
+                        ),
+                    ],
                   ),
-                  onShare: () async {
-                    final gymSets = snapshot.data!
-                        .where((gymSet) => _selection.contains(gymSet.id))
-                        .toList();
-                    final summaries = gymSets
-                        .map(
-                          (gymSet) =>
-                              "${formatDisplayNumber(context, gymSet.reps)}×${formatDisplayNumber(context, gymSet.weight)}${displayMeasurementUnit(context.l10n, gymSet.unit)} ${gymSet.name}",
-                        )
-                        .join(', ');
-                    await SharePlus.instance.share(
-                      ShareParams(text: context.l10n.shareWorkout(summaries)),
-                    );
-                    if (!mounted) return;
-                    setState(() {
-                      _selection.clear();
-                    });
-                  },
-                  onChange: (value) {
-                    setState(() {
-                      search = value;
-                      limit = 100;
-                    });
-                    setStream();
-                  },
-                  onDelete: () async {
-                    await deletePerformedSets(db, _selection.selected);
-                    setState(() {
-                      _selection.clear();
-                    });
-                  },
-                  onSelectAll: selectAllFiltered,
-                  onEdit: () => Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          EditSetsPage(ids: _selection.toList()),
+                ),
+                Positioned(
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  child: AppSearch(
+                    hintText: context.l10n.searchHistory,
+                    controller: _selection,
+                    filter: Filters(
+                      repsGtCtrl: repsGt,
+                      repsLtCtrl: repsLt,
+                      weightGtCtrl: weightGt,
+                      weightLtCtrl: weightLt,
+                      setStream: () {
+                        setState(() {
+                          limit = 100;
+                        });
+                        setStream();
+                      },
+                      endDate: endDate,
+                      startDate: startDate,
+                      setEnd: (value) {
+                        setState(() {
+                          endDate = value;
+                          limit = 100;
+                        });
+                        setStream();
+                      },
+                      setStart: (value) {
+                        setState(() {
+                          startDate = value;
+                          limit = 100;
+                        });
+                        setStream();
+                      },
+                      category: category,
+                      setCategory: (value) {
+                        setState(() {
+                          category = value;
+                          limit = 100;
+                        });
+                        setStream();
+                      },
+                    ),
+                    onShare: () async {
+                      final gymSets = snapshot.data!
+                          .where((gymSet) => _selection.contains(gymSet.id))
+                          .toList();
+                      final summaries = gymSets
+                          .map(
+                            (gymSet) =>
+                                "${formatDisplayNumber(context, gymSet.reps)}×${formatDisplayNumber(context, gymSet.weight)}${displayMeasurementUnit(context.l10n, gymSet.unit)} ${gymSet.name}",
+                          )
+                          .join(', ');
+                      await SharePlus.instance.share(
+                        ShareParams(text: context.l10n.shareWorkout(summaries)),
+                      );
+                      if (!mounted) return;
+                      setState(() {
+                        _selection.clear();
+                      });
+                    },
+                    onChange: (value) {
+                      setState(() {
+                        search = value;
+                        limit = 100;
+                      });
+                      setStream();
+                    },
+                    onDelete: () async {
+                      await deletePerformedSets(db, _selection.selected);
+                      setState(() {
+                        _selection.clear();
+                      });
+                    },
+                    onSelectAll: selectAllFiltered,
+                    onEdit: () => Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            EditSetsPage(ids: _selection.toList()),
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
-          );
-        },
+              ],
+            );
+          },
+        ),
       ),
       floatingActionButton: desktop
           ? null

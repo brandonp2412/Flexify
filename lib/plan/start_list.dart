@@ -202,7 +202,7 @@ class _StartListState extends State<StartList> {
               clipBehavior: Clip.antiAlias,
               child: InkWell(
                 onTap: () => tap(index, counts),
-                onLongPress: showActions,
+                onLongPress: null,
                 child: LayoutBuilder(
                   builder: (context, constraints) {
                     final showProgress = constraints.maxWidth >= 420;
@@ -253,6 +253,14 @@ class _StartListState extends State<StartList> {
                             const SizedBox(width: 10),
                           ],
                           trail,
+                          const SizedBox(width: 4),
+                          IconButton(
+                            tooltip: MaterialLocalizations.of(
+                              context,
+                            ).moreButtonTooltip,
+                            onPressed: showActions,
+                            icon: const Icon(Icons.more_horiz_rounded),
+                          ),
                         ],
                       ),
                     );

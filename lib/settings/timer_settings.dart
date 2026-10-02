@@ -6,6 +6,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
+import 'package:flexify/responsive.dart';
 import 'package:flexify/logging.dart';
 import 'package:flexify/native_timer_wrapper.dart';
 import 'package:flexify/settings/settings_state.dart';
@@ -32,7 +33,12 @@ List<Widget> getTimerSettings(
       Tooltip(
         message: l10n.restTimersDescription,
         child: ListTile(
-          title: Text(l10n.restTimers, textAlign: TextAlign.center),
+          title: Text(
+            l10n.restTimers,
+            textAlign: isDesktopLayout(context)
+                ? TextAlign.start
+                : TextAlign.center,
+          ),
           leading: settings.restTimers
               ? const Icon(Icons.timer)
               : const Icon(Icons.timer_outlined),
@@ -75,7 +81,12 @@ List<Widget> getTimerSettings(
       Tooltip(
         message: l10n.vibrateDescription,
         child: ListTile(
-          title: Text(l10n.vibrate, textAlign: TextAlign.center),
+          title: Text(
+            l10n.vibrate,
+            textAlign: isDesktopLayout(context)
+                ? TextAlign.start
+                : TextAlign.center,
+          ),
           leading: settings.vibrate
               ? const Icon(Icons.vibration)
               : const Icon(Icons.vibration_outlined),
@@ -121,7 +132,12 @@ List<Widget> getTimerSettings(
       Tooltip(
         message: l10n.enableSoundDescription,
         child: ListTile(
-          title: Text(l10n.enableSound, textAlign: TextAlign.center),
+          title: Text(
+            l10n.enableSound,
+            textAlign: isDesktopLayout(context)
+                ? TextAlign.start
+                : TextAlign.center,
+          ),
           leading: settings.enableSound
               ? const Icon(Icons.music_note)
               : const Icon(Icons.music_note_outlined),
@@ -140,7 +156,12 @@ List<Widget> getTimerSettings(
       Tooltip(
         message: l10n.keepScreenOnDescription,
         child: ListTile(
-          title: Text(l10n.keepScreenOn, textAlign: TextAlign.center),
+          title: Text(
+            l10n.keepScreenOn,
+            textAlign: isDesktopLayout(context)
+                ? TextAlign.start
+                : TextAlign.center,
+          ),
           leading: settings.keepScreenOn
               ? const Icon(Icons.light_mode)
               : const Icon(Icons.light_mode_outlined),
@@ -181,7 +202,9 @@ List<Widget> getTimerSettings(
                   const SizedBox(width: 8),
                   Text(
                     l10n.globalDefault,
-                    textAlign: TextAlign.center,
+                    textAlign: isDesktopLayout(context)
+                        ? TextAlign.start
+                        : TextAlign.center,
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                 ],
@@ -348,7 +371,9 @@ class _ProgressPositionSettingState extends State<_ProgressPositionSetting> {
               padding: const EdgeInsets.only(bottom: 4),
               child: Text(
                 context.l10n.progressBarPosition,
-                textAlign: TextAlign.center,
+                textAlign: isDesktopLayout(context)
+                    ? TextAlign.start
+                    : TextAlign.center,
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
             ),
@@ -619,8 +644,7 @@ class _TimerSettingsState extends State<TimerSettings> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(title: Text(context.l10n.timers)),
-      body: ListView(
-        padding: const EdgeInsets.only(bottom: 116),
+      body: ResponsiveSettingsList(
         children: _player.isAvailable
             ? [
                 ...getTimerSettings(
@@ -637,11 +661,15 @@ class _TimerSettingsState extends State<TimerSettings> {
                 ListTile(
                   title: Text(
                     context.l10n.timerSettings,
-                    textAlign: TextAlign.center,
+                    textAlign: isDesktopLayout(context)
+                        ? TextAlign.start
+                        : TextAlign.center,
                   ),
                   subtitle: Text(
                     context.l10n.audioFeaturesUnavailable,
-                    textAlign: TextAlign.center,
+                    textAlign: isDesktopLayout(context)
+                        ? TextAlign.start
+                        : TextAlign.center,
                   ),
                 ),
               ],

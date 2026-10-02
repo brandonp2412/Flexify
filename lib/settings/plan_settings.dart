@@ -3,6 +3,7 @@ import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
+import 'package:flexify/responsive.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
@@ -75,7 +76,9 @@ List<Widget> getPlanSettings(
                 padding: const EdgeInsets.only(bottom: 4),
                 child: Text(
                   l10n.planTrailingDisplay,
-                  textAlign: TextAlign.center,
+                  textAlign: isDesktopLayout(context)
+                      ? TextAlign.start
+                      : TextAlign.center,
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
               ),
@@ -190,12 +193,8 @@ class _PlanSettingsState extends State<PlanSettings> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(title: Text(context.l10n.navPlans)),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: ListView(
-          padding: const EdgeInsets.only(bottom: 116),
-          children: getPlanSettings(context, '', _settings, _max, _warmup),
-        ),
+      body: ResponsiveSettingsList(
+        children: getPlanSettings(context, '', _settings, _max, _warmup),
       ),
     );
   }

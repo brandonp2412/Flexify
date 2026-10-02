@@ -3,6 +3,7 @@ import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
+import 'package:flexify/responsive.dart';
 import 'package:flexify/settings/category_management_page.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
@@ -23,7 +24,12 @@ List<Widget> getWorkoutSettings(
       Tooltip(
         message: l10n.groupHistoryDescription,
         child: ListTile(
-          title: Text(l10n.groupHistory, textAlign: TextAlign.center),
+          title: Text(
+            l10n.groupHistory,
+            textAlign: isDesktopLayout(context)
+                ? TextAlign.start
+                : TextAlign.center,
+          ),
           leading: settings.groupHistory
               ? const Icon(Icons.view_agenda)
               : const Icon(Icons.view_agenda_outlined),
@@ -42,7 +48,12 @@ List<Widget> getWorkoutSettings(
       Tooltip(
         message: l10n.showUnitsDescription,
         child: ListTile(
-          title: Text(l10n.showUnits, textAlign: TextAlign.center),
+          title: Text(
+            l10n.showUnits,
+            textAlign: isDesktopLayout(context)
+                ? TextAlign.start
+                : TextAlign.center,
+          ),
           leading: settings.showUnits
               ? const Icon(Icons.scale)
               : const Icon(Icons.scale_outlined),
@@ -61,7 +72,12 @@ List<Widget> getWorkoutSettings(
       Tooltip(
         message: l10n.showBodyWeightDescription,
         child: ListTile(
-          title: Text(l10n.showBodyWeight, textAlign: TextAlign.center),
+          title: Text(
+            l10n.showBodyWeight,
+            textAlign: isDesktopLayout(context)
+                ? TextAlign.start
+                : TextAlign.center,
+          ),
           leading: settings.showBodyWeight
               ? const Icon(Icons.monitor_weight)
               : const Icon(Icons.monitor_weight_outlined),
@@ -80,7 +96,12 @@ List<Widget> getWorkoutSettings(
       Tooltip(
         message: l10n.showCategoriesDescription,
         child: ListTile(
-          title: Text(l10n.showCategories, textAlign: TextAlign.center),
+          title: Text(
+            l10n.showCategories,
+            textAlign: isDesktopLayout(context)
+                ? TextAlign.start
+                : TextAlign.center,
+          ),
           leading: settings.showCategories
               ? const Icon(Icons.category)
               : const Icon(Icons.category_outlined),
@@ -98,7 +119,12 @@ List<Widget> getWorkoutSettings(
     if (matches([l10n.manageCategories, l10n.manageCategoriesDescription]))
       ListTile(
         leading: const Icon(Icons.category),
-        title: Text(l10n.manageCategories, textAlign: TextAlign.center),
+        title: Text(
+          l10n.manageCategories,
+          textAlign: isDesktopLayout(context)
+              ? TextAlign.start
+              : TextAlign.center,
+        ),
         subtitle: Text(l10n.manageCategoriesDescription),
         onTap: () => Navigator.of(context).push(
           MaterialPageRoute(builder: (_) => const CategoryManagementPage()),
@@ -108,7 +134,12 @@ List<Widget> getWorkoutSettings(
       Tooltip(
         message: l10n.showNotesDescription,
         child: ListTile(
-          title: Text(l10n.showNotes, textAlign: TextAlign.center),
+          title: Text(
+            l10n.showNotes,
+            textAlign: isDesktopLayout(context)
+                ? TextAlign.start
+                : TextAlign.center,
+          ),
           leading: settings.showNotes
               ? const Icon(Icons.note_alt)
               : const Icon(Icons.note_alt_outlined),
@@ -130,7 +161,12 @@ List<Widget> getWorkoutSettings(
       Tooltip(
         message: l10n.positiveNotificationsDescription,
         child: ListTile(
-          title: Text(l10n.positiveReinforcement, textAlign: TextAlign.center),
+          title: Text(
+            l10n.positiveReinforcement,
+            textAlign: isDesktopLayout(context)
+                ? TextAlign.start
+                : TextAlign.center,
+          ),
           leading: const Text('😊', style: TextStyle(fontSize: 24)),
           onTap: () {
             db.settings.update().write(
@@ -150,7 +186,12 @@ List<Widget> getWorkoutSettings(
       Tooltip(
         message: l10n.repEstimationDescription,
         child: ListTile(
-          title: Text(l10n.repEstimation, textAlign: TextAlign.center),
+          title: Text(
+            l10n.repEstimation,
+            textAlign: isDesktopLayout(context)
+                ? TextAlign.start
+                : TextAlign.center,
+          ),
           leading: settings.repEstimation
               ? const Icon(Icons.repeat)
               : const Icon(Icons.repeat_outlined),
@@ -169,7 +210,12 @@ List<Widget> getWorkoutSettings(
       Tooltip(
         message: l10n.durationEstimationDescription,
         child: ListTile(
-          title: Text(l10n.durationEstimation, textAlign: TextAlign.center),
+          title: Text(
+            l10n.durationEstimation,
+            textAlign: isDesktopLayout(context)
+                ? TextAlign.start
+                : TextAlign.center,
+          ),
           leading: settings.durationEstimation
               ? const Icon(Icons.schedule)
               : const Icon(Icons.schedule_outlined),
@@ -193,7 +239,12 @@ List<Widget> getWorkoutSettings(
       Tooltip(
         message: l10n.showGraphXAxisToggleDescription,
         child: ListTile(
-          title: Text(l10n.showGraphXAxisToggle, textAlign: TextAlign.center),
+          title: Text(
+            l10n.showGraphXAxisToggle,
+            textAlign: isDesktopLayout(context)
+                ? TextAlign.start
+                : TextAlign.center,
+          ),
           leading: settings.showGraphXAxis
               ? const Icon(Icons.show_chart)
               : const Icon(Icons.show_chart_outlined),
@@ -212,7 +263,12 @@ List<Widget> getWorkoutSettings(
       Tooltip(
         message: l10n.showGraphLimitDescription,
         child: ListTile(
-          title: Text(l10n.showGraphLimit, textAlign: TextAlign.center),
+          title: Text(
+            l10n.showGraphLimit,
+            textAlign: isDesktopLayout(context)
+                ? TextAlign.start
+                : TextAlign.center,
+          ),
           leading: settings.showGraphLimit
               ? const Icon(Icons.tune)
               : const Icon(Icons.tune_outlined),
@@ -305,7 +361,12 @@ List<Widget> getWorkoutSettings(
       Tooltip(
         message: l10n.defaultTimeBasedXAxisDescription,
         child: ListTile(
-          title: Text(l10n.defaultTimeBasedXAxis, textAlign: TextAlign.center),
+          title: Text(
+            l10n.defaultTimeBasedXAxis,
+            textAlign: isDesktopLayout(context)
+                ? TextAlign.start
+                : TextAlign.center,
+          ),
           leading: settings.defaultGraphTimeBasedXAxis
               ? const Icon(Icons.timeline)
               : const Icon(Icons.timeline_outlined),
@@ -349,8 +410,7 @@ class _WorkoutSettingsState extends State<WorkoutSettings> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(title: Text(context.l10n.workouts)),
-      body: ListView(
-        padding: const EdgeInsets.only(bottom: 116),
+      body: ResponsiveSettingsList(
         children: getWorkoutSettings(context, '', _settings),
       ),
     );

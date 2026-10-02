@@ -11,12 +11,16 @@ import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+enum _GraphContextAction { edit, delete }
+
 class GraphTile extends StatelessWidget {
   final GraphExerciseSummary gymSet;
   final Set<String> selected;
   final Function(String) onSelect;
   final TabController tabCtrl;
   final bool timeBasedXAxis; // new flag to control x-axis behaviour
+  final VoidCallback? onEdit;
+  final Future<void> Function()? onDelete;
 
   const GraphTile({
     super.key,
@@ -25,6 +29,8 @@ class GraphTile extends StatelessWidget {
     required this.gymSet,
     required this.tabCtrl,
     this.timeBasedXAxis = false,
+    this.onEdit,
+    this.onDelete,
   });
 
   @override
@@ -209,16 +215,56 @@ class GraphTile extends StatelessWidget {
             ),
           );
         },
-        onLongPress: () {
-          onSelect(gymSet.selectionKey);
-        },
+        onLongPress: desktop
+            ? null
+            : () {
+                onSelect(gymSet.selectionKey);
+              },
       ),
     );
 
     if (!desktop) return tile;
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
-      child: tile,
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onSecondaryTapDown: (details) async {
+        final action = await showDesktopContextMenu<_GraphContextAction>(
+          context,
+          details.globalPosition,
+          [
+            if (onEdit != null)
+              PopupMenuItem(
+                value: _GraphContextAction.edit,
+                child: ListTile(
+                  leading: const Icon(Icons.edit_outlined),
+                  title: Text(context.l10n.actionEdit),
+                ),
+              ),
+            if (onDelete != null)
+              PopupMenuItem(
+                value: _GraphContextAction.delete,
+                child: ListTile(
+                  leading: const Icon(Icons.delete_outline),
+                  title: Text(context.l10n.actionDelete),
+                ),
+              ),
+          ],
+        );
+        if (!context.mounted) return;
+        switch (action) {
+          case _GraphContextAction.edit:
+            onEdit?.call();
+            break;
+          case _GraphContextAction.delete:
+            await onDelete?.call();
+            break;
+          case null:
+            break;
+        }
+      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
+        child: tile,
+      ),
     );
   }
 
