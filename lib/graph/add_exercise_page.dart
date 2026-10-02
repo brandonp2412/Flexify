@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:drift/drift.dart' hide Column;
@@ -21,6 +22,39 @@ class AddExercisePage extends StatefulWidget {
 }
 
 class _AddExercisePageState extends State<AddExercisePage> {
+  bool _hasUnsavedChanges = false;
+  bool _allowPop = false;
+
+  void _markDirty() {
+    if (_hasUnsavedChanges) return;
+    setState(() => _hasUnsavedChanges = true);
+  }
+
+  Future<void> _confirmDiscard(Object? result) async {
+    final discard = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog.adaptive(
+        title: Text(context.l10n.unsavedChanges),
+        content: Text(context.l10n.discardUnsavedChanges),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text(context.l10n.actionCancel),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: Text(context.l10n.actionDiscard),
+          ),
+        ],
+      ),
+    );
+    if (discard != true || !mounted) return;
+    setState(() => _allowPop = true);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) Navigator.of(context).pop(result);
+    });
+  }
+
   final TextEditingController _nameCtrl = TextEditingController();
   bool _cardio = false;
 
@@ -35,123 +69,137 @@ class _AddExercisePageState extends State<AddExercisePage> {
   void initState() {
     super.initState();
     if (widget.name != null) _nameCtrl.text = widget.name!;
+
+    _nameCtrl.addListener(_markDirty);
+    _hasUnsavedChanges = false;
   }
 
   @override
   Widget build(BuildContext context) {
     settings = context.watch<SettingsState>();
 
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: AppBar(title: Text(context.l10n.addExercise)),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _key,
-          child: ListView(
-            padding: const EdgeInsets.only(bottom: 116),
-            children: [
-              TextFormField(
-                controller: _nameCtrl,
-                decoration: InputDecoration(labelText: context.l10n.nameLabel),
-                textCapitalization: TextCapitalization.sentences,
-                autofocus: true,
-                validator: (value) => value?.isNotEmpty == true
-                    ? null
-                    : context.l10n.requiredField,
-              ),
-              const SizedBox(height: 8),
-              DropdownButtonFormField<String>(
-                key: ValueKey(_unit),
-                decoration: InputDecoration(labelText: context.l10n.unitLabel),
-                initialValue: _unit,
-                items: [
-                  DropdownMenuItem(
-                    value: 'kg',
-                    child: Text(context.l10n.kilogramsUnit),
+    return PopScope(
+      canPop: _allowPop || !_hasUnsavedChanges,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop || _allowPop || !_hasUnsavedChanges) return;
+        unawaited(_confirmDiscard(result));
+      },
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        appBar: AppBar(title: Text(context.l10n.addExercise)),
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Form(
+            key: _key,
+            child: ListView(
+              padding: const EdgeInsets.only(bottom: 116),
+              children: [
+                TextFormField(
+                  controller: _nameCtrl,
+                  decoration: InputDecoration(
+                    labelText: context.l10n.nameLabel,
                   ),
-                  DropdownMenuItem(
-                    value: 'lb',
-                    child: Text(context.l10n.poundsUnit),
-                  ),
-                  DropdownMenuItem(
-                    value: 'stone',
-                    child: Text(context.l10n.stoneUnit),
-                  ),
-                  DropdownMenuItem(
-                    value: 'km',
-                    child: Text(context.l10n.kilometersUnit),
-                  ),
-                  DropdownMenuItem(
-                    value: 'mi',
-                    child: Text(context.l10n.milesUnit),
-                  ),
-                ],
-                onChanged: (String? newValue) {
-                  setState(() {
-                    _unit = newValue!;
-                  });
-                },
-              ),
-              const SizedBox(height: 8),
-              ListTile(
-                title: Text(
-                  _cardio ? context.l10n.cardio : context.l10n.strength,
+                  textCapitalization: TextCapitalization.sentences,
+                  autofocus: true,
+                  validator: (value) => value?.isNotEmpty == true
+                      ? null
+                      : context.l10n.requiredField,
                 ),
-                leading: _cardio
-                    ? const Icon(Icons.sports_gymnastics)
-                    : const Icon(Icons.fitness_center),
-                onTap: () => _setCardio(!_cardio),
-                trailing: Switch(value: _cardio, onChanged: _setCardio),
-              ),
-              Visibility(
-                visible: settings.value.showImages,
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        TextButton.icon(
-                          onPressed: pick,
-                          label: Text(context.l10n.imageLabel),
-                          icon: const Icon(Icons.image),
-                        ),
-                        if (_image != null)
-                          TextButton.icon(
-                            onPressed: () {
-                              setState(() {
-                                _image = null;
-                              });
-                            },
-                            label: Text(context.l10n.actionDelete),
-                            icon: const Icon(Icons.delete),
-                          ),
-                      ],
+                const SizedBox(height: 8),
+                DropdownButtonFormField<String>(
+                  key: ValueKey(_unit),
+                  decoration: InputDecoration(
+                    labelText: context.l10n.unitLabel,
+                  ),
+                  initialValue: _unit,
+                  items: [
+                    DropdownMenuItem(
+                      value: 'kg',
+                      child: Text(context.l10n.kilogramsUnit),
                     ),
-                    if (_image != null) ...[
-                      const SizedBox(height: 8),
-                      Image.file(
-                        File(_image!),
-                        cacheWidth: 400,
-                        errorBuilder: (context, error, stackTrace) =>
-                            TextButton.icon(
-                              label: Text(context.l10n.imageError),
-                              icon: const Icon(Icons.error),
-                              onPressed: () => pick(),
-                            ),
-                      ),
-                    ],
+                    DropdownMenuItem(
+                      value: 'lb',
+                      child: Text(context.l10n.poundsUnit),
+                    ),
+                    DropdownMenuItem(
+                      value: 'stone',
+                      child: Text(context.l10n.stoneUnit),
+                    ),
+                    DropdownMenuItem(
+                      value: 'km',
+                      child: Text(context.l10n.kilometersUnit),
+                    ),
+                    DropdownMenuItem(
+                      value: 'mi',
+                      child: Text(context.l10n.milesUnit),
+                    ),
                   ],
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      _unit = newValue!;
+                    });
+                  },
                 ),
-              ),
-            ],
+                const SizedBox(height: 8),
+                ListTile(
+                  title: Text(
+                    _cardio ? context.l10n.cardio : context.l10n.strength,
+                  ),
+                  leading: _cardio
+                      ? const Icon(Icons.sports_gymnastics)
+                      : const Icon(Icons.fitness_center),
+                  onTap: () => _setCardio(!_cardio),
+                  trailing: Switch(value: _cardio, onChanged: _setCardio),
+                ),
+                Visibility(
+                  visible: settings.value.showImages,
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          TextButton.icon(
+                            onPressed: pick,
+                            label: Text(context.l10n.imageLabel),
+                            icon: const Icon(Icons.image),
+                          ),
+                          if (_image != null)
+                            TextButton.icon(
+                              onPressed: () {
+                                setState(() {
+                                  _image = null;
+                                });
+                              },
+                              label: Text(context.l10n.actionDelete),
+                              icon: const Icon(Icons.delete),
+                            ),
+                        ],
+                      ),
+                      if (_image != null) ...[
+                        const SizedBox(height: 8),
+                        Image.file(
+                          File(_image!),
+                          cacheWidth: 400,
+                          errorBuilder: (context, error, stackTrace) =>
+                              TextButton.icon(
+                                label: Text(context.l10n.imageError),
+                                icon: const Icon(Icons.error),
+                                onPressed: () => pick(),
+                              ),
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
-      ),
-      floatingActionButton: AnimatedFab(
-        onPressed: () => save(_unit),
-        label: Text(context.l10n.actionSave),
-        icon: const Icon(Icons.save),
+        floatingActionButton: AnimatedFab(
+          onPressed: () => save(_unit),
+          label: Text(context.l10n.actionSave),
+          icon: const Icon(Icons.save),
+        ),
       ),
     );
   }

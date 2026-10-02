@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:drift/drift.dart';
 import 'package:flexify/animated_fab.dart';
 import 'package:flexify/constants.dart';
@@ -22,6 +24,39 @@ class EditSetsPage extends StatefulWidget {
 }
 
 class _EditSetsPageState extends State<EditSetsPage> {
+  bool _hasUnsavedChanges = false;
+  bool _allowPop = false;
+
+  void _markDirty() {
+    if (_hasUnsavedChanges) return;
+    setState(() => _hasUnsavedChanges = true);
+  }
+
+  Future<void> _confirmDiscard(Object? result) async {
+    final discard = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog.adaptive(
+        title: Text(context.l10n.unsavedChanges),
+        content: Text(context.l10n.discardUnsavedChanges),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text(context.l10n.actionCancel),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: Text(context.l10n.actionDiscard),
+          ),
+        ],
+      ),
+    );
+    if (discard != true || !mounted) return;
+    setState(() => _allowPop = true);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) Navigator.of(context).pop(result);
+    });
+  }
+
   final _reps = TextEditingController();
   final _weight = TextEditingController();
   final _body = TextEditingController();
@@ -51,85 +86,213 @@ class _EditSetsPageState extends State<EditSetsPage> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        title: Text(l10n.editSets(widget.ids.length)),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.delete),
-            onPressed: () async {
-              await showDialog(
-                context: context,
-                builder: (BuildContext dialogContext) {
-                  return AlertDialog(
-                    title: Text(l10n.confirmDelete),
-                    content: Text(
-                      l10n.deleteEntriesConfirmation(widget.ids.length),
-                    ),
-                    actions: <Widget>[
-                      TextButton.icon(
-                        label: Text(l10n.actionCancel),
-                        icon: const Icon(Icons.close),
-                        onPressed: () {
-                          Navigator.pop(dialogContext);
-                        },
+    return PopScope(
+      canPop: _allowPop || !_hasUnsavedChanges,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop || _allowPop || !_hasUnsavedChanges) return;
+        unawaited(_confirmDiscard(result));
+      },
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        appBar: AppBar(
+          title: Text(l10n.editSets(widget.ids.length)),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.delete),
+              onPressed: () async {
+                await showDialog(
+                  context: context,
+                  builder: (BuildContext dialogContext) {
+                    return AlertDialog(
+                      title: Text(l10n.confirmDelete),
+                      content: Text(
+                        l10n.deleteEntriesConfirmation(widget.ids.length),
                       ),
-                      TextButton.icon(
-                        label: Text(l10n.actionDelete),
-                        icon: const Icon(Icons.delete),
-                        onPressed: () async {
-                          Navigator.pop(dialogContext);
-                          await db.gymSets.deleteWhere(
-                            (u) => u.id.isIn(widget.ids),
-                          );
-                          if (context.mounted) Navigator.pop(context);
-                        },
+                      actions: <Widget>[
+                        TextButton.icon(
+                          label: Text(l10n.actionCancel),
+                          icon: const Icon(Icons.close),
+                          onPressed: () {
+                            Navigator.pop(dialogContext);
+                          },
+                        ),
+                        TextButton.icon(
+                          label: Text(l10n.actionDelete),
+                          icon: const Icon(Icons.delete),
+                          onPressed: () async {
+                            Navigator.pop(dialogContext);
+                            await db.gymSets.deleteWhere(
+                              (u) => u.id.isIn(widget.ids),
+                            );
+                            if (context.mounted) Navigator.pop(context);
+                          },
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },
+            ),
+          ],
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Form(
+            key: _key,
+            child: ListView(
+              padding: const EdgeInsets.only(bottom: 116.0),
+              children: [
+                TextField(
+                  controller: _name,
+                  decoration: InputDecoration(
+                    labelText: l10n.nameLabel,
+                    hintText: _oldNames,
+                  ),
+                  textCapitalization: TextCapitalization.sentences,
+                ),
+                ListTile(
+                  title: Text(l10n.cardio),
+                  leading: _cardio == true
+                      ? const Icon(Icons.sports_gymnastics)
+                      : const Icon(Icons.fitness_center),
+                  contentPadding: EdgeInsets.zero,
+                  onTap: () => setState(() {
+                    _setCardio(!(_cardio ?? false));
+                  }),
+                  trailing: Switch(
+                    value: _cardio ?? false,
+                    onChanged: (value) => setState(() {
+                      _setCardio(value);
+                    }),
+                  ),
+                ),
+                if (_cardio == true) ...[
+                  if (_isWeightUnit(_unit))
+                    TextFormField(
+                      controller: _weight,
+                      decoration: InputDecoration(
+                        labelText: l10n.weightLabel,
+                        hintText: _oldWeights,
+                      ),
+                      keyboardType: const TextInputType.numberWithOptions(
+                        decimal: true,
+                      ),
+                      onTap: () => selectAll(_weight),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) return null;
+                        if (parseDisplayNumber(context, value) == null)
+                          return l10n.invalidNumber;
+                        return null;
+                      },
+                    )
+                  else
+                    TextFormField(
+                      controller: _distance,
+                      decoration: InputDecoration(
+                        labelText: l10n.distanceLabel,
+                        hintText: _oldDist,
+                      ),
+                      keyboardType: const TextInputType.numberWithOptions(
+                        decimal: true,
+                      ),
+                      onTap: () => selectAll(_distance),
+                      validator: (value) {
+                        if (value == null) return null;
+                        if (parseDisplayNumber(context, value) == null)
+                          return l10n.invalidNumber;
+                        return null;
+                      },
+                    ),
+                  const SizedBox(height: 12),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextFormField(
+                          controller: _minutes,
+                          decoration: InputDecoration(
+                            labelText: l10n.minutesLabel,
+                            hintText: _oldMin,
+                          ),
+                          keyboardType: const TextInputType.numberWithOptions(
+                            decimal: false,
+                          ),
+                          onTap: () => selectAll(_minutes),
+                          textInputAction: TextInputAction.next,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) return null;
+                            if (int.tryParse(value) == null)
+                              return l10n.invalidNumber;
+                            return null;
+                          },
+                        ),
+                      ),
+                      const SizedBox(width: 8.0),
+                      Expanded(
+                        child: TextFormField(
+                          controller: _seconds,
+                          decoration: InputDecoration(
+                            labelText: l10n.secondsLabel,
+                            hintText: _oldSec,
+                          ),
+                          keyboardType: const TextInputType.numberWithOptions(
+                            decimal: false,
+                          ),
+                          onTap: () => selectAll(_seconds),
+                          textInputAction: TextInputAction.next,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) return null;
+                            if (int.tryParse(value) == null)
+                              return l10n.invalidNumber;
+                            return null;
+                          },
+                        ),
                       ),
                     ],
-                  );
-                },
-              );
-            },
-          ),
-        ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _key,
-          child: ListView(
-            children: [
-              TextField(
-                controller: _name,
-                decoration: InputDecoration(
-                  labelText: l10n.nameLabel,
-                  hintText: _oldNames,
-                ),
-                textCapitalization: TextCapitalization.sentences,
-              ),
-              ListTile(
-                title: Text(l10n.cardio),
-                leading: _cardio == true
-                    ? const Icon(Icons.sports_gymnastics)
-                    : const Icon(Icons.fitness_center),
-                contentPadding: EdgeInsets.zero,
-                onTap: () => setState(() {
-                  _setCardio(!(_cardio ?? false));
-                }),
-                trailing: Switch(
-                  value: _cardio ?? false,
-                  onChanged: (value) => setState(() {
-                    _setCardio(value);
-                  }),
-                ),
-              ),
-              if (_cardio == true) ...[
-                if (_isWeightUnit(_unit))
+                  ),
+                  const SizedBox(height: 12),
+                  TextFormField(
+                    controller: _incline,
+                    decoration: InputDecoration(
+                      labelText: l10n.inclinePercent,
+                      hintText: _oldInc,
+                    ),
+                    keyboardType: const TextInputType.numberWithOptions(
+                      decimal: true,
+                    ),
+                    onTap: () => selectAll(_incline),
+                    validator: (value) {
+                      if (value == null) return null;
+                      if (double.tryParse(value) == null)
+                        return l10n.invalidNumber;
+                      return null;
+                    },
+                  ),
+                ],
+                if (_cardio == false || _cardio == null) ...[
+                  TextFormField(
+                    controller: _reps,
+                    decoration: InputDecoration(
+                      labelText: l10n.repsLabel,
+                      hintText: _oldReps,
+                    ),
+                    keyboardType: const TextInputType.numberWithOptions(
+                      decimal: true,
+                    ),
+                    onTap: () => selectAll(_reps),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) return null;
+                      if (parseDisplayNumber(context, value) == null)
+                        return l10n.invalidNumber;
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 12),
                   TextFormField(
                     controller: _weight,
                     decoration: InputDecoration(
-                      labelText: l10n.weightLabel,
+                      labelText: _name.text == 'Weight'
+                          ? l10n.valueLabel
+                          : l10n.weightLabel,
                       hintText: _oldWeights,
                     ),
                     keyboardType: const TextInputType.numberWithOptions(
@@ -142,249 +305,131 @@ class _EditSetsPageState extends State<EditSetsPage> {
                         return l10n.invalidNumber;
                       return null;
                     },
-                  )
-                else
-                  TextFormField(
-                    controller: _distance,
-                    decoration: InputDecoration(
-                      labelText: l10n.distanceLabel,
-                      hintText: _oldDist,
-                    ),
-                    keyboardType: const TextInputType.numberWithOptions(
-                      decimal: true,
-                    ),
-                    onTap: () => selectAll(_distance),
-                    validator: (value) {
-                      if (value == null) return null;
-                      if (parseDisplayNumber(context, value) == null)
-                        return l10n.invalidNumber;
-                      return null;
-                    },
                   ),
-                const SizedBox(height: 12),
-                Row(
-                  children: [
-                    Expanded(
+                ],
+                if (_name.text != 'Weight') const SizedBox(height: 12),
+                if (_name.text != 'Weight')
+                  Selector<SettingsState, bool>(
+                    builder: (context, showBodyWeight, child) => Visibility(
+                      visible: showBodyWeight,
                       child: TextFormField(
-                        controller: _minutes,
+                        controller: _body,
                         decoration: InputDecoration(
-                          labelText: l10n.minutesLabel,
-                          hintText: _oldMin,
+                          labelText: l10n.bodyWeightLabel,
+                          hintText: _oldBody,
                         ),
                         keyboardType: const TextInputType.numberWithOptions(
-                          decimal: false,
+                          decimal: true,
                         ),
-                        onTap: () => selectAll(_minutes),
-                        textInputAction: TextInputAction.next,
+                        onTap: () => selectAll(_body),
                         validator: (value) {
                           if (value == null || value.isEmpty) return null;
-                          if (int.tryParse(value) == null)
+                          if (parseDisplayNumber(context, value) == null)
                             return l10n.invalidNumber;
                           return null;
                         },
                       ),
                     ),
-                    const SizedBox(width: 8.0),
-                    Expanded(
-                      child: TextFormField(
-                        controller: _seconds,
-                        decoration: InputDecoration(
-                          labelText: l10n.secondsLabel,
-                          hintText: _oldSec,
-                        ),
-                        keyboardType: const TextInputType.numberWithOptions(
-                          decimal: false,
-                        ),
-                        onTap: () => selectAll(_seconds),
-                        textInputAction: TextInputAction.next,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) return null;
-                          if (int.tryParse(value) == null)
-                            return l10n.invalidNumber;
-                          return null;
-                        },
-                      ),
-                    ),
-                  ],
-                ),
+                    selector: (context, settings) =>
+                        settings.value.showBodyWeight,
+                  ),
                 const SizedBox(height: 12),
-                TextFormField(
-                  controller: _incline,
-                  decoration: InputDecoration(
-                    labelText: l10n.inclinePercent,
-                    hintText: _oldInc,
-                  ),
-                  keyboardType: const TextInputType.numberWithOptions(
-                    decimal: true,
-                  ),
-                  onTap: () => selectAll(_incline),
-                  validator: (value) {
-                    if (value == null) return null;
-                    if (double.tryParse(value) == null)
-                      return l10n.invalidNumber;
-                    return null;
-                  },
-                ),
-              ],
-              if (_cardio == false || _cardio == null) ...[
-                TextFormField(
-                  controller: _reps,
-                  decoration: InputDecoration(
-                    labelText: l10n.repsLabel,
-                    hintText: _oldReps,
-                  ),
-                  keyboardType: const TextInputType.numberWithOptions(
-                    decimal: true,
-                  ),
-                  onTap: () => selectAll(_reps),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) return null;
-                    if (parseDisplayNumber(context, value) == null)
-                      return l10n.invalidNumber;
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 12),
-                TextFormField(
-                  controller: _weight,
-                  decoration: InputDecoration(
-                    labelText: _name.text == 'Weight'
-                        ? l10n.valueLabel
-                        : l10n.weightLabel,
-                    hintText: _oldWeights,
-                  ),
-                  keyboardType: const TextInputType.numberWithOptions(
-                    decimal: true,
-                  ),
-                  onTap: () => selectAll(_weight),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) return null;
-                    if (parseDisplayNumber(context, value) == null)
-                      return l10n.invalidNumber;
-                    return null;
-                  },
-                ),
-              ],
-              if (_name.text != 'Weight') const SizedBox(height: 12),
-              if (_name.text != 'Weight')
                 Selector<SettingsState, bool>(
-                  builder: (context, showBodyWeight, child) => Visibility(
-                    visible: showBodyWeight,
-                    child: TextFormField(
-                      controller: _body,
-                      decoration: InputDecoration(
-                        labelText: l10n.bodyWeightLabel,
-                        hintText: _oldBody,
-                      ),
-                      keyboardType: const TextInputType.numberWithOptions(
-                        decimal: true,
-                      ),
-                      onTap: () => selectAll(_body),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) return null;
-                        if (parseDisplayNumber(context, value) == null)
-                          return l10n.invalidNumber;
-                        return null;
+                  builder: (context, showUnits, child) => Visibility(
+                    visible: showUnits,
+                    child: DropdownButtonFormField<String>(
+                      decoration: InputDecoration(labelText: l10n.unitLabel),
+                      initialValue: _unit,
+                      items: _getUnitItems(context),
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          _unit = newValue!;
+                        });
                       },
                     ),
                   ),
+                  selector: (context, settings) => settings.value.showUnits,
+                ),
+                const SizedBox(height: 12),
+                Selector<SettingsState, bool>(
                   selector: (context, settings) =>
-                      settings.value.showBodyWeight,
-                ),
-              const SizedBox(height: 12),
-              Selector<SettingsState, bool>(
-                builder: (context, showUnits, child) => Visibility(
-                  visible: showUnits,
-                  child: DropdownButtonFormField<String>(
-                    decoration: InputDecoration(labelText: l10n.unitLabel),
-                    initialValue: _unit,
-                    items: _getUnitItems(context),
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        _unit = newValue!;
-                      });
-                    },
-                  ),
-                ),
-                selector: (context, settings) => settings.value.showUnits,
-              ),
-              const SizedBox(height: 12),
-              Selector<SettingsState, bool>(
-                selector: (context, settings) => settings.value.showCategories,
-                builder: (context, showCategories, child) => Visibility(
-                  visible: showCategories,
-                  child: StreamBuilder<List<String>>(
-                    stream: getCategoriesStream(),
-                    builder: (context, snapshot) => Autocomplete<String>(
-                      initialValue: TextEditingValue(text: _category ?? ''),
-                      optionsBuilder: (value) =>
-                          snapshot.data
-                              ?.where(
-                                (category) => category.toLowerCase().contains(
-                                  value.text.toLowerCase(),
-                                ),
-                              )
-                              .toList() ??
-                          [],
-                      onSelected: (category) =>
-                          setState(() => _category = category),
-                      fieldViewBuilder: (context, controller, focusNode, _) =>
-                          TextFormField(
-                            controller: controller,
-                            focusNode: focusNode,
-                            decoration: InputDecoration(
-                              labelText: l10n.categoryLabel,
-                              hintText: _oldCat,
-                              helperText: l10n.categoryHelper,
-                              suffixIcon: IconButton(
-                                tooltip: l10n.manageCategories,
-                                icon: const Icon(Icons.settings),
-                                onPressed: () => Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (_) =>
-                                        const CategoryManagementPage(),
+                      settings.value.showCategories,
+                  builder: (context, showCategories, child) => Visibility(
+                    visible: showCategories,
+                    child: StreamBuilder<List<String>>(
+                      stream: getCategoriesStream(),
+                      builder: (context, snapshot) => Autocomplete<String>(
+                        initialValue: TextEditingValue(text: _category ?? ''),
+                        optionsBuilder: (value) =>
+                            snapshot.data
+                                ?.where(
+                                  (category) => category.toLowerCase().contains(
+                                    value.text.toLowerCase(),
+                                  ),
+                                )
+                                .toList() ??
+                            [],
+                        onSelected: (category) =>
+                            setState(() => _category = category),
+                        fieldViewBuilder: (context, controller, focusNode, _) =>
+                            TextFormField(
+                              controller: controller,
+                              focusNode: focusNode,
+                              decoration: InputDecoration(
+                                labelText: l10n.categoryLabel,
+                                hintText: _oldCat,
+                                helperText: l10n.categoryHelper,
+                                suffixIcon: IconButton(
+                                  tooltip: l10n.manageCategories,
+                                  icon: const Icon(Icons.settings),
+                                  onPressed: () => Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (_) =>
+                                          const CategoryManagementPage(),
+                                    ),
                                   ),
                                 ),
                               ),
+                              onChanged: (value) => setState(
+                                () => _category = value.isEmpty ? null : value,
+                              ),
                             ),
-                            onChanged: (value) => setState(
-                              () => _category = value.isEmpty ? null : value,
-                            ),
-                          ),
+                      ),
                     ),
                   ),
                 ),
-              ),
-              Selector<SettingsState, String>(
-                builder: (context, longDateFormat, child) {
-                  var subtitle = _oldCreated ?? "";
+                Selector<SettingsState, String>(
+                  builder: (context, longDateFormat, child) {
+                    var subtitle = _oldCreated ?? "";
 
-                  if (longDateFormat == 'timeago' && _created != null)
-                    subtitle = formatRelativeTime(context, _created!);
-                  else if (longDateFormat != 'timeago' && _created != null)
-                    subtitle = formatDisplayDate(
-                      context,
-                      _created!,
-                      longDateFormat,
+                    if (longDateFormat == 'timeago' && _created != null)
+                      subtitle = formatRelativeTime(context, _created!);
+                    else if (longDateFormat != 'timeago' && _created != null)
+                      subtitle = formatDisplayDate(
+                        context,
+                        _created!,
+                        longDateFormat,
+                      );
+
+                    return ListTile(
+                      title: Text(l10n.createdDate),
+                      subtitle: Text(subtitle),
+                      trailing: const Icon(Icons.calendar_today),
+                      onTap: () => _selectDate(),
                     );
-
-                  return ListTile(
-                    title: Text(l10n.createdDate),
-                    subtitle: Text(subtitle),
-                    trailing: const Icon(Icons.calendar_today),
-                    onTap: () => _selectDate(),
-                  );
-                },
-                selector: (context, settings) => settings.value.longDateFormat,
-              ),
-            ],
+                  },
+                  selector: (context, settings) =>
+                      settings.value.longDateFormat,
+                ),
+              ],
+            ),
           ),
         ),
-      ),
-      floatingActionButton: AnimatedFab(
-        onPressed: save,
-        label: Text(l10n.actionUpdate),
-        icon: const Icon(Icons.sync),
+        floatingActionButton: AnimatedFab(
+          onPressed: save,
+          label: Text(l10n.actionUpdate),
+          icon: const Icon(Icons.sync),
+        ),
       ),
     );
   }
@@ -424,6 +469,17 @@ class _EditSetsPageState extends State<EditSetsPage> {
   @override
   void initState() {
     super.initState();
+
+    _reps.addListener(_markDirty);
+    _weight.addListener(_markDirty);
+    _body.addListener(_markDirty);
+    _distance.addListener(_markDirty);
+    _minutes.addListener(_markDirty);
+    _seconds.addListener(_markDirty);
+    _incline.addListener(_markDirty);
+    _name.addListener(_markDirty);
+    _hasUnsavedChanges = false;
+
     final settings = context.read<SettingsState>().value;
 
     (db.gymSets.select()
