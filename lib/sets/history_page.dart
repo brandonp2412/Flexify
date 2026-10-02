@@ -33,6 +33,15 @@ class HistoryDay {
   });
 }
 
+/// A single calendar day together with every exercise recorded on it, so the
+/// grouped view can draw one container per day instead of one per exercise.
+class HistoryDayGroup {
+  final DateTime day;
+  final List<HistoryDay> exercises;
+
+  HistoryDayGroup({required this.day, required this.exercises});
+}
+
 class HistoryPage extends StatefulWidget {
   final TabController tabController;
 
@@ -157,12 +166,12 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
                                   );
 
                               if (groupHistory) {
-                                final historyDays = getHistoryDays(
+                                final dayGroups = getHistoryDayGroups(
                                   snapshot.data!,
                                 );
                                 return GroupHistory(
                                   scroll: scroll,
-                                  days: historyDays,
+                                  days: dayGroups,
                                   onSelect: (id) {
                                     setState(() {
                                       _selection.toggle(id);
@@ -374,6 +383,23 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
       }
     }
     return list;
+  }
+
+  /// Buckets the per-exercise slices from [getHistoryDays] into one group per
+  /// calendar day. The incoming set order is newest first, so days are already
+  /// contiguous and each group keeps its exercises in recorded order.
+  List<HistoryDayGroup> getHistoryDayGroups(
+    List<ExerciseSetView> exerciseSets,
+  ) {
+    final groups = <HistoryDayGroup>[];
+    for (final exercise in getHistoryDays(exerciseSets)) {
+      if (groups.isNotEmpty && isSameDay(groups.last.day, exercise.day)) {
+        groups.last.exercises.add(exercise);
+      } else {
+        groups.add(HistoryDayGroup(day: exercise.day, exercises: [exercise]));
+      }
+    }
+    return groups;
   }
 
   @override
