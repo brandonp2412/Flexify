@@ -114,6 +114,155 @@ Future<void> _backfillExerciseIdentity(AppDatabase database) async {
   ''');
 }
 
+Future<void> _backfillExerciseHistory(AppDatabase database) async {
+  await database.customStatement(r'''
+    INSERT INTO body_weights (timestamp, weight_kg, photo)
+    SELECT
+      created,
+      CASE unit
+        WHEN 'lb' THEN weight * 0.45359237
+        WHEN 'stone' THEN weight * 6.35029318
+        ELSE weight
+      END,
+      image
+    FROM gym_sets
+    WHERE hidden = 0
+      AND name = 'Weight'
+    ORDER BY created, id
+  ''');
+
+  // Legacy plan history has no session id. Flexify's plan history already
+  // treats same-plan sets on the same local calendar day as one session, so
+  // migration keeps that grouping. Observed first/last set times bound the
+  // workout; no unobserved start or end time is invented.
+  await database.customStatement(r'''
+    WITH grouped_workouts AS (
+      SELECT
+        MIN(gym_sets.id) AS workout_id,
+        gym_sets.plan_id AS legacy_plan_id,
+        MIN(gym_sets.created) AS started_at,
+        MAX(gym_sets.created) AS ended_at
+      FROM gym_sets
+      WHERE gym_sets.hidden = 0
+        AND gym_sets.name <> 'Weight'
+        AND gym_sets.plan_id IS NOT NULL
+      GROUP BY
+        gym_sets.plan_id,
+        DATE(gym_sets.created, 'unixepoch', 'localtime')
+    )
+    INSERT INTO workouts (id, plan_id, started_at, ended_at)
+    SELECT
+      grouped_workouts.workout_id,
+      CASE
+        WHEN EXISTS (
+          SELECT 1
+          FROM plans
+          WHERE plans.id = grouped_workouts.legacy_plan_id
+        )
+        THEN grouped_workouts.legacy_plan_id
+        ELSE NULL
+      END,
+      grouped_workouts.started_at,
+      grouped_workouts.ended_at
+    FROM grouped_workouts
+    ORDER BY grouped_workouts.started_at, grouped_workouts.workout_id
+  ''');
+
+  await database.customStatement(r'''
+    WITH source_sets AS (
+      SELECT
+        gym_sets.*,
+        exercises.id AS migrated_exercise_id,
+        CASE
+          WHEN gym_sets.plan_id IS NULL THEN NULL
+          ELSE (
+            SELECT MIN(session_set.id)
+            FROM gym_sets AS session_set
+            WHERE session_set.hidden = 0
+              AND session_set.name <> 'Weight'
+              AND session_set.plan_id = gym_sets.plan_id
+              AND DATE(
+                session_set.created,
+                'unixepoch',
+                'localtime'
+              ) = DATE(
+                gym_sets.created,
+                'unixepoch',
+                'localtime'
+              )
+          )
+        END AS migrated_workout_id,
+        CASE
+          WHEN gym_sets.body_weight = 0 THEN NULL
+          ELSE COALESCE(
+            (
+              SELECT weight_entry.unit
+              FROM gym_sets AS weight_entry
+              WHERE weight_entry.hidden = 0
+                AND weight_entry.name = 'Weight'
+                AND weight_entry.created <= gym_sets.created
+              ORDER BY weight_entry.created DESC, weight_entry.id DESC
+              LIMIT 1
+            ),
+            (
+              SELECT weight_entry.unit
+              FROM gym_sets AS weight_entry
+              WHERE weight_entry.hidden = 0
+                AND weight_entry.name = 'Weight'
+              ORDER BY weight_entry.created DESC, weight_entry.id DESC
+              LIMIT 1
+            ),
+            'kg'
+          )
+        END AS body_weight_unit
+      FROM gym_sets
+      INNER JOIN exercises ON exercises.name = gym_sets.name
+      WHERE gym_sets.hidden = 0
+        AND gym_sets.name <> 'Weight'
+    )
+    INSERT INTO exercise_sets (
+      exercise_id,
+      workout_id,
+      timestamp,
+      reps,
+      load_kg,
+      duration_ms,
+      distance_metres,
+      incline,
+      body_weight_kg,
+      notes
+    )
+    SELECT
+      source_sets.migrated_exercise_id,
+      source_sets.migrated_workout_id,
+      source_sets.created,
+      source_sets.reps,
+      CASE source_sets.unit
+        WHEN 'kg' THEN source_sets.weight
+        WHEN 'lb' THEN source_sets.weight * 0.45359237
+        WHEN 'stone' THEN source_sets.weight * 6.35029318
+        ELSE NULL
+      END,
+      CAST(ROUND(source_sets.duration * 60000.0) AS INTEGER),
+      CASE source_sets.unit
+        WHEN 'm' THEN source_sets.distance
+        WHEN 'km' THEN source_sets.distance * 1000.0
+        WHEN 'mi' THEN source_sets.distance * 1609.344
+        ELSE NULL
+      END,
+      source_sets.incline,
+      CASE source_sets.body_weight_unit
+        WHEN 'lb' THEN source_sets.body_weight * 0.45359237
+        WHEN 'stone' THEN source_sets.body_weight * 6.35029318
+        WHEN 'kg' THEN source_sets.body_weight
+        ELSE NULL
+      END,
+      source_sets.notes
+    FROM source_sets
+    ORDER BY source_sets.id
+  ''');
+}
+
 @DriftDatabase(
   tables: [
     Categories,
@@ -677,10 +826,14 @@ class AppDatabase extends _$AppDatabase {
         from59To60: (Migrator m, Schema60 schema) async {
           await _backfillExerciseIdentity(this);
         },
+        from60To61: (Migrator m, Schema61 schema) async {
+          await _backfillExerciseIdentity(this);
+          await _backfillExerciseHistory(this);
+        },
       ),
     );
   }
 
   @override
-  int get schemaVersion => 60;
+  int get schemaVersion => 61;
 }

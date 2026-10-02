@@ -16,6 +16,7 @@ import 'generated/schema_v47.dart' as v47;
 import 'generated/schema_v5.dart' as v5;
 import 'generated/schema_v53.dart' as v53;
 import 'generated/schema_v59.dart' as v59;
+import 'generated/schema_v60.dart' as v60;
 
 void main() {
   driftRuntimeOptions.dontWarnAboutMultipleDatabases = true;
@@ -666,7 +667,7 @@ void main() {
     );
   });
   test(
-    'migration from v59 to v60 backfills exercise identity and configuration',
+    'migration from v59 through v61 backfills identity and history',
     () async {
       final oldCategories = <v59.CategoriesCompanion>[
         v59.CategoriesCompanion.insert(
@@ -795,7 +796,7 @@ void main() {
 
       await verifier.testWithDataIntegrity(
         oldVersion: 59,
-        newVersion: 60,
+        newVersion: 61,
         createOld: v59.DatabaseAtV59.new,
         createNew: AppDatabase.new,
         openTestedDatabase: AppDatabase.new,
@@ -864,7 +865,254 @@ void main() {
           expect(rowingPlan.exercise, 'Rowing');
 
           expect(await newDb.select(newDb.gymSets).get(), hasLength(6));
-          expect(await newDb.select(newDb.exerciseSets).get(), isEmpty);
+          expect(await newDb.select(newDb.exerciseSets).get(), hasLength(4));
+          final migratedBodyWeights = await newDb
+              .select(newDb.bodyWeights)
+              .get();
+          expect(migratedBodyWeights, hasLength(1));
+          expect(migratedBodyWeights.single.weightKg, 75);
+          expect(await newDb.select(newDb.workouts).get(), isEmpty);
+        },
+      );
+    },
+  );
+
+  test(
+    'migration from v60 to v61 backfills canonical history exactly once',
+    () async {
+      const dayOne = 1704888000;
+      const dayTwo = dayOne + 108000;
+
+      final oldPlans = <v60.PlansCompanion>[
+        v60.PlansCompanion.insert(
+          id: const Value(1),
+          days: 'Monday',
+          title: const Value('Plan One'),
+        ),
+        v60.PlansCompanion.insert(
+          id: const Value(2),
+          days: 'Tuesday',
+          title: const Value('Plan Two'),
+        ),
+      ];
+      final oldGymSets = <v60.GymSetsCompanion>[
+        v60.GymSetsCompanion.insert(
+          id: const Value(1),
+          created: dayOne - 3600,
+          name: 'Weight',
+          reps: 1,
+          unit: 'lb',
+          weight: 180,
+          image: const Value('weight-lb.jpg'),
+        ),
+        v60.GymSetsCompanion.insert(
+          id: const Value(2),
+          bodyWeight: const Value(180),
+          created: dayOne,
+          incline: const Value(2),
+          name: 'Bench Press',
+          notes: const Value('heavy'),
+          planId: const Value(1),
+          reps: 5,
+          unit: 'lb',
+          weight: 220,
+        ),
+        v60.GymSetsCompanion.insert(
+          id: const Value(3),
+          bodyWeight: const Value(180),
+          cardio: const Value(1),
+          created: dayOne + 300,
+          distance: const Value(1.5),
+          duration: const Value(12.5),
+          name: 'Run',
+          planId: const Value(1),
+          reps: 0,
+          unit: 'mi',
+          weight: 0,
+        ),
+        v60.GymSetsCompanion.insert(
+          id: const Value(4),
+          bodyWeight: const Value(180),
+          created: dayOne + 600,
+          name: 'Squat',
+          planId: const Value(2),
+          reps: 8,
+          unit: 'kg',
+          weight: 100,
+        ),
+        v60.GymSetsCompanion.insert(
+          id: const Value(5),
+          bodyWeight: const Value(80),
+          created: dayTwo,
+          name: 'Bench Press',
+          planId: const Value(1),
+          reps: 3,
+          unit: 'kg',
+          weight: 105,
+        ),
+        v60.GymSetsCompanion.insert(
+          id: const Value(6),
+          bodyWeight: const Value(180),
+          created: dayOne + 900,
+          name: 'Curl',
+          notes: const Value('standalone'),
+          reps: 10,
+          unit: 'kg',
+          weight: 20,
+        ),
+        v60.GymSetsCompanion.insert(
+          id: const Value(7),
+          created: dayOne + 1200,
+          hidden: const Value(1),
+          name: 'Bench Press',
+          planId: const Value(1),
+          reps: 0,
+          unit: 'kg',
+          weight: 0,
+        ),
+        v60.GymSetsCompanion.insert(
+          id: const Value(8),
+          created: dayTwo - 3600,
+          name: 'Weight',
+          reps: 1,
+          unit: 'kg',
+          weight: 80,
+          image: const Value('weight-kg.jpg'),
+        ),
+        v60.GymSetsCompanion.insert(
+          id: const Value(9),
+          created: dayTwo - 1800,
+          hidden: const Value(1),
+          name: 'Weight',
+          reps: 1,
+          unit: 'stone',
+          weight: 12,
+          image: const Value('hidden-weight.jpg'),
+        ),
+        v60.GymSetsCompanion.insert(
+          id: const Value(10),
+          bodyWeight: const Value(180),
+          created: dayOne + 1500,
+          name: 'Orphan Plan Exercise',
+          planId: const Value(999),
+          reps: 12,
+          unit: 'stone',
+          weight: 10,
+        ),
+      ];
+
+      await verifier.testWithDataIntegrity(
+        oldVersion: 60,
+        newVersion: 61,
+        createOld: v60.DatabaseAtV60.new,
+        createNew: AppDatabase.new,
+        openTestedDatabase: AppDatabase.new,
+        createItems: (batch, oldDb) {
+          batch.insertAll(oldDb.plans, oldPlans);
+          batch.insertAll(oldDb.gymSets, oldGymSets);
+        },
+        validateItems: (newDb) async {
+          final legacyCount = (await newDb.customSelect('''
+                SELECT COUNT(*) AS amount
+                FROM gym_sets
+                WHERE hidden = 0 AND name <> 'Weight'
+                ''').getSingle()).read<int>('amount');
+          final legacyWeightCount = (await newDb.customSelect('''
+                SELECT COUNT(*) AS amount
+                FROM gym_sets
+                WHERE hidden = 0 AND name = 'Weight'
+                ''').getSingle()).read<int>('amount');
+
+          final exercises = await newDb.select(newDb.exercises).get();
+          final exercisesById = {
+            for (final exercise in exercises) exercise.id: exercise,
+          };
+          final migratedSets = await newDb.select(newDb.exerciseSets).get();
+          final bodyWeights = await newDb.select(newDb.bodyWeights).get();
+          final workouts = await newDb.select(newDb.workouts).get();
+
+          expect(migratedSets, hasLength(legacyCount));
+          expect(bodyWeights, hasLength(legacyWeightCount));
+          expect(await newDb.select(newDb.gymSets).get(), hasLength(10));
+          expect(
+            migratedSets
+                .map((set) => exercisesById[set.exerciseId]!.name)
+                .where((name) => name == 'Weight'),
+            isEmpty,
+          );
+
+          final benchLb = migratedSets.singleWhere(
+            (set) =>
+                exercisesById[set.exerciseId]!.name == 'Bench Press' &&
+                set.timestamp.millisecondsSinceEpoch ~/ 1000 == dayOne,
+          );
+          expect(benchLb.reps, 5);
+          expect(benchLb.loadKg, closeTo(99.7903214, 0.000001));
+          expect(benchLb.bodyWeightKg, closeTo(81.6466266, 0.000001));
+          expect(benchLb.durationMs, 0);
+          expect(benchLb.incline, 2);
+          expect(benchLb.notes, 'heavy');
+          expect(benchLb.workoutId, 2);
+
+          final run = migratedSets.singleWhere(
+            (set) => exercisesById[set.exerciseId]!.name == 'Run',
+          );
+          expect(run.loadKg, null);
+          expect(run.distanceMetres, closeTo(2414.016, 0.000001));
+          expect(run.durationMs, 750000);
+          expect(run.bodyWeightKg, closeTo(81.6466266, 0.000001));
+          expect(run.workoutId, 2);
+
+          final benchKg = migratedSets.singleWhere(
+            (set) =>
+                exercisesById[set.exerciseId]!.name == 'Bench Press' &&
+                set.timestamp.millisecondsSinceEpoch ~/ 1000 == dayTwo,
+          );
+          expect(benchKg.loadKg, 105);
+          expect(benchKg.bodyWeightKg, 80);
+          expect(benchKg.workoutId, 5);
+
+          final standalone = migratedSets.singleWhere(
+            (set) => exercisesById[set.exerciseId]!.name == 'Curl',
+          );
+          expect(standalone.workoutId, null);
+          expect(standalone.notes, 'standalone');
+
+          final orphan = migratedSets.singleWhere(
+            (set) =>
+                exercisesById[set.exerciseId]!.name == 'Orphan Plan Exercise',
+          );
+          expect(orphan.loadKg, closeTo(63.5029318, 0.000001));
+          expect(orphan.workoutId, 10);
+
+          expect(workouts, hasLength(4));
+          final planOneDayOne = workouts.singleWhere(
+            (workout) => workout.id == 2,
+          );
+          expect(planOneDayOne.planId, 1);
+          expect(
+            planOneDayOne.startedAt.millisecondsSinceEpoch ~/ 1000,
+            dayOne,
+          );
+          expect(
+            planOneDayOne.endedAt!.millisecondsSinceEpoch ~/ 1000,
+            dayOne + 300,
+          );
+          expect(workouts.singleWhere((workout) => workout.id == 4).planId, 2);
+          expect(workouts.singleWhere((workout) => workout.id == 5).planId, 1);
+          expect(
+            workouts.singleWhere((workout) => workout.id == 10).planId,
+            null,
+          );
+
+          expect(bodyWeights[0].weightKg, closeTo(81.6466266, 0.000001));
+          expect(bodyWeights[0].photo, 'weight-lb.jpg');
+          expect(bodyWeights[1].weightKg, 80);
+          expect(bodyWeights[1].photo, 'weight-kg.jpg');
+          expect(
+            bodyWeights.where((entry) => entry.photo == 'hidden-weight.jpg'),
+            isEmpty,
+          );
         },
       );
     },
