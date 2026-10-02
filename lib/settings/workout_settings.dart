@@ -123,14 +123,15 @@ List<Widget> getWorkoutSettings(
           ),
         ),
       ),
-    if (matches([l10n.notifications, l10n.positiveNotificationsDescription]))
+    if (matches([
+      l10n.positiveReinforcement,
+      l10n.positiveNotificationsDescription,
+    ]))
       Tooltip(
         message: l10n.positiveNotificationsDescription,
         child: ListTile(
-          title: Text(l10n.notifications, textAlign: TextAlign.center),
-          leading: settings.notifications
-              ? const Icon(Icons.notifications)
-              : const Icon(Icons.notifications_outlined),
+          title: Text(l10n.positiveReinforcement, textAlign: TextAlign.center),
+          leading: const Text('😊', style: TextStyle(fontSize: 24)),
           onTap: () {
             db.settings.update().write(
               SettingsCompanion(notifications: Value(!settings.notifications)),

@@ -1859,6 +1859,10 @@
   "@showNotesDescription": {
     "description": "Description of workout notes."
   },
+  "positiveReinforcement": "Positive reinforcement",
+  "@positiveReinforcement": {
+    "description": "Label for the setting that shows encouraging messages after new records."
+  },
   "positiveNotificationsDescription": "Write nice messages when a new record is hit",
   "@positiveNotificationsDescription": {
     "description": "Description of positive record notifications."

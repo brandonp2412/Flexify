@@ -1428,6 +1428,9 @@ class AppLocalizationsFa extends AppLocalizations {
       'جزئیات حرکت خود را در یک بخش متنی ثبت کنید';
 
   @override
+  String get positiveReinforcement => 'تقویت مثبت';
+
+  @override
   String get positiveNotificationsDescription =>
       'هنگام ثبت رکورد جدید پیام‌های تشویقی نمایش دهید';
 

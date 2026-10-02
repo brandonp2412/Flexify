@@ -447,6 +447,10 @@
   "showBodyWeightDescription": "啟用或停用體重記錄",
   "showCategoriesDescription": "啟用或停用訓練類別",
   "showNotesDescription": "在文字框中記錄訓練詳情",
+  "positiveReinforcement": "正向鼓勵",
+  "@positiveReinforcement": {
+    "description": "Label for the setting that shows encouraging messages after new records."
+  },
   "positiveNotificationsDescription": "創造新紀錄時顯示鼓勵訊息",
   "positiveMessagesEnabled": "鼓勵訊息現在會這樣顯示！",
   "recordEncouragement01": "太棒了！你真的很厲害。",

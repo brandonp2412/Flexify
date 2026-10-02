@@ -1850,6 +1850,10 @@
   "@showNotesDescription": {
     "description": "Description of workout notes."
   },
+  "positiveReinforcement": "Khích lệ tích cực",
+  "@positiveReinforcement": {
+    "description": "Label for the setting that shows encouraging messages after new records."
+  },
   "positiveNotificationsDescription": "Viết tin nhắn hay khi đạt kỷ lục mới",
   "@positiveNotificationsDescription": {
     "description": "Description of positive record notifications."

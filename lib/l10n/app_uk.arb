@@ -1859,6 +1859,10 @@
   "@showNotesDescription": {
     "description": "Description of workout notes."
   },
+  "positiveReinforcement": "Позитивне підкріплення",
+  "@positiveReinforcement": {
+    "description": "Label for the setting that shows encouraging messages after new records."
+  },
   "positiveNotificationsDescription": "Показувати приємні повідомлення після встановлення нового рекорду",
   "@positiveNotificationsDescription": {
     "description": "Description of positive record notifications."

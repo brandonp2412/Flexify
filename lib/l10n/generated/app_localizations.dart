@@ -2646,6 +2646,12 @@ abstract class AppLocalizations {
   /// **'Record details of your lift in a text area'**
   String get showNotesDescription;
 
+  /// Label for the setting that shows encouraging messages after new records.
+  ///
+  /// In en, this message translates to:
+  /// **'Positive reinforcement'**
+  String get positiveReinforcement;
+
   /// Description of positive record notifications.
   ///
   /// In en, this message translates to:

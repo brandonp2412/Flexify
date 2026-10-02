@@ -447,6 +447,10 @@
   "showBodyWeightDescription": "启用或禁用体重记录",
   "showCategoriesDescription": "启用或禁用训练类别",
   "showNotesDescription": "在文本框中记录训练详情",
+  "positiveReinforcement": "正向激励",
+  "@positiveReinforcement": {
+    "description": "Label for the setting that shows encouraging messages after new records."
+  },
   "positiveNotificationsDescription": "创造新纪录时显示鼓励消息",
   "positiveMessagesEnabled": "鼓励消息现在会这样显示！",
   "recordEncouragement01": "太棒了！你真的很厉害。",

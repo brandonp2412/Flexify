@@ -1446,6 +1446,9 @@ class AppLocalizationsPt extends AppLocalizations {
       'Registar detalhes do seu exercício numa área de texto';
 
   @override
+  String get positiveReinforcement => 'Reforço positivo';
+
+  @override
   String get positiveNotificationsDescription =>
       'Mostrar mensagens positivas quando for atingido um novo recorde';
 
@@ -3029,6 +3032,9 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   @override
   String get showNotesDescription =>
       'Registrar detalhes do seu exercício em uma área de texto';
+
+  @override
+  String get positiveReinforcement => 'Reforço positivo';
 
   @override
   String get positiveNotificationsDescription =>
@@ -4618,6 +4624,9 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   @override
   String get showNotesDescription =>
       'Registar detalhes do seu exercício numa área de texto';
+
+  @override
+  String get positiveReinforcement => 'Reforço positivo';
 
   @override
   String get positiveNotificationsDescription =>

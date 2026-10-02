@@ -447,6 +447,10 @@
   "showBodyWeightDescription": "体重の記録を有効または無効にします",
   "showCategoriesDescription": "トレーニングカテゴリーを有効または無効にします",
   "showNotesDescription": "トレーニングの詳細をテキスト欄に記録します",
+  "positiveReinforcement": "ポジティブな励まし",
+  "@positiveReinforcement": {
+    "description": "Label for the setting that shows encouraging messages after new records."
+  },
   "positiveNotificationsDescription": "新記録を達成したときに励ましのメッセージを表示します",
   "positiveMessagesEnabled": "ポジティブメッセージはこのように表示されます。",
   "recordEncouragement01": "よくできました！最高です。",

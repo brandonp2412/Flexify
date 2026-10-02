@@ -1420,6 +1420,9 @@ class AppLocalizationsEn extends AppLocalizations {
       'Record details of your lift in a text area';
 
   @override
+  String get positiveReinforcement => 'Positive reinforcement';
+
+  @override
   String get positiveNotificationsDescription =>
       'Write nice messages when a new record is hit';
 

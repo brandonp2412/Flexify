@@ -447,6 +447,10 @@
   "showBodyWeightDescription": "Включить/отключить отслеживание массы тела",
   "showCategoriesDescription": "Включить или отключить категории тренировок",
   "showNotesDescription": "Записывать подробности подхода в текстовом поле",
+  "positiveReinforcement": "Положительное подкрепление",
+  "@positiveReinforcement": {
+    "description": "Label for the setting that shows encouraging messages after new records."
+  },
   "positiveNotificationsDescription": "Показывать позитивные сообщения при новом рекорде",
   "positiveMessagesEnabled": "Позитивные сообщения появляются вот так!",
   "recordEncouragement01": "Отличная работа! Ты невероятен.",

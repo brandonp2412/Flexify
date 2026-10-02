@@ -1435,6 +1435,9 @@ class AppLocalizationsTr extends AppLocalizations {
       'Kaldırışının detaylarını bir metin alanına kaydet';
 
   @override
+  String get positiveReinforcement => 'Olumlu pekiştirme';
+
+  @override
   String get positiveNotificationsDescription =>
       'Yeni bir rekor kırıldığında güzel mesajlar yaz';
 

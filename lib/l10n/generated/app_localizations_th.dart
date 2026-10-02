@@ -1417,6 +1417,9 @@ class AppLocalizationsTh extends AppLocalizations {
   String get showNotesDescription => 'บันทึกรายละเอียดการยกของคุณในช่องข้อความ';
 
   @override
+  String get positiveReinforcement => 'การเสริมแรงเชิงบวก';
+
+  @override
   String get positiveNotificationsDescription =>
       'แสดงข้อความให้กำลังใจเมื่อทำสถิติใหม่';
 

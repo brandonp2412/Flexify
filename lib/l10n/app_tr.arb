@@ -447,6 +447,10 @@
   "showBodyWeightDescription": "Vücut ağırlığı takibini etkinleştir/devre dışı bırak",
   "showCategoriesDescription": "Antrenman kategorilerini etkinleştir/devre dışı bırak",
   "showNotesDescription": "Kaldırışının detaylarını bir metin alanına kaydet",
+  "positiveReinforcement": "Olumlu pekiştirme",
+  "@positiveReinforcement": {
+    "description": "Label for the setting that shows encouraging messages after new records."
+  },
   "positiveNotificationsDescription": "Yeni bir rekor kırıldığında güzel mesajlar yaz",
   "positiveMessagesEnabled": "Olumlu mesajlar artık bu şekilde görünüyor!",
   "recordEncouragement01": "Aferin LAN! İnanılmazsın.",

@@ -447,6 +447,10 @@
   "showBodyWeightDescription": "체중 기록을 켜거나 끕니다",
   "showCategoriesDescription": "운동 카테고리를 켜거나 끕니다",
   "showNotesDescription": "운동 세부 내용을 텍스트 영역에 기록합니다",
+  "positiveReinforcement": "긍정적 강화",
+  "@positiveReinforcement": {
+    "description": "Label for the setting that shows encouraging messages after new records."
+  },
   "positiveNotificationsDescription": "새 기록을 달성하면 응원 메시지를 표시합니다",
   "positiveMessagesEnabled": "긍정적인 메시지가 이제 이렇게 표시됩니다!",
   "recordEncouragement01": "잘했어요! 정말 대단합니다.",

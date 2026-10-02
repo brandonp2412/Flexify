@@ -1382,6 +1382,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get showNotesDescription => '운동 세부 내용을 텍스트 영역에 기록합니다';
 
   @override
+  String get positiveReinforcement => '긍정적 강화';
+
+  @override
   String get positiveNotificationsDescription => '새 기록을 달성하면 응원 메시지를 표시합니다';
 
   @override

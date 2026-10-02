@@ -1432,6 +1432,9 @@ class AppLocalizationsVi extends AppLocalizations {
       'Ghi lại chi tiết về thang máy của bạn trong vùng văn bản';
 
   @override
+  String get positiveReinforcement => 'Khích lệ tích cực';
+
+  @override
   String get positiveNotificationsDescription =>
       'Viết tin nhắn hay khi đạt kỷ lục mới';
 

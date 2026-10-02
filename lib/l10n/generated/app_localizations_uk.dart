@@ -1450,6 +1450,9 @@ class AppLocalizationsUk extends AppLocalizations {
       'Записувати подробиці вправи в текстовому полі';
 
   @override
+  String get positiveReinforcement => 'Позитивне підкріплення';
+
+  @override
   String get positiveNotificationsDescription =>
       'Показувати приємні повідомлення після встановлення нового рекорду';
 

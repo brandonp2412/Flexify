@@ -1447,6 +1447,9 @@ class AppLocalizationsEs extends AppLocalizations {
       'Registrar detalles del levantamiento en un campo de texto';
 
   @override
+  String get positiveReinforcement => 'Refuerzo positivo';
+
+  @override
   String get positiveNotificationsDescription =>
       'Mostrar mensajes de ánimo al conseguir un nuevo récord';
 

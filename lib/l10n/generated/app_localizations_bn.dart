@@ -1426,6 +1426,9 @@ class AppLocalizationsBn extends AppLocalizations {
   String get showNotesDescription => 'টেক্সট বক্সে আপনার লিফটের বিবরণ লিখুন';
 
   @override
+  String get positiveReinforcement => 'ইতিবাচক উৎসাহ';
+
+  @override
   String get positiveNotificationsDescription =>
       'নতুন রেকর্ড হলে উৎসাহমূলক বার্তা লিখুন';
 

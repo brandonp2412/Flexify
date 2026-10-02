@@ -141,6 +141,7 @@ class _SessionSetsState extends State<SessionSets> {
                     gymSet: sets[i],
                     number: i + 1,
                     best: sets[i].id == best,
+                    repsFirst: widget.compact,
                   ),
                 ),
             ],
@@ -232,11 +233,13 @@ class _SetChip extends StatelessWidget {
   final GymSet _gymSet;
   final int _number;
   final bool _best;
+  final bool repsFirst;
 
   const _SetChip({
     required this._gymSet,
     required this._number,
     required this._best,
+    required this.repsFirst,
   });
 
   String _value(BuildContext context) {
@@ -255,7 +258,9 @@ class _SetChip extends StatelessWidget {
     if (_gymSet.cardio) {
       return "${formatDisplayNumber(context, _gymSet.distance)} $unit";
     }
-    return "${formatDisplayNumber(context, _gymSet.weight)} $unit × ${formatDisplayNumber(context, _gymSet.reps)}";
+    final weight = "${formatDisplayNumber(context, _gymSet.weight)} $unit";
+    final reps = formatDisplayNumber(context, _gymSet.reps);
+    return repsFirst ? "$reps × $weight" : "$weight × $reps";
   }
 
   @override

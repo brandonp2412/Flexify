@@ -447,6 +447,10 @@
   "showBodyWeightDescription": "Ativar ou desativar o acompanhamento do peso corporal",
   "showCategoriesDescription": "Ativar ou desativar categorias de treino",
   "showNotesDescription": "Registar detalhes do seu exercício numa área de texto",
+  "positiveReinforcement": "Reforço positivo",
+  "@positiveReinforcement": {
+    "description": "Label for the setting that shows encouraging messages after new records."
+  },
   "positiveNotificationsDescription": "Mostrar mensagens positivas quando for atingido um novo recorde",
   "positiveMessagesEnabled": "Agora as mensagens positivas aparecem assim!",
   "recordEncouragement01": "Excelente trabalho! Está incrível.",

@@ -1380,6 +1380,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get showNotesDescription => 'トレーニングの詳細をテキスト欄に記録します';
 
   @override
+  String get positiveReinforcement => 'ポジティブな励まし';
+
+  @override
   String get positiveNotificationsDescription => '新記録を達成したときに励ましのメッセージを表示します';
 
   @override

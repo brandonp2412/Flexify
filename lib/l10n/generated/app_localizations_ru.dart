@@ -1452,6 +1452,9 @@ class AppLocalizationsRu extends AppLocalizations {
       'Записывать подробности подхода в текстовом поле';
 
   @override
+  String get positiveReinforcement => 'Положительное подкрепление';
+
+  @override
   String get positiveNotificationsDescription =>
       'Показывать позитивные сообщения при новом рекорде';
 

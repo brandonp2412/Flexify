@@ -1431,6 +1431,9 @@ class AppLocalizationsUr extends AppLocalizations {
       'ٹیکسٹ ایریا میں اپنی لفٹ کی تفصیلات درج کریں';
 
   @override
+  String get positiveReinforcement => 'مثبت حوصلہ افزائی';
+
+  @override
   String get positiveNotificationsDescription =>
       'نیا ریکارڈ بننے پر حوصلہ افزا پیغامات لکھیں';
 

@@ -1437,6 +1437,9 @@ class AppLocalizationsMs extends AppLocalizations {
       'Catat detail angkatan Anda dalam lajur teks';
 
   @override
+  String get positiveReinforcement => 'Pengukuhan positif';
+
+  @override
   String get positiveNotificationsDescription =>
       'Tunjukkan mesej positif saat rekor baru tercapai';
 

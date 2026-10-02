@@ -1369,6 +1369,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get showNotesDescription => '在文本框中记录训练详情';
 
   @override
+  String get positiveReinforcement => '正向激励';
+
+  @override
   String get positiveNotificationsDescription => '创造新纪录时显示鼓励消息';
 
   @override
@@ -2869,6 +2872,9 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
   String get showNotesDescription => '在文本框中记录训练详情';
 
   @override
+  String get positiveReinforcement => '正向激励';
+
+  @override
   String get positiveNotificationsDescription => '创造新纪录时显示鼓励消息';
 
   @override
@@ -4367,6 +4373,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get showNotesDescription => '在文字框中記錄訓練詳情';
+
+  @override
+  String get positiveReinforcement => '正向鼓勵';
 
   @override
   String get positiveNotificationsDescription => '創造新紀錄時顯示鼓勵訊息';

@@ -1448,6 +1448,9 @@ class AppLocalizationsFr extends AppLocalizations {
       'Enregistrer les détails de votre série dans une zone de texte';
 
   @override
+  String get positiveReinforcement => 'Renforcement positif';
+
+  @override
   String get positiveNotificationsDescription =>
       'Afficher des messages d’encouragement lorsqu’un nouveau record est atteint';
 

@@ -1850,6 +1850,10 @@
   "@showNotesDescription": {
     "description": "Description of workout notes."
   },
+  "positiveReinforcement": "تقویت مثبت",
+  "@positiveReinforcement": {
+    "description": "Label for the setting that shows encouraging messages after new records."
+  },
   "positiveNotificationsDescription": "هنگام ثبت رکورد جدید پیام‌های تشویقی نمایش دهید",
   "@positiveNotificationsDescription": {
     "description": "Description of positive record notifications."

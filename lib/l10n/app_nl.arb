@@ -447,6 +447,10 @@
   "showBodyWeightDescription": "Schakel het bijhouden van lichaamsgewicht in of uit",
   "showCategoriesDescription": "Schakel trainingscategorieën in of uit",
   "showNotesDescription": "Leg details van je oefening vast in een tekstveld",
+  "positiveReinforcement": "Positieve bekrachtiging",
+  "@positiveReinforcement": {
+    "description": "Label for the setting that shows encouraging messages after new records."
+  },
   "positiveNotificationsDescription": "Toon motiverende berichten wanneer je een nieuw record behaalt",
   "positiveMessagesEnabled": "Positieve berichten verschijnen nu zo!",
   "recordEncouragement01": "Goed gedaan! Je bent geweldig.",

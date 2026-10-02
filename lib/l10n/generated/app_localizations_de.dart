@@ -1441,6 +1441,9 @@ class AppLocalizationsDe extends AppLocalizations {
       'Details zu deinem Satz in einem Textfeld speichern';
 
   @override
+  String get positiveReinforcement => 'Positive Verstärkung';
+
+  @override
   String get positiveNotificationsDescription =>
       'Motivierende Nachrichten bei einem neuen Rekord anzeigen';
 

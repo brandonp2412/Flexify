@@ -1438,6 +1438,9 @@ class AppLocalizationsNl extends AppLocalizations {
       'Leg details van je oefening vast in een tekstveld';
 
   @override
+  String get positiveReinforcement => 'Positieve bekrachtiging';
+
+  @override
   String get positiveNotificationsDescription =>
       'Toon motiverende berichten wanneer je een nieuw record behaalt';
 

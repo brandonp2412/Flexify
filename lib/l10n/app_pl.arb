@@ -447,6 +447,10 @@
   "showBodyWeightDescription": "Włącz lub wyłącz śledzenie masy ciała",
   "showCategoriesDescription": "Włącz lub wyłącz kategorie treningowe",
   "showNotesDescription": "Zapisuj szczegóły ćwiczenia w polu tekstowym",
+  "positiveReinforcement": "Pozytywne wzmocnienie",
+  "@positiveReinforcement": {
+    "description": "Label for the setting that shows encouraging messages after new records."
+  },
   "positiveNotificationsDescription": "Wyświetlaj motywujące wiadomości po ustanowieniu nowego rekordu",
   "positiveMessagesEnabled": "Pozytywne wiadomości wyglądają teraz tak!",
   "recordEncouragement01": "Świetna robota! Jesteś niesamowity.",

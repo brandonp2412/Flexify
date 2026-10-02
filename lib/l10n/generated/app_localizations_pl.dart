@@ -1452,6 +1452,9 @@ class AppLocalizationsPl extends AppLocalizations {
       'Zapisuj szczegóły ćwiczenia w polu tekstowym';
 
   @override
+  String get positiveReinforcement => 'Pozytywne wzmocnienie';
+
+  @override
   String get positiveNotificationsDescription =>
       'Wyświetlaj motywujące wiadomości po ustanowieniu nowego rekordu';
 

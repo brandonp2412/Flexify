@@ -1418,6 +1418,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get showNotesDescription => 'تسجيل تفاصيل رفعتك في منطقة نص';
 
   @override
+  String get positiveReinforcement => 'التعزيز الإيجابي';
+
+  @override
   String get positiveNotificationsDescription =>
       'كتابة رسائل مشجعة عند تسجيل رقم قياسي جديد';
 

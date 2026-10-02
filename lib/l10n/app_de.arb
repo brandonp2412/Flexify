@@ -447,6 +447,10 @@
   "showBodyWeightDescription": "Körpergewichtserfassung aktivieren oder deaktivieren",
   "showCategoriesDescription": "Trainingskategorien aktivieren oder deaktivieren",
   "showNotesDescription": "Details zu deinem Satz in einem Textfeld speichern",
+  "positiveReinforcement": "Positive Verstärkung",
+  "@positiveReinforcement": {
+    "description": "Label for the setting that shows encouraging messages after new records."
+  },
   "positiveNotificationsDescription": "Motivierende Nachrichten bei einem neuen Rekord anzeigen",
   "positiveMessagesEnabled": "Motivierende Nachrichten werden jetzt so angezeigt!",
   "recordEncouragement01": "Starke Leistung! Du bist unglaublich.",

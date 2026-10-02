@@ -1424,6 +1424,9 @@ class AppLocalizationsHi extends AppLocalizations {
       'अपने लिफ्ट का विवरण टेक्स्ट क्षेत्र में दर्ज करें';
 
   @override
+  String get positiveReinforcement => 'सकारात्मक प्रोत्साहन';
+
+  @override
   String get positiveNotificationsDescription =>
       'नया रिकॉर्ड बनने पर उत्साहवर्धक संदेश दिखाएँ';
 

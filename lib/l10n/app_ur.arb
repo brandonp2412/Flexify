@@ -1850,6 +1850,10 @@
   "@showNotesDescription": {
     "description": "Description of workout notes."
   },
+  "positiveReinforcement": "مثبت حوصلہ افزائی",
+  "@positiveReinforcement": {
+    "description": "Label for the setting that shows encouraging messages after new records."
+  },
   "positiveNotificationsDescription": "نیا ریکارڈ بننے پر حوصلہ افزا پیغامات لکھیں",
   "@positiveNotificationsDescription": {
     "description": "Description of positive record notifications."
