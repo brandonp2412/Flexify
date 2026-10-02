@@ -291,10 +291,13 @@ class _StartPlanPageState extends State<StartPlanPage>
                       _selected >= snapshot.data!.length
                   ? null
                   : Padding(
-                      padding: const EdgeInsets.only(
+                      key: const Key('start-plan-floating-row'),
+                      padding: EdgeInsets.only(
                         left: 16,
                         right: 16,
-                        bottom: bottomNavHeight,
+                        bottom: MediaQuery.viewInsetsOf(context).bottom > 0
+                            ? 0
+                            : bottomNavHeight,
                       ),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,

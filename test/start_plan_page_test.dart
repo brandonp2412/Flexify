@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart' hide isNull;
+import 'package:flexify/bottom_nav.dart';
 import 'package:flexify/l10n/generated/app_localizations.dart';
 import 'package:flexify/l10n/locale_preferences.dart';
 import 'package:flexify/plan/start_plan_page.dart';
@@ -124,6 +125,22 @@ void main() {
     expect(find.textContaining('Bench press'), findsOne);
     expect(find.textContaining('Barbell row'), findsOne);
     expect(find.textContaining('Squat'), findsOne);
+
+    final floatingRow = find.byKey(const Key('start-plan-floating-row'));
+    expect(floatingRow, findsOneWidget);
+    expect(
+      (tester.widget<Padding>(floatingRow).padding as EdgeInsets).bottom,
+      bottomNavHeight,
+    );
+
+    tester.view.viewInsets = const FakeViewPadding(bottom: 300);
+    addTearDown(tester.view.resetViewInsets);
+    await tester.pumpAndSettle();
+
+    expect(
+      (tester.widget<Padding>(floatingRow).padding as EdgeInsets).bottom,
+      0,
+    );
   });
 
   testWidgets('all translated locales complete the core workout save flow', (
@@ -600,7 +617,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Set 1'), findsOne);
-    expect(find.text('50 kg × 5'), findsOne);
+    expect(find.text('5 × 50 kg'), findsOne);
   });
 
   test(
