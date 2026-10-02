@@ -44,6 +44,7 @@ class AppSearch extends StatefulWidget {
 
 class _AppSearchState extends State<AppSearch> {
   final TextEditingController _ctrl = TextEditingController();
+  final FocusNode _focusNode = FocusNode();
 
   void _clearSelection() {
     widget.controller.clear();
@@ -108,6 +109,8 @@ class _AppSearchState extends State<AppSearch> {
       child: SearchBar(
         hintText: widget.hintText ?? context.l10n.searchHint,
         controller: _ctrl,
+        focusNode: _focusNode,
+        onTap: () => _focusNode.requestFocus(),
         padding: WidgetStateProperty.all(const EdgeInsets.only(right: 8.0)),
         textCapitalization: TextCapitalization.sentences,
         onChanged: widget.onChange,
@@ -261,6 +264,7 @@ class _AppSearchState extends State<AppSearch> {
 
   @override
   void dispose() {
+    _focusNode.dispose();
     _ctrl.dispose();
     super.dispose();
   }
