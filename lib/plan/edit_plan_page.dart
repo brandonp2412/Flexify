@@ -267,7 +267,11 @@ class _EditPlanPageState extends State<EditPlanPage> {
     _titleCtrl.text = widget.plan.title.value ?? '';
     final list = widget.plan.days.value.split(',');
     _days = weekdays.map((day) => list.contains(day)).toList();
-    _loadExercises();
+    if (widget.plan.id.present) {
+      _loadExercises();
+    } else {
+      _loadingExercises = false;
+    }
   }
 
   Future<void> _loadExercises() async {

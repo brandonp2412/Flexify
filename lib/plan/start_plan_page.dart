@@ -12,6 +12,7 @@ import 'package:flexify/empty_state.dart';
 import 'package:flexify/database/exercise_analytics.dart';
 import 'package:flexify/database/performed_sets.dart';
 import 'package:flexify/l10n/l10n.dart';
+import 'package:flexify/logging.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/permissions_page.dart';
 import 'package:flexify/plan/edit_plan_page.dart';
@@ -228,7 +229,7 @@ class _StartPlanPageState extends State<StartPlanPage>
                                   color: colors.surfaceContainerLow,
                                   borderRadius: BorderRadius.circular(20),
                                 ),
-                                clipBehavior: Clip.antiAlias,
+                                clipBehavior: Clip.none,
                                 child: exerciseList(),
                               ),
                             ),
@@ -583,17 +584,14 @@ class _StartPlanPageState extends State<StartPlanPage>
   }
 
   @override
-  @override
   void dispose() {
     final workout = _workout;
     if (workout != null) {
-      unawaited(finishWorkout(db, workout.id));
+      unawaited(_finishWorkout(workout.id));
     } else {
       final pendingWorkout = _workoutFuture;
       if (pendingWorkout != null) {
-        unawaited(
-          pendingWorkout.then((workout) => finishWorkout(db, workout.id)),
-        );
+        unawaited(pendingWorkout.then((workout) => _finishWorkout(workout.id)));
       }
     }
 
@@ -617,6 +615,14 @@ class _StartPlanPageState extends State<StartPlanPage>
     _planSub?.cancel();
 
     super.dispose();
+  }
+
+  Future<void> _finishWorkout(int workoutId) async {
+    try {
+      await finishWorkout(db, workoutId);
+    } catch (error, stackTrace) {
+      talker.error('Failed to finish workout session', error, stackTrace);
+    }
   }
 
   Future<PerformedSetView?> getLast(String exercise) {

@@ -11,7 +11,6 @@ import 'package:flexify/plan/plan_queries.dart';
 import 'package:flexify/plan/plan_tile.dart';
 import 'package:flexify/responsive.dart';
 import 'package:flexify/settings/settings_state.dart';
-import 'package:flutter/foundation.dart' show listEquals;
 import 'package:flexify/platform_page_route.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -39,13 +38,11 @@ class PlansList extends StatefulWidget {
 }
 
 class _PlansListState extends State<PlansList> {
-  List<Plan> _filteredPlans = [];
   late Stream<List<PlanCount>> _planCountsStream;
 
   @override
   void initState() {
     super.initState();
-    _updateFilteredPlans();
     _planCountsStream = watchPlanCounts();
     dbVersion.addListener(_onDatabaseChanged);
   }
@@ -59,19 +56,6 @@ class _PlansListState extends State<PlansList> {
   void _onDatabaseChanged() {
     if (!mounted) return;
     setState(() => _planCountsStream = watchPlanCounts());
-  }
-
-  @override
-  void didUpdateWidget(PlansList oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (!listEquals(oldWidget.plans, widget.plans) ||
-        oldWidget.search != widget.search) {
-      _updateFilteredPlans();
-    }
-  }
-
-  void _updateFilteredPlans() {
-    _filteredPlans = widget.plans?.toList() ?? [];
   }
 
   @override
@@ -119,7 +103,7 @@ class _PlansListState extends State<PlansList> {
 
     final weekday = weekdays[DateTime.now().weekday - 1];
 
-    final filteredPlans = _filteredPlans;
+    final filteredPlans = widget.plans!.toList();
 
     if (widget.plans!.isEmpty || filteredPlans.isEmpty) return noneFound;
 

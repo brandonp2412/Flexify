@@ -53,6 +53,7 @@ class _EditSetPageState extends State<EditSetPage> {
   int? restMs;
   String? _image;
   String? _category;
+  bool _ormUpdateScheduled = false;
 
   late String _unit;
   late bool _cardio;
@@ -635,23 +636,23 @@ class _EditSetPageState extends State<EditSetPage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    setORM();
+    if (_ormUpdateScheduled) return;
+    _ormUpdateScheduled = true;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) setORM();
+    });
   }
 
   @override
   void initState() {
     super.initState();
 
-    updateFields(widget.performedSet, formatOrm: false);
-    setState(() {
-      _created = widget.performedSet.created;
-    });
+    updateFields(widget.performedSet, formatOrm: false, rebuild: false);
+    _created = widget.performedSet.created;
 
     getExerciseNames().then((names) {
       if (!mounted) return;
-      setState(() {
-        _options = names;
-      });
+      _options = names;
     });
   }
 
@@ -793,16 +794,26 @@ class _EditSetPageState extends State<EditSetPage> {
     ];
   }
 
-  void updateFields(PerformedSetView performedSet, {bool formatOrm = true}) {
+  void updateFields(
+    PerformedSetView performedSet, {
+    bool formatOrm = true,
+    bool rebuild = true,
+  }) {
     _nameCtrl?.text = performedSet.name;
-    setState(() {
+    void updateState() {
       _category = performedSet.category;
       _image = performedSet.image;
       _name = performedSet.name;
       _unit = performedSet.unit;
       _cardio = performedSet.cardio;
       restMs = performedSet.restMs;
-    });
+    }
+
+    if (rebuild) {
+      setState(updateState);
+    } else {
+      updateState();
+    }
 
     if (performedSet.reps != 0) _reps.text = toString(performedSet.reps);
     _weight.text = toString(performedSet.weight);

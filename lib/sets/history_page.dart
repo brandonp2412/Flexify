@@ -303,10 +303,12 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
 
   void onAdd() async {
     final settings = context.read<SettingsState>().value;
-    final performedSets = await stream.first;
-    final latestBodyWeight = settings.showBodyWeight
-        ? await getBodyWeight()
-        : null;
+    final performedSetsFuture = stream.first;
+    final bodyWeightFuture = settings.showBodyWeight
+        ? getBodyWeight()
+        : Future<BodyWeight?>.value();
+    final performedSets = await performedSetsFuture;
+    final latestBodyWeight = await bodyWeightFuture;
 
     PerformedSetView performedSet =
         performedSets.firstOrNull ??
