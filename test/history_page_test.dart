@@ -282,6 +282,40 @@ void main() {
     expect(find.text('Delete'), findsOneWidget);
   });
 
+  testWidgets('Grouped history preserves desktop row actions', (
+    WidgetTester tester,
+  ) async {
+    final harness = await FlexifyTestHarness.create();
+    await harness.database.settings.update().write(
+      testSettings(groupHistory: true),
+    );
+    tester.view.devicePixelRatio = 1;
+    tester.view.physicalSize = const Size(1200, 800);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    addTearDown(tester.view.resetPhysicalSize);
+    await insertExerciseSetFixture(
+      harness.database,
+      'Desktop row',
+      reps: 5,
+      weight: 90,
+    );
+
+    await pumpHistoryPage(tester, harness, surfaceSize: const Size(1200, 800));
+    await tester.tap(find.text('Desktop row (1)'));
+    await tester.pumpAndSettle();
+
+    final gesture = await tester.startGesture(
+      tester.getCenter(find.text('5 x 90 kg')),
+      kind: PointerDeviceKind.mouse,
+      buttons: kSecondaryMouseButton,
+    );
+    await gesture.up();
+    await tester.pumpAndSettle();
+
+    expect(find.text('Edit'), findsOneWidget);
+    expect(find.text('Delete'), findsOneWidget);
+  });
+
   testWidgets('HistoryPage selects', (WidgetTester tester) async {
     final harness = await FlexifyTestHarness.create();
     await insertExerciseSetFixture(

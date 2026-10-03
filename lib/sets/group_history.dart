@@ -182,7 +182,7 @@ class _GroupHistoryState extends State<GroupHistory> {
             const SizedBox(width: 8),
             Expanded(
               child: Text(
-                '${weekday}, ${date}',
+                '$weekday, $date',
                 style: Theme.of(context).textTheme.titleSmall
                     ?.copyWith(fontWeight: FontWeight.w700),
               ),
@@ -208,11 +208,14 @@ class _GroupHistoryState extends State<GroupHistory> {
 
     return ExpansionTile(
       key: ValueKey('${group.day.millisecondsSinceEpoch}|${exercise.name}'),
-      title: Text('${exercise.name} (${count})'),
+      title: Text('${exercise.name} ($count)'),
       shape: const Border.symmetric(),
       children: [
         for (final exerciseSet in exercise.exerciseSets)
-          _setRow(context, exerciseSet, showImages, desktop),
+          Builder(
+            builder: (context) =>
+                _setRow(context, exerciseSet, showImages, desktop),
+          ),
       ],
     );
   }
