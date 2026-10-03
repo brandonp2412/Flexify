@@ -1,7 +1,7 @@
 import 'package:csv/csv.dart';
 import 'package:drift/drift.dart';
 import 'package:flexify/database/database.dart';
-import 'package:flexify/database/performed_sets.dart';
+import 'package:flexify/database/exercise_set_repository.dart';
 import 'package:flexify/utils.dart';
 
 const _format = 'flexify_graphs_v2';
@@ -414,7 +414,7 @@ Future<GraphCsvImportResult> _importLegacy(
     await database.bodyWeights.deleteAll();
 
     for (final weight in legacyWeights) {
-      final kg = canonicalPerformedLoad(weight.unit, weight.value);
+      final kg = canonicalExerciseSetLoad(weight.unit, weight.value);
       if (kg == null) continue;
       await database.bodyWeights.insertOne(
         BodyWeightsCompanion.insert(timestamp: weight.timestamp, weightKg: kg),
@@ -459,7 +459,7 @@ Future<GraphCsvImportResult> _importLegacy(
       );
       final bodyWeightKg = rawBodyWeight == 0 || bodyWeightUnit == null
           ? null
-          : canonicalPerformedLoad(bodyWeightUnit, rawBodyWeight);
+          : canonicalExerciseSetLoad(bodyWeightUnit, rawBodyWeight);
 
       await database.exerciseSets.insertOne(
         ExerciseSetsCompanion.insert(
@@ -467,7 +467,7 @@ Future<GraphCsvImportResult> _importLegacy(
           timestamp: timestamp,
           reps: Value(row.number('reps')),
           loadKg: Value(
-            canonicalPerformedLoad(unit, row.number('weight') ?? 0),
+            canonicalExerciseSetLoad(unit, row.number('weight') ?? 0),
           ),
           durationMs: Value(
             row.has('duration')
@@ -476,7 +476,10 @@ Future<GraphCsvImportResult> _importLegacy(
           ),
           distanceMetres: Value(
             row.has('distance')
-                ? canonicalPerformedDistance(unit, row.number('distance') ?? 0)
+                ? canonicalExerciseSetDistance(
+                    unit,
+                    row.number('distance') ?? 0,
+                  )
                 : null,
           ),
           incline: Value(row.number('incline')),

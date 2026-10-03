@@ -15,7 +15,7 @@ import 'package:provider/provider.dart';
 enum _GraphContextAction { edit, delete }
 
 class GraphTile extends StatelessWidget {
-  final GraphExerciseSummary performedSet;
+  final GraphExerciseSummary exerciseSet;
   final Set<String> selected;
   final Function(String) onSelect;
   final TabController tabCtrl;
@@ -27,7 +27,7 @@ class GraphTile extends StatelessWidget {
     super.key,
     required this.selected,
     required this.onSelect,
-    required this.performedSet,
+    required this.exerciseSet,
     required this.tabCtrl,
     this.timeBasedXAxis = false,
     this.onEdit,
@@ -37,43 +37,43 @@ class GraphTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String trailing;
-    final unit = displayMeasurementUnit(context.l10n, performedSet.unit);
+    final unit = displayMeasurementUnit(context.l10n, exerciseSet.unit);
     final showImages = context.select<SettingsState, bool>(
       (settings) => settings.value.showImages,
     );
 
-    if (performedSet.bodyWeight) {
-      trailing = "${formatDisplayNumber(context, performedSet.weight)} $unit";
-    } else if (performedSet.cardio) {
-      final minutes = performedSet.duration.floor();
-      final seconds = ((performedSet.duration * 60) % 60)
+    if (exerciseSet.bodyWeight) {
+      trailing = "${formatDisplayNumber(context, exerciseSet.weight)} $unit";
+    } else if (exerciseSet.cardio) {
+      final minutes = exerciseSet.duration.floor();
+      final seconds = ((exerciseSet.duration * 60) % 60)
           .floor()
           .toString()
           .padLeft(2, '0');
-      final value = _isWeightUnit(performedSet.unit)
-          ? performedSet.weight
-          : performedSet.distance;
+      final value = _isWeightUnit(exerciseSet.unit)
+          ? exerciseSet.weight
+          : exerciseSet.distance;
       trailing =
           "${formatDisplayNumber(context, value)} $unit / $minutes:$seconds";
     } else {
       trailing =
-          "${formatDisplayNumber(context, performedSet.reps)} x ${formatDisplayNumber(context, performedSet.weight)} $unit";
+          "${formatDisplayNumber(context, exerciseSet.reps)} x ${formatDisplayNumber(context, exerciseSet.weight)} $unit";
     }
 
     Widget? leading;
 
-    if (showImages && performedSet.image?.isNotEmpty == true) {
+    if (showImages && exerciseSet.image?.isNotEmpty == true) {
       leading = GestureDetector(
-        onTap: () => onSelect(performedSet.selectionKey),
+        onTap: () => onSelect(exerciseSet.selectionKey),
         child: Image.file(
-          File(performedSet.image!),
+          File(exerciseSet.image!),
           cacheWidth: 64,
           errorBuilder: (context, error, stackTrace) => const Icon(Icons.error),
         ),
       );
     } else if (showImages) {
       leading = GestureDetector(
-        onTap: () => onSelect(performedSet.selectionKey),
+        onTap: () => onSelect(exerciseSet.selectionKey),
         child: Container(
           width: 24,
           height: 24,
@@ -83,8 +83,8 @@ class GraphTile extends StatelessWidget {
           ),
           child: Center(
             child: Text(
-              performedSet.name.isNotEmpty
-                  ? performedSet.name[0].toUpperCase()
+              exerciseSet.name.isNotEmpty
+                  ? exerciseSet.name[0].toUpperCase()
                   : '?',
               style: const TextStyle(
                 color: Colors.white,
@@ -101,7 +101,7 @@ class GraphTile extends StatelessWidget {
     final desktop = isDesktopLayout(context);
     final colors = Theme.of(context).colorScheme;
     final tile = Material(
-      color: selected.contains(performedSet.selectionKey)
+      color: selected.contains(exerciseSet.selectionKey)
           ? colors.primary.withValues(alpha: .18)
           : desktop
           ? colors.surfaceContainerLow
@@ -114,11 +114,10 @@ class GraphTile extends StatelessWidget {
             : null,
         leading: leading,
         title: Text(
-          performedSet.name,
+          exerciseSet.name,
           style: desktop
-              ? Theme.of(
-                  context,
-                ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600)
+              ? Theme.of(context).textTheme.titleMedium
+                    ?.copyWith(fontWeight: FontWeight.w600)
               : null,
         ),
         subtitle: Selector<SettingsState, String>(
@@ -127,34 +126,27 @@ class GraphTile extends StatelessWidget {
             padding: const EdgeInsets.only(top: 3),
             child: Text(
               dateFormat == 'timeago'
-                  ? formatRelativeTime(context, performedSet.created)
-                  : formatDisplayDate(
-                      context,
-                      performedSet.created,
-                      dateFormat,
-                    ),
-              style: Theme.of(
-                context,
-              ).textTheme.bodySmall?.copyWith(color: colors.onSurfaceVariant),
+                  ? formatRelativeTime(context, exerciseSet.created)
+                  : formatDisplayDate(context, exerciseSet.created, dateFormat),
+              style: Theme.of(context).textTheme.bodySmall
+                  ?.copyWith(color: colors.onSurfaceVariant),
             ),
           ),
         ),
         trailing: Text(
           trailing,
-          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-            fontWeight: FontWeight.w600,
-            color: colors.onSurface,
-          ),
+          style: Theme.of(context).textTheme.bodyLarge
+              ?.copyWith(fontWeight: FontWeight.w600, color: colors.onSurface),
         ),
         onTap: () async {
           if (selected.isNotEmpty) {
-            onSelect(performedSet.selectionKey);
+            onSelect(exerciseSet.selectionKey);
             return;
           }
 
-          if (performedSet.bodyWeight) {
+          if (exerciseSet.bodyWeight) {
             final data = await getBodyWeightData(
-              target: performedSet.unit,
+              target: exerciseSet.unit,
               period: Period.day,
               start: null,
               end: null,
@@ -164,8 +156,8 @@ class GraphTile extends StatelessWidget {
             Navigator.of(context).push(
               FlexPageRoute(
                 builder: (context) => StrengthPage(
-                  initialName: performedSet.name,
-                  initialUnit: performedSet.unit,
+                  initialName: exerciseSet.name,
+                  initialUnit: exerciseSet.unit,
                   initialData: data,
                   tabCtrl: tabCtrl,
                   bodyWeight: true,
@@ -175,11 +167,11 @@ class GraphTile extends StatelessWidget {
             return;
           }
 
-          if (performedSet.cardio) {
+          if (exerciseSet.cardio) {
             final data = await getCardioData(
-              target: performedSet.unit,
-              name: performedSet.name,
-              metric: _isWeightUnit(performedSet.unit)
+              target: exerciseSet.unit,
+              name: exerciseSet.name,
+              metric: _isWeightUnit(exerciseSet.unit)
                   ? CardioMetric.weight
                   : CardioMetric.pace,
               period: Period.day,
@@ -191,8 +183,8 @@ class GraphTile extends StatelessWidget {
               FlexPageRoute(
                 builder: (context) => CardioPage(
                   tabCtrl: tabCtrl,
-                  initialName: performedSet.name,
-                  initialUnit: performedSet.unit,
+                  initialName: exerciseSet.name,
+                  initialUnit: exerciseSet.unit,
                   initialData: data,
                 ),
               ),
@@ -201,8 +193,8 @@ class GraphTile extends StatelessWidget {
           }
 
           final data = await getStrengthData(
-            target: performedSet.unit,
-            name: performedSet.name,
+            target: exerciseSet.unit,
+            name: exerciseSet.name,
             metric: StrengthMetric.bestWeight,
             period: Period.day,
             start: null,
@@ -214,8 +206,8 @@ class GraphTile extends StatelessWidget {
           Navigator.of(context).push(
             FlexPageRoute(
               builder: (context) => StrengthPage(
-                initialName: performedSet.name,
-                initialUnit: performedSet.unit,
+                initialName: exerciseSet.name,
+                initialUnit: exerciseSet.unit,
                 initialData: data,
                 tabCtrl: tabCtrl,
               ),
@@ -225,7 +217,7 @@ class GraphTile extends StatelessWidget {
         onLongPress: desktop
             ? null
             : () {
-                onSelect(performedSet.selectionKey);
+                onSelect(exerciseSet.selectionKey);
               },
       ),
     );

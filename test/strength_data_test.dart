@@ -12,7 +12,7 @@ void main() {
   });
 
   test('getStrengthData converts best weight to the requested unit', () async {
-    await insertPerformedSetFixture(db, 'Bench press', reps: 5, weight: 100);
+    await insertExerciseSetFixture(db, 'Bench press', reps: 5, weight: 100);
 
     final data = await getStrengthData(
       target: 'lb',
@@ -29,8 +29,8 @@ void main() {
   });
 
   test('getStrengthData calculates daily volume in the query layer', () async {
-    await insertPerformedSetFixture(db, 'Bench press', reps: 5, weight: 100);
-    await insertPerformedSetFixture(
+    await insertExerciseSetFixture(db, 'Bench press', reps: 5, weight: 100);
+    await insertExerciseSetFixture(
       db,
       'Bench press',
       reps: 10,

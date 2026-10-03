@@ -13,7 +13,7 @@ double displayLoad(String unit, double? loadKg) {
 }
 
 /// Converts a displayed load to canonical kilograms.
-double? canonicalPerformedLoad(String unit, double value) {
+double? canonicalExerciseSetLoad(String unit, double value) {
   return switch (unit) {
     'kg' => value,
     'lb' => value * 0.45359237,
@@ -33,7 +33,7 @@ double displayDistance(String unit, double? distanceMetres) {
 }
 
 /// Converts a displayed distance to canonical metres.
-double? canonicalPerformedDistance(String unit, double value) {
+double? canonicalExerciseSetDistance(String unit, double value) {
   return switch (unit) {
     'm' => value,
     'km' => value * 1000,
@@ -53,17 +53,17 @@ double _displayBodyWeight(String unit, double? bodyWeightKg) {
 
 double? _canonicalBodyWeight(String unit, double value) {
   if (value == 0) return null;
-  return canonicalPerformedLoad(unit, value);
+  return canonicalExerciseSetLoad(unit, value);
 }
 
-PerformedSetView _toPerformedSetView(AppDatabase database, TypedResult row) {
+ExerciseSetView _toExerciseSetView(AppDatabase database, TypedResult row) {
   final set = row.readTable(database.exerciseSets);
   final exercise = row.readTable(database.exercises);
   final category = row.readTableOrNull(database.categories);
   final workout = row.readTableOrNull(database.workouts);
   final unit = exercise.displayUnit;
 
-  return PerformedSetView(
+  return ExerciseSetView(
     id: set.id,
     bodyWeight: _displayBodyWeight(unit, set.bodyWeightKg),
     cardio: exercise.kind == 'cardio',
@@ -83,8 +83,8 @@ PerformedSetView _toPerformedSetView(AppDatabase database, TypedResult row) {
   );
 }
 
-List<PerformedSetView> _filterPerformedSets(
-  List<PerformedSetView> sets, {
+List<ExerciseSetView> _filterExerciseSets(
+  List<ExerciseSetView> sets, {
   String search = '',
   String? category,
   DateTime? startDate,
@@ -117,7 +117,7 @@ List<PerformedSetView> _filterPerformedSets(
   return (limit == null ? filtered : filtered.take(limit)).toList();
 }
 
-JoinedSelectStatement<HasResultSet, dynamic> _performedSetQuery(
+JoinedSelectStatement<HasResultSet, dynamic> _exerciseSetQuery(
   AppDatabase database, {
   OrderingMode order = OrderingMode.desc,
 }) {
@@ -140,8 +140,8 @@ JoinedSelectStatement<HasResultSet, dynamic> _performedSetQuery(
   ]);
 }
 
-/// Watches performed sets projected with exercise metadata for history UI.
-Stream<List<PerformedSetView>> watchPerformedSets(
+/// Watches exercise sets projected with exercise metadata for history UI.
+Stream<List<ExerciseSetView>> watchExerciseSets(
   AppDatabase database, {
   String search = '',
   String? category,
@@ -153,9 +153,9 @@ Stream<List<PerformedSetView>> watchPerformedSets(
   double? weightLt,
   int? limit,
 }) {
-  return _performedSetQuery(database).watch().map(
-    (rows) => _filterPerformedSets(
-      rows.map((row) => _toPerformedSetView(database, row)).toList(),
+  return _exerciseSetQuery(database).watch().map(
+    (rows) => _filterExerciseSets(
+      rows.map((row) => _toExerciseSetView(database, row)).toList(),
       search: search,
       category: category,
       startDate: startDate,
@@ -169,8 +169,8 @@ Stream<List<PerformedSetView>> watchPerformedSets(
   );
 }
 
-/// Loads performed sets projected with exercise metadata.
-Future<List<PerformedSetView>> getPerformedSets(
+/// Loads exercise sets projected with exercise metadata.
+Future<List<ExerciseSetView>> getExerciseSets(
   AppDatabase database, {
   String search = '',
   String? category,
@@ -182,9 +182,9 @@ Future<List<PerformedSetView>> getPerformedSets(
   double? weightLt,
   int? limit,
 }) async {
-  final rows = await _performedSetQuery(database).get();
-  return _filterPerformedSets(
-    rows.map((row) => _toPerformedSetView(database, row)).toList(),
+  final rows = await _exerciseSetQuery(database).get();
+  return _filterExerciseSets(
+    rows.map((row) => _toExerciseSetView(database, row)).toList(),
     search: search,
     category: category,
     startDate: startDate,
@@ -197,7 +197,7 @@ Future<List<PerformedSetView>> getPerformedSets(
   );
 }
 
-Future<List<PerformedSetView>> getPerformedSetsForExercise(
+Future<List<ExerciseSetView>> getExerciseSetsForExercise(
   AppDatabase database, {
   required String exerciseName,
   DateTime? startDate,
@@ -205,7 +205,7 @@ Future<List<PerformedSetView>> getPerformedSetsForExercise(
   int? limit,
   OrderingMode order = OrderingMode.desc,
 }) async {
-  final query = _performedSetQuery(database, order: order)
+  final query = _exerciseSetQuery(database, order: order)
     ..where(database.exercises.name.equals(exerciseName));
 
   if (startDate != null) {
@@ -219,23 +219,23 @@ Future<List<PerformedSetView>> getPerformedSetsForExercise(
   if (limit != null) query.limit(limit);
 
   final rows = await query.get();
-  return rows.map((row) => _toPerformedSetView(database, row)).toList();
+  return rows.map((row) => _toExerciseSetView(database, row)).toList();
 }
 
-Future<PerformedSetView?> getPerformedSetForExerciseAt(
+Future<ExerciseSetView?> getExerciseSetForExerciseAt(
   AppDatabase database, {
   required String exerciseName,
   required DateTime timestamp,
 }) async {
-  final query = _performedSetQuery(database)
+  final query = _exerciseSetQuery(database)
     ..where(database.exercises.name.equals(exerciseName))
     ..where(database.exerciseSets.timestamp.equals(timestamp))
     ..limit(1);
   final row = await query.getSingleOrNull();
-  return row == null ? null : _toPerformedSetView(database, row);
+  return row == null ? null : _toExerciseSetView(database, row);
 }
 
-Future<int> countPerformedSetsForExercises(
+Future<int> countExerciseSetsForExercises(
   AppDatabase database,
   Iterable<String> exerciseNames,
 ) async {
@@ -259,100 +259,100 @@ Future<int> countPerformedSetsForExercises(
   return row.read(count) ?? 0;
 }
 
-/// Loads one performed set by its exercise_sets identifier.
-Future<PerformedSetView?> getPerformedSetById(
+/// Loads one exercise set by its exercise_sets identifier.
+Future<ExerciseSetView?> getExerciseSetById(
   AppDatabase database,
   int id,
 ) async {
-  final query = _performedSetQuery(database)
+  final query = _exerciseSetQuery(database)
     ..where(database.exerciseSets.id.equals(id));
   final row = await query.getSingleOrNull();
-  return row == null ? null : _toPerformedSetView(database, row);
+  return row == null ? null : _toExerciseSetView(database, row);
 }
 
-/// Loads the latest performed set for an exercise name.
-Future<PerformedSetView?> getLatestPerformedSet(
+/// Loads the latest exercise set for an exercise name.
+Future<ExerciseSetView?> getLatestExerciseSet(
   AppDatabase database, {
   required String exerciseName,
 }) async {
-  final query = _performedSetQuery(database)
+  final query = _exerciseSetQuery(database)
     ..where(database.exercises.name.equals(exerciseName))
     ..limit(1);
   final row = await query.getSingleOrNull();
-  return row == null ? null : _toPerformedSetView(database, row);
+  return row == null ? null : _toExerciseSetView(database, row);
 }
 
-/// Loads the latest performed set for an exercise in one workout.
-Future<PerformedSetView?> getLatestWorkoutPerformedSet(
+/// Loads the latest exercise set for an exercise in one workout.
+Future<ExerciseSetView?> getLatestWorkoutExerciseSet(
   AppDatabase database, {
   required int workoutId,
   required int exerciseId,
 }) async {
-  final query = _performedSetQuery(database)
+  final query = _exerciseSetQuery(database)
     ..where(
       database.exerciseSets.workoutId.equals(workoutId) &
           database.exerciseSets.exerciseId.equals(exerciseId),
     )
     ..limit(1);
   final row = await query.getSingleOrNull();
-  return row == null ? null : _toPerformedSetView(database, row);
+  return row == null ? null : _toExerciseSetView(database, row);
 }
 
-/// Watches performed sets for one exercise in one workout.
-Stream<List<PerformedSetView>> watchWorkoutPerformedSets(
+/// Watches exercise sets for one exercise in one workout.
+Stream<List<ExerciseSetView>> watchWorkoutExerciseSets(
   AppDatabase database, {
   required int workoutId,
   required int exerciseId,
 }) {
-  final query = _performedSetQuery(database, order: OrderingMode.asc)
+  final query = _exerciseSetQuery(database, order: OrderingMode.asc)
     ..where(
       database.exerciseSets.workoutId.equals(workoutId) &
           database.exerciseSets.exerciseId.equals(exerciseId),
     );
   return query.watch().map(
-    (rows) => rows.map((row) => _toPerformedSetView(database, row)).toList(),
+    (rows) => rows.map((row) => _toExerciseSetView(database, row)).toList(),
   );
 }
 
-/// Inserts one performed set into exercise_sets only.
-Future<PerformedSetView> insertPerformedSet(
+/// Inserts one exercise set into exercise_sets only.
+Future<ExerciseSetView> insertExerciseSet(
   AppDatabase database, {
-  required PerformedSetView performedSet,
+  required ExerciseSetView exerciseSet,
   required int exerciseId,
   int? workoutId,
   double? bodyWeightKg,
 }) async {
   final resolvedBodyWeightKg =
       bodyWeightKg ??
-      _canonicalBodyWeight(performedSet.unit, performedSet.bodyWeight) ??
+      _canonicalBodyWeight(exerciseSet.unit, exerciseSet.bodyWeight) ??
       (await getLatestBodyWeight(database))?.weightKg;
 
   final id = await database.exerciseSets.insertOne(
     ExerciseSetsCompanion.insert(
       exerciseId: exerciseId,
       workoutId: Value(workoutId),
-      timestamp: performedSet.created,
-      reps: Value(performedSet.reps),
+      timestamp: exerciseSet.created,
+      reps: Value(exerciseSet.reps),
       loadKg: Value(
-        canonicalPerformedLoad(performedSet.unit, performedSet.weight),
+        canonicalExerciseSetLoad(exerciseSet.unit, exerciseSet.weight),
       ),
-      durationMs: Value((performedSet.duration * 60000).round()),
+      durationMs: Value((exerciseSet.duration * 60000).round()),
       distanceMetres: Value(
-        canonicalPerformedDistance(performedSet.unit, performedSet.distance),
+        canonicalExerciseSetDistance(exerciseSet.unit, exerciseSet.distance),
       ),
-      incline: Value(performedSet.incline?.toDouble()),
+      incline: Value(exerciseSet.incline?.toDouble()),
       bodyWeightKg: Value(resolvedBodyWeightKg),
-      notes: Value(performedSet.notes),
+      notes: Value(exerciseSet.notes),
     ),
   );
-  return (await getPerformedSetById(database, id))!;
+  return (await getExerciseSetById(database, id))!;
 }
 
 /// Updates per-performance data and exercise identity in exercise_sets only.
-Future<void> updatePerformedSet(
+Future<void> updateExerciseSet(
   AppDatabase database, {
   required int id,
-  required PerformedSetView performedSet,
+  required ExerciseSetView exerciseSet,
   required int exerciseId,
   double? bodyWeightKg,
 }) {
@@ -360,51 +360,48 @@ Future<void> updatePerformedSet(
       .write(
         ExerciseSetsCompanion(
           exerciseId: Value(exerciseId),
-          timestamp: Value(performedSet.created),
-          reps: Value(performedSet.reps),
+          timestamp: Value(exerciseSet.created),
+          reps: Value(exerciseSet.reps),
           loadKg: Value(
-            canonicalPerformedLoad(performedSet.unit, performedSet.weight),
+            canonicalExerciseSetLoad(exerciseSet.unit, exerciseSet.weight),
           ),
-          durationMs: Value((performedSet.duration * 60000).round()),
+          durationMs: Value((exerciseSet.duration * 60000).round()),
           distanceMetres: Value(
-            canonicalPerformedDistance(
-              performedSet.unit,
-              performedSet.distance,
+            canonicalExerciseSetDistance(
+              exerciseSet.unit,
+              exerciseSet.distance,
             ),
           ),
-          incline: Value(performedSet.incline?.toDouble()),
+          incline: Value(exerciseSet.incline?.toDouble()),
           bodyWeightKg: Value(
             bodyWeightKg ??
-                _canonicalBodyWeight(
-                  performedSet.unit,
-                  performedSet.bodyWeight,
-                ),
+                _canonicalBodyWeight(exerciseSet.unit, exerciseSet.bodyWeight),
           ),
-          notes: Value(performedSet.notes),
+          notes: Value(exerciseSet.notes),
         ),
       );
 }
 
-/// Deletes performed sets by exercise_sets identifiers.
-Future<int> deletePerformedSets(AppDatabase database, Iterable<int> ids) {
+/// Deletes exercise sets by exercise_sets identifiers.
+Future<int> deleteExerciseSets(AppDatabase database, Iterable<int> ids) {
   final values = ids.toList();
   if (values.isEmpty) return Future.value(0);
   return (database.exerciseSets.delete()..where((set) => set.id.isIn(values)))
       .go();
 }
 
-/// Compares a set against prior performed sets for positive reinforcement.
-Future<bool> isBestPerformedSet(
+/// Compares a set against prior exercise sets for positive reinforcement.
+Future<bool> isBestExerciseSet(
   AppDatabase database,
-  PerformedSetView performedSet,
+  ExerciseSetView exerciseSet,
 ) async {
-  final previous = (await getPerformedSetsForExercise(
+  final previous = (await getExerciseSetsForExercise(
     database,
-    exerciseName: performedSet.name,
-  )).where((set) => set.id != performedSet.id);
+    exerciseName: exerciseSet.name,
+  )).where((set) => set.id != exerciseSet.id);
 
-  if (performedSet.cardio &&
-      const {'kg', 'lb', 'stone'}.contains(performedSet.unit)) {
+  if (exerciseSet.cardio &&
+      const {'kg', 'lb', 'stone'}.contains(exerciseSet.unit)) {
     final candidates = previous.toList();
     if (candidates.isEmpty) return false;
     candidates.sort((a, b) {
@@ -412,19 +409,19 @@ Future<bool> isBestPerformedSet(
       return load != 0 ? load : b.duration.compareTo(a.duration);
     });
     final best = candidates.first;
-    return performedSet.weight > best.weight ||
-        (performedSet.weight == best.weight &&
-            performedSet.duration > best.duration);
+    return exerciseSet.weight > best.weight ||
+        (exerciseSet.weight == best.weight &&
+            exerciseSet.duration > best.duration);
   }
 
-  if (performedSet.cardio) {
-    if (performedSet.duration == 0) return false;
+  if (exerciseSet.cardio) {
+    if (exerciseSet.duration == 0) return false;
     final candidates = previous.where((set) => set.duration > 0).toList();
     if (candidates.isEmpty) return false;
     final bestPace = candidates
         .map((set) => set.distance / set.duration)
         .reduce((a, b) => a > b ? a : b);
-    return performedSet.distance / performedSet.duration > bestPace;
+    return exerciseSet.distance / exerciseSet.duration > bestPace;
   }
 
   final candidates = previous.toList();
@@ -434,6 +431,6 @@ Future<bool> isBestPerformedSet(
     return load != 0 ? load : b.reps.compareTo(a.reps);
   });
   final best = candidates.first;
-  return performedSet.weight > best.weight ||
-      (performedSet.weight == best.weight && performedSet.reps > best.reps);
+  return exerciseSet.weight > best.weight ||
+      (exerciseSet.weight == best.weight && exerciseSet.reps > best.reps);
 }

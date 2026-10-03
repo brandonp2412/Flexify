@@ -1,10 +1,10 @@
 import 'package:drift/drift.dart';
 import 'package:flexify/database/database.dart';
-import 'package:flexify/database/performed_sets.dart';
+import 'package:flexify/database/exercise_set_repository.dart';
 
 final testNow = DateTime(2026, 1, 15, 12);
 
-PerformedSetView performedSetFixture(
+ExerciseSetView exerciseSetFixture(
   String name, {
   double reps = 5,
   double weight = 50,
@@ -17,7 +17,7 @@ PerformedSetView performedSetFixture(
   int? planId,
   bool hidden = false,
 }) {
-  return PerformedSetView(
+  return ExerciseSetView(
     id: 0,
     name: name,
     reps: reps,
@@ -34,7 +34,7 @@ PerformedSetView performedSetFixture(
   );
 }
 
-PerformedSetView performedSetModelFixture({
+ExerciseSetView exerciseSetModelFixture({
   int id = 0,
   String name = 'Bench press',
   double reps = 2,
@@ -47,7 +47,7 @@ PerformedSetView performedSetModelFixture({
   double distance = 0,
   bool cardio = false,
 }) {
-  return PerformedSetView(
+  return ExerciseSetView(
     id: id,
     name: name,
     reps: reps,
@@ -61,7 +61,7 @@ PerformedSetView performedSetModelFixture({
   );
 }
 
-Future<PerformedSetView> insertPerformedSetFixture(
+Future<ExerciseSetView> insertExerciseSetFixture(
   AppDatabase database,
   String name, {
   double reps = 5,
@@ -108,11 +108,11 @@ Future<PerformedSetView> insertPerformedSetFixture(
     );
   }
 
-  return insertPerformedSet(
+  return insertExerciseSet(
     database,
     exerciseId: exercise.id,
     workoutId: workoutId,
-    performedSet: PerformedSetView(
+    exerciseSet: ExerciseSetView(
       id: 0,
       name: name,
       reps: reps,

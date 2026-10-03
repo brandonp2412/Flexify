@@ -1,7 +1,7 @@
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/exercise_analytics.dart';
 import 'package:flexify/database/exercise_catalog.dart';
-import 'package:flexify/database/performed_sets.dart';
+import 'package:flexify/database/exercise_set_repository.dart';
 import 'package:flexify/main.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -16,7 +16,7 @@ void main() {
   tearDown(() => db.close());
 
   test('strength analytics normalize mixed units and survive rename', () async {
-    await insertPerformedSetFixture(
+    await insertExerciseSetFixture(
       db,
       'Bench old',
       reps: 5,
@@ -26,7 +26,7 @@ void main() {
       category: 'Chest',
       created: testNow,
     );
-    await insertPerformedSetFixture(
+    await insertExerciseSetFixture(
       db,
       'Bench old',
       reps: 10,
@@ -131,7 +131,7 @@ void main() {
   test(
     'cardio analytics normalize distance, incline, load and duration',
     () async {
-      await insertPerformedSetFixture(
+      await insertExerciseSetFixture(
         db,
         'Run',
         cardio: true,
@@ -141,7 +141,7 @@ void main() {
         incline: 2,
         created: testNow,
       );
-      await insertPerformedSetFixture(
+      await insertExerciseSetFixture(
         db,
         'Run',
         cardio: true,
@@ -170,7 +170,7 @@ void main() {
       expect(await runMetric(CardioMetric.incline), 3);
       expect(await runMetric(CardioMetric.inclineAdjustedPace), 0.27);
 
-      await insertPerformedSetFixture(
+      await insertExerciseSetFixture(
         db,
         'Sled',
         cardio: true,
@@ -179,7 +179,7 @@ void main() {
         duration: 1,
         created: testNow,
       );
-      await insertPerformedSetFixture(
+      await insertExerciseSetFixture(
         db,
         'Sled',
         cardio: true,
@@ -211,16 +211,16 @@ void main() {
     },
   );
 
-  test('RPM and best-set detection read redesigned performed sets', () async {
+  test('RPM and best-set detection read redesigned exercise sets', () async {
     final now = DateTime.now().toLocal();
-    final first = await insertPerformedSetFixture(
+    final first = await insertExerciseSetFixture(
       db,
       'Curl',
       reps: 4,
       weight: 50,
       created: now.subtract(const Duration(minutes: 2)),
     );
-    final second = await insertPerformedSetFixture(
+    final second = await insertExerciseSetFixture(
       db,
       'Curl',
       reps: 6,
@@ -231,7 +231,7 @@ void main() {
     final rpms = await getRpms();
     final rpm = rpms.singleWhere((row) => row.name == 'Curl');
     expect(rpm.rpm, closeTo(6, 0.01));
-    expect(await isBestPerformedSet(db, first), isFalse);
-    expect(await isBestPerformedSet(db, second), isTrue);
+    expect(await isBestExerciseSet(db, first), isFalse);
+    expect(await isBestExerciseSet(db, second), isTrue);
   });
 }

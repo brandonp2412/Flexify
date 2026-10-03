@@ -2,7 +2,7 @@ import 'package:drift/drift.dart';
 import 'package:flexify/animated_fab.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/exercise_catalog.dart';
-import 'package:flexify/database/performed_sets.dart';
+import 'package:flexify/database/exercise_set_repository.dart';
 import 'package:flexify/database/categories.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
@@ -81,7 +81,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
                         icon: const Icon(Icons.delete),
                         onPressed: () async {
                           Navigator.pop(dialogContext);
-                          await deletePerformedSets(db, widget.ids);
+                          await deleteExerciseSets(db, widget.ids);
                           if (context.mounted) Navigator.pop(context);
                         },
                       ),
@@ -421,63 +421,63 @@ class _EditSetsPageState extends State<EditSetsPage> {
     super.initState();
     final settings = context.read<SettingsState>().value;
 
-    getPerformedSets(db).then((allSets) {
-      final performedSets = allSets
-          .where((performedSet) => widget.ids.contains(performedSet.id))
+    getExerciseSets(db).then((allSets) {
+      final exerciseSets = allSets
+          .where((exerciseSet) => widget.ids.contains(exerciseSet.id))
           .take(3)
           .toList();
-      if (performedSets.isEmpty) return;
+      if (exerciseSets.isEmpty) return;
       setState(() {
-        _cardio = performedSets.first.cardio;
-        final units = performedSets
-            .map((performedSet) => performedSet.unit)
+        _cardio = exerciseSets.first.cardio;
+        final units = exerciseSets
+            .map((exerciseSet) => exerciseSet.unit)
             .toSet();
         _unit = units.length == 1 ? units.single : null;
-        _oldNames = performedSets
-            .map((performedSet) => performedSet.name)
+        _oldNames = exerciseSets
+            .map((exerciseSet) => exerciseSet.name)
             .join(', ');
-        _oldReps = performedSets
-            .map((performedSet) => performedSet.reps)
+        _oldReps = exerciseSets
+            .map((exerciseSet) => exerciseSet.reps)
             .join(', ');
-        _oldWeights = performedSets
-            .map((performedSet) => performedSet.weight)
+        _oldWeights = exerciseSets
+            .map((exerciseSet) => exerciseSet.weight)
             .join(', ');
-        _oldBody = performedSets
-            .map((performedSet) => performedSet.bodyWeight)
+        _oldBody = exerciseSets
+            .map((exerciseSet) => exerciseSet.bodyWeight)
             .join(', ');
         if (settings.longDateFormat == 'timeago')
-          _oldCreated = performedSets
+          _oldCreated = exerciseSets
               .map(
-                (performedSet) =>
-                    formatRelativeTime(context, performedSet.created),
+                (exerciseSet) =>
+                    formatRelativeTime(context, exerciseSet.created),
               )
               .join(', ');
         else
-          _oldCreated = performedSets
+          _oldCreated = exerciseSets
               .map(
-                (performedSet) => formatDisplayDate(
+                (exerciseSet) => formatDisplayDate(
                   context,
-                  performedSet.created,
+                  exerciseSet.created,
                   settings.longDateFormat,
                 ),
               )
               .join(', ');
-        _oldDist = performedSets
-            .map((performedSet) => performedSet.distance)
+        _oldDist = exerciseSets
+            .map((exerciseSet) => exerciseSet.distance)
             .join(', ');
-        _oldMin = performedSets
-            .map((performedSet) => performedSet.duration.floor())
+        _oldMin = exerciseSets
+            .map((exerciseSet) => exerciseSet.duration.floor())
             .join(', ');
-        _oldSec = performedSets
-            .map((performedSet) => ((performedSet.duration * 60) % 60).floor())
+        _oldSec = exerciseSets
+            .map((exerciseSet) => ((exerciseSet.duration * 60) % 60).floor())
             .join(', ');
-        final incs = performedSets
-            .map((performedSet) => performedSet.incline)
+        final incs = exerciseSets
+            .map((exerciseSet) => exerciseSet.incline)
             .whereType<int>()
             .join(', ');
         _oldInc = incs.isEmpty ? null : incs;
-        final cats = performedSets
-            .map((performedSet) => performedSet.category)
+        final cats = exerciseSets
+            .map((exerciseSet) => exerciseSet.category)
             .whereType<String>()
             .join(', ');
         _oldCat = cats.isEmpty ? null : cats;
@@ -525,9 +525,9 @@ class _EditSetsPageState extends State<EditSetsPage> {
         : parseDisplayNumber(context, _distance.text);
     if (_category != null) await createCategory(_category!);
 
-    final selected = (await getPerformedSets(
-      db,
-    )).where((set) => widget.ids.contains(set.id)).toList();
+    final selected = (await getExerciseSets(db))
+        .where((set) => widget.ids.contains(set.id))
+        .toList();
 
     final changesExercise =
         _name.text.isNotEmpty ||
@@ -575,10 +575,10 @@ class _EditSetsPageState extends State<EditSetsPage> {
         category: Value(category),
       );
 
-      await updatePerformedSet(
+      await updateExerciseSet(
         db,
         id: original.id,
-        performedSet: updated,
+        exerciseSet: updated,
         exerciseId: exercise.id,
       );
     }

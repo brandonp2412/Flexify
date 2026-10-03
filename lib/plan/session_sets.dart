@@ -1,6 +1,6 @@
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
-import 'package:flexify/database/performed_sets.dart';
+import 'package:flexify/database/exercise_set_repository.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/sets/edit_set_page.dart';
@@ -27,7 +27,7 @@ class SessionSets extends StatefulWidget {
 }
 
 class _SessionSetsState extends State<SessionSets> {
-  late Stream<List<PerformedSetView>> _stream;
+  late Stream<List<ExerciseSetView>> _stream;
   final ScrollController _scrollController = ScrollController();
   int _lastSetCount = 0;
 
@@ -54,7 +54,7 @@ class _SessionSetsState extends State<SessionSets> {
   }
 
   void _watch() {
-    _stream = watchWorkoutPerformedSets(
+    _stream = watchWorkoutExerciseSets(
       db,
       workoutId: widget.workoutId,
       exerciseId: widget.exerciseId,
@@ -106,7 +106,7 @@ class _SessionSetsState extends State<SessionSets> {
     );
   }
 
-  Widget _buildChips(List<PerformedSetView> sets) {
+  Widget _buildChips(List<ExerciseSetView> sets) {
     final best = _bestId(sets);
 
     return Column(
@@ -124,7 +124,7 @@ class _SessionSetsState extends State<SessionSets> {
                 Padding(
                   padding: const EdgeInsets.only(right: 8.0),
                   child: _SetChip(
-                    performedSet: sets[i],
+                    exerciseSet: sets[i],
                     number: i + 1,
                     best: sets[i].id == best,
                     repsFirst: widget.compact,
@@ -138,7 +138,7 @@ class _SessionSetsState extends State<SessionSets> {
   }
 
   /// Id of the top set this session, using the measurement shown to the user.
-  int? _bestId(List<PerformedSetView> sets) {
+  int? _bestId(List<ExerciseSetView> sets) {
     if (sets.length < 2) return null;
     final cardio = sets.first.cardio;
     final weightedCardio = cardio && _isWeightUnit(sets.first.unit);
@@ -216,37 +216,36 @@ class _PlaceholderChip extends StatelessWidget {
 }
 
 class _SetChip extends StatelessWidget {
-  final PerformedSetView _performedSet;
+  final ExerciseSetView _exerciseSet;
   final int _number;
   final bool _best;
   final bool repsFirst;
 
   const _SetChip({
-    required this._performedSet,
+    required this._exerciseSet,
     required this._number,
     required this._best,
     required this.repsFirst,
   });
 
   String _value(BuildContext context) {
-    final unit = displayMeasurementUnit(context.l10n, _performedSet.unit);
-    if (_performedSet.cardio &&
-        (_performedSet.unit == 'kg' ||
-            _performedSet.unit == 'lb' ||
-            _performedSet.unit == 'stone')) {
-      final minutes = _performedSet.duration.floor();
-      final seconds = ((_performedSet.duration * 60) % 60)
+    final unit = displayMeasurementUnit(context.l10n, _exerciseSet.unit);
+    if (_exerciseSet.cardio &&
+        (_exerciseSet.unit == 'kg' ||
+            _exerciseSet.unit == 'lb' ||
+            _exerciseSet.unit == 'stone')) {
+      final minutes = _exerciseSet.duration.floor();
+      final seconds = ((_exerciseSet.duration * 60) % 60)
           .floor()
           .toString()
           .padLeft(2, '0');
-      return "${formatDisplayNumber(context, _performedSet.weight)} $unit / $minutes:$seconds";
+      return "${formatDisplayNumber(context, _exerciseSet.weight)} $unit / $minutes:$seconds";
     }
-    if (_performedSet.cardio) {
-      return "${formatDisplayNumber(context, _performedSet.distance)} $unit";
+    if (_exerciseSet.cardio) {
+      return "${formatDisplayNumber(context, _exerciseSet.distance)} $unit";
     }
-    final weight =
-        "${formatDisplayNumber(context, _performedSet.weight)} $unit";
-    final reps = formatDisplayNumber(context, _performedSet.reps);
+    final weight = "${formatDisplayNumber(context, _exerciseSet.weight)} $unit";
+    final reps = formatDisplayNumber(context, _exerciseSet.reps);
     return repsFirst ? "$reps × $weight" : "$weight × $reps";
   }
 
@@ -259,7 +258,7 @@ class _SetChip extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         onTap: () => Navigator.of(context).push(
           FlexPageRoute(
-            builder: (context) => EditSetPage(performedSet: _performedSet),
+            builder: (context) => EditSetPage(exerciseSet: _exerciseSet),
           ),
         ),
         child: Padding(

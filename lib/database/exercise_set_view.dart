@@ -1,11 +1,11 @@
 import 'package:drift/drift.dart';
 
-/// UI/domain projection of a performed exercise set joined with exercise metadata.
+/// UI/domain projection of an exercise set joined with exercise metadata.
 ///
 /// This intentionally is not a Drift table. Persistent set data lives in
 /// exercise_sets, while exercise identity/configuration lives in exercises.
-class PerformedSetView {
-  const PerformedSetView({
+class ExerciseSetView {
+  const ExerciseSetView({
     required this.bodyWeight,
     required this.cardio,
     this.category,
@@ -41,7 +41,7 @@ class PerformedSetView {
   final String unit;
   final double weight;
 
-  PerformedSetView copyWith({
+  ExerciseSetView copyWith({
     double? bodyWeight,
     bool? cardio,
     Value<String?> category = const Value.absent(),
@@ -59,7 +59,7 @@ class PerformedSetView {
     String? unit,
     double? weight,
   }) {
-    return PerformedSetView(
+    return ExerciseSetView(
       bodyWeight: bodyWeight ?? this.bodyWeight,
       cardio: cardio ?? this.cardio,
       category: category.present ? category.value : this.category,

@@ -33,20 +33,20 @@ void main() {
 
   testWidgets('HistoryPage lists items', (WidgetTester tester) async {
     final harness = await FlexifyTestHarness.create();
-    await insertPerformedSetFixture(
+    await insertExerciseSetFixture(
       harness.database,
       'Bench press',
       reps: 1,
       weight: 90,
     );
-    await insertPerformedSetFixture(
+    await insertExerciseSetFixture(
       harness.database,
       'Bench press',
       reps: 4,
       weight: 80,
       created: testNow.subtract(const Duration(minutes: 3)),
     );
-    await insertPerformedSetFixture(
+    await insertExerciseSetFixture(
       harness.database,
       'Bench press',
       reps: 8,
@@ -66,7 +66,7 @@ void main() {
     WidgetTester tester,
   ) async {
     final harness = await FlexifyTestHarness.create();
-    await insertPerformedSetFixture(
+    await insertExerciseSetFixture(
       harness.database,
       'Sled push',
       reps: 0,
@@ -87,7 +87,7 @@ void main() {
 
   testWidgets('HistoryPage tap tile', (WidgetTester tester) async {
     final harness = await FlexifyTestHarness.create();
-    await insertPerformedSetFixture(
+    await insertExerciseSetFixture(
       harness.database,
       'Bench press',
       reps: 1,
@@ -123,7 +123,7 @@ void main() {
     tester.view.physicalSize = const Size(1200, 800);
     addTearDown(tester.view.resetDevicePixelRatio);
     addTearDown(tester.view.resetPhysicalSize);
-    await insertPerformedSetFixture(
+    await insertExerciseSetFixture(
       harness.database,
       'Desktop row',
       reps: 5,
@@ -145,7 +145,7 @@ void main() {
 
   testWidgets('HistoryPage selects', (WidgetTester tester) async {
     final harness = await FlexifyTestHarness.create();
-    await insertPerformedSetFixture(
+    await insertExerciseSetFixture(
       harness.database,
       'Bench press',
       reps: 1,
@@ -161,7 +161,7 @@ void main() {
 
   testWidgets('HistoryPage deletes', (WidgetTester tester) async {
     final harness = await FlexifyTestHarness.create();
-    await insertPerformedSetFixture(
+    await insertExerciseSetFixture(
       harness.database,
       'Bench press',
       reps: 1,
@@ -187,7 +187,7 @@ void main() {
     (WidgetTester tester) async {
       final harness = await FlexifyTestHarness.create();
       for (var i = 0; i < 150; i++) {
-        await insertPerformedSetFixture(
+        await insertExerciseSetFixture(
           harness.database,
           'Bench press',
           reps: i + 1,
@@ -196,7 +196,7 @@ void main() {
         );
       }
       for (var i = 0; i < 10; i++) {
-        await insertPerformedSetFixture(
+        await insertExerciseSetFixture(
           harness.database,
           'Squat',
           reps: i + 1,
@@ -226,13 +226,13 @@ void main() {
     'HistoryPage can clear selection without clearing the search filter',
     (WidgetTester tester) async {
       final harness = await FlexifyTestHarness.create();
-      await insertPerformedSetFixture(
+      await insertExerciseSetFixture(
         harness.database,
         'Bench press',
         reps: 5,
         weight: 50,
       );
-      await insertPerformedSetFixture(
+      await insertExerciseSetFixture(
         harness.database,
         'Squat',
         reps: 5,

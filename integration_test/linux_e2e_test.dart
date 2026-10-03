@@ -2,7 +2,7 @@ import 'package:drift/drift.dart' hide isNotNull, isNull;
 import 'package:drift/native.dart';
 import 'package:flexify/bottom_nav.dart';
 import 'package:flexify/database/database.dart';
-import 'package:flexify/database/performed_sets.dart';
+import 'package:flexify/database/exercise_set_repository.dart';
 import 'package:flexify/home_page.dart';
 import 'package:flexify/main.dart' as app;
 import 'package:flexify/plan/plan_tile.dart';
@@ -181,7 +181,7 @@ Finder _dropdownWithLabel(String label) => find.byWidgetPredicate(
       widget.decoration.labelText?.startsWith(label) == true,
 );
 
-Future<PerformedSetView> _insertE2ESet({
+Future<ExerciseSetView> _insertE2ESet({
   required String name,
   double reps = 5,
   double weight = 50,
@@ -196,7 +196,7 @@ Future<PerformedSetView> _insertE2ESet({
   double bodyWeight = 0,
   int? restMs,
 }) async {
-  final inserted = await insertPerformedSetFixture(
+  final inserted = await insertExerciseSetFixture(
     app.db,
     name,
     reps: reps,
@@ -216,29 +216,29 @@ Future<PerformedSetView> _insertE2ESet({
     await (app.db.exercises.update()
           ..where((row) => row.id.equals(exercise.id)))
         .write(ExercisesCompanion(defaultRestDurationMs: Value(restMs)));
-    return (await getPerformedSetById(app.db, inserted.id))!;
+    return (await getExerciseSetById(app.db, inserted.id))!;
   }
   return inserted;
 }
 
-Future<List<PerformedSetView>> _setsNamed(String name) =>
-    getPerformedSetsForExercise(app.db, exerciseName: name);
+Future<List<ExerciseSetView>> _setsNamed(String name) =>
+    getExerciseSetsForExercise(app.db, exerciseName: name);
 
-Future<PerformedSetView> _singleSet(String name) async =>
+Future<ExerciseSetView> _singleSet(String name) async =>
     (await _setsNamed(name)).single;
 
-Future<PerformedSetView?> _maybeSet(String name) async {
+Future<ExerciseSetView?> _maybeSet(String name) async {
   final rows = await _setsNamed(name);
   return rows.isEmpty ? null : rows.single;
 }
 
-Future<List<PerformedSetView>> _setsMatching(String search) =>
-    getPerformedSets(app.db, search: search);
+Future<List<ExerciseSetView>> _setsMatching(String search) =>
+    getExerciseSets(app.db, search: search);
 
-Future<List<PerformedSetView>> _setsForPlan(int planId) async =>
-    (await getPerformedSets(
-      app.db,
-    )).where((set) => set.planId == planId).toList(growable: false);
+Future<List<ExerciseSetView>> _setsForPlan(int planId) async =>
+    (await getExerciseSets(app.db))
+        .where((set) => set.planId == planId)
+        .toList(growable: false);
 
 Future<Exercise> _exerciseNamed(String name) =>
     (app.db.exercises.select()..where((row) => row.name.equals(name)))
@@ -1096,9 +1096,9 @@ void main() {
     await _tapSaveAction(tester);
     await tester.pumpAndSettle();
 
-    final rows = (await _setsNamed(
-      'Barbell bench press',
-    )).where((set) => set.planId == 1).toList();
+    final rows = (await _setsNamed('Barbell bench press'))
+        .where((set) => set.planId == 1)
+        .toList();
     expect(rows, hasLength(1));
     expect(rows.single.reps, 6);
     expect(rows.single.weight, 83);
@@ -1871,7 +1871,7 @@ void main() {
                 ..limit(1))
               .getSingle();
       expect(weightRow.weightKg, closeTo(82 * 0.45359237, 0.0001));
-      final unchanged = await getPerformedSetById(app.db, baseline.id);
+      final unchanged = await getExerciseSetById(app.db, baseline.id);
       expect(unchanged, isNotNull);
       expect(unchanged!.bodyWeight, 0);
       expect(tester.takeException(), isNull);
@@ -1995,9 +1995,8 @@ void main() {
       weight: 82,
       created: DateTime(2026, 9, 1, 12),
     );
-    final timeAxisBefore = (await _exerciseNamed(
-      'Linux E2E strength detail',
-    )).graphTimeBasedXAxis;
+    final timeAxisBefore = (await _exerciseNamed('Linux E2E strength detail'))
+        .graphTimeBasedXAxis;
     await tester.pumpAndSettle();
     await _tapTab(tester, 'GraphsPage');
     await tester.enterText(find.byType(SearchBar), 'Linux E2E strength detail');

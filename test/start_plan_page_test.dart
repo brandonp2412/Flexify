@@ -1,6 +1,6 @@
 import 'package:drift/drift.dart' hide isNotNull, isNull;
 import 'package:flexify/bottom_nav.dart';
-import 'package:flexify/database/performed_sets.dart';
+import 'package:flexify/database/exercise_set_repository.dart';
 import 'package:flexify/l10n/generated/app_localizations.dart';
 import 'package:flexify/l10n/locale_preferences.dart';
 import 'package:flexify/plan/start_plan_page.dart';
@@ -163,21 +163,21 @@ void main() {
     final harness = await FlexifyTestHarness.create();
     final database = harness.database;
 
-    await insertPerformedSetFixture(
+    await insertExerciseSetFixture(
       database,
       'Bench press',
       reps: 2,
       weight: 90,
       category: 'Chest',
     );
-    await insertPerformedSetFixture(
+    await insertExerciseSetFixture(
       database,
       'Barbell row',
       reps: 5,
       weight: 60,
       category: 'Shoulders',
     );
-    await insertPerformedSetFixture(
+    await insertExerciseSetFixture(
       database,
       'Squat',
       reps: 7,
@@ -278,7 +278,7 @@ void main() {
       await tester.tap(find.text(l10n.actionSave));
       await tester.pumpAndSettle();
 
-      final saved = await getLatestPerformedSet(
+      final saved = await getLatestExerciseSet(
         database,
         exerciseName: exercise,
       );
@@ -333,7 +333,7 @@ void main() {
     await tester.tap(find.text(l10n.actionSave));
     await tester.pumpAndSettle();
 
-    final saved = await getLatestPerformedSet(database, exerciseName: exercise);
+    final saved = await getLatestExerciseSet(database, exerciseName: exercise);
     expect(saved!.name, exercise);
     expect(saved.notes, note);
     expect(saved.weight, 50.5);
@@ -395,14 +395,14 @@ void main() {
     await database.planExercises.insertOne(
       planExerciseFixture(planId: planId, exerciseId: originalExerciseId),
     );
-    final originalHistory = performedSetFixture(
+    final originalHistory = exerciseSetFixture(
       originalExercise,
       reps: 10,
       weight: 50,
       planId: planId,
       created: testNow.subtract(const Duration(days: 7)),
     );
-    final replacementHistory = performedSetFixture(
+    final replacementHistory = exerciseSetFixture(
       replacementExercise,
       reps: 8,
       weight: 30,
@@ -413,9 +413,9 @@ void main() {
       planId,
       now: originalHistory.created,
     );
-    await insertPerformedSet(
+    await insertExerciseSet(
       database,
-      performedSet: originalHistory,
+      exerciseSet: originalHistory,
       exerciseId: originalExerciseId,
       workoutId: oldWorkout.id,
     );
@@ -424,9 +424,9 @@ void main() {
       oldWorkout.id,
       now: originalHistory.created.add(const Duration(minutes: 30)),
     );
-    await insertPerformedSet(
+    await insertExerciseSet(
       database,
-      performedSet: replacementHistory,
+      exerciseSet: replacementHistory,
       exerciseId: replacementExerciseId,
       workoutId: null,
     );
@@ -526,13 +526,13 @@ void main() {
 
     expect(notes, findsOne);
     expect(tester.widget<EditableText>(notes).focusNode.hasFocus, isTrue);
-    expect(await getPerformedSets(database, search: 'Bench press'), isEmpty);
+    expect(await getExerciseSets(database, search: 'Bench press'), isEmpty);
 
     await tester.testTextInput.receiveAction(TextInputAction.done);
     await tester.pumpAndSettle();
 
     expect(
-      await getPerformedSets(database, search: 'Bench press'),
+      await getExerciseSets(database, search: 'Bench press'),
       hasLength(1),
     );
   });
@@ -581,7 +581,7 @@ void main() {
     await tester.testTextInput.receiveAction(TextInputAction.done);
     await tester.pumpAndSettle();
 
-    final saved = await getPerformedSets(database, search: 'Sled push');
+    final saved = await getExerciseSets(database, search: 'Sled push');
     expect(saved, hasLength(1));
   });
 
@@ -669,21 +669,22 @@ void main() {
     await tester.tap(find.text('Save'));
     await tester.pumpAndSettle();
 
-    final performedSets = await getPerformedSets(
+    final exerciseSetViews = await getExerciseSets(
       database,
       search: 'Barbell bench press',
     );
     expect(
-      performedSets.where((set) => set.name == 'Barbell bench press'),
+      exerciseSetViews.where((set) => set.name == 'Barbell bench press'),
       hasLength(1),
     );
 
-    final exerciseSets = await database.exerciseSets.select().get();
-    expect(exerciseSets, hasLength(1));
-    expect(exerciseSets.single.workoutId, isNotNull);
+    final storedExerciseSets = await database.exerciseSets.select().get();
+    expect(storedExerciseSets, hasLength(1));
+    expect(storedExerciseSets.single.workoutId, isNotNull);
     final workout =
-        await (database.workouts.select()
-              ..where((row) => row.id.equals(exerciseSets.single.workoutId!)))
+        await (database.workouts.select()..where(
+              (row) => row.id.equals(storedExerciseSets.single.workoutId!),
+            ))
             .getSingle();
     expect(workout.planId, plan.id);
   });

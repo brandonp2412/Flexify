@@ -2,7 +2,7 @@ import 'package:drift/drift.dart' hide isNull;
 import 'package:flexify/database/categories.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/database/exercise_catalog.dart';
-import 'package:flexify/database/performed_sets.dart';
+import 'package:flexify/database/exercise_set_repository.dart';
 import 'package:flexify/main.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -12,7 +12,7 @@ import 'support/fixtures.dart';
 void main() {
   setUp(() => db = testDb());
 
-  Future<(Exercise, PerformedSetView)> seedChestSet() async {
+  Future<(Exercise, ExerciseSetView)> seedChestSet() async {
     await createCategory('Chest');
     final exercise = await createExerciseDefinition(
       name: 'Bench press',
@@ -20,7 +20,7 @@ void main() {
       displayUnit: 'kg',
       category: 'Chest',
     );
-    final set = await insertPerformedSetFixture(
+    final set = await insertExerciseSetFixture(
       db,
       exercise.name,
       reps: 5,
@@ -43,7 +43,7 @@ void main() {
 
       final updated = await getExerciseById(exercise.id);
       expect(await getExerciseCategoryName(updated!), 'Upper body');
-      final history = await getPerformedSets(db, search: 'Bench press');
+      final history = await getExerciseSets(db, search: 'Bench press');
       expect(history.single.category, 'Upper body');
     },
   );
@@ -66,7 +66,7 @@ void main() {
 
       final updated = await getExerciseById(exercise.id);
       expect(updated!.categoryId, upperBody.id);
-      final history = await getPerformedSets(db, search: 'Bench press');
+      final history = await getExerciseSets(db, search: 'Bench press');
       expect(history.single.category, 'Upper body');
     },
   );
@@ -82,7 +82,7 @@ void main() {
       );
 
       expect((await getExerciseById(exercise.id))!.categoryId, isNull);
-      final history = await getPerformedSets(db, search: 'Bench press');
+      final history = await getExerciseSets(db, search: 'Bench press');
       expect(history.single.category, isNull);
     },
   );

@@ -1,7 +1,7 @@
 import 'package:drift/drift.dart' hide Column;
 import 'package:flexify/database/database.dart';
 import 'package:flexify/database/exercise_analytics.dart';
-import 'package:flexify/database/performed_sets.dart';
+import 'package:flexify/database/exercise_set_repository.dart';
 import 'package:flexify/empty_state.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
@@ -15,7 +15,7 @@ import 'package:provider/provider.dart';
 
 class GraphHistoryPage extends StatefulWidget {
   final String name;
-  final List<PerformedSetView> initialSets;
+  final List<ExerciseSetView> initialSets;
   final TabController tabController;
   final bool bodyWeight;
 
@@ -32,7 +32,7 @@ class GraphHistoryPage extends StatefulWidget {
 }
 
 class _GraphHistoryPageState extends State<GraphHistoryPage> {
-  late List<PerformedSetView> _sets;
+  late List<ExerciseSetView> _sets;
   final _selection = SelectionController<int>();
   int limit = 20;
   final scroll = ScrollController();
@@ -93,8 +93,7 @@ class _GraphHistoryPageState extends State<GraphHistoryPage> {
           tooltip: context.l10n.selectAll,
           icon: const Icon(Icons.done_all),
           onPressed: () => setState(
-            () =>
-                _selection.setAll(_sets.map((performedSet) => performedSet.id)),
+            () => _selection.setAll(_sets.map((exerciseSet) => exerciseSet.id)),
           ),
         ),
         if (!widget.bodyWeight)
@@ -153,7 +152,7 @@ class _GraphHistoryPageState extends State<GraphHistoryPage> {
     if (widget.bodyWeight) {
       await (db.bodyWeights.delete()..where((row) => row.id.isIn(ids))).go();
     } else {
-      await deletePerformedSets(db, ids);
+      await deleteExerciseSets(db, ids);
     }
     if (!mounted) return;
     setState(_selection.clear);
@@ -185,7 +184,7 @@ class _GraphHistoryPageState extends State<GraphHistoryPage> {
   Future<void> setSets() async {
     final result = widget.bodyWeight
         ? await getBodyWeightGraphHistory(limit: limit)
-        : (await getPerformedSets(
+        : (await getExerciseSets(
             db,
             search: widget.name,
             limit: limit,

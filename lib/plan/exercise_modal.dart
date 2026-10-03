@@ -1,6 +1,6 @@
 import 'package:drift/drift.dart' hide Column;
 import 'package:flexify/database/database.dart';
-import 'package:flexify/database/performed_sets.dart';
+import 'package:flexify/database/exercise_set_repository.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/swap_workout.dart';
@@ -165,16 +165,16 @@ class _ExerciseModalState extends State<ExerciseModal> {
               Navigator.pop(context);
               final workoutId = widget.workoutId;
               if (workoutId == null) return;
-              final performedSet = await getLatestWorkoutPerformedSet(
+              final exerciseSet = await getLatestWorkoutExerciseSet(
                 db,
                 workoutId: workoutId,
                 exerciseId: widget.exerciseId,
               );
-              if (performedSet == null) return;
+              if (exerciseSet == null) return;
               if (!context.mounted) return;
               await Navigator.of(context).push(
                 FlexPageRoute(
-                  builder: (context) => EditSetPage(performedSet: performedSet),
+                  builder: (context) => EditSetPage(exerciseSet: exerciseSet),
                 ),
               );
               widget.onSelect();
@@ -188,13 +188,13 @@ class _ExerciseModalState extends State<ExerciseModal> {
               Navigator.pop(context);
               final workoutId = widget.workoutId;
               if (workoutId == null) return;
-              final performedSet = await getLatestWorkoutPerformedSet(
+              final exerciseSet = await getLatestWorkoutExerciseSet(
                 db,
                 workoutId: workoutId,
                 exerciseId: widget.exerciseId,
               );
-              if (performedSet == null) return;
-              await deletePerformedSets(db, [performedSet.id]);
+              if (exerciseSet == null) return;
+              await deleteExerciseSets(db, [exerciseSet.id]);
               if (!context.mounted) return;
               widget.onSelect();
               final timerState = context.read<TimerState>();

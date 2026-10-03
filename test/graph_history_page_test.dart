@@ -1,4 +1,4 @@
-import 'package:flexify/database/performed_sets.dart';
+import 'package:flexify/database/exercise_set_repository.dart';
 import 'package:flexify/graph/graph_history_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -12,21 +12,21 @@ void main() {
     'long press selects multiple graph history rows and deletes them',
     (WidgetTester tester) async {
       final harness = await FlexifyTestHarness.create();
-      await insertPerformedSetFixture(
+      await insertExerciseSetFixture(
         harness.database,
         'Graph history test',
         reps: 2,
         weight: 3,
         created: testNow.subtract(const Duration(days: 1)),
       );
-      await insertPerformedSetFixture(
+      await insertExerciseSetFixture(
         harness.database,
         'Graph history test',
         reps: 4,
         weight: 5,
         created: testNow,
       );
-      final sets = (await getPerformedSets(
+      final sets = (await getExerciseSets(
         harness.database,
         search: 'Graph history test',
       )).where((set) => set.name == 'Graph history test').toList();
@@ -61,7 +61,7 @@ void main() {
       await tester.tap(find.widgetWithText(TextButton, 'Delete'));
       await tester.pumpAndSettle();
 
-      final remaining = (await getPerformedSets(
+      final remaining = (await getExerciseSets(
         harness.database,
         search: 'Graph history test',
       )).where((set) => set.name == 'Graph history test');

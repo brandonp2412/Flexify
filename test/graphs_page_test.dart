@@ -45,7 +45,7 @@ void main() {
     WidgetTester tester,
   ) async {
     final harness = await FlexifyTestHarness.create();
-    await insertPerformedSetFixture(
+    await insertExerciseSetFixture(
       harness.database,
       'Barbell bench press',
       reps: 10,
@@ -115,7 +115,7 @@ void main() {
       testSettings(showGlobalProgress: false),
     );
     for (final name in ['Bench', 'Squat', 'Deadlift']) {
-      await insertPerformedSetFixture(
+      await insertExerciseSetFixture(
         harness.database,
         name,
         reps: 5,
@@ -144,7 +144,7 @@ void main() {
 
   testWidgets('GraphsPage selects', (WidgetTester tester) async {
     final harness = await FlexifyTestHarness.create();
-    await insertPerformedSetFixture(
+    await insertExerciseSetFixture(
       harness.database,
       'Barbell bent-over row',
       reps: 8,
@@ -162,7 +162,7 @@ void main() {
 
   testWidgets('GraphsPage deletes', (WidgetTester tester) async {
     final harness = await FlexifyTestHarness.create();
-    await insertPerformedSetFixture(
+    await insertExerciseSetFixture(
       harness.database,
       'Back extension',
       reps: 12,
@@ -189,7 +189,7 @@ void main() {
     WidgetTester tester,
   ) async {
     final harness = await FlexifyTestHarness.create();
-    await insertPerformedSetFixture(
+    await insertExerciseSetFixture(
       harness.database,
       'Zz unique test exercise',
       reps: 12,

@@ -198,12 +198,12 @@ class _CardioPageState extends State<CardioPage> {
     if (index < 0 || index >= _data.length) return;
     final row = _data[index];
     final desktop = isDesktopLayout(context);
-    final performedSet = await getGraphPointSet(_exerciseName, row.created);
-    if (!mounted || performedSet == null) return;
+    final exerciseSet = await getGraphPointSet(_exerciseName, row.created);
+    if (!mounted || exerciseSet == null) return;
 
     await Navigator.of(context).push(
       FlexPageRoute(
-        builder: (context) => EditSetPage(performedSet: performedSet),
+        builder: (context) => EditSetPage(exerciseSet: exerciseSet),
       ),
     );
     _refreshTimer?.cancel();
@@ -327,14 +327,14 @@ class _CardioPageState extends State<CardioPage> {
         actions: [
           IconButton(
             onPressed: () async {
-              final performedSets = await getGraphHistory(_exerciseName);
+              final exerciseSets = await getGraphHistory(_exerciseName);
               if (!context.mounted) return;
 
               await Navigator.of(context).push(
                 FlexPageRoute(
                   builder: (context) => GraphHistoryPage(
                     name: _exerciseName,
-                    initialSets: performedSets,
+                    initialSets: exerciseSets,
                     tabController: widget.tabCtrl,
                   ),
                 ),

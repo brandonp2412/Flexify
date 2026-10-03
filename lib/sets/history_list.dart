@@ -4,7 +4,7 @@ import 'package:flexify/app_search.dart';
 import 'package:flexify/bottom_nav.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
-import 'package:flexify/database/performed_sets.dart';
+import 'package:flexify/database/exercise_set_repository.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/responsive.dart';
@@ -19,7 +19,7 @@ import 'package:provider/provider.dart';
 enum _HistoryContextAction { edit, delete }
 
 class HistoryList extends StatefulWidget {
-  final List<PerformedSetView> sets;
+  final List<ExerciseSetView> sets;
   final ScrollController scroll;
   final Function(int) onSelect;
   final Set<int> selected;
@@ -40,12 +40,12 @@ class HistoryList extends StatefulWidget {
 
 class _HistoryListState extends State<HistoryList> {
   bool _goingNext = false;
-  List<PerformedSetView> _current = [];
+  List<ExerciseSetView> _current = [];
 
   Future<void> _showContextMenu(
     BuildContext context,
     TapDownDetails details,
-    PerformedSetView performedSet,
+    ExerciseSetView exerciseSet,
   ) async {
     final action = await showDesktopContextMenu<_HistoryContextAction>(
       context,
@@ -73,7 +73,7 @@ class _HistoryListState extends State<HistoryList> {
       case _HistoryContextAction.edit:
         await Navigator.of(context).push(
           FlexPageRoute(
-            builder: (context) => EditSetPage(performedSet: performedSet),
+            builder: (context) => EditSetPage(exerciseSet: exerciseSet),
           ),
         );
         break;
@@ -82,9 +82,7 @@ class _HistoryListState extends State<HistoryList> {
           context: context,
           builder: (dialogContext) => AlertDialog(
             title: Text(context.l10n.confirmDelete),
-            content: Text(
-              context.l10n.deleteSetConfirmation(performedSet.name),
-            ),
+            content: Text(context.l10n.deleteSetConfirmation(exerciseSet.name)),
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(dialogContext, false),
@@ -98,7 +96,7 @@ class _HistoryListState extends State<HistoryList> {
           ),
         );
         if (confirmed == true) {
-          await deletePerformedSets(db, [performedSet.id]);
+          await deleteExerciseSets(db, [exerciseSet.id]);
         }
         break;
       case null:
@@ -124,46 +122,46 @@ class _HistoryListState extends State<HistoryList> {
   }
 
   Widget _buildListItem(
-    PerformedSetView performedSet,
+    ExerciseSetView exerciseSet,
     int index,
     bool showImages,
   ) {
-    final previousPerformedSet = index > 0
+    final previousExerciseSet = index > 0
         ? _current.elementAtOrNull(index - 1)
         : null;
     final bool showDivider =
-        previousPerformedSet != null &&
-        !isSameDay(performedSet.created, previousPerformedSet.created);
+        previousExerciseSet != null &&
+        !isSameDay(exerciseSet.created, previousExerciseSet.created);
 
-    final minutes = performedSet.duration.floor();
-    final seconds = ((performedSet.duration * 60) % 60)
+    final minutes = exerciseSet.duration.floor();
+    final seconds = ((exerciseSet.duration * 60) % 60)
         .floor()
         .toString()
         .padLeft(2, '0');
-    final distance = formatDisplayNumber(context, performedSet.distance);
-    final reps = formatDisplayNumber(context, performedSet.reps);
-    final weight = formatDisplayNumber(context, performedSet.weight);
-    final unit = displayMeasurementUnit(context.l10n, performedSet.unit);
+    final distance = formatDisplayNumber(context, exerciseSet.distance);
+    final reps = formatDisplayNumber(context, exerciseSet.reps);
+    final weight = formatDisplayNumber(context, exerciseSet.weight);
+    final unit = displayMeasurementUnit(context.l10n, exerciseSet.unit);
     String incline = '';
-    if (performedSet.incline != null && performedSet.incline! > 0) {
+    if (exerciseSet.incline != null && exerciseSet.incline! > 0) {
       incline =
-          '@ ${formatDisplayPercent(context, performedSet.incline! / 100, maximumFractionDigits: 0)}';
+          '@ ${formatDisplayPercent(context, exerciseSet.incline! / 100, maximumFractionDigits: 0)}';
     }
 
     Widget? leading;
 
-    if (showImages && performedSet.image != null) {
+    if (showImages && exerciseSet.image != null) {
       leading = GestureDetector(
-        onTap: () => widget.onSelect(performedSet.id),
+        onTap: () => widget.onSelect(exerciseSet.id),
         child: Image.file(
-          File(performedSet.image!),
+          File(exerciseSet.image!),
           cacheWidth: 64,
           errorBuilder: (context, error, stackTrace) => const Icon(Icons.error),
         ),
       );
     } else if (showImages) {
       leading = GestureDetector(
-        onTap: () => widget.onSelect(performedSet.id),
+        onTap: () => widget.onSelect(exerciseSet.id),
         child: Container(
           width: 24,
           height: 24,
@@ -173,8 +171,8 @@ class _HistoryListState extends State<HistoryList> {
           ),
           child: Center(
             child: Text(
-              performedSet.name.isNotEmpty
-                  ? performedSet.name[0].toUpperCase()
+              exerciseSet.name.isNotEmpty
+                  ? exerciseSet.name[0].toUpperCase()
                   : '?',
               style: const TextStyle(
                 color: Colors.white,
@@ -189,15 +187,15 @@ class _HistoryListState extends State<HistoryList> {
     }
 
     String trailing = "$reps x $weight $unit";
-    if (performedSet.cardio &&
-        (performedSet.unit == 'kg' ||
-            performedSet.unit == 'lb' ||
-            performedSet.unit == 'stone'))
+    if (exerciseSet.cardio &&
+        (exerciseSet.unit == 'kg' ||
+            exerciseSet.unit == 'lb' ||
+            exerciseSet.unit == 'stone'))
       trailing = "$weight $unit / $minutes:$seconds $incline";
-    else if (performedSet.cardio &&
-        (performedSet.unit == 'km' ||
-            performedSet.unit == 'mi' ||
-            performedSet.unit == 'kcal'))
+    else if (exerciseSet.cardio &&
+        (exerciseSet.unit == 'km' ||
+            exerciseSet.unit == 'mi' ||
+            exerciseSet.unit == 'kcal'))
       trailing = "$distance $unit / $minutes:$seconds $incline";
 
     return Column(
@@ -205,8 +203,8 @@ class _HistoryListState extends State<HistoryList> {
         if (showDivider)
           Container(
             color:
-                (widget.selected.contains(performedSet.id) &&
-                    widget.selected.contains(previousPerformedSet.id))
+                (widget.selected.contains(exerciseSet.id) &&
+                    widget.selected.contains(previousExerciseSet.id))
                 ? Theme.of(context).colorScheme.primary.withValues(alpha: .18)
                 : Colors.transparent,
             child: Padding(
@@ -222,7 +220,7 @@ class _HistoryListState extends State<HistoryList> {
                     builder: (context, value, child) => Text(
                       formatDisplayDate(
                         context,
-                        previousPerformedSet.created,
+                        previousExerciseSet.created,
                         value,
                       ),
                     ),
@@ -238,7 +236,7 @@ class _HistoryListState extends State<HistoryList> {
             final desktop = isDesktopLayout(context);
             final colors = Theme.of(context).colorScheme;
             final tile = Material(
-              color: widget.selected.contains(performedSet.id)
+              color: widget.selected.contains(exerciseSet.id)
                   ? colors.primary.withValues(alpha: .18)
                   : desktop
                   ? colors.surfaceContainerLow
@@ -251,11 +249,10 @@ class _HistoryListState extends State<HistoryList> {
                     : null,
                 leading: leading,
                 title: Text(
-                  performedSet.name,
+                  exerciseSet.name,
                   style: desktop
-                      ? Theme.of(context).textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.w600,
-                        )
+                      ? Theme.of(context).textTheme.titleMedium
+                            ?.copyWith(fontWeight: FontWeight.w600)
                       : null,
                 ),
                 subtitle: Selector<SettingsState, String>(
@@ -265,35 +262,33 @@ class _HistoryListState extends State<HistoryList> {
                     padding: const EdgeInsets.only(top: 3),
                     child: Text(
                       dateFormat == 'timeago'
-                          ? formatRelativeTime(context, performedSet.created)
+                          ? formatRelativeTime(context, exerciseSet.created)
                           : formatDisplayDate(
                               context,
-                              performedSet.created,
+                              exerciseSet.created,
                               dateFormat,
                             ),
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: colors.onSurfaceVariant,
-                      ),
+                      style: Theme.of(context).textTheme.bodySmall
+                          ?.copyWith(color: colors.onSurfaceVariant),
                     ),
                   ),
                 ),
                 trailing: Text(
                   trailing,
-                  style: Theme.of(
-                    context,
-                  ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w600),
+                  style: Theme.of(context).textTheme.bodyLarge
+                      ?.copyWith(fontWeight: FontWeight.w600),
                 ),
                 onLongPress: desktop
                     ? null
-                    : () => widget.onSelect(performedSet.id),
+                    : () => widget.onSelect(exerciseSet.id),
                 onTap: () {
                   if (widget.selected.isNotEmpty) {
-                    widget.onSelect(performedSet.id);
+                    widget.onSelect(exerciseSet.id);
                   } else {
                     Navigator.of(context).push(
                       FlexPageRoute(
                         builder: (context) =>
-                            EditSetPage(performedSet: performedSet),
+                            EditSetPage(exerciseSet: exerciseSet),
                       ),
                     );
                   }
@@ -306,7 +301,7 @@ class _HistoryListState extends State<HistoryList> {
               child: GestureDetector(
                 behavior: HitTestBehavior.opaque,
                 onSecondaryTapDown: (details) =>
-                    _showContextMenu(context, details, performedSet),
+                    _showContextMenu(context, details, exerciseSet),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 16,

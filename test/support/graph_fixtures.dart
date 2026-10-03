@@ -86,7 +86,7 @@ final screenshotPlans = <PlansCompanion>[
 
 const screenshotExercise = 'Dumbbell shoulder press';
 
-Future<PerformedSetView> insertGraphSet(
+Future<ExerciseSetView> insertGraphSet(
   AppDatabase database,
   String exercise,
   double weight, {
@@ -100,7 +100,7 @@ Future<PerformedSetView> insertGraphSet(
   int? incline,
   String category = 'Arms',
 }) {
-  return insertPerformedSetFixture(
+  return insertExerciseSetFixture(
     database,
     exercise,
     weight: weight,

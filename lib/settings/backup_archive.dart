@@ -11,7 +11,7 @@ const _imageColumns = <(String, String)>[
   ('exercises', 'image'),
   ('body_weights', 'photo'),
   // Kept for old backups and any pre-release databases that stored an
-  // image directly against a performed set.
+  // image directly against a exercise set.
   ('exercise_sets', 'image'),
   ('gym_sets', 'image'),
 ];

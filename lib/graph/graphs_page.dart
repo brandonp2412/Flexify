@@ -195,7 +195,7 @@ class GraphsPageState extends State<GraphsPage>
   }
 
   Widget getPeek(
-    GraphExerciseSummary performedSet,
+    GraphExerciseSummary exerciseSet,
     List<dynamic> data,
     String format,
   ) {
@@ -216,7 +216,7 @@ class GraphsPageState extends State<GraphsPage>
         child: FlexLineChart(
           points: points,
           tooltipText: (index) =>
-              tooltipText(data, performedSet.unit, format, index),
+              tooltipText(data, exerciseSet.unit, format, index),
           hideBottom: true,
           hideLeft: true,
           showTrendLine: false,
@@ -266,32 +266,31 @@ class GraphsPageState extends State<GraphsPage>
                 .toLowerCase()
                 .split(" ")
                 .where((term) => term.isNotEmpty);
-            var stream = snapshot.data!.where((performedSet) {
+            var stream = snapshot.data!.where((exerciseSet) {
               if (_category != null) {
-                return performedSet.category == _category;
+                return exerciseSet.category == _category;
               }
               return true;
             });
 
             for (final term in terms) {
               stream = stream.where(
-                (performedSet) =>
-                    performedSet.name.toLowerCase().contains(term),
+                (exerciseSet) => exerciseSet.name.toLowerCase().contains(term),
               );
             }
 
-            final performedSets = stream.toList();
+            final exerciseSets = stream.toList();
             switch (_sort) {
               case GraphSort.dateDesc:
-                performedSets.sort((a, b) => b.created.compareTo(a.created));
+                exerciseSets.sort((a, b) => b.created.compareTo(a.created));
                 break;
 
               case GraphSort.dateAsc:
-                performedSets.sort((a, b) => a.created.compareTo(b.created));
+                exerciseSets.sort((a, b) => a.created.compareTo(b.created));
                 break;
 
               case GraphSort.name:
-                performedSets.sort(
+                exerciseSets.sort(
                   (a, b) =>
                       a.name.toLowerCase().compareTo(b.name.toLowerCase()),
                 );
@@ -307,7 +306,7 @@ class GraphsPageState extends State<GraphsPage>
                             settingsState.value.showGlobalProgress,
                         builder: (context, showGlobal, child) {
                           final showEmpty =
-                              performedSets.isEmpty &&
+                              exerciseSets.isEmpty &&
                               !context.l10n.globalProgress
                                   .toLowerCase()
                                   .contains(_search.toLowerCase());
@@ -334,8 +333,8 @@ class GraphsPageState extends State<GraphsPage>
                                               _search.trim(),
                                             ),
                                       actionIcon: Icons.add_rounded,
-                                      onAction: () =>
-                                          Navigator.of(context).push(
+                                      onAction: () => Navigator.of(context)
+                                          .push(
                                             FlexPageRoute(
                                               builder: (context) =>
                                                   AddExercisePage(
@@ -345,7 +344,7 @@ class GraphsPageState extends State<GraphsPage>
                                           ),
                                     ),
                                   )
-                                : graphList(performedSets, showGlobal),
+                                : graphList(exerciseSets, showGlobal),
                           );
                         },
                       ),
@@ -382,8 +381,8 @@ class GraphsPageState extends State<GraphsPage>
                     onDelete: () async => onDelete(),
                     onSelectAll: () => setState(() {
                       _selection.setAll(
-                        performedSets.map(
-                          (performedSet) => performedSet.selectionKey,
+                        exerciseSets.map(
+                          (exerciseSet) => exerciseSet.selectionKey,
                         ),
                       );
                     }),
@@ -430,12 +429,12 @@ class GraphsPageState extends State<GraphsPage>
       _selection.clear();
     });
     final sets = (await _stream.first)
-        .where((performedSet) => copy.contains(performedSet.selectionKey))
+        .where((exerciseSet) => copy.contains(exerciseSet.selectionKey))
         .toList();
     final text = sets
         .map(
-          (performedSet) =>
-              "${formatDisplayNumber(context, performedSet.reps)}×${formatDisplayNumber(context, performedSet.weight)}${displayMeasurementUnit(l10n, performedSet.unit)} ${performedSet.name}",
+          (exerciseSet) =>
+              "${formatDisplayNumber(context, exerciseSet.reps)}×${formatDisplayNumber(context, exerciseSet.weight)}${displayMeasurementUnit(l10n, exerciseSet.unit)} ${exerciseSet.name}",
         )
         .join(', ');
     await SharePlus.instance.share(ShareParams(text: l10n.shareWorkout(text)));
@@ -474,7 +473,7 @@ class GraphsPageState extends State<GraphsPage>
   }
 
   Widget _desktopGraphList(
-    List<GraphExerciseSummary> performedSets,
+    List<GraphExerciseSummary> exerciseSets,
     bool showGlobalProgress,
   ) {
     final globalSearchTerms =
@@ -486,11 +485,11 @@ class GraphsPageState extends State<GraphsPage>
         showGlobalProgress;
     final settings = context.read<SettingsState>().value;
     final showPeekGraph =
-        settings.peekGraph && performedSets.firstOrNull != null;
+        settings.peekGraph && exerciseSets.firstOrNull != null;
 
-    Widget graphTile(GraphExerciseSummary performedSet) => GraphTile(
+    Widget graphTile(GraphExerciseSummary exerciseSet) => GraphTile(
       selected: _selection.selected,
-      performedSet: performedSet,
+      exerciseSet: exerciseSet,
       onSelect: (key) async {
         setState(() {
           _selection.toggle(key);
@@ -502,10 +501,10 @@ class GraphsPageState extends State<GraphsPage>
         });
       },
       tabCtrl: widget.tabController,
-      onEdit: performedSet.bodyWeight
+      onEdit: exerciseSet.bodyWeight
           ? null
-          : () => _editGraphSummary(performedSet),
-      onDelete: () => _deleteGraphSummary(performedSet),
+          : () => _editGraphSummary(exerciseSet),
+      onDelete: () => _deleteGraphSummary(exerciseSet),
     );
 
     return CustomScrollView(
@@ -532,9 +531,8 @@ class GraphsPageState extends State<GraphsPage>
                     leading: const Icon(Icons.language),
                     title: Text(
                       context.l10n.globalProgress,
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
-                      ),
+                      style: Theme.of(context).textTheme.titleMedium
+                          ?.copyWith(fontWeight: FontWeight.w600),
                     ),
                     subtitle: Text(context.l10n.chartGroupedByCategory),
                     trailing: const Icon(Icons.chevron_right_rounded),
@@ -560,36 +558,36 @@ class GraphsPageState extends State<GraphsPage>
                     Widget? child,
                   ) {
                     if (!settings.value.peekGraph ||
-                        performedSets.firstOrNull == null) {
+                        exerciseSets.firstOrNull == null) {
                       return const SizedBox();
                     }
                     return FutureBuilder(
                       builder: (context, snapshot) => snapshot.data != null
                           ? getPeek(
-                              performedSets.first,
+                              exerciseSets.first,
                               snapshot.data!,
                               settings.value.shortDateFormat,
                             )
                           : const SizedBox(),
-                      future: performedSets.first.bodyWeight
+                      future: exerciseSets.first.bodyWeight
                           ? getBodyWeightData(
-                              target: performedSets.first.unit,
+                              target: exerciseSets.first.unit,
                               period: Period.day,
                               start: null,
                               end: null,
                               limit: 20,
                             )
-                          : performedSets.first.cardio
+                          : exerciseSets.first.cardio
                           ? getCardioData(
-                              name: performedSets.first.name,
-                              target: performedSets.first.unit,
-                              metric: _isWeightUnit(performedSets.first.unit)
+                              name: exerciseSets.first.name,
+                              target: exerciseSets.first.unit,
+                              metric: _isWeightUnit(exerciseSets.first.unit)
                                   ? CardioMetric.weight
                                   : CardioMetric.pace,
                             )
                           : getStrengthData(
-                              target: performedSets.first.unit,
-                              name: performedSets.first.name,
+                              target: exerciseSets.first.unit,
+                              name: exerciseSets.first.name,
                               metric: StrengthMetric.bestWeight,
                               period: Period.day,
                               start: null,
@@ -609,8 +607,8 @@ class GraphsPageState extends State<GraphsPage>
               crossAxisSpacing: 4,
               mainAxisSpacing: 2,
             ),
-            itemCount: performedSets.length,
-            itemBuilder: (context, index) => graphTile(performedSets[index]),
+            itemCount: exerciseSets.length,
+            itemBuilder: (context, index) => graphTile(exerciseSets[index]),
           ),
         ),
       ],
@@ -618,13 +616,13 @@ class GraphsPageState extends State<GraphsPage>
   }
 
   Widget graphList(
-    List<GraphExerciseSummary> performedSets,
+    List<GraphExerciseSummary> exerciseSets,
     bool showGlobalProgress,
   ) {
     if (isDesktopLayout(context)) {
-      return _desktopGraphList(performedSets, showGlobalProgress);
+      return _desktopGraphList(exerciseSets, showGlobalProgress);
     }
-    var itemCount = performedSets.length;
+    var itemCount = exerciseSets.length;
     final globalSearchTerms =
         '${context.l10n.globalProgress} ${context.l10n.navGraphs}'
             .toLowerCase();
@@ -636,7 +634,7 @@ class GraphsPageState extends State<GraphsPage>
 
     final settings = context.read<SettingsState>().value;
     final showPeekGraph =
-        settings.peekGraph && performedSets.firstOrNull != null;
+        settings.peekGraph && exerciseSets.firstOrNull != null;
     if (showPeekGraph) itemCount++;
 
     return ListView.builder(
@@ -678,9 +676,8 @@ class GraphsPageState extends State<GraphsPage>
                     title: Text(
                       context.l10n.globalProgress,
                       style: isDesktopLayout(context)
-                          ? Theme.of(context).textTheme.titleMedium?.copyWith(
-                              fontWeight: FontWeight.w600,
-                            )
+                          ? Theme.of(context).textTheme.titleMedium
+                                ?.copyWith(fontWeight: FontWeight.w600)
                           : null,
                     ),
                     subtitle: Text(context.l10n.chartGroupedByCategory),
@@ -708,36 +705,35 @@ class GraphsPageState extends State<GraphsPage>
             builder:
                 (BuildContext context, SettingsState settings, Widget? child) {
                   if (!settings.value.peekGraph) return const SizedBox();
-                  if (performedSets.firstOrNull == null)
-                    return const SizedBox();
+                  if (exerciseSets.firstOrNull == null) return const SizedBox();
 
                   return FutureBuilder(
                     builder: (context, snapshot) => snapshot.data != null
                         ? getPeek(
-                            performedSets.first,
+                            exerciseSets.first,
                             snapshot.data!,
                             settings.value.shortDateFormat,
                           )
                         : const SizedBox(),
-                    future: performedSets.first.bodyWeight
+                    future: exerciseSets.first.bodyWeight
                         ? getBodyWeightData(
-                            target: performedSets.first.unit,
+                            target: exerciseSets.first.unit,
                             period: Period.day,
                             start: null,
                             end: null,
                             limit: 20,
                           )
-                        : performedSets.first.cardio
+                        : exerciseSets.first.cardio
                         ? getCardioData(
-                            name: performedSets.first.name,
-                            target: performedSets.first.unit,
-                            metric: _isWeightUnit(performedSets.first.unit)
+                            name: exerciseSets.first.name,
+                            target: exerciseSets.first.unit,
+                            metric: _isWeightUnit(exerciseSets.first.unit)
                                 ? CardioMetric.weight
                                 : CardioMetric.pace,
                           )
                         : getStrengthData(
-                            target: performedSets.first.unit,
-                            name: performedSets.first.name,
+                            target: exerciseSets.first.unit,
+                            name: exerciseSets.first.name,
                             metric: StrengthMetric.bestWeight,
                             period: Period.day,
                             start: null,
@@ -753,13 +749,13 @@ class GraphsPageState extends State<GraphsPage>
           currentIdx--;
         }
 
-        final performedSet = performedSets.elementAtOrNull(currentIdx);
-        if (performedSet == null) return const SizedBox();
+        final exerciseSet = exerciseSets.elementAtOrNull(currentIdx);
+        if (exerciseSet == null) return const SizedBox();
 
         return ResponsiveContent(
           child: GraphTile(
             selected: _selection.selected,
-            performedSet: performedSet,
+            exerciseSet: exerciseSet,
             onSelect: (key) async {
               setState(() {
                 _selection.toggle(key);
@@ -771,10 +767,10 @@ class GraphsPageState extends State<GraphsPage>
               });
             },
             tabCtrl: widget.tabController,
-            onEdit: performedSet.bodyWeight
+            onEdit: exerciseSet.bodyWeight
                 ? null
-                : () => _editGraphSummary(performedSet),
-            onDelete: () => _deleteGraphSummary(performedSet),
+                : () => _editGraphSummary(exerciseSet),
+            onDelete: () => _deleteGraphSummary(exerciseSet),
           ),
         );
       },

@@ -58,7 +58,7 @@ Future<AppDatabase> _pumpBenchmarkApp(WidgetTester tester) async {
     planId: planId,
     exercise: 'Jitter bench press',
   );
-  await insertPerformedSetFixture(
+  await insertExerciseSetFixture(
     database,
     'Jitter bench press',
     reps: 5,

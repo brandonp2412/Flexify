@@ -2,7 +2,7 @@ import 'package:drift/drift.dart';
 import 'package:flexify/database/exercises.dart';
 import 'package:flexify/database/workouts.dart';
 
-/// One performed exercise set with metrics stored in canonical units.
+/// One exercise set with metrics stored in canonical units.
 class ExerciseSets extends Table {
   IntColumn get id => integer().autoIncrement()();
   IntColumn get exerciseId => integer().references(Exercises, #id)();

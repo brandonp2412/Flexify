@@ -20,7 +20,7 @@ library;
 
 import 'package:drift/drift.dart';
 import 'package:flexify/database/database.dart';
-import 'package:flexify/database/performed_sets.dart';
+import 'package:flexify/database/exercise_set_repository.dart';
 import 'package:flexify/l10n/generated/app_localizations.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/sets/history_page.dart';
@@ -77,8 +77,8 @@ Widget historyApp(Setting settings) {
   );
 }
 
-Future<PerformedSetView> insertSet(String name, {int minutesAgo = 0}) =>
-    insertPerformedSetFixture(
+Future<ExerciseSetView> insertSet(String name, {int minutesAgo = 0}) =>
+    insertExerciseSetFixture(
       db,
       name,
       reps: 5,
@@ -170,7 +170,7 @@ void main() {
     await tester.pumpWidget(historyApp(await settings()));
     await tester.pumpAndSettle();
 
-    await deletePerformedSets(db, [id]);
+    await deleteExerciseSets(db, [id]);
     final frames = await countFramesToSettle(tester);
 
     // Measured baseline: 2 frames, same as insert.

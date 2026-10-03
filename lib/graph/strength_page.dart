@@ -251,7 +251,7 @@ class _StrengthPageState extends State<StrengthPage> {
         actions: [
           IconButton(
             onPressed: () async {
-              final performedSets = widget.bodyWeight
+              final exerciseSets = widget.bodyWeight
                   ? await getBodyWeightGraphHistory()
                   : await getGraphHistory(_exerciseName);
               if (!context.mounted) return;
@@ -260,7 +260,7 @@ class _StrengthPageState extends State<StrengthPage> {
                 FlexPageRoute(
                   builder: (context) => GraphHistoryPage(
                     name: _exerciseName,
-                    initialSets: performedSets,
+                    initialSets: exerciseSets,
                     tabController: widget.tabCtrl,
                     bodyWeight: widget.bodyWeight,
                   ),
@@ -606,12 +606,12 @@ class _StrengthPageState extends State<StrengthPage> {
     if (widget.bodyWeight || index < 0 || index >= _data.length) return;
     final row = _data[index];
     final desktop = isDesktopLayout(context);
-    final performedSet = await getGraphPointSet(_exerciseName, row.created);
-    if (!mounted || performedSet == null) return;
+    final exerciseSet = await getGraphPointSet(_exerciseName, row.created);
+    if (!mounted || exerciseSet == null) return;
 
     await Navigator.of(context).push(
       FlexPageRoute(
-        builder: (context) => EditSetPage(performedSet: performedSet),
+        builder: (context) => EditSetPage(exerciseSet: exerciseSet),
       ),
     );
     _refreshTimer?.cancel();

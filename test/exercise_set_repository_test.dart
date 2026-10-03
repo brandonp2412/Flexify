@@ -1,7 +1,7 @@
 import 'package:drift/drift.dart' hide isNull, isNotNull;
 import 'package:drift/native.dart';
 import 'package:flexify/database/database.dart';
-import 'package:flexify/database/performed_sets.dart';
+import 'package:flexify/database/exercise_set_repository.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -44,7 +44,7 @@ void main() {
     );
   }
 
-  PerformedSetView draft({
+  ExerciseSetView draft({
     required String name,
     required String unit,
     required DateTime created,
@@ -57,7 +57,7 @@ void main() {
     int? incline,
     String? notes,
   }) {
-    return PerformedSetView(
+    return ExerciseSetView(
       id: 0,
       bodyWeight: bodyWeight,
       cardio: cardio,
@@ -73,83 +73,86 @@ void main() {
     );
   }
 
-  test('CRUD stores only canonical performed data in exercise_sets', () async {
-    final exerciseId = await addExercise(
-      name: 'Cutover Bench',
-      unit: 'lb',
-      cardio: false,
-      category: 'Push',
-      image: '/tmp/bench.png',
-      restMs: 90000,
-    );
-    final planId = await database.plans.insertOne(
-      PlansCompanion.insert(days: 'Friday'),
-    );
-    final workoutId = await database.workouts.insertOne(
-      WorkoutsCompanion.insert(
-        planId: Value(planId),
-        startedAt: DateTime(2026, 10, 2, 18),
-      ),
-    );
-
-    final inserted = await insertPerformedSet(
-      database,
-      performedSet: draft(
+  test(
+    'CRUD stores only canonical exercise-set data in exercise_sets',
+    () async {
+      final exerciseId = await addExercise(
         name: 'Cutover Bench',
         unit: 'lb',
-        created: DateTime(2026, 10, 2, 18, 5),
-        reps: 5,
-        weight: 220,
-        duration: 1.5,
-        bodyWeight: 180,
-        notes: 'working set',
-      ),
-      exerciseId: exerciseId,
-      workoutId: workoutId,
-    );
+        cardio: false,
+        category: 'Push',
+        image: '/tmp/bench.png',
+        restMs: 90000,
+      );
+      final planId = await database.plans.insertOne(
+        PlansCompanion.insert(days: 'Friday'),
+      );
+      final workoutId = await database.workouts.insertOne(
+        WorkoutsCompanion.insert(
+          planId: Value(planId),
+          startedAt: DateTime(2026, 10, 2, 18),
+        ),
+      );
 
-    final stored =
-        await (database.exerciseSets.select()
-              ..where((set) => set.id.equals(inserted.id)))
-            .getSingle();
-    expect(stored.exerciseId, exerciseId);
-    expect(stored.workoutId, workoutId);
-    expect(stored.reps, 5);
-    expect(stored.loadKg, closeTo(99.7903214, 0.000001));
-    expect(stored.durationMs, 90000);
-    expect(stored.bodyWeightKg, closeTo(81.6466266, 0.000001));
-    expect(stored.notes, 'working set');
+      final inserted = await insertExerciseSet(
+        database,
+        exerciseSet: draft(
+          name: 'Cutover Bench',
+          unit: 'lb',
+          created: DateTime(2026, 10, 2, 18, 5),
+          reps: 5,
+          weight: 220,
+          duration: 1.5,
+          bodyWeight: 180,
+          notes: 'working set',
+        ),
+        exerciseId: exerciseId,
+        workoutId: workoutId,
+      );
 
-    expect(inserted.name, 'Cutover Bench');
-    expect(inserted.category, 'Push');
-    expect(inserted.image, '/tmp/bench.png');
-    expect(inserted.restMs, 90000);
-    expect(inserted.unit, 'lb');
-    expect(inserted.weight, closeTo(220, 0.000001));
-    expect(inserted.bodyWeight, closeTo(180, 0.000001));
-    expect(inserted.planId, planId);
+      final stored =
+          await (database.exerciseSets.select()
+                ..where((set) => set.id.equals(inserted.id)))
+              .getSingle();
+      expect(stored.exerciseId, exerciseId);
+      expect(stored.workoutId, workoutId);
+      expect(stored.reps, 5);
+      expect(stored.loadKg, closeTo(99.7903214, 0.000001));
+      expect(stored.durationMs, 90000);
+      expect(stored.bodyWeightKg, closeTo(81.6466266, 0.000001));
+      expect(stored.notes, 'working set');
 
-    await updatePerformedSet(
-      database,
-      id: inserted.id,
-      performedSet: inserted.copyWith(
-        reps: 6,
-        weight: 225,
-        notes: const Value('top set'),
-      ),
-      exerciseId: exerciseId,
-    );
+      expect(inserted.name, 'Cutover Bench');
+      expect(inserted.category, 'Push');
+      expect(inserted.image, '/tmp/bench.png');
+      expect(inserted.restMs, 90000);
+      expect(inserted.unit, 'lb');
+      expect(inserted.weight, closeTo(220, 0.000001));
+      expect(inserted.bodyWeight, closeTo(180, 0.000001));
+      expect(inserted.planId, planId);
 
-    final updated = await getPerformedSetById(database, inserted.id);
-    expect(updated, isNotNull);
-    expect(updated!.reps, 6);
-    expect(updated.weight, closeTo(225, 0.000001));
-    expect(updated.notes, 'top set');
-    expect(updated.category, 'Push');
+      await updateExerciseSet(
+        database,
+        id: inserted.id,
+        exerciseSet: inserted.copyWith(
+          reps: 6,
+          weight: 225,
+          notes: const Value('top set'),
+        ),
+        exerciseId: exerciseId,
+      );
 
-    expect(await deletePerformedSets(database, [inserted.id]), 1);
-    expect(await getPerformedSetById(database, inserted.id), isNull);
-  });
+      final updated = await getExerciseSetById(database, inserted.id);
+      expect(updated, isNotNull);
+      expect(updated!.reps, 6);
+      expect(updated.weight, closeTo(225, 0.000001));
+      expect(updated.notes, 'top set');
+      expect(updated.category, 'Push');
+
+      expect(await deleteExerciseSets(database, [inserted.id]), 1);
+      expect(await getExerciseSetById(database, inserted.id), isNull);
+    },
+  );
 
   test('history search and filters use joined exercise metadata', () async {
     final benchId = await addExercise(
@@ -165,9 +168,9 @@ void main() {
       category: 'Cardio',
     );
 
-    await insertPerformedSet(
+    await insertExerciseSet(
       database,
-      performedSet: draft(
+      exerciseSet: draft(
         name: 'Cutover Bench',
         unit: 'kg',
         created: DateTime(2026, 9, 30, 9),
@@ -176,9 +179,9 @@ void main() {
       ),
       exerciseId: benchId,
     );
-    await insertPerformedSet(
+    await insertExerciseSet(
       database,
-      performedSet: draft(
+      exerciseSet: draft(
         name: 'Cutover Bench',
         unit: 'kg',
         created: DateTime(2026, 10, 1, 9),
@@ -187,9 +190,9 @@ void main() {
       ),
       exerciseId: benchId,
     );
-    await insertPerformedSet(
+    await insertExerciseSet(
       database,
-      performedSet: draft(
+      exerciseSet: draft(
         name: 'Cutover Run',
         unit: 'km',
         created: DateTime(2026, 10, 2, 9),
@@ -201,12 +204,12 @@ void main() {
       exerciseId: runId,
     );
 
-    final searched = await getPerformedSets(database, search: 'bench');
+    final searched = await getExerciseSets(database, search: 'bench');
     expect(searched, hasLength(2));
     expect(searched.every((set) => set.category == 'Push'), isTrue);
     expect(searched.first.created, DateTime(2026, 10, 1, 9));
 
-    final filtered = await getPerformedSets(
+    final filtered = await getExerciseSets(
       database,
       category: 'Push',
       startDate: DateTime(2026, 10, 1),
@@ -217,7 +220,7 @@ void main() {
     expect(filtered.single.name, 'Cutover Bench');
     expect(filtered.single.reps, 8);
 
-    final cardio = await getPerformedSets(database, category: 'Cardio');
+    final cardio = await getExerciseSets(database, category: 'Cardio');
     expect(cardio, hasLength(1));
     expect(cardio.single.cardio, isTrue);
     expect(cardio.single.distance, closeTo(5, 0.000001));

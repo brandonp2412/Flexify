@@ -3,7 +3,7 @@ import 'package:flexify/app_search.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/body_weight_repository.dart';
 import 'package:flexify/database/database.dart';
-import 'package:flexify/database/performed_sets.dart';
+import 'package:flexify/database/exercise_set_repository.dart';
 import 'package:flexify/empty_state.dart';
 import 'package:flexify/filters.dart';
 import 'package:flexify/l10n/l10n.dart';
@@ -23,12 +23,12 @@ import 'package:share_plus/share_plus.dart';
 
 class HistoryDay {
   final String name;
-  final List<PerformedSetView> performedSets;
+  final List<ExerciseSetView> exerciseSets;
   final DateTime day;
 
   HistoryDay({
     required this.name,
-    required this.performedSets,
+    required this.exerciseSets,
     required this.day,
   });
 }
@@ -81,7 +81,7 @@ class _HistoryPageWidget extends StatefulWidget {
 }
 
 class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
-  late Stream<List<PerformedSetView>> stream;
+  late Stream<List<ExerciseSetView>> stream;
 
   final repsGt = TextEditingController();
   final repsLt = TextEditingController();
@@ -243,16 +243,16 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
                       },
                     ),
                     onShare: () async {
-                      final performedSets = snapshot.data!
+                      final exerciseSets = snapshot.data!
                           .where(
-                            (performedSet) =>
-                                _selection.contains(performedSet.id),
+                            (exerciseSet) =>
+                                _selection.contains(exerciseSet.id),
                           )
                           .toList();
-                      final summaries = performedSets
+                      final summaries = exerciseSets
                           .map(
-                            (performedSet) =>
-                                "${formatDisplayNumber(context, performedSet.reps)}×${formatDisplayNumber(context, performedSet.weight)}${displayMeasurementUnit(context.l10n, performedSet.unit)} ${performedSet.name}",
+                            (exerciseSet) =>
+                                "${formatDisplayNumber(context, exerciseSet.reps)}×${formatDisplayNumber(context, exerciseSet.weight)}${displayMeasurementUnit(context.l10n, exerciseSet.unit)} ${exerciseSet.name}",
                           )
                           .join(', ');
                       await SharePlus.instance.share(
@@ -271,7 +271,7 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
                       setStream();
                     },
                     onDelete: () async {
-                      await deletePerformedSets(db, _selection.selected);
+                      await deleteExerciseSets(db, _selection.selected);
                       setState(() {
                         _selection.clear();
                       });
@@ -303,16 +303,16 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
 
   void onAdd() async {
     final settings = context.read<SettingsState>().value;
-    final performedSetsFuture = stream.first;
+    final exerciseSetsFuture = stream.first;
     final bodyWeightFuture = settings.showBodyWeight
         ? getBodyWeight()
         : Future<BodyWeight?>.value();
-    final performedSets = await performedSetsFuture;
+    final exerciseSets = await exerciseSetsFuture;
     final latestBodyWeight = await bodyWeightFuture;
 
-    PerformedSetView performedSet =
-        performedSets.firstOrNull ??
-        PerformedSetView(
+    ExerciseSetView exerciseSet =
+        exerciseSets.firstOrNull ??
+        ExerciseSetView(
           id: 0,
           bodyWeight: 0,
           restMs: const Duration(minutes: 3, seconds: 30).inMilliseconds,
@@ -325,22 +325,22 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
           duration: 0,
           distance: 0,
         );
-    performedSet = performedSet.copyWith(
+    exerciseSet = exerciseSet.copyWith(
       id: 0,
       bodyWeight: 0,
       created: DateTime.now().toLocal(),
     );
 
-    if (settings.strengthUnit != 'last-entry' && !performedSet.cardio) {
-      performedSet = performedSet.copyWith(unit: settings.strengthUnit);
-    } else if (settings.cardioUnit != 'last-entry' && performedSet.cardio) {
-      performedSet = performedSet.copyWith(unit: settings.cardioUnit);
+    if (settings.strengthUnit != 'last-entry' && !exerciseSet.cardio) {
+      exerciseSet = exerciseSet.copyWith(unit: settings.strengthUnit);
+    } else if (settings.cardioUnit != 'last-entry' && exerciseSet.cardio) {
+      exerciseSet = exerciseSet.copyWith(unit: settings.cardioUnit);
     }
 
     if (latestBodyWeight != null) {
-      performedSet = performedSet.copyWith(
+      exerciseSet = exerciseSet.copyWith(
         bodyWeight: displayBodyWeight(
-          performedSet.unit,
+          exerciseSet.unit,
           latestBodyWeight.weightKg,
         ),
       );
@@ -349,28 +349,28 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
     if (!mounted) return;
     Navigator.of(context).push(
       FlexPageRoute(
-        builder: (context) => EditSetPage(performedSet: performedSet),
+        builder: (context) => EditSetPage(exerciseSet: exerciseSet),
       ),
     );
   }
 
-  List<HistoryDay> getHistoryDays(List<PerformedSetView> performedSets) {
+  List<HistoryDay> getHistoryDays(List<ExerciseSetView> exerciseSets) {
     final map = <String, HistoryDay>{};
     final list = <HistoryDay>[];
-    for (final performedSet in performedSets) {
-      final day = DateUtils.dateOnly(performedSet.created);
-      final key = '${performedSet.name}|${day.millisecondsSinceEpoch}';
+    for (final exerciseSet in exerciseSets) {
+      final day = DateUtils.dateOnly(exerciseSet.created);
+      final key = '${exerciseSet.name}|${day.millisecondsSinceEpoch}';
       final existing = map[key];
       if (existing == null) {
         final hd = HistoryDay(
-          name: performedSet.name,
-          performedSets: [performedSet],
+          name: exerciseSet.name,
+          exerciseSets: [exerciseSet],
           day: day,
         );
         map[key] = hd;
         list.add(hd);
       } else {
-        existing.performedSets.add(performedSet);
+        existing.exerciseSets.add(exerciseSet);
       }
     }
     return list;
@@ -392,8 +392,8 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
     setStream();
   }
 
-  Stream<List<PerformedSetView>> _filteredStream({int? rowLimit}) {
-    return watchPerformedSets(
+  Stream<List<ExerciseSetView>> _filteredStream({int? rowLimit}) {
+    return watchExerciseSets(
       db,
       search: search,
       category: category,
@@ -415,8 +415,8 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
     );
   }
 
-  Future<List<PerformedSetView>> _filteredSets({int? rowLimit}) {
-    return getPerformedSets(
+  Future<List<ExerciseSetView>> _filteredSets({int? rowLimit}) {
+    return getExerciseSets(
       db,
       search: search,
       category: category,
@@ -439,10 +439,10 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
   }
 
   Future<void> selectAllFiltered() async {
-    final performedSets = await _filteredSets();
+    final exerciseSets = await _filteredSets();
     if (!mounted) return;
     setState(() {
-      _selection.setAll(performedSets.map((performedSet) => performedSet.id));
+      _selection.setAll(exerciseSets.map((exerciseSet) => exerciseSet.id));
     });
   }
 

@@ -3,7 +3,7 @@ import 'package:flexify/bottom_nav.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/custom_set_indicator.dart';
 import 'package:flexify/database/database.dart';
-import 'package:flexify/database/performed_sets.dart';
+import 'package:flexify/database/exercise_set_repository.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/exercise_modal.dart';
 import 'package:flexify/plan/plan_queries.dart';
@@ -63,17 +63,17 @@ class _StartListState extends State<StartList> {
 
     final workoutId = widget.workoutId;
     if (workoutId == null) return;
-    final performedSet = await getLatestWorkoutPerformedSet(
+    final exerciseSet = await getLatestWorkoutExerciseSet(
       db,
       workoutId: workoutId,
       exerciseId: widget.exercises[index].exercise.id,
     );
-    if (performedSet == null) return;
+    if (exerciseSet == null) return;
     if (!mounted) return;
 
     Navigator.of(context).push(
       FlexPageRoute(
-        builder: (context) => EditSetPage(performedSet: performedSet),
+        builder: (context) => EditSetPage(exerciseSet: exerciseSet),
       ),
     );
   }
@@ -266,9 +266,8 @@ class _StartListState extends State<StartList> {
                           trail,
                           const SizedBox(width: 4),
                           IconButton(
-                            tooltip: MaterialLocalizations.of(
-                              context,
-                            ).moreButtonTooltip,
+                            tooltip: MaterialLocalizations.of(context)
+                                .moreButtonTooltip,
                             onPressed: showActions,
                             icon: const Icon(Icons.more_horiz_rounded),
                           ),

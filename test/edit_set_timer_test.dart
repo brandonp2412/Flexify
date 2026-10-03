@@ -19,7 +19,7 @@ void main() {
 
       await harness.pump(
         tester,
-        EditSetPage(performedSet: performedSetModelFixture()),
+        EditSetPage(exerciseSet: exerciseSetModelFixture()),
       );
 
       await tester.enterText(find.bySemanticsLabel('Reps'), '10');
@@ -90,7 +90,7 @@ void main() {
 
       await harness.pump(
         tester,
-        EditSetPage(performedSet: performedSetModelFixture()),
+        EditSetPage(exerciseSet: exerciseSetModelFixture()),
       );
 
       await tester.enterText(find.bySemanticsLabel('Reps'), '10');

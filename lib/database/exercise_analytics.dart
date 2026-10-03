@@ -4,7 +4,7 @@ import 'package:drift/drift.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/body_weight_repository.dart';
 import 'package:flexify/database/database.dart';
-import 'package:flexify/database/performed_sets.dart';
+import 'package:flexify/database/exercise_set_repository.dart';
 import 'package:flexify/graph/cardio_data.dart';
 import 'package:flexify/graph/strength_data.dart';
 import 'package:flexify/main.dart';
@@ -64,12 +64,12 @@ String _periodKey(DateTime value, Period period) {
   }
 }
 
-List<List<PerformedSetView>> _groupSets(
-  Iterable<PerformedSetView> sets,
+List<List<ExerciseSetView>> _groupSets(
+  Iterable<ExerciseSetView> sets,
   Period period,
   int limit,
 ) {
-  final grouped = <String, List<PerformedSetView>>{};
+  final grouped = <String, List<ExerciseSetView>>{};
   for (final set in sets) {
     grouped.putIfAbsent(_periodKey(set.created, period), () => []).add(set);
   }
@@ -82,13 +82,13 @@ List<List<PerformedSetView>> _groupSets(
   return groups.take(limit).toList().reversed.toList();
 }
 
-double _loadInUnit(PerformedSetView set, String target) {
-  final kg = canonicalPerformedLoad(set.unit, set.weight);
+double _loadInUnit(ExerciseSetView set, String target) {
+  final kg = canonicalExerciseSetLoad(set.unit, set.weight);
   return displayLoad(target, kg);
 }
 
-double _distanceInUnit(PerformedSetView set, String target) {
-  final metres = canonicalPerformedDistance(set.unit, set.distance);
+double _distanceInUnit(ExerciseSetView set, String target) {
+  final metres = canonicalExerciseSetDistance(set.unit, set.distance);
   return displayDistance(target, metres);
 }
 
@@ -98,10 +98,10 @@ double _oneRepMax(double weight, double reps) {
   return weight >= 0 ? weight / factor : weight * factor;
 }
 
-PerformedSetView _latest(List<PerformedSetView> sets) =>
+ExerciseSetView _latest(List<ExerciseSetView> sets) =>
     sets.reduce((a, b) => a.created.isAfter(b.created) ? a : b);
 
-PerformedSetView _bestWeightSet(List<PerformedSetView> sets, String target) {
+ExerciseSetView _bestWeightSet(List<ExerciseSetView> sets, String target) {
   return sets.reduce((a, b) {
     final aWeight = _loadInUnit(a, target);
     final bWeight = _loadInUnit(b, target);
@@ -111,7 +111,7 @@ PerformedSetView _bestWeightSet(List<PerformedSetView> sets, String target) {
   });
 }
 
-PerformedSetView _bestRepsSet(List<PerformedSetView> sets) {
+ExerciseSetView _bestRepsSet(List<ExerciseSetView> sets) {
   return sets.reduce((a, b) {
     if (b.reps > a.reps) return b;
     if (b.reps == a.reps && b.weight > a.weight) return b;
@@ -119,7 +119,7 @@ PerformedSetView _bestRepsSet(List<PerformedSetView> sets) {
   });
 }
 
-PerformedSetView _bestOneRepMaxSet(List<PerformedSetView> sets, String target) {
+ExerciseSetView _bestOneRepMaxSet(List<ExerciseSetView> sets, String target) {
   return sets.reduce((a, b) {
     final aOrm = _oneRepMax(_loadInUnit(a, target), a.reps);
     final bOrm = _oneRepMax(_loadInUnit(b, target), b.reps);
@@ -127,7 +127,7 @@ PerformedSetView _bestOneRepMaxSet(List<PerformedSetView> sets, String target) {
   });
 }
 
-PerformedSetView _bestRelativeSet(List<PerformedSetView> sets) {
+ExerciseSetView _bestRelativeSet(List<ExerciseSetView> sets) {
   return sets.reduce((a, b) {
     if (b.weight > a.weight) return b;
     if (b.weight == a.weight && b.reps > a.reps) return b;
@@ -136,12 +136,12 @@ PerformedSetView _bestRelativeSet(List<PerformedSetView> sets) {
 }
 
 StrengthData _strengthBucket(
-  List<PerformedSetView> sets, {
+  List<ExerciseSetView> sets, {
   required StrengthMetric metric,
   required String target,
   String? category,
 }) {
-  late final PerformedSetView representative;
+  late final ExerciseSetView representative;
   late final double value;
 
   switch (metric) {
@@ -232,7 +232,7 @@ Future<List<StrengthData>> getStrengthData({
   required DateTime? end,
   required int limit,
 }) async {
-  final sets = await getPerformedSetsForExercise(
+  final sets = await getExerciseSetsForExercise(
     db,
     exerciseName: name,
     startDate: start,
@@ -252,7 +252,7 @@ Future<List<StrengthData>> getStrengthData({
       .toList();
 }
 
-double _averageIncline(List<PerformedSetView> sets) {
+double _averageIncline(List<ExerciseSetView> sets) {
   final values = sets
       .where((set) => set.incline != null)
       .map((set) => set.incline!.toDouble())
@@ -262,7 +262,7 @@ double _averageIncline(List<PerformedSetView> sets) {
 }
 
 CardioData _cardioBucket(
-  List<PerformedSetView> sets, {
+  List<ExerciseSetView> sets, {
   required CardioMetric metric,
   required String target,
 }) {
@@ -322,7 +322,7 @@ Future<List<CardioData>> getCardioData({
   DateTime? end,
   int limit = 11,
 }) async {
-  final sets = await getPerformedSetsForExercise(
+  final sets = await getExerciseSetsForExercise(
     db,
     exerciseName: name,
     startDate: start ?? DateTime(0),
@@ -350,7 +350,7 @@ Future<List<StrengthData>> getGlobalData({
   required DateTime? end,
   required int limit,
 }) async {
-  final allSets = await getPerformedSets(db);
+  final allSets = await getExerciseSets(db);
   final filtered = allSets.where((set) {
     if (set.category == null) return false;
     if (start != null && set.created.isBefore(start)) return false;
@@ -358,7 +358,7 @@ Future<List<StrengthData>> getGlobalData({
     return true;
   });
 
-  final buckets = <String, List<PerformedSetView>>{};
+  final buckets = <String, List<ExerciseSetView>>{};
   for (final set in filtered) {
     final key = '${set.category}\u0000${_periodKey(set.created, period)}';
     buckets.putIfAbsent(key, () => []).add(set);
@@ -388,12 +388,12 @@ Future<List<StrengthData>> getGlobalData({
 Future<List<Rpm>> getRpms() async {
   final cutoff = DateTime.now().subtract(const Duration(days: 30));
   final sets =
-      (await getPerformedSets(
-          db,
-        )).where((set) => !set.cardio && !set.created.isBefore(cutoff)).toList()
+      (await getExerciseSets(db))
+          .where((set) => !set.cardio && !set.created.isBefore(cutoff))
+          .toList()
         ..sort((a, b) => a.created.compareTo(b.created));
 
-  final byName = <String, List<PerformedSetView>>{};
+  final byName = <String, List<ExerciseSetView>>{};
   for (final set in sets) {
     byName.putIfAbsent(set.name, () => []).add(set);
   }
@@ -401,7 +401,7 @@ Future<List<Rpm>> getRpms() async {
   final grouped = <String, List<double>>{};
   final weights = <String, double>{};
   for (final entry in byName.entries) {
-    PerformedSetView? previous;
+    ExerciseSetView? previous;
     for (final set in entry.value) {
       if (previous != null) {
         final minutes =
@@ -511,9 +511,8 @@ Stream<List<GraphExerciseSummary>> watchGraphs() {
             ),
             created: timestamp == null
                 ? DateTime.fromMillisecondsSinceEpoch(0).toLocal()
-                : DateTime.fromMillisecondsSinceEpoch(
-                    timestamp * 1000,
-                  ).toLocal(),
+                : DateTime.fromMillisecondsSinceEpoch(timestamp * 1000)
+                      .toLocal(),
             image: result.readNullable<String>('image'),
             category: result.readNullable<String>('category'),
           );
@@ -521,24 +520,24 @@ Stream<List<GraphExerciseSummary>> watchGraphs() {
       );
 }
 
-Future<List<PerformedSetView>> getGraphHistory(
+Future<List<ExerciseSetView>> getGraphHistory(
   String exerciseName, {
   int limit = 20,
 }) {
-  return getPerformedSetsForExercise(
+  return getExerciseSetsForExercise(
     db,
     exerciseName: exerciseName,
     limit: limit,
   );
 }
 
-Future<List<PerformedSetView>> getBodyWeightGraphHistory({
+Future<List<ExerciseSetView>> getBodyWeightGraphHistory({
   int limit = 20,
 }) async {
   final rows = await getBodyWeightHistory(db, limit: limit);
   return rows
       .map(
-        (row) => PerformedSetView(
+        (row) => ExerciseSetView(
           id: row.id,
           bodyWeight: 0,
           cardio: false,
@@ -555,11 +554,11 @@ Future<List<PerformedSetView>> getBodyWeightGraphHistory({
       .toList();
 }
 
-Future<PerformedSetView?> getGraphPointSet(
+Future<ExerciseSetView?> getGraphPointSet(
   String exerciseName,
   DateTime timestamp,
 ) {
-  return getPerformedSetForExerciseAt(
+  return getExerciseSetForExerciseAt(
     db,
     exerciseName: exerciseName,
     timestamp: timestamp,
@@ -567,5 +566,5 @@ Future<PerformedSetView?> getGraphPointSet(
 }
 
 Future<int> countGraphSets(Iterable<String> exerciseNames) {
-  return countPerformedSetsForExercises(db, exerciseNames);
+  return countExerciseSetsForExercises(db, exerciseNames);
 }

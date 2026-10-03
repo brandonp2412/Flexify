@@ -1,7 +1,7 @@
 import 'package:drift/drift.dart' hide isNull;
 import 'package:drift/native.dart';
 import 'package:flexify/database/database.dart';
-import 'package:flexify/database/performed_sets.dart';
+import 'package:flexify/database/exercise_set_repository.dart';
 import 'package:flexify/home_page.dart';
 import 'package:flexify/l10n/generated/app_localizations.dart';
 import 'package:flexify/main.dart' as app;
@@ -128,9 +128,8 @@ void main() {
     expect(materialApp.locale, const Locale('de'));
 
     final context = tester.element(find.byType(HomePage));
-    Navigator.of(
-      context,
-    ).push(MaterialPageRoute(builder: (_) => StartPlanPage(plan: plan)));
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (_) => StartPlanPage(plan: plan)));
     await tester.pumpAndSettle();
 
     final l10n = lookupAppLocalizations(const Locale('de'));
@@ -143,7 +142,7 @@ void main() {
     await tester.tap(find.text(l10n.saveSet));
     await tester.pumpAndSettle();
 
-    final saved = await getLatestPerformedSet(database, exerciseName: exercise);
+    final saved = await getLatestExerciseSet(database, exerciseName: exercise);
     expect(saved, isNot(equals(null)));
     expect(saved!.name, exercise);
     expect(saved.reps, 5);

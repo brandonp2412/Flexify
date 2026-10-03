@@ -1,7 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/database/exercise_catalog.dart';
-import 'package:flexify/database/performed_sets.dart';
+import 'package:flexify/database/exercise_set_repository.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/plan_queries.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -79,7 +79,7 @@ void main() {
             .exerciseId,
         exercise.id,
       );
-      final history = await getPerformedSets(db, search: 'Renamed stable lift');
+      final history = await getExerciseSets(db, search: 'Renamed stable lift');
       expect(history, hasLength(1));
       expect(history.single.name, 'Renamed stable lift');
       expect(history.single.created, timestamp);

@@ -18,7 +18,7 @@ import 'database_connection_web.dart'
     if (dart.library.io) 'database_connection_native.dart';
 import 'migrations_web.dart' if (dart.library.io) 'migrations_native.dart';
 
-export 'performed_set_view.dart';
+export 'exercise_set_view.dart';
 
 part 'database.g.dart';
 

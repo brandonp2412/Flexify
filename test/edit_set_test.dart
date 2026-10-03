@@ -7,12 +7,12 @@ import 'support/fixtures.dart';
 import 'support/test_app.dart';
 
 void main() {
-  testWidgets('EditPerformedSet inserts', (WidgetTester tester) async {
+  testWidgets('EditExerciseSet inserts', (WidgetTester tester) async {
     final harness = await FlexifyTestHarness.create();
     await harness.pump(
       tester,
       EditSetPage(
-        performedSet: performedSetModelFixture(
+        exerciseSet: exerciseSetModelFixture(
           bodyWeight: 52,
           duration: 3,
           distance: 6,
@@ -51,7 +51,7 @@ void main() {
 
     await harness.pump(
       tester,
-      EditSetPage(performedSet: performedSetModelFixture()),
+      EditSetPage(exerciseSet: exerciseSetModelFixture()),
     );
 
     expect(find.bySemanticsLabel('Reps'), findsOne);
@@ -69,7 +69,7 @@ void main() {
     final harness = await FlexifyTestHarness.create();
     await harness.pump(
       tester,
-      EditSetPage(performedSet: performedSetModelFixture()),
+      EditSetPage(exerciseSet: exerciseSetModelFixture()),
     );
     await tester.pumpAndSettle();
 
@@ -95,7 +95,7 @@ void main() {
     final harness = await FlexifyTestHarness.create();
     await harness.pump(
       tester,
-      EditSetPage(performedSet: performedSetModelFixture()),
+      EditSetPage(exerciseSet: exerciseSetModelFixture()),
       surfaceSize: const Size(800, 1600),
     );
     await tester.pumpAndSettle();
@@ -111,12 +111,12 @@ void main() {
     );
   });
 
-  testWidgets('EditPerformedSet updates', (WidgetTester tester) async {
+  testWidgets('EditExerciseSet updates', (WidgetTester tester) async {
     final harness = await FlexifyTestHarness.create();
     await harness.pump(
       tester,
       EditSetPage(
-        performedSet: performedSetModelFixture(
+        exerciseSet: exerciseSetModelFixture(
           id: 1,
           bodyWeight: 52,
           duration: 3,
@@ -141,7 +141,7 @@ void main() {
   ) async {
     final harness = await FlexifyTestHarness.create();
 
-    await insertPerformedSetFixture(
+    await insertExerciseSetFixture(
       harness.database,
       'Bench press',
       reps: 10,
@@ -149,7 +149,7 @@ void main() {
       created: DateTime.now(),
       notes: 'bad shoulder',
     );
-    await insertPerformedSetFixture(
+    await insertExerciseSetFixture(
       harness.database,
       'Squat',
       reps: 5,
@@ -163,7 +163,7 @@ void main() {
     await harness.pump(
       tester,
       EditSetPage(
-        performedSet: performedSetModelFixture(name: '', reps: 0, weight: 0),
+        exerciseSet: exerciseSetModelFixture(name: '', reps: 0, weight: 0),
       ),
       surfaceSize: const Size(800, 1600),
     );
@@ -190,7 +190,7 @@ void main() {
   });
 
   testWidgets(
-    'EditPerformedSet resizes for the keyboard so notes remain reachable',
+    'EditExerciseSet resizes for the keyboard so notes remain reachable',
     (WidgetTester tester) async {
       final harness = await FlexifyTestHarness.create();
       await harness.database.settings.update().write(
@@ -199,7 +199,7 @@ void main() {
 
       await harness.pump(
         tester,
-        EditSetPage(performedSet: performedSetModelFixture()),
+        EditSetPage(exerciseSet: exerciseSetModelFixture()),
         surfaceSize: const Size(430, 900),
       );
       await tester.pumpAndSettle();

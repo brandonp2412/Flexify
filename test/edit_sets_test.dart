@@ -1,4 +1,4 @@
-import 'package:flexify/database/performed_sets.dart';
+import 'package:flexify/database/exercise_set_repository.dart';
 import 'package:flexify/sets/edit_sets_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -17,14 +17,14 @@ void main() {
       testSettings(showUnits: true),
     );
     final ids = [
-      (await insertPerformedSetFixture(
+      (await insertExerciseSetFixture(
         harness.database,
         'Bench press',
         reps: 2,
         weight: 90,
         created: DateTime.now(),
       )).id,
-      (await insertPerformedSetFixture(
+      (await insertExerciseSetFixture(
         harness.database,
         'Deadlift',
         reps: 5,
@@ -64,13 +64,13 @@ void main() {
     expect(find.bySemanticsLabel('Reps'), findsOne);
   });
 
-  testWidgets('EditPerformedSets', (WidgetTester tester) async {
+  testWidgets('EditExerciseSets', (WidgetTester tester) async {
     final harness = await FlexifyTestHarness.create();
     await harness.database.settings.update().write(
       testSettings(showUnits: true),
     );
     final ids = [
-      (await insertPerformedSetFixture(
+      (await insertExerciseSetFixture(
         harness.database,
         'Bench press',
         reps: 2,
@@ -78,7 +78,7 @@ void main() {
         created: DateTime.now(),
         category: 'Chest',
       )).id,
-      (await insertPerformedSetFixture(
+      (await insertExerciseSetFixture(
         harness.database,
         'Shoulder press',
         reps: 5,
@@ -86,7 +86,7 @@ void main() {
         created: DateTime.now(),
         category: 'Shoulders',
       )).id,
-      (await insertPerformedSetFixture(
+      (await insertExerciseSetFixture(
         harness.database,
         'Deadlift',
         reps: 7,
@@ -121,7 +121,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Edit 3 sets'), findsNothing);
-    final performedSets = (await getPerformedSets(harness.database))
+    final exerciseSets = (await getExerciseSets(harness.database))
         .where(
           (set) =>
               ids.contains(set.id) &&
@@ -130,6 +130,6 @@ void main() {
               set.name == 'New name',
         )
         .toList();
-    expect(performedSets.length, equals(3));
+    expect(exerciseSets.length, equals(3));
   });
 }

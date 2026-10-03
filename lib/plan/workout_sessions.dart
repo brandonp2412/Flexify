@@ -1,6 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:flexify/database/database.dart';
-import 'package:flexify/database/performed_sets.dart';
+import 'package:flexify/database/exercise_set_repository.dart';
 
 class PlanExerciseEntry {
   final PlanExercise planExercise;
@@ -177,7 +177,7 @@ Future<ExerciseSet?> getLatestManualExerciseSet(
       .getSingleOrNull();
 }
 
-Future<PerformedSetView?> getFirstOfLastPlanWorkout(
+Future<ExerciseSetView?> getFirstOfLastPlanWorkout(
   AppDatabase database, {
   required int exerciseId,
   required int planId,
@@ -195,10 +195,10 @@ Future<PerformedSetView?> getFirstOfLastPlanWorkout(
     exerciseId: exerciseId,
   );
   if (exerciseSet == null) return null;
-  return getPerformedSetById(database, exerciseSet.id);
+  return getExerciseSetById(database, exerciseSet.id);
 }
 
-Future<PerformedSetView?> getStartPlanPrefillById(
+Future<ExerciseSetView?> getStartPlanPrefillById(
   AppDatabase database, {
   required int exerciseId,
   required int planId,
@@ -212,7 +212,7 @@ Future<PerformedSetView?> getStartPlanPrefillById(
 
   final manual = await getLatestManualExerciseSet(database, exerciseId);
   if (manual == null) return null;
-  return getPerformedSetById(database, manual.id);
+  return getExerciseSetById(database, manual.id);
 }
 
 double? canonicalLoadKg(String unit, double value) {

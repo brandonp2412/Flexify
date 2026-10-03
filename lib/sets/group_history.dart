@@ -4,7 +4,7 @@ import 'package:flexify/app_search.dart';
 import 'package:flexify/bottom_nav.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
-import 'package:flexify/database/performed_sets.dart';
+import 'package:flexify/database/exercise_set_repository.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/responsive.dart';
@@ -43,7 +43,7 @@ class _GroupHistoryState extends State<GroupHistory> {
   Future<void> _showContextMenu(
     BuildContext context,
     TapDownDetails details,
-    PerformedSetView performedSet,
+    ExerciseSetView exerciseSet,
   ) async {
     final action = await showDesktopContextMenu<_GroupedHistoryContextAction>(
       context,
@@ -71,7 +71,7 @@ class _GroupHistoryState extends State<GroupHistory> {
       case _GroupedHistoryContextAction.edit:
         await Navigator.of(context).push(
           FlexPageRoute(
-            builder: (context) => EditSetPage(performedSet: performedSet),
+            builder: (context) => EditSetPage(exerciseSet: exerciseSet),
           ),
         );
         break;
@@ -80,9 +80,7 @@ class _GroupHistoryState extends State<GroupHistory> {
           context: context,
           builder: (dialogContext) => AlertDialog(
             title: Text(context.l10n.confirmDelete),
-            content: Text(
-              context.l10n.deleteSetConfirmation(performedSet.name),
-            ),
+            content: Text(context.l10n.deleteSetConfirmation(exerciseSet.name)),
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(dialogContext, false),
@@ -96,7 +94,7 @@ class _GroupHistoryState extends State<GroupHistory> {
           ),
         );
         if (confirmed == true) {
-          await deletePerformedSets(db, [performedSet.id]);
+          await deleteExerciseSets(db, [exerciseSet.id]);
         }
         break;
       case null:
@@ -147,42 +145,42 @@ class _GroupHistoryState extends State<GroupHistory> {
     return [
       ExpansionTile(
         title: Text(
-          "${history.name} (${formatDisplayNumber(context, history.performedSets.length, maximumFractionDigits: 0)})",
+          "${history.name} (${formatDisplayNumber(context, history.exerciseSets.length, maximumFractionDigits: 0)})",
         ),
         subtitle: Selector<SettingsState, String>(
           selector: (context, settings) => settings.value.shortDateFormat,
           builder: (context, value, child) => Text(
             formatDisplayDate(
               context,
-              history.performedSets.first.created,
+              history.exerciseSets.first.created,
               value,
             ),
           ),
         ),
         shape: const Border.symmetric(),
-        children: history.performedSets.map((performedSet) {
-          final minutes = performedSet.duration.floor();
-          final seconds = ((performedSet.duration * 60) % 60)
+        children: history.exerciseSets.map((exerciseSet) {
+          final minutes = exerciseSet.duration.floor();
+          final seconds = ((exerciseSet.duration * 60) % 60)
               .floor()
               .toString()
               .padLeft(2, '0');
-          final distance = formatDisplayNumber(context, performedSet.distance);
-          final reps = formatDisplayNumber(context, performedSet.reps);
-          final weight = formatDisplayNumber(context, performedSet.weight);
-          final unit = displayMeasurementUnit(context.l10n, performedSet.unit);
+          final distance = formatDisplayNumber(context, exerciseSet.distance);
+          final reps = formatDisplayNumber(context, exerciseSet.reps);
+          final weight = formatDisplayNumber(context, exerciseSet.weight);
+          final unit = displayMeasurementUnit(context.l10n, exerciseSet.unit);
           String incline = '';
-          if (performedSet.incline != null && performedSet.incline! > 0) {
+          if (exerciseSet.incline != null && exerciseSet.incline! > 0) {
             incline =
-                '@ ${formatDisplayPercent(context, performedSet.incline! / 100, maximumFractionDigits: 0)}';
+                '@ ${formatDisplayPercent(context, exerciseSet.incline! / 100, maximumFractionDigits: 0)}';
           }
 
           Widget? leading;
 
-          if (showImages && performedSet.image != null) {
+          if (showImages && exerciseSet.image != null) {
             leading = GestureDetector(
-              onTap: () => widget.onSelect(performedSet.id),
+              onTap: () => widget.onSelect(exerciseSet.id),
               child: Image.file(
-                File(performedSet.image!),
+                File(exerciseSet.image!),
                 cacheWidth: 64,
                 errorBuilder: (context, error, stackTrace) =>
                     const Icon(Icons.error),
@@ -190,7 +188,7 @@ class _GroupHistoryState extends State<GroupHistory> {
             );
           } else if (showImages) {
             leading = GestureDetector(
-              onTap: () => widget.onSelect(performedSet.id),
+              onTap: () => widget.onSelect(exerciseSet.id),
               child: Container(
                 width: 24,
                 height: 24,
@@ -200,8 +198,8 @@ class _GroupHistoryState extends State<GroupHistory> {
                 ),
                 child: Center(
                   child: Text(
-                    performedSet.name.isNotEmpty
-                        ? performedSet.name[0].toUpperCase()
+                    exerciseSet.name.isNotEmpty
+                        ? exerciseSet.name[0].toUpperCase()
                         : '?',
                     style: const TextStyle(
                       color: Colors.white,
@@ -216,20 +214,20 @@ class _GroupHistoryState extends State<GroupHistory> {
           }
 
           String title = "$reps x $weight $unit";
-          if (performedSet.cardio &&
-              (performedSet.unit == 'kg' ||
-                  performedSet.unit == 'lb' ||
-                  performedSet.unit == 'stone')) {
+          if (exerciseSet.cardio &&
+              (exerciseSet.unit == 'kg' ||
+                  exerciseSet.unit == 'lb' ||
+                  exerciseSet.unit == 'stone')) {
             title = "$weight $unit / $minutes:$seconds $incline";
-          } else if (performedSet.cardio &&
-              (performedSet.unit == 'km' ||
-                  performedSet.unit == 'mi' ||
-                  performedSet.unit == 'kcal')) {
+          } else if (exerciseSet.cardio &&
+              (exerciseSet.unit == 'km' ||
+                  exerciseSet.unit == 'mi' ||
+                  exerciseSet.unit == 'kcal')) {
             title = "$distance $unit / $minutes:$seconds $incline";
           }
 
           final tile = Material(
-            color: widget.selected.contains(performedSet.id)
+            color: widget.selected.contains(exerciseSet.id)
                 ? Theme.of(context).colorScheme.primary.withValues(alpha: .18)
                 : Colors.transparent,
             child: ListTile(
@@ -239,10 +237,10 @@ class _GroupHistoryState extends State<GroupHistory> {
                 selector: (context, settings) => settings.value.longDateFormat,
                 builder: (context, dateFormat, child) => Text(
                   dateFormat == 'timeago'
-                      ? formatRelativeTime(context, performedSet.created)
+                      ? formatRelativeTime(context, exerciseSet.created)
                       : formatDisplayDate(
                           context,
-                          performedSet.created,
+                          exerciseSet.created,
                           dateFormat,
                         ),
                 ),
@@ -250,16 +248,16 @@ class _GroupHistoryState extends State<GroupHistory> {
               onLongPress: isDesktopLayout(context)
                   ? null
                   : () {
-                      widget.onSelect(performedSet.id);
+                      widget.onSelect(exerciseSet.id);
                     },
               onTap: () {
                 if (widget.selected.isNotEmpty)
-                  widget.onSelect(performedSet.id);
+                  widget.onSelect(exerciseSet.id);
                 else
                   Navigator.of(context).push(
                     FlexPageRoute(
                       builder: (context) =>
-                          EditSetPage(performedSet: performedSet),
+                          EditSetPage(exerciseSet: exerciseSet),
                     ),
                   );
               },
@@ -269,7 +267,7 @@ class _GroupHistoryState extends State<GroupHistory> {
           return GestureDetector(
             behavior: HitTestBehavior.opaque,
             onSecondaryTapDown: (details) =>
-                _showContextMenu(context, details, performedSet),
+                _showContextMenu(context, details, exerciseSet),
             child: tile,
           );
         }).toList(),
