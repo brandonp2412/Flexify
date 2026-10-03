@@ -389,7 +389,7 @@ class AppDatabase extends _$AppDatabase {
         try {
           await stepByStep(
             from1To2: (m, schema) async {
-              final gymSets = await schema.gymSets.select().get();
+              final legacyRows = await schema.gymSets.select().get();
               final plans = await schema.plans.select().get();
               await m.drop(schema.gymSets);
               await m.drop(schema.plans);
@@ -397,13 +397,13 @@ class AppDatabase extends _$AppDatabase {
               await m.create(schema.plans);
 
               await schema.gymSets.insertAll(
-                gymSets.map(
-                  (gymSet) => RawValuesInsertable({
-                    'name': Variable(gymSet.read<String>('name')),
-                    'reps': Variable(gymSet.read<double>('reps')),
-                    'weight': Variable(gymSet.read<double>('weight')),
-                    'unit': Variable(gymSet.read<String>('unit')),
-                    'created': Variable(gymSet.read<DateTime>('created')),
+                legacyRows.map(
+                  (legacyRow) => RawValuesInsertable({
+                    'name': Variable(legacyRow.read<String>('name')),
+                    'reps': Variable(legacyRow.read<double>('reps')),
+                    'weight': Variable(legacyRow.read<double>('weight')),
+                    'unit': Variable(legacyRow.read<String>('unit')),
+                    'created': Variable(legacyRow.read<DateTime>('created')),
                   }),
                 ),
               );
@@ -516,7 +516,7 @@ class AppDatabase extends _$AppDatabase {
             from17To18: (Migrator m, Schema18 schema) async {
               final plans = await (schema.plans.select()).get();
               const maxSets = CustomExpression<int>('max_sets');
-              final gymSets =
+              final legacyRows =
                   await (schema.gymSets.selectOnly()
                         ..addColumns([maxSets, schema.gymSets.name])
                         ..groupBy([schema.gymSets.name]))
@@ -527,19 +527,19 @@ class AppDatabase extends _$AppDatabase {
                 final exercises = plan.read<String>('exercises').split(',');
 
                 for (final exercise in exercises) {
-                  final index = gymSets.indexWhere(
-                    (gymSet) =>
-                        gymSet.read(schema.gymSets.name) == exercise.trim(),
+                  final index = legacyRows.indexWhere(
+                    (legacyRow) =>
+                        legacyRow.read(schema.gymSets.name) == exercise.trim(),
                   );
                   if (index == -1) continue;
 
-                  final gymSet = gymSets[index];
+                  final legacyRow = legacyRows[index];
                   pe.add(
                     RawValuesInsertable({
                       'plan_id': Variable(plan.read<int>('id')),
                       'exercise': Variable(exercise),
                       'enabled': const Variable(true),
-                      'max_sets': Variable(gymSet.read(maxSets)),
+                      'max_sets': Variable(legacyRow.read(maxSets)),
                     }),
                   );
                 }
