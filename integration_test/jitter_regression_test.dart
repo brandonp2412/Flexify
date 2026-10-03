@@ -13,8 +13,12 @@ import '../test/support/fixtures.dart';
 
 const _allTabs = 'HistoryPage,PlansPage,GraphsPage,TimerPage,SettingsPage';
 
-Future<AppDatabase> _pumpBenchmarkApp(WidgetTester tester) async {
-  await tester.binding.setSurfaceSize(const Size(1440, 900));
+Future<AppDatabase> _pumpBenchmarkApp(
+  WidgetTester tester, {
+  String tabs = _allTabs,
+  Size surfaceSize = const Size(1440, 900),
+}) async {
+  await tester.binding.setSurfaceSize(surfaceSize);
   addTearDown(() => tester.binding.setSurfaceSize(null));
 
   final database = AppDatabase(
@@ -32,8 +36,8 @@ Future<AppDatabase> _pumpBenchmarkApp(WidgetTester tester) async {
   });
 
   await database.settings.update().write(
-    const SettingsCompanion(
-      tabs: Value(_allTabs),
+    SettingsCompanion(
+      tabs: Value(tabs),
       explainedPermissions: Value(true),
       notificationPermissionRequested: Value(true),
       restTimers: Value(false),
@@ -144,6 +148,32 @@ void main() {
       (message) => null,
     );
   });
+
+  testWidgets(
+    'first Plans to History tab slide stays within the frame budget',
+    (tester) async {
+      await _pumpBenchmarkApp(
+        tester,
+        tabs: 'PlansPage,HistoryPage,GraphsPage,TimerPage,SettingsPage',
+        surfaceSize: const Size(390, 844),
+      );
+
+      final report = await _measureFrames(
+        binding,
+        'plans_to_history_first_load',
+        () async {
+          await tester.tap(find.byKey(const Key('HistoryPage')));
+          await tester.pumpAndSettle();
+        },
+      );
+
+      _expectSmoothFrames(report, 'First Plans to History tab slide');
+
+      await tester.pump(const Duration(milliseconds: 100));
+      await tester.pumpAndSettle();
+      expect(find.text('Jitter bench press'), findsWidgets);
+    },
+  );
 
   testWidgets('opening StartPlanPage stays within the frame budget', (
     tester,
