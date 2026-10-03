@@ -289,9 +289,9 @@ void main() {
               context: context,
               page: StrengthPage(
                 tabCtrl: MockTabController(),
-                name: 'Shoulder press',
-                unit: 'kg',
-                data: data,
+                initialName: 'Shoulder press',
+                initialUnit: 'kg',
+                initialData: data,
               ),
             );
           },

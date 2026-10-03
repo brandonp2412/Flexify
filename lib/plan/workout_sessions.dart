@@ -215,30 +215,6 @@ Future<PerformedSetView?> getStartPlanPrefillById(
   return getPerformedSetById(database, manual.id);
 }
 
-Stream<List<PerformedSetView>> watchLegacyWorkoutSets(
-  AppDatabase database, {
-  required int workoutId,
-  required int exerciseId,
-}) {
-  return watchWorkoutPerformedSets(
-    database,
-    workoutId: workoutId,
-    exerciseId: exerciseId,
-  );
-}
-
-Future<PerformedSetView?> getLatestLegacyWorkoutSet(
-  AppDatabase database, {
-  required int workoutId,
-  required int exerciseId,
-}) {
-  return getLatestWorkoutPerformedSet(
-    database,
-    workoutId: workoutId,
-    exerciseId: exerciseId,
-  );
-}
-
 double? canonicalLoadKg(String unit, double value) {
   return switch (unit) {
     'kg' => value,
@@ -246,21 +222,4 @@ double? canonicalLoadKg(String unit, double value) {
     'stone' => value * 6.35029318,
     _ => null,
   };
-}
-
-Future<int> insertExerciseSetMirror(
-  AppDatabase database, {
-  required PerformedSetView performedSet,
-  required int exerciseId,
-  required int? workoutId,
-  double? bodyWeightKg,
-}) async {
-  final inserted = await insertPerformedSet(
-    database,
-    performedSet: performedSet,
-    exerciseId: exerciseId,
-    workoutId: workoutId,
-    bodyWeightKg: bodyWeightKg,
-  );
-  return inserted.id;
 }

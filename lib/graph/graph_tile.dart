@@ -116,8 +116,9 @@ class GraphTile extends StatelessWidget {
         title: Text(
           performedSet.name,
           style: desktop
-              ? Theme.of(context).textTheme.titleMedium
-                    ?.copyWith(fontWeight: FontWeight.w600)
+              ? Theme.of(
+                  context,
+                ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600)
               : null,
         ),
         subtitle: Selector<SettingsState, String>(
@@ -132,15 +133,18 @@ class GraphTile extends StatelessWidget {
                       performedSet.created,
                       dateFormat,
                     ),
-              style: Theme.of(context).textTheme.bodySmall
-                  ?.copyWith(color: colors.onSurfaceVariant),
+              style: Theme.of(
+                context,
+              ).textTheme.bodySmall?.copyWith(color: colors.onSurfaceVariant),
             ),
           ),
         ),
         trailing: Text(
           trailing,
-          style: Theme.of(context).textTheme.bodyLarge
-              ?.copyWith(fontWeight: FontWeight.w600, color: colors.onSurface),
+          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+            fontWeight: FontWeight.w600,
+            color: colors.onSurface,
+          ),
         ),
         onTap: () async {
           if (selected.isNotEmpty) {
@@ -160,9 +164,9 @@ class GraphTile extends StatelessWidget {
             Navigator.of(context).push(
               FlexPageRoute(
                 builder: (context) => StrengthPage(
-                  name: performedSet.name,
-                  unit: performedSet.unit,
-                  data: data,
+                  initialName: performedSet.name,
+                  initialUnit: performedSet.unit,
+                  initialData: data,
                   tabCtrl: tabCtrl,
                   bodyWeight: true,
                 ),
@@ -187,9 +191,9 @@ class GraphTile extends StatelessWidget {
               FlexPageRoute(
                 builder: (context) => CardioPage(
                   tabCtrl: tabCtrl,
-                  name: performedSet.name,
-                  unit: performedSet.unit,
-                  data: data,
+                  initialName: performedSet.name,
+                  initialUnit: performedSet.unit,
+                  initialData: data,
                 ),
               ),
             );
@@ -210,9 +214,9 @@ class GraphTile extends StatelessWidget {
           Navigator.of(context).push(
             FlexPageRoute(
               builder: (context) => StrengthPage(
-                name: performedSet.name,
-                unit: performedSet.unit,
-                data: data,
+                initialName: performedSet.name,
+                initialUnit: performedSet.unit,
+                initialData: data,
                 tabCtrl: tabCtrl,
               ),
             ),

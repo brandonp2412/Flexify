@@ -2,7 +2,7 @@ import 'package:flexify/bottom_nav.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/exercise_analytics.dart';
 import 'package:flexify/empty_state.dart';
-import 'package:flexify/graph/flex_line.dart';
+import 'package:flexify/graph/flex_line_chart.dart';
 import 'package:flexify/graph/graph_options_controls.dart';
 import 'package:flexify/graph/strength_data.dart';
 import 'package:flexify/l10n/l10n.dart';
@@ -30,28 +30,34 @@ class _GlobalProgressPageState extends State<GlobalProgressPage> {
   DateTime? endDate;
   String targetUnit = 'kg';
   int limit = 100;
-  TabController? tabController;
 
   @override
   void initState() {
     super.initState();
     setData();
 
-    tabController = widget.tabController;
-    tabController?.addListener(tabListener);
+    widget.tabController.addListener(tabListener);
   }
 
   void tabListener() {
     final settings = context.read<SettingsState>().value;
     final graphsIndex = settings.tabs.split(',').indexOf('GraphsPage');
-    if (tabController?.indexIsChanging == true) return;
-    if (tabController?.index != graphsIndex) return;
+    if (widget.tabController.indexIsChanging) return;
+    if (widget.tabController.index != graphsIndex) return;
     setData();
   }
 
   @override
+  void didUpdateWidget(GlobalProgressPage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.tabController == widget.tabController) return;
+    oldWidget.tabController.removeListener(tabListener);
+    widget.tabController.addListener(tabListener);
+  }
+
+  @override
   void dispose() {
-    tabController?.removeListener(tabListener);
+    widget.tabController.removeListener(tabListener);
     super.dispose();
   }
 
@@ -96,17 +102,17 @@ class _GlobalProgressPageState extends State<GlobalProgressPage> {
       dateToXMap[allDates[i]] = i;
     }
 
-    final chartSeries = <FlexLineSeries>[];
+    final chartSeries = <FlexLineChartSeries>[];
     for (var index = 0; index < categories.length; index++) {
       final category = categories[index];
       final categoryData = data.where((d) => d.category == category).toList();
       chartSeries.add(
-        FlexLineSeries(
+        FlexLineChartSeries(
           name: category ?? context.l10n.none,
           color: chartColors[index],
           points: [
             for (final row in categoryData)
-              FlexChartPoint(
+              FlexLineChartPoint(
                 dateToXMap[row.created]!.toDouble(),
                 row.value,
                 column: dateToXMap[row.created],
@@ -116,7 +122,7 @@ class _GlobalProgressPageState extends State<GlobalProgressPage> {
       );
     }
 
-    final lineChart = FlexGroupedLine(
+    final lineChart = FlexGroupedLineChart(
       series: chartSeries,
       xLabels: [
         for (final date in allDates)

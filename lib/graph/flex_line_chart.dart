@@ -4,25 +4,26 @@ import 'package:drafter/drafter.dart';
 import 'package:drafter/painting.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 @immutable
-class FlexChartPoint {
+class FlexLineChartPoint {
   final double x;
   final double y;
   final int? column;
 
-  const FlexChartPoint(this.x, this.y, {this.column});
+  const FlexLineChartPoint(this.x, this.y, {this.column});
 }
 
 @immutable
-class FlexLineSeries {
-  final List<FlexChartPoint> points;
+class FlexLineChartSeries {
+  final List<FlexLineChartPoint> points;
   final Color color;
   final String name;
 
-  const FlexLineSeries({
+  const FlexLineChartSeries({
     required this.points,
     required this.color,
     this.name = '',
@@ -30,19 +31,34 @@ class FlexLineSeries {
 }
 
 @immutable
-class _FlexAxisLabel {
+class _LineChartAxisLabel {
   final double x;
   final int? column;
   final String text;
 
-  const _FlexAxisLabel(this.x, this.text, {this.column});
+  const _LineChartAxisLabel(this.x, this.text, {this.column});
 }
 
-class FlexLine extends StatelessWidget {
-  static const double _edgePaddingFraction = 0.02;
+const _lineChartEdgePaddingFraction = 0.02;
 
-  final List<FlexChartPoint> points;
-  final List<dynamic> data;
+(double, double) _calculateYBounds(List<FlexLineChartPoint> points) {
+  if (points.isEmpty) return (0, 1);
+
+  var minY = points.map((point) => point.y).reduce(min);
+  var maxY = points.map((point) => point.y).reduce(max);
+  if (maxY - minY < 1.0) {
+    final center = (maxY + minY) / 2;
+    minY = center - 0.5;
+    maxY = center + 0.5;
+  }
+
+  final padding = (maxY - minY) * _lineChartEdgePaddingFraction;
+  return (minY - padding, maxY + padding);
+}
+
+class FlexLineChart extends StatelessWidget {
+  final List<FlexLineChartPoint> points;
+  final List<DateTime> dates;
   final bool? hideBottom;
   final bool? hideLeft;
   final bool? showTrendLine;
@@ -50,11 +66,14 @@ class FlexLine extends StatelessWidget {
   final String Function(int index) tooltipText;
   final ValueChanged<int>? onPointSelected;
 
-  const FlexLine({
+  static (double, double) calculateYBounds(List<FlexLineChartPoint> points) =>
+      _calculateYBounds(points);
+
+  const FlexLineChart({
     super.key,
     required this.points,
     required this.tooltipText,
-    required this.data,
+    this.dates = const [],
     this.onPointSelected,
     this.hideBottom,
     this.hideLeft,
@@ -62,7 +81,9 @@ class FlexLine extends StatelessWidget {
     this.timeBasedXAxis = false,
   });
 
-  List<FlexChartPoint> _calculateTrendLine(List<FlexChartPoint> source) {
+  List<FlexLineChartPoint> _calculateTrendLine(
+    List<FlexLineChartPoint> source,
+  ) {
     if (source.length < 2) return const [];
 
     double sumX = 0;
@@ -86,28 +107,13 @@ class FlexLine extends StatelessWidget {
     final end = source.last;
 
     return [
-      FlexChartPoint(
+      FlexLineChartPoint(
         start.x,
         slope * start.x + intercept,
         column: start.column,
       ),
-      FlexChartPoint(end.x, slope * end.x + intercept, column: end.column),
+      FlexLineChartPoint(end.x, slope * end.x + intercept, column: end.column),
     ];
-  }
-
-  static (double, double) calculateYBounds(List<FlexChartPoint> source) {
-    if (source.isEmpty) return (0, 1);
-
-    var minY = source.map((point) => point.y).reduce(min);
-    var maxY = source.map((point) => point.y).reduce(max);
-    if (maxY - minY < 1.0) {
-      final center = (maxY + minY) / 2;
-      minY = center - 0.5;
-      maxY = center + 0.5;
-    }
-
-    final padding = (maxY - minY) * _edgePaddingFraction;
-    return (minY - padding, maxY + padding);
   }
 
   @override
@@ -116,17 +122,17 @@ class FlexLine extends StatelessWidget {
     final primary = Theme.of(context).colorScheme.primary;
     final secondary = Theme.of(context).colorScheme.secondary;
     final yBounds = calculateYBounds(points);
-    final labels = <_FlexAxisLabel>[];
+    final labels = <_LineChartAxisLabel>[];
 
     if (hideBottom != true) {
       for (
         var index = 0;
-        index < points.length && index < data.length;
+        index < points.length && index < dates.length;
         index++
       ) {
-        final created = data[index].created as DateTime;
+        final created = dates[index];
         labels.add(
-          _FlexAxisLabel(
+          _LineChartAxisLabel(
             points[index].x,
             formatDisplayDate(context, created, settings.shortDateFormat),
             column: points[index].column ?? index,
@@ -135,12 +141,11 @@ class FlexLine extends StatelessWidget {
       }
     }
 
-    return InteractiveChart(
-      animate: false,
-      renderer: _FlexLineRenderer(
-        series: [FlexLineSeries(points: points, color: primary)],
+    return _FlexLineChartInteraction(
+      renderer: _FlexLineChartRenderer(
+        series: [FlexLineChartSeries(points: points, color: primary)],
         trendSeries: showTrendLine == true
-            ? FlexLineSeries(
+            ? FlexLineChartSeries(
                 points: _calculateTrendLine(points),
                 color: secondary,
               )
@@ -155,30 +160,20 @@ class FlexLine extends StatelessWidget {
         xLabels: labels,
         uniformXCount: timeBasedXAxis ? null : points.length,
       ),
-      interaction: ChartInteraction(
-        tooltip: true,
-        selection: onPointSelected != null,
-        rowLabel: (mark) => tooltipText(mark.index),
-        onSelected: onPointSelected == null
-            ? null
-            : (selection) {
-                if (selection != null) {
-                  onPointSelected!(selection.mark.index);
-                }
-              },
-      ),
+      rowLabel: (mark) => tooltipText(mark.index),
+      onPointSelected: onPointSelected,
     );
   }
 }
 
-class FlexGroupedLine extends StatelessWidget {
-  final List<FlexLineSeries> series;
+class FlexGroupedLineChart extends StatelessWidget {
+  final List<FlexLineChartSeries> series;
   final List<String> xLabels;
   final String Function(int seriesIndex, int xIndex) tooltipText;
   final bool showLeftLabels;
   final bool showBottomLabels;
 
-  const FlexGroupedLine({
+  const FlexGroupedLineChart({
     super.key,
     required this.series,
     required this.xLabels,
@@ -192,27 +187,13 @@ class FlexGroupedLine extends StatelessWidget {
     final settings = context.watch<SettingsState>().value;
     final points = [for (final line in series) ...line.points];
 
-    var minY = points.isEmpty
-        ? 0.0
-        : points.map((point) => point.y).reduce(min);
-    var maxY = points.isEmpty
-        ? 1.0
-        : points.map((point) => point.y).reduce(max);
-    if (maxY - minY < 1.0) {
-      final center = (maxY + minY) / 2;
-      minY = center - 0.5;
-      maxY = center + 0.5;
-    }
-    final padding = (maxY - minY) * 0.02;
-    minY -= padding;
-    maxY += padding;
+    final yBounds = _calculateYBounds(points);
 
-    return InteractiveChart(
-      animate: false,
-      renderer: _FlexLineRenderer(
+    return _FlexLineChartInteraction(
+      renderer: _FlexLineChartRenderer(
         series: series,
-        minY: minY,
-        maxY: maxY,
+        minY: yBounds.$1,
+        maxY: yBounds.$2,
         curveLines: settings.curveLines,
         curveSmoothness: settings.curveSmoothness ?? 0.35,
         fillFirstSeries: false,
@@ -220,22 +201,219 @@ class FlexGroupedLine extends StatelessWidget {
         showBottomLabels: showBottomLabels,
         xLabels: [
           for (var i = 0; i < xLabels.length; i++)
-            _FlexAxisLabel(i.toDouble(), xLabels[i], column: i),
+            _LineChartAxisLabel(i.toDouble(), xLabels[i], column: i),
         ],
         uniformXCount: xLabels.length,
       ),
-      interaction: ChartInteraction(
-        tooltip: true,
-        selection: false,
-        rowLabel: (mark) => tooltipText(mark.seriesIndex, mark.index),
-      ),
+      rowLabel: (mark) => tooltipText(mark.seriesIndex, mark.index),
     );
   }
 }
 
-class _FlexLineRenderer extends ChartRenderer implements InteractiveRenderer {
-  final List<FlexLineSeries> series;
-  final FlexLineSeries? trendSeries;
+class _FlexLineChartInteraction extends StatefulWidget {
+  final _FlexLineChartRenderer renderer;
+  final String Function(PlotMark mark) rowLabel;
+  final ValueChanged<int>? onPointSelected;
+
+  const _FlexLineChartInteraction({
+    required this.renderer,
+    required this.rowLabel,
+    this.onPointSelected,
+  });
+
+  @override
+  State<_FlexLineChartInteraction> createState() =>
+      _FlexLineChartInteractionState();
+}
+
+class _FlexLineChartInteractionState extends State<_FlexLineChartInteraction> {
+  final ValueNotifier<int?> _activeIndex = ValueNotifier(null);
+
+  void _activate(Offset position, ChartScene scene) {
+    _activeIndex.value = ChartHitTest.nearestIndexAtX(scene, position.dx);
+  }
+
+  void _select(Offset position, ChartScene scene) {
+    final callback = widget.onPointSelected;
+    final index = ChartHitTest.nearestIndexAtX(scene, position.dx);
+    if (callback != null && index != null) callback(index);
+  }
+
+  void _clear() {
+    _activeIndex.value = null;
+  }
+
+  bool get _keepTooltipOnTapUp {
+    if (kIsWeb) return true;
+    return switch (defaultTargetPlatform) {
+      TargetPlatform.linux ||
+      TargetPlatform.macOS ||
+      TargetPlatform.windows => true,
+      _ => false,
+    };
+  }
+
+  @override
+  void didUpdateWidget(_FlexLineChartInteraction oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (!identical(oldWidget.renderer, widget.renderer)) _clear();
+  }
+
+  @override
+  void dispose() {
+    _activeIndex.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = DrafterTheme.of(context);
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final size = constraints.biggest;
+        final scene = widget.renderer.buildScene(size);
+
+        return MouseRegion(
+          onHover: (event) => _activate(event.localPosition, scene),
+          onExit: (_) => _clear(),
+          child: GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onPanDown: (details) {
+              _activate(details.localPosition, scene);
+              _select(details.localPosition, scene);
+            },
+            onPanStart: (details) => _activate(details.localPosition, scene),
+            onPanUpdate: (details) => _activate(details.localPosition, scene),
+            onPanEnd: (_) => _clear(),
+            onPanCancel: _clear,
+            onTapDown: (details) => _activate(details.localPosition, scene),
+            onTapUp: (details) {
+              _activate(details.localPosition, scene);
+              if (!_keepTooltipOnTapUp) _clear();
+            },
+            onTapCancel: _clear,
+            onLongPressStart: (details) =>
+                _activate(details.localPosition, scene),
+            onLongPressMoveUpdate: (details) =>
+                _activate(details.localPosition, scene),
+            onLongPressEnd: (_) => _clear(),
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                ChartCanvas(renderer: widget.renderer, animate: false),
+                Positioned.fill(
+                  child: IgnorePointer(
+                    child: RepaintBoundary(
+                      child: CustomPaint(
+                        painter: _FlexLineTooltipPainter(
+                          activeIndex: _activeIndex,
+                          scene: scene,
+                          theme: theme,
+                          rowLabel: widget.rowLabel,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _FlexLineTooltipPainter extends CustomPainter {
+  final ValueNotifier<int?> activeIndex;
+  final ChartScene scene;
+  final DrafterThemeColors theme;
+  final String Function(PlotMark mark) rowLabel;
+
+  _FlexLineTooltipPainter({
+    required this.activeIndex,
+    required this.scene,
+    required this.theme,
+    required this.rowLabel,
+  }) : super(repaint: activeIndex);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final index = activeIndex.value;
+    final bounds = scene.bounds;
+    if (index == null || bounds == null) return;
+
+    final marks = ChartHitTest.marksAtIndex(scene, index);
+    if (marks.isEmpty) return;
+
+    final x = scene.scale?.xForIndex(index) ?? marks.first.center.dx;
+    drawTrackball(
+      canvas,
+      x: x,
+      top: bounds.top,
+      bottom: bounds.bottom,
+      lineColor: theme.crosshair,
+      markers: [for (final mark in marks) mark.center],
+      markerColors: [for (final mark in marks) mark.color],
+    );
+    drawTooltip(
+      canvas,
+      anchor: Offset(x, bounds.top),
+      container: size,
+      title: marks.first.label.isEmpty ? null : marks.first.label,
+      background: theme.tooltipBackground,
+      textColor: theme.tooltipText,
+      mutedTextColor: theme.tooltipMutedText,
+      rows: [
+        for (final mark in marks)
+          TooltipRow(rowLabel(mark), swatch: mark.color),
+      ],
+    );
+  }
+
+  @override
+  bool shouldRepaint(covariant _FlexLineTooltipPainter oldDelegate) =>
+      oldDelegate.scene != scene ||
+      oldDelegate.theme != theme ||
+      oldDelegate.rowLabel != rowLabel;
+}
+
+class _FlexLineChartScale extends CartesianScale {
+  final Map<int, double> _xByIndex;
+
+  _FlexLineChartScale({
+    required super.bounds,
+    required super.count,
+    required super.minValue,
+    required super.maxValue,
+    required Map<int, double> xByIndex,
+  }) : _xByIndex = Map.unmodifiable(xByIndex);
+
+  @override
+  double xForIndex(int index) => _xByIndex[index] ?? super.xForIndex(index);
+
+  @override
+  int nearestIndex(double px) {
+    if (_xByIndex.isEmpty || !px.isFinite) return super.nearestIndex(px);
+
+    var nearest = _xByIndex.keys.first;
+    var nearestDistance = (_xByIndex[nearest]! - px).abs();
+    for (final entry in _xByIndex.entries.skip(1)) {
+      final distance = (entry.value - px).abs();
+      if (distance < nearestDistance) {
+        nearest = entry.key;
+        nearestDistance = distance;
+      }
+    }
+    return nearest;
+  }
+}
+
+class _FlexLineChartRenderer extends ChartRenderer
+    implements InteractiveRenderer {
+  final List<FlexLineChartSeries> series;
+  final FlexLineChartSeries? trendSeries;
   final double minY;
   final double maxY;
   final bool curveLines;
@@ -243,10 +421,10 @@ class _FlexLineRenderer extends ChartRenderer implements InteractiveRenderer {
   final bool fillFirstSeries;
   final bool showLeftLabels;
   final bool showBottomLabels;
-  final List<_FlexAxisLabel> xLabels;
+  final List<_LineChartAxisLabel> xLabels;
   final int? uniformXCount;
 
-  const _FlexLineRenderer({
+  const _FlexLineChartRenderer({
     required this.series,
     required this.minY,
     required this.maxY,
@@ -272,7 +450,7 @@ class _FlexLineRenderer extends ChartRenderer implements InteractiveRenderer {
     );
   }
 
-  List<FlexChartPoint> get _allPoints => [
+  List<FlexLineChartPoint> get _allPoints => [
     for (final line in series) ...line.points,
   ];
 
@@ -284,7 +462,11 @@ class _FlexLineRenderer extends ChartRenderer implements InteractiveRenderer {
     return maxX == minX ? (minX - 0.5, maxX + 0.5) : (minX, maxX);
   }
 
-  double _xForPoint(FlexChartPoint point, int pointIndex, ChartBounds bounds) {
+  double _xForPoint(
+    FlexLineChartPoint point,
+    int pointIndex,
+    ChartBounds bounds,
+  ) {
     final count = uniformXCount;
     if (count != null) {
       if (count <= 1) return bounds.left + bounds.width / 2;
@@ -303,7 +485,7 @@ class _FlexLineRenderer extends ChartRenderer implements InteractiveRenderer {
     return bounds.bottom - (value - minY) / span * bounds.height;
   }
 
-  List<Offset> _pixelPoints(FlexLineSeries line, ChartBounds bounds) => [
+  List<Offset> _pixelPoints(FlexLineChartSeries line, ChartBounds bounds) => [
     for (var i = 0; i < line.points.length; i++)
       Offset(
         _xForPoint(line.points[i], i, bounds),
@@ -340,7 +522,7 @@ class _FlexLineRenderer extends ChartRenderer implements InteractiveRenderer {
   void _drawSeries(
     Canvas canvas,
     ChartBounds bounds,
-    FlexLineSeries line, {
+    FlexLineChartSeries line, {
     required bool fill,
     required double progress,
   }) {
@@ -391,7 +573,7 @@ class _FlexLineRenderer extends ChartRenderer implements InteractiveRenderer {
   void _drawDashedTrend(
     Canvas canvas,
     ChartBounds bounds,
-    FlexLineSeries trend,
+    FlexLineChartSeries trend,
   ) {
     final points = _pixelPoints(trend, bounds);
     if (points.length < 2) return;
@@ -434,7 +616,7 @@ class _FlexLineRenderer extends ChartRenderer implements InteractiveRenderer {
     final centers = <double>[];
     final widths = <double>[];
     for (final label in xLabels) {
-      final point = FlexChartPoint(label.x, 0, column: label.column);
+      final point = FlexLineChartPoint(label.x, 0, column: label.column);
       centers.add(_xForPoint(point, label.column ?? centers.length, bounds));
       widths.add(measureChartText(label.text));
     }
@@ -482,14 +664,35 @@ class _FlexLineRenderer extends ChartRenderer implements InteractiveRenderer {
   @override
   ChartScene buildScene(Size size) {
     final bounds = _bounds(size);
-    CartesianScale? scale;
-    final count = uniformXCount;
-    if (count != null && count > 0) {
-      scale = CartesianScale(
-        bounds: bounds,
-        count: count,
-        minValue: minY,
-        maxValue: maxY,
+    final xByIndex = <int, double>{};
+
+    for (final line in series) {
+      for (var pointIndex = 0; pointIndex < line.points.length; pointIndex++) {
+        final point = line.points[pointIndex];
+        final index = point.column ?? pointIndex;
+        xByIndex.putIfAbsent(
+          index,
+          () => _xForPoint(point, pointIndex, bounds),
+        );
+      }
+    }
+
+    final orderedColumns = xByIndex.entries.toList()
+      ..sort((a, b) => a.value.compareTo(b.value));
+    final hitRegions = <int, Rect>{};
+    for (var i = 0; i < orderedColumns.length; i++) {
+      final column = orderedColumns[i];
+      final left = i == 0
+          ? bounds.left
+          : (orderedColumns[i - 1].value + column.value) / 2;
+      final right = i == orderedColumns.length - 1
+          ? bounds.right
+          : (column.value + orderedColumns[i + 1].value) / 2;
+      hitRegions[column.key] = Rect.fromLTRB(
+        left,
+        bounds.top,
+        right,
+        bounds.bottom,
       );
     }
 
@@ -498,9 +701,10 @@ class _FlexLineRenderer extends ChartRenderer implements InteractiveRenderer {
       final line = series[seriesIndex];
       for (var pointIndex = 0; pointIndex < line.points.length; pointIndex++) {
         final point = line.points[pointIndex];
+        final index = point.column ?? pointIndex;
         marks.add(
           PlotMark(
-            index: point.column ?? pointIndex,
+            index: index,
             seriesIndex: seriesIndex,
             seriesName: line.name,
             label: '',
@@ -509,11 +713,22 @@ class _FlexLineRenderer extends ChartRenderer implements InteractiveRenderer {
               _xForPoint(point, pointIndex, bounds),
               _yForValue(point.y, bounds),
             ),
+            region: hitRegions[index],
             color: line.color,
           ),
         );
       }
     }
+
+    final scale = xByIndex.isEmpty
+        ? null
+        : _FlexLineChartScale(
+            bounds: bounds,
+            count: xByIndex.length,
+            minValue: minY,
+            maxValue: maxY,
+            xByIndex: xByIndex,
+          );
 
     return ChartScene(
       bounds: bounds,

@@ -7,7 +7,7 @@ import 'package:flexify/database/exercise_analytics.dart';
 import 'package:flexify/empty_state.dart';
 import 'package:flexify/graph/cardio_data.dart';
 import 'package:flexify/graph/edit_graph_page.dart';
-import 'package:flexify/graph/flex_line.dart';
+import 'package:flexify/graph/flex_line_chart.dart';
 import 'package:flexify/graph/graph_options_controls.dart';
 import 'package:flexify/graph/graph_history_page.dart';
 import 'package:flexify/graph/graph_notes_page.dart';
@@ -21,16 +21,16 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CardioPage extends StatefulWidget {
-  final String name;
-  final String unit;
-  final List<CardioData> data;
+  final String initialName;
+  final String initialUnit;
+  final List<CardioData> initialData;
   final TabController tabCtrl;
 
   const CardioPage({
     super.key,
-    required this.name,
-    required this.unit,
-    required this.data,
+    required this.initialName,
+    required this.initialUnit,
+    required this.initialData,
     required this.tabCtrl,
   });
 
@@ -39,15 +39,14 @@ class CardioPage extends StatefulWidget {
 }
 
 class _CardioPageState extends State<CardioPage> {
-  late List<CardioData> data = widget.data;
-  late String target = widget.unit;
-  late String name = widget.name;
+  late List<CardioData> _data;
+  late String _targetUnit;
+  late String _exerciseName;
   late int limit;
   late CardioMetric metric;
   late Period period;
   DateTime? start;
   DateTime? end;
-  TabController? ctrl;
   DateTime lastTap = DateTime(0);
   late bool useTimeBasedXAxis;
   Timer? _refreshTimer;
@@ -57,10 +56,13 @@ class _CardioPageState extends State<CardioPage> {
   @override
   void initState() {
     super.initState();
+    _data = widget.initialData;
+    _targetUnit = widget.initialUnit;
+    _exerciseName = widget.initialName;
     final settings = context.read<SettingsState>().value;
     useTimeBasedXAxis = settings.defaultGraphTimeBasedXAxis;
     limit = settings.defaultGraphLimit;
-    metric = _isWeightUnit(target)
+    metric = _isWeightUnit(_targetUnit)
         ? CardioMetric.weight
         : CardioMetric.values.firstWhere(
             (m) => m.name == settings.defaultGraphMetric,
@@ -75,7 +77,7 @@ class _CardioPageState extends State<CardioPage> {
   }
 
   Future<void> _loadPreferences() async {
-    final pref = await getExerciseByName(name);
+    final pref = await getExerciseByName(_exerciseName);
     if (pref == null || !mounted) return;
     setState(() {
       final savedMetric = CardioMetric.values.firstWhere(
@@ -83,7 +85,7 @@ class _CardioPageState extends State<CardioPage> {
         orElse: () => metric,
       );
       metric =
-          _isWeightUnit(target) &&
+          _isWeightUnit(_targetUnit) &&
               !{
                 CardioMetric.weight,
                 CardioMetric.duration,
@@ -103,7 +105,7 @@ class _CardioPageState extends State<CardioPage> {
   }
 
   Future<void> _savePreferences() async {
-    final exercise = await getExerciseByName(name);
+    final exercise = await getExerciseByName(_exerciseName);
     if (exercise == null) return;
     await updateExerciseGraphPreferences(
       exerciseId: exercise.id,
@@ -150,7 +152,7 @@ class _CardioPageState extends State<CardioPage> {
   }
 
   String tooltipText(int index, String format) {
-    final row = data.elementAt(index);
+    final row = _data.elementAt(index);
     String text = formatDisplayNumber(
       context,
       row.value,
@@ -193,10 +195,10 @@ class _CardioPageState extends State<CardioPage> {
       });
     }
 
-    if (index < 0 || index >= data.length) return;
-    final row = data[index];
+    if (index < 0 || index >= _data.length) return;
+    final row = _data[index];
     final desktop = isDesktopLayout(context);
-    final performedSet = await getGraphPointSet(name, row.created);
+    final performedSet = await getGraphPointSet(_exerciseName, row.created);
     if (!mounted || performedSet == null) return;
 
     await Navigator.of(context).push(
@@ -223,7 +225,7 @@ class _CardioPageState extends State<CardioPage> {
     final desktop = isDesktopLayout(context);
     final theme = Theme.of(context);
 
-    final metricOptions = _isWeightUnit(target)
+    final metricOptions = _isWeightUnit(_targetUnit)
         ? <(CardioMetric, String)>[
             (CardioMetric.weight, context.l10n.weightLabel),
             (CardioMetric.duration, context.l10n.durationLabel),
@@ -299,12 +301,12 @@ class _CardioPageState extends State<CardioPage> {
               : cardioDistanceUnitMenuItems(context.l10n))
         : <DropdownMenuItem<String>>[];
 
-    final points = <FlexChartPoint>[];
-    for (var index = 0; index < data.length; index++) {
-      final row = data[index];
+    final points = <FlexLineChartPoint>[];
+    for (var index = 0; index < _data.length; index++) {
+      final row = _data[index];
       final value = double.parse(row.value.toStringAsFixed(1));
       points.add(
-        FlexChartPoint(
+        FlexLineChartPoint(
           useTimeBasedXAxis
               ? row.created.millisecondsSinceEpoch.toDouble()
               : index.toDouble(),
@@ -317,7 +319,7 @@ class _CardioPageState extends State<CardioPage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text(name),
+        title: Text(_exerciseName),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
@@ -325,14 +327,14 @@ class _CardioPageState extends State<CardioPage> {
         actions: [
           IconButton(
             onPressed: () async {
-              final performedSets = await getGraphHistory(name);
+              final performedSets = await getGraphHistory(_exerciseName);
               if (!context.mounted) return;
 
               await Navigator.of(context).push(
                 FlexPageRoute(
                   builder: (context) => GraphHistoryPage(
-                    name: name,
-                    performedSets: performedSets,
+                    name: _exerciseName,
+                    initialSets: performedSets,
                     tabController: widget.tabCtrl,
                   ),
                 ),
@@ -350,22 +352,24 @@ class _CardioPageState extends State<CardioPage> {
           IconButton(
             onPressed: () async {
               final newName = await Navigator.of(context).push<String>(
-                FlexPageRoute(builder: (context) => EditGraphPage(name: name)),
+                FlexPageRoute(
+                  builder: (context) => EditGraphPage(name: _exerciseName),
+                ),
               );
               if (mounted && newName != null) {
                 final updated = await getExerciseByName(newName);
                 if (!mounted) return;
                 setState(() {
-                  name = newName;
-                  if (updated != null) target = updated.displayUnit;
-                  if (_isWeightUnit(target) &&
+                  _exerciseName = newName;
+                  if (updated != null) _targetUnit = updated.displayUnit;
+                  if (_isWeightUnit(_targetUnit) &&
                       !{
                         CardioMetric.weight,
                         CardioMetric.duration,
                         CardioMetric.incline,
                       }.contains(metric)) {
                     metric = CardioMetric.weight;
-                  } else if (!_isWeightUnit(target) &&
+                  } else if (!_isWeightUnit(_targetUnit) &&
                       metric == CardioMetric.weight) {
                     metric = CardioMetric.pace;
                   }
@@ -417,11 +421,11 @@ class _CardioPageState extends State<CardioPage> {
                 GraphOptionsControls(
                   compact: true,
                   shortDateFormat: shortDateFormat,
-                  unitValue: showUnitControl ? target : null,
+                  unitValue: showUnitControl ? _targetUnit : null,
                   unitItems: unitItems,
                   onUnitChanged: (value) {
                     setState(() {
-                      target = value;
+                      _targetUnit = value;
                     });
                     setData();
                   },
@@ -461,20 +465,20 @@ class _CardioPageState extends State<CardioPage> {
               ],
               const SizedBox(height: 8),
               Expanded(
-                child: data.isEmpty
+                child: _data.isEmpty
                     ? AppEmptyState(
                         icon: Icons.monitor_heart_outlined,
-                        title: context.l10n.noDataFor(name),
+                        title: context.l10n.noDataFor(_exerciseName),
                         message: context.l10n.completeSetForChart,
                       )
                     : Padding(
                         padding: const EdgeInsets.only(right: 32.0, top: 16.0),
-                        child: FlexLine(
+                        child: FlexLineChart(
                           points: points,
                           tooltipText: (index) =>
                               tooltipText(index, shortDateFormat),
                           onPointSelected: touchLine,
-                          data: data,
+                          dates: _data.map((row) => row.created).toList(),
                           timeBasedXAxis: useTimeBasedXAxis,
                         ),
                       ),
@@ -534,11 +538,11 @@ class _CardioPageState extends State<CardioPage> {
                 child: GraphOptionsControls(
                   compact: false,
                   shortDateFormat: settings.shortDateFormat,
-                  unitValue: showUnitControl ? target : null,
+                  unitValue: showUnitControl ? _targetUnit : null,
                   unitItems: unitItems,
                   onUnitChanged: (value) {
                     setState(() {
-                      target = value;
+                      _targetUnit = value;
                     });
                     setData();
                     refreshSheet();
@@ -599,15 +603,15 @@ class _CardioPageState extends State<CardioPage> {
       end: end,
       period: period,
       metric: metric,
-      name: name,
+      name: _exerciseName,
       start: start,
-      target: target,
+      target: _targetUnit,
       limit: limit,
     );
 
     if (!mounted) return;
     setState(() {
-      data = cardio;
+      _data = cardio;
     });
   }
 

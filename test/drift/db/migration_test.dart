@@ -682,214 +682,205 @@ void main() {
       },
     );
   });
-  test(
-    'migration from v59 through v61 backfills identity and history',
-    () async {
-      final oldCategories = <v59.CategoriesCompanion>[
-        v59.CategoriesCompanion.insert(
-          id: const Value(10),
-          name: 'Chest & Arms',
-        ),
-        v59.CategoriesCompanion.insert(
-          id: const Value(20),
-          name: 'Conditioning',
-        ),
-      ];
-      final oldPlans = <v59.PlansCompanion>[
-        v59.PlansCompanion.insert(
-          id: const Value(1),
-          days: 'Monday',
-          title: const Value('Migration Plan'),
-        ),
-      ];
-      final oldGymSets = <v59.GymSetsCompanion>[
-        v59.GymSetsCompanion.insert(
-          id: const Value(1),
-          created: 100,
-          name: 'Bench Press',
-          reps: 8,
-          unit: 'lb',
-          weight: 100,
-          category: const Value('Chest & Arms'),
-          image: const Value('old-history.png'),
-          notes: const Value('ordinary set note'),
-          restMs: const Value(60000),
-        ),
-        v59.GymSetsCompanion.insert(
-          id: const Value(2),
-          created: 200,
-          name: 'Bench Press',
-          reps: 6,
-          unit: 'kg',
-          weight: 80,
-          category: const Value('Chest & Arms'),
-          image: const Value('latest-history.png'),
-          notes: const Value('latest set note'),
-          restMs: const Value(90000),
-        ),
-        v59.GymSetsCompanion.insert(
-          id: const Value(3),
-          created: 50,
-          name: 'Bench Press',
-          reps: 0,
-          unit: 'kg',
-          weight: 0,
-          category: const Value('Chest & Arms'),
-          hidden: const Value(1),
-          image: const Value('template.png'),
-          notes: const Value('template note'),
-          restMs: const Value(120000),
-        ),
-        v59.GymSetsCompanion.insert(
-          id: const Value(4),
-          cardio: const Value(1),
-          created: 250,
-          name: 'Rowing',
-          reps: 0,
-          unit: 'km',
-          weight: 0,
-          category: const Value('Conditioning'),
-          image: const Value('old-rowing.png'),
-          notes: const Value('old rowing set note'),
-          restMs: const Value(30000),
-        ),
-        v59.GymSetsCompanion.insert(
-          id: const Value(5),
-          cardio: const Value(1),
-          created: 300,
-          name: 'Rowing',
-          reps: 0,
-          unit: 'mi',
-          weight: 0,
-          category: const Value('Conditioning'),
-          image: const Value('latest-rowing.png'),
-          notes: const Value('latest rowing set note'),
-          restMs: const Value(45000),
-        ),
-        v59.GymSetsCompanion.insert(
-          id: const Value(6),
-          created: 400,
-          name: 'Weight',
-          reps: 1,
-          unit: 'kg',
-          weight: 75,
-        ),
-      ];
-      final oldGraphPreferences = <v59.GraphPreferencesCompanion>[
-        v59.GraphPreferencesCompanion.insert(
-          name: 'Bench Press',
-          metric: const Value('volume'),
-          period: const Value('week'),
-          limit: const Value(7),
-          timeBasedXAxis: const Value(1),
-          notes: const Value('exercise-level note'),
-        ),
-        v59.GraphPreferencesCompanion.insert(
-          name: 'Preference Only',
-          metric: const Value('bestReps'),
-        ),
-      ];
-      final oldPlanExercises = <v59.PlanExercisesCompanion>[
-        v59.PlanExercisesCompanion.insert(
-          id: const Value(1),
-          enabled: 1,
-          exercise: 'Bench Press',
-          planId: 1,
-        ),
-        v59.PlanExercisesCompanion.insert(
-          id: const Value(2),
-          enabled: 1,
-          exercise: 'Rowing',
-          planId: 1,
-        ),
-        v59.PlanExercisesCompanion.insert(
-          id: const Value(3),
-          enabled: 1,
-          exercise: 'Weight',
-          planId: 1,
-        ),
-      ];
+  test('migration from v59 through v61 backfills identity and history', () async {
+    final oldCategories = <v59.CategoriesCompanion>[
+      v59.CategoriesCompanion.insert(id: const Value(10), name: 'Chest & Arms'),
+      v59.CategoriesCompanion.insert(id: const Value(20), name: 'Conditioning'),
+    ];
+    final oldPlans = <v59.PlansCompanion>[
+      v59.PlansCompanion.insert(
+        id: const Value(1),
+        days: 'Monday',
+        title: const Value('Migration Plan'),
+      ),
+    ];
+    final oldGymSets = <v59.GymSetsCompanion>[
+      v59.GymSetsCompanion.insert(
+        id: const Value(1),
+        created: 100,
+        name: 'Bench Press',
+        reps: 8,
+        unit: 'lb',
+        weight: 100,
+        category: const Value('Chest & Arms'),
+        image: const Value('old-history.png'),
+        notes: const Value('ordinary set note'),
+        restMs: const Value(60000),
+      ),
+      v59.GymSetsCompanion.insert(
+        id: const Value(2),
+        created: 200,
+        name: 'Bench Press',
+        reps: 6,
+        unit: 'kg',
+        weight: 80,
+        category: const Value('Chest & Arms'),
+        image: const Value('latest-history.png'),
+        notes: const Value('latest set note'),
+        restMs: const Value(90000),
+      ),
+      v59.GymSetsCompanion.insert(
+        id: const Value(3),
+        created: 50,
+        name: 'Bench Press',
+        reps: 0,
+        unit: 'kg',
+        weight: 0,
+        category: const Value('Chest & Arms'),
+        hidden: const Value(1),
+        image: const Value('template.png'),
+        notes: const Value('template note'),
+        restMs: const Value(120000),
+      ),
+      v59.GymSetsCompanion.insert(
+        id: const Value(4),
+        cardio: const Value(1),
+        created: 250,
+        name: 'Rowing',
+        reps: 0,
+        unit: 'km',
+        weight: 0,
+        category: const Value('Conditioning'),
+        image: const Value('old-rowing.png'),
+        notes: const Value('old rowing set note'),
+        restMs: const Value(30000),
+      ),
+      v59.GymSetsCompanion.insert(
+        id: const Value(5),
+        cardio: const Value(1),
+        created: 300,
+        name: 'Rowing',
+        reps: 0,
+        unit: 'mi',
+        weight: 0,
+        category: const Value('Conditioning'),
+        image: const Value('latest-rowing.png'),
+        notes: const Value('latest rowing set note'),
+        restMs: const Value(45000),
+      ),
+      v59.GymSetsCompanion.insert(
+        id: const Value(6),
+        created: 400,
+        name: 'Weight',
+        reps: 1,
+        unit: 'kg',
+        weight: 75,
+      ),
+    ];
+    final oldGraphPreferences = <v59.GraphPreferencesCompanion>[
+      v59.GraphPreferencesCompanion.insert(
+        name: 'Bench Press',
+        metric: const Value('volume'),
+        period: const Value('week'),
+        limit: const Value(7),
+        timeBasedXAxis: const Value(1),
+        notes: const Value('exercise-level note'),
+      ),
+      v59.GraphPreferencesCompanion.insert(
+        name: 'Preference Only',
+        metric: const Value('bestReps'),
+      ),
+    ];
+    final oldPlanExercises = <v59.PlanExercisesCompanion>[
+      v59.PlanExercisesCompanion.insert(
+        id: const Value(1),
+        enabled: 1,
+        exercise: 'Bench Press',
+        planId: 1,
+      ),
+      v59.PlanExercisesCompanion.insert(
+        id: const Value(2),
+        enabled: 1,
+        exercise: 'Rowing',
+        planId: 1,
+      ),
+      v59.PlanExercisesCompanion.insert(
+        id: const Value(3),
+        enabled: 1,
+        exercise: 'Weight',
+        planId: 1,
+      ),
+    ];
 
-      await verifier.testWithDataIntegrity(
-        oldVersion: 59,
-        newVersion: 61,
-        createOld: v59.DatabaseAtV59.new,
-        createNew: AppDatabase.new,
-        openTestedDatabase: AppDatabase.new,
-        createItems: (batch, oldDb) {
-          batch.insertAll(oldDb.categories, oldCategories);
-          batch.insertAll(oldDb.plans, oldPlans);
-          batch.insertAll(oldDb.gymSets, oldGymSets);
-          batch.insertAll(oldDb.graphPreferences, oldGraphPreferences);
-          batch.insertAll(oldDb.planExercises, oldPlanExercises);
-        },
-        validateItems: (newDb) async {
-          final exercises = await newDb.select(newDb.exercises).get();
-          expect(exercises, hasLength(2));
+    await verifier.testWithDataIntegrity(
+      oldVersion: 59,
+      newVersion: 61,
+      createOld: v59.DatabaseAtV59.new,
+      createNew: AppDatabase.new,
+      openTestedDatabase: AppDatabase.new,
+      createItems: (batch, oldDb) {
+        batch.insertAll(oldDb.categories, oldCategories);
+        batch.insertAll(oldDb.plans, oldPlans);
+        batch.insertAll(oldDb.gymSets, oldGymSets);
+        batch.insertAll(oldDb.graphPreferences, oldGraphPreferences);
+        batch.insertAll(oldDb.planExercises, oldPlanExercises);
+      },
+      validateItems: (newDb) async {
+        final exercises = await newDb.select(newDb.exercises).get();
+        expect(exercises, hasLength(2));
 
-          final bench = exercises.singleWhere(
-            (exercise) => exercise.name == 'Bench Press',
-          );
-          expect(bench.kind, 'strength');
-          expect(bench.displayUnit, 'kg');
-          expect(bench.categoryId, 10);
-          expect(bench.image, 'template.png');
-          expect(bench.defaultRestDurationMs, 120000);
-          expect(bench.notes, 'exercise-level note');
-          expect(bench.graphMetric, 'volume');
-          expect(bench.graphPeriod, 'week');
-          expect(bench.graphLimit, 7);
-          expect(bench.graphTimeBasedXAxis, isTrue);
+        final bench = exercises.singleWhere(
+          (exercise) => exercise.name == 'Bench Press',
+        );
+        expect(bench.kind, 'strength');
+        expect(bench.displayUnit, 'kg');
+        expect(bench.categoryId, 10);
+        expect(bench.image, 'template.png');
+        expect(bench.defaultRestDurationMs, 120000);
+        expect(bench.notes, 'exercise-level note');
+        expect(bench.graphMetric, 'volume');
+        expect(bench.graphPeriod, 'week');
+        expect(bench.graphLimit, 7);
+        expect(bench.graphTimeBasedXAxis, isTrue);
 
-          final rowing = exercises.singleWhere(
-            (exercise) => exercise.name == 'Rowing',
-          );
-          expect(rowing.kind, 'cardio');
-          expect(rowing.displayUnit, 'mi');
-          expect(rowing.categoryId, 20);
-          expect(rowing.image, 'latest-rowing.png');
-          expect(rowing.defaultRestDurationMs, 45000);
-          expect(rowing.notes, null);
-          expect(rowing.graphMetric, 'bestWeight');
-          expect(rowing.graphPeriod, 'day');
-          expect(rowing.graphLimit, 20);
-          expect(rowing.graphTimeBasedXAxis, isFalse);
+        final rowing = exercises.singleWhere(
+          (exercise) => exercise.name == 'Rowing',
+        );
+        expect(rowing.kind, 'cardio');
+        expect(rowing.displayUnit, 'mi');
+        expect(rowing.categoryId, 20);
+        expect(rowing.image, 'latest-rowing.png');
+        expect(rowing.defaultRestDurationMs, 45000);
+        expect(rowing.notes, null);
+        expect(rowing.graphMetric, 'bestWeight');
+        expect(rowing.graphPeriod, 'day');
+        expect(rowing.graphLimit, 20);
+        expect(rowing.graphTimeBasedXAxis, isFalse);
 
-          expect(
-            exercises.where((exercise) => exercise.name == 'Weight'),
-            isEmpty,
-          );
-          expect(
-            exercises.where((exercise) => exercise.name == 'Preference Only'),
-            isEmpty,
-          );
+        expect(
+          exercises.where((exercise) => exercise.name == 'Weight'),
+          isEmpty,
+        );
+        expect(
+          exercises.where((exercise) => exercise.name == 'Preference Only'),
+          isEmpty,
+        );
 
-          final planExercises = await newDb
-              .customSelect('SELECT * FROM plan_exercises')
-              .get();
-          expect(
-            planExercises.map((row) => row.read<int>('exercise_id')),
-            containsAll(<int>[bench.id, rowing.id]),
-          );
-          expect(planExercises, hasLength(2));
+        final planExercises = await newDb
+            .customSelect('SELECT * FROM plan_exercises')
+            .get();
+        expect(
+          planExercises.map((row) => row.read<int>('exercise_id')),
+          containsAll(<int>[bench.id, rowing.id]),
+        );
+        expect(planExercises, hasLength(2));
 
-          expect(
-            await newDb.customSelect(
-              "SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'gym_sets'",
-            ).get(),
-            isEmpty,
-          );
-          expect(await newDb.select(newDb.exerciseSets).get(), hasLength(4));
-          final migratedBodyWeights = await newDb
-              .select(newDb.bodyWeights)
-              .get();
-          expect(migratedBodyWeights, hasLength(1));
-          expect(migratedBodyWeights.single.weightKg, 75);
-          expect(await newDb.select(newDb.workouts).get(), isEmpty);
-        },
-      );
-    },
-  );
+        expect(
+          await newDb
+              .customSelect(
+                "SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'gym_sets'",
+              )
+              .get(),
+          isEmpty,
+        );
+        expect(await newDb.select(newDb.exerciseSets).get(), hasLength(4));
+        final migratedBodyWeights = await newDb.select(newDb.bodyWeights).get();
+        expect(migratedBodyWeights, hasLength(1));
+        expect(migratedBodyWeights.single.weightKg, 75);
+        expect(await newDb.select(newDb.workouts).get(), isEmpty);
+      },
+    );
+  });
 
   test(
     'migration from v60 to v61 backfills canonical history exactly once',
@@ -1037,9 +1028,11 @@ void main() {
           expect(migratedSets, hasLength(6));
           expect(bodyWeights, hasLength(2));
           expect(
-            await newDb.customSelect(
-              "SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'gym_sets'",
-            ).get(),
+            await newDb
+                .customSelect(
+                  "SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'gym_sets'",
+                )
+                .get(),
             isEmpty,
           );
           expect(

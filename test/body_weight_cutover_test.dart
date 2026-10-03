@@ -72,75 +72,78 @@ void main() {
     },
   );
 
-  test('later body weight does not change performed-set snapshot or relative strength', () async {
-    final firstWeightAt = DateTime(2026, 10, 3, 8);
-    final setAt = DateTime(2026, 10, 3, 9);
+  test(
+    'later body weight does not change performed-set snapshot or relative strength',
+    () async {
+      final firstWeightAt = DateTime(2026, 10, 3, 8);
+      final setAt = DateTime(2026, 10, 3, 9);
 
-    await recordBodyWeight(db, timestamp: firstWeightAt, weightKg: 80);
-    final exerciseId = await db.exercises.insertOne(
-      ExercisesCompanion.insert(
+      await recordBodyWeight(db, timestamp: firstWeightAt, weightKg: 80);
+      final exerciseId = await db.exercises.insertOne(
+        ExercisesCompanion.insert(
+          name: 'Snapshot bench',
+          kind: 'strength',
+          displayUnit: 'kg',
+        ),
+      );
+
+      final inserted = await insertPerformedSet(
+        db,
+        exerciseId: exerciseId,
+        performedSet: PerformedSetView(
+          id: 0,
+          bodyWeight: 0,
+          cardio: false,
+          created: setAt,
+          distance: 0,
+          duration: 0,
+          name: 'Snapshot bench',
+          reps: 5,
+          unit: 'kg',
+          weight: 100,
+        ),
+      );
+
+      final storedBefore =
+          await (db.exerciseSets.select()
+                ..where((row) => row.id.equals(inserted.id)))
+              .getSingle();
+      expect(storedBefore.bodyWeightKg, 80);
+
+      final relativeBefore = await getStrengthData(
+        target: 'kg',
         name: 'Snapshot bench',
-        kind: 'strength',
-        displayUnit: 'kg',
-      ),
-    );
+        metric: StrengthMetric.relativeStrength,
+        period: Period.day,
+        start: null,
+        end: null,
+        limit: 20,
+      );
+      expect(relativeBefore.single.value, closeTo(1.25, 0.0001));
 
-    final inserted = await insertPerformedSet(
-      db,
-      exerciseId: exerciseId,
-      performedSet: PerformedSetView(
-        id: 0,
-        bodyWeight: 0,
-        cardio: false,
-        created: setAt,
-        distance: 0,
-        duration: 0,
+      await recordBodyWeight(
+        db,
+        timestamp: DateTime(2026, 10, 3, 20),
+        weightKg: 90,
+      );
+
+      final storedAfter =
+          await (db.exerciseSets.select()
+                ..where((row) => row.id.equals(inserted.id)))
+              .getSingle();
+      expect(storedAfter.bodyWeightKg, 80);
+
+      final relativeAfter = await getStrengthData(
+        target: 'kg',
         name: 'Snapshot bench',
-        reps: 5,
-        unit: 'kg',
-        weight: 100,
-      ),
-    );
-
-    final storedBefore =
-        await (db.exerciseSets.select()
-              ..where((row) => row.id.equals(inserted.id)))
-            .getSingle();
-    expect(storedBefore.bodyWeightKg, 80);
-
-    final relativeBefore = await getStrengthData(
-      target: 'kg',
-      name: 'Snapshot bench',
-      metric: StrengthMetric.relativeStrength,
-      period: Period.day,
-      start: null,
-      end: null,
-      limit: 20,
-    );
-    expect(relativeBefore.single.value, closeTo(1.25, 0.0001));
-
-    await recordBodyWeight(
-      db,
-      timestamp: DateTime(2026, 10, 3, 20),
-      weightKg: 90,
-    );
-
-    final storedAfter =
-        await (db.exerciseSets.select()
-              ..where((row) => row.id.equals(inserted.id)))
-            .getSingle();
-    expect(storedAfter.bodyWeightKg, 80);
-
-    final relativeAfter = await getStrengthData(
-      target: 'kg',
-      name: 'Snapshot bench',
-      metric: StrengthMetric.relativeStrength,
-      period: Period.day,
-      start: null,
-      end: null,
-      limit: 20,
-    );
-    expect(relativeAfter.single.value, closeTo(1.25, 0.0001));
-    expect(relativeAfter.single.value, relativeBefore.single.value);
-  });
+        metric: StrengthMetric.relativeStrength,
+        period: Period.day,
+        start: null,
+        end: null,
+        limit: 20,
+      );
+      expect(relativeAfter.single.value, closeTo(1.25, 0.0001));
+      expect(relativeAfter.single.value, relativeBefore.single.value);
+    },
+  );
 }

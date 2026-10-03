@@ -1,8 +1,8 @@
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
+import 'package:flexify/database/performed_sets.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
-import 'package:flexify/plan/workout_sessions.dart';
 import 'package:flexify/sets/edit_set_page.dart';
 import 'package:flexify/utils.dart';
 import 'package:flexify/platform_page_route.dart';
@@ -54,7 +54,7 @@ class _SessionSetsState extends State<SessionSets> {
   }
 
   void _watch() {
-    _stream = watchLegacyWorkoutSets(
+    _stream = watchWorkoutPerformedSets(
       db,
       workoutId: widget.workoutId,
       exerciseId: widget.exerciseId,

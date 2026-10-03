@@ -4,7 +4,6 @@ import 'package:flexify/database/performed_sets.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/swap_workout.dart';
-import 'package:flexify/plan/workout_sessions.dart';
 import 'package:flexify/sets/edit_set_page.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/timer/timer_state.dart';
@@ -166,7 +165,7 @@ class _ExerciseModalState extends State<ExerciseModal> {
               Navigator.pop(context);
               final workoutId = widget.workoutId;
               if (workoutId == null) return;
-              final performedSet = await getLatestLegacyWorkoutSet(
+              final performedSet = await getLatestWorkoutPerformedSet(
                 db,
                 workoutId: workoutId,
                 exerciseId: widget.exerciseId,
@@ -189,7 +188,7 @@ class _ExerciseModalState extends State<ExerciseModal> {
               Navigator.pop(context);
               final workoutId = widget.workoutId;
               if (workoutId == null) return;
-              final performedSet = await getLatestLegacyWorkoutSet(
+              final performedSet = await getLatestWorkoutPerformedSet(
                 db,
                 workoutId: workoutId,
                 exerciseId: widget.exerciseId,

@@ -15,14 +15,14 @@ import 'package:provider/provider.dart';
 
 class GraphHistoryPage extends StatefulWidget {
   final String name;
-  final List<PerformedSetView> performedSets;
+  final List<PerformedSetView> initialSets;
   final TabController tabController;
   final bool bodyWeight;
 
   const GraphHistoryPage({
     super.key,
     required this.name,
-    required this.performedSets,
+    required this.initialSets,
     required this.tabController,
     this.bodyWeight = false,
   });
@@ -32,11 +32,10 @@ class GraphHistoryPage extends StatefulWidget {
 }
 
 class _GraphHistoryPageState extends State<GraphHistoryPage> {
-  late List<PerformedSetView> sets = widget.performedSets;
+  late List<PerformedSetView> _sets;
   final _selection = SelectionController<int>();
   int limit = 20;
   final scroll = ScrollController();
-  late final TabController ctrl = widget.tabController;
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +50,7 @@ class _GraphHistoryPageState extends State<GraphHistoryPage> {
         appBar: _buildAppBar(),
         body: Builder(
           builder: (context) {
-            if (sets.isEmpty) {
+            if (_sets.isEmpty) {
               return AppEmptyState(
                 icon: Icons.history_rounded,
                 title: context.l10n.noHistoryFor(widget.name),
@@ -61,7 +60,7 @@ class _GraphHistoryPageState extends State<GraphHistoryPage> {
 
             return HistoryList(
               scroll: scroll,
-              sets: sets,
+              sets: _sets,
               onSelect: (id) => setState(() => _selection.toggle(id)),
               selected: _selection.selected,
               onNext: () {
@@ -95,7 +94,7 @@ class _GraphHistoryPageState extends State<GraphHistoryPage> {
           icon: const Icon(Icons.done_all),
           onPressed: () => setState(
             () =>
-                _selection.setAll(sets.map((performedSet) => performedSet.id)),
+                _selection.setAll(_sets.map((performedSet) => performedSet.id)),
           ),
         ),
         if (!widget.bodyWeight)
@@ -162,8 +161,16 @@ class _GraphHistoryPageState extends State<GraphHistoryPage> {
   }
 
   @override
+  void didUpdateWidget(GraphHistoryPage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.tabController == widget.tabController) return;
+    oldWidget.tabController.removeListener(tabListener);
+    widget.tabController.addListener(tabListener);
+  }
+
+  @override
   void dispose() {
-    ctrl.removeListener(tabListener);
+    widget.tabController.removeListener(tabListener);
     scroll.dispose();
     super.dispose();
   }
@@ -171,7 +178,8 @@ class _GraphHistoryPageState extends State<GraphHistoryPage> {
   @override
   void initState() {
     super.initState();
-    ctrl.addListener(tabListener);
+    _sets = widget.initialSets;
+    widget.tabController.addListener(tabListener);
   }
 
   Future<void> setSets() async {
@@ -184,15 +192,15 @@ class _GraphHistoryPageState extends State<GraphHistoryPage> {
           )).where((set) => set.name == widget.name).toList();
     if (!mounted) return;
     setState(() {
-      sets = result;
+      _sets = result;
     });
   }
 
   void tabListener() {
     final settings = context.read<SettingsState>().value;
     final index = settings.tabs.split(',').indexOf('GraphsPage');
-    if (ctrl.indexIsChanging == true) return;
-    if (ctrl.index != index) return;
+    if (widget.tabController.indexIsChanging) return;
+    if (widget.tabController.index != index) return;
     setSets();
   }
 }

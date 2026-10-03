@@ -525,9 +525,9 @@ class _EditSetsPageState extends State<EditSetsPage> {
         : parseDisplayNumber(context, _distance.text);
     if (_category != null) await createCategory(_category!);
 
-    final selected = (await getPerformedSets(db))
-        .where((set) => widget.ids.contains(set.id))
-        .toList();
+    final selected = (await getPerformedSets(
+      db,
+    )).where((set) => widget.ids.contains(set.id)).toList();
 
     final changesExercise =
         _name.text.isNotEmpty ||

@@ -1,7 +1,6 @@
 import 'package:drift/drift.dart' hide Column;
 import 'package:flexify/database/database.dart';
-import 'package:flexify/graph/cardio_data.dart';
-import 'package:flexify/graph/flex_line.dart';
+import 'package:flexify/graph/flex_line_chart.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/l10n/locale_preferences.dart';
 import 'package:flexify/main.dart';
@@ -342,36 +341,19 @@ List<Widget> getAppearanceSettings(
         height: MediaQuery.of(context).size.height * 0.3,
         child: Padding(
           padding: const EdgeInsets.only(right: 32, top: 16),
-          child: FlexLine(
+          child: FlexLineChart(
             hideBottom: true,
             hideLeft: true,
             points: const [
-              FlexChartPoint(0, 0.13),
-              FlexChartPoint(1, 5),
-              FlexChartPoint(2, 2),
+              FlexLineChartPoint(0, 0.13),
+              FlexLineChartPoint(1, 5),
+              FlexLineChartPoint(2, 2),
             ],
             tooltipText: (index) => formatDisplayNumber(
               context,
               const [0.13, 5.0, 2.0][index],
               minimumFractionDigits: 2,
             ),
-            data: [
-              CardioData(
-                created: DateTime.parse('2024-05-19 14:54:17.000'),
-                value: 0.13,
-                unit: 'km',
-              ),
-              CardioData(
-                created: DateTime.parse('2024-05-19 14:54:17.000'),
-                value: 0.13,
-                unit: 'km',
-              ),
-              CardioData(
-                created: DateTime.parse('2024-05-19 14:54:17.000'),
-                value: 0.13,
-                unit: 'km',
-              ),
-            ],
           ),
         ),
       ),

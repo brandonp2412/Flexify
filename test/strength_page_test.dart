@@ -25,9 +25,9 @@ Future<void> pumpStrengthPage(
       length: 1,
       child: StrengthPage(
         tabCtrl: MockTabController(),
-        name: screenshotExercise,
-        unit: 'kg',
-        data: await getStrengthData(
+        initialName: screenshotExercise,
+        initialUnit: 'kg',
+        initialData: await getStrengthData(
           target: 'kg',
           name: screenshotExercise,
           metric: StrengthMetric.bestWeight,

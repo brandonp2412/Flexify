@@ -9,7 +9,7 @@ import 'package:flexify/empty_state.dart';
 import 'package:flexify/graph/add_exercise_page.dart';
 import 'package:flexify/graph/cardio_data.dart';
 import 'package:flexify/graph/edit_graph_page.dart';
-import 'package:flexify/graph/flex_line.dart';
+import 'package:flexify/graph/flex_line_chart.dart';
 import 'package:flexify/graph/global_progress_page.dart';
 import 'package:flexify/graphs_filters.dart';
 import 'package:flexify/l10n/l10n.dart';
@@ -201,7 +201,7 @@ class GraphsPageState extends State<GraphsPage>
   ) {
     final points = [
       for (var index = 0; index < data.length; index++)
-        FlexChartPoint(index.toDouble(), data[index].value),
+        FlexLineChartPoint(index.toDouble(), data[index].value),
     ];
 
     return SizedBox(
@@ -213,8 +213,7 @@ class GraphsPageState extends State<GraphsPage>
           left: 48.0,
           bottom: 16.0,
         ),
-        child: FlexLine(
-          data: data,
+        child: FlexLineChart(
           points: points,
           tooltipText: (index) =>
               tooltipText(data, performedSet.unit, format, index),
@@ -335,8 +334,8 @@ class GraphsPageState extends State<GraphsPage>
                                               _search.trim(),
                                             ),
                                       actionIcon: Icons.add_rounded,
-                                      onAction: () => Navigator.of(context)
-                                          .push(
+                                      onAction: () =>
+                                          Navigator.of(context).push(
                                             FlexPageRoute(
                                               builder: (context) =>
                                                   AddExercisePage(
@@ -533,8 +532,9 @@ class GraphsPageState extends State<GraphsPage>
                     leading: const Icon(Icons.language),
                     title: Text(
                       context.l10n.globalProgress,
-                      style: Theme.of(context).textTheme.titleMedium
-                          ?.copyWith(fontWeight: FontWeight.w600),
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                     subtitle: Text(context.l10n.chartGroupedByCategory),
                     trailing: const Icon(Icons.chevron_right_rounded),
@@ -678,8 +678,9 @@ class GraphsPageState extends State<GraphsPage>
                     title: Text(
                       context.l10n.globalProgress,
                       style: isDesktopLayout(context)
-                          ? Theme.of(context).textTheme.titleMedium
-                                ?.copyWith(fontWeight: FontWeight.w600)
+                          ? Theme.of(context).textTheme.titleMedium?.copyWith(
+                              fontWeight: FontWeight.w600,
+                            )
                           : null,
                     ),
                     subtitle: Text(context.l10n.chartGroupedByCategory),

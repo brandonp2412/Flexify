@@ -388,9 +388,9 @@ Future<List<StrengthData>> getGlobalData({
 Future<List<Rpm>> getRpms() async {
   final cutoff = DateTime.now().subtract(const Duration(days: 30));
   final sets =
-      (await getPerformedSets(db))
-          .where((set) => !set.cardio && !set.created.isBefore(cutoff))
-          .toList()
+      (await getPerformedSets(
+          db,
+        )).where((set) => !set.cardio && !set.created.isBefore(cutoff)).toList()
         ..sort((a, b) => a.created.compareTo(b.created));
 
   final byName = <String, List<PerformedSetView>>{};
@@ -511,8 +511,9 @@ Stream<List<GraphExerciseSummary>> watchGraphs() {
             ),
             created: timestamp == null
                 ? DateTime.fromMillisecondsSinceEpoch(0).toLocal()
-                : DateTime.fromMillisecondsSinceEpoch(timestamp * 1000)
-                      .toLocal(),
+                : DateTime.fromMillisecondsSinceEpoch(
+                    timestamp * 1000,
+                  ).toLocal(),
             image: result.readNullable<String>('image'),
             category: result.readNullable<String>('category'),
           );

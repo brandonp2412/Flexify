@@ -1,4 +1,5 @@
 {
+  "git.ignoreSubmodules": true,
   "dart.flutterSdkPath": "/home/brandon/flexify/flutter",
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {

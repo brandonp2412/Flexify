@@ -56,7 +56,7 @@ double? _canonicalBodyWeight(String unit, double value) {
   return canonicalPerformedLoad(unit, value);
 }
 
-PerformedSetView _toPerformedSet(AppDatabase database, TypedResult row) {
+PerformedSetView _toPerformedSetView(AppDatabase database, TypedResult row) {
   final set = row.readTable(database.exerciseSets);
   final exercise = row.readTable(database.exercises);
   final category = row.readTableOrNull(database.categories);
@@ -155,7 +155,7 @@ Stream<List<PerformedSetView>> watchPerformedSets(
 }) {
   return _performedSetQuery(database).watch().map(
     (rows) => _filterPerformedSets(
-      rows.map((row) => _toPerformedSet(database, row)).toList(),
+      rows.map((row) => _toPerformedSetView(database, row)).toList(),
       search: search,
       category: category,
       startDate: startDate,
@@ -184,7 +184,7 @@ Future<List<PerformedSetView>> getPerformedSets(
 }) async {
   final rows = await _performedSetQuery(database).get();
   return _filterPerformedSets(
-    rows.map((row) => _toPerformedSet(database, row)).toList(),
+    rows.map((row) => _toPerformedSetView(database, row)).toList(),
     search: search,
     category: category,
     startDate: startDate,
@@ -219,7 +219,7 @@ Future<List<PerformedSetView>> getPerformedSetsForExercise(
   if (limit != null) query.limit(limit);
 
   final rows = await query.get();
-  return rows.map((row) => _toPerformedSet(database, row)).toList();
+  return rows.map((row) => _toPerformedSetView(database, row)).toList();
 }
 
 Future<PerformedSetView?> getPerformedSetForExerciseAt(
@@ -232,7 +232,7 @@ Future<PerformedSetView?> getPerformedSetForExerciseAt(
     ..where(database.exerciseSets.timestamp.equals(timestamp))
     ..limit(1);
   final row = await query.getSingleOrNull();
-  return row == null ? null : _toPerformedSet(database, row);
+  return row == null ? null : _toPerformedSetView(database, row);
 }
 
 Future<int> countPerformedSetsForExercises(
@@ -267,7 +267,7 @@ Future<PerformedSetView?> getPerformedSetById(
   final query = _performedSetQuery(database)
     ..where(database.exerciseSets.id.equals(id));
   final row = await query.getSingleOrNull();
-  return row == null ? null : _toPerformedSet(database, row);
+  return row == null ? null : _toPerformedSetView(database, row);
 }
 
 /// Loads the latest performed set for an exercise name.
@@ -279,7 +279,7 @@ Future<PerformedSetView?> getLatestPerformedSet(
     ..where(database.exercises.name.equals(exerciseName))
     ..limit(1);
   final row = await query.getSingleOrNull();
-  return row == null ? null : _toPerformedSet(database, row);
+  return row == null ? null : _toPerformedSetView(database, row);
 }
 
 /// Loads the latest performed set for an exercise in one workout.
@@ -295,7 +295,7 @@ Future<PerformedSetView?> getLatestWorkoutPerformedSet(
     )
     ..limit(1);
   final row = await query.getSingleOrNull();
-  return row == null ? null : _toPerformedSet(database, row);
+  return row == null ? null : _toPerformedSetView(database, row);
 }
 
 /// Watches performed sets for one exercise in one workout.
@@ -310,7 +310,7 @@ Stream<List<PerformedSetView>> watchWorkoutPerformedSets(
           database.exerciseSets.exerciseId.equals(exerciseId),
     );
   return query.watch().map(
-    (rows) => rows.map((row) => _toPerformedSet(database, row)).toList(),
+    (rows) => rows.map((row) => _toPerformedSetView(database, row)).toList(),
   );
 }
 

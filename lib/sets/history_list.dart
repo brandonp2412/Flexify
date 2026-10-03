@@ -253,8 +253,9 @@ class _HistoryListState extends State<HistoryList> {
                 title: Text(
                   performedSet.name,
                   style: desktop
-                      ? Theme.of(context).textTheme.titleMedium
-                            ?.copyWith(fontWeight: FontWeight.w600)
+                      ? Theme.of(context).textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.w600,
+                        )
                       : null,
                 ),
                 subtitle: Selector<SettingsState, String>(
@@ -270,15 +271,17 @@ class _HistoryListState extends State<HistoryList> {
                               performedSet.created,
                               dateFormat,
                             ),
-                      style: Theme.of(context).textTheme.bodySmall
-                          ?.copyWith(color: colors.onSurfaceVariant),
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: colors.onSurfaceVariant,
+                      ),
                     ),
                   ),
                 ),
                 trailing: Text(
                   trailing,
-                  style: Theme.of(context).textTheme.bodyLarge
-                      ?.copyWith(fontWeight: FontWeight.w600),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w600),
                 ),
                 onLongPress: desktop
                     ? null
