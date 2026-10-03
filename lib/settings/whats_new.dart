@@ -159,8 +159,9 @@ class _WhatsNewState extends State<WhatsNew> {
         result.add(
           Changelog(
             name: filename,
-            created: DateFormat.yMMMd(localeTag)
-                .format(DateTime.fromMillisecondsSinceEpoch(timestamp * 1000)),
+            created: DateFormat.yMMMd(
+              localeTag,
+            ).format(DateTime.fromMillisecondsSinceEpoch(timestamp * 1000)),
             content: content,
           ),
         );
@@ -217,8 +218,9 @@ class _WhatsNewState extends State<WhatsNew> {
                   IconButton(
                     onPressed: _page > 0 ? () => _setPage(_page - 1) : null,
                     icon: const Icon(Icons.chevron_left),
-                    tooltip: MaterialLocalizations.of(context)
-                        .previousPageTooltip,
+                    tooltip: MaterialLocalizations.of(
+                      context,
+                    ).previousPageTooltip,
                   ),
                   Text(
                     '${_page + 1} / ${(_changelogFiles.length / _pageSize).ceil()}',

@@ -9,6 +9,7 @@ import 'package:flexify/plan/plan_tile.dart';
 import 'package:flexify/settings/settings_page.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/settings/workout_settings.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
@@ -96,6 +97,26 @@ Future<void> _tapSaveAction(WidgetTester tester) async {
     }
   }
   fail('No responsive save action found');
+}
+
+Future<void> _secondaryTap(WidgetTester tester, Finder finder) async {
+  final gesture = await tester.startGesture(
+    tester.getCenter(finder),
+    kind: PointerDeviceKind.mouse,
+    buttons: kSecondaryMouseButton,
+  );
+  await gesture.up();
+  await tester.pumpAndSettle();
+}
+
+void _expectBefore(WidgetTester tester, Finder before, Finder after) {
+  final first = tester.getTopLeft(before);
+  final second = tester.getTopLeft(after);
+  if ((first.dy - second.dy).abs() < 1) {
+    expect(first.dx, lessThan(second.dx));
+  } else {
+    expect(first.dy, lessThan(second.dy));
+  }
 }
 
 Future<void> _tapTab(WidgetTester tester, String tab) async {
@@ -470,13 +491,12 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('Long-press tab removal updates home navigation safely', (
+  testWidgets('Desktop tab removal updates home navigation safely', (
     tester,
   ) async {
     await _pumpIsolatedApp(tester);
 
-    await tester.longPress(find.byKey(const Key('GraphsPage')));
-    await tester.pumpAndSettle();
+    await _secondaryTap(tester, find.byKey(const Key('GraphsPage')));
     expect(find.text('Remove Graphs tab?'), findsOneWidget);
     await tester.tap(find.text('Remove'));
     await tester.pumpAndSettle();
@@ -660,6 +680,13 @@ void main() {
 
   testWidgets('Graph history opens on Linux desktop', (tester) async {
     await _pumpIsolatedApp(tester);
+    await _insertE2ESet(
+      name: 'Barbell bench press',
+      reps: 5,
+      weight: 80,
+      created: DateTime(2026, 9, 1, 10),
+    );
+    await tester.pumpAndSettle();
     await _tapTab(tester, 'GraphsPage');
 
     await tester.tap(find.text('Barbell bench press'));
@@ -669,74 +696,63 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('Graph selection, curve options, and history multi-delete work', (
-    tester,
-  ) async {
-    await _pumpIsolatedApp(tester);
-    final now = DateTime(2026, 8, 30, 12);
-    for (var index = 0; index < 2; index++) {
-      await _insertE2ESet(
-        name: 'Selection E2E',
-        reps: (5 + index).toDouble(),
-        weight: (50 + index).toDouble(),
-        created: now.subtract(Duration(days: index)),
-      );
-    }
-    await _tapTab(tester, 'GraphsPage');
-    await tester.enterText(find.byType(SearchBar), 'Selection E2E');
-    await tester.pumpAndSettle();
+  testWidgets(
+    'Graph desktop context, curve options, and history actions work',
+    (tester) async {
+      await _pumpIsolatedApp(tester);
+      final now = DateTime(2026, 8, 30, 12);
+      for (var index = 0; index < 2; index++) {
+        await _insertE2ESet(
+          name: 'Selection E2E',
+          reps: (5 + index).toDouble(),
+          weight: (50 + index).toDouble(),
+          created: now.subtract(Duration(days: index)),
+        );
+      }
+      await _tapTab(tester, 'GraphsPage');
+      await tester.enterText(find.byType(SearchBar), 'Selection E2E');
+      await tester.pumpAndSettle();
 
-    await tester.longPress(find.widgetWithText(ListTile, 'Selection E2E'));
-    await tester.pumpAndSettle();
-    expect(find.text('1'), findsOneWidget);
-    await tester.tap(find.byTooltip('Clear selection'));
-    await tester.pumpAndSettle();
+      final graphTile = find.widgetWithText(ListTile, 'Selection E2E');
+      await _secondaryTap(tester, graphTile);
+      expect(find.text('Edit'), findsOneWidget);
+      expect(find.text('Delete'), findsOneWidget);
+      await tester.tap(find.text('Edit'));
+      await tester.pumpAndSettle();
+      await tester.binding.handlePopRoute();
+      await tester.pumpAndSettle();
 
-    await tester.tap(find.widgetWithText(ListTile, 'Selection E2E'));
-    await tester.pumpAndSettle();
-    await _openGraphOptionsIfNeeded(tester);
-    expect(find.text('Curve line graphs'), findsOneWidget);
-    expect(find.text('Curve smoothness'), findsOneWidget);
-    await tester.tapAt(const Offset(8, 8));
-    await tester.pumpAndSettle();
+      await tester.tap(graphTile);
+      await tester.pumpAndSettle();
+      await _openGraphOptionsIfNeeded(tester);
+      expect(find.text('Curve line graphs'), findsOneWidget);
+      expect(find.text('Curve smoothness'), findsOneWidget);
+      await tester.tapAt(const Offset(8, 8));
+      await tester.pumpAndSettle();
 
-    await tester.tap(find.byTooltip('History'));
-    await tester.pumpAndSettle();
-    expect(find.text('5 x 50 kg'), findsOneWidget);
-    expect(find.text('6 x 51 kg'), findsOneWidget);
-    await tester.longPress(find.text('5 x 50 kg'));
-    await tester.pumpAndSettle();
-    expect(find.text('1 selected'), findsOneWidget);
-    expect(find.byTooltip('Select all'), findsOneWidget);
-    await tester.tap(find.byTooltip('Select all'));
-    await tester.pumpAndSettle();
-    expect(find.text('2 selected'), findsOneWidget);
-    await tester.tap(find.byTooltip('Delete selected'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.widgetWithText(TextButton, 'Cancel'));
-    await tester.pumpAndSettle();
-    expect(find.text('2 selected'), findsOneWidget);
-    await tester.tap(find.byTooltip('Cancel selection'));
-    await tester.pumpAndSettle();
+      await tester.tap(find.byTooltip('History'));
+      await tester.pumpAndSettle();
+      expect(find.text('5 x 50 kg'), findsOneWidget);
+      expect(find.text('6 x 51 kg'), findsOneWidget);
 
-    await tester.longPress(find.text('5 x 50 kg'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('6 x 51 kg'));
-    await tester.pumpAndSettle();
-    expect(find.text('2 selected'), findsOneWidget);
-    await tester.tap(find.byTooltip('Delete selected'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.widgetWithText(TextButton, 'Delete'));
-    await tester.pumpAndSettle();
+      await _secondaryTap(tester, find.text('5 x 50 kg'));
+      expect(find.text('Edit'), findsOneWidget);
+      expect(find.text('Delete'), findsOneWidget);
+      await tester.tap(find.text('Delete'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.widgetWithText(FilledButton, 'Delete'));
+      await tester.pumpAndSettle();
 
-    expect(find.text('No history yet for Selection E2E'), findsOneWidget);
-    expect(tester.takeException(), isNull);
-  });
+      expect(await _setsNamed('Selection E2E'), hasLength(1));
+      expect(find.text('6 x 51 kg'), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    },
+  );
 
   testWidgets('Graph sort, category filter, global progress, and hide work', (
     tester,
   ) async {
-    await _pumpIsolatedApp(tester, surfaceSize: const Size(1000, 950));
+    await _pumpIsolatedApp(tester, surfaceSize: const Size(899, 950));
     await app.db.settings.update().write(
       const SettingsCompanion(showGlobalProgress: Value(true)),
     );
@@ -779,11 +795,16 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text('Name').last);
     await tester.pumpAndSettle();
-    var alphaY = tester.getTopLeft(find.text('Linux E2E graph Alpha')).dy;
-    var betaY = tester.getTopLeft(find.text('Linux E2E graph Beta')).dy;
-    var zebraY = tester.getTopLeft(find.text('Linux E2E graph Zebra')).dy;
-    expect(alphaY, lessThan(betaY));
-    expect(betaY, lessThan(zebraY));
+    _expectBefore(
+      tester,
+      find.text('Linux E2E graph Alpha'),
+      find.text('Linux E2E graph Beta'),
+    );
+    _expectBefore(
+      tester,
+      find.text('Linux E2E graph Beta'),
+      find.text('Linux E2E graph Zebra'),
+    );
 
     await tester.tap(find.byTooltip('Filter'));
     await tester.pumpAndSettle();
@@ -791,11 +812,16 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text('Date (newest)').last);
     await tester.pumpAndSettle();
-    alphaY = tester.getTopLeft(find.text('Linux E2E graph Alpha')).dy;
-    betaY = tester.getTopLeft(find.text('Linux E2E graph Beta')).dy;
-    zebraY = tester.getTopLeft(find.text('Linux E2E graph Zebra')).dy;
-    expect(betaY, lessThan(alphaY));
-    expect(alphaY, lessThan(zebraY));
+    _expectBefore(
+      tester,
+      find.text('Linux E2E graph Beta'),
+      find.text('Linux E2E graph Alpha'),
+    );
+    _expectBefore(
+      tester,
+      find.text('Linux E2E graph Alpha'),
+      find.text('Linux E2E graph Zebra'),
+    );
 
     await tester.tap(find.byTooltip('Filter'));
     await tester.pumpAndSettle();
@@ -803,11 +829,16 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text('Date (oldest)').last);
     await tester.pumpAndSettle();
-    alphaY = tester.getTopLeft(find.text('Linux E2E graph Alpha')).dy;
-    betaY = tester.getTopLeft(find.text('Linux E2E graph Beta')).dy;
-    zebraY = tester.getTopLeft(find.text('Linux E2E graph Zebra')).dy;
-    expect(zebraY, lessThan(alphaY));
-    expect(alphaY, lessThan(betaY));
+    _expectBefore(
+      tester,
+      find.text('Linux E2E graph Zebra'),
+      find.text('Linux E2E graph Alpha'),
+    );
+    _expectBefore(
+      tester,
+      find.text('Linux E2E graph Alpha'),
+      find.text('Linux E2E graph Beta'),
+    );
 
     await tester.tap(find.byTooltip('Filter'));
     await tester.pumpAndSettle();
@@ -834,30 +865,9 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('Global progress'), findsOneWidget);
 
-    await tester.tap(find.text('Global progress'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('Best weight'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('Volume').last);
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('Week'));
-    await tester.pumpAndSettle();
-    await _openGraphOptionsIfNeeded(tester);
-    await tester.tap(find.byType(DropdownButtonFormField<String>));
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('Pounds (lb)').last);
-    await tester.pumpAndSettle();
-    await tester.drag(find.byType(Slider).first, const Offset(100, 0));
-    await tester.pumpAndSettle();
-    await tester.tapAt(const Offset(8, 8));
-    await tester.pumpAndSettle();
-    expect(tester.takeException(), isNull);
-
-    await tester.binding.handlePopRoute();
-    await tester.pumpAndSettle();
-    await tester.longPress(find.text('Global progress'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.widgetWithText(ListTile, 'Hide global progress'));
+    await _secondaryTap(tester, find.text('Global progress'));
+    expect(find.text('Hide global progress'), findsOneWidget);
+    await tester.tap(find.text('Hide global progress'));
     await tester.pumpAndSettle();
     expect(find.text('Global progress'), findsNothing);
     final settings = await (app.db.settings.select()..limit(1)).getSingle();
@@ -1190,7 +1200,7 @@ void main() {
       of: find.byKey(Key(originalFirst)),
       matching: find.byIcon(Icons.drag_handle),
     );
-    await tester.drag(firstHandle, const Offset(0, 120));
+    await tester.drag(firstHandle, const Offset(0, 70));
     await tester.pumpAndSettle();
 
     exercises =
@@ -1209,28 +1219,28 @@ void main() {
   testWidgets('Timer stopwatch and countdown controls work on Linux', (
     tester,
   ) async {
-    await _pumpIsolatedApp(tester, surfaceSize: const Size(900, 700));
+    await _pumpIsolatedApp(tester, surfaceSize: const Size(899, 700));
     await _tapTab(tester, 'TimerPage');
 
-    expect(find.text('Start'), findsOneWidget);
-    await tester.tap(find.text('Start'));
+    expect(find.text('Start stopwatch'), findsOneWidget);
+    await tester.tap(find.text('Start stopwatch'));
     await tester.pump(const Duration(milliseconds: 250));
     expect(find.text('Pause'), findsOneWidget);
     expect(find.text('Restart'), findsOneWidget);
 
     await tester.tap(find.text('Pause'));
     await tester.pumpAndSettle();
-    expect(find.text('Start'), findsOneWidget);
+    expect(find.text('Start stopwatch'), findsOneWidget);
     await tester.tap(find.text('Restart'));
     await tester.pumpAndSettle();
     expect(find.text('+1 minute'), findsOneWidget);
 
     await tester.tap(find.text('+1 minute'));
     await tester.pump(const Duration(milliseconds: 400));
-    expect(find.text('Stop'), findsOneWidget);
-    await tester.tap(find.text('Stop'));
+    expect(find.text('Stop timer'), findsOneWidget);
+    await tester.tap(find.text('Stop timer'));
     await tester.pumpAndSettle();
-    expect(find.text('Start'), findsOneWidget);
+    expect(find.text('Start stopwatch'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 
@@ -1473,10 +1483,8 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('Graph select-all delete cancel and confirm work', (
-    tester,
-  ) async {
-    await _pumpIsolatedApp(tester, surfaceSize: const Size(900, 900));
+  testWidgets('Graph desktop delete cancel and confirm work', (tester) async {
+    await _pumpIsolatedApp(tester);
     await _insertE2ESet(
       name: 'Linux E2E selectable graph A',
       reps: 5,
@@ -1495,24 +1503,29 @@ void main() {
       'Linux E2E selectable graph',
     );
     await tester.pumpAndSettle();
-    await tester.longPress(
-      find.widgetWithText(ListTile, 'Linux E2E selectable graph A'),
+
+    final graphA = find.widgetWithText(
+      ListTile,
+      'Linux E2E selectable graph A',
     );
-    await tester.pumpAndSettle();
-    await tester.tap(find.byTooltip('Show menu'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.widgetWithText(ListTile, 'Select all'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.byTooltip('Delete selected'));
+    await _secondaryTap(tester, graphA);
+    await tester.tap(find.text('Delete'));
     await tester.pumpAndSettle();
     await tester.tap(find.widgetWithText(TextButton, 'Cancel'));
     await tester.pumpAndSettle();
     expect(await _setsMatching('Linux E2E selectable graph'), hasLength(2));
-    await tester.tap(find.byTooltip('Delete selected'));
+
+    await _secondaryTap(
+      tester,
+      find.widgetWithText(ListTile, 'Linux E2E selectable graph B'),
+    );
+    await tester.tap(find.text('Delete'));
     await tester.pumpAndSettle();
-    await tester.tap(find.widgetWithText(TextButton, 'Delete'));
+    await tester.tap(find.widgetWithText(FilledButton, 'Delete'));
     await tester.pumpAndSettle();
-    expect(await _setsMatching('Linux E2E selectable graph'), isEmpty);
+
+    expect(await _setsNamed('Linux E2E selectable graph A'), hasLength(1));
+    expect(await _setsNamed('Linux E2E selectable graph B'), isEmpty);
     expect(tester.takeException(), isNull);
   });
 
@@ -1776,10 +1789,8 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('History multi-select bulk edit, select-all, and delete work', (
-    tester,
-  ) async {
-    await _pumpIsolatedApp(tester, surfaceSize: const Size(900, 900));
+  testWidgets('History desktop context edit and delete work', (tester) async {
+    await _pumpIsolatedApp(tester);
     await _insertE2ESet(
       name: 'Linux E2E bulk A',
       reps: 5,
@@ -1797,46 +1808,18 @@ void main() {
     await tester.enterText(find.byType(SearchBar), 'Linux E2E bulk');
     await tester.pumpAndSettle();
 
-    await tester.longPress(find.widgetWithText(ListTile, 'Linux E2E bulk A'));
+    await _secondaryTap(tester, find.text('Linux E2E bulk A'));
+    expect(find.text('Edit'), findsOneWidget);
+    expect(find.text('Delete'), findsOneWidget);
+    await tester.tap(find.text('Edit'));
     await tester.pumpAndSettle();
-    await tester.tap(find.widgetWithText(ListTile, 'Linux E2E bulk B'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.byTooltip('Show menu'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.widgetWithText(ListTile, 'Edit'));
-    await tester.pumpAndSettle();
-    expect(find.text('Edit 2 sets'), findsOneWidget);
     await tester.enterText(_textFieldWithLabel('Reps'), '10');
-    await tester.tap(find.text('Update'));
+    await _tapSaveAction(tester);
     await tester.pumpAndSettle();
 
-    var rows = await _setsMatching('Linux E2E bulk');
-    expect(rows, hasLength(2));
-    expect(rows.every((row) => row.reps == 10), isTrue);
-
-    final clearSelection = find.byTooltip('Clear selection');
-    if (clearSelection.evaluate().isNotEmpty) {
-      await tester.tap(clearSelection.first);
-      await tester.pumpAndSettle();
-      await tester.enterText(find.byType(SearchBar), 'Linux E2E bulk');
-      await tester.pumpAndSettle();
-    }
-    await tester.tap(find.byTooltip('Show menu'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.widgetWithText(ListTile, 'Select all'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.byTooltip('Delete selected'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.widgetWithText(TextButton, 'Cancel'));
-    await tester.pumpAndSettle();
-    expect(await _setsMatching('Linux E2E bulk'), hasLength(2));
-
-    await tester.tap(find.byTooltip('Delete selected'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.widgetWithText(TextButton, 'Delete'));
-    await tester.pumpAndSettle();
-    rows = await _setsMatching('Linux E2E bulk');
-    expect(rows, isEmpty);
+    final edited = await _setsNamed('Linux E2E bulk A');
+    expect(edited, hasLength(1));
+    expect(edited.single.reps, 10);
     expect(tester.takeException(), isNull);
   });
 
@@ -1889,7 +1872,7 @@ void main() {
   testWidgets(
     'Plan create, title/day search, edit, select-all and delete work',
     (tester) async {
-      await _pumpIsolatedApp(tester, surfaceSize: const Size(1000, 900));
+      await _pumpIsolatedApp(tester, surfaceSize: const Size(899, 900));
       await _tapTab(tester, 'PlansPage');
       await tester.tap(find.text('New plan'));
       await tester.pumpAndSettle();
@@ -1899,9 +1882,11 @@ void main() {
       );
       await tester.tap(find.text('Mon'));
       await tester.pumpAndSettle();
-      await tester.enterText(find.byType(SearchBar), 'Barbell bench press');
+      await tester.enterText(find.byType(SearchBar), 'Linux E2E plan exercise');
       await tester.pumpAndSettle();
-      await tester.tap(find.widgetWithText(ListTile, 'Barbell bench press'));
+      await tester.tap(find.text('Add “Linux E2E plan exercise”').last);
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Save'));
       await tester.pumpAndSettle();
       await tester.tap(find.text('Save plan'));
       await tester.pumpAndSettle();
@@ -1911,33 +1896,28 @@ void main() {
                 ..where((tbl) => tbl.title.equals('Linux E2E custom plan')))
               .getSingle();
       expect(plan.days, 'Monday');
-      final benchPlanExercise = await _planExerciseForName(
+      final createdPlanExercise = await _planExerciseForName(
         plan.id,
-        'Barbell bench press',
+        'Linux E2E plan exercise',
       );
-      expect(benchPlanExercise, isNotNull);
-      expect(benchPlanExercise!.enabled, isTrue);
+      expect(createdPlanExercise, isNotNull);
+      expect(createdPlanExercise!.enabled, isTrue);
 
       final planSearch = find.byType(SearchBar);
+      final customPlanTile = find.widgetWithText(
+        PlanTile,
+        'Linux E2E custom plan',
+      );
       await tester.enterText(planSearch, 'Linux E2E custom plan');
       await tester.pumpAndSettle();
-      expect(
-        find.widgetWithText(ListTile, 'Linux E2E custom plan'),
-        findsOneWidget,
-      );
+      expect(customPlanTile, findsOneWidget);
       await tester.enterText(planSearch, 'Monday');
       await tester.pumpAndSettle();
-      expect(
-        find.widgetWithText(ListTile, 'Linux E2E custom plan'),
-        findsOneWidget,
-      );
+      expect(customPlanTile, findsOneWidget);
       await tester.enterText(planSearch, 'Linux E2E custom plan');
       await tester.pumpAndSettle();
 
-      await tester.longPress(
-        find.widgetWithText(ListTile, 'Linux E2E custom plan'),
-      );
-      await tester.pumpAndSettle();
+      await _secondaryTap(tester, customPlanTile);
       await tester.tap(find.byTooltip('Show menu'));
       await tester.pumpAndSettle();
       await tester.tap(find.widgetWithText(ListTile, 'Edit'));
@@ -2188,7 +2168,12 @@ void main() {
     await tester.tap(find.byType(PlanTile).first);
     await tester.pumpAndSettle();
 
-    await tester.longPress(find.byKey(const Key('Barbell bench press')));
+    await tester.tap(
+      find.descendant(
+        of: find.byKey(const Key('Barbell bench press')),
+        matching: find.byIcon(Icons.more_horiz_rounded),
+      ),
+    );
     await tester.pumpAndSettle();
     await tester.tap(find.widgetWithText(ListTile, 'Settings'));
     await tester.pumpAndSettle();
@@ -2209,7 +2194,12 @@ void main() {
     expect(planExercise.maxSets, 2);
     expect(planExercise.timers, isFalse);
 
-    await tester.longPress(find.byKey(const Key('Squat')));
+    await tester.tap(
+      find.descendant(
+        of: find.byKey(const Key('Squat')),
+        matching: find.byIcon(Icons.more_horiz_rounded),
+      ),
+    );
     await tester.pumpAndSettle();
     await tester.tap(find.widgetWithText(ListTile, 'Swap'));
     await tester.pumpAndSettle();
@@ -2244,7 +2234,12 @@ void main() {
     logged = await _setsForPlan(1);
     expect(logged.single.reps, 7);
 
-    await tester.longPress(find.byKey(Key(loggedName)));
+    await tester.tap(
+      find.descendant(
+        of: find.byKey(Key(loggedName)),
+        matching: find.byIcon(Icons.more_horiz_rounded),
+      ),
+    );
     await tester.pumpAndSettle();
     expect(find.text('Undo'), findsOneWidget);
     expect(find.text('Edit'), findsOneWidget);

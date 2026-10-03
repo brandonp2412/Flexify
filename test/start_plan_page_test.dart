@@ -585,6 +585,44 @@ void main() {
     expect(saved, hasLength(1));
   });
 
+  testWidgets('StartPlanPage compact desktop exercise list does not overflow', (
+    WidgetTester tester,
+  ) async {
+    final harness = await FlexifyTestHarness.create();
+    final database = harness.database;
+
+    final id = await database.plans.insertOne(planFixture());
+    final plan =
+        await (database.plans.select()..where((row) => row.id.equals(id)))
+            .getSingle();
+    for (final exercise in const [
+      'Barbell bench press',
+      'Squat',
+      'Lat pull-down',
+    ]) {
+      await insertPlanExerciseFixture(
+        database,
+        planId: plan.id,
+        exercise: exercise,
+      );
+    }
+    await database.settings.update().write(
+      testSettings(
+        explainedPermissions: true,
+        notificationPermissionRequested: true,
+      ),
+    );
+
+    await harness.pump(
+      tester,
+      StartPlanPage(plan: plan),
+      surfaceSize: const Size(900, 900),
+    );
+    await tester.pumpAndSettle();
+
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('StartPlanPage saves', (WidgetTester tester) async {
     final harness = await FlexifyTestHarness.create();
     final database = harness.database;

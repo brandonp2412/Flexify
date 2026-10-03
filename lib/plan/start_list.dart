@@ -212,6 +212,7 @@ class _StartListState extends State<StartList> {
                 onLongPress: null,
                 child: LayoutBuilder(
                   builder: (context, constraints) {
+                    final compact = constraints.maxWidth < 260;
                     final showProgress = constraints.maxWidth >= 420;
                     return Padding(
                       padding: const EdgeInsets.symmetric(
@@ -220,15 +221,17 @@ class _StartListState extends State<StartList> {
                       ),
                       child: Row(
                         children: [
-                          Icon(
-                            selected
-                                ? Icons.radio_button_checked_rounded
-                                : Icons.radio_button_unchecked_rounded,
-                            color: selected
-                                ? colors.primary
-                                : colors.onSurfaceVariant,
-                          ),
-                          const SizedBox(width: 12),
+                          if (!compact) ...[
+                            Icon(
+                              selected
+                                  ? Icons.radio_button_checked_rounded
+                                  : Icons.radio_button_unchecked_rounded,
+                              color: selected
+                                  ? colors.primary
+                                  : colors.onSurfaceVariant,
+                            ),
+                            const SizedBox(width: 12),
+                          ],
                           Expanded(
                             child: Text(
                               exercise.exercise.name,
@@ -242,7 +245,7 @@ class _StartListState extends State<StartList> {
                                   ),
                             ),
                           ),
-                          const SizedBox(width: 12),
+                          if (!compact) const SizedBox(width: 12),
                           if (showProgress) ...[
                             SizedBox(
                               width: 150,
@@ -250,8 +253,9 @@ class _StartListState extends State<StartList> {
                             ),
                             const SizedBox(width: 12),
                           ],
-                          if (trailing == PlanTrailing.reorder ||
-                              trailing == PlanTrailing.none) ...[
+                          if (!compact &&
+                              (trailing == PlanTrailing.reorder ||
+                                  trailing == PlanTrailing.none)) ...[
                             Text(
                               '${formatDisplayNumber(context, count, maximumFractionDigits: 0)} / ${formatDisplayNumber(context, max, maximumFractionDigits: 0)}',
                               style: Theme.of(context).textTheme.labelLarge
