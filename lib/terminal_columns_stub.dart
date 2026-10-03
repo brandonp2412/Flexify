@@ -1,0 +1,1 @@
+int? currentTerminalColumns() => null;
