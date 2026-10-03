@@ -40,6 +40,14 @@ class _LineChartAxisLabel {
 }
 
 const _lineChartEdgePaddingFraction = 0.02;
+const _axisLabelFontSize = 10.0;
+const _axisLabelFontWeight = FontWeight.w500;
+
+Color _axisLabelColor(DrafterThemeColors theme) {
+  final contrastTarget = theme.isDark ? Colors.white : Colors.black;
+  final blendAmount = theme.isDark ? 0.10 : 0.30;
+  return Color.lerp(theme.label, contrastTarget, blendAmount)!;
+}
 
 (double, double) _calculateYBounds(List<FlexLineChartPoint> points) {
   if (points.isEmpty) return (0, 1);
@@ -68,6 +76,16 @@ class FlexLineChart extends StatelessWidget {
 
   static (double, double) calculateYBounds(List<FlexLineChartPoint> points) =>
       _calculateYBounds(points);
+
+  @visibleForTesting
+  static double get axisLabelFontSize => _axisLabelFontSize;
+
+  @visibleForTesting
+  static FontWeight get axisLabelFontWeight => _axisLabelFontWeight;
+
+  @visibleForTesting
+  static Color axisLabelColor(DrafterThemeColors theme) =>
+      _axisLabelColor(theme);
 
   const FlexLineChart({
     super.key,
@@ -596,6 +614,8 @@ class _FlexLineChartRenderer extends ChartRenderer
   }
 
   void _drawAxes(Canvas canvas, ChartBounds bounds, DrafterThemeColors theme) {
+    final axisLabelColor = _axisLabelColor(theme);
+
     if (showLeftLabels) {
       const tickCount = 4;
       for (var i = 0; i <= tickCount; i++) {
@@ -605,7 +625,9 @@ class _FlexLineChartRenderer extends ChartRenderer
           canvas,
           ChartFormatting.format(value),
           Offset(bounds.left - 7, y),
-          color: theme.label,
+          color: axisLabelColor,
+          fontSize: _axisLabelFontSize,
+          weight: _axisLabelFontWeight,
           h: HAlign.end,
           v: VAlign.center,
         );
@@ -618,7 +640,14 @@ class _FlexLineChartRenderer extends ChartRenderer
     for (final label in xLabels) {
       final point = FlexLineChartPoint(label.x, 0, column: label.column);
       centers.add(_xForPoint(point, label.column ?? centers.length, bounds));
-      widths.add(measureChartText(label.text));
+      widths.add(
+        measureChartText(
+          label.text,
+          fontSize: _axisLabelFontSize,
+          weight: _axisLabelFontWeight,
+          color: axisLabelColor,
+        ),
+      );
     }
     final keep = LabelLayout.thin(centers, widths, 6).toSet();
     for (var i = 0; i < xLabels.length; i++) {
@@ -627,7 +656,9 @@ class _FlexLineChartRenderer extends ChartRenderer
         canvas,
         xLabels[i].text,
         Offset(centers[i], bounds.bottom + 15),
-        color: theme.label,
+        color: axisLabelColor,
+        fontSize: _axisLabelFontSize,
+        weight: _axisLabelFontWeight,
         h: HAlign.center,
         v: VAlign.center,
       );
