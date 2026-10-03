@@ -820,20 +820,21 @@ void main() {
 
   test('Flutter UI avoids obvious hard-coded English literals', () {
     final violations = <String>[];
+    // `Directory.listSync` yields platform separators, so normalise before
+    // matching the forward-slash allowlist and generated-path exclusion.
+    String normalize(String path) => path.replaceAll(r'\', '/');
     final dartFiles = Directory('lib')
         .listSync(recursive: true)
         .whereType<File>()
-        .where(
-          (file) =>
-              file.path.endsWith('.dart') &&
-              !file.path.contains('/l10n/generated/'),
-        );
+        .where((file) {
+          final path = normalize(file.path);
+          return path.endsWith('.dart') && !path.contains('/l10n/generated/');
+        });
 
     for (final file in dartFiles) {
-      final relativePath = file.path.replaceFirst(
-        '${Directory.current.path}/',
-        '',
-      );
+      final relativePath = normalize(
+        file.path,
+      ).replaceFirst('${normalize(Directory.current.path)}/', '');
       final sourceText = file.readAsStringSync();
       for (final pattern in [
         _directTextPattern,

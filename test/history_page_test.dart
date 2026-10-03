@@ -85,6 +85,123 @@ void main() {
     expect(find.text('30 kg / 10:00 '), findsOne);
   });
 
+  testWidgets('HistoryPage groups every exercise of a day into one card', (
+    WidgetTester tester,
+  ) async {
+    final harness = await FlexifyTestHarness.create();
+    await harness.database.settings.update().write(
+      testSettings(groupHistory: true),
+    );
+    await insertExerciseSetFixture(
+      harness.database,
+      'Bench press',
+      reps: 3,
+      weight: 40,
+      created: testNow.subtract(const Duration(hours: 1)),
+    );
+    await insertExerciseSetFixture(
+      harness.database,
+      'Bench press',
+      reps: 5,
+      weight: 45,
+      created: testNow.subtract(const Duration(hours: 2)),
+    );
+    await insertExerciseSetFixture(
+      harness.database,
+      'Squat',
+      reps: 8,
+      weight: 60,
+      created: testNow.subtract(const Duration(hours: 3)),
+    );
+    await insertExerciseSetFixture(
+      harness.database,
+      'Deadlift',
+      reps: 5,
+      weight: 100,
+      created: testNow.subtract(const Duration(days: 1)),
+    );
+
+    await pumpHistoryPage(tester, harness);
+
+    final cards = find.byType(Card);
+    expect(cards, findsNWidgets(2));
+
+    final newestDay = cards.at(0);
+    expect(
+      find.descendant(of: newestDay, matching: find.text('Bench press (2)')),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(of: newestDay, matching: find.text('Squat (1)')),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(of: newestDay, matching: find.text('Deadlift (1)')),
+      findsNothing,
+    );
+    expect(
+      find.descendant(
+        of: newestDay,
+        matching: find.byIcon(Icons.calendar_today_rounded),
+      ),
+      findsOneWidget,
+    );
+
+    expect(
+      find.descendant(of: cards.at(1), matching: find.text('Deadlift (1)')),
+      findsOneWidget,
+    );
+  });
+
+  testWidgets('HistoryPage expands an exercise inside its day card', (
+    WidgetTester tester,
+  ) async {
+    final harness = await FlexifyTestHarness.create();
+    await harness.database.settings.update().write(
+      testSettings(groupHistory: true),
+    );
+    await insertExerciseSetFixture(
+      harness.database,
+      'Bench press',
+      reps: 3,
+      weight: 40,
+      created: testNow.subtract(const Duration(hours: 1)),
+    );
+    await insertExerciseSetFixture(
+      harness.database,
+      'Bench press',
+      reps: 5,
+      weight: 45,
+      created: testNow.subtract(const Duration(hours: 2)),
+    );
+    await insertExerciseSetFixture(
+      harness.database,
+      'Squat',
+      reps: 8,
+      weight: 60,
+    );
+
+    await pumpHistoryPage(tester, harness);
+
+    final cards = find.byType(Card);
+    expect(cards, findsNWidgets(1));
+    expect(find.text('3 x 40 kg'), findsNothing);
+
+    await tester.tap(find.text('Bench press (2)'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('3 x 40 kg'), findsOneWidget);
+    expect(
+      find.descendant(of: cards, matching: find.text('3 x 40 kg')),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(of: cards, matching: find.text('Squat (1)')),
+      findsOneWidget,
+    );
+    expect(find.byType(Card), findsNWidgets(1));
+  });
+
   testWidgets('HistoryPage tap tile', (WidgetTester tester) async {
     final harness = await FlexifyTestHarness.create();
     await insertExerciseSetFixture(
