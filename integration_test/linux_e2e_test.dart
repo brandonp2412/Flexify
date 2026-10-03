@@ -652,6 +652,15 @@ void main() {
     await _tapTab(tester, 'PlansPage');
     await tester.tap(find.text('New plan'));
     await tester.pumpAndSettle();
+    await tester.enterText(
+      find.byType(SearchBar),
+      'Linux E2E invalid working sets',
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Add “Linux E2E invalid working sets”').last);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Save'));
+    await tester.pumpAndSettle();
 
     await tester.tap(find.byTooltip('Settings').first);
     await tester.pumpAndSettle();
