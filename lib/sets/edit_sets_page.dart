@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:drift/drift.dart';
 import 'package:flexify/animated_fab.dart';
 import 'package:flexify/constants.dart';
@@ -23,6 +25,39 @@ class EditSetsPage extends StatefulWidget {
 }
 
 class _EditSetsPageState extends State<EditSetsPage> {
+  bool _hasUnsavedChanges = false;
+  bool _allowPop = false;
+
+  void _markDirty() {
+    if (_hasUnsavedChanges) return;
+    setState(() => _hasUnsavedChanges = true);
+  }
+
+  Future<void> _confirmDiscard(Object? result) async {
+    final discard = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog.adaptive(
+        title: Text(context.l10n.unsavedChanges),
+        content: Text(context.l10n.discardUnsavedChanges),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text(context.l10n.actionCancel),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: Text(context.l10n.actionDiscard),
+          ),
+        ],
+      ),
+    );
+    if (discard != true || !mounted) return;
+    setState(() => _allowPop = true);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) Navigator.of(context).pop(result);
+    });
+  }
+
   final _reps = TextEditingController();
   final _weight = TextEditingController();
   final _body = TextEditingController();
@@ -52,7 +87,13 @@ class _EditSetsPageState extends State<EditSetsPage> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return Scaffold(
+    return PopScope(
+      canPop: _allowPop || !_hasUnsavedChanges,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop || _allowPop || !_hasUnsavedChanges) return;
+        unawaited(_confirmDiscard(result));
+      },
+      child: Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text(l10n.editSets(widget.ids.length)),
@@ -82,7 +123,9 @@ class _EditSetsPageState extends State<EditSetsPage> {
                         onPressed: () async {
                           Navigator.pop(dialogContext);
                           await deleteExerciseSets(db, widget.ids);
-                          if (context.mounted) Navigator.pop(context);
+                            if (!context.mounted) return;
+                            _allowPop = true;
+                            Navigator.pop(context);
                         },
                       ),
                     ],
@@ -106,6 +149,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
                   hintText: _oldNames,
                 ),
                 textCapitalization: TextCapitalization.sentences,
+                  onChanged: (_) => _markDirty(),
               ),
               ListTile(
                 title: Text(l10n.cardio),
@@ -113,14 +157,10 @@ class _EditSetsPageState extends State<EditSetsPage> {
                     ? const Icon(Icons.sports_gymnastics)
                     : const Icon(Icons.fitness_center),
                 contentPadding: EdgeInsets.zero,
-                onTap: () => setState(() {
-                  _setCardio(!(_cardio ?? false));
-                }),
+                  onTap: () => _setCardio(!(_cardio ?? false)),
                 trailing: Switch(
                   value: _cardio ?? false,
-                  onChanged: (value) => setState(() {
-                    _setCardio(value);
-                  }),
+                    onChanged: _setCardio,
                 ),
               ),
               if (_cardio == true) ...[
@@ -135,6 +175,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
                       decimal: true,
                     ),
                     onTap: () => selectAll(_weight),
+                      onChanged: (_) => _markDirty(),
                     validator: (value) {
                       if (value == null || value.isEmpty) return null;
                       if (parseDisplayNumber(context, value) == null)
@@ -153,6 +194,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
                       decimal: true,
                     ),
                     onTap: () => selectAll(_distance),
+                      onChanged: (_) => _markDirty(),
                     validator: (value) {
                       if (value == null) return null;
                       if (parseDisplayNumber(context, value) == null)
@@ -174,6 +216,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
                           decimal: false,
                         ),
                         onTap: () => selectAll(_minutes),
+                          onChanged: (_) => _markDirty(),
                         textInputAction: TextInputAction.next,
                         validator: (value) {
                           if (value == null || value.isEmpty) return null;
@@ -195,6 +238,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
                           decimal: false,
                         ),
                         onTap: () => selectAll(_seconds),
+                          onChanged: (_) => _markDirty(),
                         textInputAction: TextInputAction.next,
                         validator: (value) {
                           if (value == null || value.isEmpty) return null;
@@ -217,6 +261,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
                     decimal: true,
                   ),
                   onTap: () => selectAll(_incline),
+                    onChanged: (_) => _markDirty(),
                   validator: (value) {
                     if (value == null) return null;
                     if (double.tryParse(value) == null)
@@ -236,6 +281,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
                     decimal: true,
                   ),
                   onTap: () => selectAll(_reps),
+                    onChanged: (_) => _markDirty(),
                   validator: (value) {
                     if (value == null || value.isEmpty) return null;
                     if (parseDisplayNumber(context, value) == null)
@@ -254,6 +300,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
                     decimal: true,
                   ),
                   onTap: () => selectAll(_weight),
+                    onChanged: (_) => _markDirty(),
                   validator: (value) {
                     if (value == null || value.isEmpty) return null;
                     if (parseDisplayNumber(context, value) == null)
@@ -276,6 +323,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
                       decimal: true,
                     ),
                     onTap: () => selectAll(_body),
+                      onChanged: (_) => _markDirty(),
                     validator: (value) {
                       if (value == null || value.isEmpty) return null;
                       if (parseDisplayNumber(context, value) == null)
@@ -284,7 +332,8 @@ class _EditSetsPageState extends State<EditSetsPage> {
                     },
                   ),
                 ),
-                selector: (context, settings) => settings.value.showBodyWeight,
+                  selector: (context, settings) =>
+                      settings.value.showBodyWeight,
               ),
               const SizedBox(height: 12),
               Selector<SettingsState, bool>(
@@ -295,6 +344,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
                     initialValue: _unit,
                     items: _getUnitItems(context),
                     onChanged: (String? newValue) {
+                        _markDirty();
                       setState(() {
                         _unit = newValue!;
                       });
@@ -305,7 +355,8 @@ class _EditSetsPageState extends State<EditSetsPage> {
               ),
               const SizedBox(height: 12),
               Selector<SettingsState, bool>(
-                selector: (context, settings) => settings.value.showCategories,
+                  selector: (context, settings) =>
+                      settings.value.showCategories,
                 builder: (context, showCategories, child) => Visibility(
                   visible: showCategories,
                   child: StreamBuilder<List<String>>(
@@ -321,8 +372,10 @@ class _EditSetsPageState extends State<EditSetsPage> {
                               )
                               .toList() ??
                           [],
-                      onSelected: (category) =>
-                          setState(() => _category = category),
+                        onSelected: (category) {
+                          _markDirty();
+                          setState(() => _category = category);
+                        },
                       fieldViewBuilder: (context, controller, focusNode, _) =>
                           TextFormField(
                             controller: controller,
@@ -342,9 +395,13 @@ class _EditSetsPageState extends State<EditSetsPage> {
                                 ),
                               ),
                             ),
-                            onChanged: (value) => setState(
-                              () => _category = value.isEmpty ? null : value,
-                            ),
+                              onChanged: (value) {
+                                _markDirty();
+                                setState(
+                                  () =>
+                                      _category = value.isEmpty ? null : value,
+                                );
+                              },
                           ),
                     ),
                   ),
@@ -370,7 +427,8 @@ class _EditSetsPageState extends State<EditSetsPage> {
                     onTap: () => _selectDate(),
                   );
                 },
-                selector: (context, settings) => settings.value.longDateFormat,
+                  selector: (context, settings) =>
+                      settings.value.longDateFormat,
               ),
             ],
           ),
@@ -380,6 +438,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
         onPressed: save,
         label: Text(l10n.actionUpdate),
         icon: const Icon(Icons.sync),
+      ),
       ),
     );
   }
@@ -395,8 +454,11 @@ class _EditSetsPageState extends State<EditSetsPage> {
   }
 
   void _setCardio(bool value) {
+    _markDirty();
+    setState(() {
     _cardio = value;
     if (!value && !_isWeightUnit(_unit)) _unit = 'kg';
+    });
   }
 
   bool _isWeightUnit(String? value) =>
@@ -489,6 +551,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
     );
 
     if (pickedTime != null && mounted) {
+      _markDirty();
       setState(() {
         _created = DateTime(
           pickedDate.year,
@@ -503,8 +566,6 @@ class _EditSetsPageState extends State<EditSetsPage> {
 
   Future<void> save() async {
     if (!_key.currentState!.validate()) return;
-
-    Navigator.pop(context);
 
     _category = _category?.trim();
     if (_category?.isEmpty ?? false) _category = null;
@@ -577,6 +638,10 @@ class _EditSetsPageState extends State<EditSetsPage> {
         exerciseId: exercise.id,
       );
     }
+
+    if (!mounted) return;
+    _allowPop = true;
+    Navigator.pop(context);
   }
 
   Future<void> _selectDate() async {

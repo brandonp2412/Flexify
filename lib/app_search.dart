@@ -103,10 +103,19 @@ class _AppSearchState extends State<AppSearch> {
       trailingMain = const SizedBox.shrink(key: ValueKey('emptyWidget'));
     }
 
+    final searchPadding = isDesktopLayout(context)
+        ? const EdgeInsets.fromLTRB(24, 16, 24, 0)
+        : const EdgeInsets.fromLTRB(16, 16, 16, 0);
+
     return ResponsiveContent(
       maxWidth: 760,
-      desktopPadding: const EdgeInsets.fromLTRB(24, 16, 24, 0),
-      mobilePadding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+      desktopPadding: EdgeInsets.zero,
+      mobilePadding: EdgeInsets.zero,
+      child: GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onTap: _focusNode.requestFocus,
+        child: Padding(
+          padding: searchPadding,
       child: SearchBar(
         hintText: widget.hintText ?? context.l10n.searchHint,
         controller: _ctrl,
@@ -160,7 +169,9 @@ class _AppSearchState extends State<AppSearch> {
                   final RenderBox button =
                       context.findRenderObject() as RenderBox;
                   final RenderBox overlay =
-                      Navigator.of(context).overlay!.context.findRenderObject()
+                          Navigator.of(
+                                context,
+                              ).overlay!.context.findRenderObject()
                           as RenderBox;
                   final RelativeRect position = RelativeRect.fromRect(
                     Rect.fromPoints(
@@ -245,10 +256,12 @@ class _AppSearchState extends State<AppSearch> {
                               Navigator.pop(context);
                               await Navigator.of(context).push(
                                 FlexPageRoute(
-                                  builder: (context) => const SettingsPage(),
+                                      builder: (context) =>
+                                          const SettingsPage(),
                                 ),
                               );
-                              if (widget.onRefresh != null) widget.onRefresh!();
+                                  if (widget.onRefresh != null)
+                                    widget.onRefresh!();
                             },
                           ),
                         ),
@@ -259,6 +272,8 @@ class _AppSearchState extends State<AppSearch> {
             ),
           ),
         ],
+      ),
+        ),
       ),
     );
   }

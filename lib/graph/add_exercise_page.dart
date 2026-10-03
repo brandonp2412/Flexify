@@ -67,9 +67,6 @@ class _AddExercisePageState extends State<AddExercisePage> {
   void initState() {
     super.initState();
     if (widget.name != null) _nameCtrl.text = widget.name!;
-
-    _nameCtrl.addListener(_markDirty);
-    _hasUnsavedChanges = false;
   }
 
   @override
@@ -99,6 +96,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
                   ),
                   textCapitalization: TextCapitalization.sentences,
                   autofocus: true,
+                  onChanged: (_) => _markDirty(),
                   validator: (value) => value?.isNotEmpty == true
                       ? null
                       : context.l10n.requiredField,
@@ -133,6 +131,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
                     ),
                   ],
                   onChanged: (String? newValue) {
+                    _markDirty();
                     setState(() {
                       _unit = newValue!;
                     });
@@ -164,6 +163,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
                           if (_image != null)
                             TextButton.icon(
                               onPressed: () {
+                                _markDirty();
                                 setState(() {
                                   _image = null;
                                 });
@@ -209,6 +209,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
   }
 
   void _setCardio(bool value) {
+    _markDirty();
     setState(() {
       _cardio = value;
       if (value && _isWeightUnit(_unit)) {
@@ -227,11 +228,13 @@ class _AddExercisePageState extends State<AddExercisePage> {
       value == 'kg' || value == 'lb' || value == 'stone';
 
   void pick() async {
-    FilePickerResult? result = await FilePicker.pickFiles();
-    if (result?.files.single == null || !mounted) return;
+    final result = await FilePicker.pickFiles();
+    final path = result?.files.single.path;
+    if (path == null || !mounted) return;
 
+    _markDirty();
     setState(() {
-      _image = result?.files.single.path;
+      _image = path;
     });
   }
 
@@ -252,6 +255,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
     talker.info('Created exercise definition');
     if (!mounted) return;
 
+    _allowPop = true;
     Navigator.pop(context, exercise);
   }
 }

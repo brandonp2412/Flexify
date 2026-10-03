@@ -95,6 +95,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
                   textInputAction: TextInputAction.next,
                   decoration: InputDecoration(labelText: context.l10n.newName),
                   textCapitalization: TextCapitalization.sentences,
+                  onChanged: (_) => _markDirty(),
                 ),
                 const SizedBox(height: 12.0),
                 Row(
@@ -108,6 +109,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
                         ),
                         keyboardType: TextInputType.number,
                         onTap: () => selectAll(minutes),
+                        onChanged: (_) => _markDirty(),
                         validator: (value) {
                           if (value == null || value.isEmpty) return null;
                           if (int.tryParse(value) == null)
@@ -128,6 +130,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
                         onTap: () {
                           selectAll(seconds);
                         },
+                        onChanged: (_) => _markDirty(),
                         validator: (value) {
                           if (value == null || value.isEmpty) return null;
                           if (int.tryParse(value) == null)
@@ -167,6 +170,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
                                   )
                                   .toList(),
                               onChanged: (value) {
+                                _markDirty();
                                 setState(() {
                                   category = value!;
                                 });
@@ -190,6 +194,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
                     ...cardioUnitMenuItems(context.l10n),
                   ],
                   onChanged: (value) {
+                    _markDirty();
                     setState(() {
                       unit = value;
                     });
@@ -227,6 +232,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
                               if (image != null)
                                 TextButton.icon(
                                   onPressed: () {
+                                    _markDirty();
                                     setState(() {
                                       image = null;
                                     });
@@ -277,7 +283,6 @@ class _EditGraphPageState extends State<EditGraphPage> {
   }
 
   Future<void> doUpdate() async {
-    _hasUnsavedChanges = false;
     Duration? duration;
     if (int.tryParse(minutes.text) != null && int.tryParse(minutes.text)! > 0 ||
         int.tryParse(seconds.text) != null && int.tryParse(seconds.text)! > 0) {
@@ -307,9 +312,6 @@ class _EditGraphPageState extends State<EditGraphPage> {
   @override
   void initState() {
     super.initState();
-    name.addListener(_markDirty);
-    minutes.addListener(_markDirty);
-    seconds.addListener(_markDirty);
 
     getExerciseByName(widget.name).then((exercise) async {
       if (exercise == null || !mounted) return;
@@ -334,11 +336,13 @@ class _EditGraphPageState extends State<EditGraphPage> {
   }
 
   void pick() async {
-    FilePickerResult? result = await FilePicker.pickFiles();
-    if (result?.files.single == null || !mounted) return;
+    final result = await FilePicker.pickFiles();
+    final path = result?.files.single.path;
+    if (path == null || !mounted) return;
 
+    _markDirty();
     setState(() {
-      image = result?.files.single.path;
+      image = path;
     });
   }
 
@@ -382,10 +386,12 @@ class _EditGraphPageState extends State<EditGraphPage> {
     await doUpdate();
 
     if (!mounted) return;
+    _allowPop = true;
     Navigator.pop(context, name.text);
   }
 
   void _setCardio(bool value) {
+    _markDirty();
     setState(() {
       cardio = value;
       if (!value && unit != null && !_isWeightUnit(unit!)) unit = 'kg';

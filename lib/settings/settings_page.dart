@@ -47,6 +47,7 @@ class _SettingsPageState extends State<SettingsPage>
     super.build(context);
     List<Widget> filtered = [];
     final settings = context.watch<SettingsState>();
+    final desktop = isDesktopLayout(context);
     if (_searchCtrl.text.isNotEmpty) {
       filtered.addAll(
         getAppearanceSettings(context, _searchCtrl.text, settings),
@@ -117,11 +118,18 @@ class _SettingsPageState extends State<SettingsPage>
       ),
       body: ResponsiveContent(
         maxWidth: 1120,
-        desktopPadding: const EdgeInsets.fromLTRB(32, 12, 32, 28),
-        mobilePadding: const EdgeInsets.all(8),
+        desktopPadding: EdgeInsets.zero,
+        mobilePadding: EdgeInsets.zero,
         child: Column(
           children: <Widget>[
-            SearchBar(
+            GestureDetector(
+              behavior: HitTestBehavior.translucent,
+              onTap: _focusNode.requestFocus,
+              child: Padding(
+                padding: desktop
+                    ? const EdgeInsets.fromLTRB(32, 12, 32, 0)
+                    : const EdgeInsets.fromLTRB(8, 8, 8, 0),
+                child: SearchBar(
               hintText: context.l10n.searchHint,
               controller: _searchCtrl,
               focusNode: _focusNode,
@@ -132,8 +140,14 @@ class _SettingsPageState extends State<SettingsPage>
               onChanged: (_) => setState(() {}),
               leading: const Icon(Icons.search),
             ),
-            SizedBox(height: isDesktopLayout(context) ? 20 : 8),
+              ),
+            ),
+            SizedBox(height: desktop ? 20 : 8),
             Expanded(
+              child: Padding(
+                padding: desktop
+                    ? const EdgeInsets.fromLTRB(32, 0, 32, 28)
+                    : const EdgeInsets.fromLTRB(8, 0, 8, 8),
               child: _searchCtrl.text.isNotEmpty
                   ? ListView(
                       padding: EdgeInsets.only(
@@ -204,7 +218,8 @@ class _SettingsPageState extends State<SettingsPage>
                                               .textTheme
                                               .bodySmall
                                               ?.copyWith(
-                                                color: colors.onSurfaceVariant,
+                                                  color:
+                                                      colors.onSurfaceVariant,
                                               ),
                                         ),
                                       ],
@@ -230,6 +245,7 @@ class _SettingsPageState extends State<SettingsPage>
                           )
                           .toList(),
                     ),
+            ),
             ),
           ],
         ),

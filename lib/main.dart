@@ -56,28 +56,6 @@ PageTransitionsTheme _pageTransitionsTheme() {
   );
 }
 
-/// Gives touch input the same tap-outside behavior Flutter provides for
-/// mouse input: tapping away from an editable field releases its focus.
-class DismissKeyboardOnTapOutside extends StatelessWidget {
-  final Widget child;
-
-  const DismissKeyboardOnTapOutside({super.key, required this.child});
-
-  @override
-  Widget build(BuildContext context) => Actions(
-    actions: {
-      EditableTextTapOutsideIntent:
-          CallbackAction<EditableTextTapOutsideIntent>(
-            onInvoke: (intent) {
-              intent.focusNode.unfocus();
-              return null;
-            },
-          ),
-    },
-    child: child,
-  );
-}
-
 void _syncBackupLocalizations(AppLocalizations l10n) {
   if (kIsWeb || defaultTargetPlatform != TargetPlatform.android) return;
   if (_lastSyncedBackupLocale == l10n.localeName) return;
@@ -356,11 +334,16 @@ class _KeyboardUnfocusWrapperState extends State<KeyboardUnfocusWrapper>
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        FocusManager.instance.primaryFocus?.unfocus();
+    return Actions(
+      actions: {
+        EditableTextTapOutsideIntent:
+            CallbackAction<EditableTextTapOutsideIntent>(
+              onInvoke: (intent) {
+                intent.focusNode.unfocus();
+                return null;
+              },
+            ),
       },
-      behavior: HitTestBehavior.translucent,
       child: widget.child,
     );
   }
