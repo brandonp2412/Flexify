@@ -17,7 +17,7 @@ class ExerciseModal extends StatefulWidget {
   final int planExerciseId;
   final int exerciseId;
   final String exerciseName;
-  final int workoutId;
+  final int? workoutId;
   final bool hasData;
   final Function() onSelect;
 
@@ -164,9 +164,11 @@ class _ExerciseModalState extends State<ExerciseModal> {
             title: Text(context.l10n.actionEdit),
             onTap: () async {
               Navigator.pop(context);
+              final workoutId = widget.workoutId;
+              if (workoutId == null) return;
               final gymSet = await getLatestLegacyWorkoutSet(
                 db,
-                workoutId: widget.workoutId,
+                workoutId: workoutId,
                 exerciseId: widget.exerciseId,
               );
               if (gymSet == null) return;
@@ -185,9 +187,11 @@ class _ExerciseModalState extends State<ExerciseModal> {
             title: Text(context.l10n.actionUndo),
             onTap: () async {
               Navigator.pop(context);
+              final workoutId = widget.workoutId;
+              if (workoutId == null) return;
               final gymSet = await getLatestLegacyWorkoutSet(
                 db,
-                workoutId: widget.workoutId,
+                workoutId: workoutId,
                 exerciseId: widget.exerciseId,
               );
               if (gymSet == null) return;

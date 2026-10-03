@@ -31,8 +31,9 @@ import 'package:provider/provider.dart';
 
 class StartPlanPage extends StatefulWidget {
   final Plan plan;
+  final List<PlanExerciseEntry>? initialExercises;
 
-  const StartPlanPage({super.key, required this.plan});
+  const StartPlanPage({super.key, required this.plan, this.initialExercises});
 
   @override
   createState() => _StartPlanPageState();
@@ -66,6 +67,7 @@ class _StartPlanPageState extends State<StartPlanPage>
   Stream<List<PlanExerciseEntry>>? _stream;
   Stream<List<GymCount>>? _gymCountsStream;
   Workout? _workout;
+  Future<Workout>? _workoutFuture;
   StreamSubscription<Plan?>? _planSub;
   late String _unit = 'kg';
   late String _title = widget.plan.days;
@@ -73,10 +75,11 @@ class _StartPlanPageState extends State<StartPlanPage>
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
+    return StreamBuilder<List<PlanExerciseEntry>>(
       stream: _stream,
+      initialData: widget.initialExercises,
       builder: (context, snapshot) {
-        if (snapshot.data == null || _workout == null) {
+        if (snapshot.data == null) {
           return Scaffold(
             appBar: AppBar(
               title: Text(_displayTitle(context)),
@@ -126,7 +129,7 @@ class _StartPlanPageState extends State<StartPlanPage>
                     onSelect: select,
                     counts: counts,
                     plan: widget.plan,
-                    workoutId: _workout!.id,
+                    workoutId: _workout?.id,
                   );
 
             return Scaffold(
@@ -200,7 +203,8 @@ class _StartPlanPageState extends State<StartPlanPage>
                                         ...cardioFields(snapshot, counts),
                                       unitSelector(),
                                       notesField(snapshot, counts),
-                                      if (snapshot.data!.isNotEmpty &&
+                                      if (_workout != null &&
+                                          snapshot.data!.isNotEmpty &&
                                           _selected <
                                               snapshot.data!.length) ...[
                                         const SizedBox(height: 16),
@@ -245,6 +249,7 @@ class _StartPlanPageState extends State<StartPlanPage>
                   FloatingActionButtonLocation.centerFloat,
               floatingActionButton:
                   desktop ||
+                      _workout == null ||
                       snapshot.data!.isEmpty ||
                       _selected >= snapshot.data!.length
                   ? null
@@ -583,6 +588,13 @@ class _StartPlanPageState extends State<StartPlanPage>
     final workout = _workout;
     if (workout != null) {
       unawaited(finishWorkout(db, workout.id));
+    } else {
+      final pendingWorkout = _workoutFuture;
+      if (pendingWorkout != null) {
+        unawaited(
+          pendingWorkout.then((workout) => finishWorkout(db, workout.id)),
+        );
+      }
     }
 
     _reps.dispose();
@@ -626,13 +638,25 @@ class _StartPlanPageState extends State<StartPlanPage>
   Future<Exercise?> getExerciseTemplate(PlanExerciseEntry entry) async =>
       entry.exercise;
 
+  Future<Workout> _ensureWorkout() async {
+    final current = _workout;
+    if (current != null) return current;
+
+    final workout = await (_workoutFuture ??= resumeOrStartWorkout(
+      db,
+      widget.plan.id,
+    ));
+    if (mounted && _workout == null) {
+      setState(() {
+        _workout = workout;
+        _gymCountsStream = watchGymCounts(widget.plan.id, workout.id);
+      });
+    }
+    return workout;
+  }
+
   Future<void> _initializeWorkout() async {
-    final workout = await resumeOrStartWorkout(db, widget.plan.id);
-    if (!mounted) return;
-    setState(() {
-      _workout = workout;
-      _gymCountsStream = watchGymCounts(widget.plan.id, workout.id);
-    });
+    await _ensureWorkout();
   }
 
   @override
@@ -644,9 +668,20 @@ class _StartPlanPageState extends State<StartPlanPage>
     _titleFromDays = widget.plan.title?.isNotEmpty != true;
     _title = _titleFromDays ? widget.plan.days : widget.plan.title!;
 
-    _bindPlanStream();
-    unawaited(_loadExercises());
-    unawaited(_initializeWorkout());
+    final initialExercises = widget.initialExercises;
+    if (initialExercises != null && initialExercises.isNotEmpty) {
+      final exercise = initialExercises.first.exercise;
+      _cardio = exercise.kind == 'cardio';
+      _unit = exercise.displayUnit;
+      _image = exercise.image;
+    }
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      _bindPlanStream();
+      unawaited(_loadExercises());
+      unawaited(_initializeWorkout());
+    });
   }
 
   void _reloadDatabaseStreams() {
@@ -732,8 +767,8 @@ class _StartPlanPageState extends State<StartPlanPage>
     if (!_key.currentState!.validate()) return;
     if (snapshot.data == null || snapshot.data!.isEmpty) return;
     if (_selected >= snapshot.data!.length) return;
-    final workout = _workout;
-    if (workout == null || !mounted) return;
+    final workout = await _ensureWorkout();
+    if (!mounted) return;
 
     final entry = snapshot.data![_selected];
     final exerciseId = entry.exercise.id;

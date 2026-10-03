@@ -21,7 +21,7 @@ class StartList extends StatefulWidget {
   final Future<void> Function(int) onSelect;
   final List<GymCount> counts;
   final Plan plan;
-  final int workoutId;
+  final int? workoutId;
 
   const StartList({
     super.key,
@@ -60,9 +60,11 @@ class _StartListState extends State<StartList> {
         lastTap = (index: index, dateTime: DateTime.now());
       });
 
+    final workoutId = widget.workoutId;
+    if (workoutId == null) return;
     final gymSet = await getLatestLegacyWorkoutSet(
       db,
-      workoutId: widget.workoutId,
+      workoutId: workoutId,
       exerciseId: widget.exercises[index].exercise.id,
     );
     if (gymSet == null) return;

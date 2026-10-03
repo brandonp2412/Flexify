@@ -61,6 +61,48 @@ void main() {
     expect(find.byType(AppBar), findsOneWidget);
   });
 
+  testWidgets('cached plan exercises render on the first frame', (
+    WidgetTester tester,
+  ) async {
+    final harness = await FlexifyTestHarness.create();
+    final database = harness.database;
+
+    final id = await database.plans.insertOne(
+      planFixture(title: 'Cached plan'),
+    );
+    await insertPlanExerciseFixture(
+      database,
+      planId: id,
+      exercise: 'Instant bench press',
+    );
+    final plan =
+        await (database.plans.select()..where((plan) => plan.id.equals(id)))
+            .getSingle();
+    final planExercise =
+        await (database.planExercises.select()
+              ..where((entry) => entry.planId.equals(id))
+              ..limit(1))
+            .getSingle();
+    final exercise =
+        await (database.exercises.select()
+              ..where((entry) => entry.id.equals(planExercise.exerciseId))
+              ..limit(1))
+            .getSingle();
+    final exercises = [
+      PlanExerciseEntry(planExercise: planExercise, exercise: exercise),
+    ];
+
+    await harness.pump(
+      tester,
+      StartPlanPage(plan: plan, initialExercises: exercises),
+      surfaceSize: const Size(1200, 800),
+    );
+
+    expect(find.byType(CircularProgressIndicator), findsNothing);
+    expect(find.text('Instant bench press'), findsWidgets);
+    expect(find.text('Cached plan'), findsOneWidget);
+  });
+
   testWidgets(
     'StartPlanPage rep estimation does not crash when no RPM data for exercise',
     (WidgetTester tester) async {

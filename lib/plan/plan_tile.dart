@@ -39,6 +39,7 @@ class PlanTile extends StatefulWidget {
 
 class _PlanTileState extends State<PlanTile> {
   late Stream<List<PlanExerciseEntry>> _exercisesStream;
+  List<PlanExerciseEntry>? _latestExercises;
 
   @override
   void initState() {
@@ -54,7 +55,10 @@ class _PlanTileState extends State<PlanTile> {
   }
 
   void _onDbChanged() {
-    setState(() => _exercisesStream = _getExercises());
+    setState(() {
+      _latestExercises = null;
+      _exercisesStream = _getExercises();
+    });
   }
 
   Stream<List<PlanExerciseEntry>> _getExercises() =>
@@ -151,6 +155,7 @@ class _PlanTileState extends State<PlanTile> {
             stream: _exercisesStream,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
+                _latestExercises = snapshot.data!;
                 return Text(
                   snapshot.data!.map((e) => e.exercise.name).join('  •  '),
                   maxLines: desktop ? 2 : null,
@@ -228,7 +233,10 @@ class _PlanTileState extends State<PlanTile> {
           widget.navigatorKey.currentState!.push(
             FlexPageRoute(
               settings: RouteSettings(name: 'start-plan:${widget.plan.id}'),
-              builder: (context) => StartPlanPage(plan: widget.plan),
+              builder: (context) => StartPlanPage(
+                plan: widget.plan,
+                initialExercises: _latestExercises,
+              ),
             ),
           );
         },
