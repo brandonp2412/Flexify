@@ -266,8 +266,9 @@ class _StartListState extends State<StartList> {
                           trail,
                           const SizedBox(width: 4),
                           IconButton(
-                            tooltip: MaterialLocalizations.of(context)
-                                .moreButtonTooltip,
+                            tooltip: MaterialLocalizations.of(
+                              context,
+                            ).moreButtonTooltip,
                             onPressed: showActions,
                             icon: const Icon(Icons.more_horiz_rounded),
                           ),

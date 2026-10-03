@@ -236,9 +236,9 @@ Future<List<ExerciseSetView>> _setsMatching(String search) =>
     getExerciseSets(app.db, search: search);
 
 Future<List<ExerciseSetView>> _setsForPlan(int planId) async =>
-    (await getExerciseSets(app.db))
-        .where((set) => set.planId == planId)
-        .toList(growable: false);
+    (await getExerciseSets(
+      app.db,
+    )).where((set) => set.planId == planId).toList(growable: false);
 
 Future<Exercise> _exerciseNamed(String name) =>
     (app.db.exercises.select()..where((row) => row.name.equals(name)))
@@ -1096,9 +1096,9 @@ void main() {
     await _tapSaveAction(tester);
     await tester.pumpAndSettle();
 
-    final rows = (await _setsNamed('Barbell bench press'))
-        .where((set) => set.planId == 1)
-        .toList();
+    final rows = (await _setsNamed(
+      'Barbell bench press',
+    )).where((set) => set.planId == 1).toList();
     expect(rows, hasLength(1));
     expect(rows.single.reps, 6);
     expect(rows.single.weight, 83);
@@ -1995,8 +1995,9 @@ void main() {
       weight: 82,
       created: DateTime(2026, 9, 1, 12),
     );
-    final timeAxisBefore = (await _exerciseNamed('Linux E2E strength detail'))
-        .graphTimeBasedXAxis;
+    final timeAxisBefore = (await _exerciseNamed(
+      'Linux E2E strength detail',
+    )).graphTimeBasedXAxis;
     await tester.pumpAndSettle();
     await _tapTab(tester, 'GraphsPage');
     await tester.enterText(find.byType(SearchBar), 'Linux E2E strength detail');

@@ -333,8 +333,8 @@ class GraphsPageState extends State<GraphsPage>
                                               _search.trim(),
                                             ),
                                       actionIcon: Icons.add_rounded,
-                                      onAction: () => Navigator.of(context)
-                                          .push(
+                                      onAction: () =>
+                                          Navigator.of(context).push(
                                             FlexPageRoute(
                                               builder: (context) =>
                                                   AddExercisePage(
@@ -531,8 +531,9 @@ class GraphsPageState extends State<GraphsPage>
                     leading: const Icon(Icons.language),
                     title: Text(
                       context.l10n.globalProgress,
-                      style: Theme.of(context).textTheme.titleMedium
-                          ?.copyWith(fontWeight: FontWeight.w600),
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                     subtitle: Text(context.l10n.chartGroupedByCategory),
                     trailing: const Icon(Icons.chevron_right_rounded),
@@ -676,8 +677,9 @@ class GraphsPageState extends State<GraphsPage>
                     title: Text(
                       context.l10n.globalProgress,
                       style: isDesktopLayout(context)
-                          ? Theme.of(context).textTheme.titleMedium
-                                ?.copyWith(fontWeight: FontWeight.w600)
+                          ? Theme.of(context).textTheme.titleMedium?.copyWith(
+                              fontWeight: FontWeight.w600,
+                            )
                           : null,
                     ),
                     subtitle: Text(context.l10n.chartGroupedByCategory),

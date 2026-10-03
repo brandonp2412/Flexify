@@ -804,8 +804,9 @@ class _StartPlanPageState extends State<StartPlanPage>
         !kIsWeb &&
         defaultTargetPlatform == TargetPlatform.android &&
         mounted) {
-      await Navigator.of(context)
-          .push(FlexPageRoute(builder: (context) => const PermissionsPage()));
+      await Navigator.of(
+        context,
+      ).push(FlexPageRoute(builder: (context) => const PermissionsPage()));
     }
 
     if (!mounted) return;

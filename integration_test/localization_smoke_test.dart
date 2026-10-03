@@ -128,8 +128,9 @@ void main() {
     expect(materialApp.locale, const Locale('de'));
 
     final context = tester.element(find.byType(HomePage));
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (_) => StartPlanPage(plan: plan)));
+    Navigator.of(
+      context,
+    ).push(MaterialPageRoute(builder: (_) => StartPlanPage(plan: plan)));
     await tester.pumpAndSettle();
 
     final l10n = lookupAppLocalizations(const Locale('de'));
