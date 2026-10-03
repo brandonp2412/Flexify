@@ -598,9 +598,8 @@ class _StrengthPageState extends State<StrengthPage> {
   Future<void> touchLine(int index) async {
     if (DateTime.now().difference(lastTap) >=
         const Duration(milliseconds: 300)) {
-      return setState(() {
-        lastTap = DateTime.now();
-      });
+      lastTap = DateTime.now();
+      return;
     }
 
     if (widget.bodyWeight || index < 0 || index >= _data.length) return;

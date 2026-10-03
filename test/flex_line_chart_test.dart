@@ -111,6 +111,99 @@ void main() {
     await tester.pump();
   });
 
+  testWidgets('tooltip stays active when selection rebuilds its parent', (
+    WidgetTester tester,
+  ) async {
+    final harness = await FlexifyTestHarness.create();
+    final tooltipIndexes = <int>[];
+
+    await harness.pump(
+      tester,
+      StatefulBuilder(
+        builder: (context, setState) => Scaffold(
+          body: SizedBox(
+            width: 300,
+            height: 200,
+            child: FlexLineChart(
+              points: const [
+                FlexLineChartPoint(0, 10, column: 0),
+                FlexLineChartPoint(1, 20, column: 1),
+                FlexLineChartPoint(2, 15, column: 2),
+              ],
+              showTrendLine: false,
+              hideBottom: true,
+              hideLeft: true,
+              tooltipText: (index) {
+                tooltipIndexes.add(index);
+                return 'Point $index';
+              },
+              onPointSelected: (_) => setState(() {}),
+            ),
+          ),
+        ),
+      ),
+    );
+
+    final finder = find.byType(FlexLineChart);
+    final topLeft = tester.getTopLeft(finder);
+    tooltipIndexes.clear();
+
+    final gesture = await tester.startGesture(topLeft + const Offset(150, 180));
+    await tester.pump();
+
+    expect(tooltipIndexes, contains(1));
+
+    await gesture.up();
+    await tester.pump();
+  });
+
+  testWidgets('drag updates every crossed tooltip on the next frame', (
+    WidgetTester tester,
+  ) async {
+    final harness = await FlexifyTestHarness.create();
+    final tooltipIndexes = <int>[];
+
+    await harness.pump(
+      tester,
+      Scaffold(
+        body: SizedBox(
+          width: 300,
+          height: 200,
+          child: FlexLineChart(
+            points: const [
+              FlexLineChartPoint(0, 10, column: 0),
+              FlexLineChartPoint(1, 20, column: 1),
+              FlexLineChartPoint(2, 15, column: 2),
+              FlexLineChartPoint(3, 25, column: 3),
+            ],
+            showTrendLine: false,
+            hideBottom: true,
+            hideLeft: true,
+            tooltipText: (index) {
+              tooltipIndexes.add(index);
+              return 'Point $index';
+            },
+          ),
+        ),
+      ),
+    );
+
+    final finder = find.byType(FlexLineChart);
+    final topLeft = tester.getTopLeft(finder);
+    final gesture = await tester.startGesture(topLeft + const Offset(16, 180));
+    await tester.pump();
+
+    for (final (x, expectedIndex) in [(105.0, 1), (195.0, 2), (284.0, 3)]) {
+      tooltipIndexes.clear();
+      await gesture.moveTo(topLeft + Offset(x, 180));
+      await tester.pump();
+      expect(tooltipIndexes, contains(expectedIndex));
+    }
+
+    await gesture.up();
+    await tester.pump();
+  });
+
   testWidgets('long press then horizontal drag scrubs the tooltip', (
     WidgetTester tester,
   ) async {

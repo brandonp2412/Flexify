@@ -190,9 +190,8 @@ class _CardioPageState extends State<CardioPage> {
   Future<void> touchLine(int index) async {
     if (DateTime.now().difference(lastTap) >=
         const Duration(milliseconds: 300)) {
-      return setState(() {
-        lastTap = DateTime.now();
-      });
+      lastTap = DateTime.now();
+      return;
     }
 
     if (index < 0 || index >= _data.length) return;

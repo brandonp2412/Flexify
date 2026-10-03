@@ -274,7 +274,8 @@ class _FlexLineChartInteractionState extends State<_FlexLineChartInteraction> {
   @override
   void didUpdateWidget(_FlexLineChartInteraction oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (!identical(oldWidget.renderer, widget.renderer)) _clear();
+    final index = _activeIndex.value;
+    if (index != null && !widget.renderer.hasIndex(index)) _clear();
   }
 
   @override
@@ -295,27 +296,18 @@ class _FlexLineChartInteractionState extends State<_FlexLineChartInteraction> {
         return MouseRegion(
           onHover: (event) => _activate(event.localPosition, scene),
           onExit: (_) => _clear(),
-          child: GestureDetector(
+          child: Listener(
             behavior: HitTestBehavior.opaque,
-            onPanDown: (details) {
-              _activate(details.localPosition, scene);
-              _select(details.localPosition, scene);
+            onPointerDown: (event) {
+              _activate(event.localPosition, scene);
+              _select(event.localPosition, scene);
             },
-            onPanStart: (details) => _activate(details.localPosition, scene),
-            onPanUpdate: (details) => _activate(details.localPosition, scene),
-            onPanEnd: (_) => _clear(),
-            onPanCancel: _clear,
-            onTapDown: (details) => _activate(details.localPosition, scene),
-            onTapUp: (details) {
-              _activate(details.localPosition, scene);
+            onPointerMove: (event) => _activate(event.localPosition, scene),
+            onPointerUp: (event) {
+              _activate(event.localPosition, scene);
               if (!_keepTooltipOnTapUp) _clear();
             },
-            onTapCancel: _clear,
-            onLongPressStart: (details) =>
-                _activate(details.localPosition, scene),
-            onLongPressMoveUpdate: (details) =>
-                _activate(details.localPosition, scene),
-            onLongPressEnd: (_) => _clear(),
+            onPointerCancel: (_) => _clear(),
             child: Stack(
               fit: StackFit.expand,
               children: [
@@ -471,6 +463,16 @@ class _FlexLineChartRenderer extends ChartRenderer
   List<FlexLineChartPoint> get _allPoints => [
     for (final line in series) ...line.points,
   ];
+
+  bool hasIndex(int index) {
+    for (final line in series) {
+      for (var pointIndex = 0; pointIndex < line.points.length; pointIndex++) {
+        if ((line.points[pointIndex].column ?? pointIndex) == index)
+          return true;
+      }
+    }
+    return false;
+  }
 
   (double, double) get _xBounds {
     final points = _allPoints;
