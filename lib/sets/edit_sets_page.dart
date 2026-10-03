@@ -421,11 +421,8 @@ class _EditSetsPageState extends State<EditSetsPage> {
     super.initState();
     final settings = context.read<SettingsState>().value;
 
-    getExerciseSets(db).then((allSets) {
-      final exerciseSets = allSets
-          .where((exerciseSet) => widget.ids.contains(exerciseSet.id))
-          .take(3)
-          .toList();
+    getExerciseSetsByIds(db, widget.ids).then((allSets) {
+      final exerciseSets = allSets.take(3).toList();
       if (exerciseSets.isEmpty) return;
       setState(() {
         _cardio = exerciseSets.first.cardio;
@@ -525,9 +522,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
         : parseDisplayNumber(context, _distance.text);
     if (_category != null) await createCategory(_category!);
 
-    final selected = (await getExerciseSets(db))
-        .where((set) => widget.ids.contains(set.id))
-        .toList();
+    final selected = await getExerciseSetsByIds(db, widget.ids);
 
     final changesExercise =
         _name.text.isNotEmpty ||

@@ -52,10 +52,14 @@ void main() {
       expect(
         indexes.map((row) => row.read<String>('name')),
         containsAll(<String>[
-          'plan_exercises_plan_id',
+          'exercises_category_id',
+          'plan_exercises_plan_exercise',
+          'plan_exercises_exercise_id',
+          'exercise_sets_timestamp',
           'exercise_sets_exercise_timestamp',
           'exercise_sets_workout_exercise',
           'workouts_plan_ended_started',
+          'workouts_active_plan',
           'body_weights_timestamp',
         ]),
       );

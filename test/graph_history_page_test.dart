@@ -69,4 +69,53 @@ void main() {
       expect(find.text('No history yet for Graph history test'), findsOne);
     },
   );
+  testWidgets(
+    'refresh keeps exact exercise history when similar names are newer',
+    (WidgetTester tester) async {
+      final harness = await FlexifyTestHarness.create();
+      final exact = await insertExerciseSetFixture(
+        harness.database,
+        'Press',
+        reps: 5,
+        weight: 100,
+        created: testNow.subtract(const Duration(days: 30)),
+      );
+      for (var i = 0; i < 25; i++) {
+        await insertExerciseSetFixture(
+          harness.database,
+          'Bench Press',
+          reps: i + 1,
+          weight: 50 + i.toDouble(),
+          created: testNow.subtract(Duration(minutes: i)),
+        );
+      }
+
+      final initialSets = await getExerciseSetsForExercise(
+        harness.database,
+        exerciseName: 'Press',
+      );
+      expect(initialSets.map((set) => set.id), contains(exact.id));
+
+      final tabController = TabController(
+        length: 4,
+        initialIndex: 1,
+        vsync: tester,
+      );
+      addTearDown(tabController.dispose);
+
+      await harness.pump(
+        tester,
+        GraphHistoryPage(
+          name: 'Press',
+          initialSets: initialSets,
+          tabController: tabController,
+        ),
+      );
+      tabController.animateTo(2, duration: const Duration(milliseconds: 1));
+      await tester.pumpAndSettle();
+
+      expect(find.text('5 x 100 kg'), findsOneWidget);
+      expect(find.text('No history yet for Press'), findsNothing);
+    },
+  );
 }

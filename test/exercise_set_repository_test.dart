@@ -228,6 +228,68 @@ void main() {
     expect(cardio.single.incline, 2);
   });
 
+  test('ID and date/type filters stay in the repository query', () async {
+    final strengthId = await addExercise(
+      name: 'Filtered Strength',
+      unit: 'kg',
+      cardio: false,
+    );
+    final cardioId = await addExercise(
+      name: 'Filtered Cardio',
+      unit: 'km',
+      cardio: true,
+    );
+
+    final oldStrength = await insertExerciseSet(
+      database,
+      exerciseSet: draft(
+        name: 'Filtered Strength',
+        unit: 'kg',
+        created: DateTime(2026, 9, 1),
+        reps: 5,
+        weight: 50,
+      ),
+      exerciseId: strengthId,
+    );
+    final newStrength = await insertExerciseSet(
+      database,
+      exerciseSet: draft(
+        name: 'Filtered Strength',
+        unit: 'kg',
+        created: DateTime(2026, 10, 2),
+        reps: 6,
+        weight: 60,
+      ),
+      exerciseId: strengthId,
+    );
+    final cardio = await insertExerciseSet(
+      database,
+      exerciseSet: draft(
+        name: 'Filtered Cardio',
+        unit: 'km',
+        created: DateTime(2026, 10, 3),
+        cardio: true,
+        distance: 5,
+        duration: 25,
+      ),
+      exerciseId: cardioId,
+    );
+
+    final selected = await getExerciseSetsByIds(database, [
+      oldStrength.id,
+      cardio.id,
+    ]);
+    expect(selected.map((set) => set.id).toSet(), {oldStrength.id, cardio.id});
+
+    final recentStrength = await getExerciseSets(
+      database,
+      startDate: DateTime(2026, 10, 1),
+      endDateExclusive: DateTime(2026, 10, 3),
+      cardio: false,
+    );
+    expect(recentStrength.map((set) => set.id), [newStrength.id]);
+  });
+
   test('history ordering uses the timestamp index', () async {
     final queryPlan = await database.customSelect('''
       EXPLAIN QUERY PLAN

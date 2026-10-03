@@ -158,6 +158,21 @@ void main() {
         planId: planId,
         exerciseId: source.id,
         enabled: true,
+        maxSets: const Value(5),
+        warmupSets: const Value(2),
+        timers: const Value(false),
+        sequence: const Value(1),
+      ),
+    );
+    await db.planExercises.insertOne(
+      PlanExercisesCompanion.insert(
+        planId: planId,
+        exerciseId: target.id,
+        enabled: false,
+        maxSets: const Value(2),
+        warmupSets: const Value(1),
+        timers: const Value(true),
+        sequence: const Value(3),
       ),
     );
     await db.exerciseSets.insertOne(
@@ -199,6 +214,11 @@ void main() {
               ..where((row) => row.planId.equals(planId)))
             .getSingle();
     expect(planExercise.exerciseId, target.id);
+    expect(planExercise.enabled, isTrue);
+    expect(planExercise.maxSets, 5);
+    expect(planExercise.warmupSets, 2);
+    expect(planExercise.timers, isFalse);
+    expect(planExercise.sequence, 1);
   });
 
   test('plan editor discovers catalog exercises by stable id', () async {

@@ -112,6 +112,9 @@ JoinedSelectStatement<HasResultSet, dynamic> _filteredExerciseSetQuery(
   String? category,
   DateTime? startDate,
   DateTime? endDate,
+  DateTime? endDateExclusive,
+  Iterable<int>? ids,
+  bool? cardio,
   double? repsGt,
   double? repsLt,
   double? weightGt,
@@ -130,9 +133,15 @@ JoinedSelectStatement<HasResultSet, dynamic> _filteredExerciseSetQuery(
     query.where(sets.timestamp.isBiggerOrEqualValue(startDate));
   if (endDate != null)
     query.where(sets.timestamp.isSmallerOrEqualValue(endDate));
+  if (endDateExclusive != null)
+    query.where(sets.timestamp.isSmallerThanValue(endDateExclusive));
+  if (ids != null) query.where(sets.id.isIn(ids));
+  if (cardio != null) {
+    query.where(exercises.kind.equals(cardio ? 'cardio' : 'strength'));
+  }
 
   // History's numeric filters apply to strength sets only, in displayed units.
-  final cardio = exercises.kind.equals('cardio');
+  final isCardio = exercises.kind.equals('cardio');
   final reps = ifNull(sets.reps, const Constant(0.0));
   final load = ifNull(sets.loadKg, const Constant(0.0));
   final weight = exercises.displayUnit.caseMatch<double>(
@@ -142,12 +151,12 @@ JoinedSelectStatement<HasResultSet, dynamic> _filteredExerciseSetQuery(
     },
     orElse: load,
   );
-  if (repsGt != null) query.where(cardio | reps.isBiggerThanValue(repsGt));
-  if (repsLt != null) query.where(cardio | reps.isSmallerThanValue(repsLt));
+  if (repsGt != null) query.where(isCardio | reps.isBiggerThanValue(repsGt));
+  if (repsLt != null) query.where(isCardio | reps.isSmallerThanValue(repsLt));
   if (weightGt != null)
-    query.where(cardio | weight.isBiggerThanValue(weightGt));
+    query.where(isCardio | weight.isBiggerThanValue(weightGt));
   if (weightLt != null)
-    query.where(cardio | weight.isSmallerThanValue(weightLt));
+    query.where(isCardio | weight.isSmallerThanValue(weightLt));
   if (limit != null) query.limit(limit);
   return query;
 }
@@ -188,6 +197,8 @@ Future<List<ExerciseSetView>> getExerciseSets(
   String? category,
   DateTime? startDate,
   DateTime? endDate,
+  DateTime? endDateExclusive,
+  bool? cardio,
   double? repsGt,
   double? repsLt,
   double? weightGt,
@@ -200,12 +211,25 @@ Future<List<ExerciseSetView>> getExerciseSets(
     category: category,
     startDate: startDate,
     endDate: endDate,
+    endDateExclusive: endDateExclusive,
+    cardio: cardio,
     repsGt: repsGt,
     repsLt: repsLt,
     weightGt: weightGt,
     weightLt: weightLt,
     limit: limit,
   ).get();
+  return rows.map((row) => _toExerciseSetView(database, row)).toList();
+}
+
+/// Loads only the requested exercise-set identifiers.
+Future<List<ExerciseSetView>> getExerciseSetsByIds(
+  AppDatabase database,
+  Iterable<int> ids,
+) async {
+  final values = ids.toList();
+  if (values.isEmpty) return [];
+  final rows = await _filteredExerciseSetQuery(database, ids: values).get();
   return rows.map((row) => _toExerciseSetView(database, row)).toList();
 }
 

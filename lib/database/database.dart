@@ -306,39 +306,12 @@ class AppDatabase extends _$AppDatabase {
     return MigrationStrategy(
       beforeOpen: (details) async {
         await customStatement('PRAGMA foreign_keys = ON');
-        if (details.versionNow >= 63) {
-          await _removeOrphanedPlanExercises(this);
-        }
-        if (details.versionNow >= 59) {
-          await customStatement(
-            'CREATE INDEX IF NOT EXISTS exercise_sets_exercise_timestamp '
-            'ON exercise_sets(exercise_id, timestamp)',
-          );
-          await customStatement(
-            'CREATE INDEX IF NOT EXISTS exercise_sets_workout_exercise '
-            'ON exercise_sets(workout_id, exercise_id)',
-          );
-          await customStatement(
-            'CREATE INDEX IF NOT EXISTS workouts_plan_ended_started '
-            'ON workouts(plan_id, ended_at, started_at)',
-          );
-          await customStatement(
-            'CREATE INDEX IF NOT EXISTS body_weights_timestamp '
-            'ON body_weights(timestamp)',
-          );
-        }
         talker.debug('Opening Flexify database schema v${details.versionNow}');
         if (kDebugMode) await validateDatabaseSchema();
       },
       onCreate: (Migrator m) async {
         talker.info('Creating Flexify database');
         await m.createAll();
-        await m.createIndex(
-          Index(
-            'plan_exercises',
-            "CREATE INDEX IF NOT EXISTS plan_exercises_plan_id ON plan_exercises(plan_id);",
-          ),
-        );
 
         for (final categoryName
             in defaultExercises.map((entry) => entry.$2).toSet()) {
@@ -387,7 +360,7 @@ class AppDatabase extends _$AppDatabase {
       onUpgrade: (m, from, to) async {
         await customStatement('PRAGMA foreign_keys = OFF');
         try {
-          await stepByStep(
+          final upgrade = stepByStep(
             from1To2: (m, schema) async {
               final legacyRows = await schema.gymSets.select().get();
               final plans = await schema.plans.select().get();
@@ -956,7 +929,147 @@ class AppDatabase extends _$AppDatabase {
             from63To64: (m, schema) async {
               await m.createIndex(schema.exerciseSetsTimestamp);
             },
-          )(m, from, to);
+            from64To65: (m, schema) async {
+              await customStatement('''
+                WITH ranked AS (
+                  SELECT
+                    id,
+                    ROW_NUMBER() OVER (
+                      PARTITION BY plan_id, exercise_id
+                      ORDER BY enabled DESC, sequence ASC, id ASC
+                    ) AS duplicate_rank
+                  FROM plan_exercises
+                )
+                UPDATE plan_exercises
+                SET
+                  enabled = (
+                    SELECT MAX(other.enabled)
+                    FROM plan_exercises AS other
+                    WHERE other.plan_id = plan_exercises.plan_id
+                      AND other.exercise_id = plan_exercises.exercise_id
+                  ),
+                  max_sets = COALESCE(
+                    plan_exercises.max_sets,
+                    (
+                      SELECT other.max_sets
+                      FROM plan_exercises AS other
+                      WHERE other.plan_id = plan_exercises.plan_id
+                        AND other.exercise_id = plan_exercises.exercise_id
+                        AND other.max_sets IS NOT NULL
+                      ORDER BY
+                        other.enabled DESC,
+                        other.sequence ASC,
+                        other.id ASC
+                      LIMIT 1
+                    )
+                  ),
+                  warmup_sets = COALESCE(
+                    plan_exercises.warmup_sets,
+                    (
+                      SELECT other.warmup_sets
+                      FROM plan_exercises AS other
+                      WHERE other.plan_id = plan_exercises.plan_id
+                        AND other.exercise_id = plan_exercises.exercise_id
+                        AND other.warmup_sets IS NOT NULL
+                      ORDER BY
+                        other.enabled DESC,
+                        other.sequence ASC,
+                        other.id ASC
+                      LIMIT 1
+                    )
+                  ),
+                  sequence = (
+                    SELECT MIN(other.sequence)
+                    FROM plan_exercises AS other
+                    WHERE other.plan_id = plan_exercises.plan_id
+                      AND other.exercise_id = plan_exercises.exercise_id
+                  )
+                WHERE id IN (
+                  SELECT id
+                  FROM ranked
+                  WHERE duplicate_rank = 1
+                )
+              ''');
+
+              await customStatement('''
+                WITH ranked AS (
+                  SELECT
+                    id,
+                    ROW_NUMBER() OVER (
+                      PARTITION BY plan_id, exercise_id
+                      ORDER BY enabled DESC, sequence ASC, id ASC
+                    ) AS duplicate_rank
+                  FROM plan_exercises
+                )
+                DELETE FROM plan_exercises
+                WHERE id IN (
+                  SELECT id
+                  FROM ranked
+                  WHERE duplicate_rank > 1
+                )
+              ''');
+
+              await customStatement('''
+                WITH ranked AS (
+                  SELECT
+                    id,
+                    started_at,
+                    ROW_NUMBER() OVER (
+                      PARTITION BY plan_id
+                      ORDER BY started_at DESC, id DESC
+                    ) AS active_rank,
+                    MAX(started_at) OVER (
+                      PARTITION BY plan_id
+                    ) AS latest_started_at
+                  FROM workouts
+                  WHERE plan_id IS NOT NULL
+                    AND ended_at IS NULL
+                )
+                UPDATE workouts
+                SET ended_at = (
+                  SELECT
+                    CASE
+                      WHEN latest_started_at > started_at
+                      THEN latest_started_at
+                      ELSE started_at
+                    END
+                  FROM ranked
+                  WHERE ranked.id = workouts.id
+                )
+                WHERE id IN (
+                  SELECT id
+                  FROM ranked
+                  WHERE active_rank > 1
+                )
+              ''');
+
+              await customStatement(
+                'DROP INDEX IF EXISTS exercise_sets_exercise_timestamp',
+              );
+              await customStatement(
+                'DROP INDEX IF EXISTS exercise_sets_workout_exercise',
+              );
+              await customStatement(
+                'DROP INDEX IF EXISTS workouts_plan_ended_started',
+              );
+              await customStatement(
+                'DROP INDEX IF EXISTS body_weights_timestamp',
+              );
+              await customStatement(
+                'DROP INDEX IF EXISTS plan_exercises_plan_id',
+              );
+
+              await m.createIndex(schema.exercisesCategoryId);
+              await m.createIndex(schema.exerciseSetsExerciseTimestamp);
+              await m.createIndex(schema.exerciseSetsWorkoutExercise);
+              await m.createIndex(schema.workoutsPlanEndedStarted);
+              await m.createIndex(schema.workoutsActivePlan);
+              await m.createIndex(schema.bodyWeightsTimestamp);
+              await m.createIndex(schema.planExercisesPlanExercise);
+              await m.createIndex(schema.planExercisesExerciseId);
+            },
+          );
+          await transaction(() => upgrade(m, from, to));
 
           if (to == schemaVersion) {
             final foreignKeyViolations = await customSelect(
@@ -974,5 +1087,5 @@ class AppDatabase extends _$AppDatabase {
   }
 
   @override
-  int get schemaVersion => 64;
+  int get schemaVersion => 65;
 }

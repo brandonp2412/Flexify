@@ -113,6 +113,57 @@ Future<Exercise> syncExerciseDefinition({
       .getSingle();
 }
 
+Future<void> _mergePlanExerciseReferences({
+  required int sourceExerciseId,
+  required int targetExerciseId,
+}) async {
+  final sourceRows =
+      await (db.planExercises.select()
+            ..where((row) => row.exerciseId.equals(sourceExerciseId)))
+          .get();
+
+  for (final source in sourceRows) {
+    final target =
+        await (db.planExercises.select()..where(
+              (row) =>
+                  row.planId.equals(source.planId) &
+                  row.exerciseId.equals(targetExerciseId),
+            ))
+            .getSingleOrNull();
+
+    if (target == null) {
+      await (db.planExercises.update()
+            ..where((row) => row.id.equals(source.id)))
+          .write(PlanExercisesCompanion(exerciseId: Value(targetExerciseId)));
+      continue;
+    }
+
+    final preferSource = source.enabled && !target.enabled;
+    await (db.planExercises.update()..where((row) => row.id.equals(target.id)))
+        .write(
+          PlanExercisesCompanion(
+            enabled: Value(target.enabled || source.enabled),
+            maxSets: Value(
+              preferSource ? source.maxSets : target.maxSets ?? source.maxSets,
+            ),
+            warmupSets: Value(
+              preferSource
+                  ? source.warmupSets
+                  : target.warmupSets ?? source.warmupSets,
+            ),
+            timers: Value(preferSource ? source.timers : target.timers),
+            sequence: Value(
+              source.sequence < target.sequence
+                  ? source.sequence
+                  : target.sequence,
+            ),
+          ),
+        );
+    await (db.planExercises.delete()..where((row) => row.id.equals(source.id)))
+        .go();
+  }
+}
+
 Future<void> updateExerciseDefinition({
   required int exerciseId,
   required String name,
@@ -145,12 +196,13 @@ Future<void> updateExerciseDefinition({
   }
 
   await db.transaction(() async {
+    await _mergePlanExerciseReferences(
+      sourceExerciseId: exerciseId,
+      targetExerciseId: target.id,
+    );
     await (db.exerciseSets.update()
           ..where((row) => row.exerciseId.equals(exerciseId)))
         .write(ExerciseSetsCompanion(exerciseId: Value(target.id)));
-    await (db.planExercises.update()
-          ..where((row) => row.exerciseId.equals(exerciseId)))
-        .write(PlanExercisesCompanion(exerciseId: Value(target.id)));
     await (db.exercises.update()..where((row) => row.id.equals(target.id)))
         .write(
           ExercisesCompanion(

@@ -64,6 +64,97 @@ String _periodKey(DateTime value, Period period) {
   }
 }
 
+String _categoryPeriodKey(String category, DateTime created, Period period) =>
+    '$category\u0000${_periodKey(created, period)}';
+
+DateTime _periodStart(DateTime value, Period period) {
+  final date = value.toLocal();
+  switch (period) {
+    case Period.day:
+      return DateTime(date.year, date.month, date.day);
+    case Period.month:
+      return DateTime(date.year, date.month);
+    case Period.year:
+      return DateTime(date.year);
+    case Period.week:
+      final jan1 = DateTime(date.year);
+      final firstMonday = jan1.add(Duration(days: (8 - jan1.weekday) % 7));
+      if (date.isBefore(firstMonday)) return jan1;
+      final week = date.difference(firstMonday).inDays ~/ 7;
+      return DateTime(
+        firstMonday.year,
+        firstMonday.month,
+        firstMonday.day + week * 7,
+      );
+  }
+}
+
+Future<({Set<String> keys, DateTime? cutoff})> _latestGlobalBuckets({
+  required Period period,
+  required DateTime? start,
+  required DateTime? end,
+  required int limit,
+}) async {
+  if (limit <= 0) return (keys: <String>{}, cutoff: null);
+
+  const pageSize = 256;
+  final keys = <String>{};
+  DateTime? cutoff;
+  var offset = 0;
+
+  while (keys.length < limit) {
+    final query = db.selectOnly(db.exerciseSets)
+      ..join([
+        innerJoin(
+          db.exercises,
+          db.exercises.id.equalsExp(db.exerciseSets.exerciseId),
+        ),
+        innerJoin(
+          db.categories,
+          db.categories.id.equalsExp(db.exercises.categoryId),
+        ),
+      ])
+      ..addColumns([
+        db.exerciseSets.id,
+        db.exerciseSets.timestamp,
+        db.categories.name,
+      ])
+      ..orderBy([
+        OrderingTerm.desc(db.exerciseSets.timestamp),
+        OrderingTerm.desc(db.exerciseSets.id),
+      ])
+      ..limit(pageSize, offset: offset);
+
+    if (start != null) {
+      query.where(db.exerciseSets.timestamp.isBiggerOrEqualValue(start));
+    }
+    if (end != null) {
+      query.where(db.exerciseSets.timestamp.isSmallerThanValue(end));
+    }
+
+    final rows = await query.get();
+    if (rows.isEmpty) break;
+
+    for (final row in rows) {
+      final created = row.read(db.exerciseSets.timestamp)!;
+      final category = row.read(db.categories.name)!;
+      final key = _categoryPeriodKey(category, created, period);
+      if (!keys.add(key)) continue;
+
+      final bucketStart = _periodStart(created, period);
+      if (cutoff == null || bucketStart.isBefore(cutoff)) {
+        cutoff = bucketStart;
+      }
+      if (keys.length == limit) break;
+    }
+
+    if (rows.length < pageSize || keys.length == limit) break;
+    offset += rows.length;
+  }
+
+  return (keys: keys, cutoff: cutoff);
+}
+
 List<List<ExerciseSetView>> _groupSets(
   Iterable<ExerciseSetView> sets,
   Period period,
@@ -350,17 +441,29 @@ Future<List<StrengthData>> getGlobalData({
   required DateTime? end,
   required int limit,
 }) async {
-  final allSets = await getExerciseSets(db);
-  final filtered = allSets.where((set) {
-    if (set.category == null) return false;
-    if (start != null && set.created.isBefore(start)) return false;
-    if (end != null && !set.created.isBefore(end)) return false;
-    return true;
-  });
+  final window = await _latestGlobalBuckets(
+    period: period,
+    start: start,
+    end: end,
+    limit: limit,
+  );
+  if (window.keys.isEmpty || window.cutoff == null) return [];
+
+  final fetchStart = start != null && start.isAfter(window.cutoff!)
+      ? start
+      : window.cutoff;
+  final allSets = await getExerciseSets(
+    db,
+    startDate: fetchStart,
+    endDateExclusive: end,
+  );
 
   final buckets = <String, List<ExerciseSetView>>{};
-  for (final set in filtered) {
-    final key = '${set.category}\u0000${_periodKey(set.created, period)}';
+  for (final set in allSets) {
+    final category = set.category;
+    if (category == null) continue;
+    final key = _categoryPeriodKey(category, set.created, period);
+    if (!window.keys.contains(key)) continue;
     buckets.putIfAbsent(key, () => []).add(set);
   }
 
@@ -370,10 +473,7 @@ Future<List<StrengthData>> getGlobalData({
   }
   groups.sort((a, b) => b.last.created.compareTo(a.last.created));
 
-  return groups
-      .take(limit)
-      .toList()
-      .reversed
+  return groups.reversed
       .map(
         (group) => _strengthBucket(
           group,
@@ -387,11 +487,8 @@ Future<List<StrengthData>> getGlobalData({
 
 Future<List<Rpm>> getRpms() async {
   final cutoff = DateTime.now().subtract(const Duration(days: 30));
-  final sets =
-      (await getExerciseSets(db))
-          .where((set) => !set.cardio && !set.created.isBefore(cutoff))
-          .toList()
-        ..sort((a, b) => a.created.compareTo(b.created));
+  final sets = await getExerciseSets(db, startDate: cutoff, cardio: false)
+    ..sort((a, b) => a.created.compareTo(b.created));
 
   final byName = <String, List<ExerciseSetView>>{};
   for (final set in sets) {
@@ -511,8 +608,9 @@ Stream<List<GraphExerciseSummary>> watchGraphs() {
             ),
             created: timestamp == null
                 ? DateTime.fromMillisecondsSinceEpoch(0).toLocal()
-                : DateTime.fromMillisecondsSinceEpoch(timestamp * 1000)
-                      .toLocal(),
+                : DateTime.fromMillisecondsSinceEpoch(
+                    timestamp * 1000,
+                  ).toLocal(),
             image: result.readNullable<String>('image'),
             category: result.readNullable<String>('category'),
           );

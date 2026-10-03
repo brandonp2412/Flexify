@@ -2,6 +2,7 @@ import 'package:drift/drift.dart';
 import 'package:flexify/database/categories.dart';
 
 /// Stable exercise identity and configuration shared across plans and history.
+@TableIndex(name: 'exercises_category_id', columns: {#categoryId})
 class Exercises extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get name => text().unique()();

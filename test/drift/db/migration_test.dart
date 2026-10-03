@@ -18,6 +18,7 @@ import 'generated/schema_v53.dart' as v53;
 import 'generated/schema_v59.dart' as v59;
 import 'generated/schema_v60.dart' as v60;
 import 'generated/schema_v62.dart' as v62;
+import 'generated/schema_v64.dart' as v64;
 
 void main() {
   driftRuntimeOptions.dontWarnAboutMultipleDatabases = true;
@@ -1221,6 +1222,143 @@ void main() {
             (row) => row.read<String>('name') == 'exercise_id',
           );
           expect(exerciseIdColumn.read<int>('notnull'), 1);
+
+          final foreignKeyViolations = await newDb
+              .customSelect('PRAGMA foreign_key_check')
+              .get();
+          expect(foreignKeyViolations, isEmpty);
+        },
+      );
+    },
+  );
+  test(
+    'migration from v64 to v65 repairs duplicates and installs constraints',
+    () async {
+      final olderStart =
+          DateTime(2026, 10, 3, 8).millisecondsSinceEpoch ~/ 1000;
+      final newerStart =
+          DateTime(2026, 10, 3, 9).millisecondsSinceEpoch ~/ 1000;
+
+      await verifier.testWithDataIntegrity(
+        oldVersion: 64,
+        newVersion: 65,
+        createOld: v64.DatabaseAtV64.new,
+        createNew: AppDatabase.new,
+        openTestedDatabase: AppDatabase.new,
+        createItems: (batch, oldDb) {
+          batch.insert(
+            oldDb.plans,
+            v64.PlansCompanion.insert(id: const Value(1), days: 'Friday'),
+          );
+          batch.insert(
+            oldDb.exercises,
+            v64.ExercisesCompanion.insert(
+              id: const Value(10),
+              name: 'Bench Press',
+              kind: 'strength',
+              displayUnit: 'kg',
+            ),
+          );
+          batch.insertAll(oldDb.planExercises, [
+            v64.PlanExercisesCompanion.insert(
+              id: const Value(20),
+              planId: 1,
+              exerciseId: 10,
+              enabled: 0,
+              maxSets: const Value(5),
+              warmupSets: const Value(2),
+              sequence: const Value(3),
+            ),
+            v64.PlanExercisesCompanion.insert(
+              id: const Value(21),
+              planId: 1,
+              exerciseId: 10,
+              enabled: 1,
+              sequence: const Value(1),
+            ),
+          ]);
+          batch.insertAll(oldDb.workouts, [
+            v64.WorkoutsCompanion.insert(
+              id: const Value(30),
+              planId: const Value(1),
+              startedAt: olderStart,
+            ),
+            v64.WorkoutsCompanion.insert(
+              id: const Value(31),
+              planId: const Value(1),
+              startedAt: newerStart,
+            ),
+          ]);
+        },
+        validateItems: (newDb) async {
+          final planExercises = await newDb.select(newDb.planExercises).get();
+          expect(planExercises, hasLength(1));
+          expect(planExercises.single.id, 21);
+          expect(planExercises.single.enabled, isTrue);
+          expect(planExercises.single.maxSets, 5);
+          expect(planExercises.single.warmupSets, 2);
+          expect(planExercises.single.sequence, 1);
+
+          final workouts =
+              await (newDb.workouts.select()
+                    ..where((row) => row.planId.equals(1))
+                    ..orderBy([(row) => OrderingTerm.asc(row.id)]))
+                  .get();
+          expect(workouts, hasLength(2));
+          expect(workouts[0].id, 30);
+          expect(
+            workouts[0].endedAt,
+            DateTime.fromMillisecondsSinceEpoch(newerStart * 1000),
+          );
+          expect(workouts[1].id, 31);
+          expect(workouts[1].endedAt, null);
+
+          final indexes = await newDb
+              .customSelect(
+                "SELECT name FROM sqlite_master "
+                "WHERE type = 'index' AND name IN ("
+                "'exercises_category_id',"
+                "'exercise_sets_exercise_timestamp',"
+                "'exercise_sets_workout_exercise',"
+                "'workouts_plan_ended_started',"
+                "'workouts_active_plan',"
+                "'body_weights_timestamp',"
+                "'plan_exercises_plan_exercise',"
+                "'plan_exercises_exercise_id'"
+                ")",
+              )
+              .map((row) => row.read<String>('name'))
+              .get();
+          expect(indexes.toSet(), {
+            'exercises_category_id',
+            'exercise_sets_exercise_timestamp',
+            'exercise_sets_workout_exercise',
+            'workouts_plan_ended_started',
+            'workouts_active_plan',
+            'body_weights_timestamp',
+            'plan_exercises_plan_exercise',
+            'plan_exercises_exercise_id',
+          });
+
+          expect(
+            () => newDb.planExercises.insertOne(
+              PlanExercisesCompanion.insert(
+                planId: 1,
+                exerciseId: 10,
+                enabled: true,
+              ),
+            ),
+            throwsA(anything),
+          );
+          expect(
+            () => newDb.workouts.insertOne(
+              WorkoutsCompanion.insert(
+                planId: const Value(1),
+                startedAt: DateTime(2026, 10, 3, 10),
+              ),
+            ),
+            throwsA(anything),
+          );
 
           final foreignKeyViolations = await newDb
               .customSelect('PRAGMA foreign_key_check')

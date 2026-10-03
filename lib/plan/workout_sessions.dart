@@ -77,27 +77,29 @@ Future<Workout> resumeOrStartWorkout(
   AppDatabase database,
   int planId, {
   DateTime? now,
-}) async {
-  final existing =
-      await (database.workouts.select()
-            ..where(
-              (workout) =>
-                  workout.planId.equals(planId) & workout.endedAt.isNull(),
-            )
-            ..orderBy([
-              (workout) => OrderingTerm.desc(workout.startedAt),
-              (workout) => OrderingTerm.desc(workout.id),
-            ])
-            ..limit(1))
-          .getSingleOrNull();
-  if (existing != null) return existing;
+}) {
+  return database.transaction(() async {
+    final existing =
+        await (database.workouts.select()
+              ..where(
+                (workout) =>
+                    workout.planId.equals(planId) & workout.endedAt.isNull(),
+              )
+              ..orderBy([
+                (workout) => OrderingTerm.desc(workout.startedAt),
+                (workout) => OrderingTerm.desc(workout.id),
+              ])
+              ..limit(1))
+            .getSingleOrNull();
+    if (existing != null) return existing;
 
-  return database.workouts.insertReturning(
-    WorkoutsCompanion.insert(
-      planId: Value(planId),
-      startedAt: now ?? DateTime.now(),
-    ),
-  );
+    return database.workouts.insertReturning(
+      WorkoutsCompanion.insert(
+        planId: Value(planId),
+        startedAt: now ?? DateTime.now(),
+      ),
+    );
+  });
 }
 
 Future<void> finishWorkout(

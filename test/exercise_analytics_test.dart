@@ -211,6 +211,62 @@ void main() {
     },
   );
 
+  test(
+    'global analytics keeps complete latest buckets at the requested limit',
+    () async {
+      final old = DateTime(2020, 1, 1, 8);
+      await insertExerciseSetFixture(
+        db,
+        'Old chest',
+        reps: 10,
+        weight: 100,
+        category: 'Old',
+        created: old,
+      );
+
+      final backDay = testNow.subtract(const Duration(days: 1));
+      await insertExerciseSetFixture(
+        db,
+        'Row',
+        reps: 4,
+        weight: 50,
+        category: 'Back',
+        created: DateTime(backDay.year, backDay.month, backDay.day, 10),
+      );
+
+      final chestDay = testNow;
+      await insertExerciseSetFixture(
+        db,
+        'Bench',
+        reps: 5,
+        weight: 80,
+        category: 'Chest',
+        created: DateTime(chestDay.year, chestDay.month, chestDay.day, 8),
+      );
+      await insertExerciseSetFixture(
+        db,
+        'Bench',
+        reps: 5,
+        weight: 100,
+        category: 'Chest',
+        created: DateTime(chestDay.year, chestDay.month, chestDay.day, 20),
+      );
+
+      final global = await getGlobalData(
+        target: 'kg',
+        metric: StrengthMetric.volume,
+        period: Period.day,
+        start: null,
+        end: null,
+        limit: 2,
+      );
+
+      expect(global.map((row) => row.category).toList(), ['Back', 'Chest']);
+      expect(global.last.value, 900);
+      expect(global.map((row) => row.category), isNot(contains('Old')));
+    },
+  );
+
   test('RPM and best-set detection read redesigned exercise sets', () async {
     final now = DateTime.now().toLocal();
     final first = await insertExerciseSetFixture(

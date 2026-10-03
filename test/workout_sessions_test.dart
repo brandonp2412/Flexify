@@ -62,6 +62,24 @@ void main() {
     expect(next.id, isNot(first.id));
   });
 
+  test('concurrent starts keep one active workout per plan', () async {
+    final planId = await db.plans.insertOne(planFixture());
+
+    final started = await Future.wait([
+      for (var i = 0; i < 12; i++)
+        resumeOrStartWorkout(db, planId, now: DateTime(2026, 1, 1, 10, i)),
+    ]);
+
+    expect(started.map((workout) => workout.id).toSet(), hasLength(1));
+    final active =
+        await (db.workouts.select()..where(
+              (workout) =>
+                  workout.planId.equals(planId) & workout.endedAt.isNull(),
+            ))
+            .get();
+    expect(active, hasLength(1));
+  });
+
   test('last-session prefill uses the actual workout and same plan', () async {
     final planA = await db.plans.insertOne(planFixture(title: 'A'));
     final planB = await db.plans.insertOne(planFixture(title: 'B'));

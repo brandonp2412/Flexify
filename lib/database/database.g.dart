@@ -5560,9 +5560,41 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $BodyWeightsTable bodyWeights = $BodyWeightsTable(this);
   late final $SettingsTable settings = $SettingsTable(this);
   late final $PlanExercisesTable planExercises = $PlanExercisesTable(this);
+  late final Index exercisesCategoryId = Index(
+    'exercises_category_id',
+    'CREATE INDEX exercises_category_id ON exercises (category_id)',
+  );
+  late final Index workoutsPlanEndedStarted = Index(
+    'workouts_plan_ended_started',
+    'CREATE INDEX workouts_plan_ended_started ON workouts (plan_id, ended_at, started_at DESC, id DESC)',
+  );
+  late final Index workoutsActivePlan = Index(
+    'workouts_active_plan',
+    'CREATE UNIQUE INDEX workouts_active_plan ON workouts (plan_id) WHERE ended_at IS NULL AND plan_id IS NOT NULL',
+  );
   late final Index exerciseSetsTimestamp = Index(
     'exercise_sets_timestamp',
     'CREATE INDEX exercise_sets_timestamp ON exercise_sets (timestamp, id)',
+  );
+  late final Index exerciseSetsExerciseTimestamp = Index(
+    'exercise_sets_exercise_timestamp',
+    'CREATE INDEX exercise_sets_exercise_timestamp ON exercise_sets (exercise_id, timestamp DESC, id DESC)',
+  );
+  late final Index exerciseSetsWorkoutExercise = Index(
+    'exercise_sets_workout_exercise',
+    'CREATE INDEX exercise_sets_workout_exercise ON exercise_sets (workout_id, exercise_id, timestamp, id)',
+  );
+  late final Index bodyWeightsTimestamp = Index(
+    'body_weights_timestamp',
+    'CREATE INDEX body_weights_timestamp ON body_weights (timestamp DESC, id DESC)',
+  );
+  late final Index planExercisesPlanExercise = Index(
+    'plan_exercises_plan_exercise',
+    'CREATE UNIQUE INDEX plan_exercises_plan_exercise ON plan_exercises (plan_id, exercise_id)',
+  );
+  late final Index planExercisesExerciseId = Index(
+    'plan_exercises_exercise_id',
+    'CREATE INDEX plan_exercises_exercise_id ON plan_exercises (exercise_id)',
   );
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
@@ -5577,7 +5609,15 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     bodyWeights,
     settings,
     planExercises,
+    exercisesCategoryId,
+    workoutsPlanEndedStarted,
+    workoutsActivePlan,
     exerciseSetsTimestamp,
+    exerciseSetsExerciseTimestamp,
+    exerciseSetsWorkoutExercise,
+    bodyWeightsTimestamp,
+    planExercisesPlanExercise,
+    planExercisesExerciseId,
   ];
   @override
   StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules([
