@@ -4,7 +4,7 @@ import 'package:flexify/database/performed_sets.dart';
 
 final testNow = DateTime(2026, 1, 15, 12);
 
-GymSet gymSetFixture(
+PerformedSetView performedSetFixture(
   String name, {
   double reps = 5,
   double weight = 50,
@@ -17,7 +17,7 @@ GymSet gymSetFixture(
   int? planId,
   bool hidden = false,
 }) {
-  return GymSet(
+  return PerformedSetView(
     id: 0,
     name: name,
     reps: reps,
@@ -34,7 +34,7 @@ GymSet gymSetFixture(
   );
 }
 
-GymSet gymSetModelFixture({
+PerformedSetView performedSetModelFixture({
   int id = 0,
   String name = 'Bench press',
   double reps = 2,
@@ -47,7 +47,7 @@ GymSet gymSetModelFixture({
   double distance = 0,
   bool cardio = false,
 }) {
-  return GymSet(
+  return PerformedSetView(
     id: id,
     name: name,
     reps: reps,
@@ -61,7 +61,7 @@ GymSet gymSetModelFixture({
   );
 }
 
-Future<GymSet> insertPerformedSetFixture(
+Future<PerformedSetView> insertPerformedSetFixture(
   AppDatabase database,
   String name, {
   double reps = 5,
@@ -112,7 +112,7 @@ Future<GymSet> insertPerformedSetFixture(
     database,
     exerciseId: exercise.id,
     workoutId: workoutId,
-    gymSet: GymSet(
+    performedSet: PerformedSetView(
       id: 0,
       name: name,
       reps: reps,

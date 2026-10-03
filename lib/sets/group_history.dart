@@ -43,7 +43,7 @@ class _GroupHistoryState extends State<GroupHistory> {
   Future<void> _showContextMenu(
     BuildContext context,
     TapDownDetails details,
-    GymSet gymSet,
+    PerformedSetView performedSet,
   ) async {
     final action = await showDesktopContextMenu<_GroupedHistoryContextAction>(
       context,
@@ -70,7 +70,9 @@ class _GroupHistoryState extends State<GroupHistory> {
     switch (action) {
       case _GroupedHistoryContextAction.edit:
         await Navigator.of(context).push(
-          FlexPageRoute(builder: (context) => EditSetPage(gymSet: gymSet)),
+          FlexPageRoute(
+            builder: (context) => EditSetPage(performedSet: performedSet),
+          ),
         );
         break;
       case _GroupedHistoryContextAction.delete:
@@ -78,7 +80,9 @@ class _GroupHistoryState extends State<GroupHistory> {
           context: context,
           builder: (dialogContext) => AlertDialog(
             title: Text(context.l10n.confirmDelete),
-            content: Text(context.l10n.deleteSetConfirmation(gymSet.name)),
+            content: Text(
+              context.l10n.deleteSetConfirmation(performedSet.name),
+            ),
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(dialogContext, false),
@@ -92,7 +96,7 @@ class _GroupHistoryState extends State<GroupHistory> {
           ),
         );
         if (confirmed == true) {
-          await deletePerformedSets(db, [gymSet.id]);
+          await deletePerformedSets(db, [performedSet.id]);
         }
         break;
       case null:
@@ -143,38 +147,42 @@ class _GroupHistoryState extends State<GroupHistory> {
     return [
       ExpansionTile(
         title: Text(
-          "${history.name} (${formatDisplayNumber(context, history.gymSets.length, maximumFractionDigits: 0)})",
+          "${history.name} (${formatDisplayNumber(context, history.performedSets.length, maximumFractionDigits: 0)})",
         ),
         subtitle: Selector<SettingsState, String>(
           selector: (context, settings) => settings.value.shortDateFormat,
           builder: (context, value, child) => Text(
-            formatDisplayDate(context, history.gymSets.first.created, value),
+            formatDisplayDate(
+              context,
+              history.performedSets.first.created,
+              value,
+            ),
           ),
         ),
         shape: const Border.symmetric(),
-        children: history.gymSets.map((gymSet) {
-          final minutes = gymSet.duration.floor();
-          final seconds = ((gymSet.duration * 60) % 60)
+        children: history.performedSets.map((performedSet) {
+          final minutes = performedSet.duration.floor();
+          final seconds = ((performedSet.duration * 60) % 60)
               .floor()
               .toString()
               .padLeft(2, '0');
-          final distance = formatDisplayNumber(context, gymSet.distance);
-          final reps = formatDisplayNumber(context, gymSet.reps);
-          final weight = formatDisplayNumber(context, gymSet.weight);
-          final unit = displayMeasurementUnit(context.l10n, gymSet.unit);
+          final distance = formatDisplayNumber(context, performedSet.distance);
+          final reps = formatDisplayNumber(context, performedSet.reps);
+          final weight = formatDisplayNumber(context, performedSet.weight);
+          final unit = displayMeasurementUnit(context.l10n, performedSet.unit);
           String incline = '';
-          if (gymSet.incline != null && gymSet.incline! > 0) {
+          if (performedSet.incline != null && performedSet.incline! > 0) {
             incline =
-                '@ ${formatDisplayPercent(context, gymSet.incline! / 100, maximumFractionDigits: 0)}';
+                '@ ${formatDisplayPercent(context, performedSet.incline! / 100, maximumFractionDigits: 0)}';
           }
 
           Widget? leading;
 
-          if (showImages && gymSet.image != null) {
+          if (showImages && performedSet.image != null) {
             leading = GestureDetector(
-              onTap: () => widget.onSelect(gymSet.id),
+              onTap: () => widget.onSelect(performedSet.id),
               child: Image.file(
-                File(gymSet.image!),
+                File(performedSet.image!),
                 cacheWidth: 64,
                 errorBuilder: (context, error, stackTrace) =>
                     const Icon(Icons.error),
@@ -182,7 +190,7 @@ class _GroupHistoryState extends State<GroupHistory> {
             );
           } else if (showImages) {
             leading = GestureDetector(
-              onTap: () => widget.onSelect(gymSet.id),
+              onTap: () => widget.onSelect(performedSet.id),
               child: Container(
                 width: 24,
                 height: 24,
@@ -192,7 +200,9 @@ class _GroupHistoryState extends State<GroupHistory> {
                 ),
                 child: Center(
                   child: Text(
-                    gymSet.name.isNotEmpty ? gymSet.name[0].toUpperCase() : '?',
+                    performedSet.name.isNotEmpty
+                        ? performedSet.name[0].toUpperCase()
+                        : '?',
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 16,
@@ -206,20 +216,20 @@ class _GroupHistoryState extends State<GroupHistory> {
           }
 
           String title = "$reps x $weight $unit";
-          if (gymSet.cardio &&
-              (gymSet.unit == 'kg' ||
-                  gymSet.unit == 'lb' ||
-                  gymSet.unit == 'stone')) {
+          if (performedSet.cardio &&
+              (performedSet.unit == 'kg' ||
+                  performedSet.unit == 'lb' ||
+                  performedSet.unit == 'stone')) {
             title = "$weight $unit / $minutes:$seconds $incline";
-          } else if (gymSet.cardio &&
-              (gymSet.unit == 'km' ||
-                  gymSet.unit == 'mi' ||
-                  gymSet.unit == 'kcal')) {
+          } else if (performedSet.cardio &&
+              (performedSet.unit == 'km' ||
+                  performedSet.unit == 'mi' ||
+                  performedSet.unit == 'kcal')) {
             title = "$distance $unit / $minutes:$seconds $incline";
           }
 
           final tile = Material(
-            color: widget.selected.contains(gymSet.id)
+            color: widget.selected.contains(performedSet.id)
                 ? Theme.of(context).colorScheme.primary.withValues(alpha: .18)
                 : Colors.transparent,
             child: ListTile(
@@ -229,22 +239,27 @@ class _GroupHistoryState extends State<GroupHistory> {
                 selector: (context, settings) => settings.value.longDateFormat,
                 builder: (context, dateFormat, child) => Text(
                   dateFormat == 'timeago'
-                      ? formatRelativeTime(context, gymSet.created)
-                      : formatDisplayDate(context, gymSet.created, dateFormat),
+                      ? formatRelativeTime(context, performedSet.created)
+                      : formatDisplayDate(
+                          context,
+                          performedSet.created,
+                          dateFormat,
+                        ),
                 ),
               ),
               onLongPress: isDesktopLayout(context)
                   ? null
                   : () {
-                      widget.onSelect(gymSet.id);
+                      widget.onSelect(performedSet.id);
                     },
               onTap: () {
                 if (widget.selected.isNotEmpty)
-                  widget.onSelect(gymSet.id);
+                  widget.onSelect(performedSet.id);
                 else
                   Navigator.of(context).push(
                     FlexPageRoute(
-                      builder: (context) => EditSetPage(gymSet: gymSet),
+                      builder: (context) =>
+                          EditSetPage(performedSet: performedSet),
                     ),
                   );
               },
@@ -254,7 +269,7 @@ class _GroupHistoryState extends State<GroupHistory> {
           return GestureDetector(
             behavior: HitTestBehavior.opaque,
             onSecondaryTapDown: (details) =>
-                _showContextMenu(context, details, gymSet),
+                _showContextMenu(context, details, performedSet),
             child: tile,
           );
         }).toList(),

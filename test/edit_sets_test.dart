@@ -64,7 +64,7 @@ void main() {
     expect(find.bySemanticsLabel('Reps'), findsOne);
   });
 
-  testWidgets('EditGymSets', (WidgetTester tester) async {
+  testWidgets('EditPerformedSets', (WidgetTester tester) async {
     final harness = await FlexifyTestHarness.create();
     await harness.database.settings.update().write(
       testSettings(showUnits: true),

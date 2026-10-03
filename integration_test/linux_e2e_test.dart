@@ -160,7 +160,7 @@ Finder _dropdownWithLabel(String label) => find.byWidgetPredicate(
       widget.decoration.labelText?.startsWith(label) == true,
 );
 
-Future<GymSet> _insertE2ESet({
+Future<PerformedSetView> _insertE2ESet({
   required String name,
   double reps = 5,
   double weight = 50,
@@ -200,22 +200,24 @@ Future<GymSet> _insertE2ESet({
   return inserted;
 }
 
-Future<List<GymSet>> _setsNamed(String name) =>
+Future<List<PerformedSetView>> _setsNamed(String name) =>
     getPerformedSetsForExercise(app.db, exerciseName: name);
 
-Future<GymSet> _singleSet(String name) async => (await _setsNamed(name)).single;
+Future<PerformedSetView> _singleSet(String name) async =>
+    (await _setsNamed(name)).single;
 
-Future<GymSet?> _maybeSet(String name) async {
+Future<PerformedSetView?> _maybeSet(String name) async {
   final rows = await _setsNamed(name);
   return rows.isEmpty ? null : rows.single;
 }
 
-Future<List<GymSet>> _setsMatching(String search) =>
+Future<List<PerformedSetView>> _setsMatching(String search) =>
     getPerformedSets(app.db, search: search);
 
-Future<List<GymSet>> _setsForPlan(int planId) async => (await getPerformedSets(
-  app.db,
-)).where((set) => set.planId == planId).toList(growable: false);
+Future<List<PerformedSetView>> _setsForPlan(int planId) async =>
+    (await getPerformedSets(
+      app.db,
+    )).where((set) => set.planId == planId).toList(growable: false);
 
 Future<Exercise> _exerciseNamed(String name) =>
     (app.db.exercises.select()..where((row) => row.name.equals(name)))

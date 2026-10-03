@@ -15,14 +15,14 @@ import 'package:provider/provider.dart';
 
 class GraphHistoryPage extends StatefulWidget {
   final String name;
-  final List<GymSet> gymSets;
+  final List<PerformedSetView> performedSets;
   final TabController tabController;
   final bool bodyWeight;
 
   const GraphHistoryPage({
     super.key,
     required this.name,
-    required this.gymSets,
+    required this.performedSets,
     required this.tabController,
     this.bodyWeight = false,
   });
@@ -32,7 +32,7 @@ class GraphHistoryPage extends StatefulWidget {
 }
 
 class _GraphHistoryPageState extends State<GraphHistoryPage> {
-  late List<GymSet> sets = widget.gymSets;
+  late List<PerformedSetView> sets = widget.performedSets;
   final _selection = SelectionController<int>();
   int limit = 20;
   final scroll = ScrollController();
@@ -94,7 +94,8 @@ class _GraphHistoryPageState extends State<GraphHistoryPage> {
           tooltip: context.l10n.selectAll,
           icon: const Icon(Icons.done_all),
           onPressed: () => setState(
-            () => _selection.setAll(sets.map((gymSet) => gymSet.id)),
+            () =>
+                _selection.setAll(sets.map((performedSet) => performedSet.id)),
           ),
         ),
         if (!widget.bodyWeight)

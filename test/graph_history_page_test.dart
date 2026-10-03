@@ -37,7 +37,7 @@ void main() {
         tester,
         GraphHistoryPage(
           name: 'Graph history test',
-          gymSets: sets,
+          performedSets: sets,
           tabController: tabController,
         ),
       );

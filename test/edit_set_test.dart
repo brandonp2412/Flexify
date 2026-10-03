@@ -7,12 +7,16 @@ import 'support/fixtures.dart';
 import 'support/test_app.dart';
 
 void main() {
-  testWidgets('EditGymSet inserts', (WidgetTester tester) async {
+  testWidgets('EditPerformedSet inserts', (WidgetTester tester) async {
     final harness = await FlexifyTestHarness.create();
     await harness.pump(
       tester,
       EditSetPage(
-        gymSet: gymSetModelFixture(bodyWeight: 52, duration: 3, distance: 6),
+        performedSet: performedSetModelFixture(
+          bodyWeight: 52,
+          duration: 3,
+          distance: 6,
+        ),
       ),
     );
 
@@ -45,7 +49,10 @@ void main() {
       unit: 'km',
     );
 
-    await harness.pump(tester, EditSetPage(gymSet: gymSetModelFixture()));
+    await harness.pump(
+      tester,
+      EditSetPage(performedSet: performedSetModelFixture()),
+    );
 
     expect(find.bySemanticsLabel('Reps'), findsOne);
 
@@ -60,7 +67,10 @@ void main() {
 
   testWidgets('cardio toggle switches fields', (WidgetTester tester) async {
     final harness = await FlexifyTestHarness.create();
-    await harness.pump(tester, EditSetPage(gymSet: gymSetModelFixture()));
+    await harness.pump(
+      tester,
+      EditSetPage(performedSet: performedSetModelFixture()),
+    );
     await tester.pumpAndSettle();
 
     expect(find.bySemanticsLabel('Reps'), findsOne);
@@ -85,7 +95,7 @@ void main() {
     final harness = await FlexifyTestHarness.create();
     await harness.pump(
       tester,
-      EditSetPage(gymSet: gymSetModelFixture()),
+      EditSetPage(performedSet: performedSetModelFixture()),
       surfaceSize: const Size(800, 1600),
     );
     await tester.pumpAndSettle();
@@ -101,12 +111,12 @@ void main() {
     );
   });
 
-  testWidgets('EditGymSet updates', (WidgetTester tester) async {
+  testWidgets('EditPerformedSet updates', (WidgetTester tester) async {
     final harness = await FlexifyTestHarness.create();
     await harness.pump(
       tester,
       EditSetPage(
-        gymSet: gymSetModelFixture(
+        performedSet: performedSetModelFixture(
           id: 1,
           bodyWeight: 52,
           duration: 3,
@@ -152,7 +162,9 @@ void main() {
 
     await harness.pump(
       tester,
-      EditSetPage(gymSet: gymSetModelFixture(name: '', reps: 0, weight: 0)),
+      EditSetPage(
+        performedSet: performedSetModelFixture(name: '', reps: 0, weight: 0),
+      ),
       surfaceSize: const Size(800, 1600),
     );
     await tester.pumpAndSettle();
@@ -177,23 +189,24 @@ void main() {
     );
   });
 
-  testWidgets('EditGymSet resizes for the keyboard so notes remain reachable', (
-    WidgetTester tester,
-  ) async {
-    final harness = await FlexifyTestHarness.create();
-    await harness.database.settings.update().write(
-      testSettings(showNotes: true),
-    );
+  testWidgets(
+    'EditPerformedSet resizes for the keyboard so notes remain reachable',
+    (WidgetTester tester) async {
+      final harness = await FlexifyTestHarness.create();
+      await harness.database.settings.update().write(
+        testSettings(showNotes: true),
+      );
 
-    await harness.pump(
-      tester,
-      EditSetPage(gymSet: gymSetModelFixture()),
-      surfaceSize: const Size(430, 900),
-    );
-    await tester.pumpAndSettle();
+      await harness.pump(
+        tester,
+        EditSetPage(performedSet: performedSetModelFixture()),
+        surfaceSize: const Size(430, 900),
+      );
+      await tester.pumpAndSettle();
 
-    final scaffold = tester.widget<Scaffold>(find.byType(Scaffold));
-    expect(scaffold.resizeToAvoidBottomInset, isTrue);
-    expect(find.bySemanticsLabel('Notes'), findsOne);
-  });
+      final scaffold = tester.widget<Scaffold>(find.byType(Scaffold));
+      expect(scaffold.resizeToAvoidBottomInset, isTrue);
+      expect(find.bySemanticsLabel('Notes'), findsOne);
+    },
+  );
 }

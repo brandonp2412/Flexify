@@ -166,16 +166,16 @@ class _ExerciseModalState extends State<ExerciseModal> {
               Navigator.pop(context);
               final workoutId = widget.workoutId;
               if (workoutId == null) return;
-              final gymSet = await getLatestLegacyWorkoutSet(
+              final performedSet = await getLatestLegacyWorkoutSet(
                 db,
                 workoutId: workoutId,
                 exerciseId: widget.exerciseId,
               );
-              if (gymSet == null) return;
+              if (performedSet == null) return;
               if (!context.mounted) return;
               await Navigator.of(context).push(
                 FlexPageRoute(
-                  builder: (context) => EditSetPage(gymSet: gymSet),
+                  builder: (context) => EditSetPage(performedSet: performedSet),
                 ),
               );
               widget.onSelect();
@@ -189,13 +189,13 @@ class _ExerciseModalState extends State<ExerciseModal> {
               Navigator.pop(context);
               final workoutId = widget.workoutId;
               if (workoutId == null) return;
-              final gymSet = await getLatestLegacyWorkoutSet(
+              final performedSet = await getLatestLegacyWorkoutSet(
                 db,
                 workoutId: workoutId,
                 exerciseId: widget.exerciseId,
               );
-              if (gymSet == null) return;
-              await deletePerformedSets(db, [gymSet.id]);
+              if (performedSet == null) return;
+              await deletePerformedSets(db, [performedSet.id]);
               if (!context.mounted) return;
               widget.onSelect();
               final timerState = context.read<TimerState>();

@@ -23,10 +23,14 @@ import 'package:share_plus/share_plus.dart';
 
 class HistoryDay {
   final String name;
-  final List<GymSet> gymSets;
+  final List<PerformedSetView> performedSets;
   final DateTime day;
 
-  HistoryDay({required this.name, required this.gymSets, required this.day});
+  HistoryDay({
+    required this.name,
+    required this.performedSets,
+    required this.day,
+  });
 }
 
 class HistoryPage extends StatefulWidget {
@@ -77,7 +81,7 @@ class _HistoryPageWidget extends StatefulWidget {
 }
 
 class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
-  late Stream<List<GymSet>> stream;
+  late Stream<List<PerformedSetView>> stream;
 
   final repsGt = TextEditingController();
   final repsLt = TextEditingController();
@@ -239,13 +243,16 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
                       },
                     ),
                     onShare: () async {
-                      final gymSets = snapshot.data!
-                          .where((gymSet) => _selection.contains(gymSet.id))
+                      final performedSets = snapshot.data!
+                          .where(
+                            (performedSet) =>
+                                _selection.contains(performedSet.id),
+                          )
                           .toList();
-                      final summaries = gymSets
+                      final summaries = performedSets
                           .map(
-                            (gymSet) =>
-                                "${formatDisplayNumber(context, gymSet.reps)}×${formatDisplayNumber(context, gymSet.weight)}${displayMeasurementUnit(context.l10n, gymSet.unit)} ${gymSet.name}",
+                            (performedSet) =>
+                                "${formatDisplayNumber(context, performedSet.reps)}×${formatDisplayNumber(context, performedSet.weight)}${displayMeasurementUnit(context.l10n, performedSet.unit)} ${performedSet.name}",
                           )
                           .join(', ');
                       await SharePlus.instance.share(
@@ -296,14 +303,14 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
 
   void onAdd() async {
     final settings = context.read<SettingsState>().value;
-    final gymSets = await stream.first;
+    final performedSets = await stream.first;
     final latestBodyWeight = settings.showBodyWeight
         ? await getBodyWeight()
         : null;
 
-    GymSet gymSet =
-        gymSets.firstOrNull ??
-        GymSet(
+    PerformedSetView performedSet =
+        performedSets.firstOrNull ??
+        PerformedSetView(
           id: 0,
           bodyWeight: 0,
           restMs: const Duration(minutes: 3, seconds: 30).inMilliseconds,
@@ -316,43 +323,52 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
           duration: 0,
           distance: 0,
         );
-    gymSet = gymSet.copyWith(
+    performedSet = performedSet.copyWith(
       id: 0,
       bodyWeight: 0,
       created: DateTime.now().toLocal(),
     );
 
-    if (settings.strengthUnit != 'last-entry' && !gymSet.cardio) {
-      gymSet = gymSet.copyWith(unit: settings.strengthUnit);
-    } else if (settings.cardioUnit != 'last-entry' && gymSet.cardio) {
-      gymSet = gymSet.copyWith(unit: settings.cardioUnit);
+    if (settings.strengthUnit != 'last-entry' && !performedSet.cardio) {
+      performedSet = performedSet.copyWith(unit: settings.strengthUnit);
+    } else if (settings.cardioUnit != 'last-entry' && performedSet.cardio) {
+      performedSet = performedSet.copyWith(unit: settings.cardioUnit);
     }
 
     if (latestBodyWeight != null) {
-      gymSet = gymSet.copyWith(
-        bodyWeight: displayBodyWeight(gymSet.unit, latestBodyWeight.weightKg),
+      performedSet = performedSet.copyWith(
+        bodyWeight: displayBodyWeight(
+          performedSet.unit,
+          latestBodyWeight.weightKg,
+        ),
       );
     }
 
     if (!mounted) return;
-    Navigator.of(
-      context,
-    ).push(FlexPageRoute(builder: (context) => EditSetPage(gymSet: gymSet)));
+    Navigator.of(context).push(
+      FlexPageRoute(
+        builder: (context) => EditSetPage(performedSet: performedSet),
+      ),
+    );
   }
 
-  List<HistoryDay> getHistoryDays(List<GymSet> gymSets) {
+  List<HistoryDay> getHistoryDays(List<PerformedSetView> performedSets) {
     final map = <String, HistoryDay>{};
     final list = <HistoryDay>[];
-    for (final gymSet in gymSets) {
-      final day = DateUtils.dateOnly(gymSet.created);
-      final key = '${gymSet.name}|${day.millisecondsSinceEpoch}';
+    for (final performedSet in performedSets) {
+      final day = DateUtils.dateOnly(performedSet.created);
+      final key = '${performedSet.name}|${day.millisecondsSinceEpoch}';
       final existing = map[key];
       if (existing == null) {
-        final hd = HistoryDay(name: gymSet.name, gymSets: [gymSet], day: day);
+        final hd = HistoryDay(
+          name: performedSet.name,
+          performedSets: [performedSet],
+          day: day,
+        );
         map[key] = hd;
         list.add(hd);
       } else {
-        existing.gymSets.add(gymSet);
+        existing.performedSets.add(performedSet);
       }
     }
     return list;
@@ -374,7 +390,7 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
     setStream();
   }
 
-  Stream<List<GymSet>> _filteredStream({int? rowLimit}) {
+  Stream<List<PerformedSetView>> _filteredStream({int? rowLimit}) {
     return watchPerformedSets(
       db,
       search: search,
@@ -397,7 +413,7 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
     );
   }
 
-  Future<List<GymSet>> _filteredSets({int? rowLimit}) {
+  Future<List<PerformedSetView>> _filteredSets({int? rowLimit}) {
     return getPerformedSets(
       db,
       search: search,
@@ -421,10 +437,10 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
   }
 
   Future<void> selectAllFiltered() async {
-    final gymSets = await _filteredSets();
+    final performedSets = await _filteredSets();
     if (!mounted) return;
     setState(() {
-      _selection.setAll(gymSets.map((gymSet) => gymSet.id));
+      _selection.setAll(performedSets.map((performedSet) => performedSet.id));
     });
   }
 

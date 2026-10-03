@@ -27,7 +27,7 @@ class SessionSets extends StatefulWidget {
 }
 
 class _SessionSetsState extends State<SessionSets> {
-  late Stream<List<GymSet>> _stream;
+  late Stream<List<PerformedSetView>> _stream;
   final ScrollController _scrollController = ScrollController();
   int _lastSetCount = 0;
 
@@ -106,7 +106,7 @@ class _SessionSetsState extends State<SessionSets> {
     );
   }
 
-  Widget _buildChips(List<GymSet> sets) {
+  Widget _buildChips(List<PerformedSetView> sets) {
     final best = _bestId(sets);
 
     return Column(
@@ -124,7 +124,7 @@ class _SessionSetsState extends State<SessionSets> {
                 Padding(
                   padding: const EdgeInsets.only(right: 8.0),
                   child: _SetChip(
-                    gymSet: sets[i],
+                    performedSet: sets[i],
                     number: i + 1,
                     best: sets[i].id == best,
                     repsFirst: widget.compact,
@@ -138,7 +138,7 @@ class _SessionSetsState extends State<SessionSets> {
   }
 
   /// Id of the top set this session, using the measurement shown to the user.
-  int? _bestId(List<GymSet> sets) {
+  int? _bestId(List<PerformedSetView> sets) {
     if (sets.length < 2) return null;
     final cardio = sets.first.cardio;
     final weightedCardio = cardio && _isWeightUnit(sets.first.unit);
@@ -216,36 +216,37 @@ class _PlaceholderChip extends StatelessWidget {
 }
 
 class _SetChip extends StatelessWidget {
-  final GymSet _gymSet;
+  final PerformedSetView _performedSet;
   final int _number;
   final bool _best;
   final bool repsFirst;
 
   const _SetChip({
-    required this._gymSet,
+    required this._performedSet,
     required this._number,
     required this._best,
     required this.repsFirst,
   });
 
   String _value(BuildContext context) {
-    final unit = displayMeasurementUnit(context.l10n, _gymSet.unit);
-    if (_gymSet.cardio &&
-        (_gymSet.unit == 'kg' ||
-            _gymSet.unit == 'lb' ||
-            _gymSet.unit == 'stone')) {
-      final minutes = _gymSet.duration.floor();
-      final seconds = ((_gymSet.duration * 60) % 60).floor().toString().padLeft(
-        2,
-        '0',
-      );
-      return "${formatDisplayNumber(context, _gymSet.weight)} $unit / $minutes:$seconds";
+    final unit = displayMeasurementUnit(context.l10n, _performedSet.unit);
+    if (_performedSet.cardio &&
+        (_performedSet.unit == 'kg' ||
+            _performedSet.unit == 'lb' ||
+            _performedSet.unit == 'stone')) {
+      final minutes = _performedSet.duration.floor();
+      final seconds = ((_performedSet.duration * 60) % 60)
+          .floor()
+          .toString()
+          .padLeft(2, '0');
+      return "${formatDisplayNumber(context, _performedSet.weight)} $unit / $minutes:$seconds";
     }
-    if (_gymSet.cardio) {
-      return "${formatDisplayNumber(context, _gymSet.distance)} $unit";
+    if (_performedSet.cardio) {
+      return "${formatDisplayNumber(context, _performedSet.distance)} $unit";
     }
-    final weight = "${formatDisplayNumber(context, _gymSet.weight)} $unit";
-    final reps = formatDisplayNumber(context, _gymSet.reps);
+    final weight =
+        "${formatDisplayNumber(context, _performedSet.weight)} $unit";
+    final reps = formatDisplayNumber(context, _performedSet.reps);
     return repsFirst ? "$reps × $weight" : "$weight × $reps";
   }
 
@@ -257,7 +258,9 @@ class _SetChip extends StatelessWidget {
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
         onTap: () => Navigator.of(context).push(
-          FlexPageRoute(builder: (context) => EditSetPage(gymSet: _gymSet)),
+          FlexPageRoute(
+            builder: (context) => EditSetPage(performedSet: _performedSet),
+          ),
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),

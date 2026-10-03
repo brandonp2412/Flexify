@@ -422,45 +422,62 @@ class _EditSetsPageState extends State<EditSetsPage> {
     final settings = context.read<SettingsState>().value;
 
     getPerformedSets(db).then((allSets) {
-      final gymSets = allSets
-          .where((gymSet) => widget.ids.contains(gymSet.id))
+      final performedSets = allSets
+          .where((performedSet) => widget.ids.contains(performedSet.id))
           .take(3)
           .toList();
-      if (gymSets.isEmpty) return;
+      if (performedSets.isEmpty) return;
       setState(() {
-        _cardio = gymSets.first.cardio;
-        final units = gymSets.map((gymSet) => gymSet.unit).toSet();
+        _cardio = performedSets.first.cardio;
+        final units = performedSets
+            .map((performedSet) => performedSet.unit)
+            .toSet();
         _unit = units.length == 1 ? units.single : null;
-        _oldNames = gymSets.map((gymSet) => gymSet.name).join(', ');
-        _oldReps = gymSets.map((gymSet) => gymSet.reps).join(', ');
-        _oldWeights = gymSets.map((gymSet) => gymSet.weight).join(', ');
-        _oldBody = gymSets.map((gymSet) => gymSet.bodyWeight).join(', ');
+        _oldNames = performedSets
+            .map((performedSet) => performedSet.name)
+            .join(', ');
+        _oldReps = performedSets
+            .map((performedSet) => performedSet.reps)
+            .join(', ');
+        _oldWeights = performedSets
+            .map((performedSet) => performedSet.weight)
+            .join(', ');
+        _oldBody = performedSets
+            .map((performedSet) => performedSet.bodyWeight)
+            .join(', ');
         if (settings.longDateFormat == 'timeago')
-          _oldCreated = gymSets
-              .map((gymSet) => formatRelativeTime(context, gymSet.created))
+          _oldCreated = performedSets
+              .map(
+                (performedSet) =>
+                    formatRelativeTime(context, performedSet.created),
+              )
               .join(', ');
         else
-          _oldCreated = gymSets
+          _oldCreated = performedSets
               .map(
-                (gymSet) => formatDisplayDate(
+                (performedSet) => formatDisplayDate(
                   context,
-                  gymSet.created,
+                  performedSet.created,
                   settings.longDateFormat,
                 ),
               )
               .join(', ');
-        _oldDist = gymSets.map((gymSet) => gymSet.distance).join(', ');
-        _oldMin = gymSets.map((gymSet) => gymSet.duration.floor()).join(', ');
-        _oldSec = gymSets
-            .map((gymSet) => ((gymSet.duration * 60) % 60).floor())
+        _oldDist = performedSets
+            .map((performedSet) => performedSet.distance)
             .join(', ');
-        final incs = gymSets
-            .map((gymSet) => gymSet.incline)
+        _oldMin = performedSets
+            .map((performedSet) => performedSet.duration.floor())
+            .join(', ');
+        _oldSec = performedSets
+            .map((performedSet) => ((performedSet.duration * 60) % 60).floor())
+            .join(', ');
+        final incs = performedSets
+            .map((performedSet) => performedSet.incline)
             .whereType<int>()
             .join(', ');
         _oldInc = incs.isEmpty ? null : incs;
-        final cats = gymSets
-            .map((gymSet) => gymSet.category)
+        final cats = performedSets
+            .map((performedSet) => performedSet.category)
             .whereType<String>()
             .join(', ');
         _oldCat = cats.isEmpty ? null : cats;
@@ -508,9 +525,9 @@ class _EditSetsPageState extends State<EditSetsPage> {
         : parseDisplayNumber(context, _distance.text);
     if (_category != null) await createCategory(_category!);
 
-    final selected = (await getPerformedSets(
-      db,
-    )).where((set) => widget.ids.contains(set.id)).toList();
+    final selected = (await getPerformedSets(db))
+        .where((set) => widget.ids.contains(set.id))
+        .toList();
 
     final changesExercise =
         _name.text.isNotEmpty ||
@@ -561,7 +578,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
       await updatePerformedSet(
         db,
         id: original.id,
-        gymSet: updated,
+        performedSet: updated,
         exerciseId: exercise.id,
       );
     }

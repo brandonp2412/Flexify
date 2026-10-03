@@ -177,7 +177,7 @@ Future<ExerciseSet?> getLatestManualExerciseSet(
       .getSingleOrNull();
 }
 
-Future<GymSet?> getFirstOfLastPlanWorkout(
+Future<PerformedSetView?> getFirstOfLastPlanWorkout(
   AppDatabase database, {
   required int exerciseId,
   required int planId,
@@ -198,7 +198,7 @@ Future<GymSet?> getFirstOfLastPlanWorkout(
   return getPerformedSetById(database, exerciseSet.id);
 }
 
-Future<GymSet?> getStartPlanPrefillById(
+Future<PerformedSetView?> getStartPlanPrefillById(
   AppDatabase database, {
   required int exerciseId,
   required int planId,
@@ -215,7 +215,7 @@ Future<GymSet?> getStartPlanPrefillById(
   return getPerformedSetById(database, manual.id);
 }
 
-Stream<List<GymSet>> watchLegacyWorkoutSets(
+Stream<List<PerformedSetView>> watchLegacyWorkoutSets(
   AppDatabase database, {
   required int workoutId,
   required int exerciseId,
@@ -227,7 +227,7 @@ Stream<List<GymSet>> watchLegacyWorkoutSets(
   );
 }
 
-Future<GymSet?> getLatestLegacyWorkoutSet(
+Future<PerformedSetView?> getLatestLegacyWorkoutSet(
   AppDatabase database, {
   required int workoutId,
   required int exerciseId,
@@ -250,14 +250,14 @@ double? canonicalLoadKg(String unit, double value) {
 
 Future<int> insertExerciseSetMirror(
   AppDatabase database, {
-  required GymSet gymSet,
+  required PerformedSetView performedSet,
   required int exerciseId,
   required int? workoutId,
   double? bodyWeightKg,
 }) async {
   final inserted = await insertPerformedSet(
     database,
-    gymSet: gymSet,
+    performedSet: performedSet,
     exerciseId: exerciseId,
     workoutId: workoutId,
     bodyWeightKg: bodyWeightKg,

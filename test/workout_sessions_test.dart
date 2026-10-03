@@ -8,7 +8,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'mock_tests.dart';
 import 'support/fixtures.dart';
 
-Future<GymSet> addMirroredSet({
+Future<PerformedSetView> addMirroredSet({
   required int exerciseId,
   required String exerciseName,
   required int? planId,
@@ -18,7 +18,7 @@ Future<GymSet> addMirroredSet({
 }) {
   return insertPerformedSet(
     db,
-    gymSet: gymSetFixture(
+    performedSet: performedSetFixture(
       exerciseName,
       planId: planId,
       created: created,

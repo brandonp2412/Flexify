@@ -395,14 +395,14 @@ void main() {
     await database.planExercises.insertOne(
       planExerciseFixture(planId: planId, exerciseId: originalExerciseId),
     );
-    final originalHistory = gymSetFixture(
+    final originalHistory = performedSetFixture(
       originalExercise,
       reps: 10,
       weight: 50,
       planId: planId,
       created: testNow.subtract(const Duration(days: 7)),
     );
-    final replacementHistory = gymSetFixture(
+    final replacementHistory = performedSetFixture(
       replacementExercise,
       reps: 8,
       weight: 30,
@@ -415,7 +415,7 @@ void main() {
     );
     await insertPerformedSet(
       database,
-      gymSet: originalHistory,
+      performedSet: originalHistory,
       exerciseId: originalExerciseId,
       workoutId: oldWorkout.id,
     );
@@ -426,7 +426,7 @@ void main() {
     );
     await insertPerformedSet(
       database,
-      gymSet: replacementHistory,
+      performedSet: replacementHistory,
       exerciseId: replacementExerciseId,
       workoutId: null,
     );

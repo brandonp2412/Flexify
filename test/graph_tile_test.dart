@@ -18,7 +18,7 @@ void main() {
           tabCtrl: MockTabController(),
           onSelect: (value) => null,
           selected: const {},
-          gymSet: GraphExerciseSummary(
+          performedSet: GraphExerciseSummary(
             exerciseId: 1,
             bodyWeight: false,
             name: 'Bench press',
@@ -49,7 +49,7 @@ void main() {
           tabCtrl: MockTabController(),
           onSelect: (value) => null,
           selected: const {},
-          gymSet: GraphExerciseSummary(
+          performedSet: GraphExerciseSummary(
             exerciseId: null,
             bodyWeight: true,
             name: 'Weight',
@@ -88,7 +88,7 @@ void main() {
           onEdit: () => edited = true,
           onDelete: () async {},
           selected: const {},
-          gymSet: GraphExerciseSummary(
+          performedSet: GraphExerciseSummary(
             exerciseId: 1,
             bodyWeight: false,
             name: 'Desktop bench press',

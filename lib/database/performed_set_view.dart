@@ -4,8 +4,8 @@ import 'package:drift/drift.dart';
 ///
 /// This intentionally is not a Drift table. Persistent set data lives in
 /// exercise_sets, while exercise identity/configuration lives in exercises.
-class GymSet {
-  const GymSet({
+class PerformedSetView {
+  const PerformedSetView({
     required this.bodyWeight,
     required this.cardio,
     this.category,
@@ -41,7 +41,7 @@ class GymSet {
   final String unit;
   final double weight;
 
-  GymSet copyWith({
+  PerformedSetView copyWith({
     double? bodyWeight,
     bool? cardio,
     Value<String?> category = const Value.absent(),
@@ -59,7 +59,7 @@ class GymSet {
     String? unit,
     double? weight,
   }) {
-    return GymSet(
+    return PerformedSetView(
       bodyWeight: bodyWeight ?? this.bodyWeight,
       cardio: cardio ?? this.cardio,
       category: category.present ? category.value : this.category,

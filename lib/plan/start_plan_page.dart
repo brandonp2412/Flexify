@@ -619,7 +619,7 @@ class _StartPlanPageState extends State<StartPlanPage>
     super.dispose();
   }
 
-  Future<GymSet?> getLast(String exercise) {
+  Future<PerformedSetView?> getLast(String exercise) {
     return getLatestPerformedSet(db, exerciseName: exercise);
   }
 
@@ -628,7 +628,7 @@ class _StartPlanPageState extends State<StartPlanPage>
   /// "Most recent session" = the calendar day of the latest recorded set.
   /// Showing the first set (rather than the last) gives a better baseline for
   /// progressive overload when weights decrease across sets.
-  Future<GymSet?> getFirstOfLastSession(int exerciseId) =>
+  Future<PerformedSetView?> getFirstOfLastSession(int exerciseId) =>
       getStartPlanPrefillById(
         db,
         exerciseId: exerciseId,
@@ -738,26 +738,26 @@ class _StartPlanPageState extends State<StartPlanPage>
     }
   }
 
-  void _updateGymSetTextFields(GymSet gymSet) {
+  void _updatePerformedSetTextFields(PerformedSetView performedSet) {
     final settings = context.read<SettingsState>().value;
-    if (settings.strengthUnit == 'last-entry' && !gymSet.cardio ||
-        settings.cardioUnit == 'last-entry' && gymSet.cardio)
-      _unit = gymSet.unit;
-    else if (gymSet.cardio)
+    if (settings.strengthUnit == 'last-entry' && !performedSet.cardio ||
+        settings.cardioUnit == 'last-entry' && performedSet.cardio)
+      _unit = performedSet.unit;
+    else if (performedSet.cardio)
       _unit = settings.cardioUnit;
     else
       _unit = settings.strengthUnit;
 
-    _reps.text = toString(gymSet.reps);
-    _weight.text = toString(gymSet.weight);
-    _distance.text = toString(gymSet.distance);
-    _minutes.text = gymSet.duration.floor().toString();
-    _seconds.text = ((gymSet.duration * 60) % 60).floor().toString();
-    _incline.text = gymSet.incline?.toString() ?? "";
-    _cardio = gymSet.cardio;
-    _category = gymSet.category;
-    _image = gymSet.image;
-    _notes.text = gymSet.notes ?? "";
+    _reps.text = toString(performedSet.reps);
+    _weight.text = toString(performedSet.weight);
+    _distance.text = toString(performedSet.distance);
+    _minutes.text = performedSet.duration.floor().toString();
+    _seconds.text = ((performedSet.duration * 60) % 60).floor().toString();
+    _incline.text = performedSet.incline?.toString() ?? "";
+    _cardio = performedSet.cardio;
+    _category = performedSet.category;
+    _image = performedSet.image;
+    _notes.text = performedSet.notes ?? "";
   }
 
   Future<void> save(
@@ -798,9 +798,8 @@ class _StartPlanPageState extends State<StartPlanPage>
         !kIsWeb &&
         defaultTargetPlatform == TargetPlatform.android &&
         mounted) {
-      await Navigator.of(
-        context,
-      ).push(FlexPageRoute(builder: (context) => const PermissionsPage()));
+      await Navigator.of(context)
+          .push(FlexPageRoute(builder: (context) => const PermissionsPage()));
     }
 
     if (!mounted) return;
@@ -820,7 +819,7 @@ class _StartPlanPageState extends State<StartPlanPage>
     }
 
     final created = DateTime.now().toLocal();
-    final gymSetDraft = GymSet(
+    final performedSetDraft = PerformedSetView(
       id: 0,
       bodyWeight: bodyWeight ?? 0,
       cardio: _cardio,
@@ -862,9 +861,9 @@ class _StartPlanPageState extends State<StartPlanPage>
         count == (max ?? settings.maxSets) &&
         _selected < snapshot.data!.length - 1;
 
-    final gymSet = await insertPerformedSet(
+    final performedSet = await insertPerformedSet(
       db,
-      gymSet: gymSetDraft,
+      performedSet: performedSetDraft,
       exerciseId: exerciseId,
       workoutId: workout.id,
       bodyWeightKg: bodyWeightKg,
@@ -872,14 +871,14 @@ class _StartPlanPageState extends State<StartPlanPage>
     if (!mounted) return;
     final messages = positiveReinforcementMessages(context.l10n);
     setState(() {
-      _updateGymSetTextFields(gymSet);
+      _updatePerformedSetTextFields(performedSet);
       _lastSaved = DateTime.now();
     });
     if (finishedExercise) await select(_selected + 1);
 
     if (!settings.notifications) return;
 
-    final best = await isBestPerformedSet(db, gymSet);
+    final best = await isBestPerformedSet(db, performedSet);
     if (!best) return;
     final random = Random();
     final randomMessage = messages[random.nextInt(messages.length)];
@@ -895,7 +894,7 @@ class _StartPlanPageState extends State<StartPlanPage>
     if (exercises.isEmpty) {
       setState(() {
         _selected = 0;
-        _clearGymSetTextFields();
+        _clearPerformedSetTextFields();
       });
       return;
     }
@@ -913,15 +912,15 @@ class _StartPlanPageState extends State<StartPlanPage>
     setState(() {
       _selected = selected;
       if (last != null) {
-        _updateGymSetTextFields(last);
+        _updatePerformedSetTextFields(last);
       } else if (template != null) {
-        _clearGymSetTextFields();
+        _clearPerformedSetTextFields();
         _cardio = template.kind == 'cardio';
         _unit = template.displayUnit;
         _category = templateCategory;
         _image = template.image;
       } else {
-        _clearGymSetTextFields();
+        _clearPerformedSetTextFields();
       }
     });
   }
@@ -931,7 +930,7 @@ class _StartPlanPageState extends State<StartPlanPage>
     await _selectFromEntries(exercises, index);
   }
 
-  void _clearGymSetTextFields() {
+  void _clearPerformedSetTextFields() {
     final settings = context.read<SettingsState>().value;
     _unit = settings.strengthUnit == 'last-entry'
         ? 'kg'

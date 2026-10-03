@@ -195,7 +195,7 @@ class GraphsPageState extends State<GraphsPage>
   }
 
   Widget getPeek(
-    GraphExerciseSummary gymSet,
+    GraphExerciseSummary performedSet,
     List<dynamic> data,
     String format,
   ) {
@@ -216,7 +216,8 @@ class GraphsPageState extends State<GraphsPage>
         child: FlexLine(
           data: data,
           points: points,
-          tooltipText: (index) => tooltipText(data, gymSet.unit, format, index),
+          tooltipText: (index) =>
+              tooltipText(data, performedSet.unit, format, index),
           hideBottom: true,
           hideLeft: true,
           showTrendLine: false,
@@ -266,31 +267,32 @@ class GraphsPageState extends State<GraphsPage>
                 .toLowerCase()
                 .split(" ")
                 .where((term) => term.isNotEmpty);
-            var stream = snapshot.data!.where((gymSet) {
+            var stream = snapshot.data!.where((performedSet) {
               if (_category != null) {
-                return gymSet.category == _category;
+                return performedSet.category == _category;
               }
               return true;
             });
 
             for (final term in terms) {
               stream = stream.where(
-                (gymSet) => gymSet.name.toLowerCase().contains(term),
+                (performedSet) =>
+                    performedSet.name.toLowerCase().contains(term),
               );
             }
 
-            final gymSets = stream.toList();
+            final performedSets = stream.toList();
             switch (_sort) {
               case GraphSort.dateDesc:
-                gymSets.sort((a, b) => b.created.compareTo(a.created));
+                performedSets.sort((a, b) => b.created.compareTo(a.created));
                 break;
 
               case GraphSort.dateAsc:
-                gymSets.sort((a, b) => a.created.compareTo(b.created));
+                performedSets.sort((a, b) => a.created.compareTo(b.created));
                 break;
 
               case GraphSort.name:
-                gymSets.sort(
+                performedSets.sort(
                   (a, b) =>
                       a.name.toLowerCase().compareTo(b.name.toLowerCase()),
                 );
@@ -306,7 +308,7 @@ class GraphsPageState extends State<GraphsPage>
                             settingsState.value.showGlobalProgress,
                         builder: (context, showGlobal, child) {
                           final showEmpty =
-                              gymSets.isEmpty &&
+                              performedSets.isEmpty &&
                               !context.l10n.globalProgress
                                   .toLowerCase()
                                   .contains(_search.toLowerCase());
@@ -333,8 +335,8 @@ class GraphsPageState extends State<GraphsPage>
                                               _search.trim(),
                                             ),
                                       actionIcon: Icons.add_rounded,
-                                      onAction: () =>
-                                          Navigator.of(context).push(
+                                      onAction: () => Navigator.of(context)
+                                          .push(
                                             FlexPageRoute(
                                               builder: (context) =>
                                                   AddExercisePage(
@@ -344,7 +346,7 @@ class GraphsPageState extends State<GraphsPage>
                                           ),
                                     ),
                                   )
-                                : graphList(gymSets, showGlobal),
+                                : graphList(performedSets, showGlobal),
                           );
                         },
                       ),
@@ -381,7 +383,9 @@ class GraphsPageState extends State<GraphsPage>
                     onDelete: () async => onDelete(),
                     onSelectAll: () => setState(() {
                       _selection.setAll(
-                        gymSets.map((gymSet) => gymSet.selectionKey),
+                        performedSets.map(
+                          (performedSet) => performedSet.selectionKey,
+                        ),
                       );
                     }),
                     onEdit: () async {
@@ -427,12 +431,12 @@ class GraphsPageState extends State<GraphsPage>
       _selection.clear();
     });
     final sets = (await _stream.first)
-        .where((gymSet) => copy.contains(gymSet.selectionKey))
+        .where((performedSet) => copy.contains(performedSet.selectionKey))
         .toList();
     final text = sets
         .map(
-          (gymSet) =>
-              "${formatDisplayNumber(context, gymSet.reps)}×${formatDisplayNumber(context, gymSet.weight)}${displayMeasurementUnit(l10n, gymSet.unit)} ${gymSet.name}",
+          (performedSet) =>
+              "${formatDisplayNumber(context, performedSet.reps)}×${formatDisplayNumber(context, performedSet.weight)}${displayMeasurementUnit(l10n, performedSet.unit)} ${performedSet.name}",
         )
         .join(', ');
     await SharePlus.instance.share(ShareParams(text: l10n.shareWorkout(text)));
@@ -471,7 +475,7 @@ class GraphsPageState extends State<GraphsPage>
   }
 
   Widget _desktopGraphList(
-    List<GraphExerciseSummary> gymSets,
+    List<GraphExerciseSummary> performedSets,
     bool showGlobalProgress,
   ) {
     final globalSearchTerms =
@@ -482,11 +486,12 @@ class GraphsPageState extends State<GraphsPage>
         _category == null &&
         showGlobalProgress;
     final settings = context.read<SettingsState>().value;
-    final showPeekGraph = settings.peekGraph && gymSets.firstOrNull != null;
+    final showPeekGraph =
+        settings.peekGraph && performedSets.firstOrNull != null;
 
-    Widget graphTile(GraphExerciseSummary gymSet) => GraphTile(
+    Widget graphTile(GraphExerciseSummary performedSet) => GraphTile(
       selected: _selection.selected,
-      gymSet: gymSet,
+      performedSet: performedSet,
       onSelect: (key) async {
         setState(() {
           _selection.toggle(key);
@@ -498,8 +503,10 @@ class GraphsPageState extends State<GraphsPage>
         });
       },
       tabCtrl: widget.tabController,
-      onEdit: gymSet.bodyWeight ? null : () => _editGraphSummary(gymSet),
-      onDelete: () => _deleteGraphSummary(gymSet),
+      onEdit: performedSet.bodyWeight
+          ? null
+          : () => _editGraphSummary(performedSet),
+      onDelete: () => _deleteGraphSummary(performedSet),
     );
 
     return CustomScrollView(
@@ -526,9 +533,8 @@ class GraphsPageState extends State<GraphsPage>
                     leading: const Icon(Icons.language),
                     title: Text(
                       context.l10n.globalProgress,
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
-                      ),
+                      style: Theme.of(context).textTheme.titleMedium
+                          ?.copyWith(fontWeight: FontWeight.w600),
                     ),
                     subtitle: Text(context.l10n.chartGroupedByCategory),
                     trailing: const Icon(Icons.chevron_right_rounded),
@@ -554,36 +560,36 @@ class GraphsPageState extends State<GraphsPage>
                     Widget? child,
                   ) {
                     if (!settings.value.peekGraph ||
-                        gymSets.firstOrNull == null) {
+                        performedSets.firstOrNull == null) {
                       return const SizedBox();
                     }
                     return FutureBuilder(
                       builder: (context, snapshot) => snapshot.data != null
                           ? getPeek(
-                              gymSets.first,
+                              performedSets.first,
                               snapshot.data!,
                               settings.value.shortDateFormat,
                             )
                           : const SizedBox(),
-                      future: gymSets.first.bodyWeight
+                      future: performedSets.first.bodyWeight
                           ? getBodyWeightData(
-                              target: gymSets.first.unit,
+                              target: performedSets.first.unit,
                               period: Period.day,
                               start: null,
                               end: null,
                               limit: 20,
                             )
-                          : gymSets.first.cardio
+                          : performedSets.first.cardio
                           ? getCardioData(
-                              name: gymSets.first.name,
-                              target: gymSets.first.unit,
-                              metric: _isWeightUnit(gymSets.first.unit)
+                              name: performedSets.first.name,
+                              target: performedSets.first.unit,
+                              metric: _isWeightUnit(performedSets.first.unit)
                                   ? CardioMetric.weight
                                   : CardioMetric.pace,
                             )
                           : getStrengthData(
-                              target: gymSets.first.unit,
-                              name: gymSets.first.name,
+                              target: performedSets.first.unit,
+                              name: performedSets.first.name,
                               metric: StrengthMetric.bestWeight,
                               period: Period.day,
                               start: null,
@@ -603,8 +609,8 @@ class GraphsPageState extends State<GraphsPage>
               crossAxisSpacing: 4,
               mainAxisSpacing: 2,
             ),
-            itemCount: gymSets.length,
-            itemBuilder: (context, index) => graphTile(gymSets[index]),
+            itemCount: performedSets.length,
+            itemBuilder: (context, index) => graphTile(performedSets[index]),
           ),
         ),
       ],
@@ -612,13 +618,13 @@ class GraphsPageState extends State<GraphsPage>
   }
 
   Widget graphList(
-    List<GraphExerciseSummary> gymSets,
+    List<GraphExerciseSummary> performedSets,
     bool showGlobalProgress,
   ) {
     if (isDesktopLayout(context)) {
-      return _desktopGraphList(gymSets, showGlobalProgress);
+      return _desktopGraphList(performedSets, showGlobalProgress);
     }
-    var itemCount = gymSets.length;
+    var itemCount = performedSets.length;
     final globalSearchTerms =
         '${context.l10n.globalProgress} ${context.l10n.navGraphs}'
             .toLowerCase();
@@ -629,7 +635,8 @@ class GraphsPageState extends State<GraphsPage>
     if (showGlobal) itemCount++;
 
     final settings = context.read<SettingsState>().value;
-    final showPeekGraph = settings.peekGraph && gymSets.firstOrNull != null;
+    final showPeekGraph =
+        settings.peekGraph && performedSets.firstOrNull != null;
     if (showPeekGraph) itemCount++;
 
     return ListView.builder(
@@ -671,9 +678,8 @@ class GraphsPageState extends State<GraphsPage>
                     title: Text(
                       context.l10n.globalProgress,
                       style: isDesktopLayout(context)
-                          ? Theme.of(context).textTheme.titleMedium?.copyWith(
-                              fontWeight: FontWeight.w600,
-                            )
+                          ? Theme.of(context).textTheme.titleMedium
+                                ?.copyWith(fontWeight: FontWeight.w600)
                           : null,
                     ),
                     subtitle: Text(context.l10n.chartGroupedByCategory),
@@ -701,35 +707,36 @@ class GraphsPageState extends State<GraphsPage>
             builder:
                 (BuildContext context, SettingsState settings, Widget? child) {
                   if (!settings.value.peekGraph) return const SizedBox();
-                  if (gymSets.firstOrNull == null) return const SizedBox();
+                  if (performedSets.firstOrNull == null)
+                    return const SizedBox();
 
                   return FutureBuilder(
                     builder: (context, snapshot) => snapshot.data != null
                         ? getPeek(
-                            gymSets.first,
+                            performedSets.first,
                             snapshot.data!,
                             settings.value.shortDateFormat,
                           )
                         : const SizedBox(),
-                    future: gymSets.first.bodyWeight
+                    future: performedSets.first.bodyWeight
                         ? getBodyWeightData(
-                            target: gymSets.first.unit,
+                            target: performedSets.first.unit,
                             period: Period.day,
                             start: null,
                             end: null,
                             limit: 20,
                           )
-                        : gymSets.first.cardio
+                        : performedSets.first.cardio
                         ? getCardioData(
-                            name: gymSets.first.name,
-                            target: gymSets.first.unit,
-                            metric: _isWeightUnit(gymSets.first.unit)
+                            name: performedSets.first.name,
+                            target: performedSets.first.unit,
+                            metric: _isWeightUnit(performedSets.first.unit)
                                 ? CardioMetric.weight
                                 : CardioMetric.pace,
                           )
                         : getStrengthData(
-                            target: gymSets.first.unit,
-                            name: gymSets.first.name,
+                            target: performedSets.first.unit,
+                            name: performedSets.first.name,
                             metric: StrengthMetric.bestWeight,
                             period: Period.day,
                             start: null,
@@ -745,13 +752,13 @@ class GraphsPageState extends State<GraphsPage>
           currentIdx--;
         }
 
-        final gymSet = gymSets.elementAtOrNull(currentIdx);
-        if (gymSet == null) return const SizedBox();
+        final performedSet = performedSets.elementAtOrNull(currentIdx);
+        if (performedSet == null) return const SizedBox();
 
         return ResponsiveContent(
           child: GraphTile(
             selected: _selection.selected,
-            gymSet: gymSet,
+            performedSet: performedSet,
             onSelect: (key) async {
               setState(() {
                 _selection.toggle(key);
@@ -763,8 +770,10 @@ class GraphsPageState extends State<GraphsPage>
               });
             },
             tabCtrl: widget.tabController,
-            onEdit: gymSet.bodyWeight ? null : () => _editGraphSummary(gymSet),
-            onDelete: () => _deleteGraphSummary(gymSet),
+            onEdit: performedSet.bodyWeight
+                ? null
+                : () => _editGraphSummary(performedSet),
+            onDelete: () => _deleteGraphSummary(performedSet),
           ),
         );
       },

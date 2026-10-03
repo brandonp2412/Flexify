@@ -56,14 +56,14 @@ double? _canonicalBodyWeight(String unit, double value) {
   return canonicalPerformedLoad(unit, value);
 }
 
-GymSet _toGymSet(AppDatabase database, TypedResult row) {
+PerformedSetView _toPerformedSet(AppDatabase database, TypedResult row) {
   final set = row.readTable(database.exerciseSets);
   final exercise = row.readTable(database.exercises);
   final category = row.readTableOrNull(database.categories);
   final workout = row.readTableOrNull(database.workouts);
   final unit = exercise.displayUnit;
 
-  return GymSet(
+  return PerformedSetView(
     id: set.id,
     bodyWeight: _displayBodyWeight(unit, set.bodyWeightKg),
     cardio: exercise.kind == 'cardio',
@@ -83,8 +83,8 @@ GymSet _toGymSet(AppDatabase database, TypedResult row) {
   );
 }
 
-List<GymSet> _filterPerformedSets(
-  List<GymSet> sets, {
+List<PerformedSetView> _filterPerformedSets(
+  List<PerformedSetView> sets, {
   String search = '',
   String? category,
   DateTime? startDate,
@@ -141,7 +141,7 @@ JoinedSelectStatement<HasResultSet, dynamic> _performedSetQuery(
 }
 
 /// Watches performed sets projected with exercise metadata for history UI.
-Stream<List<GymSet>> watchPerformedSets(
+Stream<List<PerformedSetView>> watchPerformedSets(
   AppDatabase database, {
   String search = '',
   String? category,
@@ -155,7 +155,7 @@ Stream<List<GymSet>> watchPerformedSets(
 }) {
   return _performedSetQuery(database).watch().map(
     (rows) => _filterPerformedSets(
-      rows.map((row) => _toGymSet(database, row)).toList(),
+      rows.map((row) => _toPerformedSet(database, row)).toList(),
       search: search,
       category: category,
       startDate: startDate,
@@ -170,7 +170,7 @@ Stream<List<GymSet>> watchPerformedSets(
 }
 
 /// Loads performed sets projected with exercise metadata.
-Future<List<GymSet>> getPerformedSets(
+Future<List<PerformedSetView>> getPerformedSets(
   AppDatabase database, {
   String search = '',
   String? category,
@@ -184,7 +184,7 @@ Future<List<GymSet>> getPerformedSets(
 }) async {
   final rows = await _performedSetQuery(database).get();
   return _filterPerformedSets(
-    rows.map((row) => _toGymSet(database, row)).toList(),
+    rows.map((row) => _toPerformedSet(database, row)).toList(),
     search: search,
     category: category,
     startDate: startDate,
@@ -197,7 +197,7 @@ Future<List<GymSet>> getPerformedSets(
   );
 }
 
-Future<List<GymSet>> getPerformedSetsForExercise(
+Future<List<PerformedSetView>> getPerformedSetsForExercise(
   AppDatabase database, {
   required String exerciseName,
   DateTime? startDate,
@@ -219,10 +219,10 @@ Future<List<GymSet>> getPerformedSetsForExercise(
   if (limit != null) query.limit(limit);
 
   final rows = await query.get();
-  return rows.map((row) => _toGymSet(database, row)).toList();
+  return rows.map((row) => _toPerformedSet(database, row)).toList();
 }
 
-Future<GymSet?> getPerformedSetForExerciseAt(
+Future<PerformedSetView?> getPerformedSetForExerciseAt(
   AppDatabase database, {
   required String exerciseName,
   required DateTime timestamp,
@@ -232,7 +232,7 @@ Future<GymSet?> getPerformedSetForExerciseAt(
     ..where(database.exerciseSets.timestamp.equals(timestamp))
     ..limit(1);
   final row = await query.getSingleOrNull();
-  return row == null ? null : _toGymSet(database, row);
+  return row == null ? null : _toPerformedSet(database, row);
 }
 
 Future<int> countPerformedSetsForExercises(
@@ -260,15 +260,18 @@ Future<int> countPerformedSetsForExercises(
 }
 
 /// Loads one performed set by its exercise_sets identifier.
-Future<GymSet?> getPerformedSetById(AppDatabase database, int id) async {
+Future<PerformedSetView?> getPerformedSetById(
+  AppDatabase database,
+  int id,
+) async {
   final query = _performedSetQuery(database)
     ..where(database.exerciseSets.id.equals(id));
   final row = await query.getSingleOrNull();
-  return row == null ? null : _toGymSet(database, row);
+  return row == null ? null : _toPerformedSet(database, row);
 }
 
 /// Loads the latest performed set for an exercise name.
-Future<GymSet?> getLatestPerformedSet(
+Future<PerformedSetView?> getLatestPerformedSet(
   AppDatabase database, {
   required String exerciseName,
 }) async {
@@ -276,11 +279,11 @@ Future<GymSet?> getLatestPerformedSet(
     ..where(database.exercises.name.equals(exerciseName))
     ..limit(1);
   final row = await query.getSingleOrNull();
-  return row == null ? null : _toGymSet(database, row);
+  return row == null ? null : _toPerformedSet(database, row);
 }
 
 /// Loads the latest performed set for an exercise in one workout.
-Future<GymSet?> getLatestWorkoutPerformedSet(
+Future<PerformedSetView?> getLatestWorkoutPerformedSet(
   AppDatabase database, {
   required int workoutId,
   required int exerciseId,
@@ -292,11 +295,11 @@ Future<GymSet?> getLatestWorkoutPerformedSet(
     )
     ..limit(1);
   final row = await query.getSingleOrNull();
-  return row == null ? null : _toGymSet(database, row);
+  return row == null ? null : _toPerformedSet(database, row);
 }
 
 /// Watches performed sets for one exercise in one workout.
-Stream<List<GymSet>> watchWorkoutPerformedSets(
+Stream<List<PerformedSetView>> watchWorkoutPerformedSets(
   AppDatabase database, {
   required int workoutId,
   required int exerciseId,
@@ -307,37 +310,39 @@ Stream<List<GymSet>> watchWorkoutPerformedSets(
           database.exerciseSets.exerciseId.equals(exerciseId),
     );
   return query.watch().map(
-    (rows) => rows.map((row) => _toGymSet(database, row)).toList(),
+    (rows) => rows.map((row) => _toPerformedSet(database, row)).toList(),
   );
 }
 
 /// Inserts one performed set into exercise_sets only.
-Future<GymSet> insertPerformedSet(
+Future<PerformedSetView> insertPerformedSet(
   AppDatabase database, {
-  required GymSet gymSet,
+  required PerformedSetView performedSet,
   required int exerciseId,
   int? workoutId,
   double? bodyWeightKg,
 }) async {
   final resolvedBodyWeightKg =
       bodyWeightKg ??
-      _canonicalBodyWeight(gymSet.unit, gymSet.bodyWeight) ??
+      _canonicalBodyWeight(performedSet.unit, performedSet.bodyWeight) ??
       (await getLatestBodyWeight(database))?.weightKg;
 
   final id = await database.exerciseSets.insertOne(
     ExerciseSetsCompanion.insert(
       exerciseId: exerciseId,
       workoutId: Value(workoutId),
-      timestamp: gymSet.created,
-      reps: Value(gymSet.reps),
-      loadKg: Value(canonicalPerformedLoad(gymSet.unit, gymSet.weight)),
-      durationMs: Value((gymSet.duration * 60000).round()),
-      distanceMetres: Value(
-        canonicalPerformedDistance(gymSet.unit, gymSet.distance),
+      timestamp: performedSet.created,
+      reps: Value(performedSet.reps),
+      loadKg: Value(
+        canonicalPerformedLoad(performedSet.unit, performedSet.weight),
       ),
-      incline: Value(gymSet.incline?.toDouble()),
+      durationMs: Value((performedSet.duration * 60000).round()),
+      distanceMetres: Value(
+        canonicalPerformedDistance(performedSet.unit, performedSet.distance),
+      ),
+      incline: Value(performedSet.incline?.toDouble()),
       bodyWeightKg: Value(resolvedBodyWeightKg),
-      notes: Value(gymSet.notes),
+      notes: Value(performedSet.notes),
     ),
   );
   return (await getPerformedSetById(database, id))!;
@@ -347,7 +352,7 @@ Future<GymSet> insertPerformedSet(
 Future<void> updatePerformedSet(
   AppDatabase database, {
   required int id,
-  required GymSet gymSet,
+  required PerformedSetView performedSet,
   required int exerciseId,
   double? bodyWeightKg,
 }) {
@@ -355,19 +360,27 @@ Future<void> updatePerformedSet(
       .write(
         ExerciseSetsCompanion(
           exerciseId: Value(exerciseId),
-          timestamp: Value(gymSet.created),
-          reps: Value(gymSet.reps),
-          loadKg: Value(canonicalPerformedLoad(gymSet.unit, gymSet.weight)),
-          durationMs: Value((gymSet.duration * 60000).round()),
-          distanceMetres: Value(
-            canonicalPerformedDistance(gymSet.unit, gymSet.distance),
+          timestamp: Value(performedSet.created),
+          reps: Value(performedSet.reps),
+          loadKg: Value(
+            canonicalPerformedLoad(performedSet.unit, performedSet.weight),
           ),
-          incline: Value(gymSet.incline?.toDouble()),
+          durationMs: Value((performedSet.duration * 60000).round()),
+          distanceMetres: Value(
+            canonicalPerformedDistance(
+              performedSet.unit,
+              performedSet.distance,
+            ),
+          ),
+          incline: Value(performedSet.incline?.toDouble()),
           bodyWeightKg: Value(
             bodyWeightKg ??
-                _canonicalBodyWeight(gymSet.unit, gymSet.bodyWeight),
+                _canonicalBodyWeight(
+                  performedSet.unit,
+                  performedSet.bodyWeight,
+                ),
           ),
-          notes: Value(gymSet.notes),
+          notes: Value(performedSet.notes),
         ),
       );
 }
@@ -381,13 +394,17 @@ Future<int> deletePerformedSets(AppDatabase database, Iterable<int> ids) {
 }
 
 /// Compares a set against prior performed sets for positive reinforcement.
-Future<bool> isBestPerformedSet(AppDatabase database, GymSet gymSet) async {
+Future<bool> isBestPerformedSet(
+  AppDatabase database,
+  PerformedSetView performedSet,
+) async {
   final previous = (await getPerformedSetsForExercise(
     database,
-    exerciseName: gymSet.name,
-  )).where((set) => set.id != gymSet.id);
+    exerciseName: performedSet.name,
+  )).where((set) => set.id != performedSet.id);
 
-  if (gymSet.cardio && const {'kg', 'lb', 'stone'}.contains(gymSet.unit)) {
+  if (performedSet.cardio &&
+      const {'kg', 'lb', 'stone'}.contains(performedSet.unit)) {
     final candidates = previous.toList();
     if (candidates.isEmpty) return false;
     candidates.sort((a, b) {
@@ -395,18 +412,19 @@ Future<bool> isBestPerformedSet(AppDatabase database, GymSet gymSet) async {
       return load != 0 ? load : b.duration.compareTo(a.duration);
     });
     final best = candidates.first;
-    return gymSet.weight > best.weight ||
-        (gymSet.weight == best.weight && gymSet.duration > best.duration);
+    return performedSet.weight > best.weight ||
+        (performedSet.weight == best.weight &&
+            performedSet.duration > best.duration);
   }
 
-  if (gymSet.cardio) {
-    if (gymSet.duration == 0) return false;
+  if (performedSet.cardio) {
+    if (performedSet.duration == 0) return false;
     final candidates = previous.where((set) => set.duration > 0).toList();
     if (candidates.isEmpty) return false;
     final bestPace = candidates
         .map((set) => set.distance / set.duration)
         .reduce((a, b) => a > b ? a : b);
-    return gymSet.distance / gymSet.duration > bestPace;
+    return performedSet.distance / performedSet.duration > bestPace;
   }
 
   final candidates = previous.toList();
@@ -416,6 +434,6 @@ Future<bool> isBestPerformedSet(AppDatabase database, GymSet gymSet) async {
     return load != 0 ? load : b.reps.compareTo(a.reps);
   });
   final best = candidates.first;
-  return gymSet.weight > best.weight ||
-      (gymSet.weight == best.weight && gymSet.reps > best.reps);
+  return performedSet.weight > best.weight ||
+      (performedSet.weight == best.weight && performedSet.reps > best.reps);
 }

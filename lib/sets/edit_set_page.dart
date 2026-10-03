@@ -24,9 +24,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class EditSetPage extends StatefulWidget {
-  final GymSet gymSet;
+  final PerformedSetView performedSet;
 
-  const EditSetPage({super.key, required this.gymSet});
+  const EditSetPage({super.key, required this.performedSet});
 
   @override
   createState() => _EditSetPageState();
@@ -122,9 +122,11 @@ class _EditSetPageState extends State<EditSetPage> {
   AppBar buildAppBar() {
     return AppBar(
       title: Text(
-        widget.gymSet.id > 0 ? widget.gymSet.name : context.l10n.addSet,
+        widget.performedSet.id > 0
+            ? widget.performedSet.name
+            : context.l10n.addSet,
       ),
-      actions: [if (widget.gymSet.id > 0) buildDeleteButton()],
+      actions: [if (widget.performedSet.id > 0) buildDeleteButton()],
     );
   }
 
@@ -142,7 +144,9 @@ class _EditSetPageState extends State<EditSetPage> {
       builder: (BuildContext dialogContext) {
         return AlertDialog(
           title: Text(context.l10n.confirmDelete),
-          content: Text(context.l10n.deleteSetConfirmation(widget.gymSet.name)),
+          content: Text(
+            context.l10n.deleteSetConfirmation(widget.performedSet.name),
+          ),
           actions: [
             TextButton.icon(
               label: Text(context.l10n.actionCancel),
@@ -154,7 +158,7 @@ class _EditSetPageState extends State<EditSetPage> {
               icon: const Icon(Icons.delete),
               onPressed: () async {
                 Navigator.pop(dialogContext);
-                await deletePerformedSets(db, [widget.gymSet.id]);
+                await deletePerformedSets(db, [widget.performedSet.id]);
                 if (mounted) Navigator.pop(context);
               },
             ),
@@ -377,7 +381,7 @@ class _EditSetPageState extends State<EditSetPage> {
           builder: (context, snapshot) {
             return Autocomplete<String>(
               initialValue: TextEditingValue(
-                text: widget.gymSet.category ?? "",
+                text: widget.performedSet.category ?? "",
               ),
               optionsBuilder: (TextEditingValue textEditingValue) {
                 if (snapshot.data == null) return [];
@@ -638,9 +642,9 @@ class _EditSetPageState extends State<EditSetPage> {
   void initState() {
     super.initState();
 
-    updateFields(widget.gymSet, formatOrm: false);
+    updateFields(widget.performedSet, formatOrm: false);
     setState(() {
-      _created = widget.gymSet.created;
+      _created = widget.performedSet.created;
     });
 
     getExerciseNames().then((names) {
@@ -666,7 +670,7 @@ class _EditSetPageState extends State<EditSetPage> {
     _category = _category?.trim();
     if (_category?.isEmpty ?? false) _category = null;
 
-    final gymSet = widget.gymSet.copyWith(
+    final performedSet = widget.performedSet.copyWith(
       name: _name,
       unit: _unit,
       created: _created,
@@ -699,11 +703,11 @@ class _EditSetPageState extends State<EditSetPage> {
     final settings = context.read<SettingsState>().value;
     final messages = positiveReinforcementMessages(context.l10n);
 
-    if (widget.gymSet.id > 0) {
+    if (widget.performedSet.id > 0) {
       await updatePerformedSet(
         db,
-        id: widget.gymSet.id,
-        gymSet: gymSet,
+        id: widget.performedSet.id,
+        performedSet: performedSet,
         exerciseId: exerciseDefinition.id,
       );
       if (!mounted) return;
@@ -713,7 +717,7 @@ class _EditSetPageState extends State<EditSetPage> {
 
     final inserted = await insertPerformedSet(
       db,
-      gymSet: gymSet,
+      performedSet: performedSet,
       exerciseId: exerciseDefinition.id,
     );
     talker.info('Created workout set');
@@ -789,31 +793,33 @@ class _EditSetPageState extends State<EditSetPage> {
     ];
   }
 
-  void updateFields(GymSet gymSet, {bool formatOrm = true}) {
-    _nameCtrl?.text = gymSet.name;
+  void updateFields(PerformedSetView performedSet, {bool formatOrm = true}) {
+    _nameCtrl?.text = performedSet.name;
     setState(() {
-      _category = gymSet.category;
-      _image = gymSet.image;
-      _name = gymSet.name;
-      _unit = gymSet.unit;
-      _cardio = gymSet.cardio;
-      restMs = gymSet.restMs;
+      _category = performedSet.category;
+      _image = performedSet.image;
+      _name = performedSet.name;
+      _unit = performedSet.unit;
+      _cardio = performedSet.cardio;
+      restMs = performedSet.restMs;
     });
 
-    if (gymSet.reps != 0) _reps.text = toString(gymSet.reps);
-    _weight.text = toString(gymSet.weight);
+    if (performedSet.reps != 0) _reps.text = toString(performedSet.reps);
+    _weight.text = toString(performedSet.weight);
     if (formatOrm) setORM();
-    if (gymSet.bodyWeight != 0) _body.text = toString(gymSet.bodyWeight);
-    if (gymSet.duration != 0) {
-      _minutes.text = gymSet.duration.floor().toString();
-      _seconds.text = ((gymSet.duration * 60) % 60).floor().toString();
+    if (performedSet.bodyWeight != 0)
+      _body.text = toString(performedSet.bodyWeight);
+    if (performedSet.duration != 0) {
+      _minutes.text = performedSet.duration.floor().toString();
+      _seconds.text = ((performedSet.duration * 60) % 60).floor().toString();
     }
-    if (gymSet.distance != 0) _distance.text = toString(gymSet.distance);
-    if (gymSet.incline != null && gymSet.incline != 0)
-      _incline.text = gymSet.incline.toString();
-    if (gymSet.category != null && gymSet.category!.isNotEmpty)
-      _categoryCtrl.text = gymSet.category!;
-    _notes.text = gymSet.notes ?? '';
+    if (performedSet.distance != 0)
+      _distance.text = toString(performedSet.distance);
+    if (performedSet.incline != null && performedSet.incline != 0)
+      _incline.text = performedSet.incline.toString();
+    if (performedSet.category != null && performedSet.category!.isNotEmpty)
+      _categoryCtrl.text = performedSet.category!;
+    _notes.text = performedSet.notes ?? '';
   }
 
   Future<void> selectDate() async {

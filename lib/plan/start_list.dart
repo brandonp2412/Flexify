@@ -62,17 +62,19 @@ class _StartListState extends State<StartList> {
 
     final workoutId = widget.workoutId;
     if (workoutId == null) return;
-    final gymSet = await getLatestLegacyWorkoutSet(
+    final performedSet = await getLatestLegacyWorkoutSet(
       db,
       workoutId: workoutId,
       exerciseId: widget.exercises[index].exercise.id,
     );
-    if (gymSet == null) return;
+    if (performedSet == null) return;
     if (!mounted) return;
 
-    Navigator.of(
-      context,
-    ).push(FlexPageRoute(builder: (context) => EditSetPage(gymSet: gymSet)));
+    Navigator.of(context).push(
+      FlexPageRoute(
+        builder: (context) => EditSetPage(performedSet: performedSet),
+      ),
+    );
   }
 
   @override
@@ -258,9 +260,8 @@ class _StartListState extends State<StartList> {
                           trail,
                           const SizedBox(width: 4),
                           IconButton(
-                            tooltip: MaterialLocalizations.of(
-                              context,
-                            ).moreButtonTooltip,
+                            tooltip: MaterialLocalizations.of(context)
+                                .moreButtonTooltip,
                             onPressed: showActions,
                             icon: const Icon(Icons.more_horiz_rounded),
                           ),

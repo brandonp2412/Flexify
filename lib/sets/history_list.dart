@@ -19,7 +19,7 @@ import 'package:provider/provider.dart';
 enum _HistoryContextAction { edit, delete }
 
 class HistoryList extends StatefulWidget {
-  final List<GymSet> sets;
+  final List<PerformedSetView> sets;
   final ScrollController scroll;
   final Function(int) onSelect;
   final Set<int> selected;
@@ -40,12 +40,12 @@ class HistoryList extends StatefulWidget {
 
 class _HistoryListState extends State<HistoryList> {
   bool _goingNext = false;
-  List<GymSet> _current = [];
+  List<PerformedSetView> _current = [];
 
   Future<void> _showContextMenu(
     BuildContext context,
     TapDownDetails details,
-    GymSet gymSet,
+    PerformedSetView performedSet,
   ) async {
     final action = await showDesktopContextMenu<_HistoryContextAction>(
       context,
@@ -72,7 +72,9 @@ class _HistoryListState extends State<HistoryList> {
     switch (action) {
       case _HistoryContextAction.edit:
         await Navigator.of(context).push(
-          FlexPageRoute(builder: (context) => EditSetPage(gymSet: gymSet)),
+          FlexPageRoute(
+            builder: (context) => EditSetPage(performedSet: performedSet),
+          ),
         );
         break;
       case _HistoryContextAction.delete:
@@ -80,7 +82,9 @@ class _HistoryListState extends State<HistoryList> {
           context: context,
           builder: (dialogContext) => AlertDialog(
             title: Text(context.l10n.confirmDelete),
-            content: Text(context.l10n.deleteSetConfirmation(gymSet.name)),
+            content: Text(
+              context.l10n.deleteSetConfirmation(performedSet.name),
+            ),
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(dialogContext, false),
@@ -94,7 +98,7 @@ class _HistoryListState extends State<HistoryList> {
           ),
         );
         if (confirmed == true) {
-          await deletePerformedSets(db, [gymSet.id]);
+          await deletePerformedSets(db, [performedSet.id]);
         }
         break;
       case null:
@@ -119,43 +123,47 @@ class _HistoryListState extends State<HistoryList> {
     }
   }
 
-  Widget _buildListItem(GymSet gymSet, int index, bool showImages) {
-    final previousGymSet = index > 0
+  Widget _buildListItem(
+    PerformedSetView performedSet,
+    int index,
+    bool showImages,
+  ) {
+    final previousPerformedSet = index > 0
         ? _current.elementAtOrNull(index - 1)
         : null;
     final bool showDivider =
-        previousGymSet != null &&
-        !isSameDay(gymSet.created, previousGymSet.created);
+        previousPerformedSet != null &&
+        !isSameDay(performedSet.created, previousPerformedSet.created);
 
-    final minutes = gymSet.duration.floor();
-    final seconds = ((gymSet.duration * 60) % 60).floor().toString().padLeft(
-      2,
-      '0',
-    );
-    final distance = formatDisplayNumber(context, gymSet.distance);
-    final reps = formatDisplayNumber(context, gymSet.reps);
-    final weight = formatDisplayNumber(context, gymSet.weight);
-    final unit = displayMeasurementUnit(context.l10n, gymSet.unit);
+    final minutes = performedSet.duration.floor();
+    final seconds = ((performedSet.duration * 60) % 60)
+        .floor()
+        .toString()
+        .padLeft(2, '0');
+    final distance = formatDisplayNumber(context, performedSet.distance);
+    final reps = formatDisplayNumber(context, performedSet.reps);
+    final weight = formatDisplayNumber(context, performedSet.weight);
+    final unit = displayMeasurementUnit(context.l10n, performedSet.unit);
     String incline = '';
-    if (gymSet.incline != null && gymSet.incline! > 0) {
+    if (performedSet.incline != null && performedSet.incline! > 0) {
       incline =
-          '@ ${formatDisplayPercent(context, gymSet.incline! / 100, maximumFractionDigits: 0)}';
+          '@ ${formatDisplayPercent(context, performedSet.incline! / 100, maximumFractionDigits: 0)}';
     }
 
     Widget? leading;
 
-    if (showImages && gymSet.image != null) {
+    if (showImages && performedSet.image != null) {
       leading = GestureDetector(
-        onTap: () => widget.onSelect(gymSet.id),
+        onTap: () => widget.onSelect(performedSet.id),
         child: Image.file(
-          File(gymSet.image!),
+          File(performedSet.image!),
           cacheWidth: 64,
           errorBuilder: (context, error, stackTrace) => const Icon(Icons.error),
         ),
       );
     } else if (showImages) {
       leading = GestureDetector(
-        onTap: () => widget.onSelect(gymSet.id),
+        onTap: () => widget.onSelect(performedSet.id),
         child: Container(
           width: 24,
           height: 24,
@@ -165,7 +173,9 @@ class _HistoryListState extends State<HistoryList> {
           ),
           child: Center(
             child: Text(
-              gymSet.name.isNotEmpty ? gymSet.name[0].toUpperCase() : '?',
+              performedSet.name.isNotEmpty
+                  ? performedSet.name[0].toUpperCase()
+                  : '?',
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 16,
@@ -179,11 +189,15 @@ class _HistoryListState extends State<HistoryList> {
     }
 
     String trailing = "$reps x $weight $unit";
-    if (gymSet.cardio &&
-        (gymSet.unit == 'kg' || gymSet.unit == 'lb' || gymSet.unit == 'stone'))
+    if (performedSet.cardio &&
+        (performedSet.unit == 'kg' ||
+            performedSet.unit == 'lb' ||
+            performedSet.unit == 'stone'))
       trailing = "$weight $unit / $minutes:$seconds $incline";
-    else if (gymSet.cardio &&
-        (gymSet.unit == 'km' || gymSet.unit == 'mi' || gymSet.unit == 'kcal'))
+    else if (performedSet.cardio &&
+        (performedSet.unit == 'km' ||
+            performedSet.unit == 'mi' ||
+            performedSet.unit == 'kcal'))
       trailing = "$distance $unit / $minutes:$seconds $incline";
 
     return Column(
@@ -191,8 +205,8 @@ class _HistoryListState extends State<HistoryList> {
         if (showDivider)
           Container(
             color:
-                (widget.selected.contains(gymSet.id) &&
-                    widget.selected.contains(previousGymSet.id))
+                (widget.selected.contains(performedSet.id) &&
+                    widget.selected.contains(previousPerformedSet.id))
                 ? Theme.of(context).colorScheme.primary.withValues(alpha: .18)
                 : Colors.transparent,
             child: Padding(
@@ -206,7 +220,11 @@ class _HistoryListState extends State<HistoryList> {
                     selector: (context, settings) =>
                         settings.value.shortDateFormat,
                     builder: (context, value, child) => Text(
-                      formatDisplayDate(context, previousGymSet.created, value),
+                      formatDisplayDate(
+                        context,
+                        previousPerformedSet.created,
+                        value,
+                      ),
                     ),
                   ),
                   const SizedBox(width: 4),
@@ -220,7 +238,7 @@ class _HistoryListState extends State<HistoryList> {
             final desktop = isDesktopLayout(context);
             final colors = Theme.of(context).colorScheme;
             final tile = Material(
-              color: widget.selected.contains(gymSet.id)
+              color: widget.selected.contains(performedSet.id)
                   ? colors.primary.withValues(alpha: .18)
                   : desktop
                   ? colors.surfaceContainerLow
@@ -233,11 +251,10 @@ class _HistoryListState extends State<HistoryList> {
                     : null,
                 leading: leading,
                 title: Text(
-                  gymSet.name,
+                  performedSet.name,
                   style: desktop
-                      ? Theme.of(context).textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.w600,
-                        )
+                      ? Theme.of(context).textTheme.titleMedium
+                            ?.copyWith(fontWeight: FontWeight.w600)
                       : null,
                 ),
                 subtitle: Selector<SettingsState, String>(
@@ -247,32 +264,33 @@ class _HistoryListState extends State<HistoryList> {
                     padding: const EdgeInsets.only(top: 3),
                     child: Text(
                       dateFormat == 'timeago'
-                          ? formatRelativeTime(context, gymSet.created)
+                          ? formatRelativeTime(context, performedSet.created)
                           : formatDisplayDate(
                               context,
-                              gymSet.created,
+                              performedSet.created,
                               dateFormat,
                             ),
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: colors.onSurfaceVariant,
-                      ),
+                      style: Theme.of(context).textTheme.bodySmall
+                          ?.copyWith(color: colors.onSurfaceVariant),
                     ),
                   ),
                 ),
                 trailing: Text(
                   trailing,
-                  style: Theme.of(
-                    context,
-                  ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w600),
+                  style: Theme.of(context).textTheme.bodyLarge
+                      ?.copyWith(fontWeight: FontWeight.w600),
                 ),
-                onLongPress: desktop ? null : () => widget.onSelect(gymSet.id),
+                onLongPress: desktop
+                    ? null
+                    : () => widget.onSelect(performedSet.id),
                 onTap: () {
                   if (widget.selected.isNotEmpty) {
-                    widget.onSelect(gymSet.id);
+                    widget.onSelect(performedSet.id);
                   } else {
                     Navigator.of(context).push(
                       FlexPageRoute(
-                        builder: (context) => EditSetPage(gymSet: gymSet),
+                        builder: (context) =>
+                            EditSetPage(performedSet: performedSet),
                       ),
                     );
                   }
@@ -285,7 +303,7 @@ class _HistoryListState extends State<HistoryList> {
               child: GestureDetector(
                 behavior: HitTestBehavior.opaque,
                 onSecondaryTapDown: (details) =>
-                    _showContextMenu(context, details, gymSet),
+                    _showContextMenu(context, details, performedSet),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 16,

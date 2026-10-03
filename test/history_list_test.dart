@@ -19,7 +19,12 @@ void main() {
         body: HistoryList(
           scroll: scroll,
           sets: [
-            gymSetModelFixture(id: 1, bodyWeight: 54, duration: 8, distance: 9),
+            performedSetModelFixture(
+              id: 1,
+              bodyWeight: 54,
+              duration: 8,
+              distance: 9,
+            ),
           ],
           onNext: () {},
           onSelect: (value) {},
@@ -53,7 +58,7 @@ void main() {
       Scaffold(
         body: HistoryList(
           scroll: scroll,
-          sets: [gymSetModelFixture(id: 1)],
+          sets: [performedSetModelFixture(id: 1)],
           onNext: () {},
           onSelect: (value) {},
           selected: const {1},

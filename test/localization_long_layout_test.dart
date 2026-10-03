@@ -277,7 +277,7 @@ void main() {
     final workout = await resumeOrStartWorkout(harness.database, planId);
     await insertPerformedSet(
       harness.database,
-      gymSet: gymSetFixture(
+      performedSet: performedSetFixture(
         exercise,
         planId: planId,
         reps: 12,

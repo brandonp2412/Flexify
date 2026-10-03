@@ -77,7 +77,7 @@ Widget historyApp(Setting settings) {
   );
 }
 
-Future<GymSet> insertSet(String name, {int minutesAgo = 0}) =>
+Future<PerformedSetView> insertSet(String name, {int minutesAgo = 0}) =>
     insertPerformedSetFixture(
       db,
       name,

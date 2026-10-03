@@ -12,7 +12,7 @@ import 'support/fixtures.dart';
 void main() {
   setUp(() => db = testDb());
 
-  Future<(Exercise, GymSet)> seedChestSet() async {
+  Future<(Exercise, PerformedSetView)> seedChestSet() async {
     await createCategory('Chest');
     final exercise = await createExerciseDefinition(
       name: 'Bench press',

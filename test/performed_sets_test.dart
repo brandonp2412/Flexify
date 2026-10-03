@@ -44,7 +44,7 @@ void main() {
     );
   }
 
-  GymSet draft({
+  PerformedSetView draft({
     required String name,
     required String unit,
     required DateTime created,
@@ -57,7 +57,7 @@ void main() {
     int? incline,
     String? notes,
   }) {
-    return GymSet(
+    return PerformedSetView(
       id: 0,
       bodyWeight: bodyWeight,
       cardio: cardio,
@@ -94,7 +94,7 @@ void main() {
 
     final inserted = await insertPerformedSet(
       database,
-      gymSet: draft(
+      performedSet: draft(
         name: 'Cutover Bench',
         unit: 'lb',
         created: DateTime(2026, 10, 2, 18, 5),
@@ -132,7 +132,7 @@ void main() {
     await updatePerformedSet(
       database,
       id: inserted.id,
-      gymSet: inserted.copyWith(
+      performedSet: inserted.copyWith(
         reps: 6,
         weight: 225,
         notes: const Value('top set'),
@@ -167,7 +167,7 @@ void main() {
 
     await insertPerformedSet(
       database,
-      gymSet: draft(
+      performedSet: draft(
         name: 'Cutover Bench',
         unit: 'kg',
         created: DateTime(2026, 9, 30, 9),
@@ -178,7 +178,7 @@ void main() {
     );
     await insertPerformedSet(
       database,
-      gymSet: draft(
+      performedSet: draft(
         name: 'Cutover Bench',
         unit: 'kg',
         created: DateTime(2026, 10, 1, 9),
@@ -189,7 +189,7 @@ void main() {
     );
     await insertPerformedSet(
       database,
-      gymSet: draft(
+      performedSet: draft(
         name: 'Cutover Run',
         unit: 'km',
         created: DateTime(2026, 10, 2, 9),
