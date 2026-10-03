@@ -227,4 +227,25 @@ void main() {
     expect(cardio.single.duration, 25);
     expect(cardio.single.incline, 2);
   });
+
+  test('history ordering uses the timestamp index', () async {
+    final queryPlan = await database.customSelect('''
+      EXPLAIN QUERY PLAN
+      SELECT exercise_sets.id
+      FROM exercise_sets
+      INNER JOIN exercises
+        ON exercises.id = exercise_sets.exercise_id
+      LEFT JOIN categories
+        ON categories.id = exercises.category_id
+      LEFT JOIN workouts
+        ON workouts.id = exercise_sets.workout_id
+      ORDER BY exercise_sets.timestamp DESC, exercise_sets.id DESC
+      LIMIT 100
+    ''').get();
+
+    final details = queryPlan
+        .map((row) => row.read<String>('detail'))
+        .join('\n');
+    expect(details, contains('exercise_sets_timestamp'));
+  });
 }

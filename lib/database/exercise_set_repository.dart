@@ -83,40 +83,6 @@ ExerciseSetView _toExerciseSetView(AppDatabase database, TypedResult row) {
   );
 }
 
-List<ExerciseSetView> _filterExerciseSets(
-  List<ExerciseSetView> sets, {
-  String search = '',
-  String? category,
-  DateTime? startDate,
-  DateTime? endDate,
-  double? repsGt,
-  double? repsLt,
-  double? weightGt,
-  double? weightLt,
-  int? limit,
-}) {
-  final terms = search
-      .toLowerCase()
-      .split(' ')
-      .where((term) => term.isNotEmpty)
-      .toList();
-
-  final filtered = sets.where((set) {
-    final name = set.name.toLowerCase();
-    if (terms.any((term) => !name.contains(term))) return false;
-    if (category != null && set.category != category) return false;
-    if (startDate != null && set.created.isBefore(startDate)) return false;
-    if (endDate != null && set.created.isAfter(endDate)) return false;
-    if (!set.cardio && repsGt != null && set.reps <= repsGt) return false;
-    if (!set.cardio && repsLt != null && set.reps >= repsLt) return false;
-    if (!set.cardio && weightGt != null && set.weight <= weightGt) return false;
-    if (!set.cardio && weightLt != null && set.weight >= weightLt) return false;
-    return true;
-  });
-
-  return (limit == null ? filtered : filtered.take(limit)).toList();
-}
-
 JoinedSelectStatement<HasResultSet, dynamic> _exerciseSetQuery(
   AppDatabase database, {
   OrderingMode order = OrderingMode.desc,
@@ -140,6 +106,52 @@ JoinedSelectStatement<HasResultSet, dynamic> _exerciseSetQuery(
   ]);
 }
 
+JoinedSelectStatement<HasResultSet, dynamic> _filteredExerciseSetQuery(
+  AppDatabase database, {
+  String search = '',
+  String? category,
+  DateTime? startDate,
+  DateTime? endDate,
+  double? repsGt,
+  double? repsLt,
+  double? weightGt,
+  double? weightLt,
+  int? limit,
+}) {
+  final query = _exerciseSetQuery(database);
+  final sets = database.exerciseSets;
+  final exercises = database.exercises;
+  for (final term
+      in search.toLowerCase().split(' ').where((term) => term.isNotEmpty)) {
+    query.where(exercises.name.lower().contains(term));
+  }
+  if (category != null) query.where(database.categories.name.equals(category));
+  if (startDate != null)
+    query.where(sets.timestamp.isBiggerOrEqualValue(startDate));
+  if (endDate != null)
+    query.where(sets.timestamp.isSmallerOrEqualValue(endDate));
+
+  // History's numeric filters apply to strength sets only, in displayed units.
+  final cardio = exercises.kind.equals('cardio');
+  final reps = ifNull(sets.reps, const Constant(0.0));
+  final load = ifNull(sets.loadKg, const Constant(0.0));
+  final weight = exercises.displayUnit.caseMatch<double>(
+    when: {
+      const Constant('lb'): load / const Constant(0.45359237),
+      const Constant('stone'): load / const Constant(6.35029318),
+    },
+    orElse: load,
+  );
+  if (repsGt != null) query.where(cardio | reps.isBiggerThanValue(repsGt));
+  if (repsLt != null) query.where(cardio | reps.isSmallerThanValue(repsLt));
+  if (weightGt != null)
+    query.where(cardio | weight.isBiggerThanValue(weightGt));
+  if (weightLt != null)
+    query.where(cardio | weight.isSmallerThanValue(weightLt));
+  if (limit != null) query.limit(limit);
+  return query;
+}
+
 /// Watches exercise sets projected with exercise metadata for history UI.
 Stream<List<ExerciseSetView>> watchExerciseSets(
   AppDatabase database, {
@@ -153,19 +165,19 @@ Stream<List<ExerciseSetView>> watchExerciseSets(
   double? weightLt,
   int? limit,
 }) {
-  return _exerciseSetQuery(database).watch().map(
-    (rows) => _filterExerciseSets(
-      rows.map((row) => _toExerciseSetView(database, row)).toList(),
-      search: search,
-      category: category,
-      startDate: startDate,
-      endDate: endDate,
-      repsGt: repsGt,
-      repsLt: repsLt,
-      weightGt: weightGt,
-      weightLt: weightLt,
-      limit: limit,
-    ),
+  return _filteredExerciseSetQuery(
+    database,
+    search: search,
+    category: category,
+    startDate: startDate,
+    endDate: endDate,
+    repsGt: repsGt,
+    repsLt: repsLt,
+    weightGt: weightGt,
+    weightLt: weightLt,
+    limit: limit,
+  ).watch().map(
+    (rows) => rows.map((row) => _toExerciseSetView(database, row)).toList(),
   );
 }
 
@@ -182,9 +194,8 @@ Future<List<ExerciseSetView>> getExerciseSets(
   double? weightLt,
   int? limit,
 }) async {
-  final rows = await _exerciseSetQuery(database).get();
-  return _filterExerciseSets(
-    rows.map((row) => _toExerciseSetView(database, row)).toList(),
+  final rows = await _filteredExerciseSetQuery(
+    database,
     search: search,
     category: category,
     startDate: startDate,
@@ -194,7 +205,8 @@ Future<List<ExerciseSetView>> getExerciseSets(
     weightGt: weightGt,
     weightLt: weightLt,
     limit: limit,
-  );
+  ).get();
+  return rows.map((row) => _toExerciseSetView(database, row)).toList();
 }
 
 Future<List<ExerciseSetView>> getExerciseSetsForExercise(

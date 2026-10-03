@@ -63,10 +63,7 @@ class HistoryPageState extends State<HistoryPage>
       child: Navigator(
         key: _navKey,
         onGenerateRoute: (settings) => FlexPageRoute(
-          builder: (context) => _HistoryPageWidget(
-            navigatorKey: _navKey,
-            tabController: widget.tabController,
-          ),
+          builder: (context) => _HistoryPageWidget(navigatorKey: _navKey),
           settings: settings,
         ),
       ),
@@ -76,20 +73,15 @@ class HistoryPageState extends State<HistoryPage>
 
 class _HistoryPageWidget extends StatefulWidget {
   final GlobalKey<NavigatorState> navigatorKey;
-  final TabController tabController;
 
-  const _HistoryPageWidget({
-    required this.navigatorKey,
-    required this.tabController,
-  });
+  const _HistoryPageWidget({required this.navigatorKey});
 
   @override
   createState() => _HistoryPageWidgetState();
 }
 
 class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
-  Stream<List<ExerciseSetView>>? stream;
-  bool _initialStreamStarted = false;
+  late Stream<List<ExerciseSetView>> stream;
 
   final repsGt = TextEditingController();
   final repsLt = TextEditingController();
@@ -311,8 +303,7 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
 
   void onAdd() async {
     final settings = context.read<SettingsState>().value;
-    if (stream == null) setStream();
-    final exerciseSetsFuture = stream!.first;
+    final exerciseSetsFuture = stream.first;
     final bodyWeightFuture = settings.showBodyWeight
         ? getBodyWeight()
         : Future<BodyWeight?>.value();
@@ -387,7 +378,6 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
 
   @override
   void dispose() {
-    widget.tabController.removeListener(_maybeStartInitialStream);
     repsGt.dispose();
     repsLt.dispose();
     weightGt.dispose();
@@ -399,31 +389,6 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
   @override
   void initState() {
     super.initState();
-    widget.tabController.addListener(_maybeStartInitialStream);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _maybeStartInitialStream();
-    });
-  }
-
-  void _maybeStartInitialStream() {
-    if (_initialStreamStarted || !mounted) return;
-
-    final historyIndex = context
-        .read<SettingsState>()
-        .value
-        .tabs
-        .split(',')
-        .indexOf('HistoryPage');
-    if (historyIndex < 0) return;
-
-    final animationValue =
-        widget.tabController.animation?.value ??
-        widget.tabController.index.toDouble();
-    if (widget.tabController.indexIsChanging ||
-        (animationValue - historyIndex).abs() > 0.001) {
-      return;
-    }
-
     setStream();
   }
 
@@ -482,8 +447,6 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
   }
 
   void setStream() {
-    _initialStreamStarted = true;
-    widget.tabController.removeListener(_maybeStartInitialStream);
     setState(() {
       stream = _filteredStream(rowLimit: limit);
     });

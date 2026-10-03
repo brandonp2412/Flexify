@@ -10843,6 +10843,196 @@ i1.GeneratedColumn<int> _column_186(String aliasedName) =>
       type: i1.DriftSqlType.int,
       $customConstraints: 'NOT NULL REFERENCES exercises(id)ON DELETE CASCADE',
     );
+
+final class Schema64 extends i0.VersionedSchema {
+  Schema64({required super.database}) : super(version: 64);
+  @override
+  late final List<i1.DatabaseSchemaEntity> entities = [
+    categories,
+    plans,
+    exercises,
+    workouts,
+    exerciseSets,
+    bodyWeights,
+    settings,
+    planExercises,
+    exerciseSetsTimestamp,
+  ];
+  late final Shape47 categories = Shape47(
+    source: i0.VersionedTable(
+      entityName: 'categories',
+      withoutRowId: false,
+      isStrict: false,
+      tableConstraints: [],
+      columns: [_column_86, _column_159],
+      attachedDatabase: database,
+    ),
+    alias: null,
+  );
+  late final Shape34 plans = Shape34(
+    source: i0.VersionedTable(
+      entityName: 'plans',
+      withoutRowId: false,
+      isStrict: false,
+      tableConstraints: [],
+      columns: [_column_85, _column_86, _column_87, _column_88],
+      attachedDatabase: database,
+    ),
+    alias: null,
+  );
+  late final Shape48 exercises = Shape48(
+    source: i0.VersionedTable(
+      entityName: 'exercises',
+      withoutRowId: false,
+      isStrict: false,
+      tableConstraints: [],
+      columns: [
+        _column_86,
+        _column_159,
+        _column_160,
+        _column_161,
+        _column_162,
+        _column_96,
+        _column_163,
+        _column_99,
+        _column_164,
+        _column_165,
+        _column_166,
+        _column_167,
+        _column_168,
+      ],
+      attachedDatabase: database,
+    ),
+    alias: null,
+  );
+  late final Shape49 workouts = Shape49(
+    source: i0.VersionedTable(
+      entityName: 'workouts',
+      withoutRowId: false,
+      isStrict: false,
+      tableConstraints: [],
+      columns: [_column_86, _column_169, _column_170, _column_171],
+      attachedDatabase: database,
+    ),
+    alias: null,
+  );
+  late final Shape50 exerciseSets = Shape50(
+    source: i0.VersionedTable(
+      entityName: 'exercise_sets',
+      withoutRowId: false,
+      isStrict: false,
+      tableConstraints: [],
+      columns: [
+        _column_86,
+        _column_172,
+        _column_173,
+        _column_174,
+        _column_175,
+        _column_176,
+        _column_177,
+        _column_178,
+        _column_179,
+        _column_180,
+        _column_99,
+      ],
+      attachedDatabase: database,
+    ),
+    alias: null,
+  );
+  late final Shape51 bodyWeights = Shape51(
+    source: i0.VersionedTable(
+      entityName: 'body_weights',
+      withoutRowId: false,
+      isStrict: false,
+      tableConstraints: [],
+      columns: [_column_86, _column_174, _column_181, _column_182],
+      attachedDatabase: database,
+    ),
+    alias: null,
+  );
+  late final Shape53 settings = Shape53(
+    source: i0.VersionedTable(
+      entityName: 'settings',
+      withoutRowId: false,
+      isStrict: false,
+      tableConstraints: [],
+      columns: [
+        _column_105,
+        _column_106,
+        _column_107,
+        _column_185,
+        _column_108,
+        _column_109,
+        _column_110,
+        _column_111,
+        _column_112,
+        _column_113,
+        _column_114,
+        _column_86,
+        _column_115,
+        _column_158,
+        _column_116,
+        _column_117,
+        _column_157,
+        _column_118,
+        _column_119,
+        _column_120,
+        _column_121,
+        _column_122,
+        _column_123,
+        _column_124,
+        _column_125,
+        _column_126,
+        _column_127,
+        _column_128,
+        _column_129,
+        _column_130,
+        _column_131,
+        _column_132,
+        _column_133,
+        _column_134,
+        _column_135,
+        _column_136,
+        _column_144,
+        _column_145,
+        _column_146,
+        _column_147,
+        _column_148,
+        _column_149,
+        _column_150,
+        _column_155,
+        _column_156,
+      ],
+      attachedDatabase: database,
+    ),
+    alias: null,
+  );
+  late final Shape54 planExercises = Shape54(
+    source: i0.VersionedTable(
+      entityName: 'plan_exercises',
+      withoutRowId: false,
+      isStrict: false,
+      tableConstraints: [],
+      columns: [
+        _column_137,
+        _column_138,
+        _column_186,
+        _column_86,
+        _column_140,
+        _column_141,
+        _column_135,
+        _column_142,
+      ],
+      attachedDatabase: database,
+    ),
+    alias: null,
+  );
+  final i1.Index exerciseSetsTimestamp = i1.Index(
+    'exercise_sets_timestamp',
+    'CREATE INDEX exercise_sets_timestamp ON exercise_sets (timestamp, id)',
+  );
+}
+
 i0.MigrationStepWithVersion migrationSteps({
   required Future<void> Function(i1.Migrator m, Schema2 schema) from1To2,
   required Future<void> Function(i1.Migrator m, Schema3 schema) from2To3,
@@ -10905,6 +11095,7 @@ i0.MigrationStepWithVersion migrationSteps({
   required Future<void> Function(i1.Migrator m, Schema61 schema) from60To61,
   required Future<void> Function(i1.Migrator m, Schema62 schema) from61To62,
   required Future<void> Function(i1.Migrator m, Schema63 schema) from62To63,
+  required Future<void> Function(i1.Migrator m, Schema64 schema) from63To64,
 }) {
   return (currentVersion, database) async {
     switch (currentVersion) {
@@ -11213,6 +11404,11 @@ i0.MigrationStepWithVersion migrationSteps({
         final migrator = i1.Migrator(database, schema);
         await from62To63(migrator, schema);
         return 63;
+      case 63:
+        final schema = Schema64(database: database);
+        final migrator = i1.Migrator(database, schema);
+        await from63To64(migrator, schema);
+        return 64;
       default:
         throw ArgumentError.value('Unknown migration from $currentVersion');
     }
@@ -11281,6 +11477,7 @@ i1.OnUpgrade stepByStep({
   required Future<void> Function(i1.Migrator m, Schema61 schema) from60To61,
   required Future<void> Function(i1.Migrator m, Schema62 schema) from61To62,
   required Future<void> Function(i1.Migrator m, Schema63 schema) from62To63,
+  required Future<void> Function(i1.Migrator m, Schema64 schema) from63To64,
 }) => i0.VersionedSchema.stepByStepHelper(
   step: migrationSteps(
     from1To2: from1To2,
@@ -11344,5 +11541,6 @@ i1.OnUpgrade stepByStep({
     from60To61: from60To61,
     from61To62: from61To62,
     from62To63: from62To63,
+    from63To64: from63To64,
   ),
 );

@@ -3,6 +3,7 @@ import 'package:flexify/database/exercises.dart';
 import 'package:flexify/database/workouts.dart';
 
 /// One exercise set with metrics stored in canonical units.
+@TableIndex(name: 'exercise_sets_timestamp', columns: {#timestamp, #id})
 class ExerciseSets extends Table {
   IntColumn get id => integer().autoIncrement()();
   IntColumn get exerciseId => integer().references(Exercises, #id)();

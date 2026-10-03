@@ -953,6 +953,9 @@ class AppDatabase extends _$AppDatabase {
               await customStatement('DROP TABLE IF EXISTS gym_sets');
               await customStatement('DROP TABLE IF EXISTS metadata');
             },
+            from63To64: (m, schema) async {
+              await m.createIndex(schema.exerciseSetsTimestamp);
+            },
           )(m, from, to);
 
           if (to == schemaVersion) {
@@ -971,5 +974,5 @@ class AppDatabase extends _$AppDatabase {
   }
 
   @override
-  int get schemaVersion => 63;
+  int get schemaVersion => 64;
 }

@@ -5560,6 +5560,10 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $BodyWeightsTable bodyWeights = $BodyWeightsTable(this);
   late final $SettingsTable settings = $SettingsTable(this);
   late final $PlanExercisesTable planExercises = $PlanExercisesTable(this);
+  late final Index exerciseSetsTimestamp = Index(
+    'exercise_sets_timestamp',
+    'CREATE INDEX exercise_sets_timestamp ON exercise_sets (timestamp, id)',
+  );
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -5573,6 +5577,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     bodyWeights,
     settings,
     planExercises,
+    exerciseSetsTimestamp,
   ];
   @override
   StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules([

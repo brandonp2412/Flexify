@@ -31,6 +31,25 @@ void main() {
     expect(find.text('No entries yet'), findsOne);
   });
 
+  testWidgets('HistoryPage loads while the tab transition is still running', (
+    tester,
+  ) async {
+    final harness = await FlexifyTestHarness.create();
+    await insertExerciseSetFixture(harness.database, 'Bench press');
+    final controller = TabController(length: 2, initialIndex: 1, vsync: tester);
+    addTearDown(controller.dispose);
+    controller.animateTo(0, duration: const Duration(seconds: 10));
+
+    await harness.pump(tester, HistoryPage(tabController: controller));
+    for (var frame = 0; frame < 10; frame++) {
+      await tester.pump(const Duration(milliseconds: 16));
+    }
+
+    expect(controller.indexIsChanging, isTrue);
+    expect(find.text('Bench press'), findsOneWidget);
+    await tester.pumpAndSettle();
+  });
+
   testWidgets('HistoryPage lists items', (WidgetTester tester) async {
     final harness = await FlexifyTestHarness.create();
     await insertExerciseSetFixture(
