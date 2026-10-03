@@ -1069,16 +1069,18 @@ class AppDatabase extends _$AppDatabase {
               await m.createIndex(schema.planExercisesExerciseId);
             },
           );
-          await transaction(() => upgrade(m, from, to));
+          await transaction(() async {
+            await upgrade(m, from, to);
 
-          if (to == schemaVersion) {
-            final foreignKeyViolations = await customSelect(
-              'PRAGMA foreign_key_check',
-            ).get();
-            if (foreignKeyViolations.isNotEmpty) {
-              throw StateError('Foreign key violations after migration');
+            if (to == schemaVersion) {
+              final foreignKeyViolations = await customSelect(
+                'PRAGMA foreign_key_check',
+              ).get();
+              if (foreignKeyViolations.isNotEmpty) {
+                throw StateError('Foreign key violations after migration');
+              }
             }
-          }
+          });
         } finally {
           await customStatement('PRAGMA foreign_keys = ON');
         }
