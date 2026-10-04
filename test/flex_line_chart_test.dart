@@ -37,6 +37,49 @@ void main() {
     expect(FlexLineChart.axisLabelFontWeight, FontWeight.w600);
   });
 
+  testWidgets('dark Material theme supplies dark Drafter colors to the chart', (
+    WidgetTester tester,
+  ) async {
+    final harness = await FlexifyTestHarness.create();
+
+    await harness.pump(
+      tester,
+      Theme(
+        data: ThemeData.dark(),
+        child: Scaffold(
+          body: SizedBox(
+            width: 300,
+            height: 200,
+            child: FlexLineChart(
+              points: const [
+                FlexLineChartPoint(0, 10),
+                FlexLineChartPoint(1, 20),
+              ],
+              showTrendLine: false,
+              tooltipText: (_) => '',
+            ),
+          ),
+        ),
+      ),
+    );
+
+    final drafterTheme = tester.widget<DrafterTheme>(
+      find.descendant(
+        of: find.byType(FlexLineChart),
+        matching: find.byType(DrafterTheme),
+      ),
+    );
+
+    expect(drafterTheme.colors, DrafterThemeColors.dark);
+    expect(
+      _contrastRatio(
+        FlexLineChart.axisLabelColor(drafterTheme.colors),
+        drafterTheme.colors.surface,
+      ),
+      greaterThanOrEqualTo(9),
+    );
+  });
+
   testWidgets('line graph renders through Drafter', (
     WidgetTester tester,
   ) async {

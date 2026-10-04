@@ -285,7 +285,8 @@ class _FlexLineChartInteractionState extends State<_FlexLineChartInteraction> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = DrafterTheme.of(context);
+    final dark = Theme.of(context).brightness == Brightness.dark;
+    final theme = dark ? DrafterThemeColors.dark : DrafterThemeColors.light;
 
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -317,7 +318,13 @@ class _FlexLineChartInteractionState extends State<_FlexLineChartInteraction> {
               child: Stack(
                 fit: StackFit.expand,
                 children: [
-                  ChartCanvas(renderer: widget.renderer, animate: false),
+                  DrafterTheme(
+                    colors: theme,
+                    child: ChartCanvas(
+                      renderer: widget.renderer,
+                      animate: false,
+                    ),
+                  ),
                   Positioned.fill(
                     child: IgnorePointer(
                       child: RepaintBoundary(
