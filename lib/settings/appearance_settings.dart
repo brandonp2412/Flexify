@@ -32,21 +32,6 @@ List<Widget> getAppearanceSettings(
         padding: const EdgeInsets.fromLTRB(8, 4, 8, 8),
         child: Column(
           children: [
-            ListTile(
-              leading: const Icon(Icons.language_rounded),
-              title: Text(
-                l10n.settingsLanguage,
-                textAlign: isDesktopLayout(context)
-                    ? TextAlign.start
-                    : TextAlign.center,
-              ),
-              subtitle: Text(
-                l10n.settingsLanguageDescription,
-                textAlign: isDesktopLayout(context)
-                    ? TextAlign.start
-                    : TextAlign.center,
-              ),
-            ),
             DropdownButtonFormField<String>(
               key: const Key('language-setting-dropdown'),
               initialValue: selectedLocale,
