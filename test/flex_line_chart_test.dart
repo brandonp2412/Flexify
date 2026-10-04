@@ -1,20 +1,11 @@
-import 'dart:math';
-
 import 'package:drafter/drafter.dart';
+import 'package:drafter/painting.dart';
 import 'package:flexify/graph/flex_line_chart.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'support/test_app.dart';
-
-double _contrastRatio(Color foreground, Color background) {
-  final foregroundLuminance = foreground.computeLuminance();
-  final backgroundLuminance = background.computeLuminance();
-  final lighter = max(foregroundLuminance, backgroundLuminance);
-  final darker = min(foregroundLuminance, backgroundLuminance);
-  return (lighter + 0.05) / (darker + 0.05);
-}
 
 void main() {
   test('line graph gives edge strokes controlled breathing room', () {
@@ -27,12 +18,7 @@ void main() {
     expect(bounds.$2, closeTo(20.2, 0.0001));
   });
 
-  test('axis labels keep readable contrast and type emphasis', () {
-    for (final theme in [DrafterThemeColors.light, DrafterThemeColors.dark]) {
-      final color = FlexLineChart.axisLabelColor(theme);
-      expect(_contrastRatio(color, theme.surface), greaterThanOrEqualTo(9));
-    }
-
+  test('axis labels keep readable type emphasis', () {
     expect(FlexLineChart.axisLabelFontSize, 12);
     expect(FlexLineChart.axisLabelFontWeight, FontWeight.w600);
   });
@@ -71,13 +57,15 @@ void main() {
     );
 
     expect(drafterTheme.colors, DrafterThemeColors.dark);
-    expect(
-      _contrastRatio(
-        FlexLineChart.axisLabelColor(drafterTheme.colors),
-        drafterTheme.colors.surface,
+
+    final chartCanvas = tester.widget<ChartCanvas>(
+      find.descendant(
+        of: find.byType(FlexLineChart),
+        matching: find.byType(ChartCanvas),
       ),
-      greaterThanOrEqualTo(9),
     );
+    final renderer = chartCanvas.renderer as dynamic;
+    expect(renderer.axisLabelColor, ThemeData.dark().colorScheme.onSurface);
   });
 
   testWidgets('line graph renders through Drafter', (

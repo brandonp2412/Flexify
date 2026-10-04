@@ -43,11 +43,6 @@ const _lineChartEdgePaddingFraction = 0.02;
 const _axisLabelFontSize = 12.0;
 const _axisLabelFontWeight = FontWeight.w600;
 
-Color _axisLabelColor(DrafterThemeColors theme) {
-  final contrastTarget = theme.isDark ? Colors.white : Colors.black;
-  return Color.lerp(theme.label, contrastTarget, 0.65)!;
-}
-
 (double, double) _calculateYBounds(List<FlexLineChartPoint> points) {
   if (points.isEmpty) return (0, 1);
 
@@ -81,10 +76,6 @@ class FlexLineChart extends StatelessWidget {
 
   @visibleForTesting
   static FontWeight get axisLabelFontWeight => _axisLabelFontWeight;
-
-  @visibleForTesting
-  static Color axisLabelColor(DrafterThemeColors theme) =>
-      _axisLabelColor(theme);
 
   const FlexLineChart({
     super.key,
@@ -136,8 +127,9 @@ class FlexLineChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final settings = context.watch<SettingsState>().value;
-    final primary = Theme.of(context).colorScheme.primary;
-    final secondary = Theme.of(context).colorScheme.secondary;
+    final colorScheme = Theme.of(context).colorScheme;
+    final primary = colorScheme.primary;
+    final secondary = colorScheme.secondary;
     final yBounds = calculateYBounds(points);
     final labels = <_LineChartAxisLabel>[];
 
@@ -176,6 +168,7 @@ class FlexLineChart extends StatelessWidget {
         showBottomLabels: hideBottom != true,
         xLabels: labels,
         uniformXCount: timeBasedXAxis ? null : points.length,
+        axisLabelColor: colorScheme.onSurface,
       ),
       rowLabel: (mark) => tooltipText(mark.index),
       onPointSelected: onPointSelected,
@@ -202,6 +195,7 @@ class FlexGroupedLineChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final settings = context.watch<SettingsState>().value;
+    final axisLabelColor = Theme.of(context).colorScheme.onSurface;
     final points = [for (final line in series) ...line.points];
 
     final yBounds = _calculateYBounds(points);
@@ -221,6 +215,7 @@ class FlexGroupedLineChart extends StatelessWidget {
             _LineChartAxisLabel(i.toDouble(), xLabels[i], column: i),
         ],
         uniformXCount: xLabels.length,
+        axisLabelColor: axisLabelColor,
       ),
       rowLabel: (mark) => tooltipText(mark.seriesIndex, mark.index),
     );
@@ -447,6 +442,7 @@ class _FlexLineChartRenderer extends ChartRenderer
   final bool showBottomLabels;
   final List<_LineChartAxisLabel> xLabels;
   final int? uniformXCount;
+  final Color axisLabelColor;
 
   const _FlexLineChartRenderer({
     required this.series,
@@ -459,6 +455,7 @@ class _FlexLineChartRenderer extends ChartRenderer
     required this.showBottomLabels,
     required this.xLabels,
     required this.uniformXCount,
+    required this.axisLabelColor,
     this.trendSeries,
   });
 
@@ -629,9 +626,7 @@ class _FlexLineChartRenderer extends ChartRenderer
     }
   }
 
-  void _drawAxes(Canvas canvas, ChartBounds bounds, DrafterThemeColors theme) {
-    final axisLabelColor = _axisLabelColor(theme);
-
+  void _drawAxes(Canvas canvas, ChartBounds bounds) {
     if (showLeftLabels) {
       const tickCount = 4;
       for (var i = 0; i <= tickCount; i++) {
@@ -690,7 +685,7 @@ class _FlexLineChartRenderer extends ChartRenderer
   ) {
     if (size.isEmpty) return;
     final bounds = _bounds(size);
-    _drawAxes(canvas, bounds, theme);
+    _drawAxes(canvas, bounds);
 
     for (var i = 0; i < series.length; i++) {
       _drawSeries(
