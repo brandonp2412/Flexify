@@ -1,0 +1,2 @@
+- استفاده از زیرماژول flutter و مشخص‌کردن نسخهٔ kotlin
+- رفع deploy-windows-store

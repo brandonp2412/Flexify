@@ -1,0 +1,2 @@
+- به‌روزرسانی pubspec.lock
+- رفع مشکلات گردش‌کار استقرار GitHub Actions

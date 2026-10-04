@@ -1,0 +1,10 @@
+• افزودن env برای اسکرین‌شات‌های وب
+• حذف changelogهای تکراری
+• رفع مشکلات buildConfig
+• رفع پورت chromedriver
+• رفع راه‌اندازی chromedriver
+• رفع نام emulator در اسکرین‌شات‌های android
+• افزودن کل پوشهٔ fastlane با Git به گردش‌کار
+• نصب و راه‌اندازی chromedriver در گردش‌کارها
+• اطمینان از قرار گرفتن اسکرین‌شات‌ها در commit
+• جلوگیری از تکراری شدن changelog هنگام کپی

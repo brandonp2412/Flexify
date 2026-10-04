@@ -1,0 +1,3 @@
+• رفع جابه‌جایی دوبارهٔ خراب در Plans
+• ساده‌سازی چشمگیر تنظیم تمرین‌ها در وضعیت برنامه
+• بازگردانی «Greatly simplify setting exercises in plan state»

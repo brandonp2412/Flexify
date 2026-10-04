@@ -1,0 +1,1 @@
+- رفع فعال‌شدن گردش‌کار استقرار با افزودن workflow_dispatch و API call

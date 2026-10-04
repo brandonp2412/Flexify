@@ -1,0 +1,2 @@
+- به‌روزرسانی pubspec.lock
+- نصب بسته‌های گمشده در deploy-windows-store

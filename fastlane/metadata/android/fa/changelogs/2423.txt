@@ -1,0 +1,2 @@
+- به‌روزرسانی pubspec.lock
+- حذف ساخت‌های macOS/iOS از workflow اقدامات GitHub

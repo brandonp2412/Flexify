@@ -1,0 +1,3 @@
+• امکان اجرای دستی گردش‌کار github
+• بازگشت به ruby 3.3 برای deploy-google-play
+• رفع نام ناشر در pubspec.yaml

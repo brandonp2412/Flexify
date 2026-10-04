@@ -1,0 +1,1 @@
+• استفاده از android-emulator-runner

@@ -1,0 +1,1 @@
+• ci: تعیین retention-days برای مراحل upload-artifact جهت کاهش مصرف فضا

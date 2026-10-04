@@ -1,0 +1,5 @@
+- افزودن multidex به android/app/build.gradle
+- به‌روزرسانی flutter به 3.22.0
+- به‌روزرسانی pubspec.lock
+- به‌روزرسانی تنظیمات vscode
+- رفع مشکل درج رکوردها از صفحهٔ تاریخچه

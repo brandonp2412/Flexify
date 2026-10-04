@@ -1,0 +1,2 @@
+- فعال‌کردن ویرایش نام نمودارها در نوار برنامه
+- تبدیل Navigator.of(context).pop() به Navigator.pop(context)

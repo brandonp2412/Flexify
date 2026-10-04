@@ -1,0 +1,6 @@
+• کپی راه‌اندازی gradle از fitbook
+• رفع استقرارهای google play
+• پایین‌تر بردن graph peek به‌اندازهٔ 1 مورد
+• حذف جدول از readme بخش get it on X [skip ci]
+• مرتب‌سازی دوبارهٔ قابلیت‌ها در README [skip ci]
+• فاصله‌گذاری بین نشان‌ها [skip ci]

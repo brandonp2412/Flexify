@@ -1,0 +1,4 @@
+- به‌روزرسانی pubspec.lock
+- راه‌اندازی استقرار msstore
+- پیکربندی انتشارهای google play
+- حذف .actrc و MIGRATION_GUIDE.md

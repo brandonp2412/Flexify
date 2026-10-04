@@ -1,0 +1,5 @@
+• به‌روزرسانی README.md
+• feat: افزودن مدیریت دسته‌بندی
+• feat: انتخاب آیکن 2 به‌عنوان آیکن راه‌انداز Flexify
+• fix: بازیابی Flutter DevTools توکار
+• fix: پایدارسازی اشکال‌زدایی Flutter در VS Code

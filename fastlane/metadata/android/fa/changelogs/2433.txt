@@ -1,0 +1,4 @@
+- رفع مسیرهای فایل انتشار GitHub برای افزودن APKهای Android
+- نسخهٔ 2.0.27 🚀
+- به‌روزرسانی pubspec.lock
+- حذف ساخت‌های macOS/iOS از workflow اقدامات GitHub

@@ -1,0 +1,1 @@
+رفع فرمان git commit در deploy.sh

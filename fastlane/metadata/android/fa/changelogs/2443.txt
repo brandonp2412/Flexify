@@ -1,0 +1,2 @@
+- به‌روزرسانی pubspec.lock
+- اصلاح مسیر فایل‌های artifact برای انتشار GitHub

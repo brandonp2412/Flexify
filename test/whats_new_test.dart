@@ -88,6 +88,20 @@ void main() {
     expect(manifest.listAssets(), contains(path));
   });
 
+  test('localized changelog loader selects the Persian catalog', () async {
+    const path = 'assets/changelogs/l10n/fa.json';
+    const translated = 'ورودی محلی‌سازی‌شده';
+    final bundle = _MemoryAssetBundle({path: '{"123": "$translated"}'});
+    final localized = await loadLocalizedChangelogCatalog(bundle, const {
+      path,
+    }, const Locale('fa'));
+
+    expect(localized, {'123': translated});
+
+    final manifest = await AssetManifest.loadFromAssetBundle(rootBundle);
+    expect(manifest.listAssets(), contains(path));
+  });
+
   test('localized changelog loader selects the Urdu catalog', () async {
     const path = 'assets/changelogs/l10n/ur.json';
     const translated = 'مقامی ترجمہ شدہ اندراج';

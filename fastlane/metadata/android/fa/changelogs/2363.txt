@@ -1,0 +1,11 @@
+- اصلاح استفاده از yq در .deploy.yml
+- اصلاح مشکلات linting
+- حذف قانون linting مربوط به avoid print
+- اجرای dart format
+- اجرای workflowها روی main
+- افزودن workflowهای github
+- اصلاح workflowهای GitHub برای مدیریت تست act
+- اصلاح بیشتر تولید اسکرین‌شات‌های دسکتاپ
+- افزودن تنظیمات اجرای تست‌های یکپارچه‌سازی برای chrome
+- اصلاح صفحهٔ تنظیمات در web
+- اصلاح اجرا در web

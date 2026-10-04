@@ -1,0 +1,2 @@
+• متعادل کردن padding اطراف پیشرفت کلی
+• رفع deploy.sh [skip ci]

@@ -1,0 +1,1 @@
+مشخص‌کردن نسخهٔ flutter در .gitmodules

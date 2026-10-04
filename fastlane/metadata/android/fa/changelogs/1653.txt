@@ -1,0 +1,1 @@
+- استفاده از powershell به‌جای cmd در deploy.sh
