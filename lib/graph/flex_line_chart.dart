@@ -42,6 +42,10 @@ class _LineChartAxisLabel {
 const _lineChartEdgePaddingFraction = 0.02;
 const _axisLabelFontSize = 12.0;
 const _axisLabelFontWeight = FontWeight.w600;
+const _xAxisLabelMinGap = 12.0;
+const _chartTopInset = 24.0;
+const _chartBottomInset = 16.0;
+const _chartBottomLabelInset = 38.0;
 
 (double, double) _calculateYBounds(List<FlexLineChartPoint> points) {
   if (points.isEmpty) return (0, 1);
@@ -461,11 +465,13 @@ class _FlexLineChartRenderer extends ChartRenderer
 
   ChartBounds _bounds(Size size) {
     final left = showLeftLabels ? 48.0 : 8.0;
-    final bottom = showBottomLabels ? 30.0 : 8.0;
+    final bottom = showBottomLabels
+        ? _chartBottomLabelInset
+        : _chartBottomInset;
     return ChartBounds.insets(
       size,
       left: left,
-      top: 8,
+      top: _chartTopInset,
       right: 8,
       bottom: bottom,
     );
@@ -660,7 +666,7 @@ class _FlexLineChartRenderer extends ChartRenderer
         ),
       );
     }
-    final keep = LabelLayout.thin(centers, widths, 6).toSet();
+    final keep = LabelLayout.thin(centers, widths, _xAxisLabelMinGap).toSet();
     for (var i = 0; i < xLabels.length; i++) {
       if (!keep.contains(i)) continue;
       drawChartText(
