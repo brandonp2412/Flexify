@@ -41,6 +41,34 @@ void main() {
     );
   });
 
+  testWidgets('GraphsPage shows empty state when global progress is disabled', (
+    WidgetTester tester,
+  ) async {
+    final harness = await FlexifyTestHarness.create();
+    await harness.database.settings.update().write(
+      testSettings(showGlobalProgress: false),
+    );
+
+    await pumpGraphsPage(tester, harness);
+
+    expect(find.text('Global progress'), findsNothing);
+    expect(find.text('No graphs found'), findsOneWidget);
+  });
+
+  testWidgets('GraphsPage keeps global progress instead of the empty state', (
+    WidgetTester tester,
+  ) async {
+    final harness = await FlexifyTestHarness.create();
+    await harness.database.settings.update().write(
+      testSettings(showGlobalProgress: true),
+    );
+
+    await pumpGraphsPage(tester, harness);
+
+    expect(find.text('Global progress'), findsOneWidget);
+    expect(find.text('No graphs found'), findsNothing);
+  });
+
   testWidgets('GraphsPage taps barbell bench press', (
     WidgetTester tester,
   ) async {

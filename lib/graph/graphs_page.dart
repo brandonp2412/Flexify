@@ -305,11 +305,15 @@ class GraphsPageState extends State<GraphsPage>
                         selector: (p0, settingsState) =>
                             settingsState.value.showGlobalProgress,
                         builder: (context, showGlobal, child) {
+                          final globalSearchTerms =
+                              '${context.l10n.globalProgress} ${context.l10n.navGraphs}'
+                                  .toLowerCase();
+                          final globalProgressVisible =
+                              showGlobal &&
+                              _category == null &&
+                              globalSearchTerms.contains(_search.toLowerCase());
                           final showEmpty =
-                              exerciseSets.isEmpty &&
-                              !context.l10n.globalProgress
-                                  .toLowerCase()
-                                  .contains(_search.toLowerCase());
+                              exerciseSets.isEmpty && !globalProgressVisible;
                           return Expanded(
                             child: showEmpty
                                 ? Padding(
