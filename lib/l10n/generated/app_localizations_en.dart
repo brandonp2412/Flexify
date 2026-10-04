@@ -583,7 +583,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get notesForExercise => 'Notes for this exercise';
 
   @override
-  String get useTimeBasedXAxis => 'Use time-based X axis';
+  String get useTimeBasedXAxis => 'Time-based X axis';
 
   @override
   String updateAllNamed(String name) {
@@ -603,7 +603,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get globalProgress => 'Global progress';
 
   @override
-  String get curveLineGraphs => 'Curve line graphs';
+  String get curveLineGraphs => 'Curve lines';
 
   @override
   String get curveLineGraphsDescription => 'Draw graph lines as smooth curves';
@@ -1092,7 +1092,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Something went wrong when creating/upgrading your database. Usually this can be fixed by deleting & re-creating your records.';
 
   @override
-  String get curveSmoothness => 'Curve smoothness';
+  String get curveSmoothness => 'Smoothness';
 
   @override
   String get actionBack => 'Back';

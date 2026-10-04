@@ -1197,7 +1197,7 @@ abstract class AppLocalizations {
   /// Graph option that uses elapsed time on the horizontal axis.
   ///
   /// In en, this message translates to:
-  /// **'Use time-based X axis'**
+  /// **'Time-based X axis'**
   String get useTimeBasedXAxis;
 
   /// Title for updating all records for a named exercise.
@@ -1233,7 +1233,7 @@ abstract class AppLocalizations {
   /// Setting that renders graph lines as curves.
   ///
   /// In en, this message translates to:
-  /// **'Curve line graphs'**
+  /// **'Curve lines'**
   String get curveLineGraphs;
 
   /// Description for the curved graph-line setting.
@@ -2103,7 +2103,7 @@ abstract class AppLocalizations {
   /// Label for graph curve smoothness.
   ///
   /// In en, this message translates to:
-  /// **'Curve smoothness'**
+  /// **'Smoothness'**
   String get curveSmoothness;
 
   /// Generic back-navigation tooltip.

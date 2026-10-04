@@ -779,7 +779,7 @@
   "@notesForExercise": {
     "description": "Hint for exercise notes."
   },
-  "useTimeBasedXAxis": "Use time-based X axis",
+  "useTimeBasedXAxis": "Time-based X axis",
   "@useTimeBasedXAxis": {
     "description": "Graph option that uses elapsed time on the horizontal axis."
   },
@@ -808,7 +808,7 @@
   "@globalProgress": {
     "description": "Title for the global progress graph."
   },
-  "curveLineGraphs": "Curve line graphs",
+  "curveLineGraphs": "Curve lines",
   "@curveLineGraphs": {
     "description": "Setting that renders graph lines as curves."
   },
@@ -1445,7 +1445,7 @@
   "@databaseMigrationFailureDescription": {
     "description": "Explanation shown when a database migration fails."
   },
-  "curveSmoothness": "Curve smoothness",
+  "curveSmoothness": "Smoothness",
   "@curveSmoothness": {
     "description": "Label for graph curve smoothness."
   },
