@@ -29,6 +29,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   late TabController _controller;
+  late final PageController _desktopPageController;
   late final TimerState _timerState;
   final GlobalKey<PlansPageState> _plansPageKey = GlobalKey<PlansPageState>();
 
@@ -39,6 +40,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     final setting = context.read<SettingsState>().value.tabs;
     final tabs = setting.split(',');
     _controller = TabController(length: tabs.length, vsync: this);
+    _desktopPageController = PageController();
     _timerState = context.read<TimerState>();
     _timerState.addListener(_handleTimerNotificationTarget);
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -72,6 +74,15 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     });
   }
 
+  void _selectDesktopTab(int index) {
+    if (_controller.index != index) {
+      _controller.index = index;
+    }
+    if (_desktopPageController.hasClients) {
+      _desktopPageController.jumpToPage(index);
+    }
+  }
+
   Future<void> _handleTimerNotificationTarget() async {
     if (!mounted) return;
     final target = _timerState.consumeNotificationTarget();
@@ -84,7 +95,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       final index = tabs.indexOf(tab);
       if (index >= 0 && index < _controller.length) {
         if (isDesktopLayout(context)) {
-          _controller.index = index;
+          _selectDesktopTab(index);
         } else {
           _controller.animateTo(index);
         }
@@ -107,7 +118,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     final plansIndex = tabs.indexOf('PlansPage');
     if (plansIndex >= 0 && plansIndex < _controller.length) {
       if (isDesktopLayout(context)) {
-        _controller.index = plansIndex;
+        _selectDesktopTab(plansIndex);
       } else {
         _controller.animateTo(plansIndex);
       }
@@ -133,6 +144,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   void dispose() {
     _timerState.removeListener(_handleTimerNotificationTarget);
     _controller.dispose();
+    _desktopPageController.dispose();
     super.dispose();
   }
 
@@ -212,38 +224,56 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     );
 
     if (tabs.length != _controller.length) {
+      final index = _controller.index.clamp(0, tabs.length - 1);
       _controller.dispose();
-      _controller = TabController(length: tabs.length, vsync: this);
-      if (_controller.index >= tabs.length) _controller.index = tabs.length - 1;
+      _controller = TabController(
+        length: tabs.length,
+        initialIndex: index,
+        vsync: this,
+      );
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted && _desktopPageController.hasClients) {
+          _desktopPageController.jumpToPage(index);
+        }
+      });
     }
 
     final desktop = isDesktopLayout(context);
+    final pages = tabs.map((tab) {
+      if (tab == 'HistoryPage') {
+        return HistoryPage(tabController: _controller);
+      } else if (tab == 'PlansPage') {
+        return PlansPage(key: _plansPageKey, tabController: _controller);
+      } else if (tab == 'GraphsPage') {
+        return GraphsPage(tabController: _controller);
+      } else if (tab == 'TimerPage') {
+        return TimerPage(tabController: _controller);
+      } else if (tab == 'SettingsPage') {
+        return const SettingsPage();
+      } else {
+        return ErrorWidget(context.l10n.tabContentError);
+      }
+    }).toList();
 
     final content = Stack(
       children: [
-        TabBarView(
-          controller: _controller,
-          physics: desktop
-              ? const NeverScrollableScrollPhysics()
-              : scrollableTabs
-              ? const AlwaysScrollableScrollPhysics()
-              : const NeverScrollableScrollPhysics(),
-          children: tabs.map((tab) {
-            if (tab == 'HistoryPage') {
-              return HistoryPage(tabController: _controller);
-            } else if (tab == 'PlansPage') {
-              return PlansPage(key: _plansPageKey, tabController: _controller);
-            } else if (tab == 'GraphsPage') {
-              return GraphsPage(tabController: _controller);
-            } else if (tab == 'TimerPage') {
-              return TimerPage(tabController: _controller);
-            } else if (tab == 'SettingsPage') {
-              return const SettingsPage();
-            } else {
-              return ErrorWidget(context.l10n.tabContentError);
-            }
-          }).toList(),
-        ),
+        if (desktop)
+          PageView(
+            controller: _desktopPageController,
+            physics: const NeverScrollableScrollPhysics(),
+            onPageChanged: (index) {
+              if (_controller.index != index) _controller.index = index;
+            },
+            children: pages,
+          )
+        else
+          TabBarView(
+            controller: _controller,
+            physics: scrollableTabs
+                ? const AlwaysScrollableScrollPhysics()
+                : const NeverScrollableScrollPhysics(),
+            children: pages,
+          ),
         if (!desktop && scrollableTabs) ...[
           Positioned(
             left: 0,
@@ -307,67 +337,13 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         child: desktop
             ? Row(
                 children: [
-                  Container(
-                    width: 224,
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.surfaceContainerLow,
-                      border: Border(
-                        right: BorderSide(
-                          color: Theme.of(
-                            context,
-                          ).colorScheme.outlineVariant.withValues(alpha: .35),
-                        ),
-                      ),
-                    ),
-                    child: ValueListenableBuilder(
-                      valueListenable: _controller.animation!,
-                      builder: (context, value, child) {
-                        return NavigationRail(
-                          extended: true,
-                          minExtendedWidth: 224,
-                          backgroundColor: Colors.transparent,
-                          selectedIndex: value.round().clamp(
-                            0,
-                            tabs.length - 1,
-                          ),
-                          onDestinationSelected: (index) {
-                            _controller.index = index;
-                          },
-                          leading: Padding(
-                            padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
-                            child: Row(
-                              children: [
-                                Icon(
-                                  Icons.fitness_center_rounded,
-                                  color: Theme.of(context).colorScheme.primary,
-                                ),
-                                const SizedBox(width: 12),
-                                Text(
-                                  context.l10n.appTitle,
-                                  style: Theme.of(context).textTheme.titleLarge
-                                      ?.copyWith(fontWeight: FontWeight.w700),
-                                ),
-                              ],
-                            ),
-                          ),
-                          destinations: tabs
-                              .map(
-                                (tab) => NavigationRailDestination(
-                                  icon: Icon(BottomNav.iconForTab(tab)),
-                                  selectedIcon: Icon(BottomNav.iconForTab(tab)),
-                                  label: GestureDetector(
-                                    key: Key(tab),
-                                    onSecondaryTapDown: (_) =>
-                                        hideTab(context, tab),
-                                    child: Text(
-                                      BottomNav.labelForTab(context, tab),
-                                    ),
-                                  ),
-                                ),
-                              )
-                              .toList(),
-                        );
-                      },
+                  ListenableBuilder(
+                    listenable: _controller,
+                    builder: (context, child) => DesktopNav(
+                      tabs: tabs,
+                      currentIndex: _controller.index.clamp(0, tabs.length - 1),
+                      onTap: _selectDesktopTab,
+                      onSecondaryTap: hideTab,
                     ),
                   ),
                   Expanded(child: content),

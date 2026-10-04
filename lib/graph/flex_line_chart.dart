@@ -46,6 +46,9 @@ const _xAxisLabelMinGap = 12.0;
 const _chartTopInset = 24.0;
 const _chartBottomInset = 16.0;
 const _chartBottomLabelInset = 38.0;
+const _tooltipPadding = 8.0;
+const _tooltipRowHeight = 16.0;
+const _tooltipDotGap = 8.0;
 
 (double, double) _calculateYBounds(List<FlexLineChartPoint> points) {
   if (points.isEmpty) return (0, 1);
@@ -80,6 +83,113 @@ class FlexLineChart extends StatelessWidget {
 
   @visibleForTesting
   static FontWeight get axisLabelFontWeight => _axisLabelFontWeight;
+
+  @visibleForTesting
+  static double tooltipTopForMarks(
+    List<double> markYs, {
+    required int rowCount,
+    bool hasTitle = false,
+  }) {
+    if (markYs.isEmpty) return 0;
+
+    final tooltipHeight =
+        (hasTitle ? _tooltipRowHeight : 0) +
+        rowCount * _tooltipRowHeight +
+        _tooltipPadding * 2;
+    return markYs.reduce(min) - tooltipHeight - _tooltipDotGap;
+  }
+
+  @visibleForTesting
+  static List<int> selectXAxisLabelIndices(
+    List<double> centers,
+    List<double> widths,
+    double minGap,
+  ) {
+    final count = centers.length;
+    if (count == 0) return const [];
+    if (count == 1) return const [0];
+
+    final order = List<int>.generate(count, (index) => index)
+      ..sort((a, b) => centers[a].compareTo(centers[b]));
+    final first = order.first;
+    final last = order.last;
+    final lastLeft = centers[last] - widths[last] / 2;
+
+    // First determine how many labels actually fit while reserving both edges.
+    final packed = <int>[first];
+    var lastRight = centers[first] + widths[first] / 2;
+    for (final index in order.skip(1).take(count - 2)) {
+      final left = centers[index] - widths[index] / 2;
+      final right = centers[index] + widths[index] / 2;
+      if (left < lastRight + minGap || right + minGap > lastLeft) continue;
+      packed.add(index);
+      lastRight = right;
+    }
+    packed.add(last);
+
+    if (packed.length <= 2 || packed.length == count) {
+      packed.sort();
+      return packed;
+    }
+
+    // Keep that adaptive label count, but choose the middle labels nearest
+    // evenly spaced visual targets instead of packing them left-to-right.
+    final balanced = <int>[first];
+    var previousOrderPosition = 0;
+    final span = centers[last] - centers[first];
+
+    for (var slot = 1; slot < packed.length - 1; slot++) {
+      final target = centers[first] + span * slot / (packed.length - 1);
+      final remainingSlots = packed.length - 1 - slot;
+      final maxOrderPosition = order.length - 1 - remainingSlots;
+      var bestOrderPosition = -1;
+      var bestDistance = double.infinity;
+
+      for (
+        var position = previousOrderPosition + 1;
+        position <= maxOrderPosition;
+        position++
+      ) {
+        final index = order[position];
+        final previous = balanced.last;
+        final left = centers[index] - widths[index] / 2;
+        final previousRight = centers[previous] + widths[previous] / 2;
+        if (left < previousRight + minGap) continue;
+
+        final distance = (centers[index] - target).abs();
+        if (distance <= bestDistance) {
+          bestDistance = distance;
+          bestOrderPosition = position;
+        }
+      }
+
+      if (bestOrderPosition < 0) {
+        packed.sort();
+        return packed;
+      }
+
+      balanced.add(order[bestOrderPosition]);
+      previousOrderPosition = bestOrderPosition;
+    }
+
+    balanced.add(last);
+
+    for (var i = 1; i < balanced.length; i++) {
+      final previous = balanced[i - 1];
+      final current = balanced[i];
+      final gap =
+          centers[current] -
+          widths[current] / 2 -
+          (centers[previous] + widths[previous] / 2);
+      if (gap < minGap) {
+        packed.sort();
+        return packed;
+      }
+    }
+
+    balanced.sort();
+    return balanced;
+  }
 
   const FlexLineChart({
     super.key,
@@ -380,11 +490,19 @@ class _FlexLineTooltipPainter extends CustomPainter {
       markers: [for (final mark in marks) mark.center],
       markerColors: [for (final mark in marks) mark.color],
     );
+    final title = marks.first.label.isEmpty ? null : marks.first.label;
     drawTooltip(
       canvas,
-      anchor: Offset(x, bounds.top),
+      anchor: Offset(
+        x,
+        FlexLineChart.tooltipTopForMarks(
+          [for (final mark in marks) mark.center.dy],
+          rowCount: marks.length,
+          hasTitle: title != null,
+        ),
+      ),
       container: size,
-      title: marks.first.label.isEmpty ? null : marks.first.label,
+      title: title,
       background: theme.tooltipBackground,
       textColor: theme.tooltipText,
       mutedTextColor: theme.tooltipMutedText,
@@ -666,7 +784,11 @@ class _FlexLineChartRenderer extends ChartRenderer
         ),
       );
     }
-    final keep = LabelLayout.thin(centers, widths, _xAxisLabelMinGap).toSet();
+    final keep = FlexLineChart.selectXAxisLabelIndices(
+      centers,
+      widths,
+      _xAxisLabelMinGap,
+    ).toSet();
     for (var i = 0; i < xLabels.length; i++) {
       if (!keep.contains(i)) continue;
       drawChartText(

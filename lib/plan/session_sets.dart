@@ -82,27 +82,17 @@ class _SessionSetsState extends State<SessionSets> {
         final sets = snapshot.data;
         if (sets != null && sets.isNotEmpty) _scrollToNewest(sets.length);
 
+        if (sets == null || sets.isEmpty) return const SizedBox.shrink();
+
+        if (!widget.compact) return _buildChips(sets);
+
         return AnimatedSize(
           duration: const Duration(milliseconds: 200),
           curve: Curves.easeOut,
           alignment: Alignment.topCenter,
-          child: sets == null || sets.isEmpty
-              ? widget.compact
-                    ? const SizedBox.shrink()
-                    : _buildPlaceholder()
-              : _buildChips(sets),
+          child: _buildChips(sets),
         );
       },
-    );
-  }
-
-  /// Same height as a populated chip row so the layout below doesn't jump
-  /// when the first set of the session is logged.
-  Widget _buildPlaceholder() {
-    return const Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [SizedBox(height: 16.0), _PlaceholderChip()],
     );
   }
 
@@ -161,91 +151,37 @@ class _SessionSetsState extends State<SessionSets> {
       unit == 'kg' || unit == 'lb' || unit == 'stone';
 }
 
-/// Skeleton stand-in for a [_SetChip]. Reuses the same `Card`/padding/text
-/// styles as the real chip so the reserved height is measured from the
-/// same font metrics rather than guessed, and the layout below doesn't
-/// jump once the first set of the session is logged. The text itself is
-/// transparent; a decoration box behind each line draws a skeleton bar
-/// sized to that line's exact bounding box, so it reads as an empty slot
-/// rather than mimicking real chip content, and stays invisible to
-/// widget-text finders in tests.
-class _PlaceholderChip extends StatelessWidget {
-  const _PlaceholderChip();
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final barColor = theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.3);
-    return Card(
-      margin: EdgeInsets.zero,
-      color: Colors.transparent,
-      elevation: 0,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-        side: BorderSide(color: theme.colorScheme.outlineVariant),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _skeletonLine(
-              context.l10n.setNumber(9),
-              theme.textTheme.labelSmall,
-              barColor,
-            ),
-            _skeletonLine("8 kg × 50", theme.textTheme.titleSmall, barColor),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _skeletonLine(String text, TextStyle? style, Color barColor) {
-    return ExcludeSemantics(
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          color: barColor,
-          borderRadius: BorderRadius.circular(4),
-        ),
-        child: Text(text, style: style?.copyWith(color: Colors.transparent)),
-      ),
-    );
-  }
-}
-
 class _SetChip extends StatelessWidget {
-  final ExerciseSetView _exerciseSet;
-  final int _number;
-  final bool _best;
+  final ExerciseSetView exerciseSet;
+  final int number;
+  final bool best;
   final bool repsFirst;
 
   const _SetChip({
-    required this._exerciseSet,
-    required this._number,
-    required this._best,
+    required this.exerciseSet,
+    required this.number,
+    required this.best,
     required this.repsFirst,
   });
 
   String _value(BuildContext context) {
-    final unit = displayMeasurementUnit(context.l10n, _exerciseSet.unit);
-    if (_exerciseSet.cardio &&
-        (_exerciseSet.unit == 'kg' ||
-            _exerciseSet.unit == 'lb' ||
-            _exerciseSet.unit == 'stone')) {
-      final minutes = _exerciseSet.duration.floor();
-      final seconds = ((_exerciseSet.duration * 60) % 60)
+    final unit = displayMeasurementUnit(context.l10n, exerciseSet.unit);
+    if (exerciseSet.cardio &&
+        (exerciseSet.unit == 'kg' ||
+            exerciseSet.unit == 'lb' ||
+            exerciseSet.unit == 'stone')) {
+      final minutes = exerciseSet.duration.floor();
+      final seconds = ((exerciseSet.duration * 60) % 60)
           .floor()
           .toString()
           .padLeft(2, '0');
-      return "${formatDisplayNumber(context, _exerciseSet.weight)} $unit / $minutes:$seconds";
+      return "${formatDisplayNumber(context, exerciseSet.weight)} $unit / $minutes:$seconds";
     }
-    if (_exerciseSet.cardio) {
-      return "${formatDisplayNumber(context, _exerciseSet.distance)} $unit";
+    if (exerciseSet.cardio) {
+      return "${formatDisplayNumber(context, exerciseSet.distance)} $unit";
     }
-    final weight = "${formatDisplayNumber(context, _exerciseSet.weight)} $unit";
-    final reps = formatDisplayNumber(context, _exerciseSet.reps);
+    final weight = "${formatDisplayNumber(context, exerciseSet.weight)} $unit";
+    final reps = formatDisplayNumber(context, exerciseSet.reps);
     return repsFirst ? "$reps × $weight" : "$weight × $reps";
   }
 
@@ -258,7 +194,7 @@ class _SetChip extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         onTap: () => Navigator.of(context).push(
           FlexPageRoute(
-            builder: (context) => EditSetPage(exerciseSet: _exerciseSet),
+            builder: (context) => EditSetPage(exerciseSet: exerciseSet),
           ),
         ),
         child: Padding(
@@ -271,12 +207,12 @@ class _SetChip extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    context.l10n.setNumber(_number),
+                    context.l10n.setNumber(number),
                     style: theme.textTheme.labelSmall?.copyWith(
                       color: theme.colorScheme.onSurfaceVariant,
                     ),
                   ),
-                  if (_best) ...[
+                  if (best) ...[
                     const SizedBox(width: 4.0),
                     Icon(
                       Icons.star,

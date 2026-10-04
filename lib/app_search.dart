@@ -13,6 +13,15 @@ import 'package:provider/provider.dart';
 /// by this amount so the first item clears the floating bar.
 const double appSearchHeight = 72;
 
+enum _AppSearchMenuAction {
+  selectAll,
+  clearSelection,
+  edit,
+  share,
+  weight,
+  settings,
+}
+
 class AppSearch extends StatefulWidget {
   final SelectionController controller;
   final ValueChanged<String> onChange;
@@ -50,6 +59,37 @@ class _AppSearchState extends State<AppSearch> {
   void _clearSelection() {
     widget.controller.clear();
     widget.onChange(_ctrl.text);
+  }
+
+  Future<void> _handleMenuAction(_AppSearchMenuAction? action) async {
+    if (action == null || !mounted) return;
+
+    switch (action) {
+      case _AppSearchMenuAction.selectAll:
+        widget.onSelectAll();
+        break;
+      case _AppSearchMenuAction.clearSelection:
+        _clearSelection();
+        break;
+      case _AppSearchMenuAction.edit:
+        await widget.onEdit();
+        break;
+      case _AppSearchMenuAction.share:
+        await widget.onShare();
+        break;
+      case _AppSearchMenuAction.weight:
+        await Navigator.of(context).push(
+          FlexPageRoute(builder: (context) => const WeightPage()),
+        );
+        break;
+      case _AppSearchMenuAction.settings:
+        await Navigator.of(context).push(
+          FlexPageRoute(builder: (context) => const SettingsPage()),
+        );
+        if (!mounted) return;
+        widget.onRefresh?.call();
+        break;
+    }
   }
 
   @override
@@ -184,89 +224,59 @@ class _AppSearchState extends State<AppSearch> {
                     Offset.zero & overlay.size,
                   );
 
-                  await showMenu(
+                  final action = await showMenu<_AppSearchMenuAction>(
                     context: context,
                     position: position,
                     items: [
                       PopupMenuItem(
+                        value: _AppSearchMenuAction.selectAll,
                         child: ListTile(
                           leading: const Icon(Icons.done_all),
                           title: Text(context.l10n.selectAll),
-                          onTap: () {
-                            Navigator.pop(context);
-                            widget.onSelectAll();
-                          },
                         ),
                       ),
                       if (sel.isNotEmpty) ...[
                         PopupMenuItem(
+                          value: _AppSearchMenuAction.clearSelection,
                           child: ListTile(
                             leading: const Icon(Icons.clear_all),
                             title: Text(context.l10n.clearSelection),
-                            onTap: () {
-                              Navigator.pop(context);
-                              _clearSelection();
-                            },
                           ),
                         ),
                         PopupMenuItem(
+                          value: _AppSearchMenuAction.edit,
                           child: ListTile(
                             leading: const Icon(Icons.edit),
                             title: Text(context.l10n.actionEdit),
-                            onTap: () async {
-                              await widget.onEdit();
-                              if (!context.mounted) return;
-                              Navigator.pop(context);
-                            },
                           ),
                         ),
                         PopupMenuItem(
+                          value: _AppSearchMenuAction.share,
                           child: ListTile(
                             leading: const Icon(Icons.share),
                             title: Text(context.l10n.actionShare),
-                            onTap: () async {
-                              await widget.onShare();
-                              if (!context.mounted) return;
-                              Navigator.pop(context);
-                            },
                           ),
                         ),
                       ],
                       if (sel.isEmpty)
                         PopupMenuItem(
+                          value: _AppSearchMenuAction.weight,
                           child: ListTile(
                             leading: const Icon(Icons.scale),
                             title: Text(context.l10n.weightLabel),
-                            onTap: () async {
-                              Navigator.pop(context);
-                              await Navigator.of(context).push(
-                                FlexPageRoute(
-                                  builder: (context) => const WeightPage(),
-                                ),
-                              );
-                            },
                           ),
                         ),
                       if (sel.isEmpty)
                         PopupMenuItem(
+                          value: _AppSearchMenuAction.settings,
                           child: ListTile(
                             leading: const Icon(Icons.settings),
                             title: Text(context.l10n.navSettings),
-                            onTap: () async {
-                              Navigator.pop(context);
-                              await Navigator.of(context).push(
-                                FlexPageRoute(
-                                      builder: (context) =>
-                                          const SettingsPage(),
-                                ),
-                              );
-                                  if (widget.onRefresh != null)
-                                    widget.onRefresh!();
-                            },
                           ),
                         ),
                     ],
                   );
+                  await _handleMenuAction(action);
                 },
               ),
             ),

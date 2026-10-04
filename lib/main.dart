@@ -158,6 +158,9 @@ class App extends StatelessWidget {
     seedColor: Colors.deepPurple,
     brightness: Brightness.dark,
   );
+  static const _popupMenuTheme = PopupMenuThemeData(
+    menuPadding: EdgeInsets.zero,
+  );
 
   static InputDecorationTheme _inputDecorationTheme(String inputStyle) {
     return switch (inputStyle) {
@@ -256,6 +259,7 @@ class App extends StatelessWidget {
             fontFamily: 'Manrope',
             useMaterial3: true,
             inputDecorationTheme: _inputDecorationTheme(inputStyle),
+            popupMenuTheme: _popupMenuTheme,
             pageTransitionsTheme: _pageTransitionsTheme(),
           ),
           darkTheme: ThemeData(
@@ -265,6 +269,7 @@ class App extends StatelessWidget {
             fontFamily: 'Manrope',
             useMaterial3: true,
             inputDecorationTheme: _inputDecorationTheme(inputStyle),
+            popupMenuTheme: _popupMenuTheme,
             pageTransitionsTheme: _pageTransitionsTheme(),
           ),
           themeMode: mode,

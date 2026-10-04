@@ -89,14 +89,13 @@ class _GraphsFiltersState extends State<GraphsFilters> {
                 ),
               ),
               PopupMenuItem(
+                onTap: () {
+                  widget.setCategory(null);
+                  widget.setSort(GraphSort.dateDesc);
+                },
                 child: ListTile(
                   leading: const Icon(Icons.clear),
                   title: Text(context.l10n.actionClear),
-                  onTap: () {
-                    widget.setCategory(null);
-                    widget.setSort(GraphSort.dateDesc);
-                    Navigator.pop(context);
-                  },
                 ),
               ),
             ],

@@ -159,16 +159,6 @@ class _TimerPageWidgetState extends State<_TimerPageWidget>
     final countdownActive = timer.getDuration() > Duration.zero;
     final desktop = isDesktopLayout(context);
 
-    final timerVisual = countdownActive
-        ? const TimerCircularProgressIndicator()
-        : StopwatchProgressIndicator(
-            startedAt: _stopwatchStartedAt,
-            accumulated: _stopwatchAccumulated,
-            isRunning: _stopwatchRunning,
-            timerState: widget.timerState,
-            onRestart: _restartStopwatch,
-          );
-
     Widget? desktopAction;
     if (timer.isRunning()) {
       desktopAction = FilledButton.icon(
@@ -187,6 +177,19 @@ class _TimerPageWidgetState extends State<_TimerPageWidget>
         ),
       );
     }
+
+    final timerVisual = countdownActive
+        ? TimerCircularProgressIndicator(
+            trailingControl: desktop ? desktopAction : null,
+          )
+        : StopwatchProgressIndicator(
+            startedAt: _stopwatchStartedAt,
+            accumulated: _stopwatchAccumulated,
+            isRunning: _stopwatchRunning,
+            timerState: widget.timerState,
+            onRestart: _restartStopwatch,
+            trailingControl: desktop ? desktopAction : null,
+          );
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -209,17 +212,7 @@ class _TimerPageWidgetState extends State<_TimerPageWidget>
           top: desktop ? 24 : 0,
           bottom: desktop ? 24 : 80,
         ),
-        child: Center(
-          child: desktop && desktopAction != null
-              ? Column(
-                  children: [
-                    Expanded(child: timerVisual),
-                    const SizedBox(height: 20),
-                    desktopAction,
-                  ],
-                )
-              : timerVisual,
-        ),
+        child: Center(child: timerVisual),
       ),
       floatingActionButton: desktop
           ? null

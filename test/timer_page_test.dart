@@ -256,6 +256,57 @@ void main() {
     timerState.dispose();
   });
 
+  testWidgets('desktop timer actions stack below +1 minute', (
+    WidgetTester tester,
+  ) async {
+    tester.view.physicalSize = const Size(1200, 800);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    final harness = await FlexifyTestHarness.create();
+    final timerState = harness.timerState;
+
+    await harness.pump(tester, const TimerPage());
+
+    final addMinute = find.widgetWithText(TextButton, '+1 minute');
+    final startStopwatch = find.widgetWithText(FilledButton, 'Start stopwatch');
+
+    expect(addMinute, findsOneWidget);
+    expect(startStopwatch, findsOneWidget);
+    expect(
+      tester.getCenter(startStopwatch).dx,
+      closeTo(tester.getCenter(addMinute).dx, 1),
+    );
+    expect(
+      tester.getTopLeft(startStopwatch).dy,
+      greaterThan(tester.getBottomLeft(addMinute).dy),
+    );
+
+    await timerState.startTimer(
+      'Test Timer',
+      const Duration(seconds: 10),
+      '',
+      false,
+      true,
+    );
+    await tester.pump();
+
+    final stopTimer = find.widgetWithText(FilledButton, 'Stop timer');
+    expect(stopTimer, findsOneWidget);
+    expect(
+      tester.getCenter(stopTimer).dx,
+      closeTo(tester.getCenter(addMinute).dx, 1),
+    );
+    expect(
+      tester.getTopLeft(stopTimer).dy,
+      greaterThan(tester.getBottomLeft(addMinute).dy),
+    );
+
+    await timerState.stopTimer();
+    timerState.dispose();
+  });
+
   testWidgets('timer circle stays fixed when a rest timer starts', (
     WidgetTester tester,
   ) async {

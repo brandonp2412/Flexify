@@ -23,6 +23,44 @@ void main() {
     expect(FlexLineChart.axisLabelFontWeight, FontWeight.w600);
   });
 
+  test('x-axis labels preserve both edges while thinning the middle', () {
+    expect(
+      FlexLineChart.selectXAxisLabelIndices(
+        const [0, 50, 100, 150, 200, 250],
+        const [40, 40, 40, 40, 40, 40],
+        12,
+      ),
+      [0, 3, 5],
+    );
+  });
+
+  test('x-axis interior labels are balanced across the available width', () {
+    expect(
+      FlexLineChart.selectXAxisLabelIndices(
+        const [0, 50, 100, 150, 200, 250, 300, 350, 400, 450],
+        const [40, 40, 40, 40, 40, 40, 40, 40, 40, 40],
+        12,
+      ),
+      [0, 2, 5, 7, 9],
+    );
+  });
+
+  test('x-axis label count expands when more labels fit', () {
+    expect(
+      FlexLineChart.selectXAxisLabelIndices(
+        const [0, 70, 140, 210, 280],
+        const [30, 30, 30, 30, 30],
+        12,
+      ),
+      [0, 1, 2, 3, 4],
+    );
+  });
+
+  test('tooltip floats above the selected dot', () {
+    expect(FlexLineChart.tooltipTopForMarks(const [100], rowCount: 1), 60);
+    expect(FlexLineChart.tooltipTopForMarks(const [140, 90], rowCount: 2), 34);
+  });
+
   testWidgets('dark Material theme supplies dark Drafter colors to the chart', (
     WidgetTester tester,
   ) async {

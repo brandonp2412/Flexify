@@ -39,4 +39,44 @@ void main() {
 
     expect(editable.focusNode.hasFocus, isTrue);
   });
+
+  testWidgets('AppSearch popup rows have one interactive surface', (
+    tester,
+  ) async {
+    final harness = await FlexifyTestHarness.create();
+    final selection = SelectionController<String>();
+    var selectedAll = false;
+
+    await harness.pump(
+      tester,
+      Scaffold(
+        body: AppSearch(
+          controller: selection,
+          onChange: (_) {},
+          onSelectAll: () => selectedAll = true,
+          onDelete: () async {},
+          onEdit: () async {},
+          onShare: () async {},
+        ),
+      ),
+      surfaceSize: const Size(1024, 600),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byIcon(Icons.more_vert));
+    await tester.pumpAndSettle();
+
+    final selectAllText = find.text('Select all');
+    expect(selectAllText, findsOneWidget);
+
+    final tile = tester.widget<ListTile>(
+      find.ancestor(of: selectAllText, matching: find.byType(ListTile)),
+    );
+    expect(tile.onTap, isNull);
+
+    await tester.tap(selectAllText);
+    await tester.pumpAndSettle();
+
+    expect(selectedAll, isTrue);
+  });
 }

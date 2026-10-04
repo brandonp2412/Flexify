@@ -13,7 +13,9 @@ const double _timerFaceFontSize = 60;
 const double _timerControlsSpacing = 8;
 
 class TimerCircularProgressIndicator extends StatefulWidget {
-  const TimerCircularProgressIndicator({super.key});
+  final Widget? trailingControl;
+
+  const TimerCircularProgressIndicator({super.key, this.trailingControl});
   @override
   State<TimerCircularProgressIndicator> createState() =>
       _TimerCircularProgressIndicatorState();
@@ -97,6 +99,7 @@ class _TimerCircularProgressIndicatorState
         builder: (context, value, child) => _TimerCircularProgressIndicatorTile(
           value: value,
           timerState: timerState,
+          trailingControl: widget.trailingControl,
         ),
       );
     }
@@ -113,6 +116,7 @@ class _TimerCircularProgressIndicatorState
         builder: (context, value, child) => _TimerCircularProgressIndicatorTile(
           value: value,
           timerState: timerState,
+          trailingControl: widget.trailingControl,
         ),
       );
     }
@@ -134,6 +138,7 @@ class _TimerCircularProgressIndicatorState
         builder: (context, value, child) => _TimerCircularProgressIndicatorTile(
           value: value,
           timerState: timerState,
+          trailingControl: widget.trailingControl,
         ),
       );
     }
@@ -141,6 +146,7 @@ class _TimerCircularProgressIndicatorState
     return _TimerCircularProgressIndicatorTile(
       value: 0,
       timerState: timerState,
+      trailingControl: widget.trailingControl,
     );
   }
 }
@@ -205,6 +211,7 @@ class StopwatchProgressIndicator extends StatefulWidget {
   final bool isRunning;
   final TimerState timerState;
   final VoidCallback onRestart;
+  final Widget? trailingControl;
 
   const StopwatchProgressIndicator({
     super.key,
@@ -213,6 +220,7 @@ class StopwatchProgressIndicator extends StatefulWidget {
     required this.isRunning,
     required this.timerState,
     required this.onRestart,
+    this.trailingControl,
   });
 
   @override
@@ -275,7 +283,7 @@ class _StopwatchProgressIndicatorState extends State<StopwatchProgressIndicator>
   Widget build(BuildContext context) {
     const double maxCircleSize = 280;
     const double strokeWidth = 10;
-    const double controlsHeight = 56;
+    final controlsHeight = widget.trailingControl == null ? 56.0 : 112.0;
 
     final onSurface = Theme.of(context).colorScheme.onSurface;
     final started = _elapsed > Duration.zero;
@@ -327,15 +335,24 @@ class _StopwatchProgressIndicatorState extends State<StopwatchProgressIndicator>
               ),
             ),
             const SizedBox(height: _timerControlsSpacing),
-            TextButton(
-              onPressed: started
-                  ? widget.onRestart
-                  : () => _addOneMinute(context),
-              child: Text(
-                started
-                    ? context.l10n.actionRestart
-                    : context.l10n.addOneMinute,
-              ),
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextButton(
+                  onPressed: started
+                      ? widget.onRestart
+                      : () => _addOneMinute(context),
+                  child: Text(
+                    started
+                        ? context.l10n.actionRestart
+                        : context.l10n.addOneMinute,
+                  ),
+                ),
+                if (widget.trailingControl != null) ...[
+                  const SizedBox(height: 8),
+                  widget.trailingControl!,
+                ],
+              ],
             ),
           ],
         );
@@ -449,10 +466,12 @@ class _TimerProgressIndicatorState extends State<TimerProgressIndicator>
 class _TimerCircularProgressIndicatorTile extends StatelessWidget {
   final double value;
   final TimerState timerState;
+  final Widget? trailingControl;
 
   const _TimerCircularProgressIndicatorTile({
     required this.value,
     required this.timerState,
+    this.trailingControl,
   });
 
   @override
@@ -460,7 +479,7 @@ class _TimerCircularProgressIndicatorTile extends StatelessWidget {
     const double maxCircleSize = 280;
     const double strokeWidth = 10;
     const double dotSize = 16;
-    const double controlsHeight = 56;
+    final controlsHeight = trailingControl == null ? 56.0 : 112.0;
 
     final primary = Theme.of(context).colorScheme.primary;
     final onSurface = Theme.of(context).colorScheme.onSurface;
@@ -531,18 +550,27 @@ class _TimerCircularProgressIndicatorTile extends StatelessWidget {
               ),
             ),
             const SizedBox(height: _timerControlsSpacing),
-            TextButton(
-              onPressed: () async {
-                final settings = context.read<SettingsState>().value;
-                if (defaultTargetPlatform != TargetPlatform.linux)
-                  await requestNotificationPermission();
-                await timerState.addOneMinute(
-                  settings.alarmSound,
-                  settings.vibrate,
-                  settings.enableSound,
-                );
-              },
-              child: Text(context.l10n.addOneMinute),
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextButton(
+                  onPressed: () async {
+                    final settings = context.read<SettingsState>().value;
+                    if (defaultTargetPlatform != TargetPlatform.linux)
+                      await requestNotificationPermission();
+                    await timerState.addOneMinute(
+                      settings.alarmSound,
+                      settings.vibrate,
+                      settings.enableSound,
+                    );
+                  },
+                  child: Text(context.l10n.addOneMinute),
+                ),
+                if (trailingControl != null) ...[
+                  const SizedBox(height: 8),
+                  trailingControl!,
+                ],
+              ],
             ),
           ],
         );

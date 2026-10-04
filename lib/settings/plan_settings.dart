@@ -65,15 +65,15 @@ List<Widget> getPlanSettings(
       l10n.planTrailingDisplay,
       l10n.planTrailingDisplayDescription,
     ]))
-      Tooltip(
-        message: l10n.planTrailingDisplayDescription,
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(8, 4, 8, 8),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(bottom: 4),
+      Padding(
+        padding: const EdgeInsets.fromLTRB(8, 4, 8, 8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(bottom: 4),
+              child: Tooltip(
+                message: l10n.planTrailingDisplayDescription,
                 child: Text(
                   l10n.planTrailingDisplay,
                   textAlign: isDesktopLayout(context)
@@ -82,82 +82,77 @@ List<Widget> getPlanSettings(
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
               ),
-              Builder(
-                builder: (context) {
-                  final current = PlanTrailing.values.byName(
-                    settings.planTrailing.replaceFirst('PlanTrailing.', ''),
-                  );
-                  void save(PlanTrailing v) => db.settings.update().write(
-                    SettingsCompanion(planTrailing: Value(v.toString())),
-                  );
-                  const progressOptions = {
-                    PlanTrailing.count,
-                    PlanTrailing.percent,
-                    PlanTrailing.ratio,
-                  };
-                  const otherOptions = {
-                    PlanTrailing.reorder,
-                    PlanTrailing.none,
-                  };
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      SegmentedButton<PlanTrailing>(
-                        emptySelectionAllowed: true,
-                        selected: progressOptions.contains(current)
-                            ? {current}
-                            : {},
-                        segments: [
-                          ButtonSegment(
-                            value: PlanTrailing.count,
-                            label: Text(l10n.countLabel),
-                            icon: const Icon(Icons.tag),
-                          ),
-                          const ButtonSegment(
-                            value: PlanTrailing.percent,
-                            label: Text('%'),
-                            icon: Icon(Icons.percent),
-                          ),
-                          ButtonSegment(
-                            value: PlanTrailing.ratio,
-                            label: Text(l10n.ratioLabel),
-                            icon: const Icon(Icons.format_list_numbered),
-                          ),
-                        ],
-                        onSelectionChanged: (s) {
-                          if (s.isNotEmpty) save(s.first);
-                        },
-                      ),
-                      const SizedBox(height: 8),
-                      SegmentedButton<PlanTrailing>(
-                        emptySelectionAllowed: true,
-                        selected: otherOptions.contains(current)
-                            ? {current}
-                            : {},
-                        segments: [
-                          ButtonSegment(
-                            value: PlanTrailing.reorder,
-                            label: Text(l10n.reorder),
-                            icon: const Icon(Icons.menu),
-                          ),
-                          ButtonSegment(
-                            value: PlanTrailing.none,
-                            label: Text(l10n.none),
-                            icon: const Icon(Icons.block),
-                          ),
-                        ],
-                        onSelectionChanged: (s) {
-                          if (s.isNotEmpty) save(s.first);
-                        },
-                      ),
-                      const SizedBox(height: 8),
-                      _PlanTrailingPreview(trailing: current),
-                    ],
-                  );
-                },
-              ),
-            ],
-          ),
+            ),
+            Builder(
+              builder: (context) {
+                final current = PlanTrailing.values.byName(
+                  settings.planTrailing.replaceFirst('PlanTrailing.', ''),
+                );
+                void save(PlanTrailing v) => db.settings.update().write(
+                  SettingsCompanion(planTrailing: Value(v.toString())),
+                );
+                const progressOptions = {
+                  PlanTrailing.count,
+                  PlanTrailing.percent,
+                  PlanTrailing.ratio,
+                };
+                const otherOptions = {PlanTrailing.reorder, PlanTrailing.none};
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SegmentedButton<PlanTrailing>(
+                      emptySelectionAllowed: true,
+                      selected: progressOptions.contains(current)
+                          ? {current}
+                          : {},
+                      segments: [
+                        ButtonSegment(
+                          value: PlanTrailing.count,
+                          label: Text(l10n.countLabel),
+                          icon: const Icon(Icons.tag),
+                        ),
+                        const ButtonSegment(
+                          value: PlanTrailing.percent,
+                          label: Text('%'),
+                          icon: Icon(Icons.percent),
+                        ),
+                        ButtonSegment(
+                          value: PlanTrailing.ratio,
+                          label: Text(l10n.ratioLabel),
+                          icon: const Icon(Icons.format_list_numbered),
+                        ),
+                      ],
+                      onSelectionChanged: (s) {
+                        if (s.isNotEmpty) save(s.first);
+                      },
+                    ),
+                    const SizedBox(height: 8),
+                    SegmentedButton<PlanTrailing>(
+                      emptySelectionAllowed: true,
+                      selected: otherOptions.contains(current) ? {current} : {},
+                      segments: [
+                        ButtonSegment(
+                          value: PlanTrailing.reorder,
+                          label: Text(l10n.reorder),
+                          icon: const Icon(Icons.menu),
+                        ),
+                        ButtonSegment(
+                          value: PlanTrailing.none,
+                          label: Text(l10n.none),
+                          icon: const Icon(Icons.block),
+                        ),
+                      ],
+                      onSelectionChanged: (s) {
+                        if (s.isNotEmpty) save(s.first);
+                      },
+                    ),
+                    const SizedBox(height: 8),
+                    _PlanTrailingPreview(trailing: current),
+                  ],
+                );
+              },
+            ),
+          ],
         ),
       ),
   ];

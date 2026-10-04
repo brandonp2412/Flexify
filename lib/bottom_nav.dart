@@ -157,3 +157,147 @@ class BottomNav extends StatelessWidget {
     }
   }
 }
+
+class DesktopNav extends StatelessWidget {
+  final List<String> tabs;
+  final int currentIndex;
+  final ValueChanged<int> onTap;
+  final void Function(BuildContext, String)? onSecondaryTap;
+
+  const DesktopNav({
+    super.key,
+    required this.tabs,
+    required this.currentIndex,
+    required this.onTap,
+    this.onSecondaryTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+
+    return Container(
+      width: 224,
+      decoration: BoxDecoration(
+        color: colors.surfaceContainerLow,
+        border: Border(
+          right: BorderSide(
+            color: colors.outlineVariant.withValues(alpha: .35),
+          ),
+        ),
+      ),
+      child: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 20, 16, 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: Row(
+                  children: [
+                    Icon(Icons.fitness_center_rounded, color: colors.primary),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Text(
+                        context.l10n.appTitle,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 24),
+              ...tabs.asMap().entries.map(
+                (entry) => Padding(
+                  padding: const EdgeInsets.only(bottom: 6),
+                  child: _DesktopNavItem(
+                    key: Key(entry.value),
+                    icon: BottomNav.iconForTab(entry.value),
+                    label: BottomNav.labelForTab(context, entry.value),
+                    selected: entry.key == currentIndex,
+                    onTap: () => onTap(entry.key),
+                    onSecondaryTap: onSecondaryTap == null
+                        ? null
+                        : () => onSecondaryTap!(context, entry.value),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _DesktopNavItem extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final bool selected;
+  final VoidCallback onTap;
+  final VoidCallback? onSecondaryTap;
+
+  const _DesktopNavItem({
+    super.key,
+    required this.icon,
+    required this.label,
+    required this.selected,
+    required this.onTap,
+    this.onSecondaryTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+    final foreground = selected
+        ? colors.onSecondaryContainer
+        : colors.onSurfaceVariant;
+
+    final child = Material(
+      color: selected ? colors.secondaryContainer : Colors.transparent,
+      borderRadius: BorderRadius.circular(14),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(14),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
+          child: Row(
+            children: [
+              Icon(icon, size: 22, color: foreground),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  label,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                    color: foreground,
+                    fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+
+    return Semantics(
+      button: true,
+      selected: selected,
+      label: label,
+      child: onSecondaryTap == null
+          ? child
+          : GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onSecondaryTap: onSecondaryTap,
+              child: child,
+            ),
+    );
+  }
+}
