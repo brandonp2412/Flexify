@@ -433,6 +433,13 @@ void main() {
     await database.planExercises.insertOne(
       planExerciseFixture(planId: planId, exerciseId: originalExerciseId),
     );
+    await database.planExercises.insertOne(
+      planExerciseFixture(
+        planId: planId,
+        exerciseId: replacementExerciseId,
+        enabled: false,
+      ),
+    );
     final originalHistory = exerciseSetFixture(
       originalExercise,
       reps: 10,

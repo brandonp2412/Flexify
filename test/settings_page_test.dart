@@ -58,7 +58,7 @@ void main() {
     await tester.enterText(find.bySemanticsLabel('Search...'), 'Language');
     await tester.pumpAndSettle();
 
-    expect(find.widgetWithText(ListTile, 'Language'), findsOneWidget);
+    expect(find.byKey(const Key('language-setting-dropdown')), findsOneWidget);
     expect(find.text('Español'), findsNothing);
 
     await tester.tap(find.byKey(const Key('language-setting-dropdown')));
@@ -96,7 +96,7 @@ void main() {
     await tester.enterText(find.bySemanticsLabel('Buscar...'), 'Idioma');
     await tester.pumpAndSettle();
 
-    expect(find.widgetWithText(ListTile, 'Idioma'), findsOneWidget);
+    expect(find.byKey(const Key('language-setting-dropdown')), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 
@@ -131,7 +131,7 @@ void main() {
     await tester.enterText(find.bySemanticsLabel('Rechercher...'), 'Langue');
     await tester.pumpAndSettle();
 
-    expect(find.widgetWithText(ListTile, 'Langue'), findsOneWidget);
+    expect(find.byKey(const Key('language-setting-dropdown')), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 
@@ -166,7 +166,7 @@ void main() {
     await tester.enterText(find.bySemanticsLabel('Suchen...'), 'Sprache');
     await tester.pumpAndSettle();
 
-    expect(find.widgetWithText(ListTile, 'Sprache'), findsOneWidget);
+    expect(find.byKey(const Key('language-setting-dropdown')), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 
@@ -201,7 +201,7 @@ void main() {
     await tester.enterText(find.bySemanticsLabel('Cerca...'), 'Lingua');
     await tester.pumpAndSettle();
 
-    expect(find.widgetWithText(ListTile, 'Lingua'), findsOneWidget);
+    expect(find.byKey(const Key('language-setting-dropdown')), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 
@@ -236,7 +236,10 @@ void main() {
       await tester.enterText(find.bySemanticsLabel('Pesquisar...'), 'Idioma');
       await tester.pumpAndSettle();
 
-      expect(find.widgetWithText(ListTile, 'Idioma'), findsOneWidget);
+      expect(
+        find.byKey(const Key('language-setting-dropdown')),
+        findsOneWidget,
+      );
       expect(tester.takeException(), isNull);
     },
   );
@@ -272,7 +275,7 @@ void main() {
     await tester.enterText(find.bySemanticsLabel('Zoeken...'), 'Taal');
     await tester.pumpAndSettle();
 
-    expect(find.widgetWithText(ListTile, 'Taal'), findsOneWidget);
+    expect(find.byKey(const Key('language-setting-dropdown')), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 
@@ -307,7 +310,7 @@ void main() {
     await tester.enterText(find.bySemanticsLabel('Szukaj...'), 'Język');
     await tester.pumpAndSettle();
 
-    expect(find.widgetWithText(ListTile, 'Język'), findsOneWidget);
+    expect(find.byKey(const Key('language-setting-dropdown')), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 
@@ -342,7 +345,7 @@ void main() {
     await tester.enterText(find.bySemanticsLabel('検索...'), '言語');
     await tester.pumpAndSettle();
 
-    expect(find.widgetWithText(ListTile, '言語'), findsOneWidget);
+    expect(find.byKey(const Key('language-setting-dropdown')), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 
@@ -377,7 +380,7 @@ void main() {
     await tester.enterText(find.bySemanticsLabel('검색...'), '언어');
     await tester.pumpAndSettle();
 
-    expect(find.widgetWithText(ListTile, '언어'), findsOneWidget);
+    expect(find.byKey(const Key('language-setting-dropdown')), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 
@@ -412,7 +415,10 @@ void main() {
       await tester.enterText(find.bySemanticsLabel('搜索...'), '语言');
       await tester.pumpAndSettle();
 
-      expect(find.widgetWithText(ListTile, '语言'), findsOneWidget);
+      expect(
+        find.byKey(const Key('language-setting-dropdown')),
+        findsOneWidget,
+      );
       expect(tester.takeException(), isNull);
     },
   );

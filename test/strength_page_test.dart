@@ -13,6 +13,7 @@ Future<void> pumpStrengthPage(
   WidgetTester tester,
   FlexifyTestHarness harness, {
   Size? surfaceSize,
+  bool bodyWeight = false,
 }) async {
   await harness.database.planExercises.deleteAll();
   await harness.database.plans.deleteAll();
@@ -36,6 +37,7 @@ Future<void> pumpStrengthPage(
           end: null,
           limit: 11,
         ),
+        bodyWeight: bodyWeight,
       ),
     ),
     surfaceSize: surfaceSize,
@@ -68,8 +70,29 @@ void main() {
     expect(find.text('Start date'), findsOne);
     expect(find.text('Stop date'), findsOne);
     expect(find.text('Data points'), findsOne);
-    expect(find.text('Curve line graphs'), findsOne);
+    expect(find.text('Curve lines'), findsOne);
     expect(tester.takeException(), null);
+  });
+
+  testWidgets('Weight graph uses a full-width options button', (
+    WidgetTester tester,
+  ) async {
+    final harness = await FlexifyTestHarness.create();
+    await pumpStrengthPage(tester, harness, bodyWeight: true);
+
+    final optionsButton = find.byKey(const Key('body-weight-options-button'));
+    expect(optionsButton, findsOneWidget);
+    expect(
+      find.descendant(of: optionsButton, matching: find.text('Options')),
+      findsOneWidget,
+    );
+    expect(find.text('Best weight'), findsNothing);
+
+    await tester.tap(optionsButton);
+    await tester.pumpAndSettle();
+
+    expect(find.text('Start date'), findsOneWidget);
+    expect(find.text('Stop date'), findsOneWidget);
   });
 
   testWidgets('StrengthPage edits', (WidgetTester tester) async {

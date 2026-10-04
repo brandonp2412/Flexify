@@ -351,9 +351,26 @@ class _EditPlanPageState extends State<EditPlanPage> {
 
     if (widget.plan.id.present) {
       final planId = widget.plan.id.value;
-      await db.update(db.plans).replace(newPlan.copyWith(id: widget.plan.id));
-      await db.planExercises.deleteWhere((tbl) => tbl.planId.equals(planId));
-      await db.planExercises.insertAll(_orderedExercises(planId).toList());
+      await db.transaction(() async {
+        await (db.update(
+          db.plans,
+        )..where((plan) => plan.id.equals(planId))).write(
+          PlansCompanion(
+            days: Value(selected.join(',')),
+            title: Value(_titleCtrl.text),
+          ),
+        );
+
+        for (final exercise in _orderedExercises(planId)) {
+          if (exercise.id.present) {
+            await (db.update(db.planExercises)
+                  ..where((row) => row.id.equals(exercise.id.value)))
+                .write(exercise);
+          } else {
+            await db.into(db.planExercises).insert(exercise);
+          }
+        }
+      });
     } else {
       final highest =
           await (db.plans.select()

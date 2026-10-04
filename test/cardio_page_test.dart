@@ -78,8 +78,8 @@ void main() {
     expect(find.text('Start date'), findsOne);
     expect(find.text('Stop date'), findsOne);
     expect(find.text('Data points'), findsOne);
-    expect(find.text('Use time-based X axis'), findsOne);
-    expect(find.text('Curve line graphs'), findsOne);
+    expect(find.text('Time-based X axis'), findsOne);
+    expect(find.text('Curve lines'), findsOne);
     expect(tester.takeException(), null);
   });
 

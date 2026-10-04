@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart';
+import 'package:flexify/database/database.dart';
 import 'package:flexify/plan/edit_plan_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -53,6 +54,63 @@ void main() {
     await tester.tap(find.text('Save'));
     await tester.pumpAndSettle();
     expect(find.textContaining('Title'), findsNothing);
+  });
+
+  testWidgets('EditPlanPage preserves active workout progress', (
+    WidgetTester tester,
+  ) async {
+    final harness = await FlexifyTestHarness.create();
+    final database = harness.database;
+    final plan = planFixture(
+      id: 1,
+      days: 'Monday',
+      title: 'In progress',
+      sequence: 1,
+    );
+
+    await database.planExercises.deleteAll();
+    await database.plans.deleteAll();
+    await database.plans.insertOne(plan);
+    final planExercise = await insertPlanExerciseFixture(
+      database,
+      planId: 1,
+      exercise: 'Arnold press',
+    );
+    final workout = await database.workouts.insertReturning(
+      WorkoutsCompanion.insert(
+        planId: const Value(1),
+        startedAt: DateTime(2026, 10, 5, 8),
+      ),
+    );
+    await database.exerciseSets.insertOne(
+      ExerciseSetsCompanion.insert(
+        exerciseId: planExercise.exerciseId,
+        workoutId: Value(workout.id),
+        timestamp: DateTime(2026, 10, 5, 8, 30),
+        reps: const Value(8),
+        loadKg: const Value(20),
+      ),
+    );
+
+    await harness.pump(tester, EditPlanPage(plan: plan));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Save'));
+    await tester.pumpAndSettle();
+
+    final preservedWorkout =
+        await (database.workouts.select()
+              ..where((row) => row.id.equals(workout.id)))
+            .getSingle();
+    expect(preservedWorkout.planId, 1);
+
+    final preservedSet = await database.exerciseSets.select().getSingle();
+    expect(preservedSet.workoutId, workout.id);
+
+    final preservedPlanExercise =
+        await (database.planExercises.select()
+              ..where((row) => row.exerciseId.equals(planExercise.exerciseId)))
+            .getSingle();
+    expect(preservedPlanExercise.id, planExercise.id);
   });
 
   testWidgets('EditPlanPage searches', (WidgetTester tester) async {

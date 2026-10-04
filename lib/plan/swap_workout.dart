@@ -1,8 +1,10 @@
 import 'package:drift/drift.dart' as drift;
 import 'package:flexify/database/database.dart';
 import 'package:flexify/database/exercise_catalog.dart';
+import 'package:flexify/graph/add_exercise_page.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
+import 'package:flexify/platform_page_route.dart';
 import 'package:flutter/material.dart';
 
 class SwapWorkout extends StatefulWidget {
@@ -18,6 +20,7 @@ class _SwapWorkoutState extends State<SwapWorkout> {
   late Stream<List<Exercise>> _distinctExercises;
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
+  Set<int> _unavailableExerciseIds = const {};
 
   @override
   void initState() {
@@ -29,12 +32,74 @@ class _SwapWorkoutState extends State<SwapWorkout> {
     });
 
     _distinctExercises = watchExerciseCatalog();
+    _loadUnavailableExercises();
+  }
+
+  Future<void> _loadUnavailableExercises() async {
+    final source =
+        await (db.planExercises.select()
+              ..where((row) => row.id.equals(widget.planExerciseId)))
+            .getSingle();
+    final enabled =
+        await (db.planExercises.select()..where(
+              (row) =>
+                  row.planId.equals(source.planId) & row.enabled.equals(true),
+            ))
+            .get();
+
+    if (!mounted) return;
+    setState(() {
+      _unavailableExerciseIds = enabled
+          .where((row) => row.id != source.id)
+          .map((row) => row.exerciseId)
+          .toSet();
+    });
   }
 
   @override
   void dispose() {
     _searchController.dispose();
     super.dispose();
+  }
+
+  Future<void> _swapToExercise(Exercise exercise) async {
+    final didSwap = await db.transaction(() async {
+      final source =
+          await (db.planExercises.select()
+                ..where((row) => row.id.equals(widget.planExerciseId)))
+              .getSingle();
+      final existing =
+          await (db.planExercises.select()..where(
+                (row) =>
+                    row.planId.equals(source.planId) &
+                    row.exerciseId.equals(exercise.id),
+              ))
+              .getSingleOrNull();
+
+      if (existing?.id == source.id) return true;
+      if (existing?.enabled == true) return false;
+
+      if (existing != null) {
+        await (db.planExercises.delete()
+              ..where((row) => row.id.equals(existing.id)))
+            .go();
+      }
+      await (db.planExercises.update()
+            ..where((row) => row.id.equals(source.id)))
+          .write(PlanExercisesCompanion(exerciseId: drift.Value(exercise.id)));
+      return true;
+    });
+
+    if (!mounted || !didSwap) return;
+    Navigator.pop(context, true);
+  }
+
+  Future<void> _createAndSwap() async {
+    final exercise = await Navigator.of(context).push<Exercise>(
+      FlexPageRoute(builder: (context) => AddExercisePage(name: _searchQuery)),
+    );
+    if (exercise == null || !mounted) return;
+    await _swapToExercise(exercise);
   }
 
   @override
@@ -55,6 +120,16 @@ class _SwapWorkoutState extends State<SwapWorkout> {
               ),
             ),
           ),
+          ListTile(
+            key: const Key('create-swap-exercise'),
+            leading: const Icon(Icons.add_rounded),
+            title: Text(
+              _searchQuery.isEmpty
+                  ? context.l10n.addExercise
+                  : context.l10n.addNamed(_searchQuery),
+            ),
+            onTap: _createAndSwap,
+          ),
           Expanded(
             child: StreamBuilder<List<Exercise>>(
               stream: _distinctExercises,
@@ -68,9 +143,11 @@ class _SwapWorkoutState extends State<SwapWorkout> {
 
                 final exercises = snapshot.data!
                     .where(
-                      (exercise) => exercise.name.toLowerCase().contains(
-                        _searchQuery.toLowerCase(),
-                      ),
+                      (exercise) =>
+                          !_unavailableExerciseIds.contains(exercise.id) &&
+                          exercise.name.toLowerCase().contains(
+                            _searchQuery.toLowerCase(),
+                          ),
                     )
                     .toList();
 
@@ -80,19 +157,7 @@ class _SwapWorkoutState extends State<SwapWorkout> {
                     final exercise = exercises[index];
                     return ListTile(
                       title: Text(exercise.name),
-                      onTap: () async {
-                        await (db.planExercises.update()..where(
-                              (tbl) => tbl.id.equals(widget.planExerciseId),
-                            ))
-                            .write(
-                              PlanExercisesCompanion(
-                                exerciseId: drift.Value(exercise.id),
-                              ),
-                            );
-
-                        if (!context.mounted) return;
-                        Navigator.pop(context, true);
-                      },
+                      onTap: () => _swapToExercise(exercise),
                     );
                   },
                 );

@@ -315,20 +315,29 @@ class _StrengthPageState extends State<StrengthPage> {
                   ],
                 )
               else ...[
-                Row(
-                  children: [
-                    if (!widget.bodyWeight)
-                      Expanded(child: metricSelector)
-                    else
-                      const Spacer(),
-                    const SizedBox(width: 8),
-                    IconButton.filledTonal(
-                      icon: const Icon(Icons.tune),
-                      tooltip: context.l10n.options,
+                if (widget.bodyWeight)
+                  SizedBox(
+                    width: double.infinity,
+                    height: 48,
+                    child: FilledButton.tonalIcon(
+                      key: const Key('body-weight-options-button'),
                       onPressed: _showOptions,
+                      icon: const Icon(Icons.tune),
+                      label: Text(context.l10n.options),
                     ),
-                  ],
-                ),
+                  )
+                else
+                  Row(
+                    children: [
+                      Expanded(child: metricSelector),
+                      const SizedBox(width: 8),
+                      IconButton.filledTonal(
+                        icon: const Icon(Icons.tune),
+                        tooltip: context.l10n.options,
+                        onPressed: _showOptions,
+                      ),
+                    ],
+                  ),
                 const SizedBox(height: 8),
                 periodSelector,
               ],

@@ -206,8 +206,9 @@ class _ExerciseModalState extends State<ExerciseModal> {
             leading: const Icon(Icons.swap_horiz),
             title: Text(context.l10n.actionSwap),
             onTap: () async {
-              Navigator.pop(context);
-              final result = await Navigator.of(context).push(
+              final navigator = Navigator.of(context);
+              navigator.pop();
+              final result = await navigator.push(
                 FlexPageRoute(
                   builder: (context) =>
                       SwapWorkout(planExerciseId: widget.planExerciseId),

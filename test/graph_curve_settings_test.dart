@@ -13,8 +13,8 @@ void main() {
     await harness.pump(tester, const Scaffold(body: GraphCurveSettings()));
     await tester.pumpAndSettle();
 
-    expect(find.text('Curve line graphs'), findsOne);
-    expect(find.text('Curve smoothness'), findsOne);
+    expect(find.text('Curve lines'), findsOne);
+    expect(find.text('Smoothness'), findsOne);
 
     final initial = await harness.database
         .select(harness.database.settings)
