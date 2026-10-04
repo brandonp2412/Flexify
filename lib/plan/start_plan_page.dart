@@ -61,6 +61,7 @@ class _StartPlanPageState extends State<StartPlanPage>
   int _selected = 0;
   bool _cardio = false;
   DateTime? _lastSaved;
+  bool _saving = false;
   List<Rpm>? _rpms;
   String? _category;
   String? _image;
@@ -770,126 +771,133 @@ class _StartPlanPageState extends State<StartPlanPage>
     AsyncSnapshot<List<PlanExerciseEntry>> snapshot,
     List<GymCount> counts,
   ) async {
+    if (_saving) return;
     if (!_key.currentState!.validate()) return;
     if (snapshot.data == null || snapshot.data!.isEmpty) return;
     if (_selected >= snapshot.data!.length) return;
-    final workout = await _ensureWorkout();
-    if (!mounted) return;
 
-    final entry = snapshot.data![_selected];
-    final exerciseId = entry.exercise.id;
-    final exercise = entry.exercise.name;
-    double? bodyWeight;
-    double? bodyWeightKg;
-    final settings = context.read<SettingsState>().value;
-    final timerState = context.read<TimerState>();
-    if (settings.showBodyWeight) {
-      final weightEntry = await getBodyWeight();
-      if (weightEntry != null) {
-        bodyWeightKg = weightEntry.weightKg;
-        bodyWeight = displayBodyWeight(_unit, weightEntry.weightKg);
+    _saving = true;
+    try {
+      final workout = await _ensureWorkout();
+      if (!mounted) return;
+
+      final entry = snapshot.data![_selected];
+      final exerciseId = entry.exercise.id;
+      final exercise = entry.exercise.name;
+      double? bodyWeight;
+      double? bodyWeightKg;
+      final settings = context.read<SettingsState>().value;
+      final timerState = context.read<TimerState>();
+      if (settings.showBodyWeight) {
+        final weightEntry = await getBodyWeight();
+        if (weightEntry != null) {
+          bodyWeightKg = weightEntry.weightKg;
+          bodyWeight = displayBodyWeight(_unit, weightEntry.weightKg);
+        }
       }
-    }
-    if (settings.showBodyWeight && bodyWeight == null) {
-      final lastSet = await getLast(exercise);
-      bodyWeight = lastSet?.bodyWeight;
-    }
+      if (settings.showBodyWeight && bodyWeight == null) {
+        final lastSet = await getLast(exercise);
+        bodyWeight = lastSet?.bodyWeight;
+      }
 
-    if (settings.notifications && !settings.notificationPermissionRequested) {
-      await requestNotificationPermission();
-    }
+      if (settings.notifications && !settings.notificationPermissionRequested) {
+        await requestNotificationPermission();
+      }
 
-    if (!settings.explainedPermissions &&
-        settings.restTimers &&
-        !kIsWeb &&
-        defaultTargetPlatform == TargetPlatform.android &&
-        mounted) {
-      await Navigator.of(
-        context,
-      ).push(FlexPageRoute(builder: (context) => const PermissionsPage()));
-    }
+      if (!settings.explainedPermissions &&
+          settings.restTimers &&
+          !kIsWeb &&
+          defaultTargetPlatform == TargetPlatform.android &&
+          mounted) {
+        await Navigator.of(
+          context,
+        ).push(FlexPageRoute(builder: (context) => const PermissionsPage()));
+      }
 
-    if (!mounted) return;
-    final index = counts.indexWhere(
-      (element) => element.exerciseId == exerciseId,
-    );
-
-    int? max;
-    double? restMs;
-    int warmupSets = 0;
-    bool peTimers = true;
-    if (index != -1) {
-      max = counts[index].maxSets;
-      restMs = counts[index].restMs?.toDouble();
-      warmupSets = counts[index].warmupSets ?? 0;
-      peTimers = counts[index].timers;
-    }
-
-    final created = DateTime.now().toLocal();
-    final exerciseSetDraft = ExerciseSetView(
-      id: 0,
-      bodyWeight: bodyWeight ?? 0,
-      cardio: _cardio,
-      category: _category,
-      created: created,
-      distance: parseDisplayNumber(context, _distance.text) ?? 0,
-      duration:
-          (int.tryParse(_seconds.text) ?? 0) / 60 +
-          (int.tryParse(_minutes.text) ?? 0),
-      image: _image,
-      incline: int.tryParse(_incline.text),
-      name: exercise,
-      notes: _notes.text,
-      planId: widget.plan.id,
-      reps: parseDisplayNumber(context, _reps.text) ?? 0,
-      restMs: restMs?.toInt(),
-      unit: _unit,
-      weight: parseDisplayNumber(context, _weight.text) ?? 0,
-    );
-
-    var count = 0;
-    if (index != -1) count = counts[index].count;
-    count++;
-
-    restMs ??= settings.timerDuration.toDouble();
-
-    if (settings.restTimers && count > warmupSets && peTimers) {
-      timerState.startTimer(
-        "$exercise ($count/${max ?? settings.maxSets})",
-        Duration(milliseconds: restMs.toInt()),
-        settings.alarmSound,
-        settings.vibrate,
-        settings.enableSound,
-        "plan:${widget.plan.id}",
+      if (!mounted) return;
+      final index = counts.indexWhere(
+        (element) => element.exerciseId == exerciseId,
       );
+
+      int? max;
+      double? restMs;
+      int warmupSets = 0;
+      bool peTimers = true;
+      if (index != -1) {
+        max = counts[index].maxSets;
+        restMs = counts[index].restMs?.toDouble();
+        warmupSets = counts[index].warmupSets ?? 0;
+        peTimers = counts[index].timers;
+      }
+
+      final created = DateTime.now().toLocal();
+      final exerciseSetDraft = ExerciseSetView(
+        id: 0,
+        bodyWeight: bodyWeight ?? 0,
+        cardio: _cardio,
+        category: _category,
+        created: created,
+        distance: parseDisplayNumber(context, _distance.text) ?? 0,
+        duration:
+            (int.tryParse(_seconds.text) ?? 0) / 60 +
+            (int.tryParse(_minutes.text) ?? 0),
+        image: _image,
+        incline: int.tryParse(_incline.text),
+        name: exercise,
+        notes: _notes.text,
+        planId: widget.plan.id,
+        reps: parseDisplayNumber(context, _reps.text) ?? 0,
+        restMs: restMs?.toInt(),
+        unit: _unit,
+        weight: parseDisplayNumber(context, _weight.text) ?? 0,
+      );
+
+      var count = 0;
+      if (index != -1) count = counts[index].count;
+      count++;
+
+      restMs ??= settings.timerDuration.toDouble();
+
+      if (settings.restTimers && count > warmupSets && peTimers) {
+        timerState.startTimer(
+          "$exercise ($count/${max ?? settings.maxSets})",
+          Duration(milliseconds: restMs.toInt()),
+          settings.alarmSound,
+          settings.vibrate,
+          settings.enableSound,
+          "plan:${widget.plan.id}",
+        );
+      }
+
+      final finishedExercise =
+          count == (max ?? settings.maxSets) &&
+          _selected < snapshot.data!.length - 1;
+
+      final exerciseSet = await insertExerciseSet(
+        db,
+        exerciseSet: exerciseSetDraft,
+        exerciseId: exerciseId,
+        workoutId: workout.id,
+        bodyWeightKg: bodyWeightKg,
+      );
+      if (!mounted) return;
+      final messages = positiveReinforcementMessages(context.l10n);
+      setState(() {
+        _updateExerciseSetTextFields(exerciseSet);
+        _lastSaved = DateTime.now();
+      });
+      if (finishedExercise) await select(_selected + 1);
+
+      if (!settings.notifications) return;
+
+      final best = await isBestExerciseSet(db, exerciseSet);
+      if (!best) return;
+      final random = Random();
+      final randomMessage = messages[random.nextInt(messages.length)];
+      if (mounted && random.nextDouble() < 0.3) toast(randomMessage);
+    } finally {
+      _saving = false;
     }
-
-    final finishedExercise =
-        count == (max ?? settings.maxSets) &&
-        _selected < snapshot.data!.length - 1;
-
-    final exerciseSet = await insertExerciseSet(
-      db,
-      exerciseSet: exerciseSetDraft,
-      exerciseId: exerciseId,
-      workoutId: workout.id,
-      bodyWeightKg: bodyWeightKg,
-    );
-    if (!mounted) return;
-    final messages = positiveReinforcementMessages(context.l10n);
-    setState(() {
-      _updateExerciseSetTextFields(exerciseSet);
-      _lastSaved = DateTime.now();
-    });
-    if (finishedExercise) await select(_selected + 1);
-
-    if (!settings.notifications) return;
-
-    final best = await isBestExerciseSet(db, exerciseSet);
-    if (!best) return;
-    final random = Random();
-    final randomMessage = messages[random.nextInt(messages.length)];
-    if (mounted && random.nextDouble() < 0.3) toast(randomMessage);
   }
 
   Future<void> _selectFromEntries(

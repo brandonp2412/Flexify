@@ -289,6 +289,44 @@ void main() {
     }
   });
 
+  testWidgets('rapid save taps create only one workout set', (
+    WidgetTester tester,
+  ) async {
+    const exercise = 'Rapid tap bench press';
+    final l10n = lookupAppLocalizations(const Locale('en'));
+    final harness = await FlexifyTestHarness.create();
+    final database = harness.database;
+
+    final id = await database.plans.insertOne(planFixture());
+    await insertPlanExerciseFixture(database, planId: id, exercise: exercise);
+    await database.settings.update().write(
+      testSettings(
+        explainedPermissions: true,
+        notificationPermissionRequested: true,
+        restTimers: false,
+      ),
+    );
+    final plan =
+        await (database.plans.select()..where((plan) => plan.id.equals(id)))
+            .getSingle();
+
+    await harness.pump(tester, StartPlanPage(plan: plan));
+    await tester.pumpAndSettle();
+
+    await tester.enterText(textFieldWithLabel(l10n.repsLabel), '5');
+    await tester.enterText(textFieldWithLabel(l10n.weightWithUnit('kg')), '50');
+
+    await tester.tap(find.text(l10n.actionSave));
+    await tester.tap(find.text(l10n.actionSave));
+    await tester.pumpAndSettle();
+
+    final saved = await getExerciseSetsForExercise(
+      database,
+      exerciseName: exercise,
+    );
+    expect(saved, hasLength(1));
+  });
+
   testWidgets('StartPlanPage saves localized German decimal input', (
     WidgetTester tester,
   ) async {
