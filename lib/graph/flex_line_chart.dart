@@ -40,13 +40,12 @@ class _LineChartAxisLabel {
 }
 
 const _lineChartEdgePaddingFraction = 0.02;
-const _axisLabelFontSize = 10.0;
-const _axisLabelFontWeight = FontWeight.w500;
+const _axisLabelFontSize = 12.0;
+const _axisLabelFontWeight = FontWeight.w600;
 
 Color _axisLabelColor(DrafterThemeColors theme) {
   final contrastTarget = theme.isDark ? Colors.white : Colors.black;
-  final blendAmount = theme.isDark ? 0.10 : 0.30;
-  return Color.lerp(theme.label, contrastTarget, blendAmount)!;
+  return Color.lerp(theme.label, contrastTarget, 0.65)!;
 }
 
 (double, double) _calculateYBounds(List<FlexLineChartPoint> points) {
@@ -302,31 +301,39 @@ class _FlexLineChartInteractionState extends State<_FlexLineChartInteraction> {
               _activate(event.localPosition, scene);
               _select(event.localPosition, scene);
             },
-            onPointerMove: (event) => _activate(event.localPosition, scene),
             onPointerUp: (event) {
               _activate(event.localPosition, scene);
               if (!_keepTooltipOnTapUp) _clear();
             },
             onPointerCancel: (_) => _clear(),
-            child: Stack(
-              fit: StackFit.expand,
-              children: [
-                ChartCanvas(renderer: widget.renderer, animate: false),
-                Positioned.fill(
-                  child: IgnorePointer(
-                    child: RepaintBoundary(
-                      child: CustomPaint(
-                        painter: _FlexLineTooltipPainter(
-                          activeIndex: _activeIndex,
-                          scene: scene,
-                          theme: theme,
-                          rowLabel: widget.rowLabel,
+            child: GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onLongPressStart: (details) =>
+                  _activate(details.localPosition, scene),
+              onLongPressMoveUpdate: (details) =>
+                  _activate(details.localPosition, scene),
+              onLongPressEnd: (_) => _clear(),
+              onLongPressCancel: _clear,
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  ChartCanvas(renderer: widget.renderer, animate: false),
+                  Positioned.fill(
+                    child: IgnorePointer(
+                      child: RepaintBoundary(
+                        child: CustomPaint(
+                          painter: _FlexLineTooltipPainter(
+                            activeIndex: _activeIndex,
+                            scene: scene,
+                            theme: theme,
+                            rowLabel: widget.rowLabel,
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         );

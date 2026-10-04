@@ -30,11 +30,11 @@ void main() {
   test('axis labels keep readable contrast and type emphasis', () {
     for (final theme in [DrafterThemeColors.light, DrafterThemeColors.dark]) {
       final color = FlexLineChart.axisLabelColor(theme);
-      expect(_contrastRatio(color, theme.surface), greaterThanOrEqualTo(4.5));
+      expect(_contrastRatio(color, theme.surface), greaterThanOrEqualTo(9));
     }
 
-    expect(FlexLineChart.axisLabelFontSize, 10);
-    expect(FlexLineChart.axisLabelFontWeight, FontWeight.w500);
+    expect(FlexLineChart.axisLabelFontSize, 12);
+    expect(FlexLineChart.axisLabelFontWeight, FontWeight.w600);
   });
 
   testWidgets('line graph renders through Drafter', (
@@ -157,7 +157,7 @@ void main() {
     await tester.pump();
   });
 
-  testWidgets('drag updates every crossed tooltip on the next frame', (
+  testWidgets('drag does not scrub until the long press activates', (
     WidgetTester tester,
   ) async {
     final harness = await FlexifyTestHarness.create();
@@ -193,15 +193,73 @@ void main() {
     final gesture = await tester.startGesture(topLeft + const Offset(16, 180));
     await tester.pump();
 
-    for (final (x, expectedIndex) in [(105.0, 1), (195.0, 2), (284.0, 3)]) {
-      tooltipIndexes.clear();
-      await gesture.moveTo(topLeft + Offset(x, 180));
-      await tester.pump();
-      expect(tooltipIndexes, contains(expectedIndex));
-    }
+    tooltipIndexes.clear();
+    await gesture.moveTo(topLeft + const Offset(105, 180));
+    await tester.pump();
+
+    expect(tooltipIndexes, isNot(contains(1)));
 
     await gesture.up();
     await tester.pump();
+  });
+
+  testWidgets('long press scrub wins against horizontal page swiping', (
+    WidgetTester tester,
+  ) async {
+    final harness = await FlexifyTestHarness.create();
+    final tooltipIndexes = <int>[];
+
+    final pageController = PageController();
+    addTearDown(pageController.dispose);
+
+    await harness.pump(
+      tester,
+      Scaffold(
+        body: PageView(
+          controller: pageController,
+          children: [
+            Center(
+              child: SizedBox(
+                width: 300,
+                height: 200,
+                child: FlexLineChart(
+                  points: const [
+                    FlexLineChartPoint(0, 10, column: 0),
+                    FlexLineChartPoint(1, 20, column: 1),
+                    FlexLineChartPoint(2, 15, column: 2),
+                  ],
+                  showTrendLine: false,
+                  hideBottom: true,
+                  hideLeft: true,
+                  tooltipText: (index) {
+                    tooltipIndexes.add(index);
+                    return 'Point $index';
+                  },
+                ),
+              ),
+            ),
+            const Center(child: Text('Second page')),
+          ],
+        ),
+      ),
+    );
+
+    final finder = find.byType(FlexLineChart);
+    final topLeft = tester.getTopLeft(finder);
+    final gesture = await tester.startGesture(topLeft + const Offset(284, 180));
+    await tester.pump(kLongPressTimeout + const Duration(milliseconds: 10));
+
+    tooltipIndexes.clear();
+    await gesture.moveTo(topLeft + const Offset(16, 180));
+    await tester.pump();
+
+    expect(tooltipIndexes, contains(0));
+    expect(pageController.page, closeTo(0, 0.001));
+
+    await gesture.up();
+    await tester.pumpAndSettle();
+
+    expect(pageController.page, closeTo(0, 0.001));
   });
 
   testWidgets('long press then horizontal drag scrubs the tooltip', (
