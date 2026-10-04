@@ -1,12 +1,10 @@
 import 'package:drift/drift.dart' hide Column;
 import 'package:flexify/database/database.dart';
-import 'package:flexify/graph/flex_line_chart.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/l10n/locale_preferences.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/responsive.dart';
 import 'package:flexify/settings/settings_state.dart';
-import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -333,27 +331,6 @@ List<Widget> getAppearanceSettings(
                 readOnly: true,
               ),
             ],
-          ),
-        ),
-      ),
-    if (matches([l10n.navGraphs]))
-      SizedBox(
-        height: MediaQuery.of(context).size.height * 0.3,
-        child: Padding(
-          padding: const EdgeInsets.only(right: 32, top: 16),
-          child: FlexLineChart(
-            hideBottom: true,
-            hideLeft: true,
-            points: const [
-              FlexLineChartPoint(0, 0.13),
-              FlexLineChartPoint(1, 5),
-              FlexLineChartPoint(2, 2),
-            ],
-            tooltipText: (index) => formatDisplayNumber(
-              context,
-              const [0.13, 5.0, 2.0][index],
-              minimumFractionDigits: 2,
-            ),
           ),
         ),
       ),
