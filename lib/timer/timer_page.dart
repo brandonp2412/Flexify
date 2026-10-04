@@ -205,7 +205,10 @@ class _TimerPageWidgetState extends State<_TimerPageWidget>
         ],
       ),
       body: Padding(
-        padding: EdgeInsets.only(bottom: desktop ? 24 : 80),
+        padding: EdgeInsets.only(
+          top: desktop ? 24 : 0,
+          bottom: desktop ? 24 : 80,
+        ),
         child: Center(
           child: desktop && desktopAction != null
               ? Column(

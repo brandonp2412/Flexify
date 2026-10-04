@@ -226,6 +226,36 @@ void main() {
     timerState.dispose();
   });
 
+  testWidgets('desktop timer circle clears the app bar', (
+    WidgetTester tester,
+  ) async {
+    tester.view.physicalSize = const Size(1200, 800);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    final harness = await FlexifyTestHarness.create();
+    final timerState = harness.timerState;
+
+    await harness.pump(tester, const TimerPage());
+    await timerState.startTimer(
+      'Test Timer',
+      const Duration(seconds: 10),
+      '',
+      false,
+      true,
+    );
+    await tester.pump();
+
+    final appBarRect = tester.getRect(find.byType(AppBar));
+    final circleRect = tester.getRect(find.byType(CircularProgressIndicator));
+
+    expect(circleRect.top - appBarRect.bottom, greaterThanOrEqualTo(24));
+
+    await timerState.stopTimer();
+    timerState.dispose();
+  });
+
   testWidgets('timer circle stays fixed when a rest timer starts', (
     WidgetTester tester,
   ) async {
