@@ -49,6 +49,107 @@ const _chartBottomLabelInset = 38.0;
 const _tooltipPadding = 8.0;
 const _tooltipRowHeight = 16.0;
 const _tooltipDotGap = 8.0;
+const _tooltipFontSize = 10.0;
+const _tooltipSwatchSize = 8.0;
+const _tooltipSwatchGap = 6.0;
+
+void _drawFlexTooltip(
+  Canvas canvas, {
+  required Offset anchor,
+  required Size container,
+  required List<TooltipRow> rows,
+  required Color background,
+  required Color textColor,
+  required Color mutedTextColor,
+  String? title,
+}) {
+  final hasTitle = title != null && title.isNotEmpty;
+  if (rows.isEmpty && !hasTitle) return;
+
+  var maxWidth = 0.0;
+  if (hasTitle) {
+    maxWidth = measureChartText(
+      title,
+      color: textColor,
+      fontSize: _tooltipFontSize,
+      weight: FontWeight.w600,
+    );
+  }
+  for (final row in rows) {
+    final textWidth = measureChartText(
+      row.text,
+      color: textColor,
+      fontSize: _tooltipFontSize,
+    );
+    final rowWidth =
+        textWidth +
+        (row.swatch == null ? 0 : _tooltipSwatchSize + _tooltipSwatchGap);
+    maxWidth = max(maxWidth, rowWidth);
+  }
+
+  final titleHeight = hasTitle ? _tooltipRowHeight : 0.0;
+  final boxWidth = maxWidth + _tooltipPadding * 2;
+  final boxHeight =
+      titleHeight + rows.length * _tooltipRowHeight + _tooltipPadding * 2;
+  var left = anchor.dx + 12;
+  if (left + boxWidth > container.width) {
+    left = anchor.dx - 12 - boxWidth;
+  }
+  left = left.clamp(0.0, max(0.0, container.width - boxWidth));
+  final top = anchor.dy
+      .clamp(0.0, max(0.0, container.height - boxHeight))
+      .toDouble();
+
+  canvas.drawRRect(
+    RRect.fromRectAndRadius(
+      Rect.fromLTWH(left, top, boxWidth, boxHeight),
+      const Radius.circular(8),
+    ),
+    Paint()..color = background,
+  );
+
+  var rowTop = top + _tooltipPadding;
+  if (hasTitle) {
+    drawChartText(
+      canvas,
+      title,
+      Offset(left + _tooltipPadding, rowTop + _tooltipRowHeight / 2),
+      color: mutedTextColor,
+      fontSize: _tooltipFontSize,
+      weight: FontWeight.w600,
+      v: VAlign.center,
+    );
+    rowTop += _tooltipRowHeight;
+  }
+  for (final row in rows) {
+    final rowCenter = rowTop + _tooltipRowHeight / 2;
+    var textX = left + _tooltipPadding;
+    if (row.swatch case final color?) {
+      canvas.drawRRect(
+        RRect.fromRectAndRadius(
+          Rect.fromLTWH(
+            textX,
+            rowCenter - _tooltipSwatchSize / 2,
+            _tooltipSwatchSize,
+            _tooltipSwatchSize,
+          ),
+          const Radius.circular(2),
+        ),
+        Paint()..color = color,
+      );
+      textX += _tooltipSwatchSize + _tooltipSwatchGap;
+    }
+    drawChartText(
+      canvas,
+      row.text,
+      Offset(textX, rowCenter),
+      color: textColor,
+      fontSize: _tooltipFontSize,
+      v: VAlign.center,
+    );
+    rowTop += _tooltipRowHeight;
+  }
+}
 
 (double, double) _calculateYBounds(List<FlexLineChartPoint> points) {
   if (points.isEmpty) return (0, 1);
@@ -491,7 +592,7 @@ class _FlexLineTooltipPainter extends CustomPainter {
       markerColors: [for (final mark in marks) mark.color],
     );
     final title = marks.first.label.isEmpty ? null : marks.first.label;
-    drawTooltip(
+    _drawFlexTooltip(
       canvas,
       anchor: Offset(
         x,
