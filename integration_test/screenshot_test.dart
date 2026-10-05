@@ -218,6 +218,12 @@ void main() {
       );
 
       testWidgets('StartPlanPage', (tester) async {
+        final workout = await db.workouts.insertReturning(
+          WorkoutsCompanion.insert(
+            planId: const Value(3),
+            startedAt: DateTime.now(),
+          ),
+        );
         final today = DateTime.now().toLocal();
         final seededSetIds = <int>[];
         for (var index = 0; index < 3; index++) {
@@ -227,7 +233,7 @@ void main() {
             50 + (index * 2.5),
             reps: 8,
             date: today.subtract(Duration(minutes: index)),
-            planId: 3,
+            workoutId: workout.id,
           );
           seededSetIds.add(set.id);
         }
@@ -238,7 +244,7 @@ void main() {
             25,
             reps: 12,
             date: today.subtract(Duration(minutes: 10 + index)),
-            planId: 3,
+            workoutId: workout.id,
           );
           seededSetIds.add(set.id);
         }

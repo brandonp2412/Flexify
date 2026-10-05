@@ -74,6 +74,7 @@ Future<ExerciseSetView> insertExerciseSetFixture(
   String? category,
   String? notes,
   int? planId,
+  int? workoutId,
   double bodyWeight = 0,
   int? incline,
 }) async {
@@ -101,8 +102,7 @@ Future<ExerciseSetView> insertExerciseSetFixture(
         .write(ExercisesCompanion(categoryId: Value(categoryId)));
   }
 
-  int? workoutId;
-  if (planId != null) {
+  if (workoutId == null && planId != null) {
     workoutId = await database.workouts.insertOne(
       WorkoutsCompanion.insert(planId: Value(planId), startedAt: timestamp),
     );
