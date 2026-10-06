@@ -39,7 +39,14 @@ void main() {
     expect(find.bySemanticsLabel('Reps'), findsOne);
     expect(find.bySemanticsLabel('Distance'), findsNothing);
 
-    await tester.tap(find.byType(Switch));
+    final selector = find.byKey(const Key('exercise-kind-selector'));
+    final cardio = find.descendant(of: selector, matching: find.text('Cardio'));
+    final strength = find.descendant(
+      of: selector,
+      matching: find.text('Strength'),
+    );
+
+    await tester.tap(cardio);
     await tester.pumpAndSettle();
 
     expect(find.bySemanticsLabel('Reps'), findsNothing);
@@ -58,7 +65,7 @@ void main() {
     expect(find.bySemanticsLabel('Weight'), findsNothing);
     expect(find.bySemanticsLabel('Distance'), findsOne);
 
-    await tester.tap(find.byType(Switch));
+    await tester.tap(strength);
     await tester.pumpAndSettle();
 
     expect(find.bySemanticsLabel('Reps'), findsOne);

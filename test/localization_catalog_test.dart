@@ -830,10 +830,9 @@ void main() {
         });
 
     for (final file in dartFiles) {
-      final relativePath = normalize(file.path).replaceFirst(
-        '${normalize(Directory.current.path)}/',
-        '',
-      );
+      final relativePath = normalize(
+        file.path,
+      ).replaceFirst('${normalize(Directory.current.path)}/', '');
       final sourceText = file.readAsStringSync();
       for (final pattern in [
         _directTextPattern,

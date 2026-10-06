@@ -226,60 +226,9 @@ class _GlobalProgressPageState extends State<GlobalProgressPage> {
                   ],
                 )
               else ...[
-                Row(
-                  children: [
-                    Expanded(child: metricSelector),
-                    const SizedBox(width: 8),
-                    IconButton.filledTonal(
-                      icon: const Icon(Icons.tune),
-                      tooltip: context.l10n.options,
-                      onPressed: _showOptions,
-                    ),
-                  ],
-                ),
+                metricSelector,
                 const SizedBox(height: 12),
                 periodSelector,
-              ],
-              if (desktop) ...[
-                const SizedBox(height: 12),
-                GraphOptionsControls(
-                  compact: true,
-                  shortDateFormat: settings.shortDateFormat,
-                  unitValue: settings.showUnits ? targetUnit : null,
-                  unitItems: settings.showUnits
-                      ? strengthUnitMenuItems(context.l10n)
-                      : const [],
-                  onUnitChanged: (value) {
-                    setState(() {
-                      targetUnit = value;
-                    });
-                    setData();
-                  },
-                  startDate: startDate,
-                  endDate: endDate,
-                  onSelectStart: selectStart,
-                  onClearStart: () {
-                    setState(() {
-                      startDate = null;
-                    });
-                    setData();
-                  },
-                  onSelectEnd: selectEnd,
-                  onClearEnd: () {
-                    setState(() {
-                      endDate = null;
-                    });
-                    setData();
-                  },
-                  limit: limit,
-                  maxLimit: 200,
-                  onLimitChanged: (value) {
-                    setState(() {
-                      limit = value;
-                    });
-                    setData();
-                  },
-                ),
               ],
               const SizedBox(height: 8),
               Expanded(
@@ -326,7 +275,9 @@ class _GlobalProgressPageState extends State<GlobalProgressPage> {
                   ],
                 ),
               ],
-              const SizedBox(height: 8),
+              const SizedBox(height: 4),
+              GraphOptionsButton(onPressed: _showOptions),
+              const SizedBox(height: 4),
               Flexible(
                 child: SingleChildScrollView(
                   child: Wrap(
