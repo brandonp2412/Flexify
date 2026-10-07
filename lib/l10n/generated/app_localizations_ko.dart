@@ -940,6 +940,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get keepScreenOn => '화면 켜짐 유지';
 
   @override
+  String get keepRinging => '계속 울리기';
+
+  @override
   String get alarmSound => '알람 소리';
 
   @override
@@ -1341,6 +1344,9 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get keepScreenOnDescription => '휴식 타이머 동안 화면을 켜 둡니다';
+
+  @override
+  String get keepRingingDescription => '취소할 때까지 알람 소리와 진동을 반복합니다';
 
   @override
   String get restDurationDescription => '휴식 알람이 울리기까지의 시간';

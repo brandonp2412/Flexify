@@ -368,6 +368,7 @@ class _StopwatchProgressIndicatorState extends State<StopwatchProgressIndicator>
       settings.alarmSound,
       settings.vibrate,
       settings.enableSound,
+      settings.keepRinging,
     );
   }
 
@@ -562,6 +563,7 @@ class _TimerCircularProgressIndicatorTile extends StatelessWidget {
                       settings.alarmSound,
                       settings.vibrate,
                       settings.enableSound,
+                      settings.keepRinging,
                     );
                   },
                   child: Text(context.l10n.addOneMinute),

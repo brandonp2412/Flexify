@@ -970,6 +970,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get keepScreenOn => 'Не вимикати екран';
 
   @override
+  String get keepRinging => 'Продовжувати дзвонити';
+
+  @override
   String get alarmSound => 'Звук будильника';
 
   @override
@@ -1401,6 +1404,10 @@ class AppLocalizationsUk extends AppLocalizations {
   @override
   String get keepScreenOnDescription =>
       'Не вимикати екран під час роботи таймерів відпочинку';
+
+  @override
+  String get keepRingingDescription =>
+      'Повторювати звук будильника та вібрацію, доки ви не скасуєте';
 
   @override
   String get restDurationDescription =>

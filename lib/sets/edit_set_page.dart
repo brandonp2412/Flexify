@@ -825,6 +825,7 @@ class _EditSetPageState extends State<EditSetPage> {
         settings.vibrate,
         settings.enableSound,
         'history',
+        settings.keepRinging,
       );
     else
       timer.startTimer(
@@ -834,6 +835,7 @@ class _EditSetPageState extends State<EditSetPage> {
         settings.vibrate,
         settings.enableSound,
         'history',
+        settings.keepRinging,
       );
     if (!mounted) return;
     _allowPop = true;

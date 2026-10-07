@@ -955,6 +955,9 @@ class AppLocalizationsTh extends AppLocalizations {
   String get keepScreenOn => 'เปิดหน้าจอค้างไว้';
 
   @override
+  String get keepRinging => 'ดังต่อเนื่อง';
+
+  @override
   String get alarmSound => 'เสียงปลุก';
 
   @override
@@ -1373,6 +1376,10 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get keepScreenOnDescription => 'เปิดหน้าจอค้างไว้ระหว่างตัวจับเวลาพัก';
+
+  @override
+  String get keepRingingDescription =>
+      'เล่นเสียงปลุกและสั่นซ้ำจนกว่าคุณจะยกเลิก';
 
   @override
   String get restDurationDescription => 'ระยะเวลาก่อนที่เสียงปลุกพักจะดัง';

@@ -866,6 +866,7 @@ class _StartPlanPageState extends State<StartPlanPage>
           settings.vibrate,
           settings.enableSound,
           "plan:${widget.plan.id}",
+          settings.keepRinging,
         );
       }
 

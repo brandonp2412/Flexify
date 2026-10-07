@@ -957,6 +957,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get keepScreenOn => 'स्क्रीन चालू रखें';
 
   @override
+  String get keepRinging => 'बजते रहें';
+
+  @override
   String get alarmSound => 'अलार्म ध्वनि';
 
   @override
@@ -1377,6 +1380,10 @@ class AppLocalizationsHi extends AppLocalizations {
   @override
   String get keepScreenOnDescription =>
       'रेस्ट टाइमर के दौरान स्क्रीन चालू रखें';
+
+  @override
+  String get keepRingingDescription =>
+      'जब तक आप रद्द न करें, अलार्म की ध्वनि और कंपन दोहराएँ';
 
   @override
   String get restDurationDescription => 'रेस्ट अलार्म बजने में कितना समय लगे?';

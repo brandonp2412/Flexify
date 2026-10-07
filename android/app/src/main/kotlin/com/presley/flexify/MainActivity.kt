@@ -143,6 +143,7 @@ class MainActivity : FlutterActivity() {
                     val restMs = call.argument<Int>("restMs") ?: threeMinutesThirtySeconds
                     val alarmSound = call.argument<String>("alarmSound")!!
                     val vibrate = call.argument<Boolean>("vibrate")!!
+                    val keepRinging = call.argument<Boolean>("keepRinging") ?: false
                     val target = call.argument<String>("target") ?: "timer"
                     timer(
                         restMs,
@@ -150,6 +151,7 @@ class MainActivity : FlutterActivity() {
                         timestamp,
                         alarmSound,
                         vibrate,
+                        keepRinging,
                         target,
                         timerLocalization(call)
                     )
@@ -219,6 +221,7 @@ class MainActivity : FlutterActivity() {
                         val timestamp = call.argument<Long>("timestamp")
                         val alarmSound = call.argument<String>("alarmSound")
                         val vibrate = call.argument<Boolean>("vibrate")
+                        val keepRinging = call.argument<Boolean>("keepRinging") ?: false
                         val target = call.argument<String>("target") ?: "timer"
                         val localization = timerLocalization(call)
                         timer(
@@ -227,6 +230,7 @@ class MainActivity : FlutterActivity() {
                             timestamp!!,
                             alarmSound!!,
                             vibrate!!,
+                            keepRinging,
                             target,
                             localization
                         )
@@ -325,6 +329,7 @@ class MainActivity : FlutterActivity() {
         timeStamp: Long,
         alarmSound: String,
         vibrate: Boolean,
+        keepRinging: Boolean,
         target: String,
         localization: Map<String, String>
     ) {
@@ -341,6 +346,7 @@ class MainActivity : FlutterActivity() {
             putExtra("timeStamp", timeStamp)
             putExtra("alarmSound", alarmSound)
             putExtra("vibrate", vibrate)
+            putExtra("keepRinging", keepRinging)
             putExtra(TIMER_TARGET_EXTRA, target)
             localization.forEach { (key, value) -> putExtra(key, value) }
         }

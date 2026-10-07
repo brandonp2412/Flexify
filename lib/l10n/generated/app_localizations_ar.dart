@@ -954,6 +954,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get keepScreenOn => 'إبقاء الشاشة قيد التشغيل';
 
   @override
+  String get keepRinging => 'استمرار الرنين';
+
+  @override
   String get alarmSound => 'صوت المنبه';
 
   @override
@@ -1374,6 +1377,10 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get keepScreenOnDescription =>
       'إبقاء الشاشة قيد التشغيل أثناء مؤقتات الراحة';
+
+  @override
+  String get keepRingingDescription =>
+      'كرّر صوت المنبّه والاهتزاز حتى تقوم بإلغائه';
 
   @override
   String get restDurationDescription => 'كم من الوقت قبل تشغيل منبهات الراحة؟';

@@ -962,6 +962,9 @@ class AppLocalizationsUr extends AppLocalizations {
   String get keepScreenOn => 'اسکرین روشن رکھیں';
 
   @override
+  String get keepRinging => 'بجتا رہے';
+
+  @override
   String get alarmSound => 'الارم کی آواز';
 
   @override
@@ -1383,6 +1386,10 @@ class AppLocalizationsUr extends AppLocalizations {
   @override
   String get keepScreenOnDescription =>
       'آرام کے ٹائمرز کے دوران اسکرین روشن رکھیں';
+
+  @override
+  String get keepRingingDescription =>
+      'جب تک آپ منسوخ نہ کریں الارم کی آواز اور وائبریشن دہراتا رہے';
 
   @override
   String get restDurationDescription => 'آرام کا الارم بجنے میں کتنا وقت لگے؟';

@@ -61,6 +61,7 @@ class Settings extends Table {
       integer().withDefault(const Constant(20))();
   BoolColumn get defaultGraphTimeBasedXAxis =>
       boolean().withDefault(const Constant(false))();
+  BoolColumn get keepRinging => boolean().withDefault(const Constant(false))();
   BoolColumn get keepScreenOn => boolean().withDefault(const Constant(false))();
   TextColumn get inputStyle =>
       text().withDefault(const Constant("underline"))();

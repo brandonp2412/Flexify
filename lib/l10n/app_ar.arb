@@ -1260,6 +1260,10 @@
   "@keepScreenOn": {
     "description": "Timer setting that prevents screen sleep."
   },
+  "keepRinging": "استمرار الرنين",
+  "@keepRinging": {
+    "description": "Timer setting that repeats the alarm until it is cancelled."
+  },
   "alarmSound": "صوت المنبه",
   "@alarmSound": {
     "description": "Label for choosing a timer alarm sound."
@@ -1797,6 +1801,10 @@
   "keepScreenOnDescription": "إبقاء الشاشة قيد التشغيل أثناء مؤقتات الراحة",
   "@keepScreenOnDescription": {
     "description": "Description of keeping the display awake during timers."
+  },
+  "keepRingingDescription": "كرّر صوت المنبّه والاهتزاز حتى تقوم بإلغائه",
+  "@keepRingingDescription": {
+    "description": "Description of continuously repeating a timer alarm until cancelled."
   },
   "restDurationDescription": "كم من الوقت قبل تشغيل منبهات الراحة؟",
   "@restDurationDescription": {

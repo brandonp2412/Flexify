@@ -956,6 +956,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get keepScreenOn => 'Giữ màn hình luôn bật';
 
   @override
+  String get keepRinging => 'Tiếp tục đổ chuông';
+
+  @override
   String get alarmSound => 'Âm thanh báo động';
 
   @override
@@ -1384,6 +1387,10 @@ class AppLocalizationsVi extends AppLocalizations {
   @override
   String get keepScreenOnDescription =>
       'Giữ màn hình bật trong thời gian nghỉ ngơi';
+
+  @override
+  String get keepRingingDescription =>
+      'Lặp lại âm báo và rung cho đến khi bạn hủy';
 
   @override
   String get restDurationDescription =>

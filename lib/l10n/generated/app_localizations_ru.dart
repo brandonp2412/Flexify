@@ -974,6 +974,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get keepScreenOn => 'Не выключать экран';
 
   @override
+  String get keepRinging => 'Продолжать звонить';
+
+  @override
   String get alarmSound => 'Звук таймера';
 
   @override
@@ -1403,6 +1406,10 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get keepScreenOnDescription =>
       'Держите экран включенным во время отдыха';
+
+  @override
+  String get keepRingingDescription =>
+      'Повторять звук будильника и вибрацию, пока вы не отмените';
 
   @override
   String get restDurationDescription =>

@@ -964,6 +964,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get keepScreenOn => 'Manter o ecrã ligado';
 
   @override
+  String get keepRinging => 'Continuar a tocar';
+
+  @override
   String get alarmSound => 'Som do alarme';
 
   @override
@@ -1395,6 +1398,10 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get keepScreenOnDescription =>
       'Manter o ecrã ligado durante os temporizadores de descanso';
+
+  @override
+  String get keepRingingDescription =>
+      'Repetir o som e a vibração do alarme até cancelares';
 
   @override
   String get restDurationDescription =>
@@ -2554,6 +2561,9 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get keepScreenOn => 'Manter a tela ligada';
 
   @override
+  String get keepRinging => 'Continuar tocando';
+
+  @override
   String get alarmSound => 'Som do alarme';
 
   @override
@@ -2984,6 +2994,10 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   @override
   String get keepScreenOnDescription =>
       'Manter a tela ligada durante os temporizadores de descanso';
+
+  @override
+  String get keepRingingDescription =>
+      'Repetir o som e a vibração do alarme até você cancelar';
 
   @override
   String get restDurationDescription =>
@@ -4144,6 +4158,9 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get keepScreenOn => 'Manter o ecrã ligado';
 
   @override
+  String get keepRinging => 'Continuar a tocar';
+
+  @override
   String get alarmSound => 'Som do alarme';
 
   @override
@@ -4575,6 +4592,10 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   @override
   String get keepScreenOnDescription =>
       'Manter o ecrã ligado durante os temporizadores de descanso';
+
+  @override
+  String get keepRingingDescription =>
+      'Repetir o som e a vibração do alarme até cancelares';
 
   @override
   String get restDurationDescription =>

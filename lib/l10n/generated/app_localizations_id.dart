@@ -960,6 +960,9 @@ class AppLocalizationsId extends AppLocalizations {
   String get keepScreenOn => 'Biarkan layar menyala';
 
   @override
+  String get keepRinging => 'Terus berdering';
+
+  @override
   String get alarmSound => 'Suara alarm';
 
   @override
@@ -1387,6 +1390,10 @@ class AppLocalizationsId extends AppLocalizations {
   @override
   String get keepScreenOnDescription =>
       'Biarkan layar menyala selama pewaktu istirahat';
+
+  @override
+  String get keepRingingDescription =>
+      'Ulangi suara alarm dan getaran sampai Anda membatalkannya';
 
   @override
   String get restDurationDescription =>
