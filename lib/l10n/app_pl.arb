@@ -64,6 +64,8 @@
   "navGraphs": "Wykresy",
   "navTimer": "Minutnik",
   "navSettings": "Ustawienia",
+  "navCategories": "Kategorie",
+  "exerciseAlreadyExists": "To ćwiczenie już istnieje",
   "errorLabel": "Błąd",
   "tabContentError": "Nie udało się wyświetlić zawartości karty.",
   "cannotHideAllTabs": "Nie można ukryć wszystkiego!",

@@ -4,6 +4,7 @@ import 'package:flexify/app_search.dart';
 import 'package:flexify/bottom_nav.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
+import 'package:flexify/database/exercise_key.dart';
 import 'package:flexify/database/exercise_set_repository.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
@@ -207,9 +208,18 @@ class _GroupHistoryState extends State<GroupHistory> {
       maximumFractionDigits: 0,
     );
 
+    final label = exerciseLabel(
+      (name: exercise.name, category: exercise.category),
+      sharedExerciseNames(
+        group.exercises.map(
+          (entry) => (name: entry.name, category: entry.category),
+        ),
+      ),
+    );
+
     return ExpansionTile(
-      key: ValueKey('${group.day.millisecondsSinceEpoch}|${exercise.name}'),
-      title: Text('${exercise.name} ($count)'),
+      key: ValueKey('${group.day.millisecondsSinceEpoch}|$label'),
+      title: Text('$label ($count)'),
       shape: const Border.symmetric(),
       children: [
         for (final exerciseSet in exercise.exerciseSets)

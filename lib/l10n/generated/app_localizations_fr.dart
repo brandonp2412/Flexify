@@ -112,6 +112,12 @@ class AppLocalizationsFr extends AppLocalizations {
   String get navSettings => 'Paramètres';
 
   @override
+  String get navCategories => 'Catégories';
+
+  @override
+  String get exerciseAlreadyExists => 'Cet exercice existe déjà';
+
+  @override
   String get errorLabel => 'Erreur';
 
   @override

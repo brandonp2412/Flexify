@@ -172,4 +172,95 @@ void main() {
     expect(runSet.durationMs, 1500000);
     expect(runSet.incline, 3);
   });
+
+  test(
+    'graph CSV keeps same-named exercises in other categories apart',
+    () async {
+      final source = await emptyDatabase();
+      final target = await emptyDatabase();
+      addTearDown(source.close);
+      addTearDown(target.close);
+
+      for (final (category, load) in [('Back', 40.0), ('Shoulders', 12.0)]) {
+        final categoryId = await source.categories.insertOne(
+          CategoriesCompanion.insert(name: category),
+        );
+        final exerciseId = await source.exercises.insertOne(
+          ExercisesCompanion.insert(
+            name: 'Reverse fly',
+            kind: 'strength',
+            displayUnit: 'kg',
+            categoryId: Value(categoryId),
+          ),
+        );
+        await source.exerciseSets.insertOne(
+          ExerciseSetsCompanion.insert(
+            exerciseId: exerciseId,
+            timestamp: DateTime.utc(2026, 9, 1, 6),
+            reps: const Value(10),
+            loadKg: Value(load),
+          ),
+        );
+      }
+
+      final csv = await exportGraphCsv(source);
+      await importGraphCsv(target, csv);
+      final secondImport = await importGraphCsv(target, csv);
+
+      expect(secondImport.exercises, 2);
+      final categories = {
+        for (final category in await target.categories.select().get())
+          category.id: category.name,
+      };
+      final exercises = await target.exercises.select().get();
+      expect(exercises, hasLength(2));
+      final loadsByCategory = <String?, double?>{};
+      for (final set in await target.exerciseSets.select().get()) {
+        final exercise = exercises.singleWhere(
+          (row) => row.id == set.exerciseId,
+        );
+        loadsByCategory[categories[exercise.categoryId]] = set.loadKg;
+      }
+      expect(loadsByCategory, {'Back': 40.0, 'Shoulders': 12.0});
+    },
+  );
+
+  test(
+    'legacy graph CSV attaches a shared name to the oldest exercise',
+    () async {
+      final database = await emptyDatabase();
+      addTearDown(database.close);
+      final firstId = await database.exercises.insertOne(
+        ExercisesCompanion.insert(
+          name: 'Reverse fly',
+          kind: 'strength',
+          displayUnit: 'kg',
+        ),
+      );
+      final categoryId = await database.categories.insertOne(
+        CategoriesCompanion.insert(name: 'Shoulders'),
+      );
+      await database.exercises.insertOne(
+        ExercisesCompanion.insert(
+          name: 'Reverse fly',
+          kind: 'strength',
+          displayUnit: 'kg',
+          categoryId: Value(categoryId),
+        ),
+      );
+
+      const csv =
+          '''id,name,reps,weight,created,unit,bodyWeight,duration,distance,cardio,hidden,incline
+1,Reverse fly,10,20,2026-09-01T06:00:00.000Z,kg,0,0,0,false,false,
+''';
+      final result = await importGraphCsv(database, csv);
+
+      expect(result.exerciseSets, 1);
+      expect(await database.exercises.select().get(), hasLength(2));
+      expect(
+        (await database.exerciseSets.select().getSingle()).exerciseId,
+        firstId,
+      );
+    },
+  );
 }

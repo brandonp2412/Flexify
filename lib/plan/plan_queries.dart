@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:flexify/database/database.dart';
+import 'package:flexify/database/exercise_key.dart';
 import 'package:flexify/main.dart';
 
 class PlanExerciseDraft {
@@ -156,9 +157,13 @@ Future<List<PlanExerciseDraft>> loadPlanExerciseDrafts(
   PlansCompanion plan,
 ) async {
   final query = db.exercises.selectOnly()
-    ..addColumns([db.exercises.id, db.exercises.name])
+    ..addColumns([db.exercises.id, db.exercises.name, db.categories.name])
     ..where(db.exercises.archived.equals(false))
     ..join([
+      leftOuterJoin(
+        db.categories,
+        db.categories.id.equalsExp(db.exercises.categoryId),
+      ),
       leftOuterJoin(
         db.planExercises,
         db.planExercises.planId.equals(plan.id.present ? plan.id.value : 0) &
@@ -170,6 +175,11 @@ Future<List<PlanExerciseDraft>> loadPlanExerciseDrafts(
   final rows = await query.get();
   final enabled = <PlanExerciseDraft>[];
   final disabled = <PlanExerciseDraft>[];
+  ExerciseKey keyOf(TypedResult row) => (
+    name: row.read(db.exercises.name)!,
+    category: row.read(db.categories.name),
+  );
+  final sharedNames = sharedExerciseNames(rows.map(keyOf));
 
   for (final row in rows) {
     final planExercise = PlanExercisesCompanion(
@@ -184,7 +194,7 @@ Future<List<PlanExerciseDraft>> loadPlanExerciseDrafts(
     );
     final draft = PlanExerciseDraft(
       planExercise: planExercise,
-      exerciseName: row.read(db.exercises.name)!,
+      exerciseName: exerciseLabel(keyOf(row), sharedNames),
     );
     (planExercise.enabled.value ? enabled : disabled).add(draft);
   }

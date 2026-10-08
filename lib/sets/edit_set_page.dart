@@ -10,11 +10,13 @@ import 'package:flexify/database/body_weight_repository.dart';
 import 'package:flexify/database/categories.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/database/exercise_catalog.dart';
+import 'package:flexify/database/exercise_key.dart';
 import 'package:flexify/database/exercise_set_repository.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/logging.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/responsive.dart';
+import 'package:flexify/sets/exercise_options_view.dart';
 import 'package:flexify/settings/category_management_page.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/stepper_field.dart';
@@ -83,7 +85,7 @@ class _EditSetPageState extends State<EditSetPage> {
   var _categoryCtrl = TextEditingController();
   DateTime _created = DateTime.now().toLocal();
   TextEditingController? _nameCtrl;
-  List<String> _options = [];
+  List<ExerciseKey> _options = [];
   int? restMs;
   String? _image;
   String? _category;
@@ -93,26 +95,21 @@ class _EditSetPageState extends State<EditSetPage> {
   late bool _cardio;
   late String _name;
 
-  void onSelected(String option, bool showBodyWeight) async {
+  void onSelected(ExerciseKey option, bool showBodyWeight) async {
     _markDirty();
-    final last = await getLatestExerciseSet(db, exerciseName: option);
+    final last = await getLatestExerciseSet(db, exercise: option);
     if (last == null) {
-      final definition = await getExerciseByName(option);
-      final categoryName = definition == null
-          ? null
-          : await getExerciseCategoryName(definition);
+      final definition = await getExercise(option);
       if (!mounted) return;
       return setState(() {
-        _name = option;
+        _name = option.name;
+        _category = option.category;
+        _categoryCtrl.text = option.category ?? '';
         if (definition != null) {
           _cardio = definition.kind == 'cardio';
           _unit = definition.displayUnit;
-          _category = categoryName;
           _image = definition.image;
           restMs = definition.defaultRestDurationMs;
-          if (categoryName != null && categoryName.isNotEmpty) {
-            _categoryCtrl.text = categoryName;
-          }
         }
       });
     }
@@ -645,20 +642,25 @@ class _EditSetPageState extends State<EditSetPage> {
     );
   }
 
-  Autocomplete<String> autocomplete(bool showBodyWeight) {
-    return Autocomplete<String>(
+  Autocomplete<ExerciseKey> autocomplete(bool showBodyWeight) {
+    return Autocomplete<ExerciseKey>(
+      displayStringForOption: (option) => option.name,
       optionsBuilder: (textEditingValue) {
         final searchTerms = textEditingValue.text
             .toLowerCase()
             .split(" ")
             .where((term) => term.isNotEmpty);
-        Iterable<String> opts = _options;
+        Iterable<ExerciseKey> opts = _options;
 
         for (final term in searchTerms) {
-          opts = opts.where((option) => option.toLowerCase().contains(term));
+          opts = opts.where(
+            (option) => option.name.toLowerCase().contains(term),
+          );
         }
         return opts;
       },
+      optionsViewBuilder: (context, onSelected, options) =>
+          ExerciseOptionsView(options: options, onSelected: onSelected),
       onSelected: (option) => onSelected(option, showBodyWeight),
       initialValue: TextEditingValue(text: _name),
       fieldViewBuilder:
@@ -730,9 +732,9 @@ class _EditSetPageState extends State<EditSetPage> {
     updateFields(widget.exerciseSet, formatOrm: false, rebuild: false);
     _created = widget.exerciseSet.created;
 
-    getExerciseNames().then((names) {
+    getExerciseKeys().then((keys) {
       if (!mounted) return;
-      _options = names;
+      _options = keys;
     });
   }
 
@@ -752,6 +754,8 @@ class _EditSetPageState extends State<EditSetPage> {
 
     _category = _category?.trim();
     if (_category?.isEmpty ?? false) _category = null;
+    _category ??= await defaultCategoryForName(_name);
+    if (!mounted) return;
 
     final exerciseSet = widget.exerciseSet.copyWith(
       name: _name,
@@ -918,8 +922,7 @@ class _EditSetPageState extends State<EditSetPage> {
       _distance.text = toString(exerciseSet.distance);
     if (exerciseSet.incline != null && exerciseSet.incline != 0)
       _incline.text = exerciseSet.incline.toString();
-    if (exerciseSet.category != null && exerciseSet.category!.isNotEmpty)
-      _categoryCtrl.text = exerciseSet.category!;
+    _categoryCtrl.text = exerciseSet.category ?? '';
     _notes.text = exerciseSet.notes ?? '';
   }
 

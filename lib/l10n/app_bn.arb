@@ -133,6 +133,8 @@
     "description": "Navigation label for the rest timer."
   },
   "navSettings": "সেটিংস",
+  "navCategories": "বিভাগসমূহ",
+  "exerciseAlreadyExists": "এই ব্যায়ামটি ইতিমধ্যে আছে",
   "@navSettings": {
     "description": "Navigation label for app settings."
   },

@@ -64,6 +64,8 @@
   "navGraphs": "グラフ",
   "navTimer": "タイマー",
   "navSettings": "設定",
+  "navCategories": "カテゴリ",
+  "exerciseAlreadyExists": "この種目はすでに存在します",
   "errorLabel": "エラー",
   "tabContentError": "タブの内容を表示できませんでした。",
   "cannotHideAllTabs": "すべてのタブを非表示にはできません。",

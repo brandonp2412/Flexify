@@ -144,11 +144,13 @@ void main() {
       name: 'Merge source',
       cardio: false,
       displayUnit: 'kg',
+      category: 'Merged',
     );
     final target = await createExerciseDefinition(
       name: 'Merge target',
       cardio: false,
       displayUnit: 'kg',
+      category: 'Merged',
     );
     final planId = await db.plans.insertOne(
       PlansCompanion.insert(days: 'Friday'),
@@ -253,5 +255,118 @@ void main() {
     );
     expect(draft.planExercise.enabled.value, isTrue);
     expect(draft.exerciseName, exercise.name);
+  });
+
+  test('the same name can exist once per category', () async {
+    Future<Exercise> create(String? category) => createExerciseDefinition(
+      name: 'Reverse fly',
+      cardio: false,
+      displayUnit: 'kg',
+      category: category,
+    );
+    final back = await create('Back');
+    final shoulders = await create('Shoulders');
+    final uncategorized = await create(null);
+
+    expect({back.id, shoulders.id, uncategorized.id}, hasLength(3));
+    expect(
+      (await getExercise((name: 'Reverse fly', category: 'Back')))!.id,
+      back.id,
+    );
+    expect(
+      (await getExercise((name: 'Reverse fly', category: 'Shoulders')))!.id,
+      shoulders.id,
+    );
+    expect(
+      (await getExercise((name: 'Reverse fly', category: null)))!.id,
+      uncategorized.id,
+    );
+    expect(
+      (await getExercise((name: ' Reverse fly ', category: ' Back ')))!.id,
+      back.id,
+    );
+    expect(await getExercise((name: 'Reverse fly', category: 'Legs')), null);
+    expect(
+      (await getExercisesByName('Reverse fly')).map((exercise) => exercise.id),
+      [back.id, shoulders.id, uncategorized.id],
+    );
+    expect(
+      (await getExerciseKeys()).where((key) => key.name == 'Reverse fly'),
+      [
+        (name: 'Reverse fly', category: null),
+        (name: 'Reverse fly', category: 'Back'),
+        (name: 'Reverse fly', category: 'Shoulders'),
+      ],
+    );
+
+    await expectLater(create('Back'), throwsA(anything));
+    await expectLater(create(null), throwsA(anything));
+  });
+
+  test('syncing a definition never crosses categories', () async {
+    final back = await createExerciseDefinition(
+      name: 'Row',
+      cardio: false,
+      displayUnit: 'kg',
+      category: 'Back',
+    );
+
+    final shoulders = await syncExerciseDefinition(
+      name: 'Row',
+      cardio: false,
+      displayUnit: 'lb',
+      category: 'Shoulders',
+    );
+    final again = await syncExerciseDefinition(
+      name: 'Row',
+      cardio: false,
+      displayUnit: 'stone',
+      category: 'Back',
+    );
+
+    expect(shoulders.id, isNot(back.id));
+    expect(again.id, back.id);
+    expect(again.displayUnit, 'stone');
+    expect((await getExerciseById(shoulders.id))!.displayUnit, 'lb');
+    expect(await getExerciseCategoryName(again), 'Back');
+  });
+
+  test('only a matching category merges when an exercise moves', () async {
+    Future<Exercise> create(String name, String category) =>
+        createExerciseDefinition(
+          name: name,
+          cardio: false,
+          displayUnit: 'kg',
+          category: category,
+        );
+    final source = await create('Row', 'Back');
+    final legs = await create('Row', 'Legs');
+    await db.exerciseSets.insertOne(
+      ExerciseSetsCompanion.insert(
+        exerciseId: source.id,
+        timestamp: DateTime(2026, 10, 2, 9),
+      ),
+    );
+
+    await updateExerciseDefinition(
+      exerciseId: source.id,
+      name: 'Row',
+      cardio: false,
+      displayUnit: 'kg',
+      category: 'Shoulders',
+    );
+    expect(await getExerciseById(source.id), isA<Exercise>());
+    expect(await getExerciseById(legs.id), isA<Exercise>());
+
+    await updateExerciseDefinition(
+      exerciseId: source.id,
+      name: 'Row',
+      cardio: false,
+      displayUnit: 'kg',
+      category: 'Legs',
+    );
+    expect(await getExerciseById(source.id), null);
+    final sets = await db.exerciseSets.select().get();
+    expect(sets.single.exerciseId, legs.id);
   });
 }

@@ -64,6 +64,8 @@
   "navGraphs": "圖表",
   "navTimer": "計時器",
   "navSettings": "設定",
+  "navCategories": "分類",
+  "exerciseAlreadyExists": "此動作已存在",
   "errorLabel": "錯誤",
   "tabContentError": "無法顯示此標籤頁的內容。",
   "cannotHideAllTabs": "不能隱藏所有標籤頁！",

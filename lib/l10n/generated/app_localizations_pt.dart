@@ -112,6 +112,12 @@ class AppLocalizationsPt extends AppLocalizations {
   String get navSettings => 'Definições';
 
   @override
+  String get navCategories => 'Categorias';
+
+  @override
+  String get exerciseAlreadyExists => 'Este exercício já existe';
+
+  @override
   String get errorLabel => 'Erro';
 
   @override
@@ -1713,6 +1719,12 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get navSettings => 'Configurações';
 
   @override
+  String get navCategories => 'Categorias';
+
+  @override
+  String get exerciseAlreadyExists => 'Este exercício já existe';
+
+  @override
   String get errorLabel => 'Erro';
 
   @override
@@ -3304,6 +3316,12 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
 
   @override
   String get navSettings => 'Definições';
+
+  @override
+  String get navCategories => 'Categorias';
+
+  @override
+  String get exerciseAlreadyExists => 'Este exercício já existe';
 
   @override
   String get errorLabel => 'Erro';

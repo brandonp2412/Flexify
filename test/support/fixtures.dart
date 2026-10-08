@@ -84,23 +84,8 @@ Future<ExerciseSetView> insertExerciseSetFixture(
     name,
     cardio: cardio,
     unit: unit,
+    category: category,
   );
-
-  int? categoryId;
-  if (category != null) {
-    final existingCategory =
-        await (database.categories.select()
-              ..where((row) => row.name.equals(category)))
-            .getSingleOrNull();
-    categoryId =
-        existingCategory?.id ??
-        await database.categories.insertOne(
-          CategoriesCompanion.insert(name: category),
-        );
-    await (database.exercises.update()
-          ..where((row) => row.id.equals(exercise.id)))
-        .write(ExercisesCompanion(categoryId: Value(categoryId)));
-  }
 
   if (workoutId == null && planId != null) {
     workoutId = await database.workouts.insertOne(
@@ -171,14 +156,41 @@ PlanExercisesCompanion planExerciseFixture({
   );
 }
 
+/// Finds or creates an exercise.
+///
+/// Without a [category] any exercise named [name] matches, so callers that do
+/// not care about categories keep resolving to one exercise.
 Future<Exercise> ensureExerciseFixture(
   AppDatabase database,
   String name, {
   bool cardio = false,
   String unit = 'kg',
+  String? category,
 }) async {
+  int? categoryId;
+  if (category != null) {
+    final existingCategory =
+        await (database.categories.select()
+              ..where((row) => row.name.equals(category)))
+            .getSingleOrNull();
+    categoryId =
+        existingCategory?.id ??
+        await database.categories.insertOne(
+          CategoriesCompanion.insert(name: category),
+        );
+  }
+
   final existing =
-      await (database.exercises.select()..where((row) => row.name.equals(name)))
+      await (database.exercises.select()
+            ..where(
+              (row) =>
+                  row.name.equals(name) &
+                  (categoryId == null
+                      ? const Constant(true)
+                      : row.categoryId.equals(categoryId)),
+            )
+            ..orderBy([(row) => OrderingTerm.asc(row.id)])
+            ..limit(1))
           .getSingleOrNull();
   if (existing != null) {
     await (database.exercises.update()
@@ -194,7 +206,11 @@ Future<Exercise> ensureExerciseFixture(
         .getSingle();
   }
   return database.exercises.insertReturning(
-    exerciseFixture(name, cardio: cardio, unit: unit),
+    exerciseFixture(
+      name,
+      cardio: cardio,
+      unit: unit,
+    ).copyWith(categoryId: Value(categoryId)),
   );
 }
 

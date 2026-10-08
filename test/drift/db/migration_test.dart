@@ -19,6 +19,7 @@ import 'generated/schema_v59.dart' as v59;
 import 'generated/schema_v60.dart' as v60;
 import 'generated/schema_v62.dart' as v62;
 import 'generated/schema_v64.dart' as v64;
+import 'generated/schema_v66.dart' as v66;
 
 void main() {
   driftRuntimeOptions.dontWarnAboutMultipleDatabases = true;
@@ -1359,6 +1360,118 @@ void main() {
             ),
             throwsA(anything),
           );
+
+          final foreignKeyViolations = await newDb
+              .customSelect('PRAGMA foreign_key_check')
+              .get();
+          expect(foreignKeyViolations, isEmpty);
+        },
+      );
+    },
+  );
+
+  test(
+    'migration from v66 to v67 allows one exercise name per category',
+    () async {
+      final timestamp = DateTime(2026, 10, 5, 8).millisecondsSinceEpoch ~/ 1000;
+
+      await verifier.testWithDataIntegrity(
+        oldVersion: 66,
+        newVersion: 67,
+        createOld: v66.DatabaseAtV66.new,
+        createNew: AppDatabase.new,
+        openTestedDatabase: AppDatabase.new,
+        createItems: (batch, oldDb) {
+          batch.insertAll(oldDb.categories, [
+            v66.CategoriesCompanion.insert(id: const Value(1), name: 'Back'),
+            v66.CategoriesCompanion.insert(
+              id: const Value(2),
+              name: 'Shoulders',
+            ),
+          ]);
+          batch.insert(
+            oldDb.plans,
+            v66.PlansCompanion.insert(id: const Value(1), days: 'Friday'),
+          );
+          batch.insertAll(oldDb.exercises, [
+            v66.ExercisesCompanion.insert(
+              id: const Value(10),
+              name: 'Reverse fly',
+              kind: 'strength',
+              displayUnit: 'kg',
+              categoryId: const Value(1),
+            ),
+            v66.ExercisesCompanion.insert(
+              id: const Value(11),
+              name: 'Squat',
+              kind: 'strength',
+              displayUnit: 'kg',
+            ),
+          ]);
+          batch.insert(
+            oldDb.exerciseSets,
+            v66.ExerciseSetsCompanion.insert(
+              id: const Value(100),
+              exerciseId: 10,
+              timestamp: timestamp,
+            ),
+          );
+          batch.insert(
+            oldDb.planExercises,
+            v66.PlanExercisesCompanion.insert(
+              id: const Value(20),
+              planId: 1,
+              exerciseId: 11,
+              enabled: 1,
+            ),
+          );
+        },
+        validateItems: (newDb) async {
+          final exercises =
+              await (newDb.exercises.select()
+                    ..orderBy([(row) => OrderingTerm.asc(row.id)]))
+                  .get();
+          expect(exercises.map((row) => (row.id, row.name, row.categoryId)), [
+            (10, 'Reverse fly', 1),
+            (11, 'Squat', null),
+          ]);
+
+          final sets = await newDb.select(newDb.exerciseSets).get();
+          expect(sets.single.exerciseId, 10);
+          final planExercises = await newDb.select(newDb.planExercises).get();
+          expect(planExercises.single.exerciseId, 11);
+
+          final indexes = await newDb
+              .customSelect(
+                "SELECT name FROM sqlite_master WHERE type = 'index' "
+                "AND name IN ('exercises_category_id', "
+                "'exercises_name_category')",
+              )
+              .map((row) => row.read<String>('name'))
+              .get();
+          expect(indexes.toSet(), {
+            'exercises_category_id',
+            'exercises_name_category',
+          });
+
+          Future<void> insertExercise(String name, int? categoryId) {
+            return newDb.exercises.insertOne(
+              ExercisesCompanion.insert(
+                name: name,
+                kind: 'strength',
+                displayUnit: 'kg',
+                categoryId: Value(categoryId),
+              ),
+            );
+          }
+
+          await insertExercise('Reverse fly', 2);
+          await insertExercise('Squat', 1);
+          await expectLater(
+            insertExercise('Reverse fly', 1),
+            throwsA(anything),
+          );
+          await expectLater(insertExercise('Squat', null), throwsA(anything));
 
           final foreignKeyViolations = await newDb
               .customSelect('PRAGMA foreign_key_check')

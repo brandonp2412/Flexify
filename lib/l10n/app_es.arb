@@ -64,6 +64,8 @@
   "navGraphs": "Gráficos",
   "navTimer": "Temporizador",
   "navSettings": "Ajustes",
+  "navCategories": "Categorías",
+  "exerciseAlreadyExists": "Este ejercicio ya existe",
   "errorLabel": "Error",
   "tabContentError": "No se pudo mostrar el contenido de la pestaña.",
   "cannotHideAllTabs": "¡No puedes ocultarlo todo!",

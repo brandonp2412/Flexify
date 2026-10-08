@@ -170,7 +170,7 @@ void main() {
     await harness.pump(
       tester,
       StrengthPage(
-        initialName: exercise,
+        initialExercise: (name: exercise, category: null),
         initialUnit: 'kg',
         initialData: [
           StrengthData(

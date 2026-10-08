@@ -3,10 +3,12 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flexify/animated_fab.dart';
+import 'package:flexify/database/categories.dart';
 import 'package:flexify/database/exercise_catalog.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/logging.dart';
 import 'package:flexify/settings/settings_state.dart';
+import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -55,6 +57,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
 
   final TextEditingController _nameCtrl = TextEditingController();
   bool _cardio = false;
+  String? _category;
 
   late var settings = context.watch<SettingsState>();
   late String _unit = settings.value.strengthUnit == 'last-entry'
@@ -102,6 +105,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
                       : context.l10n.requiredField,
                 ),
                 const SizedBox(height: 8),
+                if (settings.value.showCategories) _categoryField(),
                 DropdownButtonFormField<String>(
                   key: ValueKey(_unit),
                   decoration: InputDecoration(
@@ -208,6 +212,30 @@ class _AddExercisePageState extends State<AddExercisePage> {
     super.dispose();
   }
 
+  Widget _categoryField() {
+    return StreamBuilder<List<String>>(
+      stream: getCategoriesStream(),
+      builder: (context, snapshot) => Padding(
+        padding: const EdgeInsets.only(bottom: 8),
+        child: DropdownButtonFormField<String?>(
+          decoration: InputDecoration(labelText: context.l10n.categoryLabel),
+          initialValue: _category,
+          items: [
+            const DropdownMenuItem(value: null, child: Text('')),
+            ...?snapshot.data?.map(
+              (category) =>
+                  DropdownMenuItem(value: category, child: Text(category)),
+            ),
+          ],
+          onChanged: (value) {
+            _markDirty();
+            setState(() => _category = value);
+          },
+        ),
+      ),
+    );
+  }
+
   void _setCardio(bool value) {
     _markDirty();
     setState(() {
@@ -246,10 +274,17 @@ class _AddExercisePageState extends State<AddExercisePage> {
     else if (settings.value.cardioUnit != 'last-entry' && _cardio)
       _unit = settings.value.cardioUnit;
 
+    final key = (name: _nameCtrl.text, category: _category);
+    if (await getExercise(key) != null) {
+      if (mounted) toast(context.l10n.exerciseAlreadyExists);
+      return;
+    }
+
     final exercise = await createExerciseDefinition(
       name: _nameCtrl.text,
       cardio: _cardio,
       displayUnit: _unit,
+      category: _category,
       image: _image,
     );
     talker.info('Created exercise definition');

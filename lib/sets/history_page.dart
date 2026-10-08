@@ -23,11 +23,13 @@ import 'package:share_plus/share_plus.dart';
 
 class HistoryDay {
   final String name;
+  final String? category;
   final List<ExerciseSetView> exerciseSets;
   final DateTime day;
 
   HistoryDay({
     required this.name,
+    this.category,
     required this.exerciseSets,
     required this.day,
   });
@@ -366,11 +368,13 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
     final list = <HistoryDay>[];
     for (final exerciseSet in exerciseSets) {
       final day = DateUtils.dateOnly(exerciseSet.created);
-      final key = '${exerciseSet.name}|${day.millisecondsSinceEpoch}';
+      final key =
+          '${exerciseSet.name}|${exerciseSet.category}|${day.millisecondsSinceEpoch}';
       final existing = map[key];
       if (existing == null) {
         final hd = HistoryDay(
           name: exerciseSet.name,
+          category: exerciseSet.category,
           exerciseSets: [exerciseSet],
           day: day,
         );

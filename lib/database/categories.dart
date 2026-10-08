@@ -89,6 +89,18 @@ Stream<List<CategorySummary>> watchCategorySummaries() {
       );
 }
 
+/// Watches the active exercises in [category], ordered by name.
+Stream<List<Exercise>> watchCategoryExercises(Category category) {
+  return (db.exercises.select()
+        ..where(
+          (exercise) =>
+              exercise.categoryId.equals(category.id) &
+              exercise.archived.equals(false),
+        )
+        ..orderBy([(exercise) => OrderingTerm.asc(exercise.name)]))
+      .watch();
+}
+
 Stream<List<String>> getCategoriesStream() {
   return (db.select(
     db.categories,

@@ -37,7 +37,7 @@ void main() {
       created: testNow.add(const Duration(minutes: 1)),
     );
 
-    final exercise = await getExerciseByName('Bench old');
+    final exercise = await getExercise((name: 'Bench old', category: 'Chest'));
     await updateExerciseDefinition(
       exerciseId: exercise!.id,
       name: 'Bench renamed',
@@ -48,7 +48,7 @@ void main() {
 
     final bestWeight = await getStrengthData(
       target: 'kg',
-      name: 'Bench renamed',
+      exercise: (name: 'Bench renamed', category: 'Chest'),
       metric: StrengthMetric.bestWeight,
       period: Period.day,
       start: testNow.subtract(const Duration(days: 1)),
@@ -57,7 +57,7 @@ void main() {
     );
     final bestReps = await getStrengthData(
       target: 'kg',
-      name: 'Bench renamed',
+      exercise: (name: 'Bench renamed', category: 'Chest'),
       metric: StrengthMetric.bestReps,
       period: Period.day,
       start: null,
@@ -66,7 +66,7 @@ void main() {
     );
     final volume = await getStrengthData(
       target: 'kg',
-      name: 'Bench renamed',
+      exercise: (name: 'Bench renamed', category: 'Chest'),
       metric: StrengthMetric.volume,
       period: Period.day,
       start: null,
@@ -75,7 +75,7 @@ void main() {
     );
     final oneRepMax = await getStrengthData(
       target: 'kg',
-      name: 'Bench renamed',
+      exercise: (name: 'Bench renamed', category: 'Chest'),
       metric: StrengthMetric.oneRepMax,
       period: Period.day,
       start: null,
@@ -84,7 +84,7 @@ void main() {
     );
     final relative = await getStrengthData(
       target: 'kg',
-      name: 'Bench renamed',
+      exercise: (name: 'Bench renamed', category: 'Chest'),
       metric: StrengthMetric.relativeStrength,
       period: Period.day,
       start: null,
@@ -100,7 +100,7 @@ void main() {
     expect(
       await getStrengthData(
         target: 'kg',
-        name: 'Bench old',
+        exercise: (name: 'Bench old', category: 'Chest'),
         metric: StrengthMetric.bestWeight,
         period: Period.day,
         start: null,
@@ -155,7 +155,7 @@ void main() {
       Future<double> runMetric(CardioMetric metric) async {
         final data = await getCardioData(
           target: 'km',
-          name: 'Run',
+          exercise: (name: 'Run', category: null),
           metric: metric,
           period: Period.day,
           start: null,
@@ -191,7 +191,7 @@ void main() {
 
       final weighted = await getCardioData(
         target: 'kg',
-        name: 'Sled',
+        exercise: (name: 'Sled', category: null),
         metric: CardioMetric.weight,
         period: Period.day,
         start: null,
@@ -199,7 +199,7 @@ void main() {
       );
       final timed = await getCardioData(
         target: 'kg',
-        name: 'Sled',
+        exercise: (name: 'Sled', category: null),
         metric: CardioMetric.duration,
         period: Period.day,
         start: null,
@@ -285,7 +285,7 @@ void main() {
     );
 
     final rpms = await getRpms();
-    final rpm = rpms.singleWhere((row) => row.name == 'Curl');
+    final rpm = rpms.singleWhere((row) => row.exercise.name == 'Curl');
     expect(rpm.rpm, closeTo(6, 0.01));
     expect(await isBestExerciseSet(db, first), isFalse);
     expect(await isBestExerciseSet(db, second), isTrue);

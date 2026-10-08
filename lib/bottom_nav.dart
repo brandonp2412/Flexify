@@ -134,6 +134,8 @@ class BottomNav extends StatelessWidget {
         return Icons.timer_rounded;
       case 'SettingsPage':
         return Icons.settings_rounded;
+      case 'CategoriesPage':
+        return Icons.category_rounded;
       default:
         return Icons.error_rounded;
     }
@@ -152,6 +154,8 @@ class BottomNav extends StatelessWidget {
         return l10n.navTimer;
       case 'SettingsPage':
         return l10n.navSettings;
+      case 'CategoriesPage':
+        return l10n.navCategories;
       default:
         return l10n.errorLabel;
     }

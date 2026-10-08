@@ -2,10 +2,19 @@ import 'package:drift/drift.dart';
 import 'package:flexify/database/categories.dart';
 
 /// Stable exercise identity and configuration shared across plans and history.
+///
+/// A name is unique within a category, so the same name can exist once per
+/// category. Uncategorized exercises share one namespace, which is why the
+/// unique index coalesces a missing category id instead of relying on a
+/// composite unique key: SQLite treats NULLs in unique keys as distinct.
 @TableIndex(name: 'exercises_category_id', columns: {#categoryId})
+@TableIndex.sql(
+  'CREATE UNIQUE INDEX exercises_name_category '
+  'ON exercises (name, COALESCE(category_id, 0))',
+)
 class Exercises extends Table {
   IntColumn get id => integer().autoIncrement()();
-  TextColumn get name => text().unique()();
+  TextColumn get name => text()();
   TextColumn get kind => text()();
   TextColumn get displayUnit => text()();
   IntColumn get categoryId => integer().nullable().references(

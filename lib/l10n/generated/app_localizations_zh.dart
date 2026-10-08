@@ -111,6 +111,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get navSettings => '设置';
 
   @override
+  String get navCategories => '分类';
+
+  @override
+  String get exerciseAlreadyExists => '该动作已存在';
+
+  @override
   String get errorLabel => '错误';
 
   @override
@@ -1620,6 +1626,12 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
   String get navSettings => '设置';
 
   @override
+  String get navCategories => '分类';
+
+  @override
+  String get exerciseAlreadyExists => '该动作已存在';
+
+  @override
   String get errorLabel => '错误';
 
   @override
@@ -3127,6 +3139,12 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get navSettings => '設定';
+
+  @override
+  String get navCategories => '分類';
+
+  @override
+  String get exerciseAlreadyExists => '此動作已存在';
 
   @override
   String get errorLabel => '錯誤';

@@ -136,6 +136,14 @@
   "@navSettings": {
     "description": "Navigation label for app settings."
   },
+  "navCategories": "Categories",
+  "@navCategories": {
+    "description": "Navigation label for the exercise categories tab."
+  },
+  "exerciseAlreadyExists": "This exercise already exists",
+  "@exerciseAlreadyExists": {
+    "description": "Toast shown when adding an exercise that already exists in the selected category."
+  },
   "errorLabel": "Error",
   "@errorLabel": {
     "description": "Generic short error label."

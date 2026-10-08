@@ -111,6 +111,12 @@ class AppLocalizationsUk extends AppLocalizations {
   String get navSettings => 'Налаштування';
 
   @override
+  String get navCategories => 'Категорії';
+
+  @override
+  String get exerciseAlreadyExists => 'Така вправа вже існує';
+
+  @override
   String get errorLabel => 'Помилка';
 
   @override

@@ -261,8 +261,13 @@ Future<GraphCsvImportResult> _importV2(
         row.nullableString('category'),
       );
       final existing =
-          await (database.exercises.select()
-                ..where((exercise) => exercise.name.equals(name)))
+          await (database.exercises.select()..where(
+                (exercise) =>
+                    exercise.name.equals(name) &
+                    (categoryId == null
+                        ? exercise.categoryId.isNull()
+                        : exercise.categoryId.equals(categoryId)),
+              ))
               .getSingleOrNull();
 
       final companion = ExercisesCompanion(
@@ -427,9 +432,13 @@ Future<GraphCsvImportResult> _importLegacy(
       final name = row.string('name', required: true);
       if (exerciseIds.containsKey(name)) continue;
 
+      // Legacy exports identify exercises by name only, so a name shared
+      // across categories resolves to the oldest matching exercise.
       final existing =
           await (database.exercises.select()
-                ..where((exercise) => exercise.name.equals(name)))
+                ..where((exercise) => exercise.name.equals(name))
+                ..orderBy([(exercise) => OrderingTerm.asc(exercise.id)])
+                ..limit(1))
               .getSingleOrNull();
       final kind = row.boolean('cardio') ? 'cardio' : 'strength';
       final unit = row.string('unit', fallback: kind == 'cardio' ? 'km' : 'kg');

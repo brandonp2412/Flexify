@@ -348,6 +348,18 @@ abstract class AppLocalizations {
   /// **'Settings'**
   String get navSettings;
 
+  /// Navigation label for the exercise categories tab.
+  ///
+  /// In en, this message translates to:
+  /// **'Categories'**
+  String get navCategories;
+
+  /// Toast shown when adding an exercise that already exists in the selected category.
+  ///
+  /// In en, this message translates to:
+  /// **'This exercise already exists'**
+  String get exerciseAlreadyExists;
+
   /// Generic short error label.
   ///
   /// In en, this message translates to:

@@ -3,6 +3,7 @@ import 'package:flexify/bottom_nav.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/custom_set_indicator.dart';
 import 'package:flexify/database/database.dart';
+import 'package:flexify/database/exercise_key.dart';
 import 'package:flexify/database/exercise_set_repository.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/exercise_modal.dart';
@@ -131,6 +132,14 @@ class _StartListState extends State<StartList> {
     List<GymCount> counts,
   ) {
     final exercise = widget.exercises[index];
+    final label = exerciseLabel(
+      (name: exercise.exercise.name, category: exercise.category),
+      sharedExerciseNames(
+        widget.exercises.map(
+          (entry) => (name: entry.exercise.name, category: entry.category),
+        ),
+      ),
+    );
     final idx = counts.indexWhere(
       (element) => element.exerciseId == exercise.exercise.id,
     );
@@ -188,7 +197,7 @@ class _StartListState extends State<StartList> {
         child: ExerciseModal(
           planExerciseId: exercise.planExercise.id,
           exerciseId: exercise.exercise.id,
-          exerciseName: exercise.exercise.name,
+          exerciseName: label,
           workoutId: widget.workoutId,
           hasData: count > 0,
           onSelect: () => widget.onSelect(index),
@@ -198,7 +207,7 @@ class _StartListState extends State<StartList> {
 
     final content = desktop
         ? Padding(
-            key: Key(exercise.exercise.name),
+            key: Key(label),
             padding: const EdgeInsets.symmetric(vertical: 4),
             child: Material(
               color: selected
@@ -234,7 +243,7 @@ class _StartListState extends State<StartList> {
                           ],
                           Expanded(
                             child: Text(
-                              exercise.exercise.name,
+                              label,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: Theme.of(context).textTheme.titleMedium
@@ -296,7 +305,7 @@ class _StartListState extends State<StartList> {
                       },
                       child: Radio<bool>(value: selected),
                     ),
-                    Flexible(child: Text(exercise.exercise.name)),
+                    Flexible(child: Text(label)),
                   ],
                 ),
               ),
@@ -306,7 +315,7 @@ class _StartListState extends State<StartList> {
 
     if (desktop) return content;
     return GestureDetector(
-      key: Key(exercise.exercise.name),
+      key: Key(label),
       onLongPress: showActions,
       child: content,
     );

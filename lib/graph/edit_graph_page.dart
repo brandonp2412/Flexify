@@ -6,6 +6,7 @@ import 'package:flexify/animated_fab.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/exercise_analytics.dart';
 import 'package:flexify/database/exercise_catalog.dart';
+import 'package:flexify/database/exercise_key.dart';
 import 'package:flexify/database/categories.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/settings/settings_state.dart';
@@ -14,9 +15,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class EditGraphPage extends StatefulWidget {
-  final String name;
+  final ExerciseKey exercise;
 
-  const EditGraphPage({required this.name, super.key});
+  const EditGraphPage({required this.exercise, super.key});
 
   @override
   createState() => _EditGraphPageState();
@@ -24,7 +25,7 @@ class EditGraphPage extends StatefulWidget {
 
 class _EditGraphPageState extends State<EditGraphPage> {
   late final TextEditingController name = TextEditingController(
-    text: widget.name,
+    text: widget.exercise.name,
   );
   final TextEditingController minutes = TextEditingController();
   final TextEditingController seconds = TextEditingController();
@@ -80,7 +81,9 @@ class _EditGraphPageState extends State<EditGraphPage> {
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
-          title: Text(context.l10n.updateAllNamed(widget.name.toLowerCase())),
+          title: Text(
+            context.l10n.updateAllNamed(widget.exercise.name.toLowerCase()),
+          ),
         ),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -292,13 +295,12 @@ class _EditGraphPageState extends State<EditGraphPage> {
       );
     }
 
-    final exerciseId =
-        _exerciseId ?? (await getExerciseByName(widget.name))?.id;
+    final exerciseId = _exerciseId ?? (await getExercise(widget.exercise))?.id;
     if (exerciseId == null || cardio == null || unit == null) return;
 
     await updateExerciseDefinition(
       exerciseId: exerciseId,
-      name: name.text.isEmpty ? widget.name : name.text,
+      name: _savedName,
       cardio: cardio!,
       displayUnit: unit!,
       defaultRestDurationMs: duration?.inMilliseconds,
@@ -307,13 +309,24 @@ class _EditGraphPageState extends State<EditGraphPage> {
     );
   }
 
-  Future<int> getCount() => countGraphSets([name.text]);
+  String get _savedName =>
+      (name.text.isEmpty ? widget.exercise.name : name.text).trim();
+
+  String? get _savedCategory {
+    final trimmed = category?.trim();
+    return trimmed == null || trimmed.isEmpty ? null : trimmed;
+  }
+
+  ExerciseKey get _savedExercise =>
+      (name: _savedName, category: _savedCategory);
+
+  Future<int> getCount() => countGraphSets([_savedExercise]);
 
   @override
   void initState() {
     super.initState();
 
-    getExerciseByName(widget.name).then((exercise) async {
+    getExercise(widget.exercise).then((exercise) async {
       if (exercise == null || !mounted) return;
       final categoryName = await getExerciseCategoryName(exercise);
       if (!mounted) return;
@@ -375,7 +388,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
     final l10n = context.l10n;
 
     final count = await getCount();
-    if (count > 0 && widget.name != name.text) {
+    if (count > 0 && widget.exercise != _savedExercise) {
       final confirmed = await confirmUpdate(
         l10n.updateConflict,
         l10n.updateConflictDescription(count),
@@ -387,7 +400,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
 
     if (!mounted) return;
     _allowPop = true;
-    Navigator.pop(context, name.text);
+    Navigator.pop(context, _savedExercise);
   }
 
   void _setCardio(bool value) {

@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:flexify/database/body_weight_repository.dart';
 import 'package:flexify/database/database.dart';
+import 'package:flexify/database/exercise_key.dart';
 
 /// Converts a stored canonical load to the exercise display unit.
 double displayLoad(String unit, double? loadKg) {
@@ -104,6 +105,14 @@ JoinedSelectStatement<HasResultSet, dynamic> _exerciseSetQuery(
     OrderingTerm(expression: database.exerciseSets.timestamp, mode: order),
     OrderingTerm(expression: database.exerciseSets.id, mode: order),
   ]);
+}
+
+Expression<bool> _isExercise(AppDatabase database, ExerciseKey exercise) {
+  final category = exercise.category;
+  return database.exercises.name.equals(exercise.name) &
+      (category == null
+          ? database.exercises.categoryId.isNull()
+          : database.categories.name.equals(category));
 }
 
 JoinedSelectStatement<HasResultSet, dynamic> _filteredExerciseSetQuery(
@@ -235,14 +244,14 @@ Future<List<ExerciseSetView>> getExerciseSetsByIds(
 
 Future<List<ExerciseSetView>> getExerciseSetsForExercise(
   AppDatabase database, {
-  required String exerciseName,
+  required ExerciseKey exercise,
   DateTime? startDate,
   DateTime? endDate,
   int? limit,
   OrderingMode order = OrderingMode.desc,
 }) async {
   final query = _exerciseSetQuery(database, order: order)
-    ..where(database.exercises.name.equals(exerciseName));
+    ..where(_isExercise(database, exercise));
 
   if (startDate != null) {
     query.where(
@@ -260,11 +269,11 @@ Future<List<ExerciseSetView>> getExerciseSetsForExercise(
 
 Future<ExerciseSetView?> getExerciseSetForExerciseAt(
   AppDatabase database, {
-  required String exerciseName,
+  required ExerciseKey exercise,
   required DateTime timestamp,
 }) async {
   final query = _exerciseSetQuery(database)
-    ..where(database.exercises.name.equals(exerciseName))
+    ..where(_isExercise(database, exercise))
     ..where(database.exerciseSets.timestamp.equals(timestamp))
     ..limit(1);
   final row = await query.getSingleOrNull();
@@ -273,10 +282,10 @@ Future<ExerciseSetView?> getExerciseSetForExerciseAt(
 
 Future<int> countExerciseSetsForExercises(
   AppDatabase database,
-  Iterable<String> exerciseNames,
+  Iterable<ExerciseKey> exercises,
 ) async {
-  final names = exerciseNames.toList();
-  if (names.isEmpty) return 0;
+  final keys = exercises.toList();
+  if (keys.isEmpty) return 0;
 
   final count = database.exerciseSets.id.count();
   final row =
@@ -288,9 +297,17 @@ Future<int> countExerciseSetsForExercises(
                   database.exerciseSets.exerciseId,
                 ),
               ),
+              leftOuterJoin(
+                database.categories,
+                database.categories.id.equalsExp(database.exercises.categoryId),
+              ),
             ])
             ..addColumns([count])
-            ..where(database.exercises.name.isIn(names)))
+            ..where(
+              keys
+                  .map((exercise) => _isExercise(database, exercise))
+                  .reduce((a, b) => a | b),
+            ))
           .getSingle();
   return row.read(count) ?? 0;
 }
@@ -306,13 +323,13 @@ Future<ExerciseSetView?> getExerciseSetById(
   return row == null ? null : _toExerciseSetView(database, row);
 }
 
-/// Loads the latest exercise set for an exercise name.
+/// Loads the latest exercise set for an exercise within its category.
 Future<ExerciseSetView?> getLatestExerciseSet(
   AppDatabase database, {
-  required String exerciseName,
+  required ExerciseKey exercise,
 }) async {
   final query = _exerciseSetQuery(database)
-    ..where(database.exercises.name.equals(exerciseName))
+    ..where(_isExercise(database, exercise))
     ..limit(1);
   final row = await query.getSingleOrNull();
   return row == null ? null : _toExerciseSetView(database, row);
@@ -433,7 +450,7 @@ Future<bool> isBestExerciseSet(
 ) async {
   final previous = (await getExerciseSetsForExercise(
     database,
-    exerciseName: exerciseSet.name,
+    exercise: (name: exerciseSet.name, category: exerciseSet.category),
   )).where((set) => set.id != exerciseSet.id);
 
   if (exerciseSet.cardio &&

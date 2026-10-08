@@ -5,8 +5,13 @@ import 'package:flexify/database/exercise_set_repository.dart';
 class PlanExerciseEntry {
   final PlanExercise planExercise;
   final Exercise exercise;
+  final String? category;
 
-  const PlanExerciseEntry({required this.planExercise, required this.exercise});
+  const PlanExerciseEntry({
+    required this.planExercise,
+    required this.exercise,
+    this.category,
+  });
 }
 
 Stream<List<PlanExerciseEntry>> watchPlanExerciseEntries(
@@ -18,6 +23,10 @@ Stream<List<PlanExerciseEntry>> watchPlanExerciseEntries(
           innerJoin(
             database.exercises,
             database.exercises.id.equalsExp(database.planExercises.exerciseId),
+          ),
+          leftOuterJoin(
+            database.categories,
+            database.categories.id.equalsExp(database.exercises.categoryId),
           ),
         ])
         ..where(
@@ -35,6 +44,7 @@ Stream<List<PlanExerciseEntry>> watchPlanExerciseEntries(
           (row) => PlanExerciseEntry(
             planExercise: row.readTable(database.planExercises),
             exercise: row.readTable(database.exercises),
+            category: row.readTableOrNull(database.categories)?.name,
           ),
         )
         .toList(),
@@ -50,6 +60,10 @@ Stream<List<PlanExerciseEntry>> watchAllPlanExerciseEntries(
           database.exercises,
           database.exercises.id.equalsExp(database.planExercises.exerciseId),
         ),
+        leftOuterJoin(
+          database.categories,
+          database.categories.id.equalsExp(database.exercises.categoryId),
+        ),
       ])..orderBy([
         OrderingTerm.asc(database.planExercises.planId),
         OrderingTerm.asc(database.planExercises.sequence),
@@ -62,6 +76,7 @@ Stream<List<PlanExerciseEntry>> watchAllPlanExerciseEntries(
           (row) => PlanExerciseEntry(
             planExercise: row.readTable(database.planExercises),
             exercise: row.readTable(database.exercises),
+            category: row.readTableOrNull(database.categories)?.name,
           ),
         )
         .toList(),

@@ -553,11 +553,15 @@ class _StartPlanPageState extends State<StartPlanPage>
     } else if (!_cardio && settings.repEstimation) {
       final parsedWeight = parseDisplayNumber(context, _weight.text);
       if (parsedWeight == null) return;
-      _stream?.first.then((planExercises) {
+      _stream?.first.then((planExercises) async {
         if (!mounted) return;
-        final matches = _rpms!.where(
-          (rpm) => rpm.name == planExercises[_selected].exercise.name,
+        final exercise = planExercises[_selected].exercise;
+        final key = (
+          name: exercise.name,
+          category: await getExerciseCategoryName(exercise),
         );
+        if (!mounted) return;
+        final matches = _rpms!.where((rpm) => rpm.exercise == key);
         if (matches.isEmpty) return;
 
         final closestRpm = matches.reduce(
@@ -626,8 +630,14 @@ class _StartPlanPageState extends State<StartPlanPage>
     }
   }
 
-  Future<ExerciseSetView?> getLast(String exercise) {
-    return getLatestExerciseSet(db, exerciseName: exercise);
+  Future<ExerciseSetView?> getLast(Exercise exercise) async {
+    return getLatestExerciseSet(
+      db,
+      exercise: (
+        name: exercise.name,
+        category: await getExerciseCategoryName(exercise),
+      ),
+    );
   }
 
   /// Returns the first set from the most recent training session for [exercise].
@@ -796,7 +806,7 @@ class _StartPlanPageState extends State<StartPlanPage>
         }
       }
       if (settings.showBodyWeight && bodyWeight == null) {
-        final lastSet = await getLast(exercise);
+        final lastSet = await getLast(entry.exercise);
         bodyWeight = lastSet?.bodyWeight;
       }
 

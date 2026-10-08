@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:flexify/database/categories.dart';
 import 'package:flexify/database/database.dart';
+import 'package:flexify/database/exercise_key.dart';
 import 'package:flexify/main.dart';
 
 Future<int?> _categoryId(String? name) async {
@@ -13,12 +14,50 @@ Future<int?> _categoryId(String? name) async {
       .id;
 }
 
-Future<Exercise?> getExerciseByName(String name) {
-  return (db.exercises.select()..where(
-        (exercise) =>
-            exercise.name.equals(name) & exercise.archived.equals(false),
-      ))
-      .getSingleOrNull();
+/// Finds the exercise named [key].name within [key].category.
+Future<Exercise?> getExercise(ExerciseKey key) {
+  final trimmedCategory = key.category?.trim();
+  final category = trimmedCategory == null || trimmedCategory.isEmpty
+      ? null
+      : trimmedCategory;
+  final query =
+      db.exercises.select().join([
+        leftOuterJoin(
+          db.categories,
+          db.categories.id.equalsExp(db.exercises.categoryId),
+        ),
+      ])..where(
+        db.exercises.name.equals(key.name.trim()) &
+            db.exercises.archived.equals(false) &
+            (category == null
+                ? db.exercises.categoryId.isNull()
+                : db.categories.name.equals(category)),
+      );
+  return query.map((row) => row.readTable(db.exercises)).getSingleOrNull();
+}
+
+/// Finds the exercises named [name] across all categories, oldest first.
+Future<List<Exercise>> getExercisesByName(String name) {
+  return (db.exercises.select()
+        ..where(
+          (exercise) =>
+              exercise.name.equals(name) & exercise.archived.equals(false),
+        )
+        ..orderBy([(exercise) => OrderingTerm.asc(exercise.id)]))
+      .get();
+}
+
+/// Returns the category to log [name] under when none was chosen.
+///
+/// An existing exercise with that name is reused, so typing a full name does
+/// not create an uncategorized duplicate that splits its history.
+Future<String?> defaultCategoryForName(String name) async {
+  final matches = await getExercisesByName(name.trim());
+  if (matches.isEmpty ||
+      matches.any((exercise) => exercise.categoryId == null)) {
+    return null;
+  }
+  return getExerciseCategoryName(matches.first);
 }
 
 Future<Exercise?> getExerciseById(int id) {
@@ -28,12 +67,55 @@ Future<Exercise?> getExerciseById(int id) {
       .getSingleOrNull();
 }
 
-Future<List<String>> getExerciseNames() {
-  return (db.exercises.select()
-        ..where((exercise) => exercise.archived.equals(false))
-        ..orderBy([(exercise) => OrderingTerm.asc(exercise.name)]))
-      .map((exercise) => exercise.name)
+/// Lists every active exercise with its category, ordered by name.
+Future<List<ExerciseKey>> getExerciseKeys() {
+  final query =
+      db.exercises.select().join([
+          leftOuterJoin(
+            db.categories,
+            db.categories.id.equalsExp(db.exercises.categoryId),
+          ),
+        ])
+        ..where(db.exercises.archived.equals(false))
+        ..orderBy([
+          OrderingTerm.asc(db.exercises.name),
+          OrderingTerm.asc(db.categories.name),
+        ]);
+  return query
+      .map(
+        (row) => (
+          name: row.read(db.exercises.name)!,
+          category: row.read(db.categories.name),
+        ),
+      )
       .get();
+}
+
+/// Watches active exercises with their category names, ordered by name.
+Stream<List<({Exercise exercise, String? category})>>
+watchExerciseCatalogEntries() {
+  final query =
+      db.exercises.select().join([
+          leftOuterJoin(
+            db.categories,
+            db.categories.id.equalsExp(db.exercises.categoryId),
+          ),
+        ])
+        ..where(db.exercises.archived.equals(false))
+        ..orderBy([
+          OrderingTerm.asc(db.exercises.name),
+          OrderingTerm.asc(db.categories.name),
+        ]);
+  return query.watch().map(
+    (rows) => rows
+        .map(
+          (row) => (
+            exercise: row.readTable(db.exercises),
+            category: row.readTableOrNull(db.categories)?.name,
+          ),
+        )
+        .toList(),
+  );
 }
 
 Stream<List<Exercise>> watchExerciseCatalog() {
@@ -87,7 +169,7 @@ Future<Exercise> syncExerciseDefinition({
   String? image,
   int? defaultRestDurationMs,
 }) async {
-  final existing = await getExerciseByName(name);
+  final existing = await getExercise((name: name, category: category));
   if (existing == null) {
     return createExerciseDefinition(
       name: name,
@@ -98,13 +180,11 @@ Future<Exercise> syncExerciseDefinition({
       defaultRestDurationMs: defaultRestDurationMs,
     );
   }
-  final categoryId = await _categoryId(category);
   await (db.exercises.update()..where((row) => row.id.equals(existing.id)))
       .write(
         ExercisesCompanion(
           kind: Value(cardio ? 'cardio' : 'strength'),
           displayUnit: Value(displayUnit),
-          categoryId: Value(categoryId),
           image: Value(image),
           defaultRestDurationMs: Value(defaultRestDurationMs),
         ),
@@ -176,8 +256,13 @@ Future<void> updateExerciseDefinition({
   final trimmedName = name.trim();
   final categoryId = await _categoryId(category);
   final target =
-      await (db.exercises.select()
-            ..where((row) => row.name.equals(trimmedName)))
+      await (db.exercises.select()..where(
+            (row) =>
+                row.name.equals(trimmedName) &
+                (categoryId == null
+                    ? row.categoryId.isNull()
+                    : row.categoryId.equals(categoryId)),
+          ))
           .getSingleOrNull();
 
   final definition = ExercisesCompanion(

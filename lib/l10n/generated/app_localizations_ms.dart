@@ -112,6 +112,12 @@ class AppLocalizationsMs extends AppLocalizations {
   String get navSettings => 'Tetapan';
 
   @override
+  String get navCategories => 'Kategori';
+
+  @override
+  String get exerciseAlreadyExists => 'Senaman ini sudah wujud';
+
+  @override
   String get errorLabel => 'Ralat';
 
   @override

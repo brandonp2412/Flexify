@@ -36,7 +36,7 @@ void main() {
       await harness.pump(
         tester,
         GraphHistoryPage(
-          name: 'Graph history test',
+          exercise: (name: 'Graph history test', category: null),
           initialSets: sets,
           tabController: tabController,
         ),
@@ -92,7 +92,7 @@ void main() {
 
       final initialSets = await getExerciseSetsForExercise(
         harness.database,
-        exerciseName: 'Press',
+        exercise: (name: 'Press', category: null),
       );
       expect(initialSets.map((set) => set.id), contains(exact.id));
 
@@ -106,7 +106,7 @@ void main() {
       await harness.pump(
         tester,
         GraphHistoryPage(
-          name: 'Press',
+          exercise: (name: 'Press', category: null),
           initialSets: initialSets,
           tabController: tabController,
         ),

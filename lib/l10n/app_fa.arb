@@ -133,6 +133,8 @@
     "description": "Navigation label for the rest timer."
   },
   "navSettings": "تنظیمات",
+  "navCategories": "دسته‌بندی‌ها",
+  "exerciseAlreadyExists": "این تمرین از قبل وجود دارد",
   "@navSettings": {
     "description": "Navigation label for app settings."
   },

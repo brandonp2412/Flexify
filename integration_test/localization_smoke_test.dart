@@ -143,7 +143,10 @@ void main() {
     await tester.tap(find.text(l10n.saveSet));
     await tester.pumpAndSettle();
 
-    final saved = await getLatestExerciseSet(database, exerciseName: exercise);
+    final saved = await getLatestExerciseSet(
+      database,
+      exercise: (name: exercise, category: null),
+    );
     expect(saved, isNot(equals(null)));
     expect(saved!.name, exercise);
     expect(saved.reps, 5);

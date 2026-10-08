@@ -5,6 +5,7 @@ import 'package:flexify/bottom_nav.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/database/exercise_analytics.dart';
+import 'package:flexify/database/exercise_key.dart';
 import 'package:flexify/empty_state.dart';
 import 'package:flexify/graph/add_exercise_page.dart';
 import 'package:flexify/graph/cardio_data.dart';
@@ -45,6 +46,7 @@ class GraphsPageState extends State<GraphsPage>
   final _scroll = ScrollController();
   bool extendFab = true;
   int _total = 0;
+  Set<String> _sharedNames = const {};
   GraphSort _sort = GraphSort.dateDesc;
 
   @override
@@ -116,7 +118,7 @@ class GraphsPageState extends State<GraphsPage>
     var count = await countGraphSets(
       summaries
           .where((summary) => !summary.bodyWeight)
-          .map((summary) => summary.name),
+          .map((summary) => summary.exercise),
     );
     if (summaries.any((summary) => summary.bodyWeight)) {
       count += await db.bodyWeights.count().getSingle();
@@ -127,14 +129,16 @@ class GraphsPageState extends State<GraphsPage>
   Future<void> _editGraphSummary(GraphExerciseSummary summary) async {
     if (summary.bodyWeight) return;
     await Navigator.of(context).push(
-      FlexPageRoute(builder: (context) => EditGraphPage(name: summary.name)),
+      FlexPageRoute(
+        builder: (context) => EditGraphPage(exercise: summary.exercise),
+      ),
     );
   }
 
   Future<void> _deleteGraphSummary(GraphExerciseSummary summary) async {
     final count = summary.bodyWeight
         ? await db.bodyWeights.count().getSingle()
-        : await countGraphSets([summary.name]);
+        : await countGraphSets([summary.exercise]);
     if (!mounted) return;
     final confirmed = await showDialog<bool>(
       context: context,
@@ -262,6 +266,11 @@ class GraphsPageState extends State<GraphsPage>
             }
             if (!snapshot.hasData) return const SizedBox();
 
+            _sharedNames = sharedExerciseNames(
+              snapshot.data!
+                  .where((summary) => !summary.bodyWeight)
+                  .map((summary) => summary.exercise),
+            );
             final terms = _search
                 .toLowerCase()
                 .split(" ")
@@ -399,7 +408,7 @@ class GraphsPageState extends State<GraphsPage>
                       await Navigator.of(context).push(
                         FlexPageRoute(
                           builder: (context) =>
-                              EditGraphPage(name: summary.name),
+                              EditGraphPage(exercise: summary.exercise),
                         ),
                       );
                     },
@@ -494,6 +503,7 @@ class GraphsPageState extends State<GraphsPage>
     Widget graphTile(GraphExerciseSummary exerciseSet) => GraphTile(
       selected: _selection.selected,
       exerciseSet: exerciseSet,
+      label: exerciseLabel(exerciseSet.exercise, _sharedNames),
       onSelect: (key) async {
         setState(() {
           _selection.toggle(key);
@@ -584,7 +594,7 @@ class GraphsPageState extends State<GraphsPage>
                             )
                           : exerciseSets.first.cardio
                           ? getCardioData(
-                              name: exerciseSets.first.name,
+                              exercise: exerciseSets.first.exercise,
                               target: exerciseSets.first.unit,
                               metric: _isWeightUnit(exerciseSets.first.unit)
                                   ? CardioMetric.weight
@@ -592,7 +602,7 @@ class GraphsPageState extends State<GraphsPage>
                             )
                           : getStrengthData(
                               target: exerciseSets.first.unit,
-                              name: exerciseSets.first.name,
+                              exercise: exerciseSets.first.exercise,
                               metric: StrengthMetric.bestWeight,
                               period: Period.day,
                               start: null,
@@ -731,7 +741,7 @@ class GraphsPageState extends State<GraphsPage>
                           )
                         : exerciseSets.first.cardio
                         ? getCardioData(
-                            name: exerciseSets.first.name,
+                            exercise: exerciseSets.first.exercise,
                             target: exerciseSets.first.unit,
                             metric: _isWeightUnit(exerciseSets.first.unit)
                                 ? CardioMetric.weight
@@ -739,7 +749,7 @@ class GraphsPageState extends State<GraphsPage>
                           )
                         : getStrengthData(
                             target: exerciseSets.first.unit,
-                            name: exerciseSets.first.name,
+                            exercise: exerciseSets.first.exercise,
                             metric: StrengthMetric.bestWeight,
                             period: Period.day,
                             start: null,
@@ -762,6 +772,7 @@ class GraphsPageState extends State<GraphsPage>
           child: GraphTile(
             selected: _selection.selected,
             exerciseSet: exerciseSet,
+            label: exerciseLabel(exerciseSet.exercise, _sharedNames),
             onSelect: (key) async {
               setState(() {
                 _selection.toggle(key);

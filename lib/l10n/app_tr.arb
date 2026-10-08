@@ -64,6 +64,8 @@
   "navGraphs": "Grafikler",
   "navTimer": "Zamanlayıcı",
   "navSettings": "Ayarlar",
+  "navCategories": "Kategoriler",
+  "exerciseAlreadyExists": "Bu egzersiz zaten var",
   "errorLabel": "Hata",
   "tabContentError": "Sekme içeriği oluşturulamadı.",
   "cannotHideAllTabs": "Her şeyi gizleyemezsin!",
