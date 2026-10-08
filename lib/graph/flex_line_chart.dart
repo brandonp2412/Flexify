@@ -95,9 +95,7 @@ void _drawFlexTooltip(
   if (left + boxWidth > container.width) {
     left = anchor.dx - 12 - boxWidth;
   }
-  left = left
-      .clamp(0.0, max(0.0, container.width - boxWidth))
-      .toDouble();
+  left = left.clamp(0.0, max(0.0, container.width - boxWidth)).toDouble();
   final top = anchor.dy
       .clamp(0.0, max(0.0, container.height - boxHeight))
       .toDouble();

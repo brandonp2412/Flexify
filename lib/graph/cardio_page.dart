@@ -218,9 +218,6 @@ class _CardioPageState extends State<CardioPage> {
     final shortDateFormat = context.select<SettingsState, String>(
       (settings) => settings.value.shortDateFormat,
     );
-    final showUnits = context.select<SettingsState, bool>(
-      (settings) => settings.value.showUnits,
-    );
     final desktop = isDesktopLayout(context);
     final theme = Theme.of(context);
 
@@ -291,15 +288,6 @@ class _CardioPageState extends State<CardioPage> {
         _savePreferences();
       },
     );
-    final showUnitControl =
-        showUnits &&
-        (metric == CardioMetric.distance || metric == CardioMetric.weight);
-    final unitItems = showUnitControl
-        ? (metric == CardioMetric.weight
-              ? strengthUnitMenuItems(context.l10n)
-              : cardioDistanceUnitMenuItems(context.l10n))
-        : <DropdownMenuItem<String>>[];
-
     final points = <FlexLineChartPoint>[];
     for (var index = 0; index < _data.length; index++) {
       final row = _data[index];
@@ -401,66 +389,9 @@ class _CardioPageState extends State<CardioPage> {
                   ],
                 )
               else ...[
-                Row(
-                  children: [
-                    Expanded(child: metricSelector),
-                    const SizedBox(width: 8),
-                    IconButton.filledTonal(
-                      icon: const Icon(Icons.tune),
-                      tooltip: context.l10n.options,
-                      onPressed: _showOptions,
-                    ),
-                  ],
-                ),
+                metricSelector,
                 const SizedBox(height: 8),
                 periodSelector,
-              ],
-              if (desktop) ...[
-                const SizedBox(height: 12),
-                GraphOptionsControls(
-                  compact: true,
-                  shortDateFormat: shortDateFormat,
-                  unitValue: showUnitControl ? _targetUnit : null,
-                  unitItems: unitItems,
-                  onUnitChanged: (value) {
-                    setState(() {
-                      _targetUnit = value;
-                    });
-                    setData();
-                  },
-                  startDate: start,
-                  endDate: end,
-                  onSelectStart: _selectStart,
-                  onClearStart: () {
-                    setState(() {
-                      start = null;
-                    });
-                    setData();
-                  },
-                  onSelectEnd: _selectEnd,
-                  onClearEnd: () {
-                    setState(() {
-                      end = null;
-                    });
-                    setData();
-                  },
-                  limit: limit,
-                  maxLimit: 100,
-                  onLimitChanged: (value) {
-                    setState(() {
-                      limit = value;
-                    });
-                    setData();
-                    _savePreferences();
-                  },
-                  timeBasedXAxis: useTimeBasedXAxis,
-                  onTimeBasedXAxisChanged: (value) {
-                    setState(() {
-                      useTimeBasedXAxis = value;
-                    });
-                    _savePreferences();
-                  },
-                ),
               ],
               const SizedBox(height: 8),
               Expanded(
@@ -482,7 +413,9 @@ class _CardioPageState extends State<CardioPage> {
                         ),
                       ),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 8),
+              GraphOptionsButton(onPressed: _showOptions),
+              const SizedBox(height: 8),
               Padding(
                 padding: const EdgeInsets.only(top: 8.0),
                 child: TextField(

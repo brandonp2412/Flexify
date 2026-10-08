@@ -76,16 +76,21 @@ void main() {
     expect(find.bySemanticsLabel('Reps'), findsOne);
     expect(find.bySemanticsLabel('Minutes'), findsNothing);
 
-    final cardio = find.widgetWithText(ListTile, 'Cardio');
-    await tester.ensureVisible(cardio);
+    final selector = find.byKey(const Key('exercise-kind-selector'));
+    final cardio = find.descendant(of: selector, matching: find.text('Cardio'));
+    final strength = find.descendant(
+      of: selector,
+      matching: find.text('Strength'),
+    );
+    await tester.ensureVisible(selector);
     await tester.tap(cardio);
     await tester.pumpAndSettle();
 
     expect(find.bySemanticsLabel('Reps'), findsNothing);
     expect(find.bySemanticsLabel('Minutes'), findsOne);
 
-    await tester.ensureVisible(cardio);
-    await tester.tap(cardio);
+    await tester.ensureVisible(selector);
+    await tester.tap(strength);
     await tester.pumpAndSettle();
 
     expect(find.bySemanticsLabel('Reps'), findsOne);
@@ -101,13 +106,21 @@ void main() {
     await tester.pumpAndSettle();
 
     final createdDate = find.widgetWithText(ListTile, 'Created date');
-    final cardio = find.widgetWithText(ListTile, 'Cardio');
+    final selector = find.byKey(const Key('exercise-kind-selector'));
 
     expect(createdDate, findsOne);
-    expect(cardio, findsOne);
+    expect(selector, findsOne);
+    expect(
+      find.descendant(of: selector, matching: find.text('Strength')),
+      findsOne,
+    );
+    expect(
+      find.descendant(of: selector, matching: find.text('Cardio')),
+      findsOne,
+    );
     expect(
       tester.getTopLeft(createdDate).dy,
-      lessThan(tester.getTopLeft(cardio).dy),
+      lessThan(tester.getTopLeft(selector).dy),
     );
   });
 

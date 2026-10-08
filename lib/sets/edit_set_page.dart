@@ -154,10 +154,10 @@ class _EditSetPageState extends State<EditSetPage> {
         unawaited(_confirmDiscard(result));
       },
       child: Scaffold(
-      resizeToAvoidBottomInset: true,
-      appBar: buildAppBar(),
-      body: buildBody(showBodyWeight),
-      floatingActionButton: buildSaveButton(),
+        resizeToAvoidBottomInset: true,
+        appBar: buildAppBar(),
+        body: buildBody(showBodyWeight),
+        floatingActionButton: buildSaveButton(),
       ),
     );
   }
@@ -243,24 +243,28 @@ class _EditSetPageState extends State<EditSetPage> {
                 if (showCategories) ...[categorySelector()],
                 if (showNotes) ...[notesField(), const SizedBox(height: 12.0)],
                 dateSelector(),
-                ListTile(
-                  title: Text(context.l10n.cardio),
-                  leading: _cardio
-                      ? const Icon(Icons.sports_gymnastics)
-                      : const Icon(Icons.fitness_center),
-                  contentPadding: EdgeInsets.zero,
-                  onTap: () {
-                    _markDirty();
-                    setState(() {
-                    _cardio = !_cardio;
-                    });
-                  },
-                  trailing: Switch(
-                    value: _cardio,
-                    onChanged: (value) {
+                SizedBox(
+                  width: double.infinity,
+                  child: SegmentedButton<bool>(
+                    key: const Key('exercise-kind-selector'),
+                    showSelectedIcon: false,
+                    segments: [
+                      ButtonSegment(
+                        value: false,
+                        icon: const Icon(Icons.fitness_center),
+                        label: Text(context.l10n.strength),
+                      ),
+                      ButtonSegment(
+                        value: true,
+                        icon: const Icon(Icons.directions_run),
+                        label: Text(context.l10n.cardio),
+                      ),
+                    ],
+                    selected: {_cardio},
+                    onSelectionChanged: (selection) {
                       _markDirty();
                       setState(() {
-                      _cardio = value;
+                        _cardio = selection.first;
                       });
                     },
                   ),
@@ -488,7 +492,7 @@ class _EditSetPageState extends State<EditSetPage> {
                       onChanged: (value) {
                         _markDirty();
                         setState(() {
-                        _category = value.isNotEmpty ? value : null;
+                          _category = value.isNotEmpty ? value : null;
                         });
                       },
                     );
@@ -564,7 +568,7 @@ class _EditSetPageState extends State<EditSetPage> {
                         : () {
                             _markDirty();
                             setState(() {
-                            _image = null;
+                              _image = null;
                             });
                           },
                     child: Image.file(
@@ -584,7 +588,7 @@ class _EditSetPageState extends State<EditSetPage> {
                     onPressed: () {
                       _markDirty();
                       setState(() {
-                      _image = null;
+                        _image = null;
                       });
                     },
                     icon: const Icon(Icons.delete_outline),
@@ -679,7 +683,7 @@ class _EditSetPageState extends State<EditSetPage> {
               onChanged: (value) {
                 _markDirty();
                 setState(() {
-                _name = value;
+                  _name = value;
                 });
               },
               validator: (value) {

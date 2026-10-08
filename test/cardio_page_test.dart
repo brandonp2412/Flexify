@@ -58,13 +58,13 @@ void main() {
     expect(find.text('Pace (distance / time)'), findsOne);
     expect(find.byTooltip('Edit'), findsOne);
 
-    await tester.tap(find.byTooltip('Options'));
+    await tester.tap(find.byKey(const Key('graph-options-button')));
     await tester.pumpAndSettle();
     expect(find.text('Start date'), findsOne);
     expect(find.text('Stop date'), findsOne);
   });
 
-  testWidgets('CardioPage exposes options inline on desktop', (
+  testWidgets('CardioPage opens options from below the graph on desktop', (
     WidgetTester tester,
   ) async {
     final harness = await FlexifyTestHarness.create();
@@ -74,7 +74,14 @@ void main() {
     addTearDown(tester.view.resetPhysicalSize);
     await pumpCardioPage(tester, harness, surfaceSize: const Size(1200, 800));
 
-    expect(find.byTooltip('Options'), findsNothing);
+    final optionsButton = find.byKey(const Key('graph-options-button'));
+    expect(optionsButton, findsOneWidget);
+    expect(tester.widget<TextButton>(optionsButton), isA<TextButton>());
+    expect(find.text('Start date'), findsNothing);
+
+    await tester.tap(optionsButton);
+    await tester.pumpAndSettle();
+
     expect(find.text('Start date'), findsOne);
     expect(find.text('Stop date'), findsOne);
     expect(find.text('Data points'), findsOne);

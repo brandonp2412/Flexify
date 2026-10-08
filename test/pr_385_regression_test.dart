@@ -118,7 +118,12 @@ void main() {
     ];
     await _openEditor(tester, harness, (_) => EditSetsPage(ids: ids));
 
-    await tester.tap(find.byType(Switch));
+    await tester.tap(
+      find.descendant(
+        of: find.byKey(const Key('exercise-kind-selector')),
+        matching: find.text('Cardio'),
+      ),
+    );
     await tester.pumpAndSettle();
     await _attemptBack(tester, find.byType(EditSetsPage));
 

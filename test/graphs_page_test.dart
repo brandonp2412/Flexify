@@ -123,7 +123,13 @@ void main() {
     await tester.tap(find.text('Global progress'));
     await tester.pumpAndSettle();
 
-    expect(find.byTooltip('Options'), findsNothing);
+    final optionsButton = find.byKey(const Key('graph-options-button'));
+    expect(optionsButton, findsOneWidget);
+    expect(find.text('Start date'), findsNothing);
+
+    await tester.tap(optionsButton);
+    await tester.pumpAndSettle();
+
     expect(find.text('Start date'), findsOne);
     expect(find.text('Stop date'), findsOne);
     expect(find.text('Data points'), findsOne);

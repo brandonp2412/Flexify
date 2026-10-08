@@ -1,4 +1,4 @@
-import 'package:drift/drift.dart';
+import 'package:drift/drift.dart' hide Column;
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/l10n/l10n.dart';
@@ -168,7 +168,7 @@ List<Widget> getWorkoutSettings(
                 ? TextAlign.start
                 : TextAlign.center,
           ),
-          leading: const Text('😊', style: TextStyle(fontSize: 24)),
+          leading: const Icon(Icons.celebration_outlined),
           onTap: () {
             db.settings.update().write(
               SettingsCompanion(notifications: Value(!settings.notifications)),
@@ -407,12 +407,38 @@ class _WorkoutSettingsState extends State<WorkoutSettings> {
   @override
   Widget build(BuildContext context) {
     _settings = context.watch<SettingsState>().value;
+    final desktop = isDesktopLayout(context);
+    final settings = getWorkoutSettings(context, '', _settings);
+    final groups = [
+      settings.sublist(0, 6),
+      settings.sublist(6, 9),
+      settings.sublist(9),
+    ];
+
+    Widget settingsGroup(List<Widget> children) {
+      final content = Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          for (var index = 0; index < children.length; index++) ...[
+            if (index > 0) const Divider(height: 1),
+            children[index],
+          ],
+        ],
+      );
+
+      if (desktop) return content;
+      return Card(
+        margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+        clipBehavior: Clip.antiAlias,
+        child: content,
+      );
+    }
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(title: Text(context.l10n.workouts)),
       body: ResponsiveSettingsList(
-        children: getWorkoutSettings(context, '', _settings),
+        children: groups.map(settingsGroup).toList(),
       ),
     );
   }
