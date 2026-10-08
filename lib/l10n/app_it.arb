@@ -64,6 +64,7 @@
   "navGraphs": "Grafici",
   "navTimer": "Timer",
   "navSettings": "Impostazioni",
+  "navCategories": "Categorie",
   "exerciseAlreadyExists": "Questo esercizio esiste già",
   "errorLabel": "Errore",
   "tabContentError": "Impossibile visualizzare il contenuto della scheda.",

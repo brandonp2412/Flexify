@@ -64,6 +64,7 @@
   "navGraphs": "Графики",
   "navTimer": "Таймер",
   "navSettings": "Настройки",
+  "navCategories": "Категории",
   "exerciseAlreadyExists": "Такое упражнение уже существует",
   "errorLabel": "Ошибка",
   "tabContentError": "Не удалось создать содержимое вкладки.",

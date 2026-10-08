@@ -112,6 +112,9 @@ class AppLocalizationsUr extends AppLocalizations {
   String get navSettings => 'ترتیبات';
 
   @override
+  String get navCategories => 'زمرے';
+
+  @override
   String get exerciseAlreadyExists => 'یہ ورزش پہلے سے موجود ہے';
 
   @override

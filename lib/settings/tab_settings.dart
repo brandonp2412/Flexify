@@ -23,6 +23,7 @@ class _TabSettingsState extends State<TabSettings> {
     (name: 'GraphsPage', enabled: false),
     (name: 'TimerPage', enabled: false),
     (name: 'SettingsPage', enabled: false),
+    (name: 'CategoriesPage', enabled: false),
   ];
 
   @override
@@ -204,6 +205,26 @@ class _TabSettingsState extends State<TabSettings> {
                           const Icon(Icons.settings),
                           SizedBox(width: 8),
                           Text(context.l10n.navSettings),
+                        ],
+                      ),
+                      trailing: ReorderableDragStartListener(
+                        index: index,
+                        child: const Icon(Icons.drag_handle),
+                      ),
+                    );
+                  } else if (tab.name == 'CategoriesPage') {
+                    return ListTile(
+                      key: Key(tab.name),
+                      onTap: () => setTab(tab.name, !tab.enabled),
+                      leading: Switch(
+                        value: tab.enabled,
+                        onChanged: (value) => setTab(tab.name, value),
+                      ),
+                      title: Row(
+                        children: [
+                          const Icon(Icons.category),
+                          SizedBox(width: 8),
+                          Text(context.l10n.navCategories),
                         ],
                       ),
                       trailing: ReorderableDragStartListener(

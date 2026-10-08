@@ -64,6 +64,7 @@
   "navGraphs": "Graphiques",
   "navTimer": "Minuteur",
   "navSettings": "Paramètres",
+  "navCategories": "Catégories",
   "exerciseAlreadyExists": "Cet exercice existe déjà",
   "errorLabel": "Erreur",
   "tabContentError": "Impossible d’afficher le contenu de l’onglet.",

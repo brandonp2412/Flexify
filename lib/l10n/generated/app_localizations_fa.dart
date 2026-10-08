@@ -112,6 +112,9 @@ class AppLocalizationsFa extends AppLocalizations {
   String get navSettings => 'تنظیمات';
 
   @override
+  String get navCategories => 'دسته‌بندی‌ها';
+
+  @override
   String get exerciseAlreadyExists => 'این تمرین از قبل وجود دارد';
 
   @override

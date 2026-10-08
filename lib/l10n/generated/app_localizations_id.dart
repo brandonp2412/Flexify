@@ -112,6 +112,9 @@ class AppLocalizationsId extends AppLocalizations {
   String get navSettings => 'Pengaturan';
 
   @override
+  String get navCategories => 'Kategori';
+
+  @override
   String get exerciseAlreadyExists => 'Latihan ini sudah ada';
 
   @override

@@ -112,6 +112,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get navSettings => 'Ayarlar';
 
   @override
+  String get navCategories => 'Kategoriler';
+
+  @override
   String get exerciseAlreadyExists => 'Bu egzersiz zaten var';
 
   @override

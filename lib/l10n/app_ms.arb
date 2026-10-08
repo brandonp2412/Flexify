@@ -133,6 +133,7 @@
     "description": "Navigation label for the rest timer."
   },
   "navSettings": "Tetapan",
+  "navCategories": "Kategori",
   "exerciseAlreadyExists": "Senaman ini sudah wujud",
   "@navSettings": {
     "description": "Navigation label for app settings."

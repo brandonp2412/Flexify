@@ -112,6 +112,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get navSettings => 'Cài đặt';
 
   @override
+  String get navCategories => 'Danh mục';
+
+  @override
   String get exerciseAlreadyExists => 'Bài tập này đã tồn tại';
 
   @override

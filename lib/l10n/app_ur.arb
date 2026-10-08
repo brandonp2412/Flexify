@@ -133,6 +133,7 @@
     "description": "Navigation label for the rest timer."
   },
   "navSettings": "ترتیبات",
+  "navCategories": "زمرے",
   "exerciseAlreadyExists": "یہ ورزش پہلے سے موجود ہے",
   "@navSettings": {
     "description": "Navigation label for app settings."

@@ -64,6 +64,7 @@
   "navGraphs": "Diagramme",
   "navTimer": "Timer",
   "navSettings": "Einstellungen",
+  "navCategories": "Kategorien",
   "exerciseAlreadyExists": "Diese Übung gibt es bereits",
   "errorLabel": "Fehler",
   "tabContentError": "Der Inhalt des Tabs konnte nicht angezeigt werden.",

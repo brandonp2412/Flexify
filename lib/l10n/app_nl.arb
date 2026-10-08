@@ -64,6 +64,7 @@
   "navGraphs": "Grafieken",
   "navTimer": "Timer",
   "navSettings": "Instellingen",
+  "navCategories": "Categorieën",
   "exerciseAlreadyExists": "Deze oefening bestaat al",
   "errorLabel": "Fout",
   "tabContentError": "De inhoud van het tabblad kon niet worden weergegeven.",

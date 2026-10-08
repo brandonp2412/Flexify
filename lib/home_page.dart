@@ -8,6 +8,7 @@ import 'package:flexify/plan/plans_page.dart';
 import 'package:flexify/plan/start_plan_page.dart';
 import 'package:flexify/responsive.dart';
 import 'package:flexify/sets/history_page.dart';
+import 'package:flexify/settings/category_management_page.dart';
 import 'package:flexify/settings/settings_page.dart';
 import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/settings/whats_new.dart';
@@ -250,6 +251,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         return TimerPage(tabController: _controller);
       } else if (tab == 'SettingsPage') {
         return const SettingsPage();
+      } else if (tab == 'CategoriesPage') {
+        return const CategoryManagementPage(asTab: true);
       } else {
         return ErrorWidget(context.l10n.tabContentError);
       }

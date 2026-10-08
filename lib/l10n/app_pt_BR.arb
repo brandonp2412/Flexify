@@ -64,6 +64,7 @@
   "navGraphs": "Gráficos",
   "navTimer": "Temporizador",
   "navSettings": "Configurações",
+  "navCategories": "Categorias",
   "exerciseAlreadyExists": "Este exercício já existe",
   "errorLabel": "Erro",
   "tabContentError": "Não foi possível exibir o conteúdo da aba.",

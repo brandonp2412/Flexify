@@ -1,21 +1,41 @@
+import 'package:flexify/bottom_nav.dart';
+import 'package:flexify/category/category_exercises_page.dart';
 import 'package:flexify/database/categories.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/l10n/l10n.dart';
+import 'package:flexify/platform_page_route.dart';
+import 'package:flexify/responsive.dart';
 import 'package:flutter/material.dart';
 
 /// Lets people create, rename, merge, and remove workout categories.
+///
+/// With [asTab] it serves as the Categories home tab: it is titled after the
+/// tab, clears the navigation bar, and opens a category's exercises on tap.
 class CategoryManagementPage extends StatelessWidget {
-  const CategoryManagementPage({super.key});
+  const CategoryManagementPage({super.key, this.asTab = false});
+
+  final bool asTab;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.manageCategories)),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => _showCategoryEditor(context),
-        icon: const Icon(Icons.add),
-        label: Text(l10n.newCategory),
+      appBar: AppBar(
+        title: Text(asTab ? l10n.navCategories : l10n.manageCategories),
+      ),
+      floatingActionButton: Padding(
+        padding: EdgeInsets.only(
+          bottom: !asTab
+              ? 0
+              : isDesktopLayout(context)
+              ? 16
+              : bottomNavHeight,
+        ),
+        child: FloatingActionButton.extended(
+          onPressed: () => _showCategoryEditor(context),
+          icon: const Icon(Icons.add),
+          label: Text(l10n.newCategory),
+        ),
       ),
       body: StreamBuilder<List<CategorySummary>>(
         stream: watchCategorySummaries(),
@@ -32,6 +52,14 @@ class CategoryManagementPage extends StatelessWidget {
               return ListTile(
                 title: Text(summary.category.name),
                 subtitle: Text(l10n.categoryUsageCount(summary.usageCount)),
+                onTap: asTab
+                    ? () => Navigator.of(context).push(
+                        FlexPageRoute(
+                          builder: (_) =>
+                              CategoryExercisesPage(category: summary.category),
+                        ),
+                      )
+                    : null,
                 trailing: PopupMenuButton<_CategoryAction>(
                   onSelected: (action) => switch (action) {
                     _CategoryAction.rename => _showCategoryEditor(
