@@ -64,6 +64,7 @@
   "navGraphs": "图表",
   "navTimer": "计时器",
   "navSettings": "设置",
+  "exerciseAlreadyExists": "该动作已存在",
   "errorLabel": "错误",
   "tabContentError": "无法显示此标签页的内容。",
   "cannotHideAllTabs": "不能隐藏所有标签页！",

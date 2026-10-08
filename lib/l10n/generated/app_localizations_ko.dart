@@ -111,6 +111,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get navSettings => '설정';
 
   @override
+  String get exerciseAlreadyExists => '이미 있는 운동입니다';
+
+  @override
   String get errorLabel => '오류';
 
   @override

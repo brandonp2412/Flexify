@@ -111,6 +111,9 @@ class AppLocalizationsTh extends AppLocalizations {
   String get navSettings => 'การตั้งค่า';
 
   @override
+  String get exerciseAlreadyExists => 'มีการออกกำลังกายนี้อยู่แล้ว';
+
+  @override
   String get errorLabel => 'ข้อผิดพลาด';
 
   @override

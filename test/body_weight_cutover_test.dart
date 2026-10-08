@@ -112,7 +112,7 @@ void main() {
 
       final relativeBefore = await getStrengthData(
         target: 'kg',
-        name: 'Snapshot bench',
+        exercise: (name: 'Snapshot bench', category: null),
         metric: StrengthMetric.relativeStrength,
         period: Period.day,
         start: null,
@@ -135,7 +135,7 @@ void main() {
 
       final relativeAfter = await getStrengthData(
         target: 'kg',
-        name: 'Snapshot bench',
+        exercise: (name: 'Snapshot bench', category: null),
         metric: StrengthMetric.relativeStrength,
         period: Period.day,
         start: null,

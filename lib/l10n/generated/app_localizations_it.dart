@@ -111,6 +111,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get navSettings => 'Impostazioni';
 
   @override
+  String get exerciseAlreadyExists => 'Questo esercizio esiste già';
+
+  @override
   String get errorLabel => 'Errore';
 
   @override

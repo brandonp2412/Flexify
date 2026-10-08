@@ -4,6 +4,7 @@ import 'package:flexify/bottom_nav.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/exercise_catalog.dart';
 import 'package:flexify/database/exercise_analytics.dart';
+import 'package:flexify/database/exercise_key.dart';
 import 'package:flexify/empty_state.dart';
 import 'package:flexify/graph/edit_graph_page.dart';
 import 'package:flexify/graph/flex_line_chart.dart';
@@ -21,7 +22,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class StrengthPage extends StatefulWidget {
-  final String initialName;
+  final ExerciseKey initialExercise;
   final String initialUnit;
   final List<StrengthData> initialData;
   final TabController tabCtrl;
@@ -29,7 +30,7 @@ class StrengthPage extends StatefulWidget {
 
   const StrengthPage({
     super.key,
-    required this.initialName,
+    required this.initialExercise,
     required this.initialUnit,
     required this.initialData,
     required this.tabCtrl,
@@ -43,7 +44,7 @@ class StrengthPage extends StatefulWidget {
 class _StrengthPageState extends State<StrengthPage> {
   late List<StrengthData> _data;
   late String _targetUnit;
-  late String _exerciseName;
+  late ExerciseKey _exercise;
   late bool useTimeBasedXAxis;
   Timer? _refreshTimer;
   Timer? _notesDebounce;
@@ -61,7 +62,7 @@ class _StrengthPageState extends State<StrengthPage> {
     super.initState();
     _data = widget.initialData;
     _targetUnit = widget.initialUnit;
-    _exerciseName = widget.initialName;
+    _exercise = widget.initialExercise;
     final settings = context.read<SettingsState>().value;
     useTimeBasedXAxis = settings.defaultGraphTimeBasedXAxis;
     limit = settings.defaultGraphLimit;
@@ -78,7 +79,7 @@ class _StrengthPageState extends State<StrengthPage> {
   }
 
   Future<void> _loadPreferences() async {
-    final pref = await getExerciseByName(_exerciseName);
+    final pref = await getExercise(_exercise);
     if (pref == null || !mounted) return;
     setState(() {
       metric = StrengthMetric.values.firstWhere(
@@ -98,7 +99,7 @@ class _StrengthPageState extends State<StrengthPage> {
 
   Future<void> _savePreferences() async {
     if (widget.bodyWeight) return;
-    final exercise = await getExerciseByName(_exerciseName);
+    final exercise = await getExercise(_exercise);
     if (exercise == null) return;
     await updateExerciseGraphPreferences(
       exerciseId: exercise.id,
@@ -243,7 +244,7 @@ class _StrengthPageState extends State<StrengthPage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text(_exerciseName),
+        title: Text(_exercise.name),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
@@ -253,13 +254,13 @@ class _StrengthPageState extends State<StrengthPage> {
             onPressed: () async {
               final exerciseSets = widget.bodyWeight
                   ? await getBodyWeightGraphHistory()
-                  : await getGraphHistory(_exerciseName);
+                  : await getGraphHistory(_exercise);
               if (!context.mounted) return;
 
               await Navigator.of(context).push(
                 FlexPageRoute(
                   builder: (context) => GraphHistoryPage(
-                    name: _exerciseName,
+                    exercise: _exercise,
                     initialSets: exerciseSets,
                     tabController: widget.tabCtrl,
                     bodyWeight: widget.bodyWeight,
@@ -279,14 +280,14 @@ class _StrengthPageState extends State<StrengthPage> {
           if (!widget.bodyWeight)
             IconButton(
               onPressed: () async {
-                String? newName = await Navigator.of(context).push(
+                final updated = await Navigator.of(context).push<ExerciseKey>(
                   FlexPageRoute(
-                    builder: (context) => EditGraphPage(name: _exerciseName),
+                    builder: (context) => EditGraphPage(exercise: _exercise),
                   ),
                 );
-                if (mounted && newName != null) {
+                if (mounted && updated != null) {
                   setState(() {
-                    _exerciseName = newName;
+                    _exercise = updated;
                   });
                 }
               },
@@ -564,7 +565,7 @@ class _StrengthPageState extends State<StrengthPage> {
           )
         : await getStrengthData(
             target: _targetUnit,
-            name: _exerciseName,
+            exercise: _exercise,
             metric: metric,
             period: period,
             start: start,
@@ -614,7 +615,7 @@ class _StrengthPageState extends State<StrengthPage> {
     if (widget.bodyWeight || index < 0 || index >= _data.length) return;
     final row = _data[index];
     final desktop = isDesktopLayout(context);
-    final exerciseSet = await getGraphPointSet(_exerciseName, row.created);
+    final exerciseSet = await getGraphPointSet(_exercise, row.created);
     if (!mounted || exerciseSet == null) return;
 
     await Navigator.of(context).push(

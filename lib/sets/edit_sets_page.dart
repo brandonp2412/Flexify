@@ -608,7 +608,10 @@ class _EditSetsPageState extends State<EditSetsPage> {
               image: original.image,
               defaultRestDurationMs: restMs,
             )
-          : await getExerciseByName(original.name);
+          : await getExercise((
+              name: original.name,
+              category: original.category,
+            ));
       if (exercise == null) continue;
 
       final updated = original.copyWith(

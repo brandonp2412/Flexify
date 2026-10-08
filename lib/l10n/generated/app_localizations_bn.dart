@@ -111,6 +111,9 @@ class AppLocalizationsBn extends AppLocalizations {
   String get navSettings => 'সেটিংস';
 
   @override
+  String get exerciseAlreadyExists => 'এই ব্যায়ামটি ইতিমধ্যে আছে';
+
+  @override
   String get errorLabel => 'ত্রুটি';
 
   @override

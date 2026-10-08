@@ -140,7 +140,8 @@ void main() {
     await _openEditor(
       tester,
       harness,
-      (_) => const EditGraphPage(name: 'Bench press'),
+      (_) =>
+          const EditGraphPage(exercise: (name: 'Bench press', category: null)),
     );
 
     expect(find.bySemanticsLabel('Rest minutes'), findsOneWidget);
@@ -156,7 +157,8 @@ void main() {
     await _openEditor(
       tester,
       harness,
-      (_) => const EditGraphPage(name: 'Bench press'),
+      (_) =>
+          const EditGraphPage(exercise: (name: 'Bench press', category: null)),
     );
 
     final unitDropdown = find.byWidgetPredicate(

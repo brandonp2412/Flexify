@@ -32,11 +32,11 @@ Future<void> pumpCardioPage(
       length: 1,
       child: CardioPage(
         tabCtrl: MockTabController(),
-        initialName: 'Run',
+        initialExercise: (name: 'Run', category: 'Arms'),
         initialUnit: 'km',
         initialData: await getCardioData(
           target: 'km',
-          name: 'Run',
+          exercise: (name: 'Run', category: 'Arms'),
           metric: CardioMetric.pace,
           period: Period.day,
           start: null,

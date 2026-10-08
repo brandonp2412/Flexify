@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart' as drift;
 import 'package:flexify/database/database.dart';
 import 'package:flexify/database/exercise_catalog.dart';
+import 'package:flexify/database/exercise_key.dart';
 import 'package:flexify/graph/add_exercise_page.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
@@ -17,7 +18,7 @@ class SwapWorkout extends StatefulWidget {
 }
 
 class _SwapWorkoutState extends State<SwapWorkout> {
-  late Stream<List<Exercise>> _distinctExercises;
+  late Stream<List<({Exercise exercise, String? category})>> _distinctExercises;
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
   Set<int> _unavailableExerciseIds = const {};
@@ -31,7 +32,7 @@ class _SwapWorkoutState extends State<SwapWorkout> {
       });
     });
 
-    _distinctExercises = watchExerciseCatalog();
+    _distinctExercises = watchExerciseCatalogEntries();
     _loadUnavailableExercises();
   }
 
@@ -131,7 +132,7 @@ class _SwapWorkoutState extends State<SwapWorkout> {
             onTap: _createAndSwap,
           ),
           Expanded(
-            child: StreamBuilder<List<Exercise>>(
+            child: StreamBuilder<List<({Exercise exercise, String? category})>>(
               stream: _distinctExercises,
               builder: (context, snapshot) {
                 if (snapshot.hasError) {
@@ -141,11 +142,19 @@ class _SwapWorkoutState extends State<SwapWorkout> {
                   return const SizedBox();
                 }
 
+                final sharedNames = sharedExerciseNames(
+                  snapshot.data!.map(
+                    (entry) =>
+                        (name: entry.exercise.name, category: entry.category),
+                  ),
+                );
                 final exercises = snapshot.data!
                     .where(
-                      (exercise) =>
-                          !_unavailableExerciseIds.contains(exercise.id) &&
-                          exercise.name.toLowerCase().contains(
+                      (entry) =>
+                          !_unavailableExerciseIds.contains(
+                            entry.exercise.id,
+                          ) &&
+                          entry.exercise.name.toLowerCase().contains(
                             _searchQuery.toLowerCase(),
                           ),
                     )
@@ -154,10 +163,15 @@ class _SwapWorkoutState extends State<SwapWorkout> {
                 return ListView.builder(
                   itemCount: exercises.length,
                   itemBuilder: (context, index) {
-                    final exercise = exercises[index];
+                    final entry = exercises[index];
                     return ListTile(
-                      title: Text(exercise.name),
-                      onTap: () => _swapToExercise(exercise),
+                      title: Text(
+                        exerciseLabel((
+                          name: entry.exercise.name,
+                          category: entry.category,
+                        ), sharedNames),
+                      ),
+                      onTap: () => _swapToExercise(entry.exercise),
                     );
                   },
                 );

@@ -280,7 +280,7 @@ void main() {
 
       final saved = await getLatestExerciseSet(
         database,
-        exerciseName: exercise,
+        exercise: (name: exercise, category: null),
       );
       expect(saved!.name, exercise, reason: locale.toLanguageTag());
       expect(saved.reps, 5, reason: locale.toLanguageTag());
@@ -322,7 +322,7 @@ void main() {
 
     final saved = await getExerciseSetsForExercise(
       database,
-      exerciseName: exercise,
+      exercise: (name: exercise, category: null),
     );
     expect(saved, hasLength(1));
   });
@@ -371,7 +371,10 @@ void main() {
     await tester.tap(find.text(l10n.actionSave));
     await tester.pumpAndSettle();
 
-    final saved = await getLatestExerciseSet(database, exerciseName: exercise);
+    final saved = await getLatestExerciseSet(
+      database,
+      exercise: (name: exercise, category: null),
+    );
     expect(saved!.name, exercise);
     expect(saved.notes, note);
     expect(saved.weight, 50.5);

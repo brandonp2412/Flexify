@@ -112,6 +112,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get navSettings => 'सेटिंग्स';
 
   @override
+  String get exerciseAlreadyExists => 'यह व्यायाम पहले से मौजूद है';
+
+  @override
   String get errorLabel => 'त्रुटि';
 
   @override

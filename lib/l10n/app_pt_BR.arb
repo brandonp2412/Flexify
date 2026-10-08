@@ -64,6 +64,7 @@
   "navGraphs": "Gráficos",
   "navTimer": "Temporizador",
   "navSettings": "Configurações",
+  "exerciseAlreadyExists": "Este exercício já existe",
   "errorLabel": "Erro",
   "tabContentError": "Não foi possível exibir o conteúdo da aba.",
   "cannotHideAllTabs": "Não é possível ocultar tudo!",

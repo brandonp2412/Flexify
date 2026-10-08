@@ -222,7 +222,7 @@ Future<ExerciseSetView> _insertE2ESet({
 }
 
 Future<List<ExerciseSetView>> _setsNamed(String name) =>
-    getExerciseSetsForExercise(app.db, exerciseName: name);
+    getExerciseSetsForExercise(app.db, exercise: (name: name, category: null));
 
 Future<ExerciseSetView> _singleSet(String name) async =>
     (await _setsNamed(name)).single;

@@ -111,6 +111,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get navSettings => 'الإعدادات';
 
   @override
+  String get exerciseAlreadyExists => 'هذا التمرين موجود بالفعل';
+
+  @override
   String get errorLabel => 'خطأ';
 
   @override

@@ -64,6 +64,7 @@
   "navGraphs": "Gráficos",
   "navTimer": "Temporizador",
   "navSettings": "Definições",
+  "exerciseAlreadyExists": "Este exercício já existe",
   "errorLabel": "Erro",
   "tabContentError": "Não foi possível apresentar o conteúdo do separador.",
   "cannotHideAllTabs": "Não é possível ocultar todos os separadores!",

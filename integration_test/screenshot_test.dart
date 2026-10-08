@@ -283,7 +283,7 @@ void main() {
           navigateToPage: (context) async {
             final data = await getStrengthData(
               target: 'kg',
-              name: screenshotExercise,
+              exercise: (name: screenshotExercise, category: 'Arms'),
               metric: StrengthMetric.bestWeight,
               period: Period.day,
               start: null,
@@ -295,7 +295,7 @@ void main() {
               context: context,
               page: StrengthPage(
                 tabCtrl: MockTabController(),
-                initialName: 'Shoulder press',
+                initialExercise: (name: 'Shoulder press', category: 'Arms'),
                 initialUnit: 'kg',
                 initialData: data,
               ),

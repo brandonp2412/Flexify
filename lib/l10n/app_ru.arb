@@ -64,6 +64,7 @@
   "navGraphs": "Графики",
   "navTimer": "Таймер",
   "navSettings": "Настройки",
+  "exerciseAlreadyExists": "Такое упражнение уже существует",
   "errorLabel": "Ошибка",
   "tabContentError": "Не удалось создать содержимое вкладки.",
   "cannotHideAllTabs": "Нельзя скрыть все вкладки!",

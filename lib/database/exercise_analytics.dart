@@ -4,6 +4,7 @@ import 'package:drift/drift.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/body_weight_repository.dart';
 import 'package:flexify/database/database.dart';
+import 'package:flexify/database/exercise_key.dart';
 import 'package:flexify/database/exercise_set_repository.dart';
 import 'package:flexify/graph/cardio_data.dart';
 import 'package:flexify/graph/strength_data.dart';
@@ -31,6 +32,9 @@ class GraphExerciseSummary {
 
   String get selectionKey =>
       bodyWeight ? 'body-weight' : 'exercise:$exerciseId';
+
+  ExerciseKey get exercise => (name: name, category: category);
+
   final String unit;
   final bool cardio;
   final double weight;
@@ -42,7 +46,7 @@ class GraphExerciseSummary {
   final String? category;
 }
 
-typedef Rpm = ({String name, double rpm, double weight});
+typedef Rpm = ({ExerciseKey exercise, double rpm, double weight});
 
 String _periodKey(DateTime value, Period period) {
   final date = value.toLocal();
@@ -316,7 +320,7 @@ Future<List<StrengthData>> getBodyWeightData({
 
 Future<List<StrengthData>> getStrengthData({
   required String target,
-  required String name,
+  required ExerciseKey exercise,
   required StrengthMetric metric,
   required Period period,
   required DateTime? start,
@@ -325,7 +329,7 @@ Future<List<StrengthData>> getStrengthData({
 }) async {
   final sets = await getExerciseSetsForExercise(
     db,
-    exerciseName: name,
+    exercise: exercise,
     startDate: start,
     endDate: end,
     order: OrderingMode.asc,
@@ -406,7 +410,7 @@ CardioData _cardioBucket(
 
 Future<List<CardioData>> getCardioData({
   Period period = Period.day,
-  String name = '',
+  required ExerciseKey exercise,
   CardioMetric metric = CardioMetric.pace,
   String target = 'km',
   DateTime? start,
@@ -415,7 +419,7 @@ Future<List<CardioData>> getCardioData({
 }) async {
   final sets = await getExerciseSetsForExercise(
     db,
-    exerciseName: name,
+    exercise: exercise,
     startDate: start ?? DateTime(0),
     endDate: end ?? DateTime.now().toLocal().add(const Duration(days: 1)),
     order: OrderingMode.asc,
@@ -490,14 +494,15 @@ Future<List<Rpm>> getRpms() async {
   final sets = await getExerciseSets(db, startDate: cutoff, cardio: false)
     ..sort((a, b) => a.created.compareTo(b.created));
 
-  final byName = <String, List<ExerciseSetView>>{};
+  final byExercise = <ExerciseKey, List<ExerciseSetView>>{};
   for (final set in sets) {
-    byName.putIfAbsent(set.name, () => []).add(set);
+    byExercise
+        .putIfAbsent((name: set.name, category: set.category), () => [])
+        .add(set);
   }
 
-  final grouped = <String, List<double>>{};
-  final weights = <String, double>{};
-  for (final entry in byName.entries) {
+  final grouped = <(ExerciseKey, double), List<double>>{};
+  for (final entry in byExercise.entries) {
     ExerciseSetView? previous;
     for (final set in entry.value) {
       if (previous != null) {
@@ -506,9 +511,7 @@ Future<List<Rpm>> getRpms() async {
         if (minutes > 0 && minutes <= 5) {
           final rpm = set.reps / minutes;
           if (rpm >= 0.1 && rpm <= 10) {
-            final key = '${entry.key}\u0000${set.weight}';
-            grouped.putIfAbsent(key, () => []).add(rpm);
-            weights[key] = set.weight;
+            grouped.putIfAbsent((entry.key, set.weight), () => []).add(rpm);
           }
         }
       }
@@ -517,12 +520,11 @@ Future<List<Rpm>> getRpms() async {
   }
 
   return grouped.entries.map((entry) {
-    final split = entry.key.indexOf('\u0000');
     final values = entry.value;
     return (
-      name: entry.key.substring(0, split),
+      exercise: entry.key.$1,
       rpm: values.reduce((a, b) => a + b) / values.length,
-      weight: weights[entry.key]!,
+      weight: entry.key.$2,
     );
   }).toList();
 }
@@ -619,14 +621,10 @@ Stream<List<GraphExerciseSummary>> watchGraphs() {
 }
 
 Future<List<ExerciseSetView>> getGraphHistory(
-  String exerciseName, {
+  ExerciseKey exercise, {
   int limit = 20,
 }) {
-  return getExerciseSetsForExercise(
-    db,
-    exerciseName: exerciseName,
-    limit: limit,
-  );
+  return getExerciseSetsForExercise(db, exercise: exercise, limit: limit);
 }
 
 Future<List<ExerciseSetView>> getBodyWeightGraphHistory({
@@ -653,16 +651,16 @@ Future<List<ExerciseSetView>> getBodyWeightGraphHistory({
 }
 
 Future<ExerciseSetView?> getGraphPointSet(
-  String exerciseName,
+  ExerciseKey exercise,
   DateTime timestamp,
 ) {
   return getExerciseSetForExerciseAt(
     db,
-    exerciseName: exerciseName,
+    exercise: exercise,
     timestamp: timestamp,
   );
 }
 
-Future<int> countGraphSets(Iterable<String> exerciseNames) {
-  return countExerciseSetsForExercises(db, exerciseNames);
+Future<int> countGraphSets(Iterable<ExerciseKey> exercises) {
+  return countExerciseSetsForExercises(db, exercises);
 }

@@ -133,6 +133,7 @@
     "description": "Navigation label for the rest timer."
   },
   "navSettings": "Cài đặt",
+  "exerciseAlreadyExists": "Bài tập này đã tồn tại",
   "@navSettings": {
     "description": "Navigation label for app settings."
   },

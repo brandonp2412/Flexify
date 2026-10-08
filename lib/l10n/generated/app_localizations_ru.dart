@@ -111,6 +111,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get navSettings => 'Настройки';
 
   @override
+  String get exerciseAlreadyExists => 'Такое упражнение уже существует';
+
+  @override
   String get errorLabel => 'Ошибка';
 
   @override

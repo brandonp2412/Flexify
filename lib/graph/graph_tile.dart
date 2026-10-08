@@ -16,6 +16,7 @@ enum _GraphContextAction { edit, delete }
 
 class GraphTile extends StatelessWidget {
   final GraphExerciseSummary exerciseSet;
+  final String? label;
   final Set<String> selected;
   final Function(String) onSelect;
   final TabController tabCtrl;
@@ -28,6 +29,7 @@ class GraphTile extends StatelessWidget {
     required this.selected,
     required this.onSelect,
     required this.exerciseSet,
+    this.label,
     required this.tabCtrl,
     this.timeBasedXAxis = false,
     this.onEdit,
@@ -114,7 +116,7 @@ class GraphTile extends StatelessWidget {
             : null,
         leading: leading,
         title: Text(
-          exerciseSet.name,
+          label ?? exerciseSet.name,
           style: desktop
               ? Theme.of(
                   context,
@@ -148,6 +150,8 @@ class GraphTile extends StatelessWidget {
             return;
           }
 
+          final exercise = exerciseSet.exercise;
+
           if (exerciseSet.bodyWeight) {
             final data = await getBodyWeightData(
               target: exerciseSet.unit,
@@ -160,7 +164,7 @@ class GraphTile extends StatelessWidget {
             Navigator.of(context).push(
               FlexPageRoute(
                 builder: (context) => StrengthPage(
-                  initialName: exerciseSet.name,
+                  initialExercise: exercise,
                   initialUnit: exerciseSet.unit,
                   initialData: data,
                   tabCtrl: tabCtrl,
@@ -174,7 +178,7 @@ class GraphTile extends StatelessWidget {
           if (exerciseSet.cardio) {
             final data = await getCardioData(
               target: exerciseSet.unit,
-              name: exerciseSet.name,
+              exercise: exercise,
               metric: _isWeightUnit(exerciseSet.unit)
                   ? CardioMetric.weight
                   : CardioMetric.pace,
@@ -187,7 +191,7 @@ class GraphTile extends StatelessWidget {
               FlexPageRoute(
                 builder: (context) => CardioPage(
                   tabCtrl: tabCtrl,
-                  initialName: exerciseSet.name,
+                  initialExercise: exercise,
                   initialUnit: exerciseSet.unit,
                   initialData: data,
                 ),
@@ -198,7 +202,7 @@ class GraphTile extends StatelessWidget {
 
           final data = await getStrengthData(
             target: exerciseSet.unit,
-            name: exerciseSet.name,
+            exercise: exercise,
             metric: StrengthMetric.bestWeight,
             period: Period.day,
             start: null,
@@ -210,7 +214,7 @@ class GraphTile extends StatelessWidget {
           Navigator.of(context).push(
             FlexPageRoute(
               builder: (context) => StrengthPage(
-                initialName: exerciseSet.name,
+                initialExercise: exercise,
                 initialUnit: exerciseSet.unit,
                 initialData: data,
                 tabCtrl: tabCtrl,

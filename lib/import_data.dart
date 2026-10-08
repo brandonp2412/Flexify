@@ -351,12 +351,16 @@ $version
         for (final rawExerciseName in exerciseNames) {
           final exerciseName = rawExerciseName.trim();
           if (exerciseName.isEmpty) continue;
-          var exercise = await getExerciseByName(exerciseName);
-          exercise ??= await createExerciseDefinition(
-            name: exerciseName,
-            cardio: false,
-            displayUnit: 'kg',
-          );
+          // Plan CSVs store names only, so a name shared across categories
+          // resolves to the oldest matching exercise.
+          final matches = await getExercisesByName(exerciseName);
+          final exercise = matches.isNotEmpty
+              ? matches.first
+              : await createExerciseDefinition(
+                  name: exerciseName,
+                  cardio: false,
+                  displayUnit: 'kg',
+                );
           planExercisesToInsert.add(
             PlanExercisesCompanion.insert(
               planId: id,

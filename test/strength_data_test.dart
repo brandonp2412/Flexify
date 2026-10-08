@@ -16,7 +16,7 @@ void main() {
 
     final data = await getStrengthData(
       target: 'lb',
-      name: 'Bench press',
+      exercise: (name: 'Bench press', category: null),
       metric: StrengthMetric.bestWeight,
       period: Period.day,
       start: testNow.subtract(const Duration(days: 1)),
@@ -40,7 +40,7 @@ void main() {
 
     final data = await getStrengthData(
       target: 'kg',
-      name: 'Bench press',
+      exercise: (name: 'Bench press', category: null),
       metric: StrengthMetric.volume,
       period: Period.day,
       start: testNow.subtract(const Duration(days: 1)),

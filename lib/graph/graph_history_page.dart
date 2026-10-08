@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart' hide Column;
 import 'package:flexify/database/database.dart';
 import 'package:flexify/database/exercise_analytics.dart';
+import 'package:flexify/database/exercise_key.dart';
 import 'package:flexify/database/exercise_set_repository.dart';
 import 'package:flexify/empty_state.dart';
 import 'package:flexify/l10n/l10n.dart';
@@ -14,14 +15,14 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class GraphHistoryPage extends StatefulWidget {
-  final String name;
+  final ExerciseKey exercise;
   final List<ExerciseSetView> initialSets;
   final TabController tabController;
   final bool bodyWeight;
 
   const GraphHistoryPage({
     super.key,
-    required this.name,
+    required this.exercise,
     required this.initialSets,
     required this.tabController,
     this.bodyWeight = false,
@@ -53,7 +54,7 @@ class _GraphHistoryPageState extends State<GraphHistoryPage> {
             if (_sets.isEmpty) {
               return AppEmptyState(
                 icon: Icons.history_rounded,
-                title: context.l10n.noHistoryFor(widget.name),
+                title: context.l10n.noHistoryFor(widget.exercise.name),
                 message: context.l10n.completeSetsForHistory,
               );
             }
@@ -77,7 +78,7 @@ class _GraphHistoryPageState extends State<GraphHistoryPage> {
   }
 
   AppBar _buildAppBar() {
-    if (_selection.isEmpty) return AppBar(title: Text(widget.name));
+    if (_selection.isEmpty) return AppBar(title: Text(widget.exercise.name));
 
     return AppBar(
       leading: IconButton(
@@ -186,7 +187,7 @@ class _GraphHistoryPageState extends State<GraphHistoryPage> {
         ? await getBodyWeightGraphHistory(limit: limit)
         : await getExerciseSetsForExercise(
             db,
-            exerciseName: widget.name,
+            exercise: widget.exercise,
             limit: limit,
           );
     if (!mounted) return;

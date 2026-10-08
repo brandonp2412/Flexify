@@ -510,7 +510,6 @@ class $ExercisesTable extends Exercises
     false,
     type: DriftSqlType.string,
     requiredDuringInsert: true,
-    defaultConstraints: GeneratedColumn.constraintIsAlways('UNIQUE'),
   );
   static const VerificationMeta _kindMeta = const VerificationMeta('kind');
   @override
@@ -5564,6 +5563,10 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     'exercises_category_id',
     'CREATE INDEX exercises_category_id ON exercises (category_id)',
   );
+  late final Index exercisesNameCategory = Index(
+    'exercises_name_category',
+    'CREATE UNIQUE INDEX exercises_name_category ON exercises (name, COALESCE(category_id, 0))',
+  );
   late final Index workoutsPlanEndedStarted = Index(
     'workouts_plan_ended_started',
     'CREATE INDEX workouts_plan_ended_started ON workouts (plan_id, ended_at, started_at DESC, id DESC)',
@@ -5610,6 +5613,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     settings,
     planExercises,
     exercisesCategoryId,
+    exercisesNameCategory,
     workoutsPlanEndedStarted,
     workoutsActivePlan,
     exerciseSetsTimestamp,

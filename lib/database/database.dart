@@ -1068,6 +1068,10 @@ class AppDatabase extends _$AppDatabase {
               await m.createIndex(schema.planExercisesPlanExercise);
               await m.createIndex(schema.planExercisesExerciseId);
             },
+            from65To66: (m, schema) async {
+              await m.alterTable(TableMigration(schema.exercises));
+              await m.createIndex(schema.exercisesNameCategory);
+            },
           );
           await transaction(() async {
             await upgrade(m, from, to);
@@ -1089,5 +1093,5 @@ class AppDatabase extends _$AppDatabase {
   }
 
   @override
-  int get schemaVersion => 65;
+  int get schemaVersion => 66;
 }

@@ -4,6 +4,7 @@ import 'package:drift/drift.dart' hide Column;
 import 'package:flexify/audio/safe_audio_player.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flexify/database/database.dart';
+import 'package:flexify/database/exercise_key.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/responsive.dart';
@@ -433,9 +434,9 @@ class _TimerSettingsState extends State<TimerSettings> {
   );
 
   final SafeAudioPlayer _player = SafeAudioPlayer(enabled: !kIsWeb);
-  List<Exercise> _exercisesWithCustomTimers = [];
-  final Map<String, TextEditingController> _minuteControllers = {};
-  final Map<String, TextEditingController> _secondControllers = {};
+  List<({Exercise exercise, String? category})> _exercisesWithCustomTimers = [];
+  final Map<int, TextEditingController> _minuteControllers = {};
+  final Map<int, TextEditingController> _secondControllers = {};
 
   @override
   void initState() {
@@ -444,29 +445,42 @@ class _TimerSettingsState extends State<TimerSettings> {
   }
 
   Future<void> _loadExercisesWithCustomTimers() async {
-    final exercises =
-        await (db.exercises.select()
+    final rows =
+        await (db.exercises.select().join([
+                leftOuterJoin(
+                  db.categories,
+                  db.categories.id.equalsExp(db.exercises.categoryId),
+                ),
+              ])
               ..where(
-                (exercise) =>
-                    exercise.defaultRestDurationMs.isNotNull() &
-                    exercise.archived.equals(false),
+                db.exercises.defaultRestDurationMs.isNotNull() &
+                    db.exercises.archived.equals(false),
               )
-              ..orderBy([(exercise) => OrderingTerm.asc(exercise.name)]))
+              ..orderBy([
+                OrderingTerm.asc(db.exercises.name),
+                OrderingTerm.asc(db.categories.name),
+              ]))
             .get();
     if (!mounted) return;
+    final exercises = [
+      for (final row in rows)
+        (
+          exercise: row.readTable(db.exercises),
+          category: row.readTableOrNull(db.categories)?.name,
+        ),
+    ];
 
     setState(() {
       _exercisesWithCustomTimers = exercises;
 
       for (final result in exercises) {
-        final exerciseName = result.name;
-        final restMs = result.defaultRestDurationMs;
+        final restMs = result.exercise.defaultRestDurationMs;
         if (restMs != null) {
           final duration = Duration(milliseconds: restMs);
-          _minuteControllers[exerciseName] = TextEditingController(
+          _minuteControllers[result.exercise.id] = TextEditingController(
             text: duration.inMinutes.toString(),
           );
-          _secondControllers[exerciseName] = TextEditingController(
+          _secondControllers[result.exercise.id] = TextEditingController(
             text: (duration.inSeconds % 60).toString(),
           );
         }
@@ -475,7 +489,7 @@ class _TimerSettingsState extends State<TimerSettings> {
   }
 
   Future<void> _updateExerciseRestTime(
-    String exerciseName,
+    int exerciseId,
     int? minutes,
     int? seconds,
   ) async {
@@ -488,7 +502,7 @@ class _TimerSettingsState extends State<TimerSettings> {
     }
 
     await (db.exercises.update()
-          ..where((exercise) => exercise.name.equals(exerciseName)))
+          ..where((exercise) => exercise.id.equals(exerciseId)))
         .write(
           ExercisesCompanion(
             defaultRestDurationMs: Value(duration?.inMilliseconds),
@@ -497,24 +511,28 @@ class _TimerSettingsState extends State<TimerSettings> {
 
     if (!mounted) return;
     if (duration == null) {
-      _minuteControllers.remove(exerciseName)?.dispose();
-      _secondControllers.remove(exerciseName)?.dispose();
+      _minuteControllers.remove(exerciseId)?.dispose();
+      _secondControllers.remove(exerciseId)?.dispose();
       setState(() {
-        _exercisesWithCustomTimers.removeWhere((e) => e.name == exerciseName);
+        _exercisesWithCustomTimers.removeWhere(
+          (e) => e.exercise.id == exerciseId,
+        );
       });
     }
   }
 
-  Future<void> _removeCustomTimer(String exerciseName) async {
+  Future<void> _removeCustomTimer(int exerciseId) async {
     await (db.exercises.update()
-          ..where((exercise) => exercise.name.equals(exerciseName)))
+          ..where((exercise) => exercise.id.equals(exerciseId)))
         .write(const ExercisesCompanion(defaultRestDurationMs: Value(null)));
     if (!mounted) return;
 
-    _minuteControllers.remove(exerciseName)?.dispose();
-    _secondControllers.remove(exerciseName)?.dispose();
+    _minuteControllers.remove(exerciseId)?.dispose();
+    _secondControllers.remove(exerciseId)?.dispose();
     setState(() {
-      _exercisesWithCustomTimers.removeWhere((e) => e.name == exerciseName);
+      _exercisesWithCustomTimers.removeWhere(
+        (e) => e.exercise.id == exerciseId,
+      );
     });
   }
 
@@ -522,6 +540,12 @@ class _TimerSettingsState extends State<TimerSettings> {
     if (_exercisesWithCustomTimers.isEmpty) {
       return const SizedBox.shrink();
     }
+
+    final sharedNames = sharedExerciseNames(
+      _exercisesWithCustomTimers.map(
+        (entry) => (name: entry.exercise.name, category: entry.category),
+      ),
+    );
 
     return Padding(
       padding: const EdgeInsets.all(16),
@@ -549,13 +573,17 @@ class _TimerSettingsState extends State<TimerSettings> {
             ),
           ),
           const SizedBox(height: 16),
-          ..._exercisesWithCustomTimers.map((exercise) {
-            final exerciseName = exercise.name;
-            if (_minuteControllers[exerciseName] == null ||
-                _secondControllers[exerciseName] == null)
+          ..._exercisesWithCustomTimers.map((entry) {
+            final exerciseId = entry.exercise.id;
+            if (_minuteControllers[exerciseId] == null ||
+                _secondControllers[exerciseId] == null)
               return const SizedBox();
-            final minController = _minuteControllers[exerciseName]!;
-            final secController = _secondControllers[exerciseName]!;
+            final minController = _minuteControllers[exerciseId]!;
+            final secController = _secondControllers[exerciseId]!;
+            final exerciseName = exerciseLabel((
+              name: entry.exercise.name,
+              category: entry.category,
+            ), sharedNames);
 
             return Card(
               margin: const EdgeInsets.only(bottom: 12),
@@ -574,7 +602,7 @@ class _TimerSettingsState extends State<TimerSettings> {
                         ),
                         IconButton(
                           icon: const Icon(Icons.delete_outline),
-                          onPressed: () => _removeCustomTimer(exerciseName),
+                          onPressed: () => _removeCustomTimer(exerciseId),
                           tooltip: context.l10n.removeCustomTimer,
                         ),
                       ],
@@ -596,7 +624,7 @@ class _TimerSettingsState extends State<TimerSettings> {
                               final seconds =
                                   int.tryParse(secController.text) ?? 0;
                               _updateExerciseRestTime(
-                                exerciseName,
+                                exerciseId,
                                 minutes,
                                 seconds,
                               );
@@ -618,7 +646,7 @@ class _TimerSettingsState extends State<TimerSettings> {
                                   int.tryParse(minController.text) ?? 0;
                               final seconds = int.tryParse(value) ?? 0;
                               _updateExerciseRestTime(
-                                exercise.name,
+                                exerciseId,
                                 minutes,
                                 seconds,
                               );

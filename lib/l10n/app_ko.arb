@@ -64,6 +64,7 @@
   "navGraphs": "그래프",
   "navTimer": "타이머",
   "navSettings": "설정",
+  "exerciseAlreadyExists": "이미 있는 운동입니다",
   "errorLabel": "오류",
   "tabContentError": "탭 내용을 표시할 수 없습니다.",
   "cannotHideAllTabs": "모든 탭을 숨길 수 없습니다!",

@@ -133,6 +133,7 @@
     "description": "Navigation label for the rest timer."
   },
   "navSettings": "การตั้งค่า",
+  "exerciseAlreadyExists": "มีการออกกำลังกายนี้อยู่แล้ว",
   "@navSettings": {
     "description": "Navigation label for app settings."
   },
