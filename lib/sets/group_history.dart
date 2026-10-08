@@ -184,8 +184,9 @@ class _GroupHistoryState extends State<GroupHistory> {
             Expanded(
               child: Text(
                 '$weekday, $date',
-                style: Theme.of(context).textTheme.titleSmall
-                    ?.copyWith(fontWeight: FontWeight.w700),
+                style: Theme.of(
+                  context,
+                ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
               ),
             ),
           ],

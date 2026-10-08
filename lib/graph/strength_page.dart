@@ -156,9 +156,6 @@ class _StrengthPageState extends State<StrengthPage> {
     final showNotes = context.select<SettingsState, bool>(
       (settings) => settings.value.showNotes,
     );
-    final showUnits = context.select<SettingsState, bool>(
-      (settings) => settings.value.showUnits,
-    );
     final desktop = isDesktopLayout(context);
     final theme = Theme.of(context);
 
@@ -316,80 +313,9 @@ class _StrengthPageState extends State<StrengthPage> {
                   ],
                 )
               else ...[
-                if (widget.bodyWeight)
-                  SizedBox(
-                    width: double.infinity,
-                    height: 48,
-                    child: FilledButton.tonalIcon(
-                      key: const Key('body-weight-options-button'),
-                      onPressed: _showOptions,
-                      icon: const Icon(Icons.tune),
-                      label: Text(context.l10n.options),
-                    ),
-                  )
-                else
-                  Row(
-                    children: [
-                      Expanded(child: metricSelector),
-                      const SizedBox(width: 8),
-                      IconButton.filledTonal(
-                        icon: const Icon(Icons.tune),
-                        tooltip: context.l10n.options,
-                        onPressed: _showOptions,
-                      ),
-                    ],
-                  ),
-                const SizedBox(height: 8),
+                if (!widget.bodyWeight) metricSelector,
+                if (!widget.bodyWeight) const SizedBox(height: 8),
                 periodSelector,
-              ],
-              if (desktop) ...[
-                const SizedBox(height: 12),
-                GraphOptionsControls(
-                  compact: true,
-                  shortDateFormat: shortDateFormat,
-                  unitValue: showUnits ? _targetUnit : null,
-                  unitItems: showUnits
-                      ? strengthUnitMenuItems(context.l10n)
-                      : const [],
-                  onUnitChanged: (value) {
-                    setState(() {
-                      _targetUnit = value;
-                    });
-                    setData();
-                  },
-                  startDate: start,
-                  endDate: end,
-                  onSelectStart: _selectStart,
-                  onClearStart: () {
-                    setState(() {
-                      start = null;
-                    });
-                    setData();
-                  },
-                  onSelectEnd: _selectEnd,
-                  onClearEnd: () {
-                    setState(() {
-                      end = null;
-                    });
-                    setData();
-                  },
-                  limit: limit,
-                  maxLimit: 100,
-                  onLimitChanged: (value) {
-                    setState(() {
-                      limit = value;
-                    });
-                    setData();
-                    _savePreferences();
-                  },
-                  timeBasedXAxis: useTimeBasedXAxis,
-                  onTimeBasedXAxisChanged: (value) {
-                    setState(() {
-                      useTimeBasedXAxis = value;
-                    });
-                    _savePreferences();
-                  },
-                ),
               ],
               if (metric == StrengthMetric.oneRepMax &&
                   _data.any((row) => row.reps >= 10))
@@ -444,7 +370,9 @@ class _StrengthPageState extends State<StrengthPage> {
                         ),
                       ),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 8),
+              GraphOptionsButton(onPressed: _showOptions),
+              const SizedBox(height: 8),
               if (showNotes) ...[
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0),

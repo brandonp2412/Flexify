@@ -45,6 +45,7 @@ class TimerService : Service() {
     private var currentTarget = "timer"
     private var alarmSound: String? = null
     private var shouldVibrate = true
+    private var shouldKeepRinging = false
     private var stopLabel = ""
     private var addOneMinuteLabel = ""
     private var timerChannelName = ""
@@ -231,6 +232,7 @@ class TimerService : Service() {
         alarmSound = intent?.getStringExtra("alarmSound")
             ?: "android.resource://$packageName/${R.raw.argon}"
         shouldVibrate = intent?.getBooleanExtra("vibrate", true) ?: true
+        shouldKeepRinging = intent?.getBooleanExtra("keepRinging", false) ?: false
         stopLabel = intent?.getStringExtra("stopLabel").orEmpty()
         addOneMinuteLabel = intent?.getStringExtra("addOneMinuteLabel").orEmpty()
         timerChannelName = intent?.getStringExtra("timerChannelName").orEmpty()
@@ -308,11 +310,13 @@ class TimerService : Service() {
         try {
             mediaPlayer = if (alarmSound?.isNotEmpty() == true)
                 MediaPlayer.create(applicationContext, Uri.parse(alarmSound)).apply {
+                    isLooping = shouldKeepRinging
                     start()
                     setOnCompletionListener { vibrator?.cancel() }
                 }
             else
                 MediaPlayer.create(applicationContext, R.raw.argon).apply {
+                    isLooping = shouldKeepRinging
                     start()
                     setOnCompletionListener { vibrator?.cancel() }
                 }
@@ -398,7 +402,8 @@ class TimerService : Service() {
             @Suppress("DEPRECATION")
             getSystemService(VIBRATOR_SERVICE) as Vibrator
         }
-        vibrator!!.vibrate(VibrationEffect.createWaveform(pattern, 2))
+        val repeatIndex = if (shouldKeepRinging) 2 else -1
+        vibrator!!.vibrate(VibrationEffect.createWaveform(pattern, repeatIndex))
     }
 
     private fun notifyFinished() {

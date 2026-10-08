@@ -56,7 +56,7 @@ void main() {
     expect(find.byTooltip('Edit'), findsOne);
   });
 
-  testWidgets('StrengthPage exposes options inline on desktop', (
+  testWidgets('StrengthPage opens options from below the graph on desktop', (
     WidgetTester tester,
   ) async {
     final harness = await FlexifyTestHarness.create();
@@ -66,7 +66,13 @@ void main() {
     addTearDown(tester.view.resetPhysicalSize);
     await pumpStrengthPage(tester, harness, surfaceSize: const Size(900, 800));
 
-    expect(find.byTooltip('Options'), findsNothing);
+    final optionsButton = find.byKey(const Key('graph-options-button'));
+    expect(optionsButton, findsOneWidget);
+    expect(find.text('Start date'), findsNothing);
+
+    await tester.tap(optionsButton);
+    await tester.pumpAndSettle();
+
     expect(find.text('Start date'), findsOne);
     expect(find.text('Stop date'), findsOne);
     expect(find.text('Data points'), findsOne);
@@ -74,14 +80,15 @@ void main() {
     expect(tester.takeException(), null);
   });
 
-  testWidgets('Weight graph uses a full-width options button', (
+  testWidgets('Weight graph uses the shared text options button', (
     WidgetTester tester,
   ) async {
     final harness = await FlexifyTestHarness.create();
     await pumpStrengthPage(tester, harness, bodyWeight: true);
 
-    final optionsButton = find.byKey(const Key('body-weight-options-button'));
+    final optionsButton = find.byKey(const Key('graph-options-button'));
     expect(optionsButton, findsOneWidget);
+    expect(tester.widget<TextButton>(optionsButton), isA<TextButton>());
     expect(
       find.descendant(of: optionsButton, matching: find.text('Options')),
       findsOneWidget,

@@ -980,6 +980,9 @@ class AppLocalizationsPl extends AppLocalizations {
   String get keepScreenOn => 'Nie wyłączaj ekranu';
 
   @override
+  String get keepRinging => 'Ciągłe dzwonienie';
+
+  @override
   String get alarmSound => 'Dźwięk alarmu';
 
   @override
@@ -1409,6 +1412,10 @@ class AppLocalizationsPl extends AppLocalizations {
   @override
   String get keepScreenOnDescription =>
       'Nie wyłączaj ekranu podczas działania minutników odpoczynku';
+
+  @override
+  String get keepRingingDescription =>
+      'Powtarzaj dźwięk alarmu i wibracje, aż go anulujesz';
 
   @override
   String get restDurationDescription =>

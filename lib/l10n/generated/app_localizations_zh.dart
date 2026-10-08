@@ -943,6 +943,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get keepScreenOn => '保持屏幕常亮';
 
   @override
+  String get keepRinging => '持续响铃';
+
+  @override
   String get alarmSound => '闹钟声音';
 
   @override
@@ -1334,6 +1337,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get keepScreenOnDescription => '休息计时器运行时保持屏幕常亮';
+
+  @override
+  String get keepRingingDescription => '重复播放闹钟声音并振动，直到你取消';
 
   @override
   String get restDurationDescription => '休息多久后触发提醒？';
@@ -2452,6 +2458,9 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
   String get keepScreenOn => '保持屏幕常亮';
 
   @override
+  String get keepRinging => '持续响铃';
+
+  @override
   String get alarmSound => '闹钟声音';
 
   @override
@@ -2843,6 +2852,9 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
 
   @override
   String get keepScreenOnDescription => '休息计时器运行时保持屏幕常亮';
+
+  @override
+  String get keepRingingDescription => '重复播放闹钟声音并振动，直到你取消';
 
   @override
   String get restDurationDescription => '休息多久后触发提醒？';
@@ -3961,6 +3973,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get keepScreenOn => '保持螢幕常亮';
 
   @override
+  String get keepRinging => '持續響鈴';
+
+  @override
   String get alarmSound => '鬧鐘聲音';
 
   @override
@@ -4352,6 +4367,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get keepScreenOnDescription => '休息計時器執行時保持螢幕常亮';
+
+  @override
+  String get keepRingingDescription => '重複播放鬧鐘聲音並振動，直到你取消';
 
   @override
   String get restDurationDescription => '休息多久後觸發提醒？';

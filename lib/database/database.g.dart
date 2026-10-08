@@ -3094,6 +3094,21 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
         ),
         defaultValue: const Constant(false),
       );
+  static const VerificationMeta _keepRingingMeta = const VerificationMeta(
+    'keepRinging',
+  );
+  @override
+  late final GeneratedColumn<bool> keepRinging = GeneratedColumn<bool>(
+    'keep_ringing',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("keep_ringing" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
   static const VerificationMeta _keepScreenOnMeta = const VerificationMeta(
     'keepScreenOn',
   );
@@ -3166,6 +3181,7 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
     defaultGraphPeriod,
     defaultGraphLimit,
     defaultGraphTimeBasedXAxis,
+    keepRinging,
     keepScreenOn,
     inputStyle,
   ];
@@ -3552,6 +3568,15 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
         ),
       );
     }
+    if (data.containsKey('keep_ringing')) {
+      context.handle(
+        _keepRingingMeta,
+        keepRinging.isAcceptableOrUnknown(
+          data['keep_ringing']!,
+          _keepRingingMeta,
+        ),
+      );
+    }
     if (data.containsKey('keep_screen_on')) {
       context.handle(
         _keepScreenOnMeta,
@@ -3748,6 +3773,10 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
         DriftSqlType.bool,
         data['${effectivePrefix}default_graph_time_based_x_axis'],
       )!,
+      keepRinging: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}keep_ringing'],
+      )!,
       keepScreenOn: attachedDatabase.typeMapping.read(
         DriftSqlType.bool,
         data['${effectivePrefix}keep_screen_on'],
@@ -3809,6 +3838,7 @@ class Setting extends DataClass implements Insertable<Setting> {
   final String defaultGraphPeriod;
   final int defaultGraphLimit;
   final bool defaultGraphTimeBasedXAxis;
+  final bool keepRinging;
   final bool keepScreenOn;
   final String inputStyle;
   const Setting({
@@ -3855,6 +3885,7 @@ class Setting extends DataClass implements Insertable<Setting> {
     required this.defaultGraphPeriod,
     required this.defaultGraphLimit,
     required this.defaultGraphTimeBasedXAxis,
+    required this.keepRinging,
     required this.keepScreenOn,
     required this.inputStyle,
   });
@@ -3918,6 +3949,7 @@ class Setting extends DataClass implements Insertable<Setting> {
     map['default_graph_time_based_x_axis'] = Variable<bool>(
       defaultGraphTimeBasedXAxis,
     );
+    map['keep_ringing'] = Variable<bool>(keepRinging);
     map['keep_screen_on'] = Variable<bool>(keepScreenOn);
     map['input_style'] = Variable<String>(inputStyle);
     return map;
@@ -3978,6 +4010,7 @@ class Setting extends DataClass implements Insertable<Setting> {
       defaultGraphPeriod: Value(defaultGraphPeriod),
       defaultGraphLimit: Value(defaultGraphLimit),
       defaultGraphTimeBasedXAxis: Value(defaultGraphTimeBasedXAxis),
+      keepRinging: Value(keepRinging),
       keepScreenOn: Value(keepScreenOn),
       inputStyle: Value(inputStyle),
     );
@@ -4042,6 +4075,7 @@ class Setting extends DataClass implements Insertable<Setting> {
       defaultGraphTimeBasedXAxis: serializer.fromJson<bool>(
         json['defaultGraphTimeBasedXAxis'],
       ),
+      keepRinging: serializer.fromJson<bool>(json['keepRinging']),
       keepScreenOn: serializer.fromJson<bool>(json['keepScreenOn']),
       inputStyle: serializer.fromJson<String>(json['inputStyle']),
     );
@@ -4097,6 +4131,7 @@ class Setting extends DataClass implements Insertable<Setting> {
       'defaultGraphTimeBasedXAxis': serializer.toJson<bool>(
         defaultGraphTimeBasedXAxis,
       ),
+      'keepRinging': serializer.toJson<bool>(keepRinging),
       'keepScreenOn': serializer.toJson<bool>(keepScreenOn),
       'inputStyle': serializer.toJson<String>(inputStyle),
     };
@@ -4146,6 +4181,7 @@ class Setting extends DataClass implements Insertable<Setting> {
     String? defaultGraphPeriod,
     int? defaultGraphLimit,
     bool? defaultGraphTimeBasedXAxis,
+    bool? keepRinging,
     bool? keepScreenOn,
     String? inputStyle,
   }) => Setting(
@@ -4198,6 +4234,7 @@ class Setting extends DataClass implements Insertable<Setting> {
     defaultGraphLimit: defaultGraphLimit ?? this.defaultGraphLimit,
     defaultGraphTimeBasedXAxis:
         defaultGraphTimeBasedXAxis ?? this.defaultGraphTimeBasedXAxis,
+    keepRinging: keepRinging ?? this.keepRinging,
     keepScreenOn: keepScreenOn ?? this.keepScreenOn,
     inputStyle: inputStyle ?? this.inputStyle,
   );
@@ -4317,6 +4354,9 @@ class Setting extends DataClass implements Insertable<Setting> {
       defaultGraphTimeBasedXAxis: data.defaultGraphTimeBasedXAxis.present
           ? data.defaultGraphTimeBasedXAxis.value
           : this.defaultGraphTimeBasedXAxis,
+      keepRinging: data.keepRinging.present
+          ? data.keepRinging.value
+          : this.keepRinging,
       keepScreenOn: data.keepScreenOn.present
           ? data.keepScreenOn.value
           : this.keepScreenOn,
@@ -4374,6 +4414,7 @@ class Setting extends DataClass implements Insertable<Setting> {
           ..write('defaultGraphPeriod: $defaultGraphPeriod, ')
           ..write('defaultGraphLimit: $defaultGraphLimit, ')
           ..write('defaultGraphTimeBasedXAxis: $defaultGraphTimeBasedXAxis, ')
+          ..write('keepRinging: $keepRinging, ')
           ..write('keepScreenOn: $keepScreenOn, ')
           ..write('inputStyle: $inputStyle')
           ..write(')'))
@@ -4425,6 +4466,7 @@ class Setting extends DataClass implements Insertable<Setting> {
     defaultGraphPeriod,
     defaultGraphLimit,
     defaultGraphTimeBasedXAxis,
+    keepRinging,
     keepScreenOn,
     inputStyle,
   ]);
@@ -4476,6 +4518,7 @@ class Setting extends DataClass implements Insertable<Setting> {
           other.defaultGraphPeriod == this.defaultGraphPeriod &&
           other.defaultGraphLimit == this.defaultGraphLimit &&
           other.defaultGraphTimeBasedXAxis == this.defaultGraphTimeBasedXAxis &&
+          other.keepRinging == this.keepRinging &&
           other.keepScreenOn == this.keepScreenOn &&
           other.inputStyle == this.inputStyle);
 }
@@ -4524,6 +4567,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
   final Value<String> defaultGraphPeriod;
   final Value<int> defaultGraphLimit;
   final Value<bool> defaultGraphTimeBasedXAxis;
+  final Value<bool> keepRinging;
   final Value<bool> keepScreenOn;
   final Value<String> inputStyle;
   const SettingsCompanion({
@@ -4570,6 +4614,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     this.defaultGraphPeriod = const Value.absent(),
     this.defaultGraphLimit = const Value.absent(),
     this.defaultGraphTimeBasedXAxis = const Value.absent(),
+    this.keepRinging = const Value.absent(),
     this.keepScreenOn = const Value.absent(),
     this.inputStyle = const Value.absent(),
   });
@@ -4617,6 +4662,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     this.defaultGraphPeriod = const Value.absent(),
     this.defaultGraphLimit = const Value.absent(),
     this.defaultGraphTimeBasedXAxis = const Value.absent(),
+    this.keepRinging = const Value.absent(),
     this.keepScreenOn = const Value.absent(),
     this.inputStyle = const Value.absent(),
   }) : alarmSound = Value(alarmSound),
@@ -4679,6 +4725,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     Expression<String>? defaultGraphPeriod,
     Expression<int>? defaultGraphLimit,
     Expression<bool>? defaultGraphTimeBasedXAxis,
+    Expression<bool>? keepRinging,
     Expression<bool>? keepScreenOn,
     Expression<String>? inputStyle,
   }) {
@@ -4732,6 +4779,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
       if (defaultGraphLimit != null) 'default_graph_limit': defaultGraphLimit,
       if (defaultGraphTimeBasedXAxis != null)
         'default_graph_time_based_x_axis': defaultGraphTimeBasedXAxis,
+      if (keepRinging != null) 'keep_ringing': keepRinging,
       if (keepScreenOn != null) 'keep_screen_on': keepScreenOn,
       if (inputStyle != null) 'input_style': inputStyle,
     });
@@ -4781,6 +4829,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     Value<String>? defaultGraphPeriod,
     Value<int>? defaultGraphLimit,
     Value<bool>? defaultGraphTimeBasedXAxis,
+    Value<bool>? keepRinging,
     Value<bool>? keepScreenOn,
     Value<String>? inputStyle,
   }) {
@@ -4831,6 +4880,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
       defaultGraphLimit: defaultGraphLimit ?? this.defaultGraphLimit,
       defaultGraphTimeBasedXAxis:
           defaultGraphTimeBasedXAxis ?? this.defaultGraphTimeBasedXAxis,
+      keepRinging: keepRinging ?? this.keepRinging,
       keepScreenOn: keepScreenOn ?? this.keepScreenOn,
       inputStyle: inputStyle ?? this.inputStyle,
     );
@@ -4972,6 +5022,9 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
         defaultGraphTimeBasedXAxis.value,
       );
     }
+    if (keepRinging.present) {
+      map['keep_ringing'] = Variable<bool>(keepRinging.value);
+    }
     if (keepScreenOn.present) {
       map['keep_screen_on'] = Variable<bool>(keepScreenOn.value);
     }
@@ -5029,6 +5082,7 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
           ..write('defaultGraphPeriod: $defaultGraphPeriod, ')
           ..write('defaultGraphLimit: $defaultGraphLimit, ')
           ..write('defaultGraphTimeBasedXAxis: $defaultGraphTimeBasedXAxis, ')
+          ..write('keepRinging: $keepRinging, ')
           ..write('keepScreenOn: $keepScreenOn, ')
           ..write('inputStyle: $inputStyle')
           ..write(')'))
@@ -8031,6 +8085,7 @@ typedef $$SettingsTableCreateCompanionBuilder =
       Value<String> defaultGraphPeriod,
       Value<int> defaultGraphLimit,
       Value<bool> defaultGraphTimeBasedXAxis,
+      Value<bool> keepRinging,
       Value<bool> keepScreenOn,
       Value<String> inputStyle,
     });
@@ -8079,6 +8134,7 @@ typedef $$SettingsTableUpdateCompanionBuilder =
       Value<String> defaultGraphPeriod,
       Value<int> defaultGraphLimit,
       Value<bool> defaultGraphTimeBasedXAxis,
+      Value<bool> keepRinging,
       Value<bool> keepScreenOn,
       Value<String> inputStyle,
     });
@@ -8304,6 +8360,11 @@ class $$SettingsTableFilterComposer
 
   ColumnFilters<bool> get defaultGraphTimeBasedXAxis => $composableBuilder(
     column: $table.defaultGraphTimeBasedXAxis,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get keepRinging => $composableBuilder(
+    column: $table.keepRinging,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -8543,6 +8604,11 @@ class $$SettingsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<bool> get keepRinging => $composableBuilder(
+    column: $table.keepRinging,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<bool> get keepScreenOn => $composableBuilder(
     column: $table.keepScreenOn,
     builder: (column) => ColumnOrderings(column),
@@ -8763,6 +8829,11 @@ class $$SettingsTableAnnotationComposer
     builder: (column) => column,
   );
 
+  GeneratedColumn<bool> get keepRinging => $composableBuilder(
+    column: $table.keepRinging,
+    builder: (column) => column,
+  );
+
   GeneratedColumn<bool> get keepScreenOn => $composableBuilder(
     column: $table.keepScreenOn,
     builder: (column) => column,
@@ -8846,6 +8917,7 @@ class $$SettingsTableTableManager
                 Value<String> defaultGraphPeriod = const Value.absent(),
                 Value<int> defaultGraphLimit = const Value.absent(),
                 Value<bool> defaultGraphTimeBasedXAxis = const Value.absent(),
+                Value<bool> keepRinging = const Value.absent(),
                 Value<bool> keepScreenOn = const Value.absent(),
                 Value<String> inputStyle = const Value.absent(),
               }) => SettingsCompanion(
@@ -8893,6 +8965,7 @@ class $$SettingsTableTableManager
                 defaultGraphPeriod: defaultGraphPeriod,
                 defaultGraphLimit: defaultGraphLimit,
                 defaultGraphTimeBasedXAxis: defaultGraphTimeBasedXAxis,
+                keepRinging: keepRinging,
                 keepScreenOn: keepScreenOn,
                 inputStyle: inputStyle,
               ),
@@ -8942,6 +9015,7 @@ class $$SettingsTableTableManager
                 Value<String> defaultGraphPeriod = const Value.absent(),
                 Value<int> defaultGraphLimit = const Value.absent(),
                 Value<bool> defaultGraphTimeBasedXAxis = const Value.absent(),
+                Value<bool> keepRinging = const Value.absent(),
                 Value<bool> keepScreenOn = const Value.absent(),
                 Value<String> inputStyle = const Value.absent(),
               }) => SettingsCompanion.insert(
@@ -8989,6 +9063,7 @@ class $$SettingsTableTableManager
                 defaultGraphPeriod: defaultGraphPeriod,
                 defaultGraphLimit: defaultGraphLimit,
                 defaultGraphTimeBasedXAxis: defaultGraphTimeBasedXAxis,
+                keepRinging: keepRinging,
                 keepScreenOn: keepScreenOn,
                 inputStyle: inputStyle,
               ),

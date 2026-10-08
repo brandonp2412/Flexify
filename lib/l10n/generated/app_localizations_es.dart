@@ -971,6 +971,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get keepScreenOn => 'Mantener pantalla encendida';
 
   @override
+  String get keepRinging => 'Seguir sonando';
+
+  @override
   String get alarmSound => 'Sonido de alarma';
 
   @override
@@ -1402,6 +1405,10 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get keepScreenOnDescription =>
       'Mantener la pantalla encendida durante los temporizadores de descanso';
+
+  @override
+  String get keepRingingDescription =>
+      'Repetir el sonido y la vibración de la alarma hasta que la canceles';
 
   @override
   String get restDurationDescription =>

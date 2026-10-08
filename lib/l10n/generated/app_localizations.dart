@@ -1848,6 +1848,12 @@ abstract class AppLocalizations {
   /// **'Keep screen on'**
   String get keepScreenOn;
 
+  /// Timer setting that repeats the alarm until it is cancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep ringing'**
+  String get keepRinging;
+
   /// Label for choosing a timer alarm sound.
   ///
   /// In en, this message translates to:
@@ -2579,6 +2585,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Keep the screen on during rest timers'**
   String get keepScreenOnDescription;
+
+  /// Description of continuously repeating a timer alarm until cancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Repeat alarm sound and vibration until you cancel it'**
+  String get keepRingingDescription;
 
   /// Description of the default rest duration.
   ///

@@ -447,7 +447,7 @@ class Exercises extends Table with TableInfo<Exercises, ExercisesData> {
     false,
     type: DriftSqlType.string,
     requiredDuringInsert: true,
-    $customConstraints: 'NOT NULL UNIQUE',
+    $customConstraints: 'NOT NULL',
   );
   late final GeneratedColumn<String> kind = GeneratedColumn<String>(
     'kind',
@@ -4513,8 +4513,8 @@ class PlanExercisesCompanion extends UpdateCompanion<PlanExercisesData> {
   }
 }
 
-class DatabaseAtV66 extends GeneratedDatabase {
-  DatabaseAtV66(QueryExecutor e) : super(e);
+class DatabaseAtV67 extends GeneratedDatabase {
+  DatabaseAtV67(QueryExecutor e) : super(e);
   late final Categories categories = Categories(this);
   late final Plans plans = Plans(this);
   late final Exercises exercises = Exercises(this);
@@ -4526,6 +4526,10 @@ class DatabaseAtV66 extends GeneratedDatabase {
   late final Index exercisesCategoryId = Index(
     'exercises_category_id',
     'CREATE INDEX exercises_category_id ON exercises (category_id)',
+  );
+  late final Index exercisesNameCategory = Index(
+    'exercises_name_category',
+    'CREATE UNIQUE INDEX exercises_name_category ON exercises (name, COALESCE(category_id, 0))',
   );
   late final Index workoutsPlanEndedStarted = Index(
     'workouts_plan_ended_started',
@@ -4573,6 +4577,7 @@ class DatabaseAtV66 extends GeneratedDatabase {
     settings,
     planExercises,
     exercisesCategoryId,
+    exercisesNameCategory,
     workoutsPlanEndedStarted,
     workoutsActivePlan,
     exerciseSetsTimestamp,
@@ -4614,5 +4619,5 @@ class DatabaseAtV66 extends GeneratedDatabase {
     ),
   ]);
   @override
-  int get schemaVersion => 66;
+  int get schemaVersion => 67;
 }

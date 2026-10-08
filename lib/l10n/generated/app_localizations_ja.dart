@@ -945,6 +945,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get keepScreenOn => '画面をオンのままにする';
 
   @override
+  String get keepRinging => '鳴らし続ける';
+
+  @override
   String get alarmSound => 'アラーム音';
 
   @override
@@ -1345,6 +1348,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get keepScreenOnDescription => '休憩タイマー中は画面をオンのままにします';
+
+  @override
+  String get keepRingingDescription => 'キャンセルするまでアラーム音とバイブレーションを繰り返します';
 
   @override
   String get restDurationDescription => '休憩アラームが鳴るまでの時間';

@@ -19,7 +19,7 @@ import 'generated/schema_v59.dart' as v59;
 import 'generated/schema_v60.dart' as v60;
 import 'generated/schema_v62.dart' as v62;
 import 'generated/schema_v64.dart' as v64;
-import 'generated/schema_v65.dart' as v65;
+import 'generated/schema_v66.dart' as v66;
 
 void main() {
   driftRuntimeOptions.dontWarnAboutMultipleDatabases = true;
@@ -1371,37 +1371,37 @@ void main() {
   );
 
   test(
-    'migration from v65 to v66 allows one exercise name per category',
+    'migration from v66 to v67 allows one exercise name per category',
     () async {
       final timestamp = DateTime(2026, 10, 5, 8).millisecondsSinceEpoch ~/ 1000;
 
       await verifier.testWithDataIntegrity(
-        oldVersion: 65,
-        newVersion: 66,
-        createOld: v65.DatabaseAtV65.new,
+        oldVersion: 66,
+        newVersion: 67,
+        createOld: v66.DatabaseAtV66.new,
         createNew: AppDatabase.new,
         openTestedDatabase: AppDatabase.new,
         createItems: (batch, oldDb) {
           batch.insertAll(oldDb.categories, [
-            v65.CategoriesCompanion.insert(id: const Value(1), name: 'Back'),
-            v65.CategoriesCompanion.insert(
+            v66.CategoriesCompanion.insert(id: const Value(1), name: 'Back'),
+            v66.CategoriesCompanion.insert(
               id: const Value(2),
               name: 'Shoulders',
             ),
           ]);
           batch.insert(
             oldDb.plans,
-            v65.PlansCompanion.insert(id: const Value(1), days: 'Friday'),
+            v66.PlansCompanion.insert(id: const Value(1), days: 'Friday'),
           );
           batch.insertAll(oldDb.exercises, [
-            v65.ExercisesCompanion.insert(
+            v66.ExercisesCompanion.insert(
               id: const Value(10),
               name: 'Reverse fly',
               kind: 'strength',
               displayUnit: 'kg',
               categoryId: const Value(1),
             ),
-            v65.ExercisesCompanion.insert(
+            v66.ExercisesCompanion.insert(
               id: const Value(11),
               name: 'Squat',
               kind: 'strength',
@@ -1410,7 +1410,7 @@ void main() {
           ]);
           batch.insert(
             oldDb.exerciseSets,
-            v65.ExerciseSetsCompanion.insert(
+            v66.ExerciseSetsCompanion.insert(
               id: const Value(100),
               exerciseId: 10,
               timestamp: timestamp,
@@ -1418,7 +1418,7 @@ void main() {
           );
           batch.insert(
             oldDb.planExercises,
-            v65.PlanExercisesCompanion.insert(
+            v66.PlanExercisesCompanion.insert(
               id: const Value(20),
               planId: 1,
               exerciseId: 11,

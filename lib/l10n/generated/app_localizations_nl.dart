@@ -969,6 +969,9 @@ class AppLocalizationsNl extends AppLocalizations {
   String get keepScreenOn => 'Scherm aanhouden';
 
   @override
+  String get keepRinging => 'Blijven rinkelen';
+
+  @override
   String get alarmSound => 'Alarmgeluid';
 
   @override
@@ -1395,6 +1398,10 @@ class AppLocalizationsNl extends AppLocalizations {
   @override
   String get keepScreenOnDescription =>
       'Houd het scherm aan tijdens rusttimers';
+
+  @override
+  String get keepRingingDescription =>
+      'Herhaal het alarmgeluid en de trilling totdat je het annuleert';
 
   @override
   String get restDurationDescription =>

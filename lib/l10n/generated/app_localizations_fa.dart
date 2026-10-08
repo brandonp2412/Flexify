@@ -963,6 +963,9 @@ class AppLocalizationsFa extends AppLocalizations {
   String get keepScreenOn => 'روشن نگه داشتن صفحه';
 
   @override
+  String get keepRinging => 'ادامه زنگ';
+
+  @override
   String get alarmSound => 'صدای هشدار';
 
   @override
@@ -1386,6 +1389,10 @@ class AppLocalizationsFa extends AppLocalizations {
   @override
   String get keepScreenOnDescription =>
       'هنگام تایمرهای استراحت صفحه را روشن نگه دارید';
+
+  @override
+  String get keepRingingDescription =>
+      'صدا و لرزش هشدار را تا زمانی که لغوش کنید تکرار کن';
 
   @override
   String get restDurationDescription => 'چه مدت تا اجرای هشدار استراحت؟';

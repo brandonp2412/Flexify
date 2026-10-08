@@ -258,7 +258,11 @@ void main() {
     await tester.pumpAndSettle();
 
     final card = find.widgetWithText(Card, 'Reverse fly (Shoulders)');
-    await tester.ensureVisible(card);
+    await tester.scrollUntilVisible(
+      card,
+      300,
+      scrollable: find.byType(Scrollable).first,
+    );
     await tester.enterText(
       find.descendant(of: card, matching: find.widgetWithText(TextField, '1')),
       '3',

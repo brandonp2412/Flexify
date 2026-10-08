@@ -15,6 +15,7 @@ void main() {
     expect(settings.showGlobalProgress, isFalse);
     expect(settings.notifications, isFalse);
     expect(settings.durationEstimation, isFalse);
+    expect(settings.keepRinging, isFalse);
     expect(settings.keepScreenOn, isFalse);
     expect(settings.showNotes, isFalse);
     expect(settings.restTimers, isFalse);

@@ -1262,6 +1262,10 @@
   "@keepScreenOn": {
     "description": "Timer setting that prevents screen sleep."
   },
+  "keepRinging": "Terus berdering",
+  "@keepRinging": {
+    "description": "Timer setting that repeats the alarm until it is cancelled."
+  },
   "alarmSound": "Suara alarm",
   "@alarmSound": {
     "description": "Label for choosing a timer alarm sound."
@@ -1799,6 +1803,10 @@
   "keepScreenOnDescription": "Biarkan layar menyala selama pewaktu istirahat",
   "@keepScreenOnDescription": {
     "description": "Description of keeping the display awake during timers."
+  },
+  "keepRingingDescription": "Ulangi suara alarm dan getaran sampai Anda membatalkannya",
+  "@keepRingingDescription": {
+    "description": "Description of continuously repeating a timer alarm until cancelled."
   },
   "restDurationDescription": "Berapa lama sebelum alarm istirahat berbunyi?",
   "@restDurationDescription": {

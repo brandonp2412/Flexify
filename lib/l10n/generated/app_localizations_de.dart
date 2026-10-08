@@ -971,6 +971,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get keepScreenOn => 'Bildschirm eingeschaltet lassen';
 
   @override
+  String get keepRinging => 'Weiterklingeln';
+
+  @override
   String get alarmSound => 'Alarmton';
 
   @override
@@ -1398,6 +1401,10 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get keepScreenOnDescription =>
       'Bildschirm während Pausentimern eingeschaltet lassen';
+
+  @override
+  String get keepRingingDescription =>
+      'Alarmton und Vibration wiederholen, bis du sie stoppst';
 
   @override
   String get restDurationDescription =>

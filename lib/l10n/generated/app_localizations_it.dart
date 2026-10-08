@@ -965,6 +965,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get keepScreenOn => 'Mantieni schermo acceso';
 
   @override
+  String get keepRinging => 'Continua a suonare';
+
+  @override
   String get alarmSound => 'Suono allarme';
 
   @override
@@ -1393,6 +1396,10 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get keepScreenOnDescription =>
       'Mantieni lo schermo acceso durante i timer di recupero';
+
+  @override
+  String get keepRingingDescription =>
+      'Ripeti il suono e la vibrazione dell\'allarme finché non lo annulli';
 
   @override
   String get restDurationDescription =>

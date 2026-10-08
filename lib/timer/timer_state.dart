@@ -128,6 +128,7 @@ class TimerState extends ChangeNotifier {
     String alarmSound,
     bool vibrate,
     bool enableSound,
+    bool keepRinging,
   ) async {
     starting = false;
     final updated = timer.increaseDuration(const Duration(minutes: 1));
@@ -137,6 +138,7 @@ class TimerState extends ChangeNotifier {
       'alarmSound': alarmSound,
       'vibrate': vibrate,
       'enableSound': enableSound,
+      'keepRinging': keepRinging,
       'target': _target,
       'stopLabel': _stopLabel,
       'addOneMinuteLabel': _addOneMinuteLabel,
@@ -154,7 +156,7 @@ class TimerState extends ChangeNotifier {
       next?.cancel();
       next = Timer(
         const Duration(minutes: 1),
-        () => _expireDesktopTimer(null, alarmSound, enableSound),
+        () => _expireDesktopTimer(null, alarmSound, enableSound, keepRinging),
       );
     }
   }
@@ -173,6 +175,7 @@ class TimerState extends ChangeNotifier {
     bool vibrate,
     bool enableSound, [
     String target = 'timer',
+    bool keepRinging = false,
   ]) async {
     talker.info('Starting rest timer for ${rest.inSeconds} seconds');
     _target = target;
@@ -195,6 +198,7 @@ class TimerState extends ChangeNotifier {
       'alarmSound': alarmSound,
       'vibrate': vibrate,
       'enableSound': enableSound,
+      'keepRinging': keepRinging,
       'target': target,
       'stopLabel': _stopLabel,
       'addOneMinuteLabel': _addOneMinuteLabel,
@@ -212,7 +216,7 @@ class TimerState extends ChangeNotifier {
       next?.cancel();
       next = Timer(
         rest,
-        () => _expireDesktopTimer(title, alarmSound, enableSound),
+        () => _expireDesktopTimer(title, alarmSound, enableSound, keepRinging),
       );
     }
   }
@@ -221,6 +225,7 @@ class TimerState extends ChangeNotifier {
     String? title,
     String alarmSound,
     bool enableSound,
+    bool keepRinging,
   ) async {
     final duration = timer.getDuration();
     justExpired = true;
@@ -232,7 +237,7 @@ class TimerState extends ChangeNotifier {
         NativeTimerState.expired,
       ),
     );
-    await notify(title, alarmSound, enableSound);
+    await notify(title, alarmSound, enableSound, keepRinging);
   }
 
   /// Lazily builds and initializes the notification plugin a single time.
@@ -270,13 +275,14 @@ class TimerState extends ChangeNotifier {
     String? title,
     String? alarmSound,
     bool enableSound,
+    bool keepRinging,
   ) async {
     talker.info('Rest timer expired');
     if (enableSound) {
       if (alarmSound?.isNotEmpty == true) {
-        await player.playFile(alarmSound!);
+        await player.playFile(alarmSound!, loop: keepRinging);
       } else {
-        await player.playAsset('argon.mp3');
+        await player.playAsset('argon.mp3', loop: keepRinging);
       }
     }
 

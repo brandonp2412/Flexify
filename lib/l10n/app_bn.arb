@@ -1262,6 +1262,10 @@
   "@keepScreenOn": {
     "description": "Timer setting that prevents screen sleep."
   },
+  "keepRinging": "বাজতে থাকুন",
+  "@keepRinging": {
+    "description": "Timer setting that repeats the alarm until it is cancelled."
+  },
   "alarmSound": "অ্যালার্মের শব্দ",
   "@alarmSound": {
     "description": "Label for choosing a timer alarm sound."
@@ -1799,6 +1803,10 @@
   "keepScreenOnDescription": "বিশ্রাম টাইমার চলার সময় স্ক্রিন চালু রাখুন",
   "@keepScreenOnDescription": {
     "description": "Description of keeping the display awake during timers."
+  },
+  "keepRingingDescription": "আপনি বন্ধ না করা পর্যন্ত অ্যালার্মের শব্দ ও কম্পন বারবার চালান",
+  "@keepRingingDescription": {
+    "description": "Description of continuously repeating a timer alarm until cancelled."
   },
   "restDurationDescription": "বিশ্রামের অ্যালার্ম বাজতে কতক্ষণ অপেক্ষা করবে?",
   "@restDurationDescription": {

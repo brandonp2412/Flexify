@@ -966,6 +966,9 @@ class AppLocalizationsBn extends AppLocalizations {
   String get keepScreenOn => 'স্ক্রিন চালু রাখুন';
 
   @override
+  String get keepRinging => 'বাজতে থাকুন';
+
+  @override
   String get alarmSound => 'অ্যালার্মের শব্দ';
 
   @override
@@ -1386,6 +1389,10 @@ class AppLocalizationsBn extends AppLocalizations {
   @override
   String get keepScreenOnDescription =>
       'বিশ্রাম টাইমার চলার সময় স্ক্রিন চালু রাখুন';
+
+  @override
+  String get keepRingingDescription =>
+      'আপনি বন্ধ না করা পর্যন্ত অ্যালার্মের শব্দ ও কম্পন বারবার চালান';
 
   @override
   String get restDurationDescription =>

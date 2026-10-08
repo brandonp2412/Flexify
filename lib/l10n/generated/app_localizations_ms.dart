@@ -966,6 +966,9 @@ class AppLocalizationsMs extends AppLocalizations {
   String get keepScreenOn => 'Biarkan skrin menyala';
 
   @override
+  String get keepRinging => 'Terus berdering';
+
+  @override
   String get alarmSound => 'Suara alarm';
 
   @override
@@ -1393,6 +1396,10 @@ class AppLocalizationsMs extends AppLocalizations {
   @override
   String get keepScreenOnDescription =>
       'Kekalkan skrin hidup semasa pemasa rehat';
+
+  @override
+  String get keepRingingDescription =>
+      'Ulang bunyi penggera dan getaran sehingga anda membatalkannya';
 
   @override
   String get restDurationDescription =>

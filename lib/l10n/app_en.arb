@@ -1277,6 +1277,10 @@
   "@keepScreenOn": {
     "description": "Timer setting that prevents screen sleep."
   },
+  "keepRinging": "Keep ringing",
+  "@keepRinging": {
+    "description": "Timer setting that repeats the alarm until it is cancelled."
+  },
   "alarmSound": "Alarm sound",
   "@alarmSound": {
     "description": "Label for choosing a timer alarm sound."
@@ -1814,6 +1818,10 @@
   "keepScreenOnDescription": "Keep the screen on during rest timers",
   "@keepScreenOnDescription": {
     "description": "Description of keeping the display awake during timers."
+  },
+  "keepRingingDescription": "Repeat alarm sound and vibration until you cancel it",
+  "@keepRingingDescription": {
+    "description": "Description of continuously repeating a timer alarm until cancelled."
   },
   "restDurationDescription": "How long before rest alarms go off?",
   "@restDurationDescription": {

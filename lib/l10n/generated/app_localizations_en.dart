@@ -962,6 +962,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get keepScreenOn => 'Keep screen on';
 
   @override
+  String get keepRinging => 'Keep ringing';
+
+  @override
   String get alarmSound => 'Alarm sound';
 
   @override
@@ -1380,6 +1383,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get keepScreenOnDescription => 'Keep the screen on during rest timers';
+
+  @override
+  String get keepRingingDescription =>
+      'Repeat alarm sound and vibration until you cancel it';
 
   @override
   String get restDurationDescription => 'How long before rest alarms go off?';

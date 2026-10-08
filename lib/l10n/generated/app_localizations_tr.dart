@@ -965,6 +965,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get keepScreenOn => 'Ekranı Açık Tut';
 
   @override
+  String get keepRinging => 'Çalmaya devam et';
+
+  @override
   String get alarmSound => 'Alarm Sesi';
 
   @override
@@ -1391,6 +1394,10 @@ class AppLocalizationsTr extends AppLocalizations {
   @override
   String get keepScreenOnDescription =>
       'Dinlenme zamanlayıcıları sırasında ekranı açık tut';
+
+  @override
+  String get keepRingingDescription =>
+      'Siz iptal edene kadar alarm sesini ve titreşimi tekrarla';
 
   @override
   String get restDurationDescription =>

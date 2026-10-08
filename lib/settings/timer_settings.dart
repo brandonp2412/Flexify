@@ -153,6 +153,30 @@ List<Widget> getTimerSettings(
           ),
         ),
       ),
+    if (matches([l10n.keepRinging, l10n.keepRingingDescription]))
+      Tooltip(
+        message: l10n.keepRingingDescription,
+        child: ListTile(
+          title: Text(
+            l10n.keepRinging,
+            textAlign: isDesktopLayout(context)
+                ? TextAlign.start
+                : TextAlign.center,
+          ),
+          leading: settings.keepRinging
+              ? const Icon(Icons.notifications_active)
+              : const Icon(Icons.notifications_none),
+          onTap: () => db.settings.update().write(
+            SettingsCompanion(keepRinging: Value(!settings.keepRinging)),
+          ),
+          trailing: Switch(
+            value: settings.keepRinging,
+            onChanged: (value) => db.settings.update().write(
+              SettingsCompanion(keepRinging: Value(value)),
+            ),
+          ),
+        ),
+      ),
     if (matches([l10n.keepScreenOn, l10n.keepScreenOnDescription]))
       Tooltip(
         message: l10n.keepScreenOnDescription,
