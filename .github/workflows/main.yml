@@ -77,6 +77,8 @@ jobs:
           echo "should_release=true" >> "$GITHUB_OUTPUT"
 
   quality-checks:
+    needs: release-gate
+    if: ${{ !cancelled() && (github.event_name != 'schedule' || needs.release-gate.outputs.should_release == 'true') }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
@@ -97,7 +99,9 @@ jobs:
         run: ./scripts/check.sh
 
   generate-screenshots:
-    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    needs: release-gate
+    if: ${{ !cancelled() && (github.event_name != 'schedule' || needs.release-gate.outputs.should_release == 'true') && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) }}
+
     runs-on: ubuntu-latest
     timeout-minutes: 30
     strategy:
