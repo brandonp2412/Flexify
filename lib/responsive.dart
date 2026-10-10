@@ -120,9 +120,14 @@ class ResponsiveSettingsList extends StatelessWidget {
                         margin: EdgeInsets.zero,
                         color: colors.surfaceContainerLow,
                         clipBehavior: Clip.antiAlias,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 4),
-                          child: child,
+                        child: ConstrainedBox(
+                          constraints: const BoxConstraints(minHeight: 88),
+                          child: Center(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 4),
+                              child: child,
+                            ),
+                          ),
                         ),
                       ),
                     ),
