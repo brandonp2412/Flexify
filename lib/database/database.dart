@@ -1076,6 +1076,7 @@ class AppDatabase extends _$AppDatabase {
             from66To67: (m, schema) async {},
             from67To68: (m, schema) async {},
             from68To69: (Migrator m, Schema69 schema) async {
+              await m.alterTable(TableMigration(schema.settings));
               await customStatement(
                 'UPDATE settings SET default_graph_limit = 30 WHERE default_graph_limit = 20',
               );
