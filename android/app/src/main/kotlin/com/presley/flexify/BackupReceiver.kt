@@ -111,15 +111,7 @@ class BackupReceiver : BroadcastReceiver() {
                 pendingShare
             )
 
-            val parentDir = context.filesDir.parentFile
-            if (parentDir == null) {
-                failBackup(
-                    context,
-                    getBackupLocalization(context, "backupFailureAppFilesUnavailable")
-                )
-                return
-            }
-            val dbFile = File(File(parentDir, "app_flutter"), "flexify.sqlite")
+            val dbFile = getDatabaseFile(context)
             if (!dbFile.exists()) {
                 failBackup(context, getBackupLocalization(context, "backupFailureDatabaseMissing"))
                 return

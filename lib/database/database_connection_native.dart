@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
-import 'package:path/path.dart' as p;
+import 'package:flexify/storage/app_storage.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqlite3/sqlite3.dart';
 
@@ -15,8 +15,7 @@ QueryExecutor createConnectionForPath(String path) {
 
 LazyDatabase createNativeConnection() {
   return LazyDatabase(() async {
-    final folder = await getApplicationDocumentsDirectory();
-    final file = File(p.join(folder.path, 'flexify.sqlite'));
+    final file = await getDatabaseFile();
 
     final cache = (await getTemporaryDirectory()).path;
     sqlite3.tempDirectory = cache;

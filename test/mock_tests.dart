@@ -45,16 +45,19 @@ class FakeFilePickerPlatform extends FilePickerPlatform {
   }
 }
 
-/// Lets tests control the documents directory used by
-/// `getApplicationDocumentsDirectory()` without touching the real filesystem
-/// paths a device would use.
+/// Supplies isolated documents and application support paths for tests.
 class FakePathProviderPlatform extends PathProviderPlatform {
-  FakePathProviderPlatform(this.documentsPath);
+  FakePathProviderPlatform(this.documentsPath, {String? supportPath})
+    : supportPath = supportPath ?? documentsPath;
 
   final String documentsPath;
+  final String supportPath;
 
   @override
   Future<String?> getApplicationDocumentsPath() async => documentsPath;
+
+  @override
+  Future<String?> getApplicationSupportPath() async => supportPath;
 }
 
 Future<void> mockTests() async {

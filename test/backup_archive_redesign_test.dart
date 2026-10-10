@@ -64,7 +64,7 @@ void main() {
       final restoredFile = await extractBackupArchive(
         archiveFile: archive,
         workingDirectory: imported,
-        documentsDirectory: documents,
+        storageDirectory: documents,
       );
 
       final restored = sqlite3.open(restoredFile.path);

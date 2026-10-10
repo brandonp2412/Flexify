@@ -41,7 +41,7 @@ class TimerServiceTest {
     // would crash with an NPE before the code under test even runs.
     @Before
     fun seedFlexifySettingsDb() {
-        val dbFolder = File(context.filesDir.parentFile, "app_flutter")
+        val dbFolder = context.filesDir
         dbFolder.mkdirs()
         val dbFile = File(dbFolder, "flexify.sqlite")
         SQLiteDatabase.openOrCreateDatabase(dbFile, null).use { db ->

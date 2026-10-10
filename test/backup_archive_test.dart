@@ -12,7 +12,7 @@ void main() {
     final root = await Directory.systemTemp.createTemp('flexify-backup-test-');
     addTearDown(() => root.delete(recursive: true));
 
-    final documentsDirectory = Directory(p.join(root.path, 'documents'))
+    final storageDirectory = Directory(p.join(root.path, 'documents'))
       ..createSync();
     final exportDirectory = Directory(p.join(root.path, 'export'))
       ..createSync();
@@ -39,7 +39,7 @@ void main() {
     final restoredDatabase = await extractBackupArchive(
       archiveFile: archive,
       workingDirectory: importDirectory,
-      documentsDirectory: documentsDirectory,
+      storageDirectory: storageDirectory,
     );
 
     final restored = sqlite3.open(restoredDatabase.path);
@@ -47,10 +47,7 @@ void main() {
         restored.select('SELECT image FROM gym_sets').single['image'] as String;
     restored.close();
 
-    expect(
-      restoredImagePath,
-      p.join(documentsDirectory.path, '0_progress.jpg'),
-    );
+    expect(restoredImagePath, p.join(storageDirectory.path, '0_progress.jpg'));
     expect(File(restoredImagePath).readAsBytesSync(), [1, 2, 3, 4]);
   });
   test('missing database in backup uses typed validation error', () async {
@@ -59,7 +56,7 @@ void main() {
     );
     addTearDown(() => root.delete(recursive: true));
 
-    final documentsDirectory = Directory(p.join(root.path, 'documents'))
+    final storageDirectory = Directory(p.join(root.path, 'documents'))
       ..createSync();
     final importDirectory = Directory(p.join(root.path, 'import'))
       ..createSync();
@@ -74,7 +71,7 @@ void main() {
       () => extractBackupArchive(
         archiveFile: archiveFile,
         workingDirectory: importDirectory,
-        documentsDirectory: documentsDirectory,
+        storageDirectory: storageDirectory,
       ),
       throwsA(isA<MissingBackupDatabaseException>()),
     );

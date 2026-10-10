@@ -55,9 +55,16 @@ fun scheduleBackups(context: Context) {
     )
 }
 
+fun getDatabaseFile(context: Context): File {
+    val supported = File(context.filesDir, "flexify.sqlite")
+    val migrationMarker = File(context.filesDir, ".flexify-storage-migrated")
+    if (supported.exists() || migrationMarker.exists()) return supported
+    val legacy = File(File(context.filesDir.parentFile, "app_flutter"), "flexify.sqlite")
+    return if (legacy.exists()) legacy else supported
+}
+
 fun openDb(context: Context): SQLiteDatabase? {
-    val parentDir = context.filesDir.parentFile ?: return null
-    val dbFile = File(File(parentDir, "app_flutter"), "flexify.sqlite")
+    val dbFile = getDatabaseFile(context)
     if (!dbFile.exists()) return null
     return try {
         SQLiteDatabase.openDatabase(dbFile.absolutePath, null, 0)

@@ -11,8 +11,8 @@ import 'package:flexify/logging.dart';
 import 'package:flexify/plan/workout_sessions.dart';
 import 'package:flexify/settings/backup_archive.dart';
 import 'package:flexify/utils.dart';
+import 'package:flexify/storage/app_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
 class ExportData extends StatefulWidget {
@@ -98,13 +98,9 @@ class _ExportDataState extends State<ExportData> {
                         'flexify-export-',
                       );
                       try {
-                        final dbFolder =
-                            await getApplicationDocumentsDirectory();
+                        final databaseFile = await getDatabaseFile();
                         final archive = await createBackupArchive(
-                          databasePath: p.join(
-                            dbFolder.path,
-                            backupDatabaseName,
-                          ),
+                          databasePath: databaseFile.path,
                           workingDirectory: workingDirectory,
                         );
                         await FilePicker.saveFile(

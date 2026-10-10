@@ -79,7 +79,7 @@ Future<File> createBackupArchive({
 Future<File> extractBackupArchive({
   required File archiveFile,
   required Directory workingDirectory,
-  required Directory documentsDirectory,
+  required Directory storageDirectory,
 }) async {
   final input = InputFileStream(archiveFile.path);
   final archive = ZipDecoder().decodeStream(input);
@@ -93,7 +93,7 @@ Future<File> extractBackupArchive({
 
       final outputPath = isDatabase
           ? p.join(workingDirectory.path, backupDatabaseName)
-          : p.join(documentsDirectory.path, p.posix.basename(name));
+          : p.join(storageDirectory.path, p.posix.basename(name));
       final output = OutputFileStream(outputPath);
       output.writeStream(entry.getContent()!);
       await output.close();
@@ -119,7 +119,7 @@ Future<File> extractBackupArchive({
       for (final row in rows) {
         final relativePath = row['path'] as String;
         final absolutePath = p.join(
-          documentsDirectory.path,
+          storageDirectory.path,
           p.posix.basename(relativePath),
         );
         imported.execute(

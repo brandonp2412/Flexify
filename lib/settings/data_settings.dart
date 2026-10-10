@@ -12,11 +12,10 @@ import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/responsive.dart';
 import 'package:flexify/settings/settings_state.dart';
+import 'package:flexify/storage/app_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:path/path.dart' as p;
-import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
@@ -72,8 +71,7 @@ Future<void> tapBackup(bool value, AppLocalizations l10n) async {
   }
 
   try {
-    final dbFolder = await getApplicationDocumentsDirectory();
-    final dbPath = p.join(dbFolder.path, 'flexify.sqlite');
+    final dbPath = (await getDatabaseFile()).path;
     final selectedPath = await androidChannel.invokeMethod<String>('pick', {
       'dbPath': dbPath,
     });
@@ -144,8 +142,7 @@ List<Widget> getDataSettings(
     if (matches([l10n.shareDatabase]) && !kIsWeb && !Platform.isLinux)
       TextButton.icon(
         onPressed: () async {
-          final dbFolder = await getApplicationDocumentsDirectory();
-          final dbPath = p.join(dbFolder.path, 'flexify.sqlite');
+          final dbPath = (await getDatabaseFile()).path;
           await SharePlus.instance.share(ShareParams(files: [XFile(dbPath)]));
         },
         label: Text(l10n.shareDatabase),

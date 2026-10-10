@@ -2,11 +2,10 @@ import 'dart:io';
 
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
+import 'package:flexify/storage/app_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:path/path.dart' as p;
-import 'package:path_provider/path_provider.dart';
 
 class DeleteRecordsButton extends StatelessWidget {
   final BuildContext ctx;
@@ -126,11 +125,7 @@ class DeleteRecordsButton extends StatelessWidget {
                                 label: Text(context.l10n.actionDelete),
                                 icon: const Icon(Icons.delete),
                                 onPressed: () async {
-                                  final dbFolder =
-                                      await getApplicationDocumentsDirectory();
-                                  final file = File(
-                                    p.join(dbFolder.path, 'flexify.sqlite'),
-                                  );
+                                  final file = await getDatabaseFile();
                                   await db.close();
                                   await db.executor.close();
                                   await file.delete();

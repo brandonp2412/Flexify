@@ -14,6 +14,7 @@ import 'package:flexify/main.dart';
 import 'package:flexify/logging.dart';
 import 'package:flexify/settings/backup_archive.dart';
 import 'package:flexify/utils.dart';
+import 'package:flexify/storage/app_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -153,7 +154,8 @@ $version
       throw _ImportValidationException(l10n.selectedFileDoesNotExist);
     }
 
-    final dbFolder = await getApplicationDocumentsDirectory();
+    final liveDatabase = await getDatabaseFile();
+    final storageDirectory = liveDatabase.parent;
     final tempDirectory = await getTemporaryDirectory();
     final workingDirectory = await tempDirectory.createTemp('flexify-import-');
     try {
@@ -161,7 +163,7 @@ $version
           ? await extractBackupArchive(
               archiveFile: selectedFile,
               workingDirectory: workingDirectory,
-              documentsDirectory: dbFolder,
+              storageDirectory: storageDirectory,
             )
           : selectedFile;
 
@@ -186,7 +188,6 @@ $version
         await candidateDb.close();
       }
 
-      final liveDatabase = File(p.join(dbFolder.path, backupDatabaseName));
       final rollbackDatabase = File(
         p.join(workingDirectory.path, 'rollback-$backupDatabaseName'),
       );
