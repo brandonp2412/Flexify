@@ -1225,10 +1225,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get adjustedPace => 'Adjusted pace';
 
   @override
-  String get oneRepMaxAccuracyWarning =>
-      'One rep max estimates are less accurate for sets of 10+ reps';
-
-  @override
   String get addPlan => 'Add plan';
 
   @override
@@ -1573,8 +1569,4 @@ class AppLocalizationsEn extends AppLocalizations {
   String setNumber(int number) {
     return 'Set $number';
   }
-
-  @override
-  String get graphIndependentMetricScales =>
-      'Each line is scaled independently for comparison';
 }

@@ -391,7 +391,6 @@
   "inclineLabel": "傾斜",
   "paceDistanceTime": "ペース（距離 / 時間）",
   "adjustedPace": "調整後ペース",
-  "oneRepMaxAccuracyWarning": "1RMの推定値は10回以上のセットでは精度が低くなります",
   "addPlan": "プランを追加",
   "planDetails": "プランの詳細",
   "exercisesLabel": "種目",
@@ -495,10 +494,5 @@
   "nothingMatchesPlanSearch": "「{query}」に一致する項目はありません。新しいプランとして作成できます。",
   "createPlan": "プランを作成",
   "createNamedPlan": "「{name}」を作成",
-  "setNumber": "セット {number}",
-  "graphIndependentMetricScales": "比較しやすいように各線の尺度を個別に調整しています",
-  "@graphIndependentMetricScales": {
-    "description": "Note for independently scaled graph metric lines."
-  }
-
+  "setNumber": "セット {number}"
 }

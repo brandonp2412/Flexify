@@ -391,7 +391,6 @@
   "inclineLabel": "경사",
   "paceDistanceTime": "페이스 (거리 / 시간)",
   "adjustedPace": "보정 페이스",
-  "oneRepMaxAccuracyWarning": "1RM 추정치는 10회 이상 반복한 세트에서 정확도가 낮습니다",
   "addPlan": "플랜 추가",
   "planDetails": "플랜 세부 정보",
   "exercisesLabel": "운동",
@@ -495,10 +494,5 @@
   "nothingMatchesPlanSearch": "“{query}”와 일치하는 항목이 없습니다. 새 플랜으로 만들 수 있습니다.",
   "createPlan": "플랜 만들기",
   "createNamedPlan": "“{name}” 만들기",
-  "setNumber": "세트 {number}",
-  "graphIndependentMetricScales": "비교를 위해 각 선의 눈금을 독립적으로 조정합니다",
-  "@graphIndependentMetricScales": {
-    "description": "Note for independently scaled graph metric lines."
-  }
-
+  "setNumber": "세트 {number}"
 }

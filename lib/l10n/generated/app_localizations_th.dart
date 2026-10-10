@@ -1227,10 +1227,6 @@ class AppLocalizationsTh extends AppLocalizations {
   String get adjustedPace => 'เพซที่ปรับแล้ว';
 
   @override
-  String get oneRepMaxAccuracyWarning =>
-      'การประมาณหนึ่งครั้งสูงสุดจะแม่นยำน้อยลงสำหรับเซ็ตตั้งแต่ 10 ครั้งขึ้นไป';
-
-  @override
   String get addPlan => 'เพิ่มแผน';
 
   @override
@@ -1565,8 +1561,4 @@ class AppLocalizationsTh extends AppLocalizations {
   String setNumber(int number) {
     return 'เซ็ต $number';
   }
-
-  @override
-  String get graphIndependentMetricScales =>
-      'แต่ละเส้นใช้มาตราส่วนแยกกันเพื่อให้เปรียบเทียบได้';
 }

@@ -1197,9 +1197,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get adjustedPace => '调整后配速';
 
   @override
-  String get oneRepMaxAccuracyWarning => '当一组达到 10 次或更多次数时，1RM 估算的准确度会降低';
-
-  @override
   String get addPlan => '添加计划';
 
   @override
@@ -1511,9 +1508,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String setNumber(int number) {
     return '第 $number 组';
   }
-
-  @override
-  String get graphIndependentMetricScales => '每条线独立缩放以便比较';
 }
 
 /// The translations for Chinese, as used in China (`zh_CN`).
@@ -2709,9 +2703,6 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
   String get adjustedPace => '调整后配速';
 
   @override
-  String get oneRepMaxAccuracyWarning => '当一组达到 10 次或更多次数时，1RM 估算的准确度会降低';
-
-  @override
   String get addPlan => '添加计划';
 
   @override
@@ -3023,9 +3014,6 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
   String setNumber(int number) {
     return '第 $number 组';
   }
-
-  @override
-  String get graphIndependentMetricScales => '每条线独立缩放以便比较';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -4221,9 +4209,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get adjustedPace => '調整後配速';
 
   @override
-  String get oneRepMaxAccuracyWarning => '當一組達到 10 次或更多次數時，1RM 估算的準確度會降低';
-
-  @override
   String get addPlan => '新增計畫';
 
   @override
@@ -4535,7 +4520,4 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String setNumber(int number) {
     return '第 $number 組';
   }
-
-  @override
-  String get graphIndependentMetricScales => '每條線獨立縮放以便比較';
 }

@@ -1616,10 +1616,6 @@
   "@adjustedPace": {
     "description": "Cardio graph metric adjusted for incline."
   },
-  "oneRepMaxAccuracyWarning": "การประมาณหนึ่งครั้งสูงสุดจะแม่นยำน้อยลงสำหรับเซ็ตตั้งแต่ 10 ครั้งขึ้นไป",
-  "@oneRepMaxAccuracyWarning": {
-    "description": "Warning about one-repetition maximum estimate accuracy."
-  },
   "addPlan": "เพิ่มแผน",
   "@addPlan": {
     "description": "Action or title for creating a workout plan."
@@ -2048,10 +2044,5 @@
         "type": "int"
       }
     }
-  },
-  "graphIndependentMetricScales": "แต่ละเส้นใช้มาตราส่วนแยกกันเพื่อให้เปรียบเทียบได้",
-  "@graphIndependentMetricScales": {
-    "description": "Note for independently scaled graph metric lines."
   }
-
 }

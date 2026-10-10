@@ -1233,10 +1233,6 @@ class AppLocalizationsIt extends AppLocalizations {
   String get adjustedPace => 'Passo corretto';
 
   @override
-  String get oneRepMaxAccuracyWarning =>
-      'Le stime del massimale 1RM sono meno precise per serie da 10 o più ripetizioni';
-
-  @override
   String get addPlan => 'Aggiungi scheda';
 
   @override
@@ -1593,8 +1589,4 @@ class AppLocalizationsIt extends AppLocalizations {
   String setNumber(int number) {
     return 'Serie $number';
   }
-
-  @override
-  String get graphIndependentMetricScales =>
-      'Ogni linea ha una scala indipendente per facilitare il confronto';
 }

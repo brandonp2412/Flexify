@@ -391,7 +391,6 @@
   "inclineLabel": "Pendenza",
   "paceDistanceTime": "Passo (distanza / tempo)",
   "adjustedPace": "Passo corretto",
-  "oneRepMaxAccuracyWarning": "Le stime del massimale 1RM sono meno precise per serie da 10 o più ripetizioni",
   "addPlan": "Aggiungi scheda",
   "planDetails": "Dettagli scheda",
   "exercisesLabel": "Esercizi",
@@ -495,10 +494,5 @@
   "nothingMatchesPlanSearch": "Nessun risultato per “{query}”. Puoi crearlo come nuova scheda.",
   "createPlan": "Crea scheda",
   "createNamedPlan": "Crea “{name}”",
-  "setNumber": "Serie {number}",
-  "graphIndependentMetricScales": "Ogni linea ha una scala indipendente per facilitare il confronto",
-  "@graphIndependentMetricScales": {
-    "description": "Note for independently scaled graph metric lines."
-  }
-
+  "setNumber": "Serie {number}"
 }

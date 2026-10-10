@@ -391,7 +391,6 @@
   "inclineLabel": "Helling",
   "paceDistanceTime": "Tempo (afstand / tijd)",
   "adjustedPace": "Aangepast tempo",
-  "oneRepMaxAccuracyWarning": "1RM-schattingen zijn minder nauwkeurig bij sets van 10 of meer herhalingen",
   "addPlan": "Schema toevoegen",
   "planDetails": "Schemadetails",
   "exercisesLabel": "Oefeningen",
@@ -495,10 +494,5 @@
   "nothingMatchesPlanSearch": "Niets komt overeen met “{query}”. Je kunt dit als nieuw schema aanmaken.",
   "createPlan": "Schema aanmaken",
   "createNamedPlan": "“{name}” aanmaken",
-  "setNumber": "Set {number}",
-  "graphIndependentMetricScales": "Elke lijn heeft een eigen schaal om ze te kunnen vergelijken",
-  "@graphIndependentMetricScales": {
-    "description": "Note for independently scaled graph metric lines."
-  }
-
+  "setNumber": "Set {number}"
 }

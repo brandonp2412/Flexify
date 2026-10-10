@@ -1226,10 +1226,6 @@ class AppLocalizationsHi extends AppLocalizations {
   String get adjustedPace => 'समायोजित गति';
 
   @override
-  String get oneRepMaxAccuracyWarning =>
-      '10+ रेप वाले सेट के लिए एक रेप अधिकतम का अनुमान कम सटीक होता है';
-
-  @override
   String get addPlan => 'प्लान जोड़ें';
 
   @override
@@ -1575,8 +1571,4 @@ class AppLocalizationsHi extends AppLocalizations {
   String setNumber(int number) {
     return 'सेट $number';
   }
-
-  @override
-  String get graphIndependentMetricScales =>
-      'तुलना के लिए हर रेखा का पैमाना अलग-अलग समायोजित होता है';
 }

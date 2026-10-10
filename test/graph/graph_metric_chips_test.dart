@@ -22,6 +22,16 @@ void main() {
       ),
     );
     expect(find.byType(FilterChip), findsNWidgets(2));
+    final weightChip = tester.widget<FilterChip>(
+      find.byKey(const Key('graph-metric-weight')),
+    );
+    final repsChip = tester.widget<FilterChip>(
+      find.byKey(const Key('graph-metric-reps')),
+    );
+    expect(weightChip.selected, isTrue);
+    expect(repsChip.selected, isFalse);
+    expect(weightChip.side!.color, isNot(repsChip.side!.color));
+    expect(weightChip.selectedColor, isNot(repsChip.selectedColor));
     await tester.tap(find.text('Reps'));
     await tester.pump();
     expect(selected, {'weight', 'reps'});
@@ -31,6 +41,13 @@ void main() {
     await tester.tap(find.text('Reps'));
     await tester.pump();
     expect(selected, {'reps'}, reason: 'a chart needs at least one metric');
+  });
+
+  test('multi-metric vertical axis uses readable relative labels', () {
+    expect(graphYAxisLabel(0, percentage: true), '0%');
+    expect(graphYAxisLabel(25, percentage: true), '25%');
+    expect(graphYAxisLabel(100, percentage: true), '100%');
+    expect(graphYAxisLabel(25), '25');
   });
 
   test('independent scaling retains x positions and columns', () {

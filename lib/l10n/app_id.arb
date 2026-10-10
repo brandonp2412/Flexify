@@ -1616,10 +1616,6 @@
   "@adjustedPace": {
     "description": "Cardio graph metric adjusted for incline."
   },
-  "oneRepMaxAccuracyWarning": "Perkiraan maksimum 1 repetisi kurang akurat untuk set dengan 10+ repetisi",
-  "@oneRepMaxAccuracyWarning": {
-    "description": "Warning about one-repetition maximum estimate accuracy."
-  },
   "addPlan": "Tambah rencana",
   "@addPlan": {
     "description": "Action or title for creating a workout plan."
@@ -2048,10 +2044,5 @@
         "type": "int"
       }
     }
-  },
-  "graphIndependentMetricScales": "Setiap garis menggunakan skala tersendiri agar mudah dibandingkan",
-  "@graphIndependentMetricScales": {
-    "description": "Note for independently scaled graph metric lines."
   }
-
 }

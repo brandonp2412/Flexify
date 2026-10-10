@@ -440,7 +440,8 @@ class FlexMultiMetricLineChart extends StatelessWidget {
         curveLines: settings.curveLines,
         curveSmoothness: settings.curveSmoothness ?? 0.35,
         fillFirstSeries: false,
-        showLeftLabels: false,
+        showLeftLabels: true,
+        percentageYAxis: true,
         showBottomLabels: true,
         xLabels: labels,
         uniformXCount: timeBasedXAxis ? null : dates.length,
@@ -732,6 +733,10 @@ class _FlexLineChartScale extends CartesianScale {
   }
 }
 
+String graphYAxisLabel(double value, {bool percentage = false}) => percentage
+    ? '${ChartFormatting.format(value)}%'
+    : ChartFormatting.format(value);
+
 class _FlexLineChartRenderer extends ChartRenderer
     implements InteractiveRenderer {
   final List<FlexLineChartSeries> series;
@@ -743,6 +748,7 @@ class _FlexLineChartRenderer extends ChartRenderer
   final bool fillFirstSeries;
   final bool showLeftLabels;
   final bool showBottomLabels;
+  final bool percentageYAxis;
   final List<_LineChartAxisLabel> xLabels;
   final int? uniformXCount;
   final Color axisLabelColor;
@@ -756,6 +762,7 @@ class _FlexLineChartRenderer extends ChartRenderer
     required this.fillFirstSeries,
     required this.showLeftLabels,
     required this.showBottomLabels,
+    this.percentageYAxis = false,
     required this.xLabels,
     required this.uniformXCount,
     required this.axisLabelColor,
@@ -939,7 +946,7 @@ class _FlexLineChartRenderer extends ChartRenderer
         final y = _yForValue(value, bounds);
         drawChartText(
           canvas,
-          ChartFormatting.format(value),
+          graphYAxisLabel(value, percentage: percentageYAxis),
           Offset(bounds.left - 7, y),
           color: axisLabelColor,
           fontSize: _axisLabelFontSize,

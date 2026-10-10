@@ -1229,10 +1229,6 @@ class AppLocalizationsBn extends AppLocalizations {
   String get adjustedPace => 'সমন্বিত গতি';
 
   @override
-  String get oneRepMaxAccuracyWarning =>
-      '১০ বা তার বেশি রেপের সেটে এক রেপ সর্বোচ্চের অনুমান কম নির্ভুল';
-
-  @override
   String get addPlan => 'পরিকল্পনা যোগ করুন';
 
   @override
@@ -1578,8 +1574,4 @@ class AppLocalizationsBn extends AppLocalizations {
   String setNumber(int number) {
     return 'সেট $number';
   }
-
-  @override
-  String get graphIndependentMetricScales =>
-      'তুলনার জন্য প্রতিটি রেখার স্কেল আলাদাভাবে সমন্বয় করা হয়';
 }

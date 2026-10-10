@@ -391,7 +391,6 @@
   "inclineLabel": "Inclinación",
   "paceDistanceTime": "Ritmo (distancia / tiempo)",
   "adjustedPace": "Ritmo ajustado",
-  "oneRepMaxAccuracyWarning": "Las estimaciones del máximo de una repetición son menos precisas en series de 10 o más repeticiones",
   "addPlan": "Añadir plan",
   "planDetails": "Detalles del plan",
   "exercisesLabel": "Ejercicios",
@@ -495,10 +494,5 @@
   "nothingMatchesPlanSearch": "Nada coincide con “{query}”. Puedes crearlo como un plan nuevo.",
   "createPlan": "Crear plan",
   "createNamedPlan": "Crear “{name}”",
-  "setNumber": "Serie {number}",
-  "graphIndependentMetricScales": "Cada línea se escala por separado para facilitar la comparación",
-  "@graphIndependentMetricScales": {
-    "description": "Note for independently scaled graph metric lines."
-  }
-
+  "setNumber": "Serie {number}"
 }

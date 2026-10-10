@@ -391,7 +391,6 @@
   "inclineLabel": "Inclinaison",
   "paceDistanceTime": "Allure (distance / temps)",
   "adjustedPace": "Allure ajustée",
-  "oneRepMaxAccuracyWarning": "Les estimations du maximum sur 1 répétition sont moins précises pour les séries de 10 répétitions ou plus",
   "addPlan": "Ajouter un programme",
   "planDetails": "Détails du programme",
   "exercisesLabel": "Exercices",
@@ -495,10 +494,5 @@
   "nothingMatchesPlanSearch": "Aucun résultat pour « {query} ». Vous pouvez le créer comme nouveau programme.",
   "createPlan": "Créer un programme",
   "createNamedPlan": "Créer « {name} »",
-  "setNumber": "Série {number}",
-  "graphIndependentMetricScales": "Chaque courbe est mise à l’échelle séparément pour faciliter la comparaison",
-  "@graphIndependentMetricScales": {
-    "description": "Note for independently scaled graph metric lines."
-  }
-
+  "setNumber": "Série {number}"
 }

@@ -391,7 +391,6 @@
   "inclineLabel": "Steigung",
   "paceDistanceTime": "Tempo (Distanz / Zeit)",
   "adjustedPace": "Angepasstes Tempo",
-  "oneRepMaxAccuracyWarning": "1RM-Schätzungen sind bei Sätzen mit 10 oder mehr Wiederholungen weniger genau",
   "addPlan": "Plan hinzufügen",
   "planDetails": "Plandetails",
   "exercisesLabel": "Übungen",
@@ -495,10 +494,5 @@
   "nothingMatchesPlanSearch": "Keine Treffer für „{query}“. Du kannst daraus einen neuen Plan erstellen.",
   "createPlan": "Plan erstellen",
   "createNamedPlan": "„{name}“ erstellen",
-  "setNumber": "Satz {number}",
-  "graphIndependentMetricScales": "Jede Linie wird zum Vergleich unabhängig skaliert",
-  "@graphIndependentMetricScales": {
-    "description": "Note for independently scaled graph metric lines."
-  }
-
+  "setNumber": "Satz {number}"
 }

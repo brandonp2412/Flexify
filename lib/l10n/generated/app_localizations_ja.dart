@@ -1201,9 +1201,6 @@ class AppLocalizationsJa extends AppLocalizations {
   String get adjustedPace => '調整後ペース';
 
   @override
-  String get oneRepMaxAccuracyWarning => '1RMの推定値は10回以上のセットでは精度が低くなります';
-
-  @override
   String get addPlan => 'プランを追加';
 
   @override
@@ -1522,7 +1519,4 @@ class AppLocalizationsJa extends AppLocalizations {
   String setNumber(int number) {
     return 'セット $number';
   }
-
-  @override
-  String get graphIndependentMetricScales => '比較しやすいように各線の尺度を個別に調整しています';
 }

@@ -394,15 +394,6 @@ class _CardioPageState extends State<CardioPage> {
               metricSelector,
               const SizedBox(height: 8),
               periodSelector,
-              if (selectedOptions.length > 1) ...[
-                const SizedBox(height: 4),
-                Text(
-                  context.l10n.graphIndependentMetricScales,
-                  style: theme.textTheme.labelSmall?.copyWith(
-                    color: theme.colorScheme.onSurfaceVariant,
-                  ),
-                ),
-              ],
               const SizedBox(height: 8),
               Expanded(
                 child: _data.isEmpty

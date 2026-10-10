@@ -391,7 +391,6 @@
   "inclineLabel": "坡度",
   "paceDistanceTime": "配速（距离 / 时间）",
   "adjustedPace": "调整后配速",
-  "oneRepMaxAccuracyWarning": "当一组达到 10 次或更多次数时，1RM 估算的准确度会降低",
   "addPlan": "添加计划",
   "planDetails": "计划详情",
   "exercisesLabel": "动作",
@@ -495,10 +494,5 @@
   "nothingMatchesPlanSearch": "没有与“{query}”匹配的内容。你可以将其创建为新计划。",
   "createPlan": "创建计划",
   "createNamedPlan": "创建“{name}”",
-  "setNumber": "第 {number} 组",
-  "graphIndependentMetricScales": "每条线独立缩放以便比较",
-  "@graphIndependentMetricScales": {
-    "description": "Note for independently scaled graph metric lines."
-  }
-
+  "setNumber": "第 {number} 组"
 }

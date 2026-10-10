@@ -1225,10 +1225,6 @@ class AppLocalizationsFa extends AppLocalizations {
   String get adjustedPace => 'سرعت تعدیل‌شده';
 
   @override
-  String get oneRepMaxAccuracyWarning =>
-      'تخمین حداکثر یک تکرار برای ست‌های 10 تکرار یا بیشتر دقت کمتری دارد';
-
-  @override
   String get addPlan => 'افزودن برنامه';
 
   @override
@@ -1581,8 +1577,4 @@ class AppLocalizationsFa extends AppLocalizations {
   String setNumber(int number) {
     return 'ست $number';
   }
-
-  @override
-  String get graphIndependentMetricScales =>
-      'مقیاس هر خط برای مقایسه به‌صورت مستقل تنظیم می‌شود';
 }

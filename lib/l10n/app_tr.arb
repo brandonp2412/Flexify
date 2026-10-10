@@ -391,7 +391,6 @@
   "inclineLabel": "Eğim",
   "paceDistanceTime": "Tempo (mesafe / süre)",
   "adjustedPace": "Düzeltilmiş Tempo",
-  "oneRepMaxAccuracyWarning": "10+ tekrar içeren setler için 1RM tahminleri daha az doğruluk payına sahiptir.",
   "addPlan": "Plan Ekle",
   "planDetails": "Plan Detayları",
   "exercisesLabel": "Egzersizler",
@@ -495,10 +494,5 @@
   "nothingMatchesPlanSearch": "“{query}” ile eşleşen sonuç yok. Bunu yeni bir plan olarak oluşturabilirsin.",
   "createPlan": "Plan Oluştur",
   "createNamedPlan": "“{name}” Oluştur",
-  "setNumber": "{number}. Set",
-  "graphIndependentMetricScales": "Karşılaştırma için her çizgi bağımsız olarak ölçeklenir",
-  "@graphIndependentMetricScales": {
-    "description": "Note for independently scaled graph metric lines."
-  }
-
+  "setNumber": "{number}. Set"
 }

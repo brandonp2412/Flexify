@@ -1616,10 +1616,6 @@
   "@adjustedPace": {
     "description": "Cardio graph metric adjusted for incline."
   },
-  "oneRepMaxAccuracyWarning": "10+ रेप वाले सेट के लिए एक रेप अधिकतम का अनुमान कम सटीक होता है",
-  "@oneRepMaxAccuracyWarning": {
-    "description": "Warning about one-repetition maximum estimate accuracy."
-  },
   "addPlan": "प्लान जोड़ें",
   "@addPlan": {
     "description": "Action or title for creating a workout plan."
@@ -2048,10 +2044,5 @@
         "type": "int"
       }
     }
-  },
-  "graphIndependentMetricScales": "तुलना के लिए हर रेखा का पैमाना अलग-अलग समायोजित होता है",
-  "@graphIndependentMetricScales": {
-    "description": "Note for independently scaled graph metric lines."
   }
-
 }

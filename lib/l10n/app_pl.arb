@@ -391,7 +391,6 @@
   "inclineLabel": "Nachylenie",
   "paceDistanceTime": "Tempo (dystans / czas)",
   "adjustedPace": "Skorygowane tempo",
-  "oneRepMaxAccuracyWarning": "Szacunki 1RM są mniej dokładne dla serii po 10 lub więcej powtórzeń",
   "addPlan": "Dodaj plan",
   "planDetails": "Szczegóły planu",
   "exercisesLabel": "Ćwiczenia",
@@ -495,10 +494,5 @@
   "nothingMatchesPlanSearch": "Brak wyników dla „{query}”. Możesz utworzyć to jako nowy plan.",
   "createPlan": "Utwórz plan",
   "createNamedPlan": "Utwórz „{name}”",
-  "setNumber": "Seria {number}",
-  "graphIndependentMetricScales": "Każda linia ma osobną skalę, aby ułatwić porównanie",
-  "@graphIndependentMetricScales": {
-    "description": "Note for independently scaled graph metric lines."
-  }
-
+  "setNumber": "Seria {number}"
 }

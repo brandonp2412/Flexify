@@ -1202,9 +1202,6 @@ class AppLocalizationsKo extends AppLocalizations {
   String get adjustedPace => '보정 페이스';
 
   @override
-  String get oneRepMaxAccuracyWarning => '1RM 추정치는 10회 이상 반복한 세트에서 정확도가 낮습니다';
-
-  @override
   String get addPlan => '플랜 추가';
 
   @override
@@ -1524,7 +1521,4 @@ class AppLocalizationsKo extends AppLocalizations {
   String setNumber(int number) {
     return '세트 $number';
   }
-
-  @override
-  String get graphIndependentMetricScales => '비교를 위해 각 선의 눈금을 독립적으로 조정합니다';
 }

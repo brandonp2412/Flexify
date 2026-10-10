@@ -307,50 +307,6 @@ class _StrengthPageState extends State<StrengthPage> {
                 const SizedBox(height: 8),
               ],
               periodSelector,
-              if (selectedOptions.length > 1) ...[
-                const SizedBox(height: 4),
-                Text(
-                  context.l10n.graphIndependentMetricScales,
-                  style: theme.textTheme.labelSmall?.copyWith(
-                    color: theme.colorScheme.onSurfaceVariant,
-                  ),
-                ),
-              ],
-              if (_selectedMetrics.contains(StrengthMetric.oneRepMax) &&
-                  (_metricData[StrengthMetric.oneRepMax] ??
-                          const <StrengthData>[])
-                      .any((row) => row.reps >= 10))
-                Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 8,
-                    ),
-                    decoration: BoxDecoration(
-                      color: theme.colorScheme.errorContainer,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.warning_amber_rounded,
-                          color: theme.colorScheme.onErrorContainer,
-                          size: 20,
-                        ),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: Text(
-                            context.l10n.oneRepMaxAccuracyWarning,
-                            style: theme.textTheme.bodySmall?.copyWith(
-                              color: theme.colorScheme.onErrorContainer,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
               const SizedBox(height: 8),
               Expanded(
                 child: _data.isEmpty

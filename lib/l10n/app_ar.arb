@@ -1616,10 +1616,6 @@
   "@adjustedPace": {
     "description": "Cardio graph metric adjusted for incline."
   },
-  "oneRepMaxAccuracyWarning": "تقديرات الحد الأقصى لتكرار واحد أقل دقة للمجموعات التي تحتوي على 10 تكرارات أو أكثر",
-  "@oneRepMaxAccuracyWarning": {
-    "description": "Warning about one-repetition maximum estimate accuracy."
-  },
   "addPlan": "إضافة خطة",
   "@addPlan": {
     "description": "Action or title for creating a workout plan."
@@ -2048,10 +2044,5 @@
         "type": "int"
       }
     }
-  },
-  "graphIndependentMetricScales": "يُضبط مقياس كل خط بشكل مستقل لتسهيل المقارنة",
-  "@graphIndependentMetricScales": {
-    "description": "Note for independently scaled graph metric lines."
   }
-
 }

@@ -2310,12 +2310,6 @@ abstract class AppLocalizations {
   /// **'Adjusted pace'**
   String get adjustedPace;
 
-  /// Warning about one-repetition maximum estimate accuracy.
-  ///
-  /// In en, this message translates to:
-  /// **'One rep max estimates are less accurate for sets of 10+ reps'**
-  String get oneRepMaxAccuracyWarning;
-
   /// Action or title for creating a workout plan.
   ///
   /// In en, this message translates to:
@@ -2921,12 +2915,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Set {number}'**
   String setNumber(int number);
-
-  /// Note displayed when multiple graph metrics with different units share one plot.
-  ///
-  /// In en, this message translates to:
-  /// **'Each line is scaled independently for comparison'**
-  String get graphIndependentMetricScales;
 }
 
 class _AppLocalizationsDelegate
