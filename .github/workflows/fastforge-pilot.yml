@@ -1,0 +1,168 @@
+name: Fastforge packaging pilot
+
+on:
+  workflow_dispatch:
+    inputs:
+      platform:
+        description: Build-only pilot; never publishes a release
+        required: true
+        type: choice
+        options: [android, linux, windows]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: fastforge-pilot-${{ github.ref }}-${{ inputs.platform }}
+  cancel-in-progress: false
+
+jobs:
+  android:
+    if: inputs.platform == 'android'
+    runs-on: ubuntu-latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          submodules: recursive
+          persist-credentials: false
+      - uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5
+        with:
+          distribution: zulu
+          java-version: '21'
+      - name: Match F-Droid build paths
+        run: |
+          sudo mkdir -p /home/brandon /opt/android-sdk
+          sudo chown "$USER" /home/brandon
+          mv "$GITHUB_WORKSPACE" /home/brandon/flexify
+          sudo mount --bind "$ANDROID_HOME" /opt/android-sdk
+          {
+            echo 'ANDROID_HOME=/opt/android-sdk'
+            echo 'ANDROID_SDK_ROOT=/opt/android-sdk'
+            echo 'FLUTTER_ROOT=/home/brandon/flexify/flutter'
+            echo 'PUB_CACHE=/home/brandon/flexify/.pub-cache'
+          } >> "$GITHUB_ENV"
+          {
+            echo '/home/brandon/flexify/flutter/bin'
+            echo '/home/brandon/flexify/.pub-cache/bin'
+          } >> "$GITHUB_PATH"
+      - name: Set up pinned Flutter and Fastforge 0.6.12
+        working-directory: /home/brandon/flexify
+        run: |
+          test "$(git -C flutter rev-parse HEAD)" = "$(git ls-tree HEAD flutter | awk '{print $3}')"
+          chmod +x flutter/bin/*
+          flutter/bin/flutter --version
+          flutter/bin/flutter config --no-analytics
+          flutter/bin/flutter pub get --enforce-lockfile
+          flutter/bin/dart pub global activate fastforge 0.6.12
+          flutter/bin/dart run build_runner build -d
+      - name: Configure canonical Android signing
+        working-directory: /home/brandon/flexify
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          ANDROID_STORE_PASSWORD: ${{ secrets.ANDROID_STORE_PASSWORD }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+        run: |
+          test -n "$ANDROID_KEYSTORE_BASE64"
+          test -n "$ANDROID_STORE_PASSWORD"
+          test -n "$ANDROID_KEY_PASSWORD"
+          test -n "$ANDROID_KEY_ALIAS"
+          printf '%s' "$ANDROID_KEYSTORE_BASE64" | base64 --decode > android/app/keystore.jks
+          printf 'storePassword=%s\nkeyPassword=%s\nkeyAlias=%s\nstoreFile=keystore.jks\n' \
+            "$ANDROID_STORE_PASSWORD" "$ANDROID_KEY_PASSWORD" "$ANDROID_KEY_ALIAS" > android/key.properties
+          sed -i \
+            -e 's/^org.gradle.jvmargs=.*/org.gradle.jvmargs=-Xmx3G -XX:MaxMetaspaceSize=512m -XX:ReservedCodeCacheSize=512m -XX:ActiveProcessorCount=2/' \
+            -e 's/^org.gradle.workers.max=.*/org.gradle.workers.max=2/' android/gradle.properties
+          rm -f android/local.properties
+      - name: Package only with Fastforge (no publishing)
+        working-directory: /home/brandon/flexify
+        run: fastforge --no-version-check release --name pilot-android
+      - name: Verify signed APKs and generated AAB
+        working-directory: /home/brandon/flexify
+        shell: bash
+        run: |
+          shopt -s nullglob globstar
+          apks=(dist/fastforge-pilot/**/*.apk)
+          aabs=(dist/fastforge-pilot/**/*.aab)
+          test "${#apks[@]}" -gt 0
+          test "${#aabs[@]}" -gt 0
+          ./scripts/verify-android-release-signing.sh "${apks[@]}"
+          printf 'Generated %s APK(s) and %s AAB(s) using Flutter %s\n' \
+            "${#apks[@]}" "${#aabs[@]}" "$(git -C flutter rev-parse --short HEAD)"
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: fastforge-pilot-android
+          path: /home/brandon/flexify/dist/fastforge-pilot/
+          if-no-files-found: error
+          retention-days: 3
+
+  linux:
+    if: inputs.platform == 'linux'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          submodules: recursive
+          persist-credentials: false
+      - name: Install Linux build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev
+      - name: Set up pinned Flutter and Fastforge 0.6.12
+        run: |
+          test "$(git -C flutter rev-parse HEAD)" = "$(git ls-tree HEAD flutter | awk '{print $3}')"
+          chmod +x flutter/bin/*
+          echo "FLUTTER_ROOT=$PWD/flutter" >> "$GITHUB_ENV"
+          echo "PUB_CACHE=$PWD/.pub-cache" >> "$GITHUB_ENV"
+          echo "$PWD/flutter/bin" >> "$GITHUB_PATH"
+          echo "$PWD/.pub-cache/bin" >> "$GITHUB_PATH"
+      - name: Package Linux ZIP (no publishing)
+        run: |
+          flutter/bin/flutter --version
+          flutter/bin/flutter pub get --enforce-lockfile
+          flutter/bin/dart pub global activate fastforge 0.6.12
+          flutter/bin/dart run build_runner build -d
+          fastforge --no-version-check release --name pilot-linux
+          find dist/fastforge-pilot -type f -name '*.zip' | grep -q .
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: fastforge-pilot-linux
+          path: dist/fastforge-pilot/
+          if-no-files-found: error
+          retention-days: 3
+
+  windows:
+    if: inputs.platform == 'windows'
+    runs-on: windows-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          submodules: recursive
+          persist-credentials: false
+      - name: Set up pinned Flutter and Fastforge 0.6.12
+        shell: pwsh
+        run: |
+          $expected = (git ls-tree HEAD flutter).Split(' ')[2].Split("`t")[0]
+          if ((git -C flutter rev-parse HEAD).Trim() -ne $expected) { throw 'Flutter submodule drift' }
+          "FLUTTER_ROOT=$PWD/flutter" >> $env:GITHUB_ENV
+          "PUB_CACHE=$PWD/.pub-cache" >> $env:GITHUB_ENV
+          "$PWD/flutter/bin" >> $env:GITHUB_PATH
+          "$PWD/.pub-cache/bin" >> $env:GITHUB_PATH
+      - name: Package Windows ZIP (no publishing)
+        shell: pwsh
+        run: |
+          ./flutter/bin/flutter.bat --version
+          ./flutter/bin/flutter.bat pub get --enforce-lockfile
+          ./flutter/bin/dart.bat pub global activate fastforge 0.6.12
+          ./flutter/bin/dart.bat run build_runner build -d
+          fastforge --no-version-check release --name pilot-windows
+          if (-not (Get-ChildItem dist/fastforge-pilot -Recurse -Filter '*.zip')) { throw 'Fastforge produced no ZIP' }
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: fastforge-pilot-windows
+          path: dist/fastforge-pilot/
+          if-no-files-found: error
+          retention-days: 3
