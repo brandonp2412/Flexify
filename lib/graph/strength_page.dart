@@ -51,8 +51,6 @@ class _StrengthPageState extends State<StrengthPage> {
 
   late int limit;
   late StrengthMetric metric;
-  late Set<StrengthMetric> _selectedMetrics;
-  Map<StrengthMetric, List<StrengthData>> _metricData = {};
   int _dataRequest = 0;
   late Period period;
   DateTime? start;
@@ -76,8 +74,6 @@ class _StrengthPageState extends State<StrengthPage> {
     if (!settings.showBodyWeight && metric == StrengthMetric.relativeStrength) {
       metric = StrengthMetric.bestWeight;
     }
-    _selectedMetrics = {metric};
-    _metricData = {metric: _data};
     period = Period.values.firstWhere(
       (p) => p.name == settings.defaultGraphPeriod,
       orElse: () => Period.day,
@@ -90,17 +86,14 @@ class _StrengthPageState extends State<StrengthPage> {
     final pref = await getExerciseByName(_exerciseName);
     if (pref == null || !mounted) return;
     setState(() {
-      final names = pref.graphMetric.split(',').toSet();
-      _selectedMetrics = {
-        for (final m in StrengthMetric.values)
-          if (names.contains(m.name)) m,
-      };
-      if (!context.read<SettingsState>().value.showBodyWeight) {
-        _selectedMetrics.remove(StrengthMetric.relativeStrength);
-      }
-      if (_selectedMetrics.isEmpty)
-        _selectedMetrics = {StrengthMetric.bestWeight};
-      metric = _selectedMetrics.first;
+      final stored = pref.graphMetric.split(',');
+      final showBodyWeight = context.read<SettingsState>().value.showBodyWeight;
+      metric = StrengthMetric.values.firstWhere(
+        (m) =>
+            stored.contains(m.name) &&
+            (showBodyWeight || m != StrengthMetric.relativeStrength),
+        orElse: () => StrengthMetric.bestWeight,
+      );
       period = Period.values.firstWhere(
         (p) => p.name == pref.graphPeriod,
         orElse: () => period,
@@ -118,7 +111,7 @@ class _StrengthPageState extends State<StrengthPage> {
     if (exercise == null) return;
     await updateExerciseGraphPreferences(
       exerciseId: exercise.id,
-      metric: _selectedMetrics.map((m) => m.name).join(','),
+      metric: metric.name,
       period: period.name,
       limit: limit,
       timeBasedXAxis: useTimeBasedXAxis,
@@ -184,14 +177,11 @@ class _StrengthPageState extends State<StrengthPage> {
     ];
     final metricSelector = GraphMetricChips<StrengthMetric>(
       options: metricOptions,
-      selected: _selectedMetrics,
+      selected: metric,
       onChanged: (next) {
+        if (metric == next) return;
         setState(() {
-          _selectedMetrics = next;
-          if (!next.contains(metric)) {
-            metric = metricOptions.firstWhere((o) => next.contains(o.$1)).$1;
-          }
-          _data = _metricData[metric] ?? _data;
+          metric = next;
         });
         setData();
         _savePreferences();
@@ -218,11 +208,10 @@ class _StrengthPageState extends State<StrengthPage> {
       },
     );
 
-    final selectedOptions = [
-      for (final option in metricOptions)
-        if (_selectedMetrics.contains(option.$1)) option,
-    ];
     final palette = GraphMetricChips.palette(theme.colorScheme);
+    final lineColor =
+        palette[metricOptions.indexWhere((o) => o.$1 == metric) %
+            palette.length];
     final points = <FlexLineChartPoint>[];
     for (var index = 0; index < _data.length; index++) {
       points.add(
@@ -290,61 +279,18 @@ class _StrengthPageState extends State<StrengthPage> {
                       )
                     : Padding(
                         padding: const EdgeInsets.only(top: 16.0, right: 45.0),
-                        child: selectedOptions.length <= 1
-                            ? FlexLineChart(
-                                dates: _data.map((row) => row.created).toList(),
-                                points: points,
-                                tooltipText: (index) => tooltipText(
-                                  metric,
-                                  _data[index],
-                                  shortDateFormat,
-                                ),
-                                onPointSelected: touchLine,
-                                timeBasedXAxis: useTimeBasedXAxis,
-                              )
-                            : FlexMultiMetricLineChart(
-                                dates: _data.map((row) => row.created).toList(),
-                                timeBasedXAxis: useTimeBasedXAxis,
-                                onPointSelected: touchLine,
-                                series: [
-                                  for (final option in selectedOptions)
-                                    FlexLineChartSeries(
-                                      name: option.$2,
-                                      color:
-                                          palette[metricOptions.indexOf(
-                                                option,
-                                              ) %
-                                              palette.length],
-                                      points: [
-                                        for (
-                                          var index = 0;
-                                          index <
-                                                  (_metricData[option.$1]
-                                                          ?.length ??
-                                                      0) &&
-                                              index < _data.length;
-                                          index++
-                                        )
-                                          FlexLineChartPoint(
-                                            useTimeBasedXAxis
-                                                ? _data[index]
-                                                      .created
-                                                      .millisecondsSinceEpoch
-                                                      .toDouble()
-                                                : index.toDouble(),
-                                            _metricData[option.$1]![index]
-                                                .value,
-                                            column: index,
-                                          ),
-                                      ],
-                                    ),
-                                ],
-                                tooltipText: (seriesIndex, index) {
-                                  final option = selectedOptions[seriesIndex];
-                                  final rows = _metricData[option.$1]!;
-                                  return '${option.$2}: ${tooltipText(option.$1, rows[index], shortDateFormat)}';
-                                },
-                              ),
+                        child: FlexLineChart(
+                          lineColor: lineColor,
+                          dates: _data.map((row) => row.created).toList(),
+                          points: points,
+                          tooltipText: (index) => tooltipText(
+                            metric,
+                            _data[index],
+                            shortDateFormat,
+                          ),
+                          onPointSelected: touchLine,
+                          timeBasedXAxis: useTimeBasedXAxis,
+                        ),
                       ),
               ),
               const SizedBox(height: 8),
@@ -490,31 +436,26 @@ class _StrengthPageState extends State<StrengthPage> {
   Future<void> setData() async {
     if (!mounted) return;
     final request = ++_dataRequest;
-    final selected = {..._selectedMetrics};
-    final values = widget.bodyWeight
-        ? <StrengthMetric, List<StrengthData>>{
-            metric: await getBodyWeightData(
-              target: _targetUnit,
-              period: period,
-              start: start,
-              end: end,
-              limit: limit,
-            ),
-          }
-        : await getStrengthMetricsData(
+    final selected = metric;
+    final rows = widget.bodyWeight
+        ? await getBodyWeightData(
+            target: _targetUnit,
+            period: period,
+            start: start,
+            end: end,
+            limit: limit,
+          )
+        : await getStrengthData(
             target: _targetUnit,
             name: _exerciseName,
-            metrics: selected,
+            metric: selected,
             period: period,
             start: start,
             end: end,
             limit: limit,
           );
     if (!mounted || request != _dataRequest) return;
-    setState(() {
-      _metricData = values;
-      _data = values[metric] ?? const [];
-    });
+    setState(() => _data = rows);
   }
 
   String tooltipText(

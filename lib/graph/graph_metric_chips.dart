@@ -9,8 +9,8 @@ class GraphMetricChips<T> extends StatelessWidget {
   });
 
   final List<(T, String)> options;
-  final Set<T> selected;
-  final ValueChanged<Set<T>> onChanged;
+  final T selected;
+  final ValueChanged<T> onChanged;
 
   static List<Color> palette(ColorScheme colors) => [
     colors.primary,
@@ -33,8 +33,8 @@ class GraphMetricChips<T> extends StatelessWidget {
           Builder(
             builder: (context) {
               final accent = palette[index % palette.length];
-              final active = selected.contains(options[index].$1);
-              return FilterChip(
+              final active = selected == options[index].$1;
+              return ChoiceChip(
                 key: ValueKey('graph-metric-${options[index].$1}'),
                 label: Text(options[index].$2),
                 avatar: Container(
@@ -77,15 +77,7 @@ class GraphMetricChips<T> extends StatelessWidget {
                 labelPadding: const EdgeInsets.symmetric(horizontal: 4),
                 visualDensity: VisualDensity.compact,
                 onSelected: (enabled) {
-                  final next = {...selected};
-                  if (enabled) {
-                    next.add(options[index].$1);
-                  } else if (next.length > 1) {
-                    next.remove(options[index].$1);
-                  } else {
-                    return;
-                  }
-                  onChanged(next);
+                  if (enabled && !active) onChanged(options[index].$1);
                 },
               );
             },

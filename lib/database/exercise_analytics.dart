@@ -314,38 +314,6 @@ Future<List<StrengthData>> getBodyWeightData({
   }).toList();
 }
 
-Future<Map<StrengthMetric, List<StrengthData>>> getStrengthMetricsData({
-  required String target,
-  required String name,
-  required Set<StrengthMetric> metrics,
-  required Period period,
-  required DateTime? start,
-  required DateTime? end,
-  required int limit,
-}) async {
-  if (metrics.isEmpty) return {};
-  final sets = await getExerciseSetsForExercise(
-    db,
-    exerciseName: name,
-    startDate: start,
-    endDate: end,
-    order: OrderingMode.asc,
-  );
-  final groups = _groupSets(sets.where((set) => !set.cardio), period, limit);
-  return {
-    for (final metric in metrics)
-      metric: [
-        for (final group in groups)
-          _strengthBucket(
-            group,
-            metric: metric,
-            target: target,
-            category: group.first.category,
-          ),
-      ],
-  };
-}
-
 Future<List<StrengthData>> getStrengthData({
   required String target,
   required String name,
@@ -354,15 +322,25 @@ Future<List<StrengthData>> getStrengthData({
   required DateTime? start,
   required DateTime? end,
   required int limit,
-}) async => (await getStrengthMetricsData(
-  target: target,
-  name: name,
-  metrics: {metric},
-  period: period,
-  start: start,
-  end: end,
-  limit: limit,
-))[metric]!;
+}) async {
+  final sets = await getExerciseSetsForExercise(
+    db,
+    exerciseName: name,
+    startDate: start,
+    endDate: end,
+    order: OrderingMode.asc,
+  );
+  final groups = _groupSets(sets.where((set) => !set.cardio), period, limit);
+  return [
+    for (final group in groups)
+      _strengthBucket(
+        group,
+        metric: metric,
+        target: target,
+        category: group.first.category,
+      ),
+  ];
+}
 
 double _averageIncline(List<ExerciseSetView> sets) {
   final values = sets
@@ -425,33 +403,6 @@ CardioData _cardioBucket(
   );
 }
 
-Future<Map<CardioMetric, List<CardioData>>> getCardioMetricsData({
-  required Set<CardioMetric> metrics,
-  Period period = Period.day,
-  String name = '',
-  String target = 'km',
-  DateTime? start,
-  DateTime? end,
-  int limit = 11,
-}) async {
-  if (metrics.isEmpty) return {};
-  final sets = await getExerciseSetsForExercise(
-    db,
-    exerciseName: name,
-    startDate: start ?? DateTime(0),
-    endDate: end ?? DateTime.now().toLocal().add(const Duration(days: 1)),
-    order: OrderingMode.asc,
-  );
-  final groups = _groupSets(sets.where((set) => set.cardio), period, limit);
-  return {
-    for (final metric in metrics)
-      metric: [
-        for (final group in groups)
-          _cardioBucket(group, metric: metric, target: target),
-      ],
-  };
-}
-
 Future<List<CardioData>> getCardioData({
   Period period = Period.day,
   String name = '',
@@ -460,15 +411,20 @@ Future<List<CardioData>> getCardioData({
   DateTime? start,
   DateTime? end,
   int limit = 11,
-}) async => (await getCardioMetricsData(
-  metrics: {metric},
-  period: period,
-  name: name,
-  target: target,
-  start: start,
-  end: end,
-  limit: limit,
-))[metric]!;
+}) async {
+  final sets = await getExerciseSetsForExercise(
+    db,
+    exerciseName: name,
+    startDate: start ?? DateTime(0),
+    endDate: end ?? DateTime.now().toLocal().add(const Duration(days: 1)),
+    order: OrderingMode.asc,
+  );
+  final groups = _groupSets(sets.where((set) => set.cardio), period, limit);
+  return [
+    for (final group in groups)
+      _cardioBucket(group, metric: metric, target: target),
+  ];
+}
 
 Future<List<String?>> getCategories() {
   return (db.select(db.categories)

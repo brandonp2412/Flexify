@@ -45,8 +45,6 @@ class _CardioPageState extends State<CardioPage> {
   late String _exerciseName;
   late int limit;
   late CardioMetric metric;
-  late Set<CardioMetric> _selectedMetrics;
-  Map<CardioMetric, List<CardioData>> _metricData = {};
   int _dataRequest = 0;
   late Period period;
   DateTime? start;
@@ -72,8 +70,6 @@ class _CardioPageState extends State<CardioPage> {
             (m) => m.name == settings.defaultGraphMetric,
             orElse: () => CardioMetric.pace,
           );
-    _selectedMetrics = {metric};
-    _metricData = {metric: _data};
     period = Period.values.firstWhere(
       (p) => p.name == settings.defaultGraphPeriod,
       orElse: () => Period.day,
@@ -86,7 +82,7 @@ class _CardioPageState extends State<CardioPage> {
     final pref = await getExerciseByName(_exerciseName);
     if (pref == null || !mounted) return;
     setState(() {
-      final names = pref.graphMetric.split(',').toSet();
+      final stored = pref.graphMetric.split(',');
       final allowed = _isWeightUnit(_targetUnit)
           ? {CardioMetric.weight, CardioMetric.duration, CardioMetric.incline}
           : {
@@ -96,12 +92,12 @@ class _CardioPageState extends State<CardioPage> {
               CardioMetric.distance,
               CardioMetric.incline,
             };
-      _selectedMetrics = {
-        for (final m in CardioMetric.values)
-          if (names.contains(m.name) && allowed.contains(m)) m,
-      };
-      if (_selectedMetrics.isEmpty) _selectedMetrics = {metric};
-      metric = _selectedMetrics.first;
+      metric = CardioMetric.values.firstWhere(
+        (m) => stored.contains(m.name) && allowed.contains(m),
+        orElse: () => _isWeightUnit(_targetUnit)
+            ? CardioMetric.weight
+            : CardioMetric.pace,
+      );
       period = Period.values.firstWhere(
         (p) => p.name == pref.graphPeriod,
         orElse: () => period,
@@ -118,7 +114,7 @@ class _CardioPageState extends State<CardioPage> {
     if (exercise == null) return;
     await updateExerciseGraphPreferences(
       exerciseId: exercise.id,
-      metric: _selectedMetrics.map((m) => m.name).join(','),
+      metric: metric.name,
       period: period.name,
       limit: limit,
       timeBasedXAxis: useTimeBasedXAxis,
@@ -249,14 +245,11 @@ class _CardioPageState extends State<CardioPage> {
 
     final metricSelector = GraphMetricChips<CardioMetric>(
       options: metricOptions,
-      selected: _selectedMetrics,
+      selected: metric,
       onChanged: (next) {
+        if (metric == next) return;
         setState(() {
-          _selectedMetrics = next;
-          if (!next.contains(metric)) {
-            metric = metricOptions.firstWhere((o) => next.contains(o.$1)).$1;
-          }
-          _data = _metricData[metric] ?? _data;
+          metric = next;
         });
         setData();
         _savePreferences();
@@ -282,11 +275,10 @@ class _CardioPageState extends State<CardioPage> {
         _savePreferences();
       },
     );
-    final selectedOptions = [
-      for (final option in metricOptions)
-        if (_selectedMetrics.contains(option.$1)) option,
-    ];
     final palette = GraphMetricChips.palette(theme.colorScheme);
+    final lineColor =
+        palette[metricOptions.indexWhere((o) => o.$1 == metric) %
+            palette.length];
     final points = <FlexLineChartPoint>[];
     for (var index = 0; index < _data.length; index++) {
       final row = _data[index];
@@ -324,7 +316,8 @@ class _CardioPageState extends State<CardioPage> {
                 setState(() {
                   _exerciseName = newName;
                   if (updated != null) _targetUnit = updated.displayUnit;
-                  final allowed = _isWeightUnit(_targetUnit)
+                  final supportsWeight = _isWeightUnit(_targetUnit);
+                  final allowed = supportsWeight
                       ? {
                           CardioMetric.weight,
                           CardioMetric.duration,
@@ -337,16 +330,11 @@ class _CardioPageState extends State<CardioPage> {
                           CardioMetric.distance,
                           CardioMetric.incline,
                         };
-                  _selectedMetrics = _selectedMetrics.intersection(allowed);
-                  if (_selectedMetrics.isEmpty) {
-                    _selectedMetrics = {
-                      _isWeightUnit(_targetUnit)
-                          ? CardioMetric.weight
-                          : CardioMetric.pace,
-                    };
+                  if (!allowed.contains(metric)) {
+                    metric = supportsWeight
+                        ? CardioMetric.weight
+                        : CardioMetric.pace;
                   }
-                  if (!_selectedMetrics.contains(metric))
-                    metric = _selectedMetrics.first;
                 });
                 setData();
               }
@@ -380,61 +368,18 @@ class _CardioPageState extends State<CardioPage> {
                       )
                     : Padding(
                         padding: const EdgeInsets.only(right: 32.0, top: 16.0),
-                        child: selectedOptions.length <= 1
-                            ? FlexLineChart(
-                                points: points,
-                                tooltipText: (index) => tooltipText(
-                                  metric,
-                                  _data[index],
-                                  shortDateFormat,
-                                ),
-                                onPointSelected: touchLine,
-                                dates: _data.map((row) => row.created).toList(),
-                                timeBasedXAxis: useTimeBasedXAxis,
-                              )
-                            : FlexMultiMetricLineChart(
-                                dates: _data.map((row) => row.created).toList(),
-                                timeBasedXAxis: useTimeBasedXAxis,
-                                onPointSelected: touchLine,
-                                series: [
-                                  for (final option in selectedOptions)
-                                    FlexLineChartSeries(
-                                      name: option.$2,
-                                      color:
-                                          palette[metricOptions.indexOf(
-                                                option,
-                                              ) %
-                                              palette.length],
-                                      points: [
-                                        for (
-                                          var index = 0;
-                                          index <
-                                                  (_metricData[option.$1]
-                                                          ?.length ??
-                                                      0) &&
-                                              index < _data.length;
-                                          index++
-                                        )
-                                          FlexLineChartPoint(
-                                            useTimeBasedXAxis
-                                                ? _data[index]
-                                                      .created
-                                                      .millisecondsSinceEpoch
-                                                      .toDouble()
-                                                : index.toDouble(),
-                                            _metricData[option.$1]![index]
-                                                .value,
-                                            column: index,
-                                          ),
-                                      ],
-                                    ),
-                                ],
-                                tooltipText: (seriesIndex, index) {
-                                  final option = selectedOptions[seriesIndex];
-                                  final rows = _metricData[option.$1]!;
-                                  return '${option.$2}: ${tooltipText(option.$1, rows[index], shortDateFormat)}';
-                                },
-                              ),
+                        child: FlexLineChart(
+                          lineColor: lineColor,
+                          points: points,
+                          tooltipText: (index) => tooltipText(
+                            metric,
+                            _data[index],
+                            shortDateFormat,
+                          ),
+                          onPointSelected: touchLine,
+                          dates: _data.map((row) => row.created).toList(),
+                          timeBasedXAxis: useTimeBasedXAxis,
+                        ),
                       ),
               ),
               const SizedBox(height: 8),
@@ -583,21 +528,18 @@ class _CardioPageState extends State<CardioPage> {
   Future<void> setData() async {
     if (!mounted) return;
     final request = ++_dataRequest;
-    final selected = {..._selectedMetrics};
-    final values = await getCardioMetricsData(
+    final selected = metric;
+    final rows = await getCardioData(
       end: end,
       period: period,
-      metrics: selected,
+      metric: selected,
       name: _exerciseName,
       start: start,
       target: _targetUnit,
       limit: limit,
     );
     if (!mounted || request != _dataRequest) return;
-    setState(() {
-      _metricData = values;
-      _data = values[metric] ?? const [];
-    });
+    setState(() => _data = rows);
   }
 
   bool _isWeightUnit(String value) =>
