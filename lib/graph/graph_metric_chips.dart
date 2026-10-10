@@ -26,6 +26,7 @@ class GraphMetricChips<T> extends StatelessWidget {
     final palette = GraphMetricChips.palette(colors);
     final textTheme = Theme.of(context).textTheme;
     return Wrap(
+      alignment: WrapAlignment.center,
       spacing: 8,
       runSpacing: 6,
       children: [

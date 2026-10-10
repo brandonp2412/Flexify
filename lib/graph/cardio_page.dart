@@ -355,9 +355,9 @@ class _CardioPageState extends State<CardioPage> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const SizedBox(height: 8),
-              metricSelector,
-              const SizedBox(height: 8),
               periodSelector,
+              const SizedBox(height: 8),
+              metricSelector,
               const SizedBox(height: 8),
               Expanded(
                 child: _data.isEmpty

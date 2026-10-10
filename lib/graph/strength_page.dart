@@ -264,11 +264,11 @@ class _StrengthPageState extends State<StrengthPage> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const SizedBox(height: 8),
-              if (!widget.bodyWeight) ...[
-                metricSelector,
-                const SizedBox(height: 8),
-              ],
               periodSelector,
+              if (!widget.bodyWeight) ...[
+                const SizedBox(height: 8),
+                metricSelector,
+              ],
               const SizedBox(height: 8),
               Expanded(
                 child: _data.isEmpty
