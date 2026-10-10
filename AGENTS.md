@@ -12,10 +12,11 @@
   3. `flutter test`
 
 # Drift Database Rules
-- **Migration Protocol**: After any change to a table or database file:
+- **Migration Protocol**: When the persisted database schema changes (tables, columns, constraints, or indexes), or existing data needs a versioned migration:
   1. Increment the `schemaVersion` in the database class.
   2. dart run build_runner build -d
   3. dart run drift_dev make-migrations
+- Changes to database paths, connection settings, queries, or other database code do not require a schema version bump unless they include an actual schema or data migration. Do not add empty migrations for those changes.
   
 # Git & Version Control
 - **Commit Format**: Use the [Conventional Commits](https://www.conventionalcommits.org/) standard (e.g., `feat:`, `fix:`, `chore:`).
