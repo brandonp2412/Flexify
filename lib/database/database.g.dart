@@ -3078,7 +3078,7 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
     false,
     type: DriftSqlType.int,
     requiredDuringInsert: false,
-    defaultValue: const Constant(20),
+    defaultValue: const Constant(30),
   );
   static const VerificationMeta _defaultGraphTimeBasedXAxisMeta =
       const VerificationMeta('defaultGraphTimeBasedXAxis');

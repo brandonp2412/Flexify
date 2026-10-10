@@ -58,7 +58,7 @@ class Settings extends Table {
   TextColumn get defaultGraphPeriod =>
       text().withDefault(const Constant("day"))();
   IntColumn get defaultGraphLimit =>
-      integer().withDefault(const Constant(20))();
+      integer().withDefault(const Constant(30))();
   BoolColumn get defaultGraphTimeBasedXAxis =>
       boolean().withDefault(const Constant(false))();
   BoolColumn get keepRinging => boolean().withDefault(const Constant(false))();
