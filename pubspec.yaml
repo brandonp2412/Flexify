@@ -12,7 +12,7 @@ dependencies:
     sdk: flutter
   talker_flutter: 5.1.20
   cupertino_icons: ^1.0.2
-  drift: ^2.34.3
+  drift: ^2.35.2
   path_provider: ^2.1.2
   path: ^1.8.3
   csv: ^8.0.0
@@ -36,7 +36,7 @@ dependencies:
       ref: main
   timeago: ^3.2.2
   sqlite3_web: ^0.9.4
-  drift_dev: ^2.34.5
+  drift_dev: ^2.35.1
   drafter: ^0.3.0
 dev_dependencies:
   integration_test:

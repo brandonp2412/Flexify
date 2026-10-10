@@ -16,18 +16,12 @@ import 'package:flutter/foundation.dart';
 
 import 'database_connection_web.dart'
     if (dart.library.io) 'database_connection_native.dart';
-import 'migrations_web.dart' if (dart.library.io) 'migrations_native.dart';
+import 'database_validation_web.dart'
+    if (dart.library.io) 'database_validation_native.dart';
 
 export 'exercise_set_view.dart';
 
 part 'database.g.dart';
-
-LazyDatabase openConnection() {
-  return LazyDatabase(() async {
-    if (kIsWeb) return createWebConnection();
-    return createNativeConnection();
-  });
-}
 
 Future<void> _removeOrphanedPlanExercises(AppDatabase database) async {
   await database.customStatement(r'''
@@ -301,7 +295,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase.forPath(String path) : super(createConnectionForPath(path));
 
   /// Opens Flexify's persistent application database.
-  AppDatabase.persistent() : super(openConnection());
+  AppDatabase.persistent() : super(createPersistentConnection());
 
   @override
   MigrationStrategy get migration {
@@ -309,7 +303,7 @@ class AppDatabase extends _$AppDatabase {
       beforeOpen: (details) async {
         await customStatement('PRAGMA foreign_keys = ON');
         talker.debug('Opening Flexify database schema v${details.versionNow}');
-        if (kDebugMode) await validateDatabaseSchema();
+        if (kDebugMode) await validateOpenDatabase(this);
       },
       onCreate: (Migrator m) async {
         talker.info('Creating Flexify database');

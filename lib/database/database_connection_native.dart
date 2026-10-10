@@ -13,7 +13,7 @@ QueryExecutor createConnectionForPath(String path) {
   );
 }
 
-LazyDatabase createNativeConnection() {
+QueryExecutor createPersistentConnection() {
   return LazyDatabase(() async {
     final file = await getDatabaseFile();
 
@@ -26,8 +26,4 @@ LazyDatabase createNativeConnection() {
 void _configureDatabase(Database database) {
   database.execute('PRAGMA busy_timeout = 5000');
   database.execute('PRAGMA foreign_keys = ON');
-}
-
-LazyDatabase createWebConnection() {
-  throw UnsupportedError('Web connection not supported on native platforms');
 }
