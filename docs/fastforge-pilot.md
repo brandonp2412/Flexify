@@ -36,6 +36,8 @@ If initializing the submodule with a shallow clone, `flutter --version` may show
 `0.0.0-unknown` because Git tag ancestry is missing. Deepen the *submodule's
 history* without changing the pinned checkout (`git -C flutter fetch --deepen=200
 origin`). Do not use a different system Flutter to work around this.
+The GitHub-hosted Linux pilot initially reproduced this problem; all three
+runner setups now fetch missing ancestry before resolving dependencies.
 
 ## Baseline and measured evidence
 

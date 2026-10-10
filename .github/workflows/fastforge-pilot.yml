@@ -50,6 +50,9 @@ jobs:
         working-directory: /home/brandon/flexify
         run: |
           test "$(git -C flutter rev-parse HEAD)" = "$(git ls-tree HEAD flutter | awk '{print $3}')"
+          if [[ "$(git -C flutter rev-parse --is-shallow-repository)" == 'true' ]]; then
+            git -C flutter fetch --deepen=200 origin
+          fi
           chmod +x flutter/bin/*
           flutter/bin/flutter --version
           flutter/bin/flutter config --no-analytics
@@ -113,6 +116,9 @@ jobs:
       - name: Set up pinned Flutter and Fastforge 0.6.12
         run: |
           test "$(git -C flutter rev-parse HEAD)" = "$(git ls-tree HEAD flutter | awk '{print $3}')"
+          if [[ "$(git -C flutter rev-parse --is-shallow-repository)" == 'true' ]]; then
+            git -C flutter fetch --deepen=200 origin
+          fi
           chmod +x flutter/bin/*
           echo "FLUTTER_ROOT=$PWD/flutter" >> "$GITHUB_ENV"
           echo "PUB_CACHE=$PWD/.pub-cache" >> "$GITHUB_ENV"
@@ -147,6 +153,10 @@ jobs:
         run: |
           $expected = (git ls-tree HEAD flutter).Split(' ')[2].Split("`t")[0]
           if ((git -C flutter rev-parse HEAD).Trim() -ne $expected) { throw 'Flutter submodule drift' }
+          if ((git -C flutter rev-parse --is-shallow-repository).Trim() -eq 'true') {
+            git -C flutter fetch --deepen=200 origin
+            if ($LASTEXITCODE -ne 0) { throw 'Could not fetch Flutter version history' }
+          }
           "FLUTTER_ROOT=$PWD/flutter" >> $env:GITHUB_ENV
           "PUB_CACHE=$PWD/.pub-cache" >> $env:GITHUB_ENV
           "$PWD/flutter/bin" >> $env:GITHUB_PATH
