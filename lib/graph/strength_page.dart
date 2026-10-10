@@ -245,33 +245,6 @@ class _StrengthPageState extends State<StrengthPage> {
           onPressed: () => Navigator.pop(context),
         ),
         actions: [
-          IconButton(
-            onPressed: () async {
-              final exerciseSets = widget.bodyWeight
-                  ? await getBodyWeightGraphHistory()
-                  : await getGraphHistory(_exerciseName);
-              if (!context.mounted) return;
-
-              await Navigator.of(context).push(
-                FlexPageRoute(
-                  builder: (context) => GraphHistoryPage(
-                    name: _exerciseName,
-                    initialSets: exerciseSets,
-                    tabController: widget.tabCtrl,
-                    bodyWeight: widget.bodyWeight,
-                  ),
-                ),
-              );
-              _refreshTimer?.cancel();
-              if (desktop) {
-                setData();
-              } else {
-                _refreshTimer = Timer(kThemeAnimationDuration, setData);
-              }
-            },
-            icon: const Icon(Icons.history),
-            tooltip: context.l10n.navHistory,
-          ),
           if (!widget.bodyWeight)
             IconButton(
               onPressed: () async {
@@ -375,7 +348,10 @@ class _StrengthPageState extends State<StrengthPage> {
                       ),
               ),
               const SizedBox(height: 8),
-              GraphOptionsButton(onPressed: _showOptions),
+              GraphActionButtons(
+                onHistoryPressed: _showHistory,
+                onOptionsPressed: _showOptions,
+              ),
               const SizedBox(height: 8),
               if (showNotes) ...[
                 Padding(
@@ -398,6 +374,32 @@ class _StrengthPageState extends State<StrengthPage> {
         ),
       ),
     );
+  }
+
+  Future<void> _showHistory() async {
+    final exerciseSets = widget.bodyWeight
+        ? await getBodyWeightGraphHistory()
+        : await getGraphHistory(_exerciseName);
+    if (!mounted) return;
+
+    final desktop = isDesktopLayout(context);
+    await Navigator.of(context).push(
+      FlexPageRoute(
+        builder: (context) => GraphHistoryPage(
+          name: _exerciseName,
+          initialSets: exerciseSets,
+          tabController: widget.tabCtrl,
+          bodyWeight: widget.bodyWeight,
+        ),
+      ),
+    );
+    if (!mounted) return;
+    _refreshTimer?.cancel();
+    if (desktop) {
+      setData();
+    } else {
+      _refreshTimer = Timer(kThemeAnimationDuration, setData);
+    }
   }
 
   void _showOptions() {

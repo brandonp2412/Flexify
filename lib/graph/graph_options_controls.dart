@@ -22,6 +22,40 @@ class GraphOptionsButton extends StatelessWidget {
   }
 }
 
+class GraphActionButtons extends StatelessWidget {
+  final VoidCallback onHistoryPressed;
+  final VoidCallback onOptionsPressed;
+
+  const GraphActionButtons({
+    super.key,
+    required this.onHistoryPressed,
+    required this.onOptionsPressed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Wrap(
+      alignment: WrapAlignment.center,
+      spacing: 12,
+      runSpacing: 4,
+      children: [
+        TextButton.icon(
+          key: const Key('graph-history-button'),
+          onPressed: onHistoryPressed,
+          icon: const Icon(Icons.history),
+          label: Text(context.l10n.navHistory),
+        ),
+        TextButton.icon(
+          key: const Key('graph-options-button'),
+          onPressed: onOptionsPressed,
+          icon: const Icon(Icons.tune),
+          label: Text(context.l10n.options),
+        ),
+      ],
+    );
+  }
+}
+
 class GraphOptionsControls extends StatelessWidget {
   final bool compact;
   final String shortDateFormat;
