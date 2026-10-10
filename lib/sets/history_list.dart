@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flexify/app_search.dart';
 import 'package:flexify/bottom_nav.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
@@ -213,8 +214,7 @@ class _HistoryListState extends State<HistoryList> {
                   const Icon(Icons.today),
                   const SizedBox(width: 4),
                   Selector<Setting, String>(
-                    selector: (context, settings) =>
-                        settings.shortDateFormat,
+                    selector: (context, settings) => settings.shortDateFormat,
                     builder: (context, value, child) => Text(
                       formatDisplayDate(
                         context,
@@ -255,8 +255,7 @@ class _HistoryListState extends State<HistoryList> {
                       : null,
                 ),
                 subtitle: Selector<Setting, String>(
-                  selector: (context, settings) =>
-                      settings.longDateFormat,
+                  selector: (context, settings) => settings.longDateFormat,
                   builder: (context, dateFormat, child) => Padding(
                     padding: const EdgeInsets.only(top: 3),
                     child: Text(
@@ -326,6 +325,7 @@ class _HistoryListState extends State<HistoryList> {
 
     return ListView.builder(
       padding: EdgeInsets.only(
+        top: appSearchHeight + 8,
         bottom: isDesktopLayout(context) ? 32 : floatingActionButtonListPadding,
       ),
       controller: widget.scroll,
