@@ -43,6 +43,8 @@ void main() {
       );
       await tester.pumpAndSettle();
 
+      final list = tester.widget<ListView>(find.byType(ListView));
+      expect((list.padding! as EdgeInsets).top, 0);
       expect(find.text('2 x 3 kg'), findsOne);
       expect(find.text('4 x 5 kg'), findsOne);
       await tester.longPress(find.text('4 x 5 kg'));

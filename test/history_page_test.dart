@@ -75,6 +75,8 @@ void main() {
 
     await pumpHistoryPage(tester, harness);
 
+    final list = tester.widget<ListView>(find.byType(ListView));
+    expect((list.padding! as EdgeInsets).top, 80);
     expect(find.text('Bench press'), findsNWidgets(3));
     expect(find.text('1 x 90 kg'), findsOne);
     expect(find.text('4 x 80 kg'), findsOne);

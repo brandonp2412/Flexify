@@ -185,6 +185,7 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
                               } else
                                 return HistoryList(
                                   scroll: scroll,
+                                  topPadding: appSearchHeight + 8,
                                   sets: snapshot.data!,
                                   onSelect: (id) {
                                     setState(() {

@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:flexify/app_search.dart';
 import 'package:flexify/bottom_nav.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
@@ -23,6 +22,7 @@ class HistoryList extends StatefulWidget {
   final Function(int) onSelect;
   final Set<int> selected;
   final Function onNext;
+  final double topPadding;
 
   const HistoryList({
     super.key,
@@ -31,6 +31,7 @@ class HistoryList extends StatefulWidget {
     required this.selected,
     required this.onNext,
     required this.scroll,
+    this.topPadding = 0,
   });
 
   @override
@@ -325,7 +326,7 @@ class _HistoryListState extends State<HistoryList> {
 
     return ListView.builder(
       padding: EdgeInsets.only(
-        top: appSearchHeight + 8,
+        top: widget.topPadding,
         bottom: isDesktopLayout(context) ? 32 : floatingActionButtonListPadding,
       ),
       controller: widget.scroll,
