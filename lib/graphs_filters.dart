@@ -43,49 +43,61 @@ class _GraphsFiltersState extends State<GraphsFilters> {
             itemBuilder: (context) => [
               PopupMenuItem(
                 enabled: false,
-                child: DropdownButtonFormField<GraphSort>(
-                  decoration: InputDecoration(labelText: context.l10n.sortBy),
-                  initialValue: widget.sort,
-                  items: [
-                    DropdownMenuItem(
-                      value: GraphSort.dateDesc,
-                      child: Text(context.l10n.dateNewest),
-                    ),
-                    DropdownMenuItem(
-                      value: GraphSort.dateAsc,
-                      child: Text(context.l10n.dateOldest),
-                    ),
-                    DropdownMenuItem(
-                      value: GraphSort.name,
-                      child: Text(context.l10n.nameLabel),
+                child: Column(
+                  children: [
+                    const SizedBox(height: 8),
+                    DropdownButtonFormField<GraphSort>(
+                      decoration: InputDecoration(
+                        labelText: context.l10n.sortBy,
+                      ),
+                      initialValue: widget.sort,
+                      items: [
+                        DropdownMenuItem(
+                          value: GraphSort.dateDesc,
+                          child: Text(context.l10n.dateNewest),
+                        ),
+                        DropdownMenuItem(
+                          value: GraphSort.dateAsc,
+                          child: Text(context.l10n.dateOldest),
+                        ),
+                        DropdownMenuItem(
+                          value: GraphSort.name,
+                          child: Text(context.l10n.nameLabel),
+                        ),
+                      ],
+                      onChanged: (value) {
+                        if (value == null) return;
+                        widget.setSort(value);
+                        Navigator.pop(context);
+                      },
                     ),
                   ],
-                  onChanged: (value) {
-                    if (value == null) return;
-                    widget.setSort(value);
-                    Navigator.pop(context);
-                  },
                 ),
               ),
               PopupMenuItem(
                 enabled: false,
-                child: DropdownButtonFormField<String>(
-                  decoration: InputDecoration(
-                    labelText: context.l10n.categoryLabel,
-                  ),
-                  initialValue: widget.category,
-                  items: snapshot.data
-                      ?.map(
-                        (category) => DropdownMenuItem(
-                          value: category,
-                          child: Text(category),
-                        ),
-                      )
-                      .toList(),
-                  onChanged: (value) {
-                    widget.setCategory(value);
-                    Navigator.pop(context);
-                  },
+                child: Column(
+                  children: [
+                    SizedBox(height: 8),
+                    DropdownButtonFormField<String>(
+                      decoration: InputDecoration(
+                        labelText: context.l10n.categoryLabel,
+                      ),
+                      initialValue: widget.category,
+                      items: snapshot.data
+                          ?.map(
+                            (category) => DropdownMenuItem(
+                              value: category,
+                              child: Text(category),
+                            ),
+                          )
+                          .toList(),
+                      onChanged: (value) {
+                        widget.setCategory(value);
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ],
                 ),
               ),
               PopupMenuItem(
