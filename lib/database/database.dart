@@ -292,6 +292,8 @@ Future<void> _backfillExerciseHistory(AppDatabase database) async {
   ],
 )
 class AppDatabase extends _$AppDatabase {
+  Stream<Setting> watchSettings() => (select(settings)..limit(1)).watchSingle();
+
   /// Creates a database backed by the provided [executor].
   AppDatabase(super.executor);
 

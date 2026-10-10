@@ -16,7 +16,6 @@ import 'package:flexify/logging.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/responsive.dart';
 import 'package:flexify/settings/category_management_page.dart';
-import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/stepper_field.dart';
 import 'package:flexify/timer/timer_state.dart';
 import 'package:flexify/utils.dart';
@@ -143,8 +142,8 @@ class _EditSetPageState extends State<EditSetPage> {
 
   @override
   Widget build(BuildContext context) {
-    final showBodyWeight = context.select<SettingsState, bool>(
-      (settings) => settings.value.showBodyWeight,
+    final showBodyWeight = context.select<Setting, bool>(
+      (settings) => settings.showBodyWeight,
     );
 
     return PopScope(
@@ -218,9 +217,8 @@ class _EditSetPageState extends State<EditSetPage> {
       padding: const EdgeInsets.all(16.0),
       child: Form(
         key: _key,
-        child: Consumer<SettingsState>(
-          builder: (context, settingsState, child) {
-            final settings = settingsState.value;
+        child: Consumer<Setting>(
+          builder: (context, settings, child) {
             final showUnits = settings.showUnits;
             final showCategories = settings.showCategories;
             final showNotes = settings.showNotes;
@@ -414,7 +412,7 @@ class _EditSetPageState extends State<EditSetPage> {
   }
 
   Widget unitSelector() {
-    return Selector<SettingsState, bool>(
+    return Selector<Setting, bool>(
       builder: (context, showUnits, child) => Visibility(
         visible: showUnits,
         child: DropdownButtonFormField<String>(
@@ -429,13 +427,13 @@ class _EditSetPageState extends State<EditSetPage> {
           },
         ),
       ),
-      selector: (context, settings) => settings.value.showUnits,
+      selector: (context, settings) => settings.showUnits,
     );
   }
 
   Widget categorySelector() {
-    return Selector<SettingsState, bool>(
-      selector: (context, settings) => settings.value.showCategories,
+    return Selector<Setting, bool>(
+      selector: (context, settings) => settings.showCategories,
       builder: (context, showCategories, child) {
         if (!showCategories) {
           return const SizedBox();
@@ -505,7 +503,7 @@ class _EditSetPageState extends State<EditSetPage> {
   }
 
   Widget notesField() {
-    return Selector<SettingsState, bool>(
+    return Selector<Setting, bool>(
       builder: (context, showNotes, child) => Visibility(
         visible: showNotes,
         child: TextField(
@@ -515,12 +513,12 @@ class _EditSetPageState extends State<EditSetPage> {
           onChanged: (_) => _markDirty(),
         ),
       ),
-      selector: (context, settingsState) => settingsState.value.showNotes,
+      selector: (context, settings) => settings.showNotes,
     );
   }
 
   Widget dateSelector() {
-    return Selector<SettingsState, String>(
+    return Selector<Setting, String>(
       builder: (context, longDateFormat, child) => ListTile(
         contentPadding: EdgeInsets.zero,
         title: Text(context.l10n.createdDate),
@@ -532,7 +530,7 @@ class _EditSetPageState extends State<EditSetPage> {
         trailing: const Icon(Icons.calendar_today),
         onTap: () => selectDate(),
       ),
-      selector: (context, settings) => settings.value.longDateFormat,
+      selector: (context, settings) => settings.longDateFormat,
     );
   }
 
@@ -544,8 +542,8 @@ class _EditSetPageState extends State<EditSetPage> {
     );
   }
 
-  Selector<SettingsState, bool> imageField() {
-    return Selector<SettingsState, bool>(
+  Selector<Setting, bool> imageField() {
+    return Selector<Setting, bool>(
       builder: (context, showImages, child) {
         return Visibility(
           visible: showImages,
@@ -599,7 +597,7 @@ class _EditSetPageState extends State<EditSetPage> {
           ),
         );
       },
-      selector: (context, settings) => settings.value.showImages,
+      selector: (context, settings) => settings.showImages,
     );
   }
 
@@ -783,7 +781,7 @@ class _EditSetPageState extends State<EditSetPage> {
     );
     if (!mounted) return;
 
-    final settings = context.read<SettingsState>().value;
+    final settings = context.read<Setting>();
     final messages = positiveReinforcementMessages(context.l10n);
 
     if (widget.exerciseSet.id > 0) {

@@ -6,7 +6,7 @@ import 'package:flexify/animated_fab.dart';
 import 'package:flexify/database/exercise_catalog.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/logging.dart';
-import 'package:flexify/settings/settings_state.dart';
+import 'package:flexify/database/database.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -56,10 +56,10 @@ class _AddExercisePageState extends State<AddExercisePage> {
   final TextEditingController _nameCtrl = TextEditingController();
   bool _cardio = false;
 
-  late var settings = context.watch<SettingsState>();
-  late String _unit = settings.value.strengthUnit == 'last-entry'
+  late var settings = context.watch<Setting>();
+  late String _unit = settings.strengthUnit == 'last-entry'
       ? 'kg'
-      : settings.value.strengthUnit;
+      : settings.strengthUnit;
   String? _image;
   final _key = GlobalKey<FormState>();
 
@@ -71,7 +71,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
 
   @override
   Widget build(BuildContext context) {
-    settings = context.watch<SettingsState>();
+    settings = context.watch<Setting>();
 
     return PopScope(
       canPop: _allowPop || !_hasUnsavedChanges,
@@ -149,7 +149,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
                   trailing: Switch(value: _cardio, onChanged: _setCardio),
                 ),
                 Visibility(
-                  visible: settings.value.showImages,
+                  visible: settings.showImages,
                   child: Column(
                     children: [
                       Row(
@@ -213,13 +213,13 @@ class _AddExercisePageState extends State<AddExercisePage> {
     setState(() {
       _cardio = value;
       if (value && _isWeightUnit(_unit)) {
-        _unit = settings.value.cardioUnit == 'last-entry'
+        _unit = settings.cardioUnit == 'last-entry'
             ? 'km'
-            : settings.value.cardioUnit;
+            : settings.cardioUnit;
       } else if (!value && !_isWeightUnit(_unit)) {
-        _unit = settings.value.strengthUnit == 'last-entry'
+        _unit = settings.strengthUnit == 'last-entry'
             ? 'kg'
-            : settings.value.strengthUnit;
+            : settings.strengthUnit;
       }
     });
   }
@@ -241,10 +241,10 @@ class _AddExercisePageState extends State<AddExercisePage> {
   Future<void> save(String unit) async {
     if (!_key.currentState!.validate()) return;
 
-    if (settings.value.strengthUnit != 'last-entry' && !_cardio)
-      _unit = settings.value.strengthUnit;
-    else if (settings.value.cardioUnit != 'last-entry' && _cardio)
-      _unit = settings.value.cardioUnit;
+    if (settings.strengthUnit != 'last-entry' && !_cardio)
+      _unit = settings.strengthUnit;
+    else if (settings.cardioUnit != 'last-entry' && _cardio)
+      _unit = settings.cardioUnit;
 
     final exercise = await createExerciseDefinition(
       name: _nameCtrl.text,

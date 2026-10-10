@@ -4,7 +4,6 @@ import 'package:flexify/database/database.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/responsive.dart';
-import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -163,13 +162,13 @@ class FormatSettings extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final settings = context.watch<SettingsState>();
+    final settings = context.watch<Setting>();
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(title: Text(context.l10n.formats)),
       body: ResponsiveSettingsList(
-        children: getFormatSettings(context, '', settings.value),
+        children: getFormatSettings(context, '', settings),
       ),
     );
   }

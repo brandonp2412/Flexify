@@ -10,7 +10,6 @@ import 'package:flexify/logging.dart';
 import 'package:flexify/l10n/generated/app_localizations.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/l10n/locale_preferences.dart';
-import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/timer/timer_state.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -130,17 +129,17 @@ MethodChannel androidChannel = const MethodChannel(
   "com.presley.flexify/android",
 );
 
-Widget appProviders(SettingsState initialSettings) =>
+Widget appProviders(Setting initialSettings) =>
     ValueListenableBuilder<int>(
       valueListenable: dbVersion,
       builder: (context, version, child) => MultiProvider(
         key: ValueKey(version),
         providers: [
-          StreamProvider<SettingsState>(
+          StreamProvider<Setting>(
             initialData: initialSettings,
-            create: (context) => watchSettings(),
+            create: (context) => db.watchSettings(),
           ),
-          ChangeNotifierProxyProvider<SettingsState, TimerState>(
+          ChangeNotifierProxyProvider<Setting, TimerState>(
             create: (context) => TimerState(),
             update: (context, settings, previous) =>
                 previous!..setKeepScreenOn(settings.keepScreenOn),
@@ -176,27 +175,27 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = context.select<SettingsState, bool>(
-      (settings) => settings.value.systemColors,
+    final colors = context.select<Setting, bool>(
+      (settings) => settings.systemColors,
     );
-    final amoledDark = context.select<SettingsState, bool>(
-      (settings) => settings.value.themeMode == 'ThemeMode.amoled',
+    final amoledDark = context.select<Setting, bool>(
+      (settings) => settings.themeMode == 'ThemeMode.amoled',
     );
-    final mode = context.select<SettingsState, ThemeMode>(
-      (settings) => settings.value.themeMode == 'ThemeMode.amoled'
+    final mode = context.select<Setting, ThemeMode>(
+      (settings) => settings.themeMode == 'ThemeMode.amoled'
           ? ThemeMode.dark
           : ThemeMode.values.byName(
-              settings.value.themeMode.replaceFirst('ThemeMode.', ''),
+              settings.themeMode.replaceFirst('ThemeMode.', ''),
             ),
     );
-    final inputStyle = context.select<SettingsState, String>(
-      (settings) => settings.value.inputStyle,
+    final inputStyle = context.select<Setting, String>(
+      (settings) => settings.inputStyle,
     );
-    final themeMode = context.select<SettingsState, String>(
-      (settings) => settings.value.themeMode,
+    final themeMode = context.select<Setting, String>(
+      (settings) => settings.themeMode,
     );
-    final localeOverride = context.select<SettingsState, String?>(
-      (settings) => settings.value.localeOverride,
+    final localeOverride = context.select<Setting, String?>(
+      (settings) => settings.localeOverride,
     );
 
     return DynamicColorBuilder(

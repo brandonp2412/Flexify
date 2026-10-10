@@ -3,7 +3,6 @@ import 'package:flexify/database/database.dart';
 import 'package:flexify/l10n/generated/app_localizations.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/plan_tile.dart';
-import 'package:flexify/settings/settings_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
@@ -47,7 +46,7 @@ void main() async {
 
     await tester.pumpWidget(
       MultiProvider(
-        providers: [Provider<SettingsState>.value(value: settings)],
+        providers: [Provider<Setting>.value(value: settings)],
         child: MaterialApp(
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,

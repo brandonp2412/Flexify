@@ -10,7 +10,6 @@ import 'package:flexify/main.dart';
 import 'package:flexify/responsive.dart';
 import 'package:flexify/sets/edit_set_page.dart';
 import 'package:flexify/sets/history_page.dart';
-import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
 import 'package:flexify/platform_page_route.dart';
 import 'package:flutter/material.dart';
@@ -104,11 +103,11 @@ class _GroupHistoryState extends State<GroupHistory> {
 
   @override
   Widget build(BuildContext context) {
-    final showImages = context.select<SettingsState, bool>(
-      (settings) => settings.value.showImages,
+    final showImages = context.select<Setting, bool>(
+      (settings) => settings.showImages,
     );
-    final shortDateFormat = context.select<SettingsState, String>(
-      (settings) => settings.value.shortDateFormat,
+    final shortDateFormat = context.select<Setting, String>(
+      (settings) => settings.shortDateFormat,
     );
     final desktop = isDesktopLayout(context);
 
@@ -300,8 +299,8 @@ class _GroupHistoryState extends State<GroupHistory> {
       child: ListTile(
         leading: leading,
         title: Text(title),
-        subtitle: Selector<SettingsState, String>(
-          selector: (context, settings) => settings.value.longDateFormat,
+        subtitle: Selector<Setting, String>(
+          selector: (context, settings) => settings.longDateFormat,
           builder: (context, dateFormat, child) => Text(
             dateFormat == 'timeago'
                 ? formatRelativeTime(context, exerciseSet.created)

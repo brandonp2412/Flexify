@@ -2,7 +2,7 @@ import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/responsive.dart';
 import 'package:flexify/selection_controller.dart';
 import 'package:flexify/settings/settings_page.dart';
-import 'package:flexify/settings/settings_state.dart';
+import 'package:flexify/database/database.dart';
 import 'package:flexify/weight_page.dart';
 import 'package:flexify/platform_page_route.dart';
 import 'package:flutter/material.dart';
@@ -200,8 +200,8 @@ class _AppSearchState extends State<AppSearch> {
                 count: sel.length,
                 isLabelVisible: sel.isNotEmpty,
                 backgroundColor: Theme.of(context).colorScheme.primary,
-                child: Selector<SettingsState, bool>(
-                  selector: (p0, settings) => settings.value.showBodyWeight,
+                child: Selector<Setting, bool>(
+                  selector: (p0, settings) => settings.showBodyWeight,
                   builder: (context, showBodyWeight, child) => IconButton(
                     icon: const Icon(Icons.more_vert),
                     tooltip: context.l10n.showMenu,

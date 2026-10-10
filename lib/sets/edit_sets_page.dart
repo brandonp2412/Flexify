@@ -8,7 +8,7 @@ import 'package:flexify/database/exercise_set_repository.dart';
 import 'package:flexify/database/categories.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
-import 'package:flexify/settings/settings_state.dart';
+import 'package:flexify/database/database.dart';
 import 'package:flexify/settings/category_management_page.dart';
 import 'package:flexify/utils.dart';
 import 'package:flexify/platform_page_route.dart';
@@ -327,7 +327,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
                   ),
                 ],
                 const SizedBox(height: 12),
-                Selector<SettingsState, bool>(
+                Selector<Setting, bool>(
                   builder: (context, showBodyWeight, child) => Visibility(
                     visible: showBodyWeight,
                     child: TextFormField(
@@ -350,10 +350,10 @@ class _EditSetsPageState extends State<EditSetsPage> {
                     ),
                   ),
                   selector: (context, settings) =>
-                      settings.value.showBodyWeight,
+                      settings.showBodyWeight,
                 ),
                 const SizedBox(height: 12),
-                Selector<SettingsState, bool>(
+                Selector<Setting, bool>(
                   builder: (context, showUnits, child) => Visibility(
                     visible: showUnits,
                     child: DropdownButtonFormField<String>(
@@ -368,12 +368,12 @@ class _EditSetsPageState extends State<EditSetsPage> {
                       },
                     ),
                   ),
-                  selector: (context, settings) => settings.value.showUnits,
+                  selector: (context, settings) => settings.showUnits,
                 ),
                 const SizedBox(height: 12),
-                Selector<SettingsState, bool>(
+                Selector<Setting, bool>(
                   selector: (context, settings) =>
-                      settings.value.showCategories,
+                      settings.showCategories,
                   builder: (context, showCategories, child) => Visibility(
                     visible: showCategories,
                     child: StreamBuilder<List<String>>(
@@ -424,7 +424,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
                     ),
                   ),
                 ),
-                Selector<SettingsState, String>(
+                Selector<Setting, String>(
                   builder: (context, longDateFormat, child) {
                     var subtitle = _oldCreated ?? "";
 
@@ -445,7 +445,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
                     );
                   },
                   selector: (context, settings) =>
-                      settings.value.longDateFormat,
+                      settings.longDateFormat,
                 ),
               ],
             ),
@@ -498,7 +498,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
   @override
   void initState() {
     super.initState();
-    final settings = context.read<SettingsState>().value;
+    final settings = context.read<Setting>();
 
     getExerciseSetsByIds(db, widget.ids).then((allSets) {
       final exerciseSets = allSets.take(3).toList();

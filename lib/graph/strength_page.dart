@@ -15,7 +15,7 @@ import 'package:flexify/graph/strength_data.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/responsive.dart';
 import 'package:flexify/sets/edit_set_page.dart';
-import 'package:flexify/settings/settings_state.dart';
+import 'package:flexify/database/database.dart';
 import 'package:flexify/utils.dart';
 import 'package:flexify/platform_page_route.dart';
 import 'package:flutter/material.dart';
@@ -64,7 +64,7 @@ class _StrengthPageState extends State<StrengthPage> {
     _data = widget.initialData;
     _targetUnit = widget.initialUnit;
     _exerciseName = widget.initialName;
-    final settings = context.read<SettingsState>().value;
+    final settings = context.read<Setting>();
     useTimeBasedXAxis = settings.defaultGraphTimeBasedXAxis;
     limit = settings.defaultGraphLimit;
     metric = StrengthMetric.values.firstWhere(
@@ -87,7 +87,7 @@ class _StrengthPageState extends State<StrengthPage> {
     if (pref == null || !mounted) return;
     setState(() {
       final stored = pref.graphMetric.split(',');
-      final showBodyWeight = context.read<SettingsState>().value.showBodyWeight;
+      final showBodyWeight = context.read<Setting>().showBodyWeight;
       metric = StrengthMetric.values.firstWhere(
         (m) =>
             stored.contains(m.name) &&
@@ -146,7 +146,7 @@ class _StrengthPageState extends State<StrengthPage> {
   }
 
   void _onTabChanged() {
-    final settings = context.read<SettingsState>().value;
+    final settings = context.read<Setting>();
     if (widget.tabCtrl.index ==
         settings.tabs.split(',').indexOf('GraphsPage')) {
       setData();
@@ -155,14 +155,14 @@ class _StrengthPageState extends State<StrengthPage> {
 
   @override
   Widget build(BuildContext context) {
-    final showBodyWeight = context.select<SettingsState, bool>(
-      (settings) => settings.value.showBodyWeight,
+    final showBodyWeight = context.select<Setting, bool>(
+      (settings) => settings.showBodyWeight,
     );
-    final shortDateFormat = context.select<SettingsState, String>(
-      (settings) => settings.value.shortDateFormat,
+    final shortDateFormat = context.select<Setting, String>(
+      (settings) => settings.shortDateFormat,
     );
-    final showNotes = context.select<SettingsState, bool>(
-      (settings) => settings.value.showNotes,
+    final showNotes = context.select<Setting, bool>(
+      (settings) => settings.showNotes,
     );
     final desktop = isDesktopLayout(context);
     final theme = Theme.of(context);
@@ -357,7 +357,7 @@ class _StrengthPageState extends State<StrengthPage> {
       builder: (sheetContext) {
         return StatefulBuilder(
           builder: (sheetContext, setSheet) {
-            final settings = context.read<SettingsState>().value;
+            final settings = context.read<Setting>();
             void refreshSheet() => setSheet(() {});
 
             return SafeArea(

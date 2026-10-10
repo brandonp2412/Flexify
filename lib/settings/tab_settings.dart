@@ -2,7 +2,6 @@ import 'package:drift/drift.dart' hide Column;
 import 'package:flexify/database/database.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
-import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -28,8 +27,8 @@ class _TabSettingsState extends State<TabSettings> {
   @override
   void initState() {
     super.initState();
-    final settings = context.read<SettingsState>();
-    final tabSplit = settings.value.tabs.split(',');
+    final settings = context.read<Setting>();
+    final tabSplit = settings.tabs.split(',');
 
     final enabled = tabSplit.map((tab) => (name: tab, enabled: true)).toList();
     final disabled = _tabs
@@ -58,7 +57,7 @@ class _TabSettingsState extends State<TabSettings> {
 
   @override
   Widget build(BuildContext context) {
-    final settings = context.watch<SettingsState>();
+    final settings = context.watch<Setting>();
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(title: Text(context.l10n.tabs)),
@@ -76,11 +75,11 @@ class _TabSettingsState extends State<TabSettings> {
               ),
               onTap: () => db.settings.update().write(
                 SettingsCompanion(
-                  scrollableTabs: Value(!settings.value.scrollableTabs),
+                  scrollableTabs: Value(!settings.scrollableTabs),
                 ),
               ),
               leading: Switch(
-                value: settings.value.scrollableTabs,
+                value: settings.scrollableTabs,
                 onChanged: (value) {
                   db.settings.update().write(
                     SettingsCompanion(scrollableTabs: Value(value)),

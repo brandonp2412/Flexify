@@ -21,7 +21,6 @@ import 'package:flexify/plan/session_sets.dart';
 import 'package:flexify/plan/start_list.dart';
 import 'package:flexify/plan/workout_sessions.dart';
 import 'package:flexify/responsive.dart';
-import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/stepper_field.dart';
 import 'package:flexify/timer/timer_state.dart';
 import 'package:flexify/utils.dart';
@@ -320,7 +319,7 @@ class _StartPlanPageState extends State<StartPlanPage>
     AsyncSnapshot<List<PlanExerciseEntry>> snapshot,
     List<GymCount> counts,
   ) {
-    final showNotes = context.read<SettingsState>().value.showNotes;
+    final showNotes = context.read<Setting>().showNotes;
 
     return [
       Row(
@@ -441,7 +440,7 @@ class _StartPlanPageState extends State<StartPlanPage>
         snapshot.data!.isNotEmpty && _selected < snapshot.data!.length
         ? snapshot.data![_selected].exercise.name
         : '';
-    final showNotes = context.read<SettingsState>().value.showNotes;
+    final showNotes = context.read<Setting>().showNotes;
     final hasNextTextField = _cardio || showNotes;
 
     return StepperField(
@@ -449,8 +448,8 @@ class _StartPlanPageState extends State<StartPlanPage>
       focusNode: _weightFocus,
       labelText: context.l10n.weightWithUnit(_unit),
       step: weightStep(exerciseName, _unit),
-      suffixIcon: Selector<SettingsState, bool>(
-        selector: (context, settings) => settings.value.showBodyWeight,
+      suffixIcon: Selector<Setting, bool>(
+        selector: (context, settings) => settings.showBodyWeight,
         builder: (context, showBodyWeight, child) => Visibility(
           visible: showBodyWeight,
           child: IconButton(
@@ -482,8 +481,8 @@ class _StartPlanPageState extends State<StartPlanPage>
   }
 
   Widget unitSelector() {
-    return Selector<SettingsState, bool>(
-      selector: (context, settings) => settings.value.showUnits,
+    return Selector<Setting, bool>(
+      selector: (context, settings) => settings.showUnits,
       builder: (context, showUnits, child) => Visibility(
         visible: showUnits,
         child: Column(
@@ -511,8 +510,8 @@ class _StartPlanPageState extends State<StartPlanPage>
     AsyncSnapshot<List<PlanExerciseEntry>> snapshot,
     List<GymCount> counts,
   ) {
-    return Selector<SettingsState, bool>(
-      selector: (context, settings) => settings.value.showNotes,
+    return Selector<Setting, bool>(
+      selector: (context, settings) => settings.showNotes,
       builder: (context, showNotes, child) => Visibility(
         visible: showNotes,
         child: Column(
@@ -544,7 +543,7 @@ class _StartPlanPageState extends State<StartPlanPage>
     if (state != AppLifecycleState.resumed) return;
     if (_rpms == null || !mounted || _lastSaved == null) return;
 
-    final settings = context.read<SettingsState>().value;
+    final settings = context.read<Setting>();
     final difference = DateTime.now().difference(_lastSaved!);
 
     if (_cardio && settings.durationEstimation) {
@@ -736,7 +735,7 @@ class _StartPlanPageState extends State<StartPlanPage>
       }
     });
 
-    final settings = context.read<SettingsState>().value;
+    final settings = context.read<Setting>();
     if (settings.repEstimation) {
       getRpms().then((value) {
         if (!mounted) return;
@@ -746,7 +745,7 @@ class _StartPlanPageState extends State<StartPlanPage>
   }
 
   void _updateExerciseSetTextFields(ExerciseSetView exerciseSet) {
-    final settings = context.read<SettingsState>().value;
+    final settings = context.read<Setting>();
     if (settings.strengthUnit == 'last-entry' && !exerciseSet.cardio ||
         settings.cardioUnit == 'last-entry' && exerciseSet.cardio)
       _unit = exerciseSet.unit;
@@ -786,7 +785,7 @@ class _StartPlanPageState extends State<StartPlanPage>
       final exercise = entry.exercise.name;
       double? bodyWeight;
       double? bodyWeightKg;
-      final settings = context.read<SettingsState>().value;
+      final settings = context.read<Setting>();
       final timerState = context.read<TimerState>();
       if (settings.showBodyWeight) {
         final weightEntry = await getBodyWeight();
@@ -947,7 +946,7 @@ class _StartPlanPageState extends State<StartPlanPage>
   }
 
   void _clearExerciseSetTextFields() {
-    final settings = context.read<SettingsState>().value;
+    final settings = context.read<Setting>();
     _unit = settings.strengthUnit == 'last-entry'
         ? 'kg'
         : settings.strengthUnit;

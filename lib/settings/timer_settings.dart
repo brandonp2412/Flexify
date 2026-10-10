@@ -9,7 +9,6 @@ import 'package:flexify/main.dart';
 import 'package:flexify/responsive.dart';
 import 'package:flexify/logging.dart';
 import 'package:flexify/native_timer_wrapper.dart';
-import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/timer/timer_state.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/foundation.dart';
@@ -444,15 +443,15 @@ class TimerSettings extends StatefulWidget {
 }
 
 class _TimerSettingsState extends State<TimerSettings> {
-  late final SettingsState _settings = context.read<SettingsState>();
+  late final Setting _settings = context.read<Setting>();
   late final _minCtrl = TextEditingController(
     text: (Duration(
-      milliseconds: _settings.value.timerDuration,
+      milliseconds: _settings.timerDuration,
     )).inMinutes.toString(),
   );
   late final _secCtrl = TextEditingController(
     text:
-        ((Duration(milliseconds: _settings.value.timerDuration)).inSeconds % 60)
+        ((Duration(milliseconds: _settings.timerDuration)).inSeconds % 60)
             .toString(),
   );
 
@@ -659,7 +658,7 @@ class _TimerSettingsState extends State<TimerSettings> {
 
   @override
   Widget build(BuildContext context) {
-    final settings = context.watch<SettingsState>();
+    final settings = context.watch<Setting>();
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -669,7 +668,7 @@ class _TimerSettingsState extends State<TimerSettings> {
             ? [
                 ...getTimerSettings(
                   '',
-                  settings.value,
+                  settings,
                   _minCtrl,
                   _secCtrl,
                   _player,

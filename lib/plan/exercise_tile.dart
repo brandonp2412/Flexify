@@ -1,7 +1,6 @@
 import 'package:drift/drift.dart' hide Column;
 import 'package:flexify/database/database.dart';
 import 'package:flexify/l10n/l10n.dart';
-import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -56,9 +55,9 @@ class _ExerciseTileState extends State<ExerciseTile> {
                 content: SingleChildScrollView(
                   child: Column(
                     children: [
-                      Selector<SettingsState, int?>(
+                      Selector<Setting, int?>(
                         selector: (context, settings) =>
-                            settings.value.warmupSets,
+                            settings.warmupSets,
                         builder: (context, value, child) => TextField(
                           controller: _warmup,
                           keyboardType: const TextInputType.numberWithOptions(
@@ -80,8 +79,8 @@ class _ExerciseTileState extends State<ExerciseTile> {
                         ),
                       ),
                       const SizedBox(height: 16),
-                      Selector<SettingsState, int>(
-                        selector: (context, settings) => settings.value.maxSets,
+                      Selector<Setting, int>(
+                        selector: (context, settings) => settings.maxSets,
                         builder: (context, value, child) => TextField(
                           controller: _max,
                           keyboardType: const TextInputType.numberWithOptions(

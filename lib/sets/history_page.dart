@@ -14,7 +14,6 @@ import 'package:flexify/sets/edit_set_page.dart';
 import 'package:flexify/sets/edit_sets_page.dart';
 import 'package:flexify/sets/group_history.dart';
 import 'package:flexify/sets/history_list.dart';
-import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
 import 'package:flexify/platform_page_route.dart';
 import 'package:flutter/material.dart';
@@ -62,7 +61,7 @@ class HistoryPageState extends State<HistoryPage>
     return NavigatorPopHandler(
       onPopWithResult: (result) {
         if (_navKey.currentState!.canPop() == false) return;
-        final settings = context.read<SettingsState>().value;
+        final settings = context.read<Setting>();
         final historyIndex = settings.tabs.split(',').indexOf('HistoryPage');
         if (widget.tabController.index == historyIndex)
           _navKey.currentState!.pop();
@@ -159,8 +158,8 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
                           child: Builder(
                             builder: (context) {
                               final groupHistory = context
-                                  .select<SettingsState, bool>(
-                                    (settings) => settings.value.groupHistory,
+                                  .select<Setting, bool>(
+                                    (settings) => settings.groupHistory,
                                   );
 
                               if (groupHistory) {
@@ -309,7 +308,7 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
   }
 
   void onAdd() async {
-    final settings = context.read<SettingsState>().value;
+    final settings = context.read<Setting>();
     final exerciseSetsFuture = stream.first;
     final bodyWeightFuture = settings.showBodyWeight
         ? getBodyWeight()

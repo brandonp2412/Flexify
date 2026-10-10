@@ -8,7 +8,6 @@ import 'package:flexify/main.dart';
 import 'package:flexify/selection_controller.dart';
 import 'package:flexify/sets/edit_sets_page.dart';
 import 'package:flexify/sets/history_list.dart';
-import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/platform_page_route.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -196,7 +195,7 @@ class _GraphHistoryPageState extends State<GraphHistoryPage> {
   }
 
   void tabListener() {
-    final settings = context.read<SettingsState>().value;
+    final settings = context.read<Setting>();
     final index = settings.tabs.split(',').indexOf('GraphsPage');
     if (widget.tabController.indexIsChanging) return;
     if (widget.tabController.index != index) return;

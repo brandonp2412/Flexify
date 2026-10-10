@@ -9,7 +9,6 @@ import 'package:flexify/main.dart';
 import 'package:flexify/platform_page_route.dart';
 import 'package:flexify/responsive.dart';
 import 'package:flexify/sets/edit_set_page.dart';
-import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/foundation.dart' show listEquals;
 import 'package:flutter/material.dart';
@@ -213,9 +212,9 @@ class _HistoryListState extends State<HistoryList> {
                   const Expanded(child: Divider()),
                   const Icon(Icons.today),
                   const SizedBox(width: 4),
-                  Selector<SettingsState, String>(
+                  Selector<Setting, String>(
                     selector: (context, settings) =>
-                        settings.value.shortDateFormat,
+                        settings.shortDateFormat,
                     builder: (context, value, child) => Text(
                       formatDisplayDate(
                         context,
@@ -255,9 +254,9 @@ class _HistoryListState extends State<HistoryList> {
                         )
                       : null,
                 ),
-                subtitle: Selector<SettingsState, String>(
+                subtitle: Selector<Setting, String>(
                   selector: (context, settings) =>
-                      settings.value.longDateFormat,
+                      settings.longDateFormat,
                   builder: (context, dateFormat, child) => Padding(
                     padding: const EdgeInsets.only(top: 3),
                     child: Text(
@@ -321,8 +320,8 @@ class _HistoryListState extends State<HistoryList> {
 
   @override
   Widget build(BuildContext context) {
-    final showImages = context.select<SettingsState, bool>(
-      (settings) => settings.value.showImages,
+    final showImages = context.select<Setting, bool>(
+      (settings) => settings.showImages,
     );
 
     return ListView.builder(

@@ -2,7 +2,6 @@ import 'package:drift/drift.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/l10n/generated/app_localizations.dart';
 import 'package:flexify/main.dart';
-import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/timer/timer_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -46,9 +45,9 @@ class FlexifyTestHarness {
     await tester.pumpWidget(
       MultiProvider(
         providers: [
-          StreamProvider<SettingsState>(
+          StreamProvider<Setting>(
             initialData: setting,
-            create: (_) => watchSettings(),
+            create: (_) => database.watchSettings(),
           ),
           ChangeNotifierProvider.value(value: effectiveTimerState),
         ],

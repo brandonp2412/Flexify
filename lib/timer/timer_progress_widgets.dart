@@ -1,7 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flexify/l10n/l10n.dart';
-import 'package:flexify/settings/settings_state.dart';
+import 'package:flexify/database/database.dart';
 import 'package:flexify/timer/timer_state.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/foundation.dart';
@@ -361,7 +361,7 @@ class _StopwatchProgressIndicatorState extends State<StopwatchProgressIndicator>
   }
 
   Future<void> _addOneMinute(BuildContext context) async {
-    final settings = context.read<SettingsState>().value;
+    final settings = context.read<Setting>();
     if (defaultTargetPlatform != TargetPlatform.linux)
       await requestNotificationPermission();
     await widget.timerState.addOneMinute(
@@ -556,7 +556,7 @@ class _TimerCircularProgressIndicatorTile extends StatelessWidget {
               children: [
                 TextButton(
                   onPressed: () async {
-                    final settings = context.read<SettingsState>().value;
+                    final settings = context.read<Setting>();
                     if (defaultTargetPlatform != TargetPlatform.linux)
                       await requestNotificationPermission();
                     await timerState.addOneMinute(

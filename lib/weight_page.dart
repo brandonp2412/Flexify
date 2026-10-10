@@ -8,7 +8,6 @@ import 'package:flexify/database/database.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/responsive.dart';
-import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -96,7 +95,7 @@ class _WeightPageState extends State<WeightPage> {
                 enabled: false,
               ),
               const SizedBox(height: 12),
-              Selector<SettingsState, bool>(
+              Selector<Setting, bool>(
                 builder: (context, showImages, child) {
                   return Visibility(
                     visible: showImages,
@@ -144,7 +143,7 @@ class _WeightPageState extends State<WeightPage> {
                     ),
                   );
                 },
-                selector: (context, settings) => settings.value.showImages,
+                selector: (context, settings) => settings.showImages,
               ),
             ],
           ),
@@ -154,7 +153,7 @@ class _WeightPageState extends State<WeightPage> {
         onPressed: () async {
           if (!_key.currentState!.validate()) return;
 
-          final settings = context.read<SettingsState>().value;
+          final settings = context.read<Setting>();
           if (settings.strengthUnit != 'last-entry')
             _unit = settings.strengthUnit;
 
@@ -186,7 +185,7 @@ class _WeightPageState extends State<WeightPage> {
   @override
   void initState() {
     super.initState();
-    final settings = context.read<SettingsState>().value;
+    final settings = context.read<Setting>();
 
     getBodyWeight().then((value) {
       if (!mounted) return;

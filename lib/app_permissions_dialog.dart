@@ -2,7 +2,6 @@ import 'package:drift/drift.dart' hide Column;
 import 'package:flexify/database/database.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
-import 'package:flexify/settings/settings_state.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -76,7 +75,7 @@ class _AppPermissionsDialogState extends State<_AppPermissionsDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final settings = widget.settings ?? context.watch<SettingsState>().value;
+    final settings = widget.settings ?? context.watch<Setting>();
     final needsTimerAccess = settings.restTimers;
     final needsNotifications = settings.notifications || needsTimerAccess;
     final hasRequirements = needsNotifications || needsTimerAccess;

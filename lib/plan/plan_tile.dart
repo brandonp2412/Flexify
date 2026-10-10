@@ -6,7 +6,6 @@ import 'package:flexify/plan/plan_queries.dart';
 import 'package:flexify/plan/start_plan_page.dart';
 import 'package:flexify/plan/workout_sessions.dart';
 import 'package:flexify/responsive.dart';
-import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flexify/platform_page_route.dart';
@@ -79,8 +78,8 @@ class _PlanTileState extends State<PlanTile> {
     } else if (widget.plan.days.split(',').length < 7)
       title = RichText(text: TextSpan(children: _getChildren(context)));
 
-    final showImages = context.select<SettingsState, bool>(
-      (settings) => settings.value.showImages,
+    final showImages = context.select<Setting, bool>(
+      (settings) => settings.showImages,
     );
 
     Widget? leading;
@@ -174,9 +173,9 @@ class _PlanTileState extends State<PlanTile> {
         leading: leading,
         trailing: Builder(
           builder: (context) {
-            final trailing = context.select<SettingsState, PlanTrailing>(
+            final trailing = context.select<Setting, PlanTrailing>(
               (settings) => PlanTrailing.values.byName(
-                settings.value.planTrailing.replaceFirst('PlanTrailing.', ''),
+                settings.planTrailing.replaceFirst('PlanTrailing.', ''),
               ),
             );
             if (trailing == PlanTrailing.none) return const SizedBox();

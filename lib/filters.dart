@@ -1,7 +1,7 @@
 import 'package:flexify/database/categories.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/responsive.dart';
-import 'package:flexify/settings/settings_state.dart';
+import 'package:flexify/database/database.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -244,9 +244,9 @@ class _FiltersState extends State<Filters> {
                               icon: const Icon(Icons.close),
                             )
                           : null,
-                      subtitle: Selector<SettingsState, String>(
+                      subtitle: Selector<Setting, String>(
                         selector: (p0, settings) =>
-                            settings.value.shortDateFormat,
+                            settings.shortDateFormat,
                         builder: (context, shortDateFormat, child) =>
                             widget.startDate != null
                             ? Text(
@@ -274,9 +274,9 @@ class _FiltersState extends State<Filters> {
                     ListTile(
                       leading: const Icon(Icons.calendar_month),
                       title: Text(context.l10n.endDate),
-                      subtitle: Selector<SettingsState, String>(
+                      subtitle: Selector<Setting, String>(
                         selector: (p0, settings) =>
-                            settings.value.shortDateFormat,
+                            settings.shortDateFormat,
                         builder: (context, shortDateFormat, child) =>
                             widget.endDate != null
                             ? Text(

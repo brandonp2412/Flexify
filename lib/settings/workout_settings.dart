@@ -5,7 +5,6 @@ import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/responsive.dart';
 import 'package:flexify/settings/category_management_page.dart';
-import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
 import 'package:flexify/platform_page_route.dart';
 import 'package:flutter/material.dart';
@@ -397,7 +396,7 @@ class WorkoutSettings extends StatefulWidget {
 }
 
 class _WorkoutSettingsState extends State<WorkoutSettings> {
-  late var _settings = context.read<SettingsState>().value;
+  late var _settings = context.read<Setting>();
 
   late final _max = TextEditingController(text: _settings.maxSets.toString());
   late final _warmup = TextEditingController(
@@ -406,7 +405,7 @@ class _WorkoutSettingsState extends State<WorkoutSettings> {
 
   @override
   Widget build(BuildContext context) {
-    _settings = context.watch<SettingsState>().value;
+    _settings = context.watch<Setting>();
     final desktop = isDesktopLayout(context);
     final settings = getWorkoutSettings(context, '', _settings);
     final groups = [

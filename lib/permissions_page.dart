@@ -3,7 +3,6 @@ import 'package:flexify/animated_fab.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
-import 'package:flexify/settings/settings_state.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
@@ -22,7 +21,7 @@ class _PermissionsPageState extends State<PermissionsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final settings = context.watch<SettingsState>();
+    final settings = context.watch<Setting>();
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -41,12 +40,12 @@ class _PermissionsPageState extends State<PermissionsPage> {
                 onTap: () {
                   db.settings.update().write(
                     SettingsCompanion(
-                      restTimers: Value(!settings.value.restTimers),
+                      restTimers: Value(!settings.restTimers),
                     ),
                   );
                 },
                 trailing: Switch(
-                  value: settings.value.restTimers,
+                  value: settings.restTimers,
                   onChanged: (value) => db.settings.update().write(
                     SettingsCompanion(restTimers: Value(value)),
                   ),
@@ -93,7 +92,7 @@ class _PermissionsPageState extends State<PermissionsPage> {
       ),
       floatingActionButton: AnimatedFab(
         onPressed: () {
-          if ((!_ignore || !_schedule) && settings.value.restTimers)
+          if ((!_ignore || !_schedule) && settings.restTimers)
             showDialog(
               context: context,
               builder: (BuildContext context) {

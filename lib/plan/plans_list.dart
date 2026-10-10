@@ -10,7 +10,6 @@ import 'package:flexify/plan/edit_plan_page.dart';
 import 'package:flexify/plan/plan_queries.dart';
 import 'package:flexify/plan/plan_tile.dart';
 import 'package:flexify/responsive.dart';
-import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/platform_page_route.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -107,9 +106,9 @@ class _PlansListState extends State<PlansList> {
 
     if (widget.plans!.isEmpty || filteredPlans.isEmpty) return noneFound;
 
-    final settings = context.read<SettingsState>();
+    final settings = context.read<Setting>();
 
-    if (settings.value.planTrailing == PlanTrailing.reorder.toString())
+    if (settings.planTrailing == PlanTrailing.reorder.toString())
       return ReorderableListView.builder(
         scrollController: widget.scroll,
         buildDefaultDragHandles: !isDesktopLayout(context),

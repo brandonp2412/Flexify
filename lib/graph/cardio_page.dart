@@ -15,7 +15,7 @@ import 'package:flexify/graph/graph_notes_page.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/responsive.dart';
 import 'package:flexify/sets/edit_set_page.dart';
-import 'package:flexify/settings/settings_state.dart';
+import 'package:flexify/database/database.dart';
 import 'package:flexify/utils.dart';
 import 'package:flexify/platform_page_route.dart';
 import 'package:flutter/material.dart';
@@ -61,7 +61,7 @@ class _CardioPageState extends State<CardioPage> {
     _data = widget.initialData;
     _targetUnit = widget.initialUnit;
     _exerciseName = widget.initialName;
-    final settings = context.read<SettingsState>().value;
+    final settings = context.read<Setting>();
     useTimeBasedXAxis = settings.defaultGraphTimeBasedXAxis;
     limit = settings.defaultGraphLimit;
     metric = _isWeightUnit(_targetUnit)
@@ -149,7 +149,7 @@ class _CardioPageState extends State<CardioPage> {
   }
 
   void _onTabChanged() {
-    final settings = context.read<SettingsState>().value;
+    final settings = context.read<Setting>();
     if (widget.tabCtrl.index ==
         settings.tabs.split(',').indexOf('GraphsPage')) {
       setData();
@@ -223,8 +223,8 @@ class _CardioPageState extends State<CardioPage> {
 
   @override
   Widget build(BuildContext context) {
-    final shortDateFormat = context.select<SettingsState, String>(
-      (settings) => settings.value.shortDateFormat,
+    final shortDateFormat = context.select<Setting, String>(
+      (settings) => settings.shortDateFormat,
     );
     final desktop = isDesktopLayout(context);
     final theme = Theme.of(context);
@@ -442,7 +442,7 @@ class _CardioPageState extends State<CardioPage> {
       builder: (sheetContext) {
         return StatefulBuilder(
           builder: (sheetContext, setSheet) {
-            final settings = context.read<SettingsState>().value;
+            final settings = context.read<Setting>();
             final showUnitControl =
                 settings.showUnits &&
                 (metric == CardioMetric.distance ||

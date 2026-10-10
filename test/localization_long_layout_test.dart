@@ -11,7 +11,6 @@ import 'package:flexify/plan/workout_sessions.dart';
 import 'package:flexify/selection_controller.dart';
 import 'package:flexify/settings/appearance_settings.dart';
 import 'package:flexify/settings/plan_settings.dart';
-import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/timer/timer_page.dart';
 import 'package:flexify/timer/timer_state.dart';
 import 'package:flutter/material.dart';
@@ -241,7 +240,7 @@ void main() {
     await tester.pumpWidget(
       MultiProvider(
         providers: [
-          Provider<SettingsState>.value(value: settings),
+          Provider<Setting>.value(value: settings),
           ChangeNotifierProvider<TimerState>.value(value: timerState),
         ],
         child: const App(),

@@ -7,7 +7,6 @@ import 'package:flexify/home_page.dart';
 import 'package:flexify/main.dart' as app;
 import 'package:flexify/plan/plan_tile.dart';
 import 'package:flexify/settings/settings_page.dart';
-import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/settings/workout_settings.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +17,7 @@ import '../test/support/fixtures.dart';
 
 const _allTabs = 'HistoryPage,PlansPage,GraphsPage,TimerPage,SettingsPage';
 
-Future<SettingsState> _pumpIsolatedApp(
+Future<Setting> _pumpIsolatedApp(
   WidgetTester tester, {
   Size? surfaceSize,
 }) async {
@@ -1253,7 +1252,7 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('Appearance changes write through live SettingsState', (
+  testWidgets('Appearance changes write through live Setting', (
     tester,
   ) async {
     await _pumpIsolatedApp(tester, surfaceSize: const Size(900, 900));

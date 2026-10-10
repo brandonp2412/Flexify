@@ -4,7 +4,6 @@ import 'package:flexify/database/database.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/responsive.dart';
-import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -166,7 +165,7 @@ class PlanSettings extends StatefulWidget {
 }
 
 class _PlanSettingsState extends State<PlanSettings> {
-  late var _settings = context.read<SettingsState>().value;
+  late var _settings = context.read<Setting>();
 
   late final _max = TextEditingController(text: _settings.maxSets.toString());
 
@@ -183,7 +182,7 @@ class _PlanSettingsState extends State<PlanSettings> {
 
   @override
   Widget build(BuildContext context) {
-    _settings = context.watch<SettingsState>().value;
+    _settings = context.watch<Setting>();
 
     return Scaffold(
       resizeToAvoidBottomInset: false,

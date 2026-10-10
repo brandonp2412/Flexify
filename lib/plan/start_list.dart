@@ -10,7 +10,6 @@ import 'package:flexify/plan/plan_queries.dart';
 import 'package:flexify/plan/workout_sessions.dart';
 import 'package:flexify/responsive.dart';
 import 'package:flexify/sets/edit_set_page.dart';
-import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
 import 'package:flexify/platform_page_route.dart';
 import 'package:flutter/material.dart';
@@ -80,12 +79,12 @@ class _StartListState extends State<StartList> {
 
   @override
   Widget build(BuildContext context) {
-    final max = context.select<SettingsState, int>(
-      (settings) => settings.value.maxSets,
+    final max = context.select<Setting, int>(
+      (settings) => settings.maxSets,
     );
-    final trailing = context.select<SettingsState, PlanTrailing>(
+    final trailing = context.select<Setting, PlanTrailing>(
       (settings) => PlanTrailing.values.byName(
-        settings.value.planTrailing.replaceFirst('PlanTrailing.', ''),
+        settings.planTrailing.replaceFirst('PlanTrailing.', ''),
       ),
     );
     final counts = widget.counts;

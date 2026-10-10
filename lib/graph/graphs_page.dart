@@ -16,7 +16,6 @@ import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/responsive.dart';
 import 'package:flexify/selection_controller.dart';
-import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
 import 'package:flexify/platform_page_route.dart';
 import 'package:flutter/material.dart';
@@ -62,7 +61,7 @@ class GraphsPageState extends State<GraphsPage>
     return NavigatorPopHandler(
       onPopWithResult: (result) {
         if (navKey.currentState!.canPop() == false) return;
-        final settings = context.read<SettingsState>().value;
+        final settings = context.read<Setting>();
         final graphsIndex = settings.tabs.split(',').indexOf('GraphsPage');
         if (widget.tabController.index == graphsIndex)
           Navigator.of(navKey.currentContext!).pop();
@@ -301,9 +300,9 @@ class GraphsPageState extends State<GraphsPage>
                 Positioned.fill(
                   child: Column(
                     children: [
-                      Selector<SettingsState, bool>(
-                        selector: (p0, settingsState) =>
-                            settingsState.value.showGlobalProgress,
+                      Selector<Setting, bool>(
+                        selector: (context, settings) =>
+                            settings.showGlobalProgress,
                         builder: (context, showGlobal, child) {
                           final globalSearchTerms =
                               '${context.l10n.globalProgress} ${context.l10n.navGraphs}'
@@ -487,7 +486,7 @@ class GraphsPageState extends State<GraphsPage>
         globalSearchTerms.contains(_search.toLowerCase()) &&
         _category == null &&
         showGlobalProgress;
-    final settings = context.read<SettingsState>().value;
+    final settings = context.read<Setting>();
     final showPeekGraph =
         settings.peekGraph && exerciseSets.firstOrNull != null;
 
@@ -555,14 +554,14 @@ class GraphsPageState extends State<GraphsPage>
           ),
         if (showPeekGraph)
           SliverToBoxAdapter(
-            child: Consumer<SettingsState>(
+            child: Consumer<Setting>(
               builder:
                   (
                     BuildContext context,
-                    SettingsState settings,
+                    Setting settings,
                     Widget? child,
                   ) {
-                    if (!settings.value.peekGraph ||
+                    if (!settings.peekGraph ||
                         exerciseSets.firstOrNull == null) {
                       return const SizedBox();
                     }
@@ -571,7 +570,7 @@ class GraphsPageState extends State<GraphsPage>
                           ? getPeek(
                               exerciseSets.first,
                               snapshot.data!,
-                              settings.value.shortDateFormat,
+                              settings.shortDateFormat,
                             )
                           : const SizedBox(),
                       future: exerciseSets.first.bodyWeight
@@ -637,7 +636,7 @@ class GraphsPageState extends State<GraphsPage>
         showGlobalProgress;
     if (showGlobal) itemCount++;
 
-    final settings = context.read<SettingsState>().value;
+    final settings = context.read<Setting>();
     final showPeekGraph =
         settings.peekGraph && exerciseSets.firstOrNull != null;
     if (showPeekGraph) itemCount++;
@@ -707,10 +706,10 @@ class GraphsPageState extends State<GraphsPage>
         }
 
         if (showPeekGraph && currentIdx == 0) {
-          return Consumer<SettingsState>(
+          return Consumer<Setting>(
             builder:
-                (BuildContext context, SettingsState settings, Widget? child) {
-                  if (!settings.value.peekGraph) return const SizedBox();
+                (BuildContext context, Setting settings, Widget? child) {
+                  if (!settings.peekGraph) return const SizedBox();
                   if (exerciseSets.firstOrNull == null) return const SizedBox();
 
                   return FutureBuilder(
@@ -718,7 +717,7 @@ class GraphsPageState extends State<GraphsPage>
                         ? getPeek(
                             exerciseSets.first,
                             snapshot.data!,
-                            settings.value.shortDateFormat,
+                            settings.shortDateFormat,
                           )
                         : const SizedBox(),
                     future: exerciseSets.first.bodyWeight

@@ -6,7 +6,7 @@ import 'package:flexify/graph/cardio_page.dart';
 import 'package:flexify/graph/strength_page.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/responsive.dart';
-import 'package:flexify/settings/settings_state.dart';
+import 'package:flexify/database/database.dart';
 import 'package:flexify/utils.dart';
 import 'package:flexify/platform_page_route.dart';
 import 'package:flutter/material.dart';
@@ -38,8 +38,8 @@ class GraphTile extends StatelessWidget {
   Widget build(BuildContext context) {
     String trailing;
     final unit = displayMeasurementUnit(context.l10n, exerciseSet.unit);
-    final showImages = context.select<SettingsState, bool>(
-      (settings) => settings.value.showImages,
+    final showImages = context.select<Setting, bool>(
+      (settings) => settings.showImages,
     );
 
     if (exerciseSet.bodyWeight) {
@@ -121,8 +121,8 @@ class GraphTile extends StatelessWidget {
                 ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600)
               : null,
         ),
-        subtitle: Selector<SettingsState, String>(
-          selector: (context, settings) => settings.value.longDateFormat,
+        subtitle: Selector<Setting, String>(
+          selector: (context, settings) => settings.longDateFormat,
           builder: (context, dateFormat, child) => Padding(
             padding: const EdgeInsets.only(top: 3),
             child: Text(

@@ -2,7 +2,6 @@ import 'package:drift/drift.dart' hide Column;
 import 'package:flexify/database/database.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
-import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -15,9 +14,8 @@ class GraphCurveSettings extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<SettingsState>(
-      builder: (context, settingsState, child) {
-        final settings = settingsState.value;
+    return Consumer<Setting>(
+      builder: (context, settings, child) {
         final smoothness = settings.curveSmoothness ?? 0.35;
 
         void onCurveChanged(bool value) => db.settings.update().write(

@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:drafter/drafter.dart';
 import 'package:drafter/painting.dart';
-import 'package:flexify/settings/settings_state.dart';
+import 'package:flexify/database/database.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -343,7 +343,7 @@ class FlexLineChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final settings = context.watch<SettingsState>().value;
+    final settings = context.watch<Setting>();
     final colorScheme = Theme.of(context).colorScheme;
     final primary = lineColor ?? colorScheme.primary;
     final secondary = colorScheme.secondary;
@@ -411,7 +411,7 @@ class FlexGroupedLineChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final settings = context.watch<SettingsState>().value;
+    final settings = context.watch<Setting>();
     final axisLabelColor = Theme.of(context).colorScheme.onSurface;
     final points = [for (final line in series) ...line.points];
 

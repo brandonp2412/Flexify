@@ -11,7 +11,6 @@ import 'package:flexify/l10n/generated/app_localizations.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/responsive.dart';
-import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/storage/app_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -91,7 +90,7 @@ Future<void> tapBackup(bool value, AppLocalizations l10n) async {
 
 List<Widget> getDataSettings(
   String term,
-  SettingsState settings,
+  Setting settings,
   BuildContext context,
 ) {
   final l10n = context.l10n;
@@ -110,13 +109,13 @@ List<Widget> getDataSettings(
               ? TextAlign.start
               : TextAlign.center,
         ),
-        leading: settings.value.automaticBackups
+        leading: settings.automaticBackups
             ? const Icon(Icons.timer)
             : const Icon(Icons.timer_outlined),
-        onTap: () => tapBackup(!settings.value.automaticBackups, l10n),
+        onTap: () => tapBackup(!settings.automaticBackups, l10n),
         trailing: Switch(
           key: const Key('automaticBackupSwitch'),
-          value: settings.value.automaticBackups,
+          value: settings.automaticBackups,
           onChanged: (value) => tapBackup(value, l10n),
         ),
       ),
@@ -159,7 +158,7 @@ class DataSettings extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final settings = context.watch<SettingsState>();
+    final settings = context.watch<Setting>();
 
     return Scaffold(
       resizeToAvoidBottomInset: false,

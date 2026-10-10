@@ -9,7 +9,6 @@ import 'package:flexify/plan/start_plan_page.dart';
 import 'package:flexify/responsive.dart';
 import 'package:flexify/sets/history_page.dart';
 import 'package:flexify/settings/settings_page.dart';
-import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/settings/whats_new.dart';
 import 'package:flexify/timer/timer_page.dart';
 import 'package:flexify/timer/timer_progress_widgets.dart';
@@ -37,7 +36,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   void initState() {
     super.initState();
 
-    final setting = context.read<SettingsState>().value.tabs;
+    final setting = context.read<Setting>().tabs;
     final tabs = setting.split(',');
     _controller = TabController(length: tabs.length, vsync: this);
     _desktopPageController = PageController();
@@ -89,7 +88,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     if (target == null) return;
 
     final navigator = Navigator.of(context);
-    final tabs = context.read<SettingsState>().value.tabs.split(',');
+    final tabs = context.read<Setting>().tabs.split(',');
     if (target == 'history' || target == 'timer') {
       final tab = target == 'history' ? 'HistoryPage' : 'TimerPage';
       final index = tabs.indexOf(tab);
@@ -149,8 +148,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   }
 
   void hideTab(BuildContext context, String tab) async {
-    final state = context.read<SettingsState>();
-    final tabs = state.value.tabs.split(',');
+    final state = context.read<Setting>();
+    final tabs = state.tabs.split(',');
 
     if (tabs.length == 1) return toast(context.l10n.cannotHideAllTabs);
 
@@ -215,12 +214,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    final tabSettings = context.select<SettingsState, String>(
-      (settings) => settings.value.tabs,
+    final tabSettings = context.select<Setting, String>(
+      (settings) => settings.tabs,
     );
     final tabs = tabSettings.split(',');
-    final scrollableTabs = context.select<SettingsState, bool>(
-      (settings) => settings.value.scrollableTabs,
+    final scrollableTabs = context.select<Setting, bool>(
+      (settings) => settings.scrollableTabs,
     );
 
     if (tabs.length != _controller.length) {
@@ -313,15 +312,15 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               },
             ),
           ),
-        Consumer<SettingsState>(
+        Consumer<Setting>(
           builder: (context, settings, child) => Positioned(
-            top: settings.value.progressPosition == 'top' ? 8 : null,
-            bottom: settings.value.progressPosition == 'bottom'
+            top: settings.progressPosition == 'top' ? 8 : null,
+            bottom: settings.progressPosition == 'bottom'
                 ? (desktop ? 12 : 0)
                 : null,
             left: desktop ? 24 : 48,
             right: desktop ? 24 : 48,
-            child: settings.value.progressPosition != 'none'
+            child: settings.progressPosition != 'none'
                 ? const TimerProgressIndicator()
                 : const SizedBox(),
           ),

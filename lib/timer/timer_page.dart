@@ -4,7 +4,7 @@ import 'package:flexify/animated_fab.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/responsive.dart';
 import 'package:flexify/settings/settings_page.dart';
-import 'package:flexify/settings/settings_state.dart';
+import 'package:flexify/database/database.dart';
 import 'package:flexify/timer/timer_progress_widgets.dart';
 import 'package:flexify/timer/timer_state.dart';
 import 'package:flexify/utils.dart';
@@ -39,7 +39,7 @@ class TimerPageState extends State<TimerPage>
     return NavigatorPopHandler(
       onPopWithResult: (result) {
         if (_navKey.currentState!.canPop() == false) return;
-        final settings = context.read<SettingsState>().value;
+        final settings = context.read<Setting>();
         final index = settings.tabs.split(',').indexOf('TimerPage');
         final tabController = widget.tabController;
         if (tabController == null || tabController.index == index) {

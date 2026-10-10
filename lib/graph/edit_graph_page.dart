@@ -8,7 +8,7 @@ import 'package:flexify/database/exercise_analytics.dart';
 import 'package:flexify/database/exercise_catalog.dart';
 import 'package:flexify/database/categories.dart';
 import 'package:flexify/l10n/l10n.dart';
-import 'package:flexify/settings/settings_state.dart';
+import 'package:flexify/database/database.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -142,8 +142,8 @@ class _EditGraphPageState extends State<EditGraphPage> {
                   ],
                 ),
                 const SizedBox(height: 12.0),
-                Selector<SettingsState, bool>(
-                  selector: (p0, settings) => settings.value.showCategories,
+                Selector<Setting, bool>(
+                  selector: (p0, settings) => settings.showCategories,
                   builder: (context, showCategories, child) {
                     if (!showCategories) return const SizedBox();
                     return StreamBuilder(
@@ -215,7 +215,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
                   const SizedBox(height: 12.0),
                 ] else
                   const SizedBox(height: 12.0),
-                Selector<SettingsState, bool>(
+                Selector<Setting, bool>(
                   builder: (context, showImages, child) {
                     return Visibility(
                       visible: showImages,
@@ -259,7 +259,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
                       ),
                     );
                   },
-                  selector: (context, settings) => settings.value.showImages,
+                  selector: (context, settings) => settings.showImages,
                 ),
               ],
             ),

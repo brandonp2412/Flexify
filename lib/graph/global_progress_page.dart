@@ -7,7 +7,7 @@ import 'package:flexify/graph/graph_options_controls.dart';
 import 'package:flexify/graph/strength_data.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/responsive.dart';
-import 'package:flexify/settings/settings_state.dart';
+import 'package:flexify/database/database.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -40,7 +40,7 @@ class _GlobalProgressPageState extends State<GlobalProgressPage> {
   }
 
   void tabListener() {
-    final settings = context.read<SettingsState>().value;
+    final settings = context.read<Setting>();
     final graphsIndex = settings.tabs.split(',').indexOf('GraphsPage');
     if (widget.tabController.indexIsChanging) return;
     if (widget.tabController.index != graphsIndex) return;
@@ -93,7 +93,7 @@ class _GlobalProgressPageState extends State<GlobalProgressPage> {
 
   @override
   Widget build(BuildContext context) {
-    final settings = context.watch<SettingsState>().value;
+    final settings = context.watch<Setting>();
 
     final chartColors = generateChartColors(context, categories.length);
     final allDates = data.map((d) => d.created).toSet().toList()..sort();
@@ -334,7 +334,7 @@ class _GlobalProgressPageState extends State<GlobalProgressPage> {
       builder: (sheetContext) {
         return StatefulBuilder(
           builder: (sheetContext, setSheet) {
-            final settings = context.read<SettingsState>().value;
+            final settings = context.read<Setting>();
             void refreshSheet() => setSheet(() {});
 
             return SafeArea(

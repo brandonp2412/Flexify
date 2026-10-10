@@ -12,7 +12,6 @@ import 'package:flexify/plan/start_plan_page.dart';
 import 'package:flexify/plan/workout_sessions.dart';
 import 'package:flexify/responsive.dart';
 import 'package:flexify/selection_controller.dart';
-import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/platform_page_route.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -76,7 +75,7 @@ class PlansPageState extends State<PlansPage>
     return NavigatorPopHandler(
       onPopWithResult: (result) {
         if (navKey.currentState!.canPop() == false) return;
-        final settings = context.read<SettingsState>().value;
+        final settings = context.read<Setting>();
         final index = settings.tabs.split(',').indexOf('PlansPage');
         if (widget.tabController.index == index) navKey.currentState!.pop();
       },

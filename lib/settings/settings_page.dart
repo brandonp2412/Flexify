@@ -10,7 +10,6 @@ import 'package:flexify/settings/appearance_settings.dart';
 import 'package:flexify/settings/data_settings.dart';
 import 'package:flexify/settings/format_settings.dart';
 import 'package:flexify/settings/plan_settings.dart';
-import 'package:flexify/settings/settings_state.dart';
 import 'package:flexify/settings/tab_settings.dart';
 import 'package:flexify/settings/timer_settings.dart';
 import 'package:flexify/settings/workout_settings.dart';
@@ -46,23 +45,23 @@ class _SettingsPageState extends State<SettingsPage>
   Widget build(BuildContext context) {
     super.build(context);
     List<Widget> filtered = [];
-    final settings = context.watch<SettingsState>();
+    final settings = context.watch<Setting>();
     final desktop = isDesktopLayout(context);
     if (_searchCtrl.text.isNotEmpty) {
       filtered.addAll(
         getAppearanceSettings(context, _searchCtrl.text, settings),
       );
       filtered.addAll(
-        getFormatSettings(context, _searchCtrl.text, settings.value),
+        getFormatSettings(context, _searchCtrl.text, settings),
       );
       filtered.addAll(
-        getWorkoutSettings(context, _searchCtrl.text, settings.value),
+        getWorkoutSettings(context, _searchCtrl.text, settings),
       );
       if (_player.isAvailable)
         filtered.addAll(
           getTimerSettings(
             _searchCtrl.text,
-            settings.value,
+            settings,
             _minutes,
             _seconds,
             _player,
@@ -74,7 +73,7 @@ class _SettingsPageState extends State<SettingsPage>
         getPlanSettings(
           context,
           _searchCtrl.text,
-          settings.value,
+          settings,
           _maxSets,
           _warmupSets,
         ),
@@ -319,7 +318,7 @@ class _SettingsPageState extends State<SettingsPage>
   void initState() {
     super.initState();
 
-    _settings = context.read<SettingsState>().value;
+    _settings = context.read<Setting>();
     _maxSets = TextEditingController(text: _settings.maxSets.toString());
     _warmupSets = TextEditingController(text: _settings.warmupSets?.toString());
     _minutes = TextEditingController(

@@ -4,14 +4,13 @@ import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/l10n/locale_preferences.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/responsive.dart';
-import 'package:flexify/settings/settings_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 List<Widget> getAppearanceSettings(
   BuildContext context,
   String term,
-  SettingsState settings,
+  Setting settings,
 ) {
   final l10n = context.l10n;
   final normalizedTerm = term.trim().toLowerCase();
@@ -24,7 +23,7 @@ List<Widget> getAppearanceSettings(
     ...selectableLocales.map((locale) => localeDisplayName(l10n, locale)),
   ].join(' ').toLowerCase();
   final selectedLocale =
-      canonicalLocaleOverride(settings.value.localeOverride) ?? '';
+      canonicalLocaleOverride(settings.localeOverride) ?? '';
 
   return [
     if (languageSearchText.contains(normalizedTerm))
@@ -88,9 +87,9 @@ List<Widget> getAppearanceSettings(
             ),
           ],
           selected: {
-            settings.value.themeMode == 'ThemeMode.amoled'
+            settings.themeMode == 'ThemeMode.amoled'
                 ? 'ThemeMode.dark'
-                : settings.value.themeMode,
+                : settings.themeMode,
           },
           onSelectionChanged: (selection) => db.settings.update().write(
             SettingsCompanion(themeMode: Value(selection.first)),
@@ -101,7 +100,7 @@ List<Widget> getAppearanceSettings(
       Tooltip(
         message: l10n.pureBlackAmoledDescription,
         child: ListTile(
-          leading: settings.value.themeMode == 'ThemeMode.amoled'
+          leading: settings.themeMode == 'ThemeMode.amoled'
               ? const Icon(Icons.contrast)
               : const Icon(Icons.contrast_outlined),
           title: Text(
@@ -113,14 +112,14 @@ List<Widget> getAppearanceSettings(
           onTap: () => db.settings.update().write(
             SettingsCompanion(
               themeMode: Value(
-                settings.value.themeMode == 'ThemeMode.amoled'
+                settings.themeMode == 'ThemeMode.amoled'
                     ? 'ThemeMode.dark'
                     : 'ThemeMode.amoled',
               ),
             ),
           ),
           trailing: Switch(
-            value: settings.value.themeMode == 'ThemeMode.amoled',
+            value: settings.themeMode == 'ThemeMode.amoled',
             onChanged: (value) => db.settings.update().write(
               SettingsCompanion(
                 themeMode: Value(value ? 'ThemeMode.amoled' : 'ThemeMode.dark'),
@@ -141,16 +140,16 @@ List<Widget> getAppearanceSettings(
                   ? TextAlign.start
                   : TextAlign.center,
             ),
-            leading: settings.value.systemColors
+            leading: settings.systemColors
                 ? const Icon(Icons.color_lens)
                 : const Icon(Icons.color_lens_outlined),
             onTap: () => db.settings.update().write(
               SettingsCompanion(
-                systemColors: Value(!settings.value.systemColors),
+                systemColors: Value(!settings.systemColors),
               ),
             ),
             trailing: Switch(
-              value: settings.value.systemColors,
+              value: settings.systemColors,
               onChanged: (value) => db.settings.update().write(
                 SettingsCompanion(systemColors: Value(value)),
               ),
@@ -168,14 +167,14 @@ List<Widget> getAppearanceSettings(
                 ? TextAlign.start
                 : TextAlign.center,
           ),
-          leading: settings.value.showImages
+          leading: settings.showImages
               ? const Icon(Icons.image)
               : const Icon(Icons.image_outlined),
           onTap: () => db.settings.update().write(
-            SettingsCompanion(showImages: Value(!settings.value.showImages)),
+            SettingsCompanion(showImages: Value(!settings.showImages)),
           ),
           trailing: Switch(
-            value: settings.value.showImages,
+            value: settings.showImages,
             onChanged: (value) => db.settings.update().write(
               SettingsCompanion(showImages: Value(value)),
             ),
@@ -192,16 +191,16 @@ List<Widget> getAppearanceSettings(
                 ? TextAlign.start
                 : TextAlign.center,
           ),
-          leading: settings.value.showGlobalProgress
+          leading: settings.showGlobalProgress
               ? const Icon(Icons.public)
               : const Icon(Icons.public_outlined),
           onTap: () => db.settings.update().write(
             SettingsCompanion(
-              showGlobalProgress: Value(!settings.value.showGlobalProgress),
+              showGlobalProgress: Value(!settings.showGlobalProgress),
             ),
           ),
           trailing: Switch(
-            value: settings.value.showGlobalProgress,
+            value: settings.showGlobalProgress,
             onChanged: (value) => db.settings.update().write(
               SettingsCompanion(showGlobalProgress: Value(value)),
             ),
@@ -218,14 +217,14 @@ List<Widget> getAppearanceSettings(
                 ? TextAlign.start
                 : TextAlign.center,
           ),
-          leading: settings.value.peekGraph
+          leading: settings.peekGraph
               ? const Icon(Icons.visibility)
               : const Icon(Icons.visibility_outlined),
           onTap: () => db.settings.update().write(
-            SettingsCompanion(peekGraph: Value(!settings.value.peekGraph)),
+            SettingsCompanion(peekGraph: Value(!settings.peekGraph)),
           ),
           trailing: Switch(
-            value: settings.value.peekGraph,
+            value: settings.peekGraph,
             onChanged: (value) => db.settings.update().write(
               SettingsCompanion(peekGraph: Value(value)),
             ),
@@ -242,14 +241,14 @@ List<Widget> getAppearanceSettings(
                 ? TextAlign.start
                 : TextAlign.center,
           ),
-          leading: settings.value.curveLines
+          leading: settings.curveLines
               ? const Icon(Icons.insights)
               : const Icon(Icons.insights_outlined),
           onTap: () => db.settings.update().write(
-            SettingsCompanion(curveLines: Value(!settings.value.curveLines)),
+            SettingsCompanion(curveLines: Value(!settings.curveLines)),
           ),
           trailing: Switch(
-            value: settings.value.curveLines,
+            value: settings.curveLines,
             onChanged: (value) => db.settings.update().write(
               SettingsCompanion(curveLines: Value(value)),
             ),
@@ -267,7 +266,7 @@ List<Widget> getAppearanceSettings(
             style: Theme.of(context).textTheme.bodyLarge,
           ),
           Slider(
-            value: settings.value.curveSmoothness ?? 0.35,
+            value: settings.curveSmoothness ?? 0.35,
             inactiveColor: Theme.of(
               context,
             ).colorScheme.primary.withValues(alpha: 0.24),
@@ -305,7 +304,7 @@ List<Widget> getAppearanceSettings(
                     icon: const Icon(Icons.format_color_fill),
                   ),
                 ],
-                selected: {settings.value.inputStyle},
+                selected: {settings.inputStyle},
                 onSelectionChanged: (selection) => db.settings.update().write(
                   SettingsCompanion(inputStyle: Value(selection.first)),
                 ),
@@ -327,7 +326,7 @@ class AppearanceSettings extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final settings = context.watch<SettingsState>();
+    final settings = context.watch<Setting>();
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
