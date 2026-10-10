@@ -543,10 +543,6 @@ class _TimerSettingsState extends State<TimerSettings> {
   }
 
   Widget _buildPerExerciseSection() {
-    if (_exercisesWithCustomTimers.isEmpty) {
-      return const SizedBox.shrink();
-    }
-
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -679,7 +675,8 @@ class _TimerSettingsState extends State<TimerSettings> {
                   _player,
                   context,
                 ),
-                _buildPerExerciseSection(),
+                if (_exercisesWithCustomTimers.isNotEmpty)
+                  _buildPerExerciseSection(),
               ]
             : [
                 ListTile(
