@@ -1573,4 +1573,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String setNumber(int number) {
     return 'Set $number';
   }
+
+  @override
+  String get graphIndependentMetricScales =>
+      'Each line is scaled independently for comparison';
 }

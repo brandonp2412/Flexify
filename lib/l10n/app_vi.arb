@@ -2048,5 +2048,10 @@
         "type": "int"
       }
     }
+  },
+  "graphIndependentMetricScales": "Mỗi đường được chia tỷ lệ riêng để dễ so sánh",
+  "@graphIndependentMetricScales": {
+    "description": "Note for independently scaled graph metric lines."
   }
+
 }

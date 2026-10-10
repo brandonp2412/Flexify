@@ -1569,4 +1569,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String setNumber(int number) {
     return 'المجموعة $number';
   }
+
+  @override
+  String get graphIndependentMetricScales =>
+      'يُضبط مقياس كل خط بشكل مستقل لتسهيل المقارنة';
 }

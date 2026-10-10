@@ -1522,4 +1522,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String setNumber(int number) {
     return 'セット $number';
   }
+
+  @override
+  String get graphIndependentMetricScales => '比較しやすいように各線の尺度を個別に調整しています';
 }

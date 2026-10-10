@@ -1602,4 +1602,8 @@ class AppLocalizationsEs extends AppLocalizations {
   String setNumber(int number) {
     return 'Serie $number';
   }
+
+  @override
+  String get graphIndependentMetricScales =>
+      'Cada línea se escala por separado para facilitar la comparación';
 }

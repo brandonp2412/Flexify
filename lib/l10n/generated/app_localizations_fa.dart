@@ -1581,4 +1581,8 @@ class AppLocalizationsFa extends AppLocalizations {
   String setNumber(int number) {
     return 'ست $number';
   }
+
+  @override
+  String get graphIndependentMetricScales =>
+      'مقیاس هر خط برای مقایسه به‌صورت مستقل تنظیم می‌شود';
 }

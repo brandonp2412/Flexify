@@ -495,5 +495,10 @@
   "nothingMatchesPlanSearch": "没有与“{query}”匹配的内容。你可以将其创建为新计划。",
   "createPlan": "创建计划",
   "createNamedPlan": "创建“{name}”",
-  "setNumber": "第 {number} 组"
+  "setNumber": "第 {number} 组",
+  "graphIndependentMetricScales": "每条线独立缩放以便比较",
+  "@graphIndependentMetricScales": {
+    "description": "Note for independently scaled graph metric lines."
+  }
+
 }

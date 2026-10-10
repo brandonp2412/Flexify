@@ -1575,4 +1575,8 @@ class AppLocalizationsHi extends AppLocalizations {
   String setNumber(int number) {
     return 'सेट $number';
   }
+
+  @override
+  String get graphIndependentMetricScales =>
+      'तुलना के लिए हर रेखा का पैमाना अलग-अलग समायोजित होता है';
 }

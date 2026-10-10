@@ -1608,4 +1608,8 @@ class AppLocalizationsFr extends AppLocalizations {
   String setNumber(int number) {
     return 'Série $number';
   }
+
+  @override
+  String get graphIndependentMetricScales =>
+      'Chaque courbe est mise à l’échelle séparément pour faciliter la comparaison';
 }

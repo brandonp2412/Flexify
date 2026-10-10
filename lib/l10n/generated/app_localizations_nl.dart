@@ -1593,4 +1593,8 @@ class AppLocalizationsNl extends AppLocalizations {
   String setNumber(int number) {
     return 'Set $number';
   }
+
+  @override
+  String get graphIndependentMetricScales =>
+      'Elke lijn heeft een eigen schaal om ze te kunnen vergelijken';
 }

@@ -495,5 +495,10 @@
   "nothingMatchesPlanSearch": "「{query}」に一致する項目はありません。新しいプランとして作成できます。",
   "createPlan": "プランを作成",
   "createNamedPlan": "「{name}」を作成",
-  "setNumber": "セット {number}"
+  "setNumber": "セット {number}",
+  "graphIndependentMetricScales": "比較しやすいように各線の尺度を個別に調整しています",
+  "@graphIndependentMetricScales": {
+    "description": "Note for independently scaled graph metric lines."
+  }
+
 }

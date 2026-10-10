@@ -495,5 +495,10 @@
   "nothingMatchesPlanSearch": "Nessun risultato per “{query}”. Puoi crearlo come nuova scheda.",
   "createPlan": "Crea scheda",
   "createNamedPlan": "Crea “{name}”",
-  "setNumber": "Serie {number}"
+  "setNumber": "Serie {number}",
+  "graphIndependentMetricScales": "Ogni linea ha una scala indipendente per facilitare il confronto",
+  "@graphIndependentMetricScales": {
+    "description": "Note for independently scaled graph metric lines."
+  }
+
 }

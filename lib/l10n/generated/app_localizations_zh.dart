@@ -1511,6 +1511,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String setNumber(int number) {
     return '第 $number 组';
   }
+
+  @override
+  String get graphIndependentMetricScales => '每条线独立缩放以便比较';
 }
 
 /// The translations for Chinese, as used in China (`zh_CN`).
@@ -3020,6 +3023,9 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
   String setNumber(int number) {
     return '第 $number 组';
   }
+
+  @override
+  String get graphIndependentMetricScales => '每条线独立缩放以便比较';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -4529,4 +4535,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String setNumber(int number) {
     return '第 $number 組';
   }
+
+  @override
+  String get graphIndependentMetricScales => '每條線獨立縮放以便比較';
 }

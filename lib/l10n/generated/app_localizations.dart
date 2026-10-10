@@ -2921,6 +2921,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Set {number}'**
   String setNumber(int number);
+
+  /// Note displayed when multiple graph metrics with different units share one plot.
+  ///
+  /// In en, this message translates to:
+  /// **'Each line is scaled independently for comparison'**
+  String get graphIndependentMetricScales;
 }
 
 class _AppLocalizationsDelegate

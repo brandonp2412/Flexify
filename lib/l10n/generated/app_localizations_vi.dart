@@ -1588,4 +1588,8 @@ class AppLocalizationsVi extends AppLocalizations {
   String setNumber(int number) {
     return 'Hiệp $number';
   }
+
+  @override
+  String get graphIndependentMetricScales =>
+      'Mỗi đường được chia tỷ lệ riêng để dễ so sánh';
 }

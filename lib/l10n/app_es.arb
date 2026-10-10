@@ -495,5 +495,10 @@
   "nothingMatchesPlanSearch": "Nada coincide con “{query}”. Puedes crearlo como un plan nuevo.",
   "createPlan": "Crear plan",
   "createNamedPlan": "Crear “{name}”",
-  "setNumber": "Serie {number}"
+  "setNumber": "Serie {number}",
+  "graphIndependentMetricScales": "Cada línea se escala por separado para facilitar la comparación",
+  "@graphIndependentMetricScales": {
+    "description": "Note for independently scaled graph metric lines."
+  }
+
 }

@@ -1578,4 +1578,8 @@ class AppLocalizationsBn extends AppLocalizations {
   String setNumber(int number) {
     return 'সেট $number';
   }
+
+  @override
+  String get graphIndependentMetricScales =>
+      'তুলনার জন্য প্রতিটি রেখার স্কেল আলাদাভাবে সমন্বয় করা হয়';
 }

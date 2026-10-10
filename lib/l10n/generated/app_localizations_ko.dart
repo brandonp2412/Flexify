@@ -1524,4 +1524,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String setNumber(int number) {
     return '세트 $number';
   }
+
+  @override
+  String get graphIndependentMetricScales => '비교를 위해 각 선의 눈금을 독립적으로 조정합니다';
 }

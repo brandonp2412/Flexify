@@ -1604,4 +1604,8 @@ class AppLocalizationsUk extends AppLocalizations {
   String setNumber(int number) {
     return 'Підхід $number';
   }
+
+  @override
+  String get graphIndependentMetricScales =>
+      'Кожна лінія має власний масштаб для порівняння';
 }

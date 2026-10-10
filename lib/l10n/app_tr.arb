@@ -495,5 +495,10 @@
   "nothingMatchesPlanSearch": "“{query}” ile eşleşen sonuç yok. Bunu yeni bir plan olarak oluşturabilirsin.",
   "createPlan": "Plan Oluştur",
   "createNamedPlan": "“{name}” Oluştur",
-  "setNumber": "{number}. Set"
+  "setNumber": "{number}. Set",
+  "graphIndependentMetricScales": "Karşılaştırma için her çizgi bağımsız olarak ölçeklenir",
+  "@graphIndependentMetricScales": {
+    "description": "Note for independently scaled graph metric lines."
+  }
+
 }

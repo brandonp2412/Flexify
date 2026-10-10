@@ -2048,5 +2048,10 @@
         "type": "int"
       }
     }
+  },
+  "graphIndependentMetricScales": "तुलना के लिए हर रेखा का पैमाना अलग-अलग समायोजित होता है",
+  "@graphIndependentMetricScales": {
+    "description": "Note for independently scaled graph metric lines."
   }
+
 }

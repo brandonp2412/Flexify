@@ -495,5 +495,10 @@
   "nothingMatchesPlanSearch": "Keine Treffer für „{query}“. Du kannst daraus einen neuen Plan erstellen.",
   "createPlan": "Plan erstellen",
   "createNamedPlan": "„{name}“ erstellen",
-  "setNumber": "Satz {number}"
+  "setNumber": "Satz {number}",
+  "graphIndependentMetricScales": "Jede Linie wird zum Vergleich unabhängig skaliert",
+  "@graphIndependentMetricScales": {
+    "description": "Note for independently scaled graph metric lines."
+  }
+
 }

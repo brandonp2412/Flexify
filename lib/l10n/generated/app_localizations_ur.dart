@@ -1582,4 +1582,8 @@ class AppLocalizationsUr extends AppLocalizations {
   String setNumber(int number) {
     return 'سیٹ $number';
   }
+
+  @override
+  String get graphIndependentMetricScales =>
+      'موازنے کے لیے ہر لکیر کا پیمانہ الگ رکھا گیا ہے';
 }

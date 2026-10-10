@@ -1591,4 +1591,8 @@ class AppLocalizationsMs extends AppLocalizations {
   String setNumber(int number) {
     return 'Set ke-$number';
   }
+
+  @override
+  String get graphIndependentMetricScales =>
+      'Setiap garis menggunakan skala berasingan untuk perbandingan';
 }

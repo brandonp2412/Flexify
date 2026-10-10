@@ -2048,5 +2048,10 @@
         "type": "int"
       }
     }
+  },
+  "graphIndependentMetricScales": "তুলনার জন্য প্রতিটি রেখার স্কেল আলাদাভাবে সমন্বয় করা হয়",
+  "@graphIndependentMetricScales": {
+    "description": "Note for independently scaled graph metric lines."
   }
+
 }

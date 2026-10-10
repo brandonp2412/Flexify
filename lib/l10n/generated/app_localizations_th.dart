@@ -1565,4 +1565,8 @@ class AppLocalizationsTh extends AppLocalizations {
   String setNumber(int number) {
     return 'เซ็ต $number';
   }
+
+  @override
+  String get graphIndependentMetricScales =>
+      'แต่ละเส้นใช้มาตราส่วนแยกกันเพื่อให้เปรียบเทียบได้';
 }

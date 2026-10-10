@@ -2048,5 +2048,10 @@
         "type": "int"
       }
     }
+  },
+  "graphIndependentMetricScales": "แต่ละเส้นใช้มาตราส่วนแยกกันเพื่อให้เปรียบเทียบได้",
+  "@graphIndependentMetricScales": {
+    "description": "Note for independently scaled graph metric lines."
   }
+
 }

@@ -495,5 +495,10 @@
   "nothingMatchesPlanSearch": "Ничто не совпадает с «{query}». Вы можете создать его как новый план.",
   "createPlan": "Создать план",
   "createNamedPlan": "Создать «{name}»",
-  "setNumber": "Подход {number}"
+  "setNumber": "Подход {number}",
+  "graphIndependentMetricScales": "Каждая линия имеет собственный масштаб для сравнения",
+  "@graphIndependentMetricScales": {
+    "description": "Note for independently scaled graph metric lines."
+  }
+
 }

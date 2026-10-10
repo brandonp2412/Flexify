@@ -1606,4 +1606,8 @@ class AppLocalizationsPl extends AppLocalizations {
   String setNumber(int number) {
     return 'Seria $number';
   }
+
+  @override
+  String get graphIndependentMetricScales =>
+      'Każda linia ma osobną skalę, aby ułatwić porównanie';
 }

@@ -495,5 +495,10 @@
   "nothingMatchesPlanSearch": "沒有與“{query}”符合的內容。你可以將其建立為新計畫。",
   "createPlan": "建立計畫",
   "createNamedPlan": "建立“{name}”",
-  "setNumber": "第 {number} 組"
+  "setNumber": "第 {number} 組",
+  "graphIndependentMetricScales": "每條線獨立縮放以便比較",
+  "@graphIndependentMetricScales": {
+    "description": "Note for independently scaled graph metric lines."
+  }
+
 }

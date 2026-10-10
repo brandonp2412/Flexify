@@ -1603,6 +1603,10 @@ class AppLocalizationsPt extends AppLocalizations {
   String setNumber(int number) {
     return 'Série $number';
   }
+
+  @override
+  String get graphIndependentMetricScales =>
+      'Cada linha usa uma escala independente para facilitar a comparação';
 }
 
 /// The translations for Portuguese, as used in Brazil (`pt_BR`).
@@ -3196,6 +3200,10 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String setNumber(int number) {
     return 'Série $number';
   }
+
+  @override
+  String get graphIndependentMetricScales =>
+      'Cada linha usa uma escala independente para facilitar a comparação';
 }
 
 /// The translations for Portuguese, as used in Portugal (`pt_PT`).
@@ -4797,4 +4805,8 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String setNumber(int number) {
     return 'Série $number';
   }
+
+  @override
+  String get graphIndependentMetricScales =>
+      'Cada linha usa uma escala independente para facilitar a comparação';
 }

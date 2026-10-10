@@ -1607,4 +1607,8 @@ class AppLocalizationsRu extends AppLocalizations {
   String setNumber(int number) {
     return 'Подход $number';
   }
+
+  @override
+  String get graphIndependentMetricScales =>
+      'Каждая линия имеет собственный масштаб для сравнения';
 }

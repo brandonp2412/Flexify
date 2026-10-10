@@ -1597,4 +1597,8 @@ class AppLocalizationsTr extends AppLocalizations {
   String setNumber(int number) {
     return '$number. Set';
   }
+
+  @override
+  String get graphIndependentMetricScales =>
+      'Karşılaştırma için her çizgi bağımsız olarak ölçeklenir';
 }
