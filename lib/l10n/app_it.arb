@@ -391,7 +391,6 @@
   "inclineLabel": "Pendenza",
   "paceDistanceTime": "Passo (distanza / tempo)",
   "adjustedPace": "Passo corretto",
-  "oneRepMaxAccuracyWarning": "Le stime del massimale 1RM sono meno precise per serie da 10 o più ripetizioni",
   "addPlan": "Aggiungi scheda",
   "planDetails": "Dettagli scheda",
   "exercisesLabel": "Esercizi",

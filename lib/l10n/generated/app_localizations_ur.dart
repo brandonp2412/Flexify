@@ -1231,10 +1231,6 @@ class AppLocalizationsUr extends AppLocalizations {
   String get adjustedPace => 'ایڈجسٹ شدہ رفتار';
 
   @override
-  String get oneRepMaxAccuracyWarning =>
-      '10 یا اس سے زیادہ ریپس والے سیٹس میں ایک ریپ زیادہ سے زیادہ کا تخمینہ کم درست ہوتا ہے';
-
-  @override
   String get addPlan => 'منصوبہ شامل کریں';
 
   @override

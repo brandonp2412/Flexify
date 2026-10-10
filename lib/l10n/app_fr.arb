@@ -391,7 +391,6 @@
   "inclineLabel": "Inclinaison",
   "paceDistanceTime": "Allure (distance / temps)",
   "adjustedPace": "Allure ajustée",
-  "oneRepMaxAccuracyWarning": "Les estimations du maximum sur 1 répétition sont moins précises pour les séries de 10 répétitions ou plus",
   "addPlan": "Ajouter un programme",
   "planDetails": "Détails du programme",
   "exercisesLabel": "Exercices",

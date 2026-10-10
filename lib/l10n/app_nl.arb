@@ -391,7 +391,6 @@
   "inclineLabel": "Helling",
   "paceDistanceTime": "Tempo (afstand / tijd)",
   "adjustedPace": "Aangepast tempo",
-  "oneRepMaxAccuracyWarning": "1RM-schattingen zijn minder nauwkeurig bij sets van 10 of meer herhalingen",
   "addPlan": "Schema toevoegen",
   "planDetails": "Schemadetails",
   "exercisesLabel": "Oefeningen",

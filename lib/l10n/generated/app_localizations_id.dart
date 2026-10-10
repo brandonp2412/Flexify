@@ -1231,10 +1231,6 @@ class AppLocalizationsId extends AppLocalizations {
   String get adjustedPace => 'Laju yang disesuaikan';
 
   @override
-  String get oneRepMaxAccuracyWarning =>
-      'Perkiraan maksimum 1 repetisi kurang akurat untuk set dengan 10+ repetisi';
-
-  @override
   String get addPlan => 'Tambah rencana';
 
   @override

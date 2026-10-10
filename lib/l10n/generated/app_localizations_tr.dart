@@ -1231,10 +1231,6 @@ class AppLocalizationsTr extends AppLocalizations {
   String get adjustedPace => 'Düzeltilmiş Tempo';
 
   @override
-  String get oneRepMaxAccuracyWarning =>
-      '10+ tekrar içeren setler için 1RM tahminleri daha az doğruluk payına sahiptir.';
-
-  @override
   String get addPlan => 'Plan Ekle';
 
   @override

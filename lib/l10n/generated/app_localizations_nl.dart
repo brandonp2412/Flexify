@@ -1235,10 +1235,6 @@ class AppLocalizationsNl extends AppLocalizations {
   String get adjustedPace => 'Aangepast tempo';
 
   @override
-  String get oneRepMaxAccuracyWarning =>
-      '1RM-schattingen zijn minder nauwkeurig bij sets van 10 of meer herhalingen';
-
-  @override
   String get addPlan => 'Schema toevoegen';
 
   @override

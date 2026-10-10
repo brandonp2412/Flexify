@@ -1225,10 +1225,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get adjustedPace => 'Adjusted pace';
 
   @override
-  String get oneRepMaxAccuracyWarning =>
-      'One rep max estimates are less accurate for sets of 10+ reps';
-
-  @override
   String get addPlan => 'Add plan';
 
   @override

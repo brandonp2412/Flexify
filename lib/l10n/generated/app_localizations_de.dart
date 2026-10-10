@@ -1239,10 +1239,6 @@ class AppLocalizationsDe extends AppLocalizations {
   String get adjustedPace => 'Angepasstes Tempo';
 
   @override
-  String get oneRepMaxAccuracyWarning =>
-      '1RM-Schätzungen sind bei Sätzen mit 10 oder mehr Wiederholungen weniger genau';
-
-  @override
   String get addPlan => 'Plan hinzufügen';
 
   @override

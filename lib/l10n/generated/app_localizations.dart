@@ -2310,12 +2310,6 @@ abstract class AppLocalizations {
   /// **'Adjusted pace'**
   String get adjustedPace;
 
-  /// Warning about one-repetition maximum estimate accuracy.
-  ///
-  /// In en, this message translates to:
-  /// **'One rep max estimates are less accurate for sets of 10+ reps'**
-  String get oneRepMaxAccuracyWarning;
-
   /// Action or title for creating a workout plan.
   ///
   /// In en, this message translates to:

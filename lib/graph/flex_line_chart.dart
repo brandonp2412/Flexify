@@ -391,6 +391,87 @@ class FlexLineChart extends StatelessWidget {
   }
 }
 
+/// Overlays metrics with independent 0–100 scales so values with different
+/// units (such as reps and weight) remain visually comparable.
+class FlexMultiMetricLineChart extends StatelessWidget {
+  const FlexMultiMetricLineChart({
+    super.key,
+    required this.series,
+    required this.dates,
+    required this.tooltipText,
+    this.onPointSelected,
+    this.timeBasedXAxis = false,
+  });
+
+  final List<FlexLineChartSeries> series;
+  final List<DateTime> dates;
+  final String Function(int seriesIndex, int pointIndex) tooltipText;
+  final ValueChanged<int>? onPointSelected;
+  final bool timeBasedXAxis;
+
+  @override
+  Widget build(BuildContext context) {
+    final settings = context.watch<SettingsState>().value;
+    final colors = Theme.of(context).colorScheme;
+    final labels = [
+      for (var index = 0; index < dates.length; index++)
+        _LineChartAxisLabel(
+          timeBasedXAxis
+              ? dates[index].millisecondsSinceEpoch.toDouble()
+              : index.toDouble(),
+          formatDisplayDate(context, dates[index], settings.shortDateFormat),
+          column: index,
+        ),
+    ];
+    final normalized = [
+      for (final line in series)
+        FlexLineChartSeries(
+          color: line.color,
+          name: line.name,
+          points: normalizeGraphMetricPoints(line.points),
+        ),
+    ];
+
+    return _FlexLineChartInteraction(
+      renderer: _FlexLineChartRenderer(
+        series: normalized,
+        minY: 0,
+        maxY: 100,
+        curveLines: settings.curveLines,
+        curveSmoothness: settings.curveSmoothness ?? 0.35,
+        fillFirstSeries: false,
+        showLeftLabels: true,
+        percentageYAxis: true,
+        showBottomLabels: true,
+        xLabels: labels,
+        uniformXCount: timeBasedXAxis ? null : dates.length,
+        axisLabelColor: colors.onSurface,
+      ),
+      rowLabel: (mark) => tooltipText(mark.seriesIndex, mark.index),
+      onPointSelected: onPointSelected,
+    );
+  }
+}
+
+List<FlexLineChartPoint> normalizeGraphMetricPoints(
+  List<FlexLineChartPoint> points,
+) {
+  if (points.isEmpty) return [];
+  final values = [for (final point in points) point.y];
+  final minValue = values.reduce(min);
+  final maxValue = values.reduce(max);
+  return [
+    for (final point in points)
+      FlexLineChartPoint(
+        point.x,
+        maxValue == minValue
+            ? 50
+            : (point.y - minValue) * 100 / (maxValue - minValue),
+        column: point.column,
+      ),
+  ];
+}
+
 class FlexGroupedLineChart extends StatelessWidget {
   final List<FlexLineChartSeries> series;
   final List<String> xLabels;
@@ -652,6 +733,10 @@ class _FlexLineChartScale extends CartesianScale {
   }
 }
 
+String graphYAxisLabel(double value, {bool percentage = false}) => percentage
+    ? '${ChartFormatting.format(value)}%'
+    : ChartFormatting.format(value);
+
 class _FlexLineChartRenderer extends ChartRenderer
     implements InteractiveRenderer {
   final List<FlexLineChartSeries> series;
@@ -663,6 +748,7 @@ class _FlexLineChartRenderer extends ChartRenderer
   final bool fillFirstSeries;
   final bool showLeftLabels;
   final bool showBottomLabels;
+  final bool percentageYAxis;
   final List<_LineChartAxisLabel> xLabels;
   final int? uniformXCount;
   final Color axisLabelColor;
@@ -676,6 +762,7 @@ class _FlexLineChartRenderer extends ChartRenderer
     required this.fillFirstSeries,
     required this.showLeftLabels,
     required this.showBottomLabels,
+    this.percentageYAxis = false,
     required this.xLabels,
     required this.uniformXCount,
     required this.axisLabelColor,
@@ -859,7 +946,7 @@ class _FlexLineChartRenderer extends ChartRenderer
         final y = _yForValue(value, bounds);
         drawChartText(
           canvas,
-          ChartFormatting.format(value),
+          graphYAxisLabel(value, percentage: percentageYAxis),
           Offset(bounds.left - 7, y),
           color: axisLabelColor,
           fontSize: _axisLabelFontSize,

@@ -1616,10 +1616,6 @@
   "@adjustedPace": {
     "description": "Cardio graph metric adjusted for incline."
   },
-  "oneRepMaxAccuracyWarning": "Ước tính 1RM kém chính xác hơn với các hiệp từ 10 lần lặp trở lên",
-  "@oneRepMaxAccuracyWarning": {
-    "description": "Warning about one-repetition maximum estimate accuracy."
-  },
   "addPlan": "Thêm kế hoạch",
   "@addPlan": {
     "description": "Action or title for creating a workout plan."

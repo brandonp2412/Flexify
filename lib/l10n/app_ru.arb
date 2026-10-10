@@ -391,7 +391,6 @@
   "inclineLabel": "Наклон",
   "paceDistanceTime": "Расстояние/время",
   "adjustedPace": "Скорректированный темп",
-  "oneRepMaxAccuracyWarning": "Оценка максимума на одно повторение менее точна для подходов из 10 и более повторений",
   "addPlan": "Добавить план",
   "planDetails": "Подробности плана",
   "exercisesLabel": "Упражнения",

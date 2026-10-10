@@ -1616,10 +1616,6 @@
   "@adjustedPace": {
     "description": "Cardio graph metric adjusted for incline."
   },
-  "oneRepMaxAccuracyWarning": "১০ বা তার বেশি রেপের সেটে এক রেপ সর্বোচ্চের অনুমান কম নির্ভুল",
-  "@oneRepMaxAccuracyWarning": {
-    "description": "Warning about one-repetition maximum estimate accuracy."
-  },
   "addPlan": "পরিকল্পনা যোগ করুন",
   "@addPlan": {
     "description": "Action or title for creating a workout plan."

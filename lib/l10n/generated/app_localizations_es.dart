@@ -1239,10 +1239,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get adjustedPace => 'Ritmo ajustado';
 
   @override
-  String get oneRepMaxAccuracyWarning =>
-      'Las estimaciones del máximo de una repetición son menos precisas en series de 10 o más repeticiones';
-
-  @override
   String get addPlan => 'Añadir plan';
 
   @override

@@ -1222,10 +1222,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get adjustedPace => 'الوتيرة المعدلة';
 
   @override
-  String get oneRepMaxAccuracyWarning =>
-      'تقديرات الحد الأقصى لتكرار واحد أقل دقة للمجموعات التي تحتوي على 10 تكرارات أو أكثر';
-
-  @override
   String get addPlan => 'إضافة خطة';
 
   @override

@@ -391,7 +391,6 @@
   "inclineLabel": "坡度",
   "paceDistanceTime": "配速（距离 / 时间）",
   "adjustedPace": "调整后配速",
-  "oneRepMaxAccuracyWarning": "当一组达到 10 次或更多次数时，1RM 估算的准确度会降低",
   "addPlan": "添加计划",
   "planDetails": "计划详情",
   "exercisesLabel": "动作",

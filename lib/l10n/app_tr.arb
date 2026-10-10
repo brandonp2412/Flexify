@@ -391,7 +391,6 @@
   "inclineLabel": "Eğim",
   "paceDistanceTime": "Tempo (mesafe / süre)",
   "adjustedPace": "Düzeltilmiş Tempo",
-  "oneRepMaxAccuracyWarning": "10+ tekrar içeren setler için 1RM tahminleri daha az doğruluk payına sahiptir.",
   "addPlan": "Plan Ekle",
   "planDetails": "Plan Detayları",
   "exercisesLabel": "Egzersizler",

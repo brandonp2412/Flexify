@@ -1241,10 +1241,6 @@ class AppLocalizationsFr extends AppLocalizations {
   String get adjustedPace => 'Allure ajustée';
 
   @override
-  String get oneRepMaxAccuracyWarning =>
-      'Les estimations du maximum sur 1 répétition sont moins précises pour les séries de 10 répétitions ou plus';
-
-  @override
   String get addPlan => 'Ajouter un programme';
 
   @override

@@ -1625,10 +1625,6 @@
   "@adjustedPace": {
     "description": "Cardio graph metric adjusted for incline."
   },
-  "oneRepMaxAccuracyWarning": "One rep max estimates are less accurate for sets of 10+ reps",
-  "@oneRepMaxAccuracyWarning": {
-    "description": "Warning about one-repetition maximum estimate accuracy."
-  },
   "addPlan": "Add plan",
   "@addPlan": {
     "description": "Action or title for creating a workout plan."

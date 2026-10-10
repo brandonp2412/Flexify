@@ -1616,10 +1616,6 @@
   "@adjustedPace": {
     "description": "Cardio graph metric adjusted for incline."
   },
-  "oneRepMaxAccuracyWarning": "10 یا اس سے زیادہ ریپس والے سیٹس میں ایک ریپ زیادہ سے زیادہ کا تخمینہ کم درست ہوتا ہے",
-  "@oneRepMaxAccuracyWarning": {
-    "description": "Warning about one-repetition maximum estimate accuracy."
-  },
   "addPlan": "منصوبہ شامل کریں",
   "@addPlan": {
     "description": "Action or title for creating a workout plan."

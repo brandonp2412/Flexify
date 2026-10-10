@@ -391,7 +391,6 @@
   "inclineLabel": "Steigung",
   "paceDistanceTime": "Tempo (Distanz / Zeit)",
   "adjustedPace": "Angepasstes Tempo",
-  "oneRepMaxAccuracyWarning": "1RM-Schätzungen sind bei Sätzen mit 10 oder mehr Wiederholungen weniger genau",
   "addPlan": "Plan hinzufügen",
   "planDetails": "Plandetails",
   "exercisesLabel": "Übungen",

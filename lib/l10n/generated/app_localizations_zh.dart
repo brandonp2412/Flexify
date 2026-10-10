@@ -1197,9 +1197,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get adjustedPace => '调整后配速';
 
   @override
-  String get oneRepMaxAccuracyWarning => '当一组达到 10 次或更多次数时，1RM 估算的准确度会降低';
-
-  @override
   String get addPlan => '添加计划';
 
   @override
@@ -2706,9 +2703,6 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
   String get adjustedPace => '调整后配速';
 
   @override
-  String get oneRepMaxAccuracyWarning => '当一组达到 10 次或更多次数时，1RM 估算的准确度会降低';
-
-  @override
   String get addPlan => '添加计划';
 
   @override
@@ -4213,9 +4207,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get adjustedPace => '調整後配速';
-
-  @override
-  String get oneRepMaxAccuracyWarning => '當一組達到 10 次或更多次數時，1RM 估算的準確度會降低';
 
   @override
   String get addPlan => '新增計畫';

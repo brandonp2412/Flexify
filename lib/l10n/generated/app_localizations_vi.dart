@@ -1228,10 +1228,6 @@ class AppLocalizationsVi extends AppLocalizations {
   String get adjustedPace => 'Nhịp độ điều chỉnh';
 
   @override
-  String get oneRepMaxAccuracyWarning =>
-      'Ước tính 1RM kém chính xác hơn với các hiệp từ 10 lần lặp trở lên';
-
-  @override
   String get addPlan => 'Thêm kế hoạch';
 
   @override

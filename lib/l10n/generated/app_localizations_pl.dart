@@ -1248,10 +1248,6 @@ class AppLocalizationsPl extends AppLocalizations {
   String get adjustedPace => 'Skorygowane tempo';
 
   @override
-  String get oneRepMaxAccuracyWarning =>
-      'Szacunki 1RM są mniej dokładne dla serii po 10 lub więcej powtórzeń';
-
-  @override
   String get addPlan => 'Dodaj plan';
 
   @override

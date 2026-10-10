@@ -1238,10 +1238,6 @@ class AppLocalizationsPt extends AppLocalizations {
   String get adjustedPace => 'Ritmo ajustado';
 
   @override
-  String get oneRepMaxAccuracyWarning =>
-      'As estimativas de uma repetição máxima são menos precisas para séries de 10 ou mais repetições';
-
-  @override
   String get addPlan => 'Adicionar plano';
 
   @override
@@ -2835,10 +2831,6 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get adjustedPace => 'Ritmo ajustado';
 
   @override
-  String get oneRepMaxAccuracyWarning =>
-      'As estimativas de uma repetição máxima são menos precisas para séries de 10 ou mais repetições';
-
-  @override
   String get addPlan => 'Adicionar plano';
 
   @override
@@ -4430,10 +4422,6 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
 
   @override
   String get adjustedPace => 'Ritmo ajustado';
-
-  @override
-  String get oneRepMaxAccuracyWarning =>
-      'As estimativas de uma repetição máxima são menos precisas para séries de 10 ou mais repetições';
 
   @override
   String get addPlan => 'Adicionar plano';

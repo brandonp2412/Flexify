@@ -1246,10 +1246,6 @@ class AppLocalizationsUk extends AppLocalizations {
   String get adjustedPace => 'Скоригований темп';
 
   @override
-  String get oneRepMaxAccuracyWarning =>
-      'Оцінка максимуму на одне повторення менш точна для підходів із 10+ повтореннями';
-
-  @override
   String get addPlan => 'Додати план';
 
   @override

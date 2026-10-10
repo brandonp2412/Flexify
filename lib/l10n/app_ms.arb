@@ -1616,10 +1616,6 @@
   "@adjustedPace": {
     "description": "Cardio graph metric adjusted for incline."
   },
-  "oneRepMaxAccuracyWarning": "Perkiraan maksimum 1 ulangan kurang akurat untuk set dengan 10+ ulangan",
-  "@oneRepMaxAccuracyWarning": {
-    "description": "Warning about one-repetition maximum estimate accuracy."
-  },
   "addPlan": "Tambah pelan",
   "@addPlan": {
     "description": "Action or title for creating a workout plan."

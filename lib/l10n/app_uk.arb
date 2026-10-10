@@ -1625,10 +1625,6 @@
   "@adjustedPace": {
     "description": "Cardio graph metric adjusted for incline."
   },
-  "oneRepMaxAccuracyWarning": "Оцінка максимуму на одне повторення менш точна для підходів із 10+ повтореннями",
-  "@oneRepMaxAccuracyWarning": {
-    "description": "Warning about one-repetition maximum estimate accuracy."
-  },
   "addPlan": "Додати план",
   "@addPlan": {
     "description": "Action or title for creating a workout plan."

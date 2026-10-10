@@ -391,7 +391,6 @@
   "inclineLabel": "Inclinação",
   "paceDistanceTime": "Ritmo (distância / tempo)",
   "adjustedPace": "Ritmo ajustado",
-  "oneRepMaxAccuracyWarning": "As estimativas de uma repetição máxima são menos precisas para séries de 10 ou mais repetições",
   "addPlan": "Adicionar plano",
   "planDetails": "Detalhes do plano",
   "exercisesLabel": "Exercícios",
