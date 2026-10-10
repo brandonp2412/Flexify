@@ -175,10 +175,6 @@ android {
 
 }
 
-// Every installable Flexify build must use the one canonical release key.
-// The only unsigned exception is the F-Droid reproducible-build environment,
-// where F-Droid intentionally builds unsigned and applies/verifies signing
-// externally.
 gradle.taskGraph.whenReady { taskGraph ->
 
     def packagingTasks = taskGraph.allTasks.findAll { task ->
@@ -208,7 +204,7 @@ gradle.taskGraph.whenReady { taskGraph ->
             }
             throw new GradleException(
                 "Refusing to package " + productionApplicationId +
-                " without the canonical Flexify release signing key."
+                " without the Flexify release signing key."
             )
         }
 
@@ -216,7 +212,7 @@ gradle.taskGraph.whenReady { taskGraph ->
         if (actualCertificateSha256 != expectedReleaseCertificateSha256) {
             throw new GradleException(
                 "Refusing to package " + productionApplicationId +
-                " with a non-canonical signing key. Expected SHA-256 " +
+                " with the wrong signing key. Expected SHA-256 " +
                 expectedReleaseCertificateSha256 + " but got " +
                 (actualCertificateSha256 ?: '<missing>') + "."
             )

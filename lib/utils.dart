@@ -62,8 +62,8 @@ double? parseDisplayNumber(BuildContext context, String value) {
   final input = value.trim();
   if (input.isEmpty) return null;
 
-  final canonical = double.tryParse(input);
-  if (canonical != null) return canonical;
+  final parsed = double.tryParse(input);
+  if (parsed != null) return parsed;
 
   try {
     return NumberFormat.decimalPattern(

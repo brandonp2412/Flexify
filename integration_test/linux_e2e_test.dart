@@ -1652,9 +1652,7 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('Graph unit change preserves canonical historical loads', (
-    tester,
-  ) async {
+  testWidgets('Graph unit change preserves historical loads', (tester) async {
     await _pumpIsolatedApp(tester, surfaceSize: const Size(900, 900));
     await _insertE2ESet(
       name: 'Linux E2E unit presentation',
@@ -1668,7 +1666,7 @@ void main() {
       weight: 110,
       created: DateTime(2026, 9, 1, 12),
     );
-    final canonicalBefore =
+    final before =
         (await app.db.exerciseSets.select().get())
             .where((row) => row.loadKg == 100 || row.loadKg == 110)
             .map((row) => row.loadKg)
@@ -1696,13 +1694,13 @@ void main() {
 
     final rows = await _setsNamed('Linux E2E unit presentation');
     expect(rows.map((row) => row.unit).toSet(), {'stone'});
-    final canonicalAfter =
+    final after =
         (await app.db.exerciseSets.select().get())
             .where((row) => row.loadKg == 100 || row.loadKg == 110)
             .map((row) => row.loadKg)
             .toList()
           ..sort();
-    expect(canonicalAfter, canonicalBefore);
+    expect(after, before);
     expect(tester.takeException(), isNull);
   });
 
@@ -1832,51 +1830,50 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets(
-    'Enter Weight saves canonical value without mutating old set snapshots',
-    (tester) async {
-      await _pumpIsolatedApp(tester, surfaceSize: const Size(900, 900));
-      final baseline = await _insertE2ESet(
-        name: 'Linux E2E bodyweight baseline',
-        reps: 5,
-        weight: 50,
-        created: DateTime(2026, 9, 1, 9),
-      );
-      expect(baseline.bodyWeight, 0);
-      await tester.pumpAndSettle();
-      await _tapTab(tester, 'HistoryPage');
-      await tester.tap(find.byTooltip('Show menu'));
-      await tester.pumpAndSettle();
-      await tester.tap(find.widgetWithText(ListTile, 'Weight'));
-      await tester.pumpAndSettle();
-      expect(find.text('Enter Weight'), findsOneWidget);
+  testWidgets('Enter Weight saves value without mutating old set snapshots', (
+    tester,
+  ) async {
+    await _pumpIsolatedApp(tester, surfaceSize: const Size(900, 900));
+    final baseline = await _insertE2ESet(
+      name: 'Linux E2E bodyweight baseline',
+      reps: 5,
+      weight: 50,
+      created: DateTime(2026, 9, 1, 9),
+    );
+    expect(baseline.bodyWeight, 0);
+    await tester.pumpAndSettle();
+    await _tapTab(tester, 'HistoryPage');
+    await tester.tap(find.byTooltip('Show menu'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.widgetWithText(ListTile, 'Weight'));
+    await tester.pumpAndSettle();
+    expect(find.text('Enter Weight'), findsOneWidget);
 
-      await _tapSaveAction(tester);
-      await tester.pumpAndSettle();
-      expect(find.text('Required'), findsOneWidget);
-      await tester.enterText(_textFieldWithLabel('Weight'), '82');
-      await tester.tap(_dropdownWithLabel('Unit'));
-      await tester.pumpAndSettle();
-      await tester.tap(find.text('Pounds (lb)').last);
-      await tester.pumpAndSettle();
-      await _tapSaveAction(tester);
-      await tester.pumpAndSettle();
+    await _tapSaveAction(tester);
+    await tester.pumpAndSettle();
+    expect(find.text('Required'), findsOneWidget);
+    await tester.enterText(_textFieldWithLabel('Weight'), '82');
+    await tester.tap(_dropdownWithLabel('Unit'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Pounds (lb)').last);
+    await tester.pumpAndSettle();
+    await _tapSaveAction(tester);
+    await tester.pumpAndSettle();
 
-      final weightRow =
-          await (app.db.bodyWeights.select()
-                ..orderBy([
-                  (row) => OrderingTerm.desc(row.timestamp),
-                  (row) => OrderingTerm.desc(row.id),
-                ])
-                ..limit(1))
-              .getSingle();
-      expect(weightRow.weightKg, closeTo(82 * 0.45359237, 0.0001));
-      final unchanged = await getExerciseSetById(app.db, baseline.id);
-      expect(unchanged, isNotNull);
-      expect(unchanged!.bodyWeight, 0);
-      expect(tester.takeException(), isNull);
-    },
-  );
+    final weightRow =
+        await (app.db.bodyWeights.select()
+              ..orderBy([
+                (row) => OrderingTerm.desc(row.timestamp),
+                (row) => OrderingTerm.desc(row.id),
+              ])
+              ..limit(1))
+            .getSingle();
+    expect(weightRow.weightKg, closeTo(82 * 0.45359237, 0.0001));
+    final unchanged = await getExerciseSetById(app.db, baseline.id);
+    expect(unchanged, isNotNull);
+    expect(unchanged!.bodyWeight, 0);
+    expect(tester.takeException(), isNull);
+  });
 
   testWidgets(
     'Plan create, title/day search, edit, select-all and delete work',

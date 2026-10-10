@@ -1,8 +1,5 @@
 name: PR APK
 
-# APKs always use the canonical Flexify release key, so this workflow
-# only builds PRs whose source branch lives in this repository. Fork PRs
-# intentionally do not produce installable APK artifacts.
 on:
   pull_request:
     branches: [main]
@@ -44,7 +41,7 @@ jobs:
               pull_number: prNumber,
             });
             if (pr.head.repo.full_name !== `${context.repo.owner}/${context.repo.repo}`) {
-              core.setFailed('PR APKs can only be built from branches in this repository because every APK uses the canonical Flexify release signing key.');
+              core.setFailed('PR APKs can only be built from branches in this repository because every APK uses the Flexify release signing key.');
             }
 
       # Submodules are deliberately not fetched here: actions/checkout clones
@@ -85,12 +82,12 @@ jobs:
             -e 's/^org.gradle.workers.max=.*/org.gradle.workers.max=2/' \
             android/gradle.properties
 
-      - name: Decode canonical Android keystore
+      - name: Decode Android keystore
         env:
           ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
         run: printf '%s' "$ANDROID_KEYSTORE_BASE64" | base64 --decode > android/app/keystore.jks
 
-      - name: Configure canonical Android signing
+      - name: Configure Android signing
         env:
           ANDROID_STORE_PASSWORD: ${{ secrets.ANDROID_STORE_PASSWORD }}
           ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
@@ -125,7 +122,7 @@ jobs:
             echo ""
             echo "[Download the APK]($ARTIFACT_URL) (zipped, expires in 14 days)."
             echo ""
-            echo "This is the normal **Flexify** app (\`com.presley.flexify\`) signed with the canonical release key, so it updates the existing Flexify installation in place."
+            echo "This is the normal **Flexify** app (\`com.presley.flexify\`) signed with the release key, so it updates the existing Flexify installation in place."
           } >> "$GITHUB_STEP_SUMMARY"
 
       # The GITHUB_TOKEN on fork PRs is read-only, so commenting only works
@@ -151,7 +148,7 @@ jobs:
               '',
               `[Download the APK](${process.env.ARTIFACT_URL}) (zipped, expires in 14 days) to test this change.`,
               '',
-              `Built from ${pr.head.sha}. This is the normal **Flexify** app (\`com.presley.flexify\`) signed with the canonical release key, so it updates the existing Flexify installation in place.`,
+              `Built from ${pr.head.sha}. This is the normal **Flexify** app (\`com.presley.flexify\`) signed with the release key, so it updates the existing Flexify installation in place.`,
             ].join('\n');
 
             const { data: comments } = await github.rest.issues.listComments({
