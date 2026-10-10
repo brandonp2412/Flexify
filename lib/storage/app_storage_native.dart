@@ -24,6 +24,18 @@ Future<File> getDatabaseFile() async {
 
 Future<File> _resolveDatabaseFile(Directory support) async {
   await support.create(recursive: true);
+  final lock = await File(
+    p.join(support.path, '.flexify-storage.lock'),
+  ).open(mode: FileMode.append);
+  try {
+    await lock.lock(FileLock.blockingExclusive);
+    return await _resolveLockedDatabaseFile(support);
+  } finally {
+    await lock.close();
+  }
+}
+
+Future<File> _resolveLockedDatabaseFile(Directory support) async {
   final destination = File(p.join(support.path, databaseFileName));
   final staged = File('${destination.path}.migrating');
   final marker = File(p.join(support.path, '.flexify-storage-migrated'));

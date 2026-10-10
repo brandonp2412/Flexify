@@ -1072,6 +1072,7 @@ class AppDatabase extends _$AppDatabase {
               await m.addColumn(schema.settings, schema.settings.keepRinging);
             },
             from66To67: (m, schema) async {},
+            from67To68: (m, schema) async {},
           );
           await transaction(() async {
             await upgrade(m, from, to);
@@ -1093,5 +1094,5 @@ class AppDatabase extends _$AppDatabase {
   }
 
   @override
-  int get schemaVersion => 67;
+  int get schemaVersion => 68;
 }

@@ -58,6 +58,15 @@ class TimerServiceTest {
         val startIntent = Intent(context, TimerService::class.java).apply {
             putExtra("description", description)
             putExtra("milliseconds", 60_000)
+            putExtra("vibrate", false)
+            putExtra("stopLabel", "Stop")
+            putExtra("addOneMinuteLabel", "Add one minute")
+            putExtra("timerChannelName", "Rest timer")
+            putExtra("timerChannelDescription", "Active rest timer")
+            putExtra("timerFinishedChannelName", "Finished rest timer")
+            putExtra("timerFinishedChannelDescription", "Completed rest timer")
+            putExtra("timerFinishedTitle", "Timer finished")
+            putExtra("exactAlarmRequestUnavailable", "Exact alarms unavailable")
         }
         serviceRule.startService(startIntent)
 
