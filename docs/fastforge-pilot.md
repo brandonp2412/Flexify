@@ -14,7 +14,8 @@ publication credentials or `publish` / GitHub Release commands in the pilot.
 Fastforge is pinned at `0.6.12`. All Flutter and Dart commands use the `flutter`
 submodule gitlink recorded in the repository, including the Fastforge installation.
 `FLUTTER_ROOT` and `PATH` point to that checkout. The Android job additionally
-reproduces the production/F-Droid path `/home/brandon/flexify`, normalized Android
+reproduces the production/F-Droid path `/home/brandon/flexify` as a bind
+mount of `$GITHUB_WORKSPACE` (rather than moving the checkout), normalized Android
 SDK root `/opt/android-sdk`, project-local `PUB_CACHE`, Java 21 and existing Gradle
 runner-memory settings. The Android artifacts must pass the project's canonical
 certificate verification. Signing secrets are only supplied to the Android job;
@@ -38,6 +39,10 @@ history* without changing the pinned checkout (`git -C flutter fetch --deepen=20
 origin`). Do not use a different system Flutter to work around this.
 The GitHub-hosted Linux pilot initially reproduced this problem; all three
 runner setups now fetch missing ancestry before resolving dependencies.
+The first hosted Android run successfully built and verified its APK/AAB but
+failed at artifact upload: moving `$GITHUB_WORKSPACE` broke JavaScript actions'
+post-step working directory. The bind mount retains the original checkout for
+all actions while preserving the required build path.
 
 ## Baseline and measured evidence
 
