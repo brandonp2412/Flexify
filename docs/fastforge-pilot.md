@@ -67,13 +67,13 @@ jobs were not executed as part of this migration.
 
 ## Actual size and trade-off
 
-The original five GitHub workflows contained **992 lines**, with **663** in
+The original five GitHub workflows contained **989 lines**, with **663** in
 `.github/workflows/main.yml`. After promotion and deletion of the temporary
-pilot workflow there are **975 GitHub YAML lines**, of which **646** are in
+pilot workflow there are **972 GitHub YAML lines**, of which **646** are in
 `main.yml` (only **17 lines saved**, or 1.7%). Fastforge adds 24 lines of
 `distribute_options.yaml` and the required 39-line Android verification
-script: **1,038 total automation-code/config lines** compared with 992 before
-the pilot. This is a **4.6% increase**, not the previously forecast 30%+
+script: **1,035 total automation-code/config lines** compared with 989 before
+the pilot. This is a **4.7% increase**, not the previously forecast 30%+
 reduction. The benefit is upstream-managed cross-platform ZIP/APK/AAB
 packaging and a single reproducibility guard, not reduced line count.
 
