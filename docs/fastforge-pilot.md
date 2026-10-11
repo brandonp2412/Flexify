@@ -58,6 +58,23 @@ all actions while preserving the required build path.
   `9a00ab81ba6b4e83eb6bc425d1651725e5fd572a14bed5737e6bd42d24e05f86`.
 - `actionlint` 1.7.12 validated the new GitHub workflow.
 - `flutter analyze` passed; `flutter test` passed 2,606 tests on Nox.
+- Hosted GitHub Actions succeeded for Linux
+  ([run 38095301278](https://github.com/brandonp2412/Flexify/actions/runs/38095301278)),
+  Windows ([run 38095303621](https://github.com/brandonp2412/Flexify/actions/runs/38095303621))
+  and Android ([run 38097995625](https://github.com/brandonp2412/Flexify/actions/runs/38097995625)).
+  All three uploaded build artifacts successfully without invoking publication.
+- The downloaded Windows ZIP had 600 entries including `flexify.exe`.
+  The Linux ZIP had 589 entries including `flexify`.
+- The uploaded Android APK was 74,023,466 bytes and its SHA-256 was
+  `847f0b0becc05b6a539fc2b0f7beb1efd568e77f1644a9cc84b983a909d20f72`.
+  It contains native libraries for arm64-v8a, armeabi-v7a and x86_64.
+  The uploaded AAB was 71,147,609 bytes with SHA-256
+  `f7254c7c08736a39143a28e5cfa4a66892016bb54308ba7cea49540c510c19c6`.
+  The hosted Android job verified the canonical signer of the APK.
+- The experiment is an additive validation stage, **not a LOC reduction**:
+  the baseline contained 992 workflow lines; the enabled pilot adds a 178-line
+  workflow plus 24 lines of Fastforge configuration. Migration should only
+  replace production jobs after the parity checks below pass.
 - This verifies that Fastforge packaged the locally built Linux executable
   unaltered; it **does not** establish equivalence with a historical production
   release or with the complete F-Droid reproducible APK.
@@ -66,7 +83,7 @@ all actions while preserving the required build path.
 
 Before replacing any existing release job:
 
-1. Complete Android and Windows GitHub runs and inspect their produced artifacts.
+1. ~~Complete Android and Windows GitHub runs and inspect their produced artifacts.~~ Done.
 2. Compare the Android APK/AAB manifests, hashes where reproducibility applies,
    ABI coverage, package ID, version, certificate and F-Droid build requirements
    with the current release path. The existing pipeline also emits three
