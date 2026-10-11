@@ -56,6 +56,3 @@ chromedriver-win64/
 coverage/
 # Widget Preview related
 .widget_preview/
-
-# Fastforge build outputs
-/dist/

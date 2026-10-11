@@ -280,80 +280,97 @@ jobs:
   build-android:
     needs: version-bump
     runs-on: ubuntu-latest
-    timeout-minutes: 70
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
         with:
           ref: ${{ needs.version-bump.outputs.commit_sha }}
-          submodules: recursive
           persist-credentials: false
-      - uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5
+
+      - name: Setup Java
+        uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5
         with:
-          distribution: zulu
-          java-version: '21'
-      - name: Match F-Droid build paths without moving GitHub's checkout
+          distribution: "zulu"
+          java-version: "21"
+
+      - name: Create brandon user directory structure (match F-Droid)
         run: |
-          sudo mkdir -p /home/brandon/flexify /opt/android-sdk
-          sudo mount --bind "$GITHUB_WORKSPACE" /home/brandon/flexify
-          sudo mount --bind "$ANDROID_HOME" /opt/android-sdk
-          {
-            echo 'ANDROID_HOME=/opt/android-sdk'
-            echo 'ANDROID_SDK_ROOT=/opt/android-sdk'
-            echo 'FLUTTER_ROOT=/home/brandon/flexify/flutter'
-            echo 'PUB_CACHE=/home/brandon/flexify/.pub-cache'
-          } >> "$GITHUB_ENV"
-          {
-            echo '/home/brandon/flexify/flutter/bin'
-            echo '/home/brandon/flexify/.pub-cache/bin'
-          } >> "$GITHUB_PATH"
-      - name: Set up pinned Flutter and Fastforge
+          sudo mkdir -p /home/brandon
+          sudo chown $USER -R /home/brandon
+
+      - name: Move project to F-Droid location
+        env:
+          REPO_NAME: ${{ github.event.repository.name }}
+        run: |
+          cd ..
+          mv "$REPO_NAME" /home/brandon/flexify
+
+      - name: Normalize Android SDK path
         working-directory: /home/brandon/flexify
         run: |
-          test "$(git -C flutter rev-parse HEAD)" = "$(git ls-tree HEAD flutter | awk '{print $3}')"
-          if [[ "$(git -C flutter rev-parse --is-shallow-repository)" == 'true' ]]; then
-            git -C flutter fetch --deepen=200 origin
-          fi
+          sudo mkdir -p /opt/android-sdk
+          sudo mount --bind "$ANDROID_HOME" /opt/android-sdk
+          echo "ANDROID_HOME=/opt/android-sdk" >> "$GITHUB_ENV"
+          echo "ANDROID_SDK_ROOT=/opt/android-sdk" >> "$GITHUB_ENV"
+
+      - name: Setup Flutter from submodule and get dependencies
+        working-directory: /home/brandon/flexify
+        run: |
+          git submodule update --init --recursive flutter
           chmod +x flutter/bin/*
-          flutter/bin/flutter --version
+          echo "/home/brandon/flexify/flutter/bin" >> "$GITHUB_PATH"
+          export PUB_CACHE=$(pwd)/.pub-cache
+          echo "PUB_CACHE=$(pwd)/.pub-cache" >> "$GITHUB_ENV"
           flutter/bin/flutter config --no-analytics
-          flutter/bin/flutter pub get --enforce-lockfile
-          flutter/bin/dart pub global activate fastforge 0.6.12
-          flutter/bin/dart run build_runner build -d
-      - name: Configure canonical release signing and Gradle memory
+          flutter/bin/flutter pub get
+
+      - name: Run build_runner
+        working-directory: /home/brandon/flexify
+        run: dart run build_runner build -d
+
+      - name: Decode Android keystore
         working-directory: /home/brandon/flexify
         env:
           ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+        run: printf '%s' "$ANDROID_KEYSTORE_BASE64" | base64 --decode > android/app/keystore.jks
+
+      - name: Tune Gradle for CI runner memory
+        working-directory: /home/brandon/flexify
+        run: |
+          sed -i \
+            -e 's/^org.gradle.jvmargs=.*/org.gradle.jvmargs=-Xmx3G -XX:MaxMetaspaceSize=512m -XX:ReservedCodeCacheSize=512m -XX:ActiveProcessorCount=2/' \
+            -e 's/^org.gradle.workers.max=.*/org.gradle.workers.max=2/' \
+            android/gradle.properties
+
+      - name: Remove stale local.properties to ensure version from pubspec.yaml
+        working-directory: /home/brandon/flexify
+        run: rm -f android/local.properties
+
+      - name: Build android (one ABI at a time)
+        working-directory: /home/brandon/flexify
+        env:
           ANDROID_STORE_PASSWORD: ${{ secrets.ANDROID_STORE_PASSWORD }}
           ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
           ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
         run: |
-          test -n "$ANDROID_KEYSTORE_BASE64"
-          test -n "$ANDROID_STORE_PASSWORD"
-          test -n "$ANDROID_KEY_PASSWORD"
-          test -n "$ANDROID_KEY_ALIAS"
-          printf '%s' "$ANDROID_KEYSTORE_BASE64" | base64 --decode > android/app/keystore.jks
-          printf 'storePassword=%s\nkeyPassword=%s\nkeyAlias=%s\nstoreFile=keystore.jks\n' \
-            "$ANDROID_STORE_PASSWORD" "$ANDROID_KEY_PASSWORD" "$ANDROID_KEY_ALIAS" > android/key.properties
-          sed -i \
-            -e 's/^org.gradle.jvmargs=.*/org.gradle.jvmargs=-Xmx3G -XX:MaxMetaspaceSize=512m -XX:ReservedCodeCacheSize=512m -XX:ActiveProcessorCount=2/' \
-            -e 's/^org.gradle.workers.max=.*/org.gradle.workers.max=2/' android/gradle.properties
-          rm -f android/local.properties
-      - name: Package with Fastforge and prove F-Droid ABI parity
-        working-directory: /home/brandon/flexify
-        run: |
-          fastforge --no-version-check release --name pilot-android
-          ./scripts/verify-fastforge-android-parity.sh
-          version=$(sed -n 's/^version: *//p' pubspec.yaml)
-          out="dist/fastforge-pilot/$version"
-          mkdir -p "$GITHUB_WORKSPACE/build/app/outputs/flutter-apk" "$GITHUB_WORKSPACE/build/app/outputs/bundle/release"
-          cp "$out"/app-*-release.apk "$GITHUB_WORKSPACE/build/app/outputs/flutter-apk/"
-          cp "$out/flexify-$version-android.apk" "$GITHUB_WORKSPACE/build/app/outputs/flutter-apk/flexify.apk"
-          cp "$out/flexify-$version-android.aab" "$GITHUB_WORKSPACE/build/app/outputs/bundle/release/app-release.aab"
-      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+          echo "storePassword=$ANDROID_STORE_PASSWORD" > android/key.properties
+          echo "keyPassword=$ANDROID_KEY_PASSWORD" >> android/key.properties
+          echo "keyAlias=$ANDROID_KEY_ALIAS" >> android/key.properties
+          echo "storeFile=keystore.jks" >> android/key.properties
+          flutter build apk --release --split-per-abi --target-platform android-x64
+          flutter build apk --release --split-per-abi --target-platform android-arm64
+          flutter build apk --release --split-per-abi --target-platform android-arm
+          flutter build apk --release
+          mv build/app/outputs/flutter-apk/app-release.apk build/app/outputs/flutter-apk/flexify.apk
+          flutter build appbundle
+          ./scripts/verify-android-release-signing.sh build/app/outputs/flutter-apk/*.apk
+          mkdir -p "${GITHUB_WORKSPACE}/build"
+          mv build/* "${GITHUB_WORKSPACE}/build"
+
+      - name: Upload Android artifacts
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           retention-days: 7
           name: android-builds
-          if-no-files-found: error
           path: |
             build/app/outputs/flutter-apk/app-*-release.apk
             build/app/outputs/flutter-apk/flexify.apk
@@ -366,36 +383,39 @@ jobs:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
         with:
           ref: ${{ needs.version-bump.outputs.commit_sha }}
-          submodules: recursive
           persist-credentials: false
-      - name: Linux build dependencies
+
+      - name: Setup Flutter from submodule
+        run: |
+          git submodule update --init --recursive flutter
+          chmod +x flutter/bin/*
+          echo "$GITHUB_WORKSPACE/flutter/bin" >> "$GITHUB_PATH"
+          flutter/bin/flutter config --no-analytics
+
+      - name: Get Flutter dependencies
+        run: flutter pub get
+
+      - name: Install Linux dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev
-      - name: Set up pinned Flutter and Fastforge
+
+      - name: Run build_runner
+        run: dart run build_runner build -d
+
+      - name: Build Linux
+        run: flutter build linux
+
+      - name: Create Linux zip
         run: |
-          test "$(git -C flutter rev-parse HEAD)" = "$(git ls-tree HEAD flutter | awk '{print $3}')"
-          if [[ "$(git -C flutter rev-parse --is-shallow-repository)" == 'true' ]]; then
-            git -C flutter fetch --deepen=200 origin
-          fi
-          chmod +x flutter/bin/*
-          echo "FLUTTER_ROOT=$PWD/flutter" >> "$GITHUB_ENV"
-          echo "PUB_CACHE=$PWD/.pub-cache" >> "$GITHUB_ENV"
-          echo "$PWD/flutter/bin" >> "$GITHUB_PATH"
-          echo "$PWD/.pub-cache/bin" >> "$GITHUB_PATH"
-      - name: Package Linux with Fastforge
-        run: |
-          flutter/bin/flutter pub get --enforce-lockfile
-          flutter/bin/dart pub global activate fastforge 0.6.12
-          flutter/bin/dart run build_runner build -d
-          fastforge --no-version-check release --name pilot-linux
-          version=$(sed -n 's/^version: *//p' pubspec.yaml)
-          cp "dist/fastforge-pilot/$version/flexify-$version-linux.zip" build/linux/x64/release/bundle/flexify-linux.zip
-      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+          cd build/linux/x64/release/bundle
+          zip -r flexify-linux.zip .
+
+      - name: Upload Linux artifacts
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           retention-days: 7
           name: linux-builds
-          if-no-files-found: error
           path: build/linux/x64/release/bundle/flexify-linux.zip
 
   build-windows:
@@ -405,35 +425,32 @@ jobs:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
         with:
           ref: ${{ needs.version-bump.outputs.commit_sha }}
-          submodules: recursive
           persist-credentials: false
-      - name: Set up pinned Flutter and Fastforge
-        shell: pwsh
+
+      - name: Setup Flutter from submodule
         run: |
-          $expected = (git ls-tree HEAD flutter).Split(' ')[2].Split("`t")[0]
-          if ((git -C flutter rev-parse HEAD).Trim() -ne $expected) { throw 'Flutter submodule drift' }
-          if ((git -C flutter rev-parse --is-shallow-repository).Trim() -eq 'true') {
-            git -C flutter fetch --deepen=200 origin
-            if ($LASTEXITCODE -ne 0) { throw 'Could not fetch Flutter version history' }
-          }
-          "FLUTTER_ROOT=$PWD/flutter" >> $env:GITHUB_ENV
-          "PUB_CACHE=$PWD/.pub-cache" >> $env:GITHUB_ENV
-          "$PWD/flutter/bin" >> $env:GITHUB_PATH
-          "$PWD/.pub-cache/bin" >> $env:GITHUB_PATH
-      - name: Package Windows with Fastforge
-        shell: pwsh
-        run: |
-          ./flutter/bin/flutter.bat pub get --enforce-lockfile
-          ./flutter/bin/dart.bat pub global activate fastforge 0.6.12
-          ./flutter/bin/dart.bat run build_runner build -d
-          fastforge --no-version-check release --name pilot-windows
-          $version = ((Get-Content pubspec.yaml | Select-String '^version:').ToString() -replace '^version:\s*', '').Trim()
-          Copy-Item "dist/fastforge-pilot/$version/flexify-$version-windows.zip" flexify-windows.zip
-      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+          git submodule update --init --recursive flutter
+          chmod +x flutter/bin/*
+          echo "$env:GITHUB_WORKSPACE\flutter\bin" >> $env:GITHUB_PATH
+          flutter\bin\flutter config --no-analytics
+
+      - name: Get Flutter dependencies
+        run: flutter pub get
+
+      - name: Run build_runner
+        run: dart run build_runner build -d
+
+      - name: Build Windows
+        run: flutter build windows
+
+      - name: Create Windows zip
+        run: Compress-Archive -Path ./build/windows/x64/runner/Release/* -DestinationPath ./flexify-windows.zip
+
+      - name: Upload Windows artifacts
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           retention-days: 7
           name: windows-builds
-          if-no-files-found: error
           path: flexify-windows.zip
 
   build-and-deploy-web:
