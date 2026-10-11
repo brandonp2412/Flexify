@@ -27,8 +27,11 @@ Before upgrading any packages, or attempting to modify pubspec.lock ensure you a
 - Changes to database paths, connection settings, queries, or other database code do not require a schema version bump unless they include an actual schema or data migration. Do not add empty migrations for those changes.
   
 # Git & Version Control
-- **Commit Format**: Use the [Conventional Commits](https://www.conventionalcommits.org/) standard (e.g., `feat:`, `fix:`, `chore:`).
+
+- **Commit Format**: Use the Conventional Commits standard (e.g., `feat:`, `fix:`, `chore:`).
 - **Commit Message**: Write a concise title (50-72 chars) and a bulleted list in the body if the changes are complex.
+
 # Documentation & Commenting Standards
-- **Minimalist Comments**: Avoid comments that describe what the code is doing. If the code is unclear, refactor the code to be self-documenting using descriptive variable and function names.
-- **No Dead Code**: Never leave commented-out code blocks. If code is not used, delete it; Git history is the record, not the source file.
+
+- **Minimalist Comments**: Avoid comments that describe what the code is doing.
+- **No Dead Code**: Never leave commented-out code blocks.
