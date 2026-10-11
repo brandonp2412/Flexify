@@ -1,97 +1,84 @@
-# Fastforge build-only pilot
+# Fastforge packaging migration: Flexify
 
-This is an opt-in packaging experiment. The existing `Build and Release` workflow, its
-quality checks, its fortnightly release gate, Google Play, Microsoft Store, VirusTotal,
-and F-Droid procedures remain authoritative and unchanged.
+## Production behaviour
 
-## Running on GitHub
+The `Build and Release` workflow now uses **pinned Fastforge 0.6.12** to package
+Android's universal release APK and AAB, Linux ZIP, and Windows ZIP. It keeps
+all of its release cadence logic, quality checks, screenshot generation,
+GitHub Releases, GitHub Pages, Microsoft Store publishing, and VirusTotal jobs.
+Normal pushes do not publish anything. The original downstream artifact names
+and `actions/download-artifact` / GitHub Release paths are preserved.
 
-After this workflow reaches the default branch, open **Actions → Fastforge packaging
-pilot → Run workflow** and choose `android`, `linux`, or `windows`. Each run builds
-artifacts for inspection with a three-day retention period. There are **no**
-publication credentials or `publish` / GitHub Release commands in the pilot.
+The F-Droid-critical three split-per-ABI APKs are still built by the exact
+Flutter commands used in the published F-Droid recipe, with `--split-per-abi`
+and `--target-platform android-x64`, `android-arm`, and `android-arm64`.
+Fastforge does **not** substitute for those F-Droid builds. The script
+`scripts/verify-fastforge-android-parity.sh` checks that the Fastforge APK is
+byte-for-byte the same as the same-revision direct Flutter universal APK,
+then builds the three F-Droid variants, verifies package ID and version codes
+(`build_number * 100 + 1/2/3`), and verifies every APK has the canonical
+release signing certificate. Build products are staged under the original
+`android-builds`, `linux-builds`, and `windows-builds` artifact names.
 
-Fastforge is pinned at `0.6.12`. All Flutter and Dart commands use the `flutter`
-submodule gitlink recorded in the repository, including the Fastforge installation.
-`FLUTTER_ROOT` and `PATH` point to that checkout. The Android job additionally
-reproduces the production/F-Droid path `/home/brandon/flexify` as a bind
-mount of `$GITHUB_WORKSPACE` (rather than moving the checkout), normalized Android
-SDK root `/opt/android-sdk`, project-local `PUB_CACHE`, Java 21 and existing Gradle
-runner-memory settings. The Android artifacts must pass the project's canonical
-certificate verification. Signing secrets are only supplied to the Android job;
-the pilot has read-only GitHub permissions and never pushes tags or releases.
+The Flutter SDK is taken **only** from the repository's pinned `flutter`
+submodule. CI repairs shallow tag ancestry before dependency resolution
+without changing the checked-out Flutter commit. Android builds use a bind
+mount to run at `/home/brandon/flexify` with `ANDROID_HOME=/opt/android-sdk`
+and a project-local `PUB_CACHE`. This retains GitHub's original checkout so
+JavaScript actions can upload artifacts and run post-job cleanup.
 
-On Nox, in a separate worktree, use the same Flutter submodule commit and run:
+## Verified evidence
 
-```sh
-export FLUTTER_ROOT="$PWD/flutter"
-export PUB_CACHE="$PWD/.pub-cache"
-export PATH="$FLUTTER_ROOT/bin:$PUB_CACHE/bin:$PATH"
-flutter/bin/flutter pub get --enforce-lockfile
-flutter/bin/dart pub global activate fastforge 0.6.12
-flutter/bin/dart run build_runner build -d
-fastforge --no-version-check release --name pilot-linux
-```
+Baseline source SHA: `4cd8480f0fb1e471a9dcf6d151e709f2e9801792`.
+Pinned Flutter SHA: `6a19cca56475dbfba1478ee68d7bd0c2ef891da1`
+(Flutter 3.47.5). Fastforge CLI: `0.6.12`.
 
-If initializing the submodule with a shallow clone, `flutter --version` may show
-`0.0.0-unknown` because Git tag ancestry is missing. Deepen the *submodule's
-history* without changing the pinned checkout (`git -C flutter fetch --deepen=200
-origin`). Do not use a different system Flutter to work around this.
-The GitHub-hosted Linux pilot initially reproduced this problem; all three
-runner setups now fetch missing ancestry before resolving dependencies.
-The first hosted Android run successfully built and verified its APK/AAB but
-failed at artifact upload: moving `$GITHUB_WORKSPACE` broke JavaScript actions'
-post-step working directory. The bind mount retains the original checkout for
-all actions while preserving the required build path.
+- `flutter analyze` passed and `flutter test` passed **2,606 tests** on Nox.
+- `actionlint` checked the GitHub workflows; new verification shell script
+  passed `shellcheck` and `bash -n`.
+- [Hosted Linux](https://github.com/brandonp2412/Flexify/actions/runs/38095301278)
+  built/uploaded a ZIP with 589 entries.
+- [Hosted Windows](https://github.com/brandonp2412/Flexify/actions/runs/38095303621)
+  built/uploaded a ZIP with 600 entries, including `flexify.exe`.
+- Compared with the existing published Flexify 2.2.33 ZIPs, **no existing
+  archive paths are missing**. The differences are six newer changelog
+  translation assets and, on Windows, directory entries.
+- [Hosted Android initial build](https://github.com/brandonp2412/Flexify/actions/runs/38097995625)
+  successfully built/uploaded the signed universal APK and AAB.
+- [Hosted full Android parity check](https://github.com/brandonp2412/Flexify/actions/runs/38100756357)
+  **passed** all checks and artifact upload: Fastforge's universal APK was
+  byte-for-byte equal to the direct Flutter universal APK from the same source,
+  all three F-Droid ABI APKs were built and had the expected package ID,
+  architecture-specific version codes, and canonical certificate.
+- The signing certificate SHA-256 was
+  `011ee1a6e4e5ecd675f67fbf3d78ad82614a7a7a3f24ed71cc9c417154a0f0fd`,
+  matching F-Droid's published `AllowedAPKSigningKeys` for Flexify.
+- No test was deleted or loosened. All eight non-packaging GitHub release jobs
+  were compared structurally and remained unchanged.
 
-## Baseline and measured evidence
+### Evidence limitations
 
-- Existing five workflow files: approximately 992 lines in the baseline checkout.
-- The main release workflow: approximately 663 lines at the baseline SHA
-  `4cd8480f0fb1e471a9dcf6d151e709f2e9801792`.
-- Pinned SDK commit: `6a19cca56475dbfba1478ee68d7bd0c2ef891da1`
-  (reported as Flutter 3.47.5 when local tag ancestry was restored).
-- Fastforge 0.6.12 was installed and its `pilot-linux` job successfully produced
-  `dist/fastforge-pilot/2.2.33+447/flexify-2.2.33+447-linux.zip` on Nox.
-  The ZIP included 589 entries; its `flexify` executable had the same SHA-256
-  as `build/linux/x64/release/bundle/flexify`:
-  `9a00ab81ba6b4e83eb6bc425d1651725e5fd572a14bed5737e6bd42d24e05f86`.
-- `actionlint` 1.7.12 validated the new GitHub workflow.
-- `flutter analyze` passed; `flutter test` passed 2,606 tests on Nox.
-- Hosted GitHub Actions succeeded for Linux
-  ([run 38095301278](https://github.com/brandonp2412/Flexify/actions/runs/38095301278)),
-  Windows ([run 38095303621](https://github.com/brandonp2412/Flexify/actions/runs/38095303621))
-  and Android ([run 38097995625](https://github.com/brandonp2412/Flexify/actions/runs/38097995625)).
-  All three uploaded build artifacts successfully without invoking publication.
-- The downloaded Windows ZIP had 600 entries including `flexify.exe`.
-  The Linux ZIP had 589 entries including `flexify`.
-- The uploaded Android APK was 74,023,466 bytes and its SHA-256 was
-  `847f0b0becc05b6a539fc2b0f7beb1efd568e77f1644a9cc84b983a909d20f72`.
-  It contains native libraries for arm64-v8a, armeabi-v7a and x86_64.
-  The uploaded AAB was 71,147,609 bytes with SHA-256
-  `f7254c7c08736a39143a28e5cfa4a66892016bb54308ba7cea49540c510c19c6`.
-  The hosted Android job verified the canonical signer of the APK.
-- The experiment is an additive validation stage, **not a LOC reduction**:
-  the baseline contained 992 workflow lines; the enabled pilot adds a 178-line
-  workflow plus 24 lines of Fastforge configuration. Migration should only
-  replace production jobs after the parity checks below pass.
-- This verifies that Fastforge packaged the locally built Linux executable
-  unaltered; it **does not** establish equivalence with a historical production
-  release or with the complete F-Droid reproducible APK.
+The hosted parity check proves identical same-run **universal** signed APKs,
+ABI-specific package structure, version codes, and signing identity. An
+independent F-Droid rebuild of a future newly released revision is needed to
+prove bit-for-bit reproducibility against the F-Droid build servers. The
+archived pilot runs did not publish to any store; the production publish
+jobs were not executed as part of this migration.
 
-## Promotion gate
+## Actual size and trade-off
 
-Before replacing any existing release job:
+The original five GitHub workflows contained **992 lines**, with **663** in
+`.github/workflows/main.yml`. After promotion and deletion of the temporary
+pilot workflow there are **975 GitHub YAML lines**, of which **646** are in
+`main.yml` (only **17 lines saved**, or 1.7%). Fastforge adds 24 lines of
+`distribute_options.yaml` and the required 39-line Android verification
+script: **1,038 total automation-code/config lines** compared with 992 before
+the pilot. This is a **4.6% increase**, not the previously forecast 30%+
+reduction. The benefit is upstream-managed cross-platform ZIP/APK/AAB
+packaging and a single reproducibility guard, not reduced line count.
 
-1. ~~Complete Android and Windows GitHub runs and inspect their produced artifacts.~~ Done.
-2. Compare the Android APK/AAB manifests, hashes where reproducibility applies,
-   ABI coverage, package ID, version, certificate and F-Droid build requirements
-   with the current release path. The existing pipeline also emits three
-   split-per-ABI APKs; the first Fastforge pilot deliberately only tests a
-   universal APK and AAB, so it is **not yet a complete substitute**.
-3. Compare Linux and Windows ZIP layouts and key files against production
-   outputs for the same source revision, not merely successful compilation.
-4. Confirm no store publication or mutable Git operations occur during packaging.
-5. Keep existing checks and publishing workflows until all comparisons pass.
-   Evaluate total automation-config LOC as well as YAML LOC; target at least 30%
-   genuine reduction before adoption.
+The manual `fastforge-pilot.yml` was used to certify the transition and is
+removed after promotion. Its completed proof runs remain available via the
+GitHub Actions links above. The next scheduled production release still needs
+monitoring; nothing in this report claims a production store publication
+happened during the migration.
