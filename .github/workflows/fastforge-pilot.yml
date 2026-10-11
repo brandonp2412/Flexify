@@ -81,18 +81,9 @@ jobs:
       - name: Package only with Fastforge (no publishing)
         working-directory: /home/brandon/flexify
         run: fastforge --no-version-check release --name pilot-android
-      - name: Verify signed APKs and generated AAB
+      - name: Verify Fastforge and F-Droid Android release parity
         working-directory: /home/brandon/flexify
-        shell: bash
-        run: |
-          shopt -s nullglob globstar
-          apks=(dist/fastforge-pilot/**/*.apk)
-          aabs=(dist/fastforge-pilot/**/*.aab)
-          test "${#apks[@]}" -gt 0
-          test "${#aabs[@]}" -gt 0
-          ./scripts/verify-android-release-signing.sh "${apks[@]}"
-          printf 'Generated %s APK(s) and %s AAB(s) using Flutter %s\n' \
-            "${#apks[@]}" "${#aabs[@]}" "$(git -C flutter rev-parse --short HEAD)"
+        run: ./scripts/verify-fastforge-android-parity.sh
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
           name: fastforge-pilot-android
