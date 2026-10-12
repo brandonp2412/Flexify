@@ -326,6 +326,10 @@ jobs:
           flutter/bin/flutter config --no-analytics
           flutter/bin/flutter pub get
 
+      - name: Install pinned Android NDK with recovery
+        working-directory: /home/brandon/flexify
+        run: bash ./scripts/ensure-ci-ndk.sh 28.2.13676358
+
       - name: Run build_runner
         working-directory: /home/brandon/flexify
         run: dart run build_runner build -d
