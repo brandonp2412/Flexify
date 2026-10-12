@@ -1,7 +1,10 @@
-• fix(ci): complete localized release-note history
-• fix(l10n): complete Brazilian Portuguese release metadata
-• fix(l10n): complete French release metadata
-• fix(l10n): complete German release metadata
-• fix(l10n): complete Japanese release metadata
-• fix(l10n): sync Spanish release metadata
-• fix: restore dumbbell app icon
+• Center text in Flexify chart tooltips
+• Complete body-weight storage cutover
+• Delete codex hooks
+• Delete silly slop file
+• Fix Flexify screenshot workout fixture
+• Fix big space at the top of graph history
+• Fix some padding for graphs filters
+• Fix tooltip edge clamp type
+• Make default number of dots 30
+• Migrate Android build to built-in Kotlin
