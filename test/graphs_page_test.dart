@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:flexify/bottom_nav.dart';
+import 'package:flexify/database/database.dart';
 import 'package:flexify/graph/graph_tile.dart';
 import 'package:flexify/graph/graphs_page.dart';
 import 'package:flutter/material.dart';
@@ -162,6 +163,65 @@ void main() {
 
     expect(find.byType(SliverGrid), findsOneWidget);
     expect(find.byType(GraphTile), findsWidgets);
+  });
+
+  testWidgets('Desktop preview retains its query across search rebuilds', (
+    WidgetTester tester,
+  ) async {
+    final harness = await FlexifyTestHarness.create();
+    tester.view.devicePixelRatio = 1;
+    tester.view.physicalSize = const Size(1400, 900);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    addTearDown(tester.view.resetPhysicalSize);
+    await harness.database.settings.update().write(
+      const SettingsCompanion(
+        showGlobalProgress: Value(false),
+        peekGraph: Value(true),
+      ),
+    );
+    await insertExerciseSetFixture(
+      harness.database,
+      'Bench',
+      reps: 5,
+      weight: 100,
+      created: DateTime(2026, 9, 2),
+    );
+    await insertExerciseSetFixture(
+      harness.database,
+      'Squat',
+      reps: 5,
+      weight: 120,
+      created: DateTime(2026, 9, 1),
+    );
+    await pumpGraphsPage(tester, harness, surfaceSize: const Size(1400, 900));
+
+    Future<List<dynamic>> peekFuture() => tester
+        .widget<FutureBuilder<List<dynamic>>>(
+          find.byType(FutureBuilder<List<dynamic>>),
+        )
+        .future!;
+
+    final initial = peekFuture();
+    await tester.enterText(find.byType(TextField).first, 'Ben');
+    await tester.pumpAndSettle();
+    expect(identical(initial, peekFuture()), isTrue);
+
+    await tester.enterText(find.byType(TextField).first, 'Squat');
+    await tester.pumpAndSettle();
+    expect(identical(initial, peekFuture()), isFalse);
+
+    await tester.enterText(find.byType(TextField).first, 'Bench');
+    await tester.pumpAndSettle();
+    final benchBeforeUpdate = peekFuture();
+    await insertExerciseSetFixture(
+      harness.database,
+      'Bench',
+      reps: 6,
+      weight: 105,
+      created: DateTime(2026, 9, 3),
+    );
+    await tester.pumpAndSettle();
+    expect(identical(benchBeforeUpdate, peekFuture()), isFalse);
   });
 
   testWidgets('GraphsPage settings', (WidgetTester tester) async {

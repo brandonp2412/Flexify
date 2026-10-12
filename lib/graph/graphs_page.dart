@@ -37,6 +37,41 @@ class GraphsPageState extends State<GraphsPage>
     with AutomaticKeepAliveClientMixin {
   late final Stream<List<GraphExerciseSummary>> _stream = watchGraphs();
 
+  GraphExerciseSummary? _peekSummary;
+  Future<List<dynamic>>? _peekFuture;
+
+  Future<List<dynamic>> _peekData(GraphExerciseSummary summary) {
+    if (!identical(_peekSummary, summary)) {
+      _peekSummary = summary;
+      _peekFuture = summary.bodyWeight
+          ? getBodyWeightData(
+              target: summary.unit,
+              period: Period.day,
+              start: null,
+              end: null,
+              limit: 20,
+            )
+          : summary.cardio
+          ? getCardioData(
+              name: summary.name,
+              target: summary.unit,
+              metric: _isWeightUnit(summary.unit)
+                  ? CardioMetric.weight
+                  : CardioMetric.pace,
+            )
+          : getStrengthData(
+              target: summary.unit,
+              name: summary.name,
+              metric: StrengthMetric.bestWeight,
+              period: Period.day,
+              start: null,
+              end: null,
+              limit: 20,
+            );
+    }
+    return _peekFuture!;
+  }
+
   final _selection = SelectionController<String>();
   final GlobalKey<NavigatorState> navKey = GlobalKey<NavigatorState>();
   String _search = '';
@@ -555,51 +590,21 @@ class GraphsPageState extends State<GraphsPage>
         if (showPeekGraph)
           SliverToBoxAdapter(
             child: Consumer<Setting>(
-              builder:
-                  (
-                    BuildContext context,
-                    Setting settings,
-                    Widget? child,
-                  ) {
-                    if (!settings.peekGraph ||
-                        exerciseSets.firstOrNull == null) {
-                      return const SizedBox();
-                    }
-                    return FutureBuilder(
-                      builder: (context, snapshot) => snapshot.data != null
-                          ? getPeek(
-                              exerciseSets.first,
-                              snapshot.data!,
-                              settings.shortDateFormat,
-                            )
-                          : const SizedBox(),
-                      future: exerciseSets.first.bodyWeight
-                          ? getBodyWeightData(
-                              target: exerciseSets.first.unit,
-                              period: Period.day,
-                              start: null,
-                              end: null,
-                              limit: 20,
-                            )
-                          : exerciseSets.first.cardio
-                          ? getCardioData(
-                              name: exerciseSets.first.name,
-                              target: exerciseSets.first.unit,
-                              metric: _isWeightUnit(exerciseSets.first.unit)
-                                  ? CardioMetric.weight
-                                  : CardioMetric.pace,
-                            )
-                          : getStrengthData(
-                              target: exerciseSets.first.unit,
-                              name: exerciseSets.first.name,
-                              metric: StrengthMetric.bestWeight,
-                              period: Period.day,
-                              start: null,
-                              end: null,
-                              limit: 20,
-                            ),
-                    );
-                  },
+              builder: (BuildContext context, Setting settings, Widget? child) {
+                if (!settings.peekGraph || exerciseSets.firstOrNull == null) {
+                  return const SizedBox();
+                }
+                return FutureBuilder<List<dynamic>>(
+                  builder: (context, snapshot) => snapshot.data != null
+                      ? getPeek(
+                          exerciseSets.first,
+                          snapshot.data!,
+                          settings.shortDateFormat,
+                        )
+                      : const SizedBox(),
+                  future: _peekData(exerciseSets.first),
+                );
+              },
             ),
           ),
         SliverPadding(
@@ -707,46 +712,21 @@ class GraphsPageState extends State<GraphsPage>
 
         if (showPeekGraph && currentIdx == 0) {
           return Consumer<Setting>(
-            builder:
-                (BuildContext context, Setting settings, Widget? child) {
-                  if (!settings.peekGraph) return const SizedBox();
-                  if (exerciseSets.firstOrNull == null) return const SizedBox();
+            builder: (BuildContext context, Setting settings, Widget? child) {
+              if (!settings.peekGraph) return const SizedBox();
+              if (exerciseSets.firstOrNull == null) return const SizedBox();
 
-                  return FutureBuilder(
-                    builder: (context, snapshot) => snapshot.data != null
-                        ? getPeek(
-                            exerciseSets.first,
-                            snapshot.data!,
-                            settings.shortDateFormat,
-                          )
-                        : const SizedBox(),
-                    future: exerciseSets.first.bodyWeight
-                        ? getBodyWeightData(
-                            target: exerciseSets.first.unit,
-                            period: Period.day,
-                            start: null,
-                            end: null,
-                            limit: 20,
-                          )
-                        : exerciseSets.first.cardio
-                        ? getCardioData(
-                            name: exerciseSets.first.name,
-                            target: exerciseSets.first.unit,
-                            metric: _isWeightUnit(exerciseSets.first.unit)
-                                ? CardioMetric.weight
-                                : CardioMetric.pace,
-                          )
-                        : getStrengthData(
-                            target: exerciseSets.first.unit,
-                            name: exerciseSets.first.name,
-                            metric: StrengthMetric.bestWeight,
-                            period: Period.day,
-                            start: null,
-                            end: null,
-                            limit: 20,
-                          ),
-                  );
-                },
+              return FutureBuilder<List<dynamic>>(
+                builder: (context, snapshot) => snapshot.data != null
+                    ? getPeek(
+                        exerciseSets.first,
+                        snapshot.data!,
+                        settings.shortDateFormat,
+                      )
+                    : const SizedBox(),
+                future: _peekData(exerciseSets.first),
+              );
+            },
           );
         }
 
