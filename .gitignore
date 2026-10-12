@@ -56,3 +56,6 @@ chromedriver-win64/
 coverage/
 # Widget Preview related
 .widget_preview/
+
+# Local Serena agent state
+.serena/
