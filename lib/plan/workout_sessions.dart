@@ -91,7 +91,14 @@ Future<Workout> resumeOrStartWorkout(
               ])
               ..limit(1))
             .getSingleOrNull();
-    if (existing != null) return existing;
+    final currentTime = now ?? DateTime.now();
+    if (existing != null) {
+      if (currentTime.difference(existing.startedAt) <
+          const Duration(hours: 18)) {
+        return existing;
+      }
+      await finishWorkout(database, existing.id, now: currentTime);
+    }
 
     return database.workouts.insertReturning(
       WorkoutsCompanion.insert(

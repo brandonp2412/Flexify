@@ -147,6 +147,12 @@ class _StartPlanPageState extends State<StartPlanPage>
                     onPressed: editPlan,
                     icon: const Icon(Icons.edit),
                   ),
+                  if (_workout != null)
+                    IconButton(
+                      tooltip: context.l10n.actionDone,
+                      onPressed: _finishCurrentWorkout,
+                      icon: const Icon(Icons.check_circle_outline),
+                    ),
                   if (desktop && snapshot.data!.isNotEmpty)
                     Padding(
                       padding: const EdgeInsets.only(right: 16),
@@ -585,16 +591,6 @@ class _StartPlanPageState extends State<StartPlanPage>
 
   @override
   void dispose() {
-    final workout = _workout;
-    if (workout != null) {
-      unawaited(_finishWorkout(workout.id));
-    } else {
-      final pendingWorkout = _workoutFuture;
-      if (pendingWorkout != null) {
-        unawaited(pendingWorkout.then((workout) => _finishWorkout(workout.id)));
-      }
-    }
-
     _reps.dispose();
     _weight.dispose();
     _distance.dispose();
@@ -617,9 +613,13 @@ class _StartPlanPageState extends State<StartPlanPage>
     super.dispose();
   }
 
-  Future<void> _finishWorkout(int workoutId) async {
+  Future<void> _finishCurrentWorkout() async {
+    final workout = _workout;
+    if (workout == null || _saving) return;
     try {
-      await finishWorkout(db, workoutId);
+      await finishWorkout(db, workout.id);
+      if (!mounted) return;
+      Navigator.of(context).pop();
     } catch (error, stackTrace) {
       talker.error('Failed to finish workout session', error, stackTrace);
     }

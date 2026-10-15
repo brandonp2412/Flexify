@@ -62,6 +62,22 @@ void main() {
     expect(next.id, isNot(first.id));
   });
 
+  test('stale paused workouts do not leak into a later training day', () async {
+    final planId = await db.plans.insertOne(planFixture());
+    final startedAt = DateTime(2026, 1, 1, 10);
+    final paused = await resumeOrStartWorkout(db, planId, now: startedAt);
+    final nextTime = startedAt.add(const Duration(hours: 19));
+    final next = await resumeOrStartWorkout(db, planId, now: nextTime);
+
+    expect(next.id, isNot(paused.id));
+    final old =
+        await (db.workouts.select()
+              ..where((workout) => workout.id.equals(paused.id)))
+            .getSingle();
+    expect(old.endedAt, nextTime);
+    expect(next.endedAt, isNull);
+  });
+
   test('concurrent starts keep one active workout per plan', () async {
     final planId = await db.plans.insertOne(planFixture());
 

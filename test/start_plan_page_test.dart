@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart' hide isNotNull, isNull;
 import 'package:flexify/bottom_nav.dart';
+import 'package:flexify/custom_set_indicator.dart';
 import 'package:flexify/database/exercise_set_repository.dart';
 import 'package:flexify/l10n/generated/app_localizations.dart';
 import 'package:flexify/l10n/locale_preferences.dart';
@@ -815,5 +816,120 @@ void main() {
 
     expect(find.text('Set 1'), findsOne);
     expect(find.text('5 × 50 kg'), findsOne);
+  });
+
+  testWidgets('rest timer return keeps current workout and set progress', (
+    WidgetTester tester,
+  ) async {
+    final timerState = RecordingTimerState();
+    final harness = await FlexifyTestHarness.create(timerState: timerState);
+    final database = harness.database;
+    final planId = await database.plans.insertOne(planFixture());
+    await insertPlanExerciseFixture(
+      database,
+      planId: planId,
+      exercise: 'Bench press',
+    );
+    await database.settings.update().write(
+      testSettings(
+        restTimers: true,
+        explainedPermissions: true,
+        notificationPermissionRequested: true,
+      ),
+    );
+    final plan =
+        await (database.plans.select()..where((row) => row.id.equals(planId)))
+            .getSingle();
+
+    await harness.pump(tester, StartPlanPage(plan: plan));
+    await tester.pumpAndSettle();
+    await tester.enterText(textFieldWithLabel('Reps'), '8');
+    await tester.enterText(textFieldWithLabel('Weight (kg)'), '50');
+    await tester.tap(find.text('Save'));
+    await tester.pumpAndSettle();
+
+    expect(timerState.lastTitle, contains('Bench press (1/'));
+    expect(
+      tester
+          .widget<CustomSetIndicator>(find.byType(CustomSetIndicator).first)
+          .count,
+      1,
+    );
+    final original = await database.workouts.select().getSingle();
+
+    // Rest notification/navigation may dispose the plan screen.
+    await harness.pump(tester, const Scaffold(body: Text('Rest timer')));
+    await tester.pumpAndSettle();
+    final paused = await database.workouts.select().getSingle();
+    expect(paused.id, original.id);
+    expect(paused.endedAt, isNull);
+
+    await harness.pump(tester, StartPlanPage(plan: plan));
+    await tester.pumpAndSettle();
+    expect(
+      tester
+          .widget<CustomSetIndicator>(find.byType(CustomSetIndicator).first)
+          .count,
+      1,
+    );
+    expect(find.text('Set 1'), findsOneWidget);
+    expect(await database.workouts.select().get(), hasLength(1));
+    timerState.dispose();
+  });
+
+  testWidgets('Done explicitly ends a workout and resets next session', (
+    WidgetTester tester,
+  ) async {
+    final harness = await FlexifyTestHarness.create();
+    final database = harness.database;
+    final planId = await database.plans.insertOne(planFixture());
+    await insertPlanExerciseFixture(
+      database,
+      planId: planId,
+      exercise: 'Bench press',
+    );
+    await database.settings.update().write(
+      testSettings(explainedPermissions: true),
+    );
+    final plan =
+        await (database.plans.select()..where((row) => row.id.equals(planId)))
+            .getSingle();
+
+    await harness.pump(
+      tester,
+      Builder(
+        builder: (context) => Scaffold(
+          body: TextButton(
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(
+                builder: (_) => StartPlanPage(plan: plan),
+              ),
+            ),
+            child: const Text('Open plan'),
+          ),
+        ),
+      ),
+    );
+    await tester.tap(find.text('Open plan'));
+    await tester.pumpAndSettle();
+    await tester.enterText(textFieldWithLabel('Reps'), '8');
+    await tester.enterText(textFieldWithLabel('Weight (kg)'), '50');
+    await tester.tap(find.text('Save'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byTooltip('Done'));
+    await tester.pumpAndSettle();
+
+    final finished = await database.workouts.select().getSingle();
+    expect(finished.endedAt, isNotNull);
+
+    await tester.tap(find.text('Open plan'));
+    await tester.pumpAndSettle();
+    expect(
+      tester
+          .widget<CustomSetIndicator>(find.byType(CustomSetIndicator).first)
+          .count,
+      0,
+    );
+    expect(await database.workouts.select().get(), hasLength(2));
   });
 }
