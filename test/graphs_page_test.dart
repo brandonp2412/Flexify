@@ -165,6 +165,47 @@ void main() {
     expect(find.byType(GraphTile), findsWidgets);
   });
 
+  for (final size in [const Size(390, 800), const Size(1400, 900)]) {
+    testWidgets('Graphs preview reserves height only when enabled at $size', (
+      WidgetTester tester,
+    ) async {
+      final harness = await FlexifyTestHarness.create();
+      tester.view.devicePixelRatio = 1;
+      tester.view.physicalSize = size;
+      addTearDown(tester.view.resetDevicePixelRatio);
+      addTearDown(tester.view.resetPhysicalSize);
+      await harness.database.settings.update().write(
+        const SettingsCompanion(
+          showGlobalProgress: Value(false),
+          peekGraph: Value(true),
+        ),
+      );
+      await insertExerciseSetFixture(
+        harness.database,
+        'Preview press',
+        reps: 8,
+        weight: 50,
+        created: DateTime(2026, 10, 15),
+      );
+      await pumpGraphsPage(tester, harness, surfaceSize: size);
+
+      const preview = Key('graphs-peek-preview');
+      expect(find.byKey(preview), findsOneWidget);
+      expect(
+        tester.getSize(find.byKey(preview)).height,
+        closeTo(size.height * 0.15, 0.1),
+      );
+      expect(find.byType(GraphTile), findsWidgets);
+
+      await harness.database.settings.update().write(
+        const SettingsCompanion(peekGraph: Value(false)),
+      );
+      await tester.pumpAndSettle();
+      expect(find.byKey(preview), findsNothing);
+      expect(find.byType(GraphTile), findsWidgets);
+    });
+  }
+
   testWidgets('Desktop preview retains its query across search rebuilds', (
     WidgetTester tester,
   ) async {

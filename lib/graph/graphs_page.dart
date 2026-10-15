@@ -238,23 +238,33 @@ class GraphsPageState extends State<GraphsPage>
         FlexLineChartPoint(index.toDouble(), data[index].value),
     ];
 
+    return Padding(
+      padding: const EdgeInsets.only(
+        right: 48.0,
+        top: 16.0,
+        left: 48.0,
+        bottom: 16.0,
+      ),
+      child: FlexLineChart(
+        points: points,
+        tooltipText: (index) =>
+            tooltipText(data, exerciseSet.unit, format, index),
+        hideBottom: true,
+        hideLeft: true,
+        showTrendLine: false,
+      ),
+    );
+  }
+
+  Widget _peekPreview(GraphExerciseSummary summary, String dateFormat) {
     return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.15,
-      child: Padding(
-        padding: const EdgeInsets.only(
-          right: 48.0,
-          top: 16.0,
-          left: 48.0,
-          bottom: 16.0,
-        ),
-        child: FlexLineChart(
-          points: points,
-          tooltipText: (index) =>
-              tooltipText(data, exerciseSet.unit, format, index),
-          hideBottom: true,
-          hideLeft: true,
-          showTrendLine: false,
-        ),
+      key: const Key('graphs-peek-preview'),
+      height: MediaQuery.sizeOf(context).height * 0.15,
+      child: FutureBuilder<List<dynamic>>(
+        future: _peekData(summary),
+        builder: (context, snapshot) => snapshot.data == null
+            ? const SizedBox.shrink()
+            : getPeek(summary, snapshot.data!, dateFormat),
       ),
     );
   }
@@ -594,15 +604,9 @@ class GraphsPageState extends State<GraphsPage>
                 if (!settings.peekGraph || exerciseSets.firstOrNull == null) {
                   return const SizedBox();
                 }
-                return FutureBuilder<List<dynamic>>(
-                  builder: (context, snapshot) => snapshot.data != null
-                      ? getPeek(
-                          exerciseSets.first,
-                          snapshot.data!,
-                          settings.shortDateFormat,
-                        )
-                      : const SizedBox(),
-                  future: _peekData(exerciseSets.first),
+                return _peekPreview(
+                  exerciseSets.first,
+                  settings.shortDateFormat,
                 );
               },
             ),
@@ -716,16 +720,7 @@ class GraphsPageState extends State<GraphsPage>
               if (!settings.peekGraph) return const SizedBox();
               if (exerciseSets.firstOrNull == null) return const SizedBox();
 
-              return FutureBuilder<List<dynamic>>(
-                builder: (context, snapshot) => snapshot.data != null
-                    ? getPeek(
-                        exerciseSets.first,
-                        snapshot.data!,
-                        settings.shortDateFormat,
-                      )
-                    : const SizedBox(),
-                future: _peekData(exerciseSets.first),
-              );
+              return _peekPreview(exerciseSets.first, settings.shortDateFormat);
             },
           );
         }
