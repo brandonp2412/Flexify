@@ -996,9 +996,6 @@ class AppLocalizationsTr extends AppLocalizations {
   String get showNotes => 'Notları Göster';
 
   @override
-  String get repEstimation => 'Tekrar Tahmini';
-
-  @override
   String get durationEstimation => 'Süre Tahmini';
 
   @override
@@ -1545,10 +1542,6 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get recordEncouragement29 => 'Yavaş lan canavar, salonu yıkacaksın.';
-
-  @override
-  String get repEstimationDescription =>
-      'Az önce yaptığın tekrar sayısını tahmin etmeye çalış';
 
   @override
   String get durationEstimationDescription =>

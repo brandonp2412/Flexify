@@ -113,42 +113,89 @@ void main() {
     expect(find.byIcon(Icons.check_circle_outline), findsNothing);
   });
 
-  testWidgets(
-    'StartPlanPage rep estimation does not crash when no RPM data for exercise',
-    (WidgetTester tester) async {
+  testWidgets('strength reps remain unchanged when the app resumes', (
+    WidgetTester tester,
+  ) async {
+    final harness = await FlexifyTestHarness.create();
+    final database = harness.database;
+    final id = await database.plans.insertOne(planFixture());
+    await insertPlanExerciseFixture(
+      database,
+      planId: id,
+      exercise: 'Bench press',
+    );
+    await database.settings.update().write(
+      testSettings(
+        explainedPermissions: true,
+        notificationPermissionRequested: true,
+      ),
+    );
+    final plan =
+        await (database.plans.select()..where((row) => row.id.equals(id)))
+            .getSingle();
+    await harness.pump(tester, StartPlanPage(plan: plan));
+    await tester.pumpAndSettle();
+
+    final reps = textFieldWithLabel('Reps');
+    await tester.enterText(reps, '5');
+    await tester.enterText(textFieldWithLabel('Weight (kg)'), '50');
+    await tester.tap(find.text('Save'));
+    await tester.pumpAndSettle();
+
+    await tester.enterText(reps, '37');
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+    await tester.pumpAndSettle();
+    expect(tester.widget<EditableText>(reps).controller.text, '37');
+  });
+
+  for (final enabled in [false, true]) {
+    testWidgets('cardio duration estimation on resume, enabled=$enabled', (
+      WidgetTester tester,
+    ) async {
       final harness = await FlexifyTestHarness.create();
       final database = harness.database;
-
       final id = await database.plans.insertOne(planFixture());
       await insertPlanExerciseFixture(
         database,
         planId: id,
-        exercise: 'Bench press',
+        exercise: 'Sled push',
+        cardio: true,
       );
       await database.settings.update().write(
-        testSettings(
-          repEstimation: true,
-          explainedPermissions: true,
-          notificationPermissionRequested: true,
+        SettingsCompanion(
+          durationEstimation: Value(enabled),
+          explainedPermissions: const Value(true),
+          notificationPermissionRequested: const Value(true),
         ),
       );
-
       final plan =
-          await (database.plans.select()..where((plan) => plan.id.equals(id)))
+          await (database.plans.select()..where((row) => row.id.equals(id)))
               .getSingle();
       await harness.pump(tester, StartPlanPage(plan: plan));
       await tester.pumpAndSettle();
 
-      await tester.enterText(textFieldWithLabel('Reps'), '5');
-      await tester.enterText(textFieldWithLabel('Weight (kg)'), '50');
-      await tester.pumpAndSettle();
+      final minutes = editableWithSemanticsLabel('Minutes');
+      final seconds = editableWithSemanticsLabel('Seconds');
+      await tester.enterText(minutes, '1');
+      await tester.enterText(seconds, '20');
       await tester.tap(find.text('Save'));
       await tester.pumpAndSettle();
 
+      await tester.enterText(minutes, '99');
+      await tester.enterText(seconds, '45');
       tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
       await tester.pumpAndSettle();
-    },
-  );
+
+      expect(
+        tester.widget<EditableText>(minutes).controller.text,
+        enabled ? '0' : '99',
+      );
+      expect(
+        tester.widget<EditableText>(seconds).controller.text,
+        enabled ? '0' : '45',
+      );
+    });
+  }
 
   testWidgets('StartPlanPage with no exercises does not crash on save', (
     WidgetTester tester,

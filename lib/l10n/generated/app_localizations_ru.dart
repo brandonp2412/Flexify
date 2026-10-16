@@ -1011,9 +1011,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get showNotes => 'Показывать заметки';
 
   @override
-  String get repEstimation => 'Оценка';
-
-  @override
   String get durationEstimation => 'Оценка продолжительности';
 
   @override
@@ -1555,10 +1552,6 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get recordEncouragement29 => 'Очень хороший результат.';
-
-  @override
-  String get repEstimationDescription =>
-      'Попробовать предсказать количество только что выполненных повторений';
 
   @override
   String get durationEstimationDescription =>

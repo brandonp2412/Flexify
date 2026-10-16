@@ -1308,10 +1308,6 @@
   "@showNotes": {
     "description": "Workout setting for exercise notes."
   },
-  "repEstimation": "ریپس کا تخمینہ",
-  "@repEstimation": {
-    "description": "Workout setting for repetition estimation."
-  },
   "durationEstimation": "دورانیے کا تخمینہ",
   "@durationEstimation": {
     "description": "Workout setting for duration estimation."
@@ -1981,10 +1977,6 @@
   "recordEncouragement29": "بہت خوب۔",
   "@recordEncouragement29": {
     "description": "Positive message shown after a new exercise record."
-  },
-  "repEstimationDescription": "اندازہ لگائیں کہ آپ نے ابھی کتنے ریپس کیے",
-  "@repEstimationDescription": {
-    "description": "Description of repetition estimation."
   },
   "durationEstimationDescription": "اپنے کارڈیو کے دورانیے کا اندازہ لگائیں",
   "@durationEstimationDescription": {

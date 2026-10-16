@@ -1001,9 +1001,6 @@ class AppLocalizationsPt extends AppLocalizations {
   String get showNotes => 'Mostrar notas';
 
   @override
-  String get repEstimation => 'Estimativa de repetições';
-
-  @override
   String get durationEstimation => 'Estimativa de duração';
 
   @override
@@ -1550,10 +1547,6 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get recordEncouragement29 => 'Muito bom mesmo.';
-
-  @override
-  String get repEstimationDescription =>
-      'Tentar prever quantas repetições acabou de fazer';
 
   @override
   String get durationEstimationDescription =>
@@ -2594,9 +2587,6 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get showNotes => 'Mostrar notas';
 
   @override
-  String get repEstimation => 'Estimativa de repetições';
-
-  @override
   String get durationEstimation => 'Estimativa de duração';
 
   @override
@@ -3140,10 +3130,6 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get recordEncouragement29 => 'Muito bom mesmo.';
-
-  @override
-  String get repEstimationDescription =>
-      'Tentar prever quantas repetições você acabou de fazer';
 
   @override
   String get durationEstimationDescription =>
@@ -4187,9 +4173,6 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get showNotes => 'Mostrar notas';
 
   @override
-  String get repEstimation => 'Estimativa de repetições';
-
-  @override
   String get durationEstimation => 'Estimativa de duração';
 
   @override
@@ -4736,10 +4719,6 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
 
   @override
   String get recordEncouragement29 => 'Muito bom mesmo.';
-
-  @override
-  String get repEstimationDescription =>
-      'Tentar prever quantas repetições acabou de fazer';
 
   @override
   String get durationEstimationDescription =>

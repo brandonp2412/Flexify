@@ -1908,12 +1908,6 @@ abstract class AppLocalizations {
   /// **'Show notes'**
   String get showNotes;
 
-  /// Workout setting for repetition estimation.
-  ///
-  /// In en, this message translates to:
-  /// **'Rep estimation'**
-  String get repEstimation;
-
   /// Workout setting for duration estimation.
   ///
   /// In en, this message translates to:
@@ -2843,12 +2837,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Very good stuff.'**
   String get recordEncouragement29;
-
-  /// Description of repetition estimation.
-  ///
-  /// In en, this message translates to:
-  /// **'Try to predict the # of reps you just did'**
-  String get repEstimationDescription;
 
   /// Description of cardio duration estimation.
   ///

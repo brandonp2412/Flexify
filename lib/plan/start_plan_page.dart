@@ -7,7 +7,6 @@ import 'package:flexify/bottom_nav.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/body_weight_repository.dart';
 import 'package:flexify/database/database.dart';
-import 'package:flexify/database/exercise_analytics.dart';
 import 'package:flexify/database/exercise_catalog.dart';
 import 'package:flexify/database/exercise_set_repository.dart';
 import 'package:flexify/empty_state.dart';
@@ -558,32 +557,6 @@ class _StartPlanPageState extends State<StartPlanPage>
     if (_cardio && settings.durationEstimation) {
       _minutes.text = difference.inMinutes.toString();
       _seconds.text = (difference.inSeconds % 60).toString();
-    } else if (!_cardio && settings.repEstimation) {
-      final parsedWeight = parseDisplayNumber(context, _weight.text);
-      if (parsedWeight == null) return;
-      final exerciseId = _exercise?.id;
-      final exerciseName = _exercise?.name;
-      getRpms().then((rpms) {
-        if (!mounted || _exercise?.id != exerciseId) return;
-        final matches = rpms.where((rpm) => rpm.name == exerciseName);
-        if (matches.isEmpty) return;
-
-        final closestRpm = matches.reduce(
-          (rpm1, rpm2) =>
-              (rpm1.weight - parsedWeight).abs() <
-                  (rpm2.weight - parsedWeight).abs()
-              ? rpm1
-              : rpm2,
-        );
-
-        final estimatedReps = (difference.inMinutes * closestRpm.rpm).clamp(
-          1,
-          50,
-        );
-        if (estimatedReps <= 0) return;
-
-        _reps.text = estimatedReps.toInt().toString();
-      });
     }
   }
 

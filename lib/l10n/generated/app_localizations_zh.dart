@@ -973,9 +973,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get showNotes => '显示备注';
 
   @override
-  String get repEstimation => '次数估算';
-
-  @override
   String get durationEstimation => '时长估算';
 
   @override
@@ -1466,9 +1463,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get recordEncouragement29 => '真的做得很好。';
-
-  @override
-  String get repEstimationDescription => '尝试预测你刚完成的次数';
 
   @override
   String get durationEstimationDescription => '尝试预测有氧运动的持续时间';
@@ -2479,9 +2473,6 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
   String get showNotes => '显示备注';
 
   @override
-  String get repEstimation => '次数估算';
-
-  @override
   String get durationEstimation => '时长估算';
 
   @override
@@ -2972,9 +2963,6 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
 
   @override
   String get recordEncouragement29 => '真的做得很好。';
-
-  @override
-  String get repEstimationDescription => '尝试预测你刚完成的次数';
 
   @override
   String get durationEstimationDescription => '尝试预测有氧运动的持续时间';
@@ -3985,9 +3973,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get showNotes => '顯示備註';
 
   @override
-  String get repEstimation => '次數估算';
-
-  @override
   String get durationEstimation => '時長估算';
 
   @override
@@ -4478,9 +4463,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get recordEncouragement29 => '真的做得很好。';
-
-  @override
-  String get repEstimationDescription => '嘗試預測你剛完成的次數';
 
   @override
   String get durationEstimationDescription => '嘗試預測有氧運動的持續時間';

@@ -991,9 +991,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get showNotes => 'إظهار الملاحظات';
 
   @override
-  String get repEstimation => 'تقدير التكرارات';
-
-  @override
   String get durationEstimation => 'تقدير المدة';
 
   @override
@@ -1519,10 +1516,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get recordEncouragement29 => 'أداء ممتاز جدًا.';
-
-  @override
-  String get repEstimationDescription =>
-      'حاول توقع عدد التكرارات التي أنجزتها للتو';
 
   @override
   String get durationEstimationDescription => 'حاول توقع مدة تمرين القلب';

@@ -182,30 +182,6 @@ List<Widget> getWorkoutSettings(
           ),
         ),
       ),
-    if (matches([l10n.repEstimation, l10n.repEstimationDescription]))
-      Tooltip(
-        message: l10n.repEstimationDescription,
-        child: ListTile(
-          title: Text(
-            l10n.repEstimation,
-            textAlign: isDesktopLayout(context)
-                ? TextAlign.start
-                : TextAlign.center,
-          ),
-          leading: settings.repEstimation
-              ? const Icon(Icons.repeat)
-              : const Icon(Icons.repeat_outlined),
-          onTap: () => db.settings.update().write(
-            SettingsCompanion(repEstimation: Value(!settings.repEstimation)),
-          ),
-          trailing: Switch(
-            value: settings.repEstimation,
-            onChanged: (value) => db.settings.update().write(
-              SettingsCompanion(repEstimation: Value(value)),
-            ),
-          ),
-        ),
-      ),
     if (matches([l10n.durationEstimation, l10n.durationEstimationDescription]))
       Tooltip(
         message: l10n.durationEstimationDescription,

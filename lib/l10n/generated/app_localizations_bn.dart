@@ -997,9 +997,6 @@ class AppLocalizationsBn extends AppLocalizations {
   String get showNotes => 'নোট দেখান';
 
   @override
-  String get repEstimation => 'রেপ অনুমান';
-
-  @override
   String get durationEstimation => 'সময়কাল অনুমান';
 
   @override
@@ -1527,10 +1524,6 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get recordEncouragement29 => 'খুব ভালো কাজ।';
-
-  @override
-  String get repEstimationDescription =>
-      'আপনি এইমাত্র কত রেপ করেছেন তা অনুমান করার চেষ্টা করুন';
 
   @override
   String get durationEstimationDescription =>

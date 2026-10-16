@@ -1308,10 +1308,6 @@
   "@showNotes": {
     "description": "Workout setting for exercise notes."
   },
-  "repEstimation": "تخمین تکرار",
-  "@repEstimation": {
-    "description": "Workout setting for repetition estimation."
-  },
   "durationEstimation": "تخمین مدت",
   "@durationEstimation": {
     "description": "Workout setting for duration estimation."
@@ -1981,10 +1977,6 @@
   "recordEncouragement29": "خیلی خوب بود.",
   "@recordEncouragement29": {
     "description": "Positive message shown after a new exercise record."
-  },
-  "repEstimationDescription": "سعی کنید تعداد تکرارهایی را که همین حالا انجام دادید حدس بزنید",
-  "@repEstimationDescription": {
-    "description": "Description of repetition estimation."
   },
   "durationEstimationDescription": "سعی کنید مدت کاردیوی خود را تخمین بزنید",
   "@durationEstimationDescription": {

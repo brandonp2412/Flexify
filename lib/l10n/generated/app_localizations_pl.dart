@@ -1011,9 +1011,6 @@ class AppLocalizationsPl extends AppLocalizations {
   String get showNotes => 'Pokaż notatki';
 
   @override
-  String get repEstimation => 'Szacowanie powtórzeń';
-
-  @override
   String get durationEstimation => 'Szacowanie czasu trwania';
 
   @override
@@ -1555,10 +1552,6 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get recordEncouragement29 => 'Naprawdę świetnie.';
-
-  @override
-  String get repEstimationDescription =>
-      'Spróbuj przewidzieć liczbę właśnie wykonanych powtórzeń';
 
   @override
   String get durationEstimationDescription =>

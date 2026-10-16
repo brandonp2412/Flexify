@@ -976,9 +976,6 @@ class AppLocalizationsKo extends AppLocalizations {
   String get showNotes => '메모 표시';
 
   @override
-  String get repEstimation => '반복 횟수 추정';
-
-  @override
   String get durationEstimation => '시간 추정';
 
   @override
@@ -1479,9 +1476,6 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get recordEncouragement29 => '정말 잘했어요.';
-
-  @override
-  String get repEstimationDescription => '방금 수행한 반복 횟수를 예측합니다';
 
   @override
   String get durationEstimationDescription => '유산소 운동 시간을 예측합니다';

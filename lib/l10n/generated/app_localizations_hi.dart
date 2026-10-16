@@ -994,9 +994,6 @@ class AppLocalizationsHi extends AppLocalizations {
   String get showNotes => 'नोट्स दिखाएँ';
 
   @override
-  String get repEstimation => 'रेप अनुमान';
-
-  @override
   String get durationEstimation => 'अवधि अनुमान';
 
   @override
@@ -1524,10 +1521,6 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get recordEncouragement29 => 'बहुत बढ़िया काम।';
-
-  @override
-  String get repEstimationDescription =>
-      'आपने अभी कितने रेप किए, इसका अनुमान लगाने की कोशिश करें';
 
   @override
   String get durationEstimationDescription =>
