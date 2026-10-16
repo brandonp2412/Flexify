@@ -39,6 +39,51 @@ class HistoryDayGroup {
   HistoryDayGroup({required this.day, required this.exercises});
 }
 
+List<HistoryDay> getHistoryDays(List<ExerciseSetView> exerciseSets) {
+  final map = <String, HistoryDay>{};
+  final list = <HistoryDay>[];
+  for (final exerciseSet in exerciseSets) {
+    final day = DateUtils.dateOnly(exerciseSet.created);
+    final key = '${exerciseSet.name}|${day.millisecondsSinceEpoch}';
+    final existing = map[key];
+    if (existing == null) {
+      final hd = HistoryDay(
+        name: exerciseSet.name,
+        exerciseSets: [exerciseSet],
+        day: day,
+      );
+      map[key] = hd;
+      list.add(hd);
+    } else {
+      existing.exerciseSets.add(exerciseSet);
+    }
+  }
+  return list;
+}
+
+List<HistoryDayGroup> getHistoryDayGroups(List<ExerciseSetView> exerciseSets) {
+  final groups = <HistoryDayGroup>[];
+  for (final exercise in getHistoryDays(exerciseSets)) {
+    if (groups.isNotEmpty && isSameDay(groups.last.day, exercise.day)) {
+      groups.last.exercises.add(exercise);
+    } else {
+      groups.add(HistoryDayGroup(day: exercise.day, exercises: [exercise]));
+    }
+  }
+  return groups;
+}
+
+class HistoryGroupingCache {
+  List<ExerciseSetView>? _source;
+  List<HistoryDayGroup>? _groups;
+
+  List<HistoryDayGroup> get(List<ExerciseSetView> sets) {
+    if (identical(_source, sets)) return _groups!;
+    _source = sets;
+    return _groups = getHistoryDayGroups(sets);
+  }
+}
+
 class HistoryPage extends StatefulWidget {
   final TabController tabController;
 
@@ -95,6 +140,7 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
   final weightLt = TextEditingController();
   final scroll = ScrollController();
   final _selection = SelectionController<int>();
+  final _historyGroups = HistoryGroupingCache();
 
   String search = '';
   int limit = 100;
@@ -163,7 +209,7 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
                                   );
 
                               if (groupHistory) {
-                                final dayGroups = getHistoryDayGroups(
+                                final dayGroups = _historyGroups.get(
                                   snapshot.data!,
                                 );
                                 return GroupHistory(
@@ -359,42 +405,6 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
         builder: (context) => EditSetPage(exerciseSet: exerciseSet),
       ),
     );
-  }
-
-  List<HistoryDay> getHistoryDays(List<ExerciseSetView> exerciseSets) {
-    final map = <String, HistoryDay>{};
-    final list = <HistoryDay>[];
-    for (final exerciseSet in exerciseSets) {
-      final day = DateUtils.dateOnly(exerciseSet.created);
-      final key = '${exerciseSet.name}|${day.millisecondsSinceEpoch}';
-      final existing = map[key];
-      if (existing == null) {
-        final hd = HistoryDay(
-          name: exerciseSet.name,
-          exerciseSets: [exerciseSet],
-          day: day,
-        );
-        map[key] = hd;
-        list.add(hd);
-      } else {
-        existing.exerciseSets.add(exerciseSet);
-      }
-    }
-    return list;
-  }
-
-  List<HistoryDayGroup> getHistoryDayGroups(
-    List<ExerciseSetView> exerciseSets,
-  ) {
-    final groups = <HistoryDayGroup>[];
-    for (final exercise in getHistoryDays(exerciseSets)) {
-      if (groups.isNotEmpty && isSameDay(groups.last.day, exercise.day)) {
-        groups.last.exercises.add(exercise);
-      } else {
-        groups.add(HistoryDayGroup(day: exercise.day, exercises: [exercise]));
-      }
-    }
-    return groups;
   }
 
   @override
