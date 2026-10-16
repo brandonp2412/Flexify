@@ -1,0 +1,5 @@
+• Testo dei suggerimenti nei grafici centrato e visualizzazione ai bordi corretta.
+• Spaziatura della cronologia grafici e dei filtri migliorata; ora vengono mostrati 30 punti per impostazione predefinita.
+• Migrazione dell’archiviazione del peso corporeo completata.
+• Dati degli allenamenti per i test degli screenshot corretti.
+• Build Android migrata a Kotlin integrato; rimossi hook e file di sviluppo obsoleti.

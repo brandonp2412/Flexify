@@ -1,0 +1,5 @@
+• Tekst in grafiektooltips gecentreerd en afkapping bij de randen verholpen.
+• Witruimte boven de grafiekgeschiedenis en rond filters verbeterd; standaard worden 30 punten getoond.
+• Overgang van de opslag voor lichaamsgewicht afgerond.
+• Trainingsgegevens voor screenshottests gecorrigeerd.
+• Android-build omgezet naar ingebouwde Kotlin; verouderde ontwikkelhaken en bestanden verwijderd.

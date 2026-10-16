@@ -530,5 +530,6 @@
   "95": "- Full description کی spacing درست کریں\n- GitHub release بنانے کے بعد git pull --tags specify کریں\n- Google Play deployments دوبارہ فعال کریں\n- Export/import میں incline شامل کریں\n- Cardio type میں incline شامل کریں",
   "96": "- Custom alarm sound set کرتے وقت preview کریں\n- Cardio graphs ریفیکٹر کریں\n- Settings میں share database button شامل کریں",
   "97": "- “Show reorder” اور “Show counts” settings کو یکجا کریں\n- Plans ریفیکٹر کریں\n- Graphs page ریفیکٹر کریں\n- gym_sets ریفیکٹر کریں",
-  "98": "- Plans میں max sets count درست کریں"
+  "98": "- Plans میں max sets count درست کریں",
+  "1791796031": "• چارٹ ٹول ٹپس کا متن درمیان میں کیا گیا اور کناروں پر کٹنے کا مسئلہ حل ہوا۔\n• گراف کی تاریخ کے اوپر اور فلٹرز کے گرد فاصلہ بہتر ہوا؛ اب پہلے سے طے شدہ نقاط 30 ہیں۔\n• جسمانی وزن کے ڈیٹا کو نئے ذخیرے میں منتقل کرنے کا کام مکمل ہوا۔\n• اسکرین شاٹ ٹیسٹ کے ورزش ڈیٹا کی اصلاح کی گئی۔\n• Android کی تعمیر میں اندرونی Kotlin استعمال کیا گیا اور پرانی ترقیاتی فائلیں اور ہکس ہٹا دیے گئے۔"
 }

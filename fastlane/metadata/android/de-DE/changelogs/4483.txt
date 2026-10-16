@@ -1,0 +1,5 @@
+• Text in Diagramm-Tooltips zentriert und die Begrenzung an den Rändern korrigiert.
+• Abstände über dem Diagrammverlauf und an den Filtern verbessert; standardmäßig werden 30 Punkte angezeigt.
+• Umstellung der Körpergewichtsspeicherung abgeschlossen.
+• Trainingsdaten für Screenshot-Tests korrigiert.
+• Android-Build auf integriertes Kotlin umgestellt; veraltete Entwickler-Hooks und Dateien entfernt.

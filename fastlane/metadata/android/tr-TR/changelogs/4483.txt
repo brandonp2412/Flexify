@@ -1,0 +1,5 @@
+• Grafik araç ipuçlarındaki metin ortalandı ve kenarlarda kesilme sorunu düzeltildi.
+• Grafik geçmişinin üstündeki ve filtrelerdeki boşluklar iyileştirildi; varsayılan nokta sayısı 30 oldu.
+• Vücut ağırlığı verilerinin depolama geçişi tamamlandı.
+• Ekran görüntüsü testlerindeki antrenman verileri düzeltildi.
+• Android derlemesi yerleşik Kotlin’e geçirildi; eski geliştirme kancaları ve dosyaları kaldırıldı.

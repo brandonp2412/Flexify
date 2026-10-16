@@ -530,5 +530,6 @@
   "1790394970": "• fix(l10n): gültige Play-Listing-Sprachversionen verwenden",
   "1790404468": "• Brandon Dick in App-Verweisen verwenden\n• fix(l10n): neueste übersetzte Versionshinweise synchronisieren",
   "1790414297": "• fix(l10n): neueste Versionshinweise lokalisieren",
-  "1790477503": "• Übersetzungen und Korrekturen am App-Symbol vervollständigt"
+  "1790477503": "• Übersetzungen und Korrekturen am App-Symbol vervollständigt",
+  "1791796031": "• Text in Diagramm-Tooltips zentriert und die Begrenzung an den Rändern korrigiert.\n• Abstände über dem Diagrammverlauf und an den Filtern verbessert; standardmäßig werden 30 Punkte angezeigt.\n• Umstellung der Körpergewichtsspeicherung abgeschlossen.\n• Trainingsdaten für Screenshot-Tests korrigiert.\n• Android-Build auf integriertes Kotlin umgestellt; veraltete Entwickler-Hooks und Dateien entfernt."
 }

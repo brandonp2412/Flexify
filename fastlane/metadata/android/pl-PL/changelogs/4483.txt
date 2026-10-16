@@ -1,0 +1,5 @@
+• Wyśrodkowano tekst podpowiedzi na wykresach i poprawiono wyświetlanie przy krawędziach.
+• Poprawiono odstępy nad historią wykresów i przy filtrach; domyślnie wyświetla się 30 punktów.
+• Zakończono migrację przechowywania masy ciała.
+• Poprawiono dane treningowe używane w testach zrzutów ekranu.
+• Kompilacja Androida korzysta teraz z wbudowanego Kotlina; usunięto stare pliki i haki deweloperskie.

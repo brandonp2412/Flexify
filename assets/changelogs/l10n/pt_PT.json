@@ -530,5 +530,6 @@
   "1790394970": "• fix(l10n): usar localidades válidas na ficha da Play Store",
   "1790404468": "• Usar Brandon Dick nas referências do aplicação\n• fix(l10n): sincronizar as notas de versão traduzidas mais recentes",
   "1790414297": "• fix(l10n): traduzir as notas de versão mais recentes",
-  "1790477503": "• Traduções e correções do ícone do aplicação concluídas"
+  "1790477503": "• Traduções e correções do ícone do aplicação concluídas",
+  "1791796031": "• Texto das sugestões dos gráficos centrado e apresentação junto às margens corrigida.\n• Espaçamento acima do histórico dos gráficos e nos filtros melhorado; o valor predefinido é agora 30 pontos.\n• Migração do armazenamento do peso corporal concluída.\n• Dados de treino utilizados nos testes de capturas de ecrã corrigidos.\n• Compilação Android migrada para Kotlin integrado; ficheiros e mecanismos de desenvolvimento antigos removidos."
 }

@@ -530,5 +530,6 @@
   "95": "- Spasi deskripsi lengkap dengan benar\n- Spesifikasikan git tarik --tag setelah membuat rilis github\n- Re- enable google play displastments\n- Tambahkan miring ke ekspor / impor\n- Tambahkan miring ke tipe cardio",
   "96": "- Pratilik suara alarm gubahan ketika mengatur itu\n- Refactor cardio graphs\n- Tambahkan tombol basis data berbagi ke pengaturan",
   "97": "- Combine \"Show reorder\" and \"Show counts\" setting\n- Reaktor rencana\n- Reaktor halaman grafik\n- Reaktor _ set gym",
-  "98": "- Fix max set mengandalkan rencana"
+  "98": "- Fix max set mengandalkan rencana",
+  "1791796031": "• Teks tooltip grafik dipusatkan dan tampilannya di tepi diperbaiki.\n• Jarak di atas riwayat grafik dan padding filter diperbaiki; jumlah titik bawaan kini 30.\n• Migrasi penyimpanan berat badan telah selesai.\n• Data latihan untuk pengujian tangkapan layar diperbaiki.\n• Build Android kini memakai Kotlin bawaan; hook dan berkas pengembangan lama dihapus."
 }

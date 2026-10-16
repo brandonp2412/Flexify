@@ -1,0 +1,5 @@
+• Texto das dicas dos gráficos centralizado e exibição nas bordas corrigida.
+• Espaçamento acima do histórico dos gráficos e nos filtros ajustado; o padrão agora é 30 pontos.
+• Migração do armazenamento do peso corporal concluída.
+• Dados de treino usados nos testes de capturas de tela corrigidos.
+• Compilação Android migrada para Kotlin integrado; arquivos e ganchos de desenvolvimento antigos removidos.

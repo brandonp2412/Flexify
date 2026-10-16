@@ -530,5 +530,6 @@
   "1790394970": "• fix(l10n) : utiliser des paramètres régionaux valides pour la fiche Play",
   "1790404468": "• Utiliser Brandon Dick dans les références de l’application\n• fix(l10n) : synchroniser les dernières notes de version traduites",
   "1790414297": "• fix(l10n) : traduire les dernières notes de version",
-  "1790477503": "• Traductions et corrections de l’icône de l’application terminées"
+  "1790477503": "• Traductions et corrections de l’icône de l’application terminées",
+  "1791796031": "• Texte des infobulles des graphiques centré et affichage corrigé près des bords.\n• Espacement de l’historique des graphiques et des filtres amélioré ; 30 points affichés par défaut.\n• Migration du stockage du poids corporel terminée.\n• Données d’entraînement corrigées pour les tests de captures d’écran.\n• Compilation Android passée à Kotlin intégré ; anciens fichiers et outils de développement supprimés."
 }

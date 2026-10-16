@@ -530,5 +530,6 @@
   "95": "- Jarakkan full description dengan betul\n- Nyatakan git pull --tags selepas mencipta keluaran GitHub\n- Aktifkan semula deploy Google Play\n- Tambah kecondongan pada eksport/import\n- Tambah kecondongan pada jenis kardio",
   "96": "- Pratonton bunyi penggera tersuai ketika menetapkannya\n- Refaktor graf kardio\n- Tambah butang kongsi pangkalan data pada tetapan",
   "97": "- Gabungkan tetapan \"Show reorder\" dan \"Show counts\"\n- Refaktor pelan\n- Refaktor halaman graf\n- Refaktor gym_sets",
-  "98": "- Baiki kiraan set maksimum pada pelan"
+  "98": "- Baiki kiraan set maksimum pada pelan",
+  "1791796031": "• Teks tip alat carta dijajarkan ke tengah dan paparan berhampiran tepi dibetulkan.\n• Ruang di atas sejarah graf dan pad penapis ditambah baik; bilangan titik lalai kini 30.\n• Pemindahan storan berat badan selesai.\n• Data senaman untuk ujian tangkapan skrin dibetulkan.\n• Binaan Android kini menggunakan Kotlin terbina dalam; cangkuk dan fail pembangunan lama dibuang."
 }

@@ -1,0 +1,5 @@
+• Texte des infobulles des graphiques centré et affichage corrigé près des bords.
+• Espacement de l’historique des graphiques et des filtres amélioré ; 30 points affichés par défaut.
+• Migration du stockage du poids corporel terminée.
+• Données d’entraînement corrigées pour les tests de captures d’écran.
+• Compilation Android passée à Kotlin intégré ; anciens fichiers et outils de développement supprimés.

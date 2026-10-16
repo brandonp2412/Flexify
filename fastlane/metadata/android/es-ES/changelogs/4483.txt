@@ -1,0 +1,5 @@
+• Se centró el texto de las ayudas de los gráficos y se corrigió su ajuste en los bordes.
+• Se mejoraron los espacios del historial de gráficos y los filtros; ahora se muestran 30 puntos por defecto.
+• Se completó la migración del almacenamiento del peso corporal.
+• Se corrigieron los datos de entrenamiento usados en las pruebas de capturas.
+• La compilación de Android usa Kotlin integrado; se eliminaron archivos y enlaces de desarrollo obsoletos.

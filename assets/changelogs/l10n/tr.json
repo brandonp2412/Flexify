@@ -530,5 +530,6 @@
   "1790394970": "• fix(l10n): Play mağaza girişi için geçerli yerel ayarları kullan",
   "1790404468": "• Uygulama referanslarında Brandon Dick kullan\n• fix(l10n): en son çevrilmiş sürüm notlarını eşitle",
   "1790414297": "• fix(l10n): en son sürüm notlarını yerelleştir",
-  "1790477503": "• fix(ci): yerelleştirilmiş sürüm notu geçmişini tamamla\n• fix(l10n): Brezilya Portekizcesi sürüm meta verilerini tamamla\n• fix(l10n): Fransızca sürüm meta verilerini tamamla\n• fix(l10n): Almanca sürüm meta verilerini tamamla\n• fix(l10n): Japonca sürüm meta verilerini tamamla\n• fix(l10n): İspanyolca sürüm meta verilerini eşitle\n• fix: dambıl uygulama simgesini geri yükle"
+  "1790477503": "• fix(ci): yerelleştirilmiş sürüm notu geçmişini tamamla\n• fix(l10n): Brezilya Portekizcesi sürüm meta verilerini tamamla\n• fix(l10n): Fransızca sürüm meta verilerini tamamla\n• fix(l10n): Almanca sürüm meta verilerini tamamla\n• fix(l10n): Japonca sürüm meta verilerini tamamla\n• fix(l10n): İspanyolca sürüm meta verilerini eşitle\n• fix: dambıl uygulama simgesini geri yükle",
+  "1791796031": "• Grafik araç ipuçlarındaki metin ortalandı ve kenarlarda kesilme sorunu düzeltildi.\n• Grafik geçmişinin üstündeki ve filtrelerdeki boşluklar iyileştirildi; varsayılan nokta sayısı 30 oldu.\n• Vücut ağırlığı verilerinin depolama geçişi tamamlandı.\n• Ekran görüntüsü testlerindeki antrenman verileri düzeltildi.\n• Android derlemesi yerleşik Kotlin’e geçirildi; eski geliştirme kancaları ve dosyaları kaldırıldı."
 }
