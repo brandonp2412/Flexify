@@ -40,19 +40,24 @@ class HistoryDayGroup {
 }
 
 List<HistoryDay> getHistoryDays(List<ExerciseSetView> exerciseSets) {
-  final map = <String, HistoryDay>{};
+  final byExercise = <String, Map<int, HistoryDay>>{};
   final list = <HistoryDay>[];
   for (final exerciseSet in exerciseSets) {
-    final day = DateUtils.dateOnly(exerciseSet.created);
-    final key = '${exerciseSet.name}|${day.millisecondsSinceEpoch}';
-    final existing = map[key];
+    final created = exerciseSet.created;
+    final dayKey = created.year * 512 + created.month * 32 + created.day;
+    var days = byExercise[exerciseSet.name];
+    if (days == null) {
+      days = <int, HistoryDay>{};
+      byExercise[exerciseSet.name] = days;
+    }
+    final existing = days[dayKey];
     if (existing == null) {
       final hd = HistoryDay(
         name: exerciseSet.name,
         exerciseSets: [exerciseSet],
-        day: day,
+        day: DateTime(created.year, created.month, created.day),
       );
-      map[key] = hd;
+      days[dayKey] = hd;
       list.add(hd);
     } else {
       existing.exerciseSets.add(exerciseSet);
