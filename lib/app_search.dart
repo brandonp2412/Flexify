@@ -239,7 +239,7 @@ class _AppSearchState extends State<AppSearch> {
                             PopupMenuItem(
                               value: _AppSearchMenuAction.clearSelection,
                               child: ListTile(
-                                leading: const Icon(Icons.clear_all),
+                                leading: const Icon(Icons.deselect),
                                 title: Text(context.l10n.clearSelection),
                               ),
                             ),

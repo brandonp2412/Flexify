@@ -40,6 +40,44 @@ void main() {
     expect(editable.focusNode.hasFocus, isTrue);
   });
 
+  testWidgets('Clear selection menu uses deselect icon and clears selection', (
+    tester,
+  ) async {
+    final harness = await FlexifyTestHarness.create();
+    final selection = SelectionController<String>()..add('plan');
+
+    await harness.pump(
+      tester,
+      Scaffold(
+        body: AppSearch(
+          controller: selection,
+          onChange: (_) {},
+          onSelectAll: () {},
+          onDelete: () async {},
+          onEdit: () async {},
+          onShare: () async {},
+        ),
+      ),
+      surfaceSize: const Size(1024, 600),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byIcon(Icons.more_vert));
+    await tester.pumpAndSettle();
+
+    final tile = tester.widget<ListTile>(
+      find.ancestor(
+        of: find.text('Clear selection'),
+        matching: find.byType(ListTile),
+      ),
+    );
+    expect((tile.leading! as Icon).icon, Icons.deselect);
+
+    await tester.tap(find.text('Clear selection'));
+    await tester.pumpAndSettle();
+    expect(selection.isEmpty, isTrue);
+  });
+
   testWidgets('AppSearch popup rows have one interactive surface', (
     tester,
   ) async {
