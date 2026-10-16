@@ -103,6 +103,13 @@ void main() {
     expect(find.byType(CircularProgressIndicator), findsNothing);
     expect(find.text('Instant bench press'), findsWidgets);
     expect(find.text('Cached plan'), findsOneWidget);
+    expect(
+      tester
+          .widget<Scaffold>(find.byType(Scaffold))
+          .floatingActionButtonAnimator,
+      FloatingActionButtonAnimator.noAnimation,
+    );
+    expect(find.byIcon(Icons.check_circle_outline), findsNothing);
   });
 
   testWidgets(
@@ -877,7 +884,7 @@ void main() {
     timerState.dispose();
   });
 
-  testWidgets('Done explicitly ends a workout and resets next session', (
+  testWidgets('Start Plan leaves the workout open without a Done action', (
     WidgetTester tester,
   ) async {
     final harness = await FlexifyTestHarness.create();
@@ -916,20 +923,21 @@ void main() {
     await tester.enterText(textFieldWithLabel('Weight (kg)'), '50');
     await tester.tap(find.text('Save'));
     await tester.pumpAndSettle();
-    await tester.tap(find.byTooltip('Done'));
+    expect(find.byTooltip('Done'), findsNothing);
+    expect(find.byIcon(Icons.check_circle_outline), findsNothing);
+    final workout = await database.workouts.select().getSingle();
+    expect(workout.endedAt, isNull);
+
+    await tester.tap(find.byIcon(Icons.arrow_back));
     await tester.pumpAndSettle();
-
-    final finished = await database.workouts.select().getSingle();
-    expect(finished.endedAt, isNotNull);
-
     await tester.tap(find.text('Open plan'));
     await tester.pumpAndSettle();
     expect(
       tester
           .widget<CustomSetIndicator>(find.byType(CustomSetIndicator).first)
           .count,
-      0,
+      1,
     );
-    expect(await database.workouts.select().get(), hasLength(2));
+    expect(await database.workouts.select().get(), hasLength(1));
   });
 }

@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:drift/drift.dart' hide Column;
-import 'package:flexify/animated_fab.dart';
+import 'package:flexify/app_fab.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/day_selector.dart';
@@ -130,6 +130,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
         unawaited(_confirmDiscard(result));
       },
       child: Scaffold(
+        floatingActionButtonAnimator: FloatingActionButtonAnimator.noAnimation,
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
           title: Text(title),
@@ -243,7 +244,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
         ),
         floatingActionButton: desktop
             ? null
-            : AnimatedFab(
+            : AppFab(
                 onPressed: save,
                 label: Text(context.l10n.actionSave),
                 icon: const Icon(Icons.save),

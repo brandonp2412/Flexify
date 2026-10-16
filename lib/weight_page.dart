@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
-import 'package:flexify/animated_fab.dart';
+import 'package:flexify/app_fab.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/body_weight_repository.dart';
 import 'package:flexify/database/database.dart';
@@ -46,6 +46,7 @@ class _WeightPageState extends State<WeightPage> {
         : '${formatDisplayNumber(context, displayBodyWeight(displayUnit, _previousWeight!.weightKg))} ${displayMeasurementUnit(context.l10n, displayUnit)}';
 
     return Scaffold(
+      floatingActionButtonAnimator: FloatingActionButtonAnimator.noAnimation,
       resizeToAvoidBottomInset: false,
       appBar: AppBar(title: Text(context.l10n.enterWeight)),
       body: Form(
@@ -149,7 +150,7 @@ class _WeightPageState extends State<WeightPage> {
           ),
         ),
       ),
-      floatingActionButton: AnimatedFab(
+      floatingActionButton: AppFab(
         onPressed: () async {
           if (!_key.currentState!.validate()) return;
 

@@ -11,8 +11,10 @@ class CategoryManagementPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return Scaffold(
+      floatingActionButtonAnimator: FloatingActionButtonAnimator.noAnimation,
       appBar: AppBar(title: Text(l10n.manageCategories)),
       floatingActionButton: FloatingActionButton.extended(
+        heroTag: null,
         onPressed: () => _showCategoryEditor(context),
         icon: const Icon(Icons.add),
         label: Text(l10n.newCategory),

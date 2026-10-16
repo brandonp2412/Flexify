@@ -1,5 +1,5 @@
 import 'package:drift/drift.dart' as drift;
-import 'package:flexify/animated_fab.dart';
+import 'package:flexify/app_fab.dart';
 import 'package:flexify/app_search.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
@@ -182,6 +182,8 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
               );
 
               return Scaffold(
+                floatingActionButtonAnimator:
+                    FloatingActionButtonAnimator.noAnimation,
                 resizeToAvoidBottomInset: false,
                 appBar: desktop
                     ? AppBar(
@@ -278,7 +280,7 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
                 ),
                 floatingActionButton: desktop
                     ? null
-                    : AnimatedFab(
+                    : AppFab(
                         onPressed: _addPlan,
                         label: Text(context.l10n.actionAdd),
                         icon: const Icon(Icons.add),

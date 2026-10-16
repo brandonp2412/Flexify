@@ -1,4 +1,4 @@
-import 'package:flexify/animated_fab.dart';
+import 'package:flexify/app_fab.dart';
 import 'package:flexify/bottom_nav.dart';
 import 'package:flexify/l10n/generated/app_localizations.dart';
 import 'package:flexify/stepper_field.dart';
@@ -65,7 +65,7 @@ void main() {
     await harness.pump(
       tester,
       Scaffold(
-        floatingActionButton: AnimatedFab(
+        floatingActionButton: AppFab(
           onPressed: () {},
           label: Text(l10n.actionSave),
           icon: const Icon(Icons.save),

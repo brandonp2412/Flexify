@@ -4,7 +4,7 @@ import 'dart:math';
 
 import 'package:drift/drift.dart' hide Column;
 import 'package:file_picker/file_picker.dart';
-import 'package:flexify/animated_fab.dart';
+import 'package:flexify/app_fab.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/body_weight_repository.dart';
 import 'package:flexify/database/categories.dart';
@@ -173,6 +173,7 @@ class _EditSetPageState extends State<EditSetPage> {
         unawaited(_confirmDiscard(result));
       },
       child: Scaffold(
+        floatingActionButtonAnimator: FloatingActionButtonAnimator.noAnimation,
         resizeToAvoidBottomInset: true,
         appBar: buildAppBar(),
         body: buildBody(showBodyWeight),
@@ -555,7 +556,7 @@ class _EditSetPageState extends State<EditSetPage> {
   }
 
   Widget buildSaveButton() {
-    return AnimatedFab(
+    return AppFab(
       onPressed: save,
       label: Text(context.l10n.actionSave),
       icon: const Icon(Icons.save),

@@ -1,6 +1,6 @@
 import 'dart:collection';
 
-import 'package:flexify/animated_fab.dart';
+import 'package:flexify/app_fab.dart';
 import 'package:flexify/app_search.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/body_weight_repository.dart';
@@ -176,6 +176,7 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
   Widget build(BuildContext context) {
     final desktop = isDesktopLayout(context);
     return Scaffold(
+      floatingActionButtonAnimator: FloatingActionButtonAnimator.noAnimation,
       resizeToAvoidBottomInset: false,
       appBar: desktop
           ? AppBar(
@@ -369,7 +370,7 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
       ),
       floatingActionButton: desktop
           ? null
-          : AnimatedFab(
+          : AppFab(
               onPressed: onAdd,
               label: Text(context.l10n.actionAdd),
               icon: const Icon(Icons.add),

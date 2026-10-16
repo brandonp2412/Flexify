@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:drift/drift.dart' hide Column;
-import 'package:flexify/animated_fab.dart';
+import 'package:flexify/app_fab.dart';
 import 'package:flexify/bottom_nav.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/body_weight_repository.dart';
@@ -12,7 +12,6 @@ import 'package:flexify/empty_state.dart';
 import 'package:flexify/database/exercise_analytics.dart';
 import 'package:flexify/database/exercise_set_repository.dart';
 import 'package:flexify/l10n/l10n.dart';
-import 'package:flexify/logging.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/permissions_page.dart';
 import 'package:flexify/plan/edit_plan_page.dart';
@@ -134,6 +133,8 @@ class _StartPlanPageState extends State<StartPlanPage>
                   );
 
             return Scaffold(
+              floatingActionButtonAnimator:
+                  FloatingActionButtonAnimator.noAnimation,
               resizeToAvoidBottomInset: true,
               appBar: AppBar(
                 title: Text(_displayTitle(context)),
@@ -147,12 +148,6 @@ class _StartPlanPageState extends State<StartPlanPage>
                     onPressed: editPlan,
                     icon: const Icon(Icons.edit),
                   ),
-                  if (_workout != null)
-                    IconButton(
-                      tooltip: context.l10n.actionDone,
-                      onPressed: _finishCurrentWorkout,
-                      icon: const Icon(Icons.check_circle_outline),
-                    ),
                   if (desktop && snapshot.data!.isNotEmpty)
                     Padding(
                       padding: const EdgeInsets.only(right: 16),
@@ -281,7 +276,7 @@ class _StartPlanPageState extends State<StartPlanPage>
                             ),
                           ),
                           const SizedBox(width: 8),
-                          AnimatedFab(
+                          AppFab(
                             onPressed: () async => await save(snapshot, counts),
                             label: Text(context.l10n.actionSave),
                             icon: const Icon(Icons.save),
@@ -611,18 +606,6 @@ class _StartPlanPageState extends State<StartPlanPage>
     _planSub?.cancel();
 
     super.dispose();
-  }
-
-  Future<void> _finishCurrentWorkout() async {
-    final workout = _workout;
-    if (workout == null || _saving) return;
-    try {
-      await finishWorkout(db, workout.id);
-      if (!mounted) return;
-      Navigator.of(context).pop();
-    } catch (error, stackTrace) {
-      talker.error('Failed to finish workout session', error, stackTrace);
-    }
   }
 
   Future<ExerciseSetView?> getLast(String exercise) {

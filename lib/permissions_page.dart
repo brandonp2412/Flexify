@@ -1,5 +1,5 @@
 import 'package:drift/drift.dart';
-import 'package:flexify/animated_fab.dart';
+import 'package:flexify/app_fab.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
@@ -24,6 +24,7 @@ class _PermissionsPageState extends State<PermissionsPage> {
     final settings = context.watch<Setting>();
 
     return Scaffold(
+      floatingActionButtonAnimator: FloatingActionButtonAnimator.noAnimation,
       resizeToAvoidBottomInset: false,
       appBar: AppBar(title: Text(context.l10n.missingPermissions)),
       body: SafeArea(
@@ -88,7 +89,7 @@ class _PermissionsPageState extends State<PermissionsPage> {
           ),
         ),
       ),
-      floatingActionButton: AnimatedFab(
+      floatingActionButton: AppFab(
         onPressed: () {
           if ((!_ignore || !_schedule) && settings.restTimers)
             showDialog(

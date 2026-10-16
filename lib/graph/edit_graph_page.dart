@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
-import 'package:flexify/animated_fab.dart';
+import 'package:flexify/app_fab.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/exercise_analytics.dart';
 import 'package:flexify/database/exercise_catalog.dart';
@@ -78,6 +78,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
         unawaited(_confirmDiscard(result));
       },
       child: Scaffold(
+        floatingActionButtonAnimator: FloatingActionButtonAnimator.noAnimation,
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
           title: Text(context.l10n.updateAllNamed(widget.name.toLowerCase())),
@@ -265,7 +266,7 @@ class _EditGraphPageState extends State<EditGraphPage> {
             ),
           ),
         ),
-        floatingActionButton: AnimatedFab(
+        floatingActionButton: AppFab(
           onPressed: save,
           label: Text(context.l10n.actionUpdate),
           icon: const Icon(Icons.sync),

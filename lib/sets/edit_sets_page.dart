@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:drift/drift.dart';
-import 'package:flexify/animated_fab.dart';
+import 'package:flexify/app_fab.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/exercise_catalog.dart';
 import 'package:flexify/database/exercise_set_repository.dart';
@@ -94,6 +94,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
         unawaited(_confirmDiscard(result));
       },
       child: Scaffold(
+        floatingActionButtonAnimator: FloatingActionButtonAnimator.noAnimation,
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
           title: Text(l10n.editSets(widget.ids.length)),
@@ -448,7 +449,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
             ),
           ),
         ),
-        floatingActionButton: AnimatedFab(
+        floatingActionButton: AppFab(
           onPressed: save,
           label: Text(l10n.actionUpdate),
           icon: const Icon(Icons.sync),

@@ -194,6 +194,7 @@ class _WhatsNewState extends State<WhatsNew> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButtonAnimator: FloatingActionButtonAnimator.noAnimation,
       appBar: AppBar(title: Text(context.l10n.whatsNewTitle)),
       body: Column(
         children: [
@@ -239,6 +240,7 @@ class _WhatsNewState extends State<WhatsNew> {
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
+        heroTag: null,
         icon: const Icon(Icons.favorite_outline),
         onPressed: () async {
           const url = 'https://github.com/sponsors/brandonp2412';

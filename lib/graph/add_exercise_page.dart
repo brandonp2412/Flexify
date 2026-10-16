@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
-import 'package:flexify/animated_fab.dart';
+import 'package:flexify/app_fab.dart';
 import 'package:flexify/database/exercise_catalog.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/logging.dart';
@@ -80,6 +80,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
         unawaited(_confirmDiscard(result));
       },
       child: Scaffold(
+        floatingActionButtonAnimator: FloatingActionButtonAnimator.noAnimation,
         resizeToAvoidBottomInset: false,
         appBar: AppBar(title: Text(context.l10n.addExercise)),
         body: Padding(
@@ -193,7 +194,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
             ),
           ),
         ),
-        floatingActionButton: AnimatedFab(
+        floatingActionButton: AppFab(
           onPressed: () => save(_unit),
           label: Text(context.l10n.actionSave),
           icon: const Icon(Icons.save),

@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:flexify/animated_fab.dart';
+import 'package:flexify/app_fab.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/responsive.dart';
 import 'package:flexify/settings/settings_page.dart';
@@ -192,6 +192,7 @@ class _TimerPageWidgetState extends State<_TimerPageWidget>
           );
 
     return Scaffold(
+      floatingActionButtonAnimator: FloatingActionButtonAnimator.noAnimation,
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: desktop ? Text(context.l10n.navTimer) : null,
@@ -216,33 +217,22 @@ class _TimerPageWidgetState extends State<_TimerPageWidget>
       ),
       floatingActionButton: desktop
           ? null
-          : AnimatedSwitcher(
-              duration: const Duration(milliseconds: 150),
-              transitionBuilder: (child, animation) {
-                return ScaleTransition(scale: animation, child: child);
-              },
-              child: timer.isRunning()
-                  ? AnimatedFab(
-                      onPressed: () async =>
-                          await widget.timerState.stopTimer(),
-                      icon: const Icon(Icons.stop),
-                      label: Text(context.l10n.actionStop),
-                    )
-                  : countdownActive
-                  ? const SizedBox()
-                  : AnimatedFab(
-                      onPressed: _stopwatchRunning
-                          ? _pauseStopwatch
-                          : _startStopwatch,
-                      icon: Icon(
-                        _stopwatchRunning ? Icons.pause : Icons.play_arrow,
-                      ),
-                      label: Text(
-                        _stopwatchRunning
-                            ? context.l10n.actionPause
-                            : context.l10n.actionStart,
-                      ),
-                    ),
+          : timer.isRunning()
+          ? AppFab(
+              onPressed: () async => await widget.timerState.stopTimer(),
+              icon: const Icon(Icons.stop),
+              label: Text(context.l10n.actionStop),
+            )
+          : countdownActive
+          ? const SizedBox()
+          : AppFab(
+              onPressed: _stopwatchRunning ? _pauseStopwatch : _startStopwatch,
+              icon: Icon(_stopwatchRunning ? Icons.pause : Icons.play_arrow),
+              label: Text(
+                _stopwatchRunning
+                    ? context.l10n.actionPause
+                    : context.l10n.actionStart,
+              ),
             ),
     );
   }

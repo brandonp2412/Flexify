@@ -1,5 +1,5 @@
 import 'package:drift/drift.dart' hide Column;
-import 'package:flexify/animated_fab.dart';
+import 'package:flexify/app_fab.dart';
 import 'package:flexify/app_search.dart';
 import 'package:flexify/bottom_nav.dart';
 import 'package:flexify/constants.dart';
@@ -357,6 +357,7 @@ class GraphsPageState extends State<GraphsPage>
   Scaffold graphsPage() {
     final desktop = isDesktopLayout(context);
     return Scaffold(
+      floatingActionButtonAnimator: FloatingActionButtonAnimator.noAnimation,
       resizeToAvoidBottomInset: false,
       appBar: desktop
           ? AppBar(
@@ -513,7 +514,7 @@ class GraphsPageState extends State<GraphsPage>
       ),
       floatingActionButton: desktop
           ? null
-          : AnimatedFab(
+          : AppFab(
               onPressed: () => navKey.currentState!.push(
                 FlexPageRoute(builder: (context) => const AddExercisePage()),
               ),
