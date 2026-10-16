@@ -3,16 +3,26 @@ import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
 
 class PlanExerciseDraft {
-  const PlanExerciseDraft({
-    required this.planExercise,
-    required this.exerciseName,
-  });
+  PlanExerciseDraft({required this.planExercise, required this.exerciseName})
+    : normalizedExerciseName = exerciseName.toLowerCase();
 
   final PlanExercisesCompanion planExercise;
   final String exerciseName;
+  final String normalizedExerciseName;
 
   PlanExerciseDraft copyWithPlanExercise(PlanExercisesCompanion value) =>
       PlanExerciseDraft(planExercise: value, exerciseName: exerciseName);
+}
+
+List<PlanExerciseDraft> filterPlanExerciseDrafts(
+  Iterable<PlanExerciseDraft> exercises,
+  String search,
+) {
+  final normalizedSearch = search.toLowerCase();
+  return [
+    for (final exercise in exercises)
+      if (exercise.normalizedExerciseName.contains(normalizedSearch)) exercise,
+  ];
 }
 
 class PlanCount {

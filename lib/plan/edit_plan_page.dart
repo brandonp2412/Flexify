@@ -68,9 +68,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
   }
 
   Iterable<Widget> get tiles {
-    final match = _exercises.where(
-      (pe) => pe.exerciseName.toLowerCase().contains(_search.toLowerCase()),
-    );
+    final match = filterPlanExerciseDrafts(_exercises, _search);
 
     if (match.isEmpty)
       return [
@@ -91,7 +89,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
         ),
       ];
 
-    return match.toList().map(
+    return match.map(
       (pe) => ExerciseTile(
         planExercise: pe.planExercise,
         exerciseName: pe.exerciseName,
