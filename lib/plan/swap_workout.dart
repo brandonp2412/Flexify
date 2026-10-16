@@ -141,15 +141,11 @@ class _SwapWorkoutState extends State<SwapWorkout> {
                   return const SizedBox();
                 }
 
-                final exercises = snapshot.data!
-                    .where(
-                      (exercise) =>
-                          !_unavailableExerciseIds.contains(exercise.id) &&
-                          exercise.name.toLowerCase().contains(
-                            _searchQuery.toLowerCase(),
-                          ),
-                    )
-                    .toList();
+                final exercises = filterExerciseCatalog(
+                  snapshot.data!,
+                  _unavailableExerciseIds,
+                  _searchQuery,
+                );
 
                 return ListView.builder(
                   itemCount: exercises.length,
