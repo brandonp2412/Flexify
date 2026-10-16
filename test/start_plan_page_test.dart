@@ -2,6 +2,7 @@ import 'package:drift/drift.dart' hide isNotNull, isNull;
 import 'package:flexify/bottom_nav.dart';
 import 'package:flexify/custom_set_indicator.dart';
 import 'package:flexify/database/exercise_set_repository.dart';
+import 'package:flexify/database/database.dart';
 import 'package:flexify/l10n/generated/app_localizations.dart';
 import 'package:flexify/l10n/locale_preferences.dart';
 import 'package:flexify/plan/start_plan_page.dart';
@@ -334,6 +335,41 @@ void main() {
       exerciseName: exercise,
     );
     expect(saved, hasLength(1));
+  });
+
+  testWidgets('plan progress updates preserve unsaved input', (tester) async {
+    final harness = await FlexifyTestHarness.create();
+    final database = harness.database;
+    final planId = await database.plans.insertOne(planFixture());
+    await insertPlanExerciseFixture(
+      database,
+      planId: planId,
+      exercise: 'Bench press',
+    );
+    final plan =
+        await (database.plans.select()..where((row) => row.id.equals(planId)))
+            .getSingle();
+    await harness.pump(tester, StartPlanPage(plan: plan));
+    await tester.pumpAndSettle();
+    await tester.enterText(textFieldWithLabel('Reps'), '12');
+    await tester.enterText(textFieldWithLabel('Weight (kg)'), '75');
+
+    await (database.planExercises.update()
+          ..where((row) => row.planId.equals(planId)))
+        .write(const PlanExercisesCompanion(maxSets: Value(5)));
+    await tester.pumpAndSettle();
+
+    expect(
+      tester.widget<EditableText>(textFieldWithLabel('Reps')).controller.text,
+      '12',
+    );
+    expect(
+      tester
+          .widget<EditableText>(textFieldWithLabel('Weight (kg)'))
+          .controller
+          .text,
+      '75',
+    );
   });
 
   testWidgets('StartPlanPage saves localized German decimal input', (
