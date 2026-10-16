@@ -53,7 +53,9 @@ void main() {
 
     Future<int> legacy() async {
       final rows = await Future.wait(
-        planIds.map((planId) => watchPlanExerciseEntries(database, planId).first),
+        planIds.map(
+          (planId) => watchPlanExerciseEntries(database, planId).first,
+        ),
       );
       return rows.fold<int>(0, (sum, entries) => sum + entries.length);
     }
