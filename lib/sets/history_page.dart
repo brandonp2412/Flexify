@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:flexify/animated_fab.dart';
 import 'package:flexify/app_search.dart';
 import 'package:flexify/constants.dart';
@@ -80,7 +82,7 @@ List<HistoryDayGroup> getHistoryDayGroups(List<ExerciseSetView> exerciseSets) {
         exercises: [],
       );
       groups.add(group);
-      exercises = <String, HistoryDay>{};
+      exercises = HashMap<String, HistoryDay>();
       lastDayKey = dayKey;
     }
     final name = exerciseSet.name;
