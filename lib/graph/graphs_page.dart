@@ -54,6 +54,13 @@ List<GraphExerciseSummary> filterGraphSummaries(
       .split(' ')
       .where((term) => term.isNotEmpty)
       .toList();
+  if (terms.isEmpty) {
+    if (category == null) return List<GraphExerciseSummary>.of(summaries);
+    return [
+      for (final summary in summaries)
+        if (summary.category == category) summary,
+    ];
+  }
   return [
     for (final summary in summaries)
       if ((category == null || summary.category == category) &&

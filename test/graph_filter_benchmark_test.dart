@@ -53,6 +53,18 @@ void main() {
       baseline(source, 'bench press variation', 'Upper');
       filterGraphSummaries(source, 'bench press variation', 'Upper');
     }
+    final categoryOnly = Stopwatch()..start();
+    for (var i = 0; i < 200; i++) {
+      filterGraphSummaries(source, '', 'Upper');
+    }
+    categoryOnly.stop();
+    print('GRAPH_CATEGORY_ONLY_US=${categoryOnly.elapsedMicroseconds}');
+    final allItems = Stopwatch()..start();
+    for (var i = 0; i < 200; i++) {
+      filterGraphSummaries(source, '', null);
+    }
+    allItems.stop();
+    print('GRAPH_ALL_ITEMS_US=${allItems.elapsedMicroseconds}');
     final oldTime = Stopwatch()..start();
     for (var i = 0; i < 100; i++) {
       baseline(source, 'bench press variation', 'Upper');
