@@ -61,12 +61,45 @@ List<GraphExerciseSummary> filterGraphSummaries(
         if (summary.category == category) summary,
     ];
   }
-  return [
-    for (final summary in summaries)
-      if ((category == null || summary.category == category) &&
-          terms.every(summary.normalizedName.contains))
-        summary,
-  ];
+  switch (terms.length) {
+    case 1:
+      final term = terms[0];
+      return [
+        for (final summary in summaries)
+          if ((category == null || summary.category == category) &&
+              summary.normalizedName.contains(term))
+            summary,
+      ];
+    case 2:
+      final first = terms[0];
+      final second = terms[1];
+      return [
+        for (final summary in summaries)
+          if ((category == null || summary.category == category) &&
+              summary.normalizedName.contains(first) &&
+              summary.normalizedName.contains(second))
+            summary,
+      ];
+    case 3:
+      final first = terms[0];
+      final second = terms[1];
+      final third = terms[2];
+      return [
+        for (final summary in summaries)
+          if ((category == null || summary.category == category) &&
+              summary.normalizedName.contains(first) &&
+              summary.normalizedName.contains(second) &&
+              summary.normalizedName.contains(third))
+            summary,
+      ];
+    default:
+      return [
+        for (final summary in summaries)
+          if ((category == null || summary.category == category) &&
+              terms.every(summary.normalizedName.contains))
+            summary,
+      ];
+  }
 }
 
 class GraphsPage extends StatefulWidget {
