@@ -165,12 +165,15 @@ List<List<ExerciseSetView>> _groupSets(
     grouped.putIfAbsent(_periodKey(set.created, period), () => []).add(set);
   }
 
-  final groups = grouped.values.toList();
-  for (final group in groups) {
-    group.sort((a, b) => a.created.compareTo(b.created));
-  }
-  groups.sort((a, b) => b.last.created.compareTo(a.last.created));
-  return groups.take(limit).toList().reversed.toList();
+  // Callers load sets in ascending timestamp order, so each bucket and the
+  // buckets themselves are already chronological.
+  return grouped.values
+      .toList()
+      .reversed
+      .take(limit)
+      .toList()
+      .reversed
+      .toList();
 }
 
 double _loadInUnit(ExerciseSetView set, String target) {
