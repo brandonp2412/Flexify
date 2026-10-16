@@ -290,4 +290,61 @@ void main() {
     expect(await isBestExerciseSet(db, first), isFalse);
     expect(await isBestExerciseSet(db, second), isTrue);
   });
+
+  test('best-set detection preserves cardio ranking', () async {
+    final now = DateTime.now().toLocal();
+    final loadedFirst = await insertExerciseSetFixture(
+      db,
+      'Sled',
+      cardio: true,
+      unit: 'kg',
+      weight: 20,
+      duration: 10,
+      created: now.subtract(const Duration(minutes: 5)),
+    );
+    final loadedLonger = await insertExerciseSetFixture(
+      db,
+      'Sled',
+      cardio: true,
+      unit: 'kg',
+      weight: 20,
+      duration: 12,
+      created: now.subtract(const Duration(minutes: 4)),
+    );
+    final loadedLighter = await insertExerciseSetFixture(
+      db,
+      'Sled',
+      cardio: true,
+      unit: 'kg',
+      weight: 19,
+      duration: 20,
+      created: now.subtract(const Duration(minutes: 3)),
+    );
+
+    expect(await isBestExerciseSet(db, loadedFirst), isFalse);
+    expect(await isBestExerciseSet(db, loadedLonger), isTrue);
+    expect(await isBestExerciseSet(db, loadedLighter), isFalse);
+
+    final pacedFirst = await insertExerciseSetFixture(
+      db,
+      'Run',
+      cardio: true,
+      unit: 'km',
+      distance: 5,
+      duration: 30,
+      created: now.subtract(const Duration(minutes: 2)),
+    );
+    final pacedFaster = await insertExerciseSetFixture(
+      db,
+      'Run',
+      cardio: true,
+      unit: 'km',
+      distance: 5,
+      duration: 25,
+      created: now.subtract(const Duration(minutes: 1)),
+    );
+
+    expect(await isBestExerciseSet(db, pacedFirst), isFalse);
+    expect(await isBestExerciseSet(db, pacedFaster), isTrue);
+  });
 }

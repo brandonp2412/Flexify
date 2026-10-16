@@ -431,42 +431,72 @@ Future<bool> isBestExerciseSet(
   AppDatabase database,
   ExerciseSetView exerciseSet,
 ) async {
-  final previous = (await getExerciseSetsForExercise(
-    database,
-    exerciseName: exerciseSet.name,
-  )).where((set) => set.id != exerciseSet.id);
+  final exercise =
+      await (database.exercises.select()
+            ..where((row) => row.name.equals(exerciseSet.name))
+            ..limit(1))
+          .getSingleOrNull();
+  if (exercise == null) return false;
+
+  final previous = database.exerciseSets.select()
+    ..where(
+      (set) =>
+          set.exerciseId.equals(exercise.id) &
+          set.id.isNotValue(exerciseSet.id),
+    );
 
   if (exerciseSet.cardio &&
       const {'kg', 'lb', 'stone'}.contains(exerciseSet.unit)) {
-    final candidates = previous.toList();
-    if (candidates.isEmpty) return false;
-    candidates.sort((a, b) {
-      final load = b.weight.compareTo(a.weight);
-      return load != 0 ? load : b.duration.compareTo(a.duration);
-    });
-    final best = candidates.first;
-    return exerciseSet.weight > best.weight ||
-        (exerciseSet.weight == best.weight &&
-            exerciseSet.duration > best.duration);
+    final best =
+        await (previous
+              ..orderBy([
+                (set) =>
+                    OrderingTerm.desc(ifNull(set.loadKg, const Constant(0.0))),
+                (set) => OrderingTerm.desc(
+                  ifNull(set.durationMs, const Constant(0)),
+                ),
+              ])
+              ..limit(1))
+            .getSingleOrNull();
+    if (best == null) return false;
+    final bestWeight = displayLoad(exerciseSet.unit, best.loadKg);
+    final bestDuration = (best.durationMs ?? 0) / 60000;
+    return exerciseSet.weight > bestWeight ||
+        (exerciseSet.weight == bestWeight &&
+            exerciseSet.duration > bestDuration);
   }
 
   if (exerciseSet.cardio) {
     if (exerciseSet.duration == 0) return false;
-    final candidates = previous.where((set) => set.duration > 0).toList();
-    if (candidates.isEmpty) return false;
-    final bestPace = candidates
-        .map((set) => set.distance / set.duration)
-        .reduce((a, b) => a > b ? a : b);
-    return exerciseSet.distance / exerciseSet.duration > bestPace;
+    final candidates = await previous.get();
+    var bestPace = 0.0;
+    var found = false;
+    for (final candidate in candidates) {
+      final duration = (candidate.durationMs ?? 0) / 60000;
+      if (duration <= 0) continue;
+      final pace =
+          displayDistance(exerciseSet.unit, candidate.distanceMetres) /
+          duration;
+      if (!found || pace > bestPace) {
+        bestPace = pace;
+        found = true;
+      }
+    }
+    return found && exerciseSet.distance / exerciseSet.duration > bestPace;
   }
 
-  final candidates = previous.toList();
-  if (candidates.isEmpty) return false;
-  candidates.sort((a, b) {
-    final load = b.weight.compareTo(a.weight);
-    return load != 0 ? load : b.reps.compareTo(a.reps);
-  });
-  final best = candidates.first;
-  return exerciseSet.weight > best.weight ||
-      (exerciseSet.weight == best.weight && exerciseSet.reps > best.reps);
+  final best =
+      await (previous
+            ..orderBy([
+              (set) =>
+                  OrderingTerm.desc(ifNull(set.loadKg, const Constant(0.0))),
+              (set) => OrderingTerm.desc(ifNull(set.reps, const Constant(0.0))),
+            ])
+            ..limit(1))
+          .getSingleOrNull();
+  if (best == null) return false;
+  final bestWeight = displayLoad(exerciseSet.unit, best.loadKg);
+  final bestReps = best.reps ?? 0;
+  return exerciseSet.weight > bestWeight ||
+      (exerciseSet.weight == bestWeight && exerciseSet.reps > bestReps);
 }
