@@ -8,13 +8,13 @@ import 'package:flexify/day_selector.dart';
 import 'package:flexify/empty_state.dart';
 import 'package:flexify/graph/add_exercise_page.dart';
 import 'package:flexify/l10n/l10n.dart';
-import 'package:flexify/main.dart';
 import 'package:flexify/logging.dart';
+import 'package:flexify/main.dart';
 import 'package:flexify/plan/exercise_tile.dart';
 import 'package:flexify/plan/plan_queries.dart';
+import 'package:flexify/platform_page_route.dart';
 import 'package:flexify/responsive.dart';
 import 'package:flexify/utils.dart';
-import 'package:flexify/platform_page_route.dart';
 import 'package:flutter/material.dart';
 
 class EditPlanPage extends StatefulWidget {
@@ -27,12 +27,11 @@ class EditPlanPage extends StatefulWidget {
 }
 
 class _EditPlanPageState extends State<EditPlanPage> {
-  late List<bool> _days;
+  List<bool> _days = [];
   List<PlanExerciseDraft> _exercises = [];
   bool _loadingExercises = true;
   bool _hasUnsavedChanges = false;
   bool _allowPop = false;
-
   String _search = '';
 
   final _node = FocusNode();
