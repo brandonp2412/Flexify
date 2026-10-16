@@ -14,6 +14,14 @@ class StrengthData {
   });
 }
 
+typedef StrengthDataLookupKey = ({String? category, DateTime created});
+
+Map<StrengthDataLookupKey, StrengthData> indexStrengthDataByCategoryAndDate(
+  Iterable<StrengthData> data,
+) => {
+  for (final row in data) (category: row.category, created: row.created): row,
+};
+
 Map<String?, List<StrengthData>> groupStrengthDataByCategory(
   Iterable<StrengthData> data,
 ) {

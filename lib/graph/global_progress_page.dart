@@ -25,6 +25,7 @@ class _GlobalProgressPageState extends State<GlobalProgressPage> {
   StrengthMetric metric = StrengthMetric.bestWeight;
   List<StrengthData> data = [];
   List<String?> categories = [];
+  Map<StrengthDataLookupKey, StrengthData> _tooltipData = const {};
   Period period = Period.day;
   DateTime? startDate;
   DateTime? endDate;
@@ -75,6 +76,7 @@ class _GlobalProgressPageState extends State<GlobalProgressPage> {
     setState(() {
       data = newData;
       categories = newCategories;
+      _tooltipData = indexStrengthDataByCategoryAndDate(newData);
     });
   }
 
@@ -444,9 +446,8 @@ class _GlobalProgressPageState extends State<GlobalProgressPage> {
 
     final category = categories[seriesIndex];
     final touchedDate = allDates[xIndex];
-    final row = data.firstWhere(
-      (d) => d.category == category && d.created == touchedDate,
-    );
+    final row = _tooltipData[(category: category, created: touchedDate)];
+    if (row == null) return '';
     final formattedValue = formatDisplayNumber(
       context,
       row.value,
