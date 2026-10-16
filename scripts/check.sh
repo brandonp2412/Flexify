@@ -14,7 +14,7 @@ flutter pub get
 dart run build_runner build
 
 echo "== formatting =="
-dart format lib test
+dart format lib test integration_test
 
 echo "== applying auto-fixes =="
 dart fix --apply

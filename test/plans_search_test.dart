@@ -63,4 +63,19 @@ void main() {
       );
     }
   });
+  test('plan search treats percent and underscore literally', () {
+    const special = Plan(
+      id: 1,
+      title: '100%_strength',
+      days: 'Monday',
+      sequence: 0,
+    );
+    const plain = Plan(id: 2, title: 'Strength', days: 'Monday', sequence: 1);
+    final plans = [special, plain];
+    String localizeDay(String day) => day;
+
+    expect(filterPlans(plans, [], '%', localizeDay), [special]);
+    expect(filterPlans(plans, [], '_', localizeDay), [special]);
+    expect(filterPlans(plans, [], '100%_', localizeDay), [special]);
+  });
 }

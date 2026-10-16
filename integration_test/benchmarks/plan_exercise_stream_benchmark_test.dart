@@ -3,7 +3,7 @@ import 'package:flexify/database/database.dart';
 import 'package:flexify/plan/workout_sessions.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'mock_tests.dart';
+import '../../test/mock_tests.dart';
 
 int median(List<int> values) {
   final sorted = List<int>.of(values)..sort();

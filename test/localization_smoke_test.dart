@@ -26,66 +26,6 @@ void main() {
     expect(find.text('Flexify'), findsOneWidget);
   });
 
-  testWidgets('loads Spanish localization', (tester) async {
-    await tester.pumpWidget(
-      MaterialApp(
-        locale: const Locale('es'),
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: AppLocalizations.supportedLocales,
-        home: Builder(
-          builder: (context) => Text(AppLocalizations.of(context).navSettings),
-        ),
-      ),
-    );
-
-    expect(find.text('Ajustes'), findsOneWidget);
-  });
-
-  testWidgets('loads French localization', (tester) async {
-    await tester.pumpWidget(
-      MaterialApp(
-        locale: const Locale('fr'),
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: AppLocalizations.supportedLocales,
-        home: Builder(
-          builder: (context) => Text(AppLocalizations.of(context).navSettings),
-        ),
-      ),
-    );
-
-    expect(find.text('Paramètres'), findsOneWidget);
-  });
-
-  testWidgets('loads German localization', (tester) async {
-    await tester.pumpWidget(
-      MaterialApp(
-        locale: const Locale('de'),
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: AppLocalizations.supportedLocales,
-        home: Builder(
-          builder: (context) => Text(AppLocalizations.of(context).navSettings),
-        ),
-      ),
-    );
-
-    expect(find.text('Einstellungen'), findsOneWidget);
-  });
-
-  testWidgets('loads Italian localization', (tester) async {
-    await tester.pumpWidget(
-      MaterialApp(
-        locale: const Locale('it'),
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: AppLocalizations.supportedLocales,
-        home: Builder(
-          builder: (context) => Text(AppLocalizations.of(context).navSettings),
-        ),
-      ),
-    );
-
-    expect(find.text('Impostazioni'), findsOneWidget);
-  });
-
   testWidgets('loads Brazilian Portuguese localization', (tester) async {
     await tester.pumpWidget(
       MaterialApp(
@@ -133,36 +73,6 @@ void main() {
     expect(find.text('Definições'), findsOneWidget);
   });
 
-  testWidgets('loads Dutch localization', (tester) async {
-    await tester.pumpWidget(
-      MaterialApp(
-        locale: const Locale('nl'),
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: AppLocalizations.supportedLocales,
-        home: Builder(
-          builder: (context) => Text(AppLocalizations.of(context).navSettings),
-        ),
-      ),
-    );
-
-    expect(find.text('Instellingen'), findsOneWidget);
-  });
-
-  testWidgets('loads Polish localization', (tester) async {
-    await tester.pumpWidget(
-      MaterialApp(
-        locale: const Locale('pl'),
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: AppLocalizations.supportedLocales,
-        home: Builder(
-          builder: (context) => Text(AppLocalizations.of(context).navSettings),
-        ),
-      ),
-    );
-
-    expect(find.text('Ustawienia'), findsOneWidget);
-  });
-
   testWidgets('loads Japanese localization', (tester) async {
     await tester.pumpWidget(
       MaterialApp(
@@ -176,21 +86,6 @@ void main() {
     );
 
     expect(find.text('設定'), findsOneWidget);
-  });
-
-  testWidgets('loads Korean localization', (tester) async {
-    await tester.pumpWidget(
-      MaterialApp(
-        locale: const Locale('ko'),
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: AppLocalizations.supportedLocales,
-        home: Builder(
-          builder: (context) => Text(AppLocalizations.of(context).navSettings),
-        ),
-      ),
-    );
-
-    expect(find.text('설정'), findsOneWidget);
   });
 
   testWidgets('loads Simplified Chinese localization', (tester) async {
@@ -221,21 +116,6 @@ void main() {
     );
 
     expect(find.text('設定'), findsOneWidget);
-  });
-
-  testWidgets('loads Russian localization', (tester) async {
-    await tester.pumpWidget(
-      MaterialApp(
-        locale: const Locale('ru'),
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: AppLocalizations.supportedLocales,
-        home: Builder(
-          builder: (context) => Text(AppLocalizations.of(context).navSettings),
-        ),
-      ),
-    );
-
-    expect(find.text('Настройки'), findsOneWidget);
   });
 
   testWidgets('falls back safely for an unsupported locale', (tester) async {

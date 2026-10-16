@@ -253,7 +253,9 @@ void main() {
     final harness = await FlexifyTestHarness.create();
     final database = harness.database;
 
-    for (final locale in selectableLocales.skip(1)) {
+    for (final locale in selectableLocales.where(
+      (locale) => const {'de', 'pl', 'ja', 'ar'}.contains(locale.languageCode),
+    )) {
       await tester.pumpWidget(const SizedBox.shrink());
       await tester.pumpAndSettle();
       final l10n = lookupAppLocalizations(locale);

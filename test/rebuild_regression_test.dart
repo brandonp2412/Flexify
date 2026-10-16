@@ -99,45 +99,29 @@ void main() {
   Future<Setting> settings() => (db.settings.select()..limit(1)).getSingle();
 
   // --- Virtualization -------------------------------------------------
-  // Both tests share the same frame threshold. If the 100-item test ever needs
-  // significantly more frames than the 10-item test, ListView.builder is
-  // building off-screen items instead of virtualizing.
+  // Check that a larger dataset does not need more build frames.
 
-  testWidgets('HistoryPage with 10 items settles within 6 frames', (
+  testWidgets('History list virtualizes as it grows from 10 to 100 items', (
     tester,
   ) async {
     for (var i = 0; i < 10; i++) {
       await insertSet('Bench press', minutesAgo: i);
     }
-    await tester.pumpWidget(historyApp(await settings()));
-    final frames = await countFramesToSettle(tester);
+    final setting = await settings();
+    await tester.pumpWidget(historyApp(setting));
+    final smallFrames = await countFramesToSettle(tester);
+    expect(smallFrames, lessThan(6));
 
-    // Measured baseline: 2 frames.
-    print('[perf] 10-item list initial render: $frames frames');
-    expect(frames, lessThan(6), reason: '10-item list took $frames frames');
+    await tester.pumpWidget(const SizedBox.shrink());
+    await tester.pumpAndSettle();
+    for (var i = 10; i < 100; i++) {
+      await insertSet('Bench press', minutesAgo: i);
+    }
+    await tester.pumpWidget(historyApp(setting));
+    final largeFrames = await countFramesToSettle(tester);
+    expect(largeFrames, lessThan(6));
+    expect(largeFrames, lessThanOrEqualTo(smallFrames + 2));
   });
-
-  testWidgets(
-    'HistoryPage with 100 items settles within 6 frames (same as 10 -- virtualized)',
-    (tester) async {
-      for (var i = 0; i < 100; i++) {
-        await insertSet('Bench press', minutesAgo: i);
-      }
-      await tester.pumpWidget(historyApp(await settings()));
-      final frames = await countFramesToSettle(tester);
-
-      // Measured baseline: 2 frames, same as the 10-item case.
-      print('[perf] 100-item list initial render: $frames frames');
-      expect(
-        frames,
-        lessThan(6),
-        reason:
-            '100-item list took $frames frames -- '
-            'if much higher than the 10-item test, '
-            'ListView.builder is building off-screen items',
-      );
-    },
-  );
 
   // --- Stream update --------------------------------------------------
 

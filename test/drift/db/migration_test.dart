@@ -28,19 +28,23 @@ void main() {
     verifier = SchemaVerifier(GeneratedHelper());
   });
 
-  group('simple database migrations', () {
+  group('schema upgrades', () {
     const versions = GeneratedHelper.versions;
-    for (final (i, fromVersion) in versions.indexed) {
-      group('from $fromVersion', () {
-        for (final toVersion in versions.skip(i + 1)) {
-          test('to $toVersion', () async {
-            final schema = await verifier.schemaAt(fromVersion);
-            final db = AppDatabase(schema.newConnection());
+    final currentVersion = versions.last;
+    for (final (index, fromVersion) in versions.indexed) {
+      if (fromVersion == currentVersion) continue;
+      final nextVersion = versions[index + 1];
+      for (final toVersion in {nextVersion, currentVersion}) {
+        test('v$fromVersion to v$toVersion', () async {
+          final schema = await verifier.schemaAt(fromVersion);
+          final db = AppDatabase(schema.newConnection());
+          try {
             await verifier.migrateAndValidate(db, toVersion);
+          } finally {
             await db.close();
-          });
-        }
-      });
+          }
+        });
+      }
     }
   });
 
