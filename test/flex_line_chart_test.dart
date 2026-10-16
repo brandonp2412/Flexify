@@ -56,6 +56,17 @@ void main() {
     );
   });
 
+  test('x-axis labels support unordered centers', () {
+    expect(
+      FlexLineChart.selectXAxisLabelIndices(
+        const [200, 0, 100],
+        const [20, 20, 20],
+        5,
+      ),
+      [0, 1, 2],
+    );
+  });
+
   test('tooltip floats above the selected dot', () {
     expect(FlexLineChart.tooltipTopForMarks(const [100], rowCount: 1), 60);
     expect(FlexLineChart.tooltipTopForMarks(const [140, 90], rowCount: 2), 34);

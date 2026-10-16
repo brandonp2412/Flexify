@@ -211,8 +211,13 @@ class FlexLineChart extends StatelessWidget {
     if (count == 0) return const [];
     if (count == 1) return const [0];
 
-    final order = List<int>.generate(count, (index) => index)
-      ..sort((a, b) => centers[a].compareTo(centers[b]));
+    final order = List<int>.generate(count, (index) => index);
+    for (var i = 1; i < count; i++) {
+      if (centers[i - 1] > centers[i]) {
+        order.sort((a, b) => centers[a].compareTo(centers[b]));
+        break;
+      }
+    }
     final first = order.first;
     final last = order.last;
     final lastLeft = centers[last] - widths[last] / 2;
