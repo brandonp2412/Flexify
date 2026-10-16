@@ -7,10 +7,10 @@ import 'package:flexify/bottom_nav.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/body_weight_repository.dart';
 import 'package:flexify/database/database.dart';
-import 'package:flexify/database/exercise_catalog.dart';
-import 'package:flexify/empty_state.dart';
 import 'package:flexify/database/exercise_analytics.dart';
+import 'package:flexify/database/exercise_catalog.dart';
 import 'package:flexify/database/exercise_set_repository.dart';
+import 'package:flexify/empty_state.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/permissions_page.dart';
@@ -19,12 +19,12 @@ import 'package:flexify/plan/plan_queries.dart';
 import 'package:flexify/plan/session_sets.dart';
 import 'package:flexify/plan/start_list.dart';
 import 'package:flexify/plan/workout_sessions.dart';
+import 'package:flexify/platform_page_route.dart';
 import 'package:flexify/responsive.dart';
 import 'package:flexify/stepper_field.dart';
 import 'package:flexify/timer/timer_state.dart';
 import 'package:flexify/utils.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flexify/platform_page_route.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -70,9 +70,10 @@ class _StartPlanPageState extends State<StartPlanPage>
 
   Stream<List<PlanExerciseEntry>>? _stream;
   Stream<List<GymCount>>? _gymCountsStream;
-  late final Future<Workout> _workoutFuture;
   StreamSubscription<Plan?>? _planSub;
   String _unit = 'kg';
+
+  late final Future<Workout> _workoutFuture;
   late Plan _plan = widget.plan;
 
   @override
