@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:integration_test/integration_test_driver_extended.dart';
 
+import 'phone_screenshot.dart';
+
 Future<void> main() async => await integrationDriver(
   onScreenshot: (name, image, [args]) async {
     final deviceType = Platform.environment["FLEXIFY_DEVICE_TYPE"];
@@ -35,7 +37,11 @@ Future<void> main() async => await integrationDriver(
         'fastlane/metadata/android/$storeLocale/images/$deviceType/$name.png',
       ).create(recursive: true);
     }
-    await imgFile.writeAsBytes(image);
+    await imgFile.writeAsBytes(
+      !isWeb && isIos == null && deviceType == 'phoneScreenshots'
+          ? trimPhoneStatusBar(image)
+          : image,
+    );
     return true;
   },
   writeResponseOnFailure: true,
