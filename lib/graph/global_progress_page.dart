@@ -102,10 +102,11 @@ class _GlobalProgressPageState extends State<GlobalProgressPage> {
       dateToXMap[allDates[i]] = i;
     }
 
+    final dataByCategory = groupStrengthDataByCategory(data);
     final chartSeries = <FlexLineChartSeries>[];
     for (var index = 0; index < categories.length; index++) {
       final category = categories[index];
-      final categoryData = data.where((d) => d.category == category).toList();
+      final categoryData = dataByCategory[category] ?? const <StrengthData>[];
       chartSeries.add(
         FlexLineChartSeries(
           name: category ?? context.l10n.none,

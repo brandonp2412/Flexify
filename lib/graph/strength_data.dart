@@ -13,3 +13,13 @@ class StrengthData {
     this.category,
   });
 }
+
+Map<String?, List<StrengthData>> groupStrengthDataByCategory(
+  Iterable<StrengthData> data,
+) {
+  final grouped = <String?, List<StrengthData>>{};
+  for (final row in data) {
+    (grouped[row.category] ??= <StrengthData>[]).add(row);
+  }
+  return grouped;
+}
