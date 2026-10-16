@@ -51,6 +51,24 @@ void applyGraphSortToNewestFirstSummaries(
   }
 }
 
+List<GraphExerciseSummary> filterGraphSummaries(
+  List<GraphExerciseSummary> summaries,
+  String search,
+  String? category,
+) {
+  final terms = search
+      .toLowerCase()
+      .split(' ')
+      .where((term) => term.isNotEmpty)
+      .toList();
+  return [
+    for (final summary in summaries)
+      if ((category == null || summary.category == category) &&
+          terms.every(summary.normalizedName.contains))
+        summary,
+  ];
+}
+
 class GraphsPage extends StatefulWidget {
   final TabController tabController;
 
@@ -333,24 +351,11 @@ class GraphsPageState extends State<GraphsPage>
             }
             if (!snapshot.hasData) return const SizedBox();
 
-            final terms = _search
-                .toLowerCase()
-                .split(" ")
-                .where((term) => term.isNotEmpty);
-            var stream = snapshot.data!.where((exerciseSet) {
-              if (_category != null) {
-                return exerciseSet.category == _category;
-              }
-              return true;
-            });
-
-            for (final term in terms) {
-              stream = stream.where(
-                (exerciseSet) => exerciseSet.normalizedName.contains(term),
-              );
-            }
-
-            final exerciseSets = stream.toList();
+            final exerciseSets = filterGraphSummaries(
+              snapshot.data!,
+              _search,
+              _category,
+            );
             applyGraphSortToNewestFirstSummaries(exerciseSets, _sort);
             return Stack(
               children: [
