@@ -502,33 +502,42 @@ Future<List<StrengthData>> getGlobalData({
 
 Future<List<Rpm>> getRpms() async {
   final cutoff = DateTime.now().subtract(const Duration(days: 30));
-  final sets = await getExerciseSets(db, startDate: cutoff, cardio: false)
-    ..sort((a, b) => a.created.compareTo(b.created));
+  final query =
+      db.select(db.exerciseSets).join([
+          innerJoin(
+            db.exercises,
+            db.exercises.id.equalsExp(db.exerciseSets.exerciseId),
+          ),
+        ])
+        ..where(db.exerciseSets.timestamp.isBiggerOrEqualValue(cutoff))
+        ..where(db.exercises.kind.equals('strength'))
+        ..orderBy([
+          OrderingTerm.asc(db.exerciseSets.timestamp),
+          OrderingTerm.asc(db.exerciseSets.id),
+        ]);
+  final rows = await query.get();
 
-  final byName = <String, List<ExerciseSetView>>{};
-  for (final set in sets) {
-    byName.putIfAbsent(set.name, () => []).add(set);
-  }
-
+  final previousByName = <String, DateTime>{};
   final grouped = <String, List<double>>{};
   final weights = <String, double>{};
-  for (final entry in byName.entries) {
-    ExerciseSetView? previous;
-    for (final set in entry.value) {
-      if (previous != null) {
-        final minutes =
-            set.created.difference(previous.created).inMilliseconds / 60000;
-        if (minutes > 0 && minutes <= 5) {
-          final rpm = set.reps / minutes;
-          if (rpm >= 0.1 && rpm <= 10) {
-            final key = '${entry.key}\u0000${set.weight}';
-            grouped.putIfAbsent(key, () => []).add(rpm);
-            weights[key] = set.weight;
-          }
+  for (final row in rows) {
+    final set = row.readTable(db.exerciseSets);
+    final exercise = row.readTable(db.exercises);
+    final created = set.timestamp.toLocal();
+    final previous = previousByName[exercise.name];
+    if (previous != null) {
+      final minutes = created.difference(previous).inMilliseconds / 60000;
+      if (minutes > 0 && minutes <= 5) {
+        final rpm = (set.reps ?? 0) / minutes;
+        if (rpm >= 0.1 && rpm <= 10) {
+          final weight = displayLoad(exercise.displayUnit, set.loadKg);
+          final key = '${exercise.name}\u0000$weight';
+          grouped.putIfAbsent(key, () => []).add(rpm);
+          weights[key] = weight;
         }
       }
-      previous = set;
     }
+    previousByName[exercise.name] = created;
   }
 
   return grouped.entries.map((entry) {
