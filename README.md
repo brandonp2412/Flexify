@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="fastlane/metadata/android/en-US/images/icon.png" alt="Flexify app icon" width="112" />
+  <img src="docs/readme-icon.png" alt="Flexify app icon" width="112" />
 
 # Flexify
 
