@@ -49,11 +49,13 @@ List<GraphExerciseSummary> filterGraphSummaries(
   String search,
   String? category,
 ) {
-  final terms = search
-      .toLowerCase()
-      .split(' ')
-      .where((term) => term.isNotEmpty)
-      .toList();
+  final terms = search.isEmpty
+      ? const <String>[]
+      : search
+            .toLowerCase()
+            .split(' ')
+            .where((term) => term.isNotEmpty)
+            .toList();
   if (terms.isEmpty) {
     if (category == null) return List<GraphExerciseSummary>.of(summaries);
     return [

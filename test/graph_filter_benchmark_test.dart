@@ -53,6 +53,12 @@ void main() {
       baseline(source, 'bench press variation', 'Upper');
       filterGraphSummaries(source, 'bench press variation', 'Upper');
     }
+    final emptySearch = Stopwatch()..start();
+    for (var i = 0; i < 100000; i++) {
+      filterGraphSummaries(const [], '', null);
+    }
+    emptySearch.stop();
+    print('GRAPH_EMPTY_SEARCH_US=${emptySearch.elapsedMicroseconds}');
     final categoryOnly = Stopwatch()..start();
     for (var i = 0; i < 200; i++) {
       filterGraphSummaries(source, '', 'Upper');
