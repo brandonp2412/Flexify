@@ -42,6 +42,20 @@ void main() {
       applyGraphSortToNewestFirstSummaries(List.of(source), GraphSort.name);
     }
     nameTimer.stop();
+    for (var i = 0; i < 5; i++) {
+      applyGraphSortToNewestFirstSummaries(List.of(source), GraphSort.dateAsc);
+    }
+    final ascendingTimer = Stopwatch()..start();
+    for (var i = 0; i < 100; i++) {
+      applyGraphSortToNewestFirstSummaries(List.of(source), GraphSort.dateAsc);
+    }
+    ascendingTimer.stop();
+    print('GRAPH_ASC_US=${ascendingTimer.elapsedMicroseconds}');
+    final ascending = List.of(source);
+    applyGraphSortToNewestFirstSummaries(ascending, GraphSort.dateAsc);
+    for (var i = 1; i < ascending.length; i++) {
+      expect(ascending[i - 1].created.isAfter(ascending[i].created), isFalse);
+    }
     final descending = List.of(source);
     applyGraphSortToNewestFirstSummaries(descending, GraphSort.dateDesc);
     expect(

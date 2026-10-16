@@ -32,7 +32,11 @@ void applyGraphSortToNewestFirstSummaries(
     case GraphSort.dateDesc:
       break;
     case GraphSort.dateAsc:
-      summaries.sort((a, b) => a.created.compareTo(b.created));
+      for (var i = 0, j = summaries.length - 1; i < j; i++, j--) {
+        final item = summaries[i];
+        summaries[i] = summaries[j];
+        summaries[j] = item;
+      }
       break;
     case GraphSort.name:
       final keyed = [
