@@ -38,8 +38,10 @@ Future<void> main() async => await integrationDriver(
       ).create(recursive: true);
     }
     await imgFile.writeAsBytes(
-      !isWeb && isIos == null && deviceType == 'phoneScreenshots'
-          ? trimPhoneStatusBar(image)
+      !isWeb && isIos == null
+          ? (deviceType == 'phoneScreenshots'
+                ? trimPhoneStatusBar(image)
+                : toRgbPng(image))
           : image,
     );
     return true;

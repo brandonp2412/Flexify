@@ -31,7 +31,7 @@ fi
 # --profile is required: Flutter's framework-level assertion bug in
 # PipelineOwner.flushSemantics can fire spuriously during integration tests.
 # Profile mode skips Dart asserts, bypassing it.
-flutter drive --profile \
+"${FLEXIFY_SCREENSHOT_FLUTTER:-flutter}" drive --profile \
     --driver=test_driver/integration_test.dart \
     --target=integration_test/screenshot_test.dart \
     "${dart_define[@]}" \

@@ -19,9 +19,18 @@ void main() {
     final cropped = trimPhoneStatusBar(img.encodePng(screenshot));
     final result = img.decodePng(cropped)!;
     expect(trimPhoneStatusBar(cropped), cropped);
+    expect(cropped[25], 2); // PNG RGB, no alpha.
     expect(result.width, 100);
     expect(result.height, 190); // Retains six pixels above the content.
     expect(result.getPixel(10, 6).r, 120);
+  });
+
+  test('converts tablet screenshots to 24-bit PNG without cropping', () {
+    final screenshot = img.Image(width: 160, height: 100);
+    img.fill(screenshot, color: img.ColorRgba8(20, 30, 40, 255));
+    final output = toRgbPng(img.encodePng(screenshot));
+    expect(output[25], 2);
+    expect(img.decodePng(output)!.height, 100);
   });
 
   test('does not crop content that already starts at the top', () {
@@ -30,6 +39,8 @@ void main() {
     screenshot.setPixelRgb(10, 0, 120, 110, 120);
 
     final input = img.encodePng(screenshot);
-    expect(trimPhoneStatusBar(input), input);
+    final result = trimPhoneStatusBar(input);
+    expect(img.decodePng(result)!.height, 200);
+    expect(result[25], 2);
   });
 }

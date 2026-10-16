@@ -8,6 +8,8 @@ BOOT_TIMEOUT="${BOOT_TIMEOUT:-120}"
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+# This runner targets the disposable Waydroid emulator, not a physical phone.
+export FLEXIFY_SCREENSHOT_FLUTTER="${FLEXIFY_SCREENSHOT_FLUTTER:-$PROJECT_DIR/flutter/bin/flutter}"
 BASE_PROP="/var/lib/waydroid/waydroid_base.prop"
 
 device=""
@@ -250,11 +252,16 @@ bring_up_waydroid() {
 }
 
 set_resolution() {
-    local w="$1" h="$2"
+    local w="$1" h="$2" device_type="$3"
     log "Setting display resolution to ${w}x${h}..."
     timeout 20 adb -s "$device" shell wm size reset >/dev/null 2>&1 || true
     sleep 1
     timeout 20 adb -s "$device" shell wm size "${w}x${h}" 2>&1 | add_timestamps || true
+    if [ "$device_type" = phoneScreenshots ]; then
+        timeout 20 adb -s "$device" shell wm density 420 >/dev/null 2>&1
+    else
+        timeout 20 adb -s "$device" shell wm density reset >/dev/null 2>&1
+    fi
     sleep 2
     log "Verifying screen size..."
     timeout 20 adb -s "$device" shell wm size 2>&1 | add_timestamps || true
@@ -274,7 +281,7 @@ run_device_type() {
             fi
         fi
 
-        set_resolution "$w" "$h"
+        set_resolution "$w" "$h" "$device_type"
 
         log "[$device_type] Checking package manager health before install..."
         if ! pm_ready "$device"; then
@@ -351,7 +358,7 @@ main() {
             case "$device_type" in
             phoneScreenshots)
                 width=1080
-                height=2424
+                height=2160
                 ;;
             sevenInchScreenshots)
                 width=1920

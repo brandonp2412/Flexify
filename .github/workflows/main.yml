@@ -112,6 +112,7 @@ jobs:
         include:
           - device_type: phoneScreenshots
             profile: pixel_6
+            screen_size: 1080x2160
           - device_type: sevenInchScreenshots
             profile: Nexus 7
             screen_size: 1920x1080

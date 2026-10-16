@@ -147,7 +147,21 @@ for ((number = 1; number <= expected_count; number += 1)); do
     [[ "$drive_status" -ne 0 ]] && exit "$drive_status"
     exit 1
   fi
-  if [[ -n "${SCREENSHOT_SCREEN_SIZE:-}" ]] && ! file "$screenshot" | grep -Fq " $expected_dimensions,"; then
+  python3 - "$screenshot" "$FLEXIFY_DEVICE_TYPE" <<'PY'
+import struct
+import sys
+
+with open(sys.argv[1], 'rb') as source:
+    header = source.read(26)
+if header[:8] != b'\x89PNG\r\n\x1a\n':
+    raise SystemExit('Screenshot is not a PNG')
+width, height = struct.unpack('>II', header[16:24])
+if not (320 <= width <= 3840 and 320 <= height <= 3840 and max(width, height) <= 2 * min(width, height)):
+    raise SystemExit(f'Invalid Google Play screenshot dimensions: {width}x{height}')
+if header[24:26] != bytes((8, 2)):
+    raise SystemExit('Google Play screenshots must be 24-bit PNG without alpha')
+PY
+  if [[ "$FLEXIFY_DEVICE_TYPE" != phoneScreenshots && -n "${SCREENSHOT_SCREEN_SIZE:-}" ]] && ! file "$screenshot" | grep -Fq " $expected_dimensions,"; then
     echo "Screenshot has unexpected dimensions: $(file "$screenshot")" >&2
     exit 1
   fi

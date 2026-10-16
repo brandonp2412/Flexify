@@ -30,16 +30,25 @@ Uint8List trimPhoneStatusBar(List<int> bytes) {
     0,
     (image.width * 0.14).round(),
   );
-  if (cropTop == 0) return Uint8List.fromList(bytes);
+  final rgb = image.convert(numChannels: 3);
   return Uint8List.fromList(
     img.encodePng(
-      img.copyCrop(
-        image,
-        x: 0,
-        y: cropTop,
-        width: image.width,
-        height: image.height - cropTop,
-      ),
+      cropTop == 0
+          ? rgb
+          : img.copyCrop(
+              rgb,
+              x: 0,
+              y: cropTop,
+              width: image.width,
+              height: image.height - cropTop,
+            ),
     ),
   );
+}
+
+/// Google Play requires 24-bit PNG screenshots without an alpha channel.
+Uint8List toRgbPng(List<int> bytes) {
+  final image = img.decodePng(Uint8List.fromList(bytes));
+  if (image == null) throw const FormatException('Invalid screenshot PNG');
+  return Uint8List.fromList(img.encodePng(image.convert(numChannels: 3)));
 }
