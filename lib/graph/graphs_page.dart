@@ -39,14 +39,7 @@ void applyGraphSortToNewestFirstSummaries(
       }
       break;
     case GraphSort.name:
-      final keyed = [
-        for (final summary in summaries)
-          (summary: summary, key: summary.normalizedName),
-      ];
-      keyed.sort((a, b) => a.key.compareTo(b.key));
-      for (var i = 0; i < summaries.length; i++) {
-        summaries[i] = keyed[i].summary;
-      }
+      summaries.sort((a, b) => a.normalizedName.compareTo(b.normalizedName));
       break;
   }
 }
