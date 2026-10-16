@@ -23,6 +23,26 @@ import 'package:flexify/platform_page_route.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+Iterable<String> filterExerciseNameOptions(
+  Iterable<String> options,
+  String search,
+) {
+  final terms = search
+      .toLowerCase()
+      .split(' ')
+      .where((term) => term.isNotEmpty)
+      .toList();
+  if (terms.isEmpty) return options;
+
+  return options.where((option) {
+    final normalized = option.toLowerCase();
+    for (final term in terms) {
+      if (!normalized.contains(term)) return false;
+    }
+    return true;
+  });
+}
+
 class EditSetPage extends StatefulWidget {
   final ExerciseSetView exerciseSet;
 
@@ -645,18 +665,8 @@ class _EditSetPageState extends State<EditSetPage> {
 
   Autocomplete<String> autocomplete(bool showBodyWeight) {
     return Autocomplete<String>(
-      optionsBuilder: (textEditingValue) {
-        final searchTerms = textEditingValue.text
-            .toLowerCase()
-            .split(" ")
-            .where((term) => term.isNotEmpty);
-        Iterable<String> opts = _options;
-
-        for (final term in searchTerms) {
-          opts = opts.where((option) => option.toLowerCase().contains(term));
-        }
-        return opts;
-      },
+      optionsBuilder: (textEditingValue) =>
+          filterExerciseNameOptions(_options, textEditingValue.text),
       onSelected: (option) => onSelected(option, showBodyWeight),
       initialValue: TextEditingValue(text: _name),
       fieldViewBuilder:
