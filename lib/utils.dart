@@ -29,14 +29,23 @@ bool isSameDay(DateTime date1, DateTime date2) {
       date1.day == date2.day;
 }
 
-String formatDisplayDate(
-  BuildContext context,
-  DateTime value,
-  String pattern,
-) => DateFormat(
-  pattern,
-  Localizations.localeOf(context).toLanguageTag(),
-).format(value);
+final _dateFormatters = <(String, String), DateFormat>{};
+final _numberFormatters = <(String, int, int), NumberFormat>{};
+final _editableNumberFormatters = <String, NumberFormat>{};
+final _parseNumberFormatters = <String, NumberFormat>{};
+final _percentFormatters = <(String, int), NumberFormat>{};
+
+String _localeName(BuildContext context) =>
+    Localizations.localeOf(context).toLanguageTag();
+
+String formatDisplayDate(BuildContext context, DateTime value, String pattern) {
+  final locale = _localeName(context);
+  final formatter = _dateFormatters.putIfAbsent((
+    locale,
+    pattern,
+  ), () => DateFormat(pattern, locale));
+  return formatter.format(value);
+}
 
 String formatDisplayNumber(
   BuildContext context,
@@ -44,19 +53,22 @@ String formatDisplayNumber(
   int minimumFractionDigits = 0,
   int maximumFractionDigits = 2,
 }) {
-  final formatter =
-      NumberFormat.decimalPattern(
-          Localizations.localeOf(context).toLanguageTag(),
-        )
-        ..minimumFractionDigits = minimumFractionDigits
-        ..maximumFractionDigits = maximumFractionDigits;
+  final locale = _localeName(context);
+  final formatter = _numberFormatters.putIfAbsent(
+    (locale, minimumFractionDigits, maximumFractionDigits),
+    () => NumberFormat.decimalPattern(locale)
+      ..minimumFractionDigits = minimumFractionDigits
+      ..maximumFractionDigits = maximumFractionDigits,
+  );
   return formatter.format(value);
 }
 
-String formatEditableNumber(BuildContext context, num value) => NumberFormat(
-  '0.##',
-  Localizations.localeOf(context).toLanguageTag(),
-).format(value);
+String formatEditableNumber(BuildContext context, num value) {
+  final locale = _localeName(context);
+  return _editableNumberFormatters
+      .putIfAbsent(locale, () => NumberFormat('0.##', locale))
+      .format(value);
+}
 
 double? parseDisplayNumber(BuildContext context, String value) {
   final input = value.trim();
@@ -66,9 +78,11 @@ double? parseDisplayNumber(BuildContext context, String value) {
   if (parsed != null) return parsed;
 
   try {
-    return NumberFormat.decimalPattern(
-      Localizations.localeOf(context).toLanguageTag(),
-    ).parse(input).toDouble();
+    final locale = _localeName(context);
+    return _parseNumberFormatters
+        .putIfAbsent(locale, () => NumberFormat.decimalPattern(locale))
+        .parse(input)
+        .toDouble();
   } on FormatException {
     return null;
   }
@@ -79,9 +93,13 @@ String formatDisplayPercent(
   num ratio, {
   int maximumFractionDigits = 2,
 }) {
-  final formatter = NumberFormat.percentPattern(
-    Localizations.localeOf(context).toLanguageTag(),
-  )..maximumFractionDigits = maximumFractionDigits;
+  final locale = _localeName(context);
+  final formatter = _percentFormatters.putIfAbsent(
+    (locale, maximumFractionDigits),
+    () =>
+        NumberFormat.percentPattern(locale)
+          ..maximumFractionDigits = maximumFractionDigits,
+  );
   return formatter.format(ratio);
 }
 

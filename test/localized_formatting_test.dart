@@ -29,6 +29,21 @@ void main() {
     expect(find.text('1.234,5'), findsOneWidget);
   });
 
+  testWidgets('keeps cached number precision settings independent', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      formattingApp(
+        const Locale('en'),
+        (context) =>
+            '${formatDisplayNumber(context, 12.345, maximumFractionDigits: 0)}|'
+            '${formatDisplayNumber(context, 12.345, maximumFractionDigits: 2)}',
+      ),
+    );
+
+    expect(find.text('12|12.35'), findsOneWidget);
+  });
+
   testWidgets('parses localized decimal input using the active locale', (
     tester,
   ) async {
