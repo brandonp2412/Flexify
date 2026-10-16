@@ -6,7 +6,7 @@
 
 # Dependencies
 
-Before upgrading any packages, or attempting to modify pubspec.lock ensure you are using the flutter submodule binary.
+Before upgrading any packages, or attempting to modify pubspec.lock ensure you are using the flutter submodule:
 
 ```sh
 ./flutter/bin/flutter pub get
@@ -33,5 +33,7 @@ Before upgrading any packages, or attempting to modify pubspec.lock ensure you a
 
 # Documentation & Commenting Standards
 
-- **Minimalist Comments**: Avoid comments that describe what the code is doing.
-- **No Dead Code**: Never leave commented-out code blocks.
+- **Minimalist Comments**: Never write comments that explain what the code is doing.
+- **No Dead Code**: Never leave commented-out code blocks or references to removed behaviour.
+- **No markdown spam**: Do not create markdown files.
+- **Plain english**: Use simple words in any documentation / code.
