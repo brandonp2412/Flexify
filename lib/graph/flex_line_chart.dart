@@ -211,23 +211,16 @@ class FlexLineChart extends StatelessWidget {
     if (count == 0) return const [];
     if (count == 1) return const [0];
 
-    List<int>? order;
-    for (var i = 1; i < count; i++) {
-      if (centers[i - 1] > centers[i]) {
-        order = List<int>.generate(count, (index) => index)
-          ..sort((a, b) => centers[a].compareTo(centers[b]));
-        break;
-      }
-    }
-    final first = order == null ? 0 : order.first;
-    final last = order == null ? count - 1 : order.last;
+    final order = List<int>.generate(count, (index) => index)
+      ..sort((a, b) => centers[a].compareTo(centers[b]));
+    final first = order.first;
+    final last = order.last;
     final lastLeft = centers[last] - widths[last] / 2;
 
     // First determine how many labels actually fit while reserving both edges.
     final packed = <int>[first];
     var lastRight = centers[first] + widths[first] / 2;
-    for (var position = 1; position < count - 1; position++) {
-      final index = order == null ? position : order[position];
+    for (final index in order.skip(1).take(count - 2)) {
       final left = centers[index] - widths[index] / 2;
       final right = centers[index] + widths[index] / 2;
       if (left < lastRight + minGap || right + minGap > lastLeft) continue;
@@ -237,7 +230,7 @@ class FlexLineChart extends StatelessWidget {
     packed.add(last);
 
     if (packed.length <= 2 || packed.length == count) {
-      if (order != null) packed.sort();
+      packed.sort();
       return packed;
     }
 
@@ -250,7 +243,7 @@ class FlexLineChart extends StatelessWidget {
     for (var slot = 1; slot < packed.length - 1; slot++) {
       final target = centers[first] + span * slot / (packed.length - 1);
       final remainingSlots = packed.length - 1 - slot;
-      final maxOrderPosition = count - 1 - remainingSlots;
+      final maxOrderPosition = order.length - 1 - remainingSlots;
       var bestOrderPosition = -1;
       var bestDistance = double.infinity;
 
@@ -259,7 +252,7 @@ class FlexLineChart extends StatelessWidget {
         position <= maxOrderPosition;
         position++
       ) {
-        final index = order == null ? position : order[position];
+        final index = order[position];
         final previous = balanced.last;
         final left = centers[index] - widths[index] / 2;
         final previousRight = centers[previous] + widths[previous] / 2;
@@ -273,13 +266,11 @@ class FlexLineChart extends StatelessWidget {
       }
 
       if (bestOrderPosition < 0) {
-        if (order != null) packed.sort();
+        packed.sort();
         return packed;
       }
 
-      balanced.add(
-        order == null ? bestOrderPosition : order[bestOrderPosition],
-      );
+      balanced.add(order[bestOrderPosition]);
       previousOrderPosition = bestOrderPosition;
     }
 
@@ -293,12 +284,12 @@ class FlexLineChart extends StatelessWidget {
           widths[current] / 2 -
           (centers[previous] + widths[previous] / 2);
       if (gap < minGap) {
-        if (order != null) packed.sort();
+        packed.sort();
         return packed;
       }
     }
 
-    if (order != null) balanced.sort();
+    balanced.sort();
     return balanced;
   }
 

@@ -3,84 +3,34 @@ import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/workout_sessions.dart';
 
-class PlanSearchIndex {
-  PlanSearchIndex({
-    required List<Plan> plans,
-    required Iterable<PlanExerciseEntry> exercises,
-    required String Function(String day) localizeDay,
-  }) : _plans = plans,
-       _plansSearch = [
-         for (final plan in plans)
-           _PlanSearchTerms(
-             plan: plan,
-             title: plan.title?.toLowerCase(),
-             days: plan.days.toLowerCase(),
-             localizedDays: plan.days
-                 .split(',')
-                 .where((day) => day.isNotEmpty)
-                 .map(localizeDay)
-                 .join(' ')
-                 .toLowerCase(),
-           ),
-       ],
-       _exerciseNamesByPlan = _groupNormalizedExerciseNames(exercises);
-
-  final List<Plan> _plans;
-  final List<_PlanSearchTerms> _plansSearch;
-  final Map<int, List<String>> _exerciseNamesByPlan;
-
-  List<Plan> filter(String search) {
-    if (search.isEmpty) return _plans;
-
-    final normalizedSearch = search.toLowerCase();
-    return [
-      for (final terms in _plansSearch)
-        if (terms.matches(
-          normalizedSearch,
-          _exerciseNamesByPlan[terms.plan.id],
-        ))
-          terms.plan,
-    ];
-  }
-}
-
-class _PlanSearchTerms {
-  const _PlanSearchTerms({
-    required this.plan,
-    required this.title,
-    required this.days,
-    required this.localizedDays,
-  });
-
-  final Plan plan;
-  final String? title;
-  final String days;
-  final String localizedDays;
-
-  bool matches(String search, List<String>? exerciseNames) {
-    if (title?.contains(search) == true ||
-        days.contains(search) ||
-        localizedDays.contains(search)) {
-      return true;
-    }
-    if (exerciseNames == null) return false;
-    for (final name in exerciseNames) {
-      if (name.contains(search)) return true;
-    }
-    return false;
-  }
-}
-
-Map<int, List<String>> _groupNormalizedExerciseNames(
-  Iterable<PlanExerciseEntry> exercises,
+List<Plan> filterPlans(
+  List<Plan> plans,
+  List<PlanExerciseEntry> exercises,
+  String search,
+  String Function(String) localizeDay,
 ) {
-  final grouped = <int, List<String>>{};
-  for (final entry in exercises) {
-    grouped
-        .putIfAbsent(entry.planExercise.planId, () => <String>[])
-        .add(entry.exercise.name.toLowerCase());
-  }
-  return grouped;
+  if (search.isEmpty) return plans;
+
+  final normalizedSearch = search.toLowerCase();
+  final matchingPlanIds = exercises
+      .where(
+        (entry) => entry.exercise.name.toLowerCase().contains(normalizedSearch),
+      )
+      .map((entry) => entry.planExercise.planId)
+      .toSet();
+
+  return plans.where((plan) {
+    final localizedDays = plan.days
+        .split(',')
+        .where((day) => day.isNotEmpty)
+        .map(localizeDay)
+        .join(' ')
+        .toLowerCase();
+    return plan.title?.toLowerCase().contains(normalizedSearch) == true ||
+        plan.days.toLowerCase().contains(normalizedSearch) ||
+        localizedDays.contains(normalizedSearch) ||
+        matchingPlanIds.contains(plan.id);
+  }).toList();
 }
 
 class PlanExerciseDraft {

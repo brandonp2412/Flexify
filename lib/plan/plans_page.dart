@@ -104,10 +104,6 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
   String _search = '';
   late Stream<List<Plan>> _plansStream;
   late Stream<List<PlanExerciseEntry>> _planExercisesStream;
-  List<Plan>? _indexedPlans;
-  List<PlanExerciseEntry>? _indexedPlanExercises;
-  Locale? _indexedLocale;
-  PlanSearchIndex? _planSearchIndex;
 
   final _selection = SelectionController<int>();
   final _scroll = ScrollController();
@@ -137,24 +133,13 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
   }
 
   List<Plan> _filterPlans(List<Plan> plans, List<PlanExerciseEntry> exercises) {
-    if (_search.isEmpty) return plans;
-
-    final locale = Localizations.localeOf(context);
-    if (!identical(_indexedPlans, plans) ||
-        !identical(_indexedPlanExercises, exercises) ||
-        _indexedLocale != locale) {
-      final l10n = context.l10n;
-      _indexedPlans = plans;
-      _indexedPlanExercises = exercises;
-      _indexedLocale = locale;
-      _planSearchIndex = PlanSearchIndex(
-        plans: plans,
-        exercises: exercises,
-        localizeDay: (day) => localizedWeekday(l10n, day),
-      );
-    }
-
-    return _planSearchIndex!.filter(_search);
+    final l10n = context.l10n;
+    return filterPlans(
+      plans,
+      exercises,
+      _search,
+      (day) => localizedWeekday(l10n, day),
+    );
   }
 
   Future<void> _addPlan() async {
