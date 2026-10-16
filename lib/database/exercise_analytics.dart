@@ -196,13 +196,16 @@ ExerciseSetView _latest(List<ExerciseSetView> sets) =>
     sets.reduce((a, b) => a.created.isAfter(b.created) ? a : b);
 
 ExerciseSetView _bestWeightSet(List<ExerciseSetView> sets, String target) {
-  return sets.reduce((a, b) {
-    final aWeight = _loadInUnit(a, target);
-    final bWeight = _loadInUnit(b, target);
-    if (bWeight > aWeight) return b;
-    if (bWeight == aWeight && b.reps > a.reps) return b;
-    return a;
-  });
+  var best = sets.first;
+  var bestWeight = _loadInUnit(best, target);
+  for (final set in sets.skip(1)) {
+    final weight = _loadInUnit(set, target);
+    if (weight > bestWeight || (weight == bestWeight && set.reps > best.reps)) {
+      best = set;
+      bestWeight = weight;
+    }
+  }
+  return best;
 }
 
 ExerciseSetView _bestRepsSet(List<ExerciseSetView> sets) {
