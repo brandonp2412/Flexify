@@ -24,6 +24,29 @@ import 'package:share_plus/share_plus.dart';
 
 import 'graph_tile.dart';
 
+void applyGraphSortToNewestFirstSummaries(
+  List<GraphExerciseSummary> summaries,
+  GraphSort sort,
+) {
+  switch (sort) {
+    case GraphSort.dateDesc:
+      break;
+    case GraphSort.dateAsc:
+      summaries.sort((a, b) => a.created.compareTo(b.created));
+      break;
+    case GraphSort.name:
+      final keyed = [
+        for (final summary in summaries)
+          (summary: summary, key: summary.name.toLowerCase()),
+      ];
+      keyed.sort((a, b) => a.key.compareTo(b.key));
+      for (var i = 0; i < summaries.length; i++) {
+        summaries[i] = keyed[i].summary;
+      }
+      break;
+  }
+}
+
 class GraphsPage extends StatefulWidget {
   final TabController tabController;
 
@@ -324,22 +347,7 @@ class GraphsPageState extends State<GraphsPage>
             }
 
             final exerciseSets = stream.toList();
-            switch (_sort) {
-              case GraphSort.dateDesc:
-                exerciseSets.sort((a, b) => b.created.compareTo(a.created));
-                break;
-
-              case GraphSort.dateAsc:
-                exerciseSets.sort((a, b) => a.created.compareTo(b.created));
-                break;
-
-              case GraphSort.name:
-                exerciseSets.sort(
-                  (a, b) =>
-                      a.name.toLowerCase().compareTo(b.name.toLowerCase()),
-                );
-                break;
-            }
+            applyGraphSortToNewestFirstSummaries(exerciseSets, _sort);
             return Stack(
               children: [
                 Positioned.fill(
