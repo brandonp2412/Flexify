@@ -157,6 +157,11 @@ jobs:
       - name: Install pinned Android NDK with recovery
         run: bash ./scripts/ensure-ci-ndk.sh 28.2.13676358
 
+      # Compile before launching the emulator: simultaneous Gradle compilation and
+      # software-rendered Android caused VM-service connection timeouts on CI.
+      - name: Build screenshot profile APK
+        run: flutter build apk --profile --target=integration_test/screenshot_test.dart
+
       - name: Enable KVM
         run: |
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
@@ -173,7 +178,7 @@ jobs:
           target: google_apis
           arch: x86_64
           profile: ${{ matrix.profile }}
-          emulator-options: -no-window -gpu software -no-snapshot -noaudio -no-boot-anim -camera-back none
+          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -camera-back none
           script: ./scripts/ci-screenshots.sh
 
       - name: Upload ${{ matrix.device_type }}

@@ -90,8 +90,15 @@ drive_args=(
   --driver=test_driver/integration_test.dart
   --target=integration_test/screenshot_test.dart
   --no-enable-impeller
+  --use-application-binary=build/app/outputs/flutter-apk/app-profile.apk
+  --host-vmservice-port=8888
   -d "$device"
 )
+
+if [[ ! -s build/app/outputs/flutter-apk/app-profile.apk ]]; then
+  echo "Screenshot profile APK missing; build with flutter build apk --profile --target=integration_test/screenshot_test.dart" >&2
+  exit 1
+fi
 
 drive_status=1
 for attempt in 1 2; do
