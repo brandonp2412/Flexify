@@ -1519,4 +1519,10 @@ class AppLocalizationsJa extends AppLocalizations {
   String setNumber(int number) {
     return 'セット $number';
   }
+
+  @override
+  String get previousTimeInfo => '前回の情報';
+
+  @override
+  String get noPreviousSessions => 'この種目は今日より前に記録がありません。';
 }

@@ -1577,4 +1577,11 @@ class AppLocalizationsFa extends AppLocalizations {
   String setNumber(int number) {
     return 'ست $number';
   }
+
+  @override
+  String get previousTimeInfo => 'اطلاعات دفعه قبل';
+
+  @override
+  String get noPreviousSessions =>
+      'برای این تمرین پیش از امروز جلسه‌ای ثبت نشده است.';
 }

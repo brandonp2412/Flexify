@@ -494,5 +494,7 @@
   "nothingMatchesPlanSearch": "Aucun résultat pour « {query} ». Vous pouvez le créer comme nouveau programme.",
   "createPlan": "Créer un programme",
   "createNamedPlan": "Créer « {name} »",
-  "setNumber": "Série {number}"
+  "setNumber": "Série {number}",
+  "previousTimeInfo": "Infos de la dernière fois",
+  "noPreviousSessions": "Aucune séance précédente enregistrée pour cet exercice avant aujourd'hui."
 }

@@ -1593,4 +1593,11 @@ class AppLocalizationsTr extends AppLocalizations {
   String setNumber(int number) {
     return '$number. Set';
   }
+
+  @override
+  String get previousTimeInfo => 'Önceki sefer bilgisi';
+
+  @override
+  String get noPreviousSessions =>
+      'Bu egzersiz için bugünden önce kayıtlı bir seans yok.';
 }

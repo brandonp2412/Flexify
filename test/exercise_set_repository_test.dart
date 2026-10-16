@@ -290,6 +290,113 @@ void main() {
     expect(recentStrength.map((set) => set.id), [newStrength.id]);
   });
 
+  test('previous exercise day returns the last day before today', () async {
+    final exerciseId = await addExercise(
+      name: 'Previous Bench',
+      unit: 'kg',
+      cardio: false,
+    );
+    final otherId = await addExercise(
+      name: 'Previous Squat',
+      unit: 'kg',
+      cardio: false,
+    );
+
+    await insertExerciseSet(
+      database,
+      exerciseSet: draft(
+        name: 'Previous Bench',
+        unit: 'kg',
+        created: DateTime(2026, 10, 5, 18),
+        reps: 5,
+        weight: 80,
+      ),
+      exerciseId: exerciseId,
+    );
+    await insertExerciseSet(
+      database,
+      exerciseSet: draft(
+        name: 'Previous Bench',
+        unit: 'kg',
+        created: DateTime(2026, 10, 7, 7),
+        reps: 8,
+        weight: 90,
+      ),
+      exerciseId: exerciseId,
+    );
+    await insertExerciseSet(
+      database,
+      exerciseSet: draft(
+        name: 'Previous Bench',
+        unit: 'kg',
+        created: DateTime(2026, 10, 7, 7, 5),
+        reps: 6,
+        weight: 95,
+      ),
+      exerciseId: exerciseId,
+    );
+    await insertExerciseSet(
+      database,
+      exerciseSet: draft(
+        name: 'Previous Squat',
+        unit: 'kg',
+        created: DateTime(2026, 10, 8),
+        reps: 5,
+        weight: 100,
+      ),
+      exerciseId: otherId,
+    );
+    await insertExerciseSet(
+      database,
+      exerciseSet: draft(
+        name: 'Previous Bench',
+        unit: 'kg',
+        created: DateTime(2026, 10, 10, 9),
+        reps: 5,
+        weight: 100,
+      ),
+      exerciseId: exerciseId,
+    );
+
+    final previous = await getPreviousExerciseDay(
+      database,
+      exerciseId: exerciseId,
+      now: DateTime(2026, 10, 10, 12),
+    );
+
+    expect(previous, isNotNull);
+    expect(previous!.day, DateTime(2026, 10, 7));
+    expect(previous.sets.map((set) => set.reps), [8, 6]);
+    expect(previous.sets.map((set) => set.weight), [90, 95]);
+  });
+
+  test('previous exercise day is null without an earlier session', () async {
+    final exerciseId = await addExercise(
+      name: 'Brand New Lift',
+      unit: 'kg',
+      cardio: false,
+    );
+    await insertExerciseSet(
+      database,
+      exerciseSet: draft(
+        name: 'Brand New Lift',
+        unit: 'kg',
+        created: DateTime(2026, 10, 10, 9),
+        reps: 5,
+        weight: 40,
+      ),
+      exerciseId: exerciseId,
+    );
+
+    final previous = await getPreviousExerciseDay(
+      database,
+      exerciseId: exerciseId,
+      now: DateTime(2026, 10, 10, 12),
+    );
+
+    expect(previous, isNull);
+  });
+
   test('history ordering uses the timestamp index', () async {
     final queryPlan = await database.customSelect('''
       EXPLAIN QUERY PLAN

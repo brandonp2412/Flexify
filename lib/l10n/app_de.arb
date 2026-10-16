@@ -494,5 +494,7 @@
   "nothingMatchesPlanSearch": "Keine Treffer für „{query}“. Du kannst daraus einen neuen Plan erstellen.",
   "createPlan": "Plan erstellen",
   "createNamedPlan": "„{name}“ erstellen",
-  "setNumber": "Satz {number}"
+  "setNumber": "Satz {number}",
+  "previousTimeInfo": "Letzte Ausführung",
+  "noPreviousSessions": "Für diese Übung wurden vor heute keine früheren Einheiten aufgezeichnet."
 }

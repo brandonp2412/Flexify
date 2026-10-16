@@ -2044,5 +2044,7 @@
         "type": "int"
       }
     }
-  }
+  },
+  "previousTimeInfo": "Maklumat masa sebelumnya",
+  "noPreviousSessions": "Tiada sesi sebelum ini direkodkan untuk latihan ini sebelum hari ini."
 }

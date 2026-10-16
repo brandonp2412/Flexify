@@ -1599,6 +1599,13 @@ class AppLocalizationsPt extends AppLocalizations {
   String setNumber(int number) {
     return 'Série $number';
   }
+
+  @override
+  String get previousTimeInfo => 'Informações da última vez';
+
+  @override
+  String get noPreviousSessions =>
+      'Nenhuma sessão anterior registada para este exercício antes de hoje.';
 }
 
 /// The translations for Portuguese, as used in Brazil (`pt_BR`).
@@ -3188,6 +3195,13 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String setNumber(int number) {
     return 'Série $number';
   }
+
+  @override
+  String get previousTimeInfo => 'Informações da última vez';
+
+  @override
+  String get noPreviousSessions =>
+      'Nenhuma sessão anterior registrada para este exercício antes de hoje.';
 }
 
 /// The translations for Portuguese, as used in Portugal (`pt_PT`).
@@ -4785,4 +4799,11 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String setNumber(int number) {
     return 'Série $number';
   }
+
+  @override
+  String get previousTimeInfo => 'Informações da última vez';
+
+  @override
+  String get noPreviousSessions =>
+      'Nenhuma sessão anterior registada para este exercício antes de hoje.';
 }

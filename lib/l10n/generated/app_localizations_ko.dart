@@ -1521,4 +1521,10 @@ class AppLocalizationsKo extends AppLocalizations {
   String setNumber(int number) {
     return '세트 $number';
   }
+
+  @override
+  String get previousTimeInfo => '이전 기록 정보';
+
+  @override
+  String get noPreviousSessions => '오늘 이전에 이 운동의 기록이 없습니다.';
 }

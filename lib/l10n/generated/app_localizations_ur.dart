@@ -1578,4 +1578,11 @@ class AppLocalizationsUr extends AppLocalizations {
   String setNumber(int number) {
     return 'سیٹ $number';
   }
+
+  @override
+  String get previousTimeInfo => 'پچھلی بار کی معلومات';
+
+  @override
+  String get noPreviousSessions =>
+      'آج سے پہلے اس ورزش کا کوئی پچھلا سیشن درج نہیں ہے۔';
 }

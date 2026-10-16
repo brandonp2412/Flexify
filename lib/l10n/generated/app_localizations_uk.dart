@@ -1600,4 +1600,11 @@ class AppLocalizationsUk extends AppLocalizations {
   String setNumber(int number) {
     return 'Підхід $number';
   }
+
+  @override
+  String get previousTimeInfo => 'Минулого разу';
+
+  @override
+  String get noPreviousSessions =>
+      'Немає попередніх тренувань із цією вправою до сьогодні.';
 }

@@ -494,5 +494,7 @@
   "nothingMatchesPlanSearch": "“{query}” ile eşleşen sonuç yok. Bunu yeni bir plan olarak oluşturabilirsin.",
   "createPlan": "Plan Oluştur",
   "createNamedPlan": "“{name}” Oluştur",
-  "setNumber": "{number}. Set"
+  "setNumber": "{number}. Set",
+  "previousTimeInfo": "Önceki sefer bilgisi",
+  "noPreviousSessions": "Bu egzersiz için bugünden önce kayıtlı bir seans yok."
 }

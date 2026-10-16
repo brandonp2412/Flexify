@@ -53,4 +53,41 @@ void main() {
       await tester.pumpAndSettle();
     },
   );
+
+  testWidgets('ExerciseModal reports when there is no previous session', (
+    WidgetTester tester,
+  ) async {
+    await pumpExerciseModal(tester);
+
+    await tester.tap(find.text('Previous Time Info'));
+    await tester.pumpAndSettle();
+
+    expect(
+      find.text(
+        'No previous sessions recorded for this exercise before today.',
+      ),
+      findsOneWidget,
+    );
+  });
+
+  testWidgets('ExerciseModal shows the sets from the previous day', (
+    WidgetTester tester,
+  ) async {
+    final (harness, _) = await pumpExerciseModal(tester);
+    final yesterday = DateTime.now().subtract(const Duration(days: 1));
+    await insertExerciseSetFixture(
+      harness.database,
+      'Bench press',
+      created: DateTime(yesterday.year, yesterday.month, yesterday.day, 9),
+      reps: 8,
+      weight: 90,
+    );
+
+    await tester.tap(find.text('Previous Time Info'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('8 x 90 kg'), findsOneWidget);
+    expect(find.text('Set 1'), findsOneWidget);
+    expect(find.text('Bench press (1)'), findsOneWidget);
+  });
 }

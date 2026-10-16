@@ -494,5 +494,7 @@
   "nothingMatchesPlanSearch": "Nessun risultato per “{query}”. Puoi crearlo come nuova scheda.",
   "createPlan": "Crea scheda",
   "createNamedPlan": "Crea “{name}”",
-  "setNumber": "Serie {number}"
+  "setNumber": "Serie {number}",
+  "previousTimeInfo": "Informazioni ultima volta",
+  "noPreviousSessions": "Nessuna sessione precedente registrata per questo esercizio prima di oggi."
 }

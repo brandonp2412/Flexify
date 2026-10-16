@@ -1561,4 +1561,11 @@ class AppLocalizationsTh extends AppLocalizations {
   String setNumber(int number) {
     return 'เซ็ต $number';
   }
+
+  @override
+  String get previousTimeInfo => 'ข้อมูลครั้งก่อน';
+
+  @override
+  String get noPreviousSessions =>
+      'ยังไม่มีการบันทึกเซสชันก่อนหน้าของท่าออกกำลังกายนี้ก่อนวันนี้';
 }

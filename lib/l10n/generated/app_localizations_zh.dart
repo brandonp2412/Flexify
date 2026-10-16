@@ -1508,6 +1508,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String setNumber(int number) {
     return '第 $number 组';
   }
+
+  @override
+  String get previousTimeInfo => '上次信息';
+
+  @override
+  String get noPreviousSessions => '今天之前没有该动作的记录。';
 }
 
 /// The translations for Chinese, as used in China (`zh_CN`).
@@ -3014,6 +3020,12 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
   String setNumber(int number) {
     return '第 $number 组';
   }
+
+  @override
+  String get previousTimeInfo => '上次信息';
+
+  @override
+  String get noPreviousSessions => '今天之前没有该动作的记录。';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -4520,4 +4532,10 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String setNumber(int number) {
     return '第 $number 組';
   }
+
+  @override
+  String get previousTimeInfo => '上次資訊';
+
+  @override
+  String get noPreviousSessions => '今天之前沒有該動作的紀錄。';
 }

@@ -2053,5 +2053,13 @@
         "type": "int"
       }
     }
+  },
+  "previousTimeInfo": "Previous Time Info",
+  "@previousTimeInfo": {
+    "description": "Menu action showing the last day an exercise was performed."
+  },
+  "noPreviousSessions": "No previous sessions recorded for this exercise before today.",
+  "@noPreviousSessions": {
+    "description": "Empty state when an exercise has no earlier recorded sets."
   }
 }

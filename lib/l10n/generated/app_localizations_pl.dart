@@ -1602,4 +1602,11 @@ class AppLocalizationsPl extends AppLocalizations {
   String setNumber(int number) {
     return 'Seria $number';
   }
+
+  @override
+  String get previousTimeInfo => 'Informacje o ostatnim razie';
+
+  @override
+  String get noPreviousSessions =>
+      'Brak wcześniejszych sesji dla tego ćwiczenia przed dzisiaj.';
 }

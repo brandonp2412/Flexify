@@ -1569,4 +1569,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String setNumber(int number) {
     return 'Set $number';
   }
+
+  @override
+  String get previousTimeInfo => 'Previous Time Info';
+
+  @override
+  String get noPreviousSessions =>
+      'No previous sessions recorded for this exercise before today.';
 }

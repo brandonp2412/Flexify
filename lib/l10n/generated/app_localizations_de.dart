@@ -1593,4 +1593,11 @@ class AppLocalizationsDe extends AppLocalizations {
   String setNumber(int number) {
     return 'Satz $number';
   }
+
+  @override
+  String get previousTimeInfo => 'Letzte Ausführung';
+
+  @override
+  String get noPreviousSessions =>
+      'Für diese Übung wurden vor heute keine früheren Einheiten aufgezeichnet.';
 }

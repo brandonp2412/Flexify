@@ -1587,4 +1587,11 @@ class AppLocalizationsMs extends AppLocalizations {
   String setNumber(int number) {
     return 'Set ke-$number';
   }
+
+  @override
+  String get previousTimeInfo => 'Maklumat masa sebelumnya';
+
+  @override
+  String get noPreviousSessions =>
+      'Tiada sesi sebelum ini direkodkan untuk latihan ini sebelum hari ini.';
 }

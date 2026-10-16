@@ -494,5 +494,7 @@
   "nothingMatchesPlanSearch": "Niets komt overeen met “{query}”. Je kunt dit als nieuw schema aanmaken.",
   "createPlan": "Schema aanmaken",
   "createNamedPlan": "“{name}” aanmaken",
-  "setNumber": "Set {number}"
+  "setNumber": "Set {number}",
+  "previousTimeInfo": "Info vorige keer",
+  "noPreviousSessions": "Er zijn geen eerdere sessies voor deze oefening vóór vandaag geregistreerd."
 }

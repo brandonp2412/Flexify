@@ -1588,4 +1588,11 @@ class AppLocalizationsId extends AppLocalizations {
   String setNumber(int number) {
     return 'Set ke-$number';
   }
+
+  @override
+  String get previousTimeInfo => 'Info waktu sebelumnya';
+
+  @override
+  String get noPreviousSessions =>
+      'Belum ada sesi sebelumnya untuk latihan ini sebelum hari ini.';
 }

@@ -1574,4 +1574,11 @@ class AppLocalizationsBn extends AppLocalizations {
   String setNumber(int number) {
     return 'সেট $number';
   }
+
+  @override
+  String get previousTimeInfo => 'আগের বারের তথ্য';
+
+  @override
+  String get noPreviousSessions =>
+      'আজকের আগে এই ব্যায়ামের কোনো আগের সেশন রেকর্ড করা নেই।';
 }

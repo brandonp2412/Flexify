@@ -1571,4 +1571,11 @@ class AppLocalizationsHi extends AppLocalizations {
   String setNumber(int number) {
     return 'सेट $number';
   }
+
+  @override
+  String get previousTimeInfo => 'पिछली बार की जानकारी';
+
+  @override
+  String get noPreviousSessions =>
+      'आज से पहले इस व्यायाम का कोई पिछला सत्र दर्ज नहीं है।';
 }

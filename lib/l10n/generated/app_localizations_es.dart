@@ -1598,4 +1598,11 @@ class AppLocalizationsEs extends AppLocalizations {
   String setNumber(int number) {
     return 'Serie $number';
   }
+
+  @override
+  String get previousTimeInfo => 'Información de la última vez';
+
+  @override
+  String get noPreviousSessions =>
+      'No hay sesiones anteriores registradas para este ejercicio antes de hoy.';
 }

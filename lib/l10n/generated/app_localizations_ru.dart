@@ -1603,4 +1603,11 @@ class AppLocalizationsRu extends AppLocalizations {
   String setNumber(int number) {
     return 'Подход $number';
   }
+
+  @override
+  String get previousTimeInfo => 'Прошлый раз';
+
+  @override
+  String get noPreviousSessions =>
+      'Нет предыдущих тренировок с этим упражнением до сегодняшнего дня.';
 }

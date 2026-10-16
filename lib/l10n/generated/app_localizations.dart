@@ -2915,6 +2915,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Set {number}'**
   String setNumber(int number);
+
+  /// Menu action showing the last day an exercise was performed.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous Time Info'**
+  String get previousTimeInfo;
+
+  /// Empty state when an exercise has no earlier recorded sets.
+  ///
+  /// In en, this message translates to:
+  /// **'No previous sessions recorded for this exercise before today.'**
+  String get noPreviousSessions;
 }
 
 class _AppLocalizationsDelegate

@@ -494,5 +494,7 @@
   "nothingMatchesPlanSearch": "Nada corresponde a “{query}”. Você pode criá-lo como um novo plano.",
   "createPlan": "Criar plano",
   "createNamedPlan": "Criar “{name}”",
-  "setNumber": "Série {number}"
+  "setNumber": "Série {number}",
+  "previousTimeInfo": "Informações da última vez",
+  "noPreviousSessions": "Nenhuma sessão anterior registrada para este exercício antes de hoje."
 }

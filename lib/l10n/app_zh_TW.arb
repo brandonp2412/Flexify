@@ -494,5 +494,7 @@
   "nothingMatchesPlanSearch": "沒有與“{query}”符合的內容。你可以將其建立為新計畫。",
   "createPlan": "建立計畫",
   "createNamedPlan": "建立“{name}”",
-  "setNumber": "第 {number} 組"
+  "setNumber": "第 {number} 組",
+  "previousTimeInfo": "上次資訊",
+  "noPreviousSessions": "今天之前沒有該動作的紀錄。"
 }

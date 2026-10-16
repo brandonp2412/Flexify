@@ -1565,4 +1565,11 @@ class AppLocalizationsAr extends AppLocalizations {
   String setNumber(int number) {
     return 'المجموعة $number';
   }
+
+  @override
+  String get previousTimeInfo => 'معلومات المرة السابقة';
+
+  @override
+  String get noPreviousSessions =>
+      'لا توجد جلسات سابقة مسجّلة لهذا التمرين قبل اليوم.';
 }

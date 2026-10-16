@@ -258,6 +258,62 @@ Future<List<ExerciseSetView>> getExerciseSetsForExercise(
   return rows.map((row) => _toExerciseSetView(database, row)).toList();
 }
 
+/// Every set recorded for one exercise on the last day it was trained.
+class PreviousExerciseDay {
+  const PreviousExerciseDay({required this.day, required this.sets});
+
+  /// Local calendar day the sets belong to.
+  final DateTime day;
+
+  /// Sets recorded that day, oldest first.
+  final List<ExerciseSetView> sets;
+}
+
+/// Loads the sets for [exerciseId] on the most recent day before [now].
+///
+/// Today's sets are ignored, so a session in progress never shows up as the
+/// previous time. Returns null when the exercise has no earlier sets.
+Future<PreviousExerciseDay?> getPreviousExerciseDay(
+  AppDatabase database, {
+  required int exerciseId,
+  DateTime? now,
+}) async {
+  final reference = (now ?? DateTime.now()).toLocal();
+  final startOfToday = DateTime(reference.year, reference.month, reference.day);
+
+  final latest =
+      await (database.exerciseSets.select()
+            ..where(
+              (set) =>
+                  set.exerciseId.equals(exerciseId) &
+                  set.timestamp.isSmallerThanValue(startOfToday),
+            )
+            ..orderBy([
+              (set) => OrderingTerm.desc(set.timestamp),
+              (set) => OrderingTerm.desc(set.id),
+            ])
+            ..limit(1))
+          .getSingleOrNull();
+  if (latest == null) return null;
+
+  final local = latest.timestamp.toLocal();
+  final day = DateTime(local.year, local.month, local.day);
+  final rows =
+      await (_exerciseSetQuery(database, order: OrderingMode.asc)..where(
+            database.exerciseSets.exerciseId.equals(exerciseId) &
+                database.exerciseSets.timestamp.isBiggerOrEqualValue(day) &
+                database.exerciseSets.timestamp.isSmallerThanValue(
+                  DateTime(day.year, day.month, day.day + 1),
+                ),
+          ))
+          .get();
+
+  return PreviousExerciseDay(
+    day: day,
+    sets: rows.map((row) => _toExerciseSetView(database, row)).toList(),
+  );
+}
+
 Future<ExerciseSetView?> getExerciseSetForExerciseAt(
   AppDatabase database, {
   required String exerciseName,

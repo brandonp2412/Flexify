@@ -1584,4 +1584,11 @@ class AppLocalizationsVi extends AppLocalizations {
   String setNumber(int number) {
     return 'Hiệp $number';
   }
+
+  @override
+  String get previousTimeInfo => 'Thông tin lần trước';
+
+  @override
+  String get noPreviousSessions =>
+      'Chưa có buổi tập trước nào cho bài tập này trước hôm nay.';
 }
