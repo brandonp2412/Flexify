@@ -997,9 +997,6 @@ class AppLocalizationsMs extends AppLocalizations {
   String get showNotes => 'Tunjukkan nota';
 
   @override
-  String get repEstimation => 'Perkiraan ulangan';
-
-  @override
   String get durationEstimation => 'Perkiraan durasi';
 
   @override
@@ -1540,10 +1537,6 @@ class AppLocalizationsMs extends AppLocalizations {
 
   @override
   String get recordEncouragement29 => 'Bagus!';
-
-  @override
-  String get repEstimationDescription =>
-      'Coba perkirakan jumlah ulangan yang baru saja Anda lakukan';
 
   @override
   String get durationEstimationDescription =>

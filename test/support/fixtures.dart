@@ -226,7 +226,6 @@ Future<PlanExercise> insertPlanExerciseFixture(
 SettingsCompanion testSettings({
   bool? explainedPermissions,
   bool? notificationPermissionRequested,
-  bool? repEstimation,
   bool? groupHistory,
   bool? restTimers,
   bool? showNotes,
@@ -241,9 +240,6 @@ SettingsCompanion testSettings({
     notificationPermissionRequested: notificationPermissionRequested == null
         ? const Value.absent()
         : Value(notificationPermissionRequested),
-    repEstimation: repEstimation == null
-        ? const Value.absent()
-        : Value(repEstimation),
     groupHistory: groupHistory == null
         ? const Value.absent()
         : Value(groupHistory),

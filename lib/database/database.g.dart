@@ -2777,21 +2777,6 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
-  static const VerificationMeta _repEstimationMeta = const VerificationMeta(
-    'repEstimation',
-  );
-  @override
-  late final GeneratedColumn<bool> repEstimation = GeneratedColumn<bool>(
-    'rep_estimation',
-    aliasedName,
-    false,
-    type: DriftSqlType.bool,
-    requiredDuringInsert: false,
-    defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'CHECK ("rep_estimation" IN (0, 1))',
-    ),
-    defaultValue: const Constant(false),
-  );
   static const VerificationMeta _restTimersMeta = const VerificationMeta(
     'restTimers',
   );
@@ -3158,7 +3143,6 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
     notificationPermissionRequested,
     peekGraph,
     planTrailing,
-    repEstimation,
     restTimers,
     shortDateFormat,
     showBodyWeight,
@@ -3360,15 +3344,6 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
       );
     } else if (isInserting) {
       context.missing(_planTrailingMeta);
-    }
-    if (data.containsKey('rep_estimation')) {
-      context.handle(
-        _repEstimationMeta,
-        repEstimation.isAcceptableOrUnknown(
-          data['rep_estimation']!,
-          _repEstimationMeta,
-        ),
-      );
     }
     if (data.containsKey('rest_timers')) {
       context.handle(
@@ -3678,10 +3653,6 @@ class $SettingsTable extends Settings with TableInfo<$SettingsTable, Setting> {
         DriftSqlType.string,
         data['${effectivePrefix}plan_trailing'],
       )!,
-      repEstimation: attachedDatabase.typeMapping.read(
-        DriftSqlType.bool,
-        data['${effectivePrefix}rep_estimation'],
-      )!,
       restTimers: attachedDatabase.typeMapping.read(
         DriftSqlType.bool,
         data['${effectivePrefix}rest_timers'],
@@ -3815,7 +3786,6 @@ class Setting extends DataClass implements Insertable<Setting> {
   final bool notificationPermissionRequested;
   final bool peekGraph;
   final String planTrailing;
-  final bool repEstimation;
   final bool restTimers;
   final String shortDateFormat;
   final bool showBodyWeight;
@@ -3862,7 +3832,6 @@ class Setting extends DataClass implements Insertable<Setting> {
     required this.notificationPermissionRequested,
     required this.peekGraph,
     required this.planTrailing,
-    required this.repEstimation,
     required this.restTimers,
     required this.shortDateFormat,
     required this.showBodyWeight,
@@ -3922,7 +3891,6 @@ class Setting extends DataClass implements Insertable<Setting> {
     );
     map['peek_graph'] = Variable<bool>(peekGraph);
     map['plan_trailing'] = Variable<String>(planTrailing);
-    map['rep_estimation'] = Variable<bool>(repEstimation);
     map['rest_timers'] = Variable<bool>(restTimers);
     map['short_date_format'] = Variable<String>(shortDateFormat);
     map['show_body_weight'] = Variable<bool>(showBodyWeight);
@@ -3985,7 +3953,6 @@ class Setting extends DataClass implements Insertable<Setting> {
       notificationPermissionRequested: Value(notificationPermissionRequested),
       peekGraph: Value(peekGraph),
       planTrailing: Value(planTrailing),
-      repEstimation: Value(repEstimation),
       restTimers: Value(restTimers),
       shortDateFormat: Value(shortDateFormat),
       showBodyWeight: Value(showBodyWeight),
@@ -4046,7 +4013,6 @@ class Setting extends DataClass implements Insertable<Setting> {
       ),
       peekGraph: serializer.fromJson<bool>(json['peekGraph']),
       planTrailing: serializer.fromJson<String>(json['planTrailing']),
-      repEstimation: serializer.fromJson<bool>(json['repEstimation']),
       restTimers: serializer.fromJson<bool>(json['restTimers']),
       shortDateFormat: serializer.fromJson<String>(json['shortDateFormat']),
       showBodyWeight: serializer.fromJson<bool>(json['showBodyWeight']),
@@ -4106,7 +4072,6 @@ class Setting extends DataClass implements Insertable<Setting> {
       ),
       'peekGraph': serializer.toJson<bool>(peekGraph),
       'planTrailing': serializer.toJson<String>(planTrailing),
-      'repEstimation': serializer.toJson<bool>(repEstimation),
       'restTimers': serializer.toJson<bool>(restTimers),
       'shortDateFormat': serializer.toJson<String>(shortDateFormat),
       'showBodyWeight': serializer.toJson<bool>(showBodyWeight),
@@ -4158,7 +4123,6 @@ class Setting extends DataClass implements Insertable<Setting> {
     bool? notificationPermissionRequested,
     bool? peekGraph,
     String? planTrailing,
-    bool? repEstimation,
     bool? restTimers,
     String? shortDateFormat,
     bool? showBodyWeight,
@@ -4210,7 +4174,6 @@ class Setting extends DataClass implements Insertable<Setting> {
         notificationPermissionRequested ?? this.notificationPermissionRequested,
     peekGraph: peekGraph ?? this.peekGraph,
     planTrailing: planTrailing ?? this.planTrailing,
-    repEstimation: repEstimation ?? this.repEstimation,
     restTimers: restTimers ?? this.restTimers,
     shortDateFormat: shortDateFormat ?? this.shortDateFormat,
     showBodyWeight: showBodyWeight ?? this.showBodyWeight,
@@ -4293,9 +4256,6 @@ class Setting extends DataClass implements Insertable<Setting> {
       planTrailing: data.planTrailing.present
           ? data.planTrailing.value
           : this.planTrailing,
-      repEstimation: data.repEstimation.present
-          ? data.repEstimation.value
-          : this.repEstimation,
       restTimers: data.restTimers.present
           ? data.restTimers.value
           : this.restTimers,
@@ -4391,7 +4351,6 @@ class Setting extends DataClass implements Insertable<Setting> {
           )
           ..write('peekGraph: $peekGraph, ')
           ..write('planTrailing: $planTrailing, ')
-          ..write('repEstimation: $repEstimation, ')
           ..write('restTimers: $restTimers, ')
           ..write('shortDateFormat: $shortDateFormat, ')
           ..write('showBodyWeight: $showBodyWeight, ')
@@ -4443,7 +4402,6 @@ class Setting extends DataClass implements Insertable<Setting> {
     notificationPermissionRequested,
     peekGraph,
     planTrailing,
-    repEstimation,
     restTimers,
     shortDateFormat,
     showBodyWeight,
@@ -4495,7 +4453,6 @@ class Setting extends DataClass implements Insertable<Setting> {
               this.notificationPermissionRequested &&
           other.peekGraph == this.peekGraph &&
           other.planTrailing == this.planTrailing &&
-          other.repEstimation == this.repEstimation &&
           other.restTimers == this.restTimers &&
           other.shortDateFormat == this.shortDateFormat &&
           other.showBodyWeight == this.showBodyWeight &&
@@ -4544,7 +4501,6 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
   final Value<bool> notificationPermissionRequested;
   final Value<bool> peekGraph;
   final Value<String> planTrailing;
-  final Value<bool> repEstimation;
   final Value<bool> restTimers;
   final Value<String> shortDateFormat;
   final Value<bool> showBodyWeight;
@@ -4591,7 +4547,6 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     this.notificationPermissionRequested = const Value.absent(),
     this.peekGraph = const Value.absent(),
     this.planTrailing = const Value.absent(),
-    this.repEstimation = const Value.absent(),
     this.restTimers = const Value.absent(),
     this.shortDateFormat = const Value.absent(),
     this.showBodyWeight = const Value.absent(),
@@ -4639,7 +4594,6 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     this.notificationPermissionRequested = const Value.absent(),
     this.peekGraph = const Value.absent(),
     required String planTrailing,
-    this.repEstimation = const Value.absent(),
     required bool restTimers,
     required String shortDateFormat,
     this.showBodyWeight = const Value.absent(),
@@ -4702,7 +4656,6 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     Expression<bool>? notificationPermissionRequested,
     Expression<bool>? peekGraph,
     Expression<String>? planTrailing,
-    Expression<bool>? repEstimation,
     Expression<bool>? restTimers,
     Expression<String>? shortDateFormat,
     Expression<bool>? showBodyWeight,
@@ -4752,7 +4705,6 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
         'notification_permission_requested': notificationPermissionRequested,
       if (peekGraph != null) 'peek_graph': peekGraph,
       if (planTrailing != null) 'plan_trailing': planTrailing,
-      if (repEstimation != null) 'rep_estimation': repEstimation,
       if (restTimers != null) 'rest_timers': restTimers,
       if (shortDateFormat != null) 'short_date_format': shortDateFormat,
       if (showBodyWeight != null) 'show_body_weight': showBodyWeight,
@@ -4806,7 +4758,6 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     Value<bool>? notificationPermissionRequested,
     Value<bool>? peekGraph,
     Value<String>? planTrailing,
-    Value<bool>? repEstimation,
     Value<bool>? restTimers,
     Value<String>? shortDateFormat,
     Value<bool>? showBodyWeight,
@@ -4856,7 +4807,6 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
           this.notificationPermissionRequested,
       peekGraph: peekGraph ?? this.peekGraph,
       planTrailing: planTrailing ?? this.planTrailing,
-      repEstimation: repEstimation ?? this.repEstimation,
       restTimers: restTimers ?? this.restTimers,
       shortDateFormat: shortDateFormat ?? this.shortDateFormat,
       showBodyWeight: showBodyWeight ?? this.showBodyWeight,
@@ -4948,9 +4898,6 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
     }
     if (planTrailing.present) {
       map['plan_trailing'] = Variable<String>(planTrailing.value);
-    }
-    if (repEstimation.present) {
-      map['rep_estimation'] = Variable<bool>(repEstimation.value);
     }
     if (restTimers.present) {
       map['rest_timers'] = Variable<bool>(restTimers.value);
@@ -5059,7 +5006,6 @@ class SettingsCompanion extends UpdateCompanion<Setting> {
           )
           ..write('peekGraph: $peekGraph, ')
           ..write('planTrailing: $planTrailing, ')
-          ..write('repEstimation: $repEstimation, ')
           ..write('restTimers: $restTimers, ')
           ..write('shortDateFormat: $shortDateFormat, ')
           ..write('showBodyWeight: $showBodyWeight, ')
@@ -5877,7 +5823,7 @@ class $$CategoriesTableTableManager
           withReferenceMapper: (p0) => p0
               .map(
                 (e) => (
-                  e.readTable(table),
+                  e.readTable<$CategoriesTable, Category>(table),
                   $$CategoriesTableReferences(db, table, e),
                 ),
               )
@@ -6220,8 +6166,10 @@ class $$PlansTableTableManager
               ),
           withReferenceMapper: (p0) => p0
               .map(
-                (e) =>
-                    (e.readTable(table), $$PlansTableReferences(db, table, e)),
+                (e) => (
+                  e.readTable<$PlansTable, Plan>(table),
+                  $$PlansTableReferences(db, table, e),
+                ),
               )
               .toList(),
           prefetchHooksCallback:
@@ -6846,7 +6794,7 @@ class $$ExercisesTableTableManager
           withReferenceMapper: (p0) => p0
               .map(
                 (e) => (
-                  e.readTable(table),
+                  e.readTable<$ExercisesTable, Exercise>(table),
                   $$ExercisesTableReferences(db, table, e),
                 ),
               )
@@ -7261,7 +7209,7 @@ class $$WorkoutsTableTableManager
           withReferenceMapper: (p0) => p0
               .map(
                 (e) => (
-                  e.readTable(table),
+                  e.readTable<$WorkoutsTable, Workout>(table),
                   $$WorkoutsTableReferences(db, table, e),
                 ),
               )
@@ -7784,7 +7732,7 @@ class $$ExerciseSetsTableTableManager
           withReferenceMapper: (p0) => p0
               .map(
                 (e) => (
-                  e.readTable(table),
+                  e.readTable<$ExerciseSetsTable, ExerciseSet>(table),
                   $$ExerciseSetsTableReferences(db, table, e),
                 ),
               )
@@ -8012,7 +7960,16 @@ class $$BodyWeightsTableTableManager
                 photo: photo,
               ),
           withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .map(
+                (e) => (
+                  e.readTable<$BodyWeightsTable, BodyWeight>(table),
+                  BaseReferences<_$AppDatabase, $BodyWeightsTable, BodyWeight>(
+                    db,
+                    table,
+                    e,
+                  ),
+                ),
+              )
               .toList(),
           prefetchHooksCallback: null,
         ),
@@ -8057,7 +8014,6 @@ typedef $$SettingsTableCreateCompanionBuilder =
       Value<bool> notificationPermissionRequested,
       Value<bool> peekGraph,
       required String planTrailing,
-      Value<bool> repEstimation,
       required bool restTimers,
       required String shortDateFormat,
       Value<bool> showBodyWeight,
@@ -8106,7 +8062,6 @@ typedef $$SettingsTableUpdateCompanionBuilder =
       Value<bool> notificationPermissionRequested,
       Value<bool> peekGraph,
       Value<String> planTrailing,
-      Value<bool> repEstimation,
       Value<bool> restTimers,
       Value<String> shortDateFormat,
       Value<bool> showBodyWeight,
@@ -8236,11 +8191,6 @@ class $$SettingsTableFilterComposer
 
   ColumnFilters<String> get planTrailing => $composableBuilder(
     column: $table.planTrailing,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<bool> get repEstimation => $composableBuilder(
-    column: $table.repEstimation,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -8480,11 +8430,6 @@ class $$SettingsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<bool> get repEstimation => $composableBuilder(
-    column: $table.repEstimation,
-    builder: (column) => ColumnOrderings(column),
-  );
-
   ColumnOrderings<bool> get restTimers => $composableBuilder(
     column: $table.restTimers,
     builder: (column) => ColumnOrderings(column),
@@ -8715,11 +8660,6 @@ class $$SettingsTableAnnotationComposer
     builder: (column) => column,
   );
 
-  GeneratedColumn<bool> get repEstimation => $composableBuilder(
-    column: $table.repEstimation,
-    builder: (column) => column,
-  );
-
   GeneratedColumn<bool> get restTimers => $composableBuilder(
     column: $table.restTimers,
     builder: (column) => column,
@@ -8889,7 +8829,6 @@ class $$SettingsTableTableManager
                     const Value.absent(),
                 Value<bool> peekGraph = const Value.absent(),
                 Value<String> planTrailing = const Value.absent(),
-                Value<bool> repEstimation = const Value.absent(),
                 Value<bool> restTimers = const Value.absent(),
                 Value<String> shortDateFormat = const Value.absent(),
                 Value<bool> showBodyWeight = const Value.absent(),
@@ -8937,7 +8876,6 @@ class $$SettingsTableTableManager
                     notificationPermissionRequested,
                 peekGraph: peekGraph,
                 planTrailing: planTrailing,
-                repEstimation: repEstimation,
                 restTimers: restTimers,
                 shortDateFormat: shortDateFormat,
                 showBodyWeight: showBodyWeight,
@@ -8987,7 +8925,6 @@ class $$SettingsTableTableManager
                     const Value.absent(),
                 Value<bool> peekGraph = const Value.absent(),
                 required String planTrailing,
-                Value<bool> repEstimation = const Value.absent(),
                 required bool restTimers,
                 required String shortDateFormat,
                 Value<bool> showBodyWeight = const Value.absent(),
@@ -9035,7 +8972,6 @@ class $$SettingsTableTableManager
                     notificationPermissionRequested,
                 peekGraph: peekGraph,
                 planTrailing: planTrailing,
-                repEstimation: repEstimation,
                 restTimers: restTimers,
                 shortDateFormat: shortDateFormat,
                 showBodyWeight: showBodyWeight,
@@ -9064,7 +9000,16 @@ class $$SettingsTableTableManager
                 inputStyle: inputStyle,
               ),
           withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .map(
+                (e) => (
+                  e.readTable<$SettingsTable, Setting>(table),
+                  BaseReferences<_$AppDatabase, $SettingsTable, Setting>(
+                    db,
+                    table,
+                    e,
+                  ),
+                ),
+              )
               .toList(),
           prefetchHooksCallback: null,
         ),
@@ -9468,7 +9413,7 @@ class $$PlanExercisesTableTableManager
           withReferenceMapper: (p0) => p0
               .map(
                 (e) => (
-                  e.readTable(table),
+                  e.readTable<$PlanExercisesTable, PlanExercise>(table),
                   $$PlanExercisesTableReferences(db, table, e),
                 ),
               )

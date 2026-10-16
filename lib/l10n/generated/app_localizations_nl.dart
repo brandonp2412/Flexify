@@ -1000,9 +1000,6 @@ class AppLocalizationsNl extends AppLocalizations {
   String get showNotes => 'Notities tonen';
 
   @override
-  String get repEstimation => 'Herhalingen schatten';
-
-  @override
   String get durationEstimation => 'Duur schatten';
 
   @override
@@ -1541,10 +1538,6 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get recordEncouragement29 => 'Heel goed gedaan.';
-
-  @override
-  String get repEstimationDescription =>
-      'Probeer het aantal herhalingen dat je net deed te voorspellen';
 
   @override
   String get durationEstimationDescription =>

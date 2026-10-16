@@ -267,7 +267,7 @@ void main() {
     },
   );
 
-  test('RPM and best-set detection read redesigned exercise sets', () async {
+  test('best-set detection reads redesigned exercise sets', () async {
     final now = DateTime.now().toLocal();
     final first = await insertExerciseSetFixture(
       db,
@@ -284,9 +284,6 @@ void main() {
       created: now.subtract(const Duration(minutes: 1)),
     );
 
-    final rpms = await getRpms();
-    final rpm = rpms.singleWhere((row) => row.name == 'Curl');
-    expect(rpm.rpm, closeTo(6, 0.01));
     expect(await isBestExerciseSet(db, first), isFalse);
     expect(await isBestExerciseSet(db, second), isTrue);
   });

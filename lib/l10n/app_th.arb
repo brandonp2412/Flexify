@@ -1308,10 +1308,6 @@
   "@showNotes": {
     "description": "Workout setting for exercise notes."
   },
-  "repEstimation": "การประมาณจำนวนครั้ง",
-  "@repEstimation": {
-    "description": "Workout setting for repetition estimation."
-  },
   "durationEstimation": "การประมาณระยะเวลา",
   "@durationEstimation": {
     "description": "Workout setting for duration estimation."
@@ -1981,10 +1977,6 @@
   "recordEncouragement29": "ดีมากเลย",
   "@recordEncouragement29": {
     "description": "Positive message shown after a new exercise record."
-  },
-  "repEstimationDescription": "ลองคาดเดาจำนวนครั้งที่คุณเพิ่งทำไป",
-  "@repEstimationDescription": {
-    "description": "Description of repetition estimation."
   },
   "durationEstimationDescription": "ลองคาดเดาระยะเวลาคาร์ดิโอของคุณ",
   "@durationEstimationDescription": {

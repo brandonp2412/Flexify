@@ -1007,9 +1007,6 @@ class AppLocalizationsUk extends AppLocalizations {
   String get showNotes => 'Показувати нотатки';
 
   @override
-  String get repEstimation => 'Оцінювання повторень';
-
-  @override
   String get durationEstimation => 'Оцінювання тривалості';
 
   @override
@@ -1552,10 +1549,6 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get recordEncouragement29 => 'Дуже круто.';
-
-  @override
-  String get repEstimationDescription =>
-      'Спробувати передбачити кількість щойно виконаних повторень';
 
   @override
   String get durationEstimationDescription =>

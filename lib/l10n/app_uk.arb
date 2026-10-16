@@ -1317,10 +1317,6 @@
   "@showNotes": {
     "description": "Workout setting for exercise notes."
   },
-  "repEstimation": "Оцінювання повторень",
-  "@repEstimation": {
-    "description": "Workout setting for repetition estimation."
-  },
   "durationEstimation": "Оцінювання тривалості",
   "@durationEstimation": {
     "description": "Workout setting for duration estimation."
@@ -1990,10 +1986,6 @@
   "recordEncouragement29": "Дуже круто.",
   "@recordEncouragement29": {
     "description": "Positive message shown after a new exercise record."
-  },
-  "repEstimationDescription": "Спробувати передбачити кількість щойно виконаних повторень",
-  "@repEstimationDescription": {
-    "description": "Description of repetition estimation."
   },
   "durationEstimationDescription": "Спробувати передбачити тривалість кардіо",
   "@durationEstimationDescription": {

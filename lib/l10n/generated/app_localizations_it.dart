@@ -996,9 +996,6 @@ class AppLocalizationsIt extends AppLocalizations {
   String get showNotes => 'Mostra note';
 
   @override
-  String get repEstimation => 'Stima ripetizioni';
-
-  @override
   String get durationEstimation => 'Stima durata';
 
   @override
@@ -1541,10 +1538,6 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get recordEncouragement29 => 'Davvero ottimo.';
-
-  @override
-  String get repEstimationDescription =>
-      'Prova a prevedere quante ripetizioni hai appena fatto';
 
   @override
   String get durationEstimationDescription =>

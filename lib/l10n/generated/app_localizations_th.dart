@@ -992,9 +992,6 @@ class AppLocalizationsTh extends AppLocalizations {
   String get showNotes => 'แสดงหมายเหตุ';
 
   @override
-  String get repEstimation => 'การประมาณจำนวนครั้ง';
-
-  @override
   String get durationEstimation => 'การประมาณระยะเวลา';
 
   @override
@@ -1517,9 +1514,6 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get recordEncouragement29 => 'ดีมากเลย';
-
-  @override
-  String get repEstimationDescription => 'ลองคาดเดาจำนวนครั้งที่คุณเพิ่งทำไป';
 
   @override
   String get durationEstimationDescription => 'ลองคาดเดาระยะเวลาคาร์ดิโอของคุณ';

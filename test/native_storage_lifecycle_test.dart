@@ -155,7 +155,11 @@ void main() {
     ...before,
     'settings': [
       for (final setting in before['settings']!)
-        {...setting, 'default_graph_limit': 30},
+        {
+          for (final entry in setting.entries)
+            if (entry.key != 'rep_estimation') entry.key: entry.value,
+          'default_graph_limit': 30,
+        },
     ],
   };
 

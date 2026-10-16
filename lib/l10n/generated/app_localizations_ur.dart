@@ -999,9 +999,6 @@ class AppLocalizationsUr extends AppLocalizations {
   String get showNotes => 'نوٹس دکھائیں';
 
   @override
-  String get repEstimation => 'ریپس کا تخمینہ';
-
-  @override
   String get durationEstimation => 'دورانیے کا تخمینہ';
 
   @override
@@ -1531,10 +1528,6 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get recordEncouragement29 => 'بہت خوب۔';
-
-  @override
-  String get repEstimationDescription =>
-      'اندازہ لگائیں کہ آپ نے ابھی کتنے ریپس کیے';
 
   @override
   String get durationEstimationDescription =>

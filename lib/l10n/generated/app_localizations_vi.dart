@@ -993,9 +993,6 @@ class AppLocalizationsVi extends AppLocalizations {
   String get showNotes => 'Hiển thị ghi chú';
 
   @override
-  String get repEstimation => 'Ước tính số lần lặp';
-
-  @override
   String get durationEstimation => 'Ước tính thời lượng';
 
   @override
@@ -1536,10 +1533,6 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get recordEncouragement29 => 'Thứ rất tốt.';
-
-  @override
-  String get repEstimationDescription =>
-      'Hãy thử dự đoán số lần bạn vừa thực hiện';
 
   @override
   String get durationEstimationDescription =>

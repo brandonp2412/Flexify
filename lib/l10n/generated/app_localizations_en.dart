@@ -992,9 +992,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get showNotes => 'Show notes';
 
   @override
-  String get repEstimation => 'Rep estimation';
-
-  @override
   String get durationEstimation => 'Duration estimation';
 
   @override
@@ -1522,10 +1519,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get recordEncouragement29 => 'Very good stuff.';
-
-  @override
-  String get repEstimationDescription =>
-      'Try to predict the # of reps you just did';
 
   @override
   String get durationEstimationDescription =>

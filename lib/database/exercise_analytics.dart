@@ -51,8 +51,6 @@ List<GraphExerciseSummary> filterGraphSummariesBySelection(
     if (selection.contains(summary.selectionKey)) summary,
 ];
 
-typedef Rpm = ({String name, double rpm, double weight});
-
 String _periodKey(DateTime value, Period period) {
   final date = value.toLocal();
   switch (period) {
@@ -498,57 +496,6 @@ Future<List<StrengthData>> getGlobalData({
         ),
       )
       .toList();
-}
-
-Future<List<Rpm>> getRpms() async {
-  final cutoff = DateTime.now().subtract(const Duration(days: 30));
-  final query =
-      db.select(db.exerciseSets).join([
-          innerJoin(
-            db.exercises,
-            db.exercises.id.equalsExp(db.exerciseSets.exerciseId),
-          ),
-        ])
-        ..where(db.exerciseSets.timestamp.isBiggerOrEqualValue(cutoff))
-        ..where(db.exercises.kind.equals('strength'))
-        ..orderBy([
-          OrderingTerm.asc(db.exerciseSets.timestamp),
-          OrderingTerm.asc(db.exerciseSets.id),
-        ]);
-  final rows = await query.get();
-
-  final previousByName = <String, DateTime>{};
-  final grouped = <String, List<double>>{};
-  final weights = <String, double>{};
-  for (final row in rows) {
-    final set = row.readTable(db.exerciseSets);
-    final exercise = row.readTable(db.exercises);
-    final created = set.timestamp.toLocal();
-    final previous = previousByName[exercise.name];
-    if (previous != null) {
-      final minutes = created.difference(previous).inMilliseconds / 60000;
-      if (minutes > 0 && minutes <= 5) {
-        final rpm = (set.reps ?? 0) / minutes;
-        if (rpm >= 0.1 && rpm <= 10) {
-          final weight = displayLoad(exercise.displayUnit, set.loadKg);
-          final key = '${exercise.name}\u0000$weight';
-          grouped.putIfAbsent(key, () => []).add(rpm);
-          weights[key] = weight;
-        }
-      }
-    }
-    previousByName[exercise.name] = created;
-  }
-
-  return grouped.entries.map((entry) {
-    final split = entry.key.indexOf('\u0000');
-    final values = entry.value;
-    return (
-      name: entry.key.substring(0, split),
-      rpm: values.reduce((a, b) => a + b) / values.length,
-      weight: weights[entry.key]!,
-    );
-  }).toList();
 }
 
 Stream<List<GraphExerciseSummary>> watchGraphs() {

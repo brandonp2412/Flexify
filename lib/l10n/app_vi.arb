@@ -1308,10 +1308,6 @@
   "@showNotes": {
     "description": "Workout setting for exercise notes."
   },
-  "repEstimation": "Ước tính số lần lặp",
-  "@repEstimation": {
-    "description": "Workout setting for repetition estimation."
-  },
   "durationEstimation": "Ước tính thời lượng",
   "@durationEstimation": {
     "description": "Workout setting for duration estimation."
@@ -1981,10 +1977,6 @@
   "recordEncouragement29": "Thứ rất tốt.",
   "@recordEncouragement29": {
     "description": "Positive message shown after a new exercise record."
-  },
-  "repEstimationDescription": "Hãy thử dự đoán số lần bạn vừa thực hiện",
-  "@repEstimationDescription": {
-    "description": "Description of repetition estimation."
   },
   "durationEstimationDescription": "Hãy thử dự đoán thời gian tập tim mạch của bạn",
   "@durationEstimationDescription": {

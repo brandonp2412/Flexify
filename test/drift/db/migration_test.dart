@@ -19,6 +19,7 @@ import 'generated/schema_v59.dart' as v59;
 import 'generated/schema_v60.dart' as v60;
 import 'generated/schema_v62.dart' as v62;
 import 'generated/schema_v64.dart' as v64;
+import 'generated/schema_v69.dart' as v69;
 
 void main() {
   driftRuntimeOptions.dontWarnAboutMultipleDatabases = true;
@@ -1372,4 +1373,60 @@ void main() {
       );
     },
   );
+  for (final enabled in [0, 1]) {
+    test(
+      'v69 to v70 removes rep estimation and preserves duration=$enabled',
+      () async {
+        await verifier.testWithDataIntegrity(
+          oldVersion: 69,
+          newVersion: 70,
+          createOld: v69.DatabaseAtV69.new,
+          createNew: AppDatabase.new,
+          openTestedDatabase: AppDatabase.new,
+          createItems: (batch, oldDb) {
+            batch.insert(
+              oldDb.settings,
+              v69.SettingsCompanion.insert(
+                alarmSound: '',
+                cardioUnit: 'last-entry',
+                curveLines: 1,
+                durationEstimation: Value(enabled),
+                explainedPermissions: 0,
+                groupHistory: 0,
+                longDateFormat: 'timeago',
+                maxSets: 3,
+                planTrailing: 'PlanTrailing.reorder',
+                repEstimation: const Value(1),
+                restTimers: 0,
+                shortDateFormat: 'd/M/yy',
+                showUnits: 1,
+                strengthUnit: 'last-entry',
+                systemColors: 0,
+                themeMode: 'ThemeMode.system',
+                timerDuration: 210000,
+                vibrate: 1,
+                showNotes: const Value(1),
+              ),
+            );
+          },
+          validateItems: (newDb) async {
+            final settings = await newDb.settings.select().getSingle();
+            expect(settings.durationEstimation, enabled == 1);
+            expect(settings.showNotes, isTrue);
+            final columns = await newDb
+                .customSelect('PRAGMA table_info(settings)')
+                .get();
+            expect(
+              columns.map((row) => row.read<String>('name')),
+              isNot(contains('rep_estimation')),
+            );
+            expect(
+              columns.map((row) => row.read<String>('name')),
+              contains('duration_estimation'),
+            );
+          },
+        );
+      },
+    );
+  }
 }

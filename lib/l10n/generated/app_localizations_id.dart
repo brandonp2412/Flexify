@@ -997,9 +997,6 @@ class AppLocalizationsId extends AppLocalizations {
   String get showNotes => 'Tampilkan catatan';
 
   @override
-  String get repEstimation => 'Perkiraan repetisi';
-
-  @override
   String get durationEstimation => 'Perkiraan durasi';
 
   @override
@@ -1540,10 +1537,6 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get recordEncouragement29 => 'Bagus sekali.';
-
-  @override
-  String get repEstimationDescription =>
-      'Coba perkirakan jumlah repetisi yang baru saja Anda lakukan';
 
   @override
   String get durationEstimationDescription =>

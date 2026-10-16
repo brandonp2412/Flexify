@@ -993,9 +993,6 @@ class AppLocalizationsFa extends AppLocalizations {
   String get showNotes => 'نمایش یادداشت‌ها';
 
   @override
-  String get repEstimation => 'تخمین تکرار';
-
-  @override
   String get durationEstimation => 'تخمین مدت';
 
   @override
@@ -1529,10 +1526,6 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get recordEncouragement29 => 'خیلی خوب بود.';
-
-  @override
-  String get repEstimationDescription =>
-      'سعی کنید تعداد تکرارهایی را که همین حالا انجام دادید حدس بزنید';
 
   @override
   String get durationEstimationDescription =>

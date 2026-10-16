@@ -1075,6 +1075,9 @@ class AppDatabase extends _$AppDatabase {
                 'UPDATE settings SET default_graph_limit = 30 WHERE default_graph_limit = 20',
               );
             },
+            from69To70: (Migrator m, Schema70 schema) async {
+              await m.alterTable(TableMigration(schema.settings));
+            },
           );
           await transaction(() async {
             await upgrade(m, from, to);
@@ -1096,5 +1099,5 @@ class AppDatabase extends _$AppDatabase {
   }
 
   @override
-  int get schemaVersion => 69;
+  int get schemaVersion => 70;
 }

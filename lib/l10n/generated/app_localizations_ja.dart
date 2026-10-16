@@ -975,9 +975,6 @@ class AppLocalizationsJa extends AppLocalizations {
   String get showNotes => 'メモを表示';
 
   @override
-  String get repEstimation => '回数の推定';
-
-  @override
   String get durationEstimation => '時間の推定';
 
   @override
@@ -1477,9 +1474,6 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get recordEncouragement29 => '本当によくできました。';
-
-  @override
-  String get repEstimationDescription => '今行った回数を予測します';
 
   @override
   String get durationEstimationDescription => '有酸素運動の時間を予測します';
