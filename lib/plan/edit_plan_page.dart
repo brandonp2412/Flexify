@@ -67,48 +67,6 @@ class _EditPlanPageState extends State<EditPlanPage> {
     _searchCtrl.text = '';
   }
 
-  Iterable<Widget> get tiles {
-    final match = filterPlanExerciseDrafts(_exercises, _search);
-
-    if (match.isEmpty)
-      return [
-        SizedBox(
-          height: 260,
-          child: AppEmptyState(
-            icon: Icons.search_off_rounded,
-            title: context.l10n.noExercisesFound,
-            message: _search.isEmpty
-                ? context.l10n.addExerciseToPlan
-                : context.l10n.nothingMatchesExerciseSearch(_search),
-            actionLabel: _search.isEmpty
-                ? context.l10n.addExercise
-                : context.l10n.addNamed(_search),
-            actionIcon: Icons.add_rounded,
-            onAction: addExercise,
-          ),
-        ),
-      ];
-
-    return match.map(
-      (pe) => ExerciseTile(
-        planExercise: pe.planExercise,
-        exerciseName: pe.exerciseName,
-        onChange: (value) {
-          final id = _exercises.indexWhere(
-            (exercise) =>
-                exercise.planExercise.exerciseId.value ==
-                pe.planExercise.exerciseId.value,
-          );
-          if (id == -1) return;
-          setState(() {
-            _exercises[id] = pe.copyWithPlanExercise(value);
-            _hasUnsavedChanges = true;
-          });
-        },
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final storedDays = widget.plan.days.value
@@ -120,6 +78,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
               .map((day) => localizedWeekday(context.l10n, day))
               .join(', ');
 
+    final exercises = filterPlanExerciseDrafts(_exercises, _search);
     final desktop = isDesktopLayout(context);
     final colors = Theme.of(context).colorScheme;
 
@@ -233,11 +192,40 @@ class _EditPlanPageState extends State<EditPlanPage> {
                   padding: EdgeInsets.all(24),
                   child: Center(child: CircularProgressIndicator()),
                 )
+              else if (exercises.isEmpty)
+                SizedBox(
+                  height: 260,
+                  child: AppEmptyState(
+                    icon: Icons.search_off_rounded,
+                    title: context.l10n.noExercisesFound,
+                    message: _search.isEmpty
+                        ? context.l10n.addExerciseToPlan
+                        : context.l10n.nothingMatchesExerciseSearch(_search),
+                    actionLabel: _search.isEmpty
+                        ? context.l10n.addExercise
+                        : context.l10n.addNamed(_search),
+                    actionIcon: Icons.add_rounded,
+                    onAction: addExercise,
+                  ),
+                )
               else
-                ...List.generate(
-                  tiles.length,
-                  (index) => tiles.elementAt(index),
-                ),
+                for (final pe in exercises)
+                  ExerciseTile(
+                    planExercise: pe.planExercise,
+                    exerciseName: pe.exerciseName,
+                    onChange: (value) {
+                      final id = _exercises.indexWhere(
+                        (exercise) =>
+                            exercise.planExercise.exerciseId.value ==
+                            pe.planExercise.exerciseId.value,
+                      );
+                      if (id == -1) return;
+                      setState(() {
+                        _exercises[id] = pe.copyWithPlanExercise(value);
+                        _hasUnsavedChanges = true;
+                      });
+                    },
+                  ),
               SizedBox(height: desktop ? 40 : 176),
             ],
           ),
