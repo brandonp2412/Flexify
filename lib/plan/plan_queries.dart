@@ -206,11 +206,22 @@ Future<List<PlanExerciseDraft>> loadPlanExerciseDrafts(
             db.planExercises.exerciseId.equalsExp(db.exercises.id),
       ),
     ])
-    ..addColumns(db.planExercises.$columns);
+    ..addColumns(db.planExercises.$columns)
+    ..orderBy([
+      OrderingTerm.desc(
+        ifNull(db.planExercises.enabled, const Constant(false)),
+      ),
+      OrderingTerm.asc(
+        db.planExercises.enabled.caseMatch<int>(
+          when: {const Constant(true): db.planExercises.sequence},
+          orElse: const Constant(0),
+        ),
+      ),
+      OrderingTerm.asc(db.exercises.id),
+    ]);
 
   final rows = await query.get();
-  final enabled = <PlanExerciseDraft>[];
-  final disabled = <PlanExerciseDraft>[];
+  final drafts = <PlanExerciseDraft>[];
 
   for (final row in rows) {
     final planExercise = PlanExercisesCompanion(
@@ -227,12 +238,8 @@ Future<List<PlanExerciseDraft>> loadPlanExerciseDrafts(
       planExercise: planExercise,
       exerciseName: row.read(db.exercises.name)!,
     );
-    (planExercise.enabled.value ? enabled : disabled).add(draft);
+    drafts.add(draft);
   }
 
-  enabled.sort(
-    (a, b) =>
-        a.planExercise.sequence.value.compareTo(b.planExercise.sequence.value),
-  );
-  return [...enabled, ...disabled];
+  return drafts;
 }

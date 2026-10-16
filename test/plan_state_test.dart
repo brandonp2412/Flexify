@@ -95,4 +95,49 @@ void main() {
       expect(draft.exerciseName, exercise.name);
     },
   );
+
+  test(
+    'plan drafts order enabled exercises before disabled and unlinked ones',
+    () async {
+      final planId = await db.plans.insertOne(planFixture());
+      final unlinked = await ensureExerciseFixture(db, 'Unlinked');
+      final disabled = await ensureExerciseFixture(db, 'Disabled');
+      final later = await ensureExerciseFixture(db, 'Later');
+      final first = await ensureExerciseFixture(db, 'First');
+      final tied = await ensureExerciseFixture(db, 'Tied');
+      await db.planExercises.insertAll([
+        planExerciseFixture(
+          planId: planId,
+          exerciseId: disabled.id,
+          enabled: false,
+          sequence: -1,
+        ),
+        planExerciseFixture(planId: planId, exerciseId: later.id, sequence: 2),
+        planExerciseFixture(planId: planId, exerciseId: first.id, sequence: 1),
+        planExerciseFixture(planId: planId, exerciseId: tied.id, sequence: 1),
+      ]);
+
+      final drafts = await loadPlanExerciseDrafts(
+        PlansCompanion(id: Value(planId)),
+      );
+
+      final exerciseIds = {
+        first.id,
+        tied.id,
+        later.id,
+        unlinked.id,
+        disabled.id,
+      };
+      expect(
+        drafts.take(3).map((draft) => draft.planExercise.exerciseId.value),
+        [first.id, tied.id, later.id],
+      );
+      expect(
+        drafts
+            .map((draft) => draft.planExercise.exerciseId.value)
+            .where(exerciseIds.contains),
+        [first.id, tied.id, later.id, unlinked.id, disabled.id],
+      );
+    },
+  );
 }
