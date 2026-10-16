@@ -157,10 +157,11 @@ class GraphsPageState extends State<GraphsPage>
   }
 
   Future<void> onDelete() async {
-    final keys = _selection.toList();
-    final summaries = (await _stream.first)
-        .where((summary) => keys.contains(summary.selectionKey))
-        .toList();
+    final keys = Set<String>.of(_selection.selected);
+    final summaries = filterGraphSummariesBySelection(
+      await _stream.first,
+      keys,
+    );
     final exerciseIds = summaries
         .where((summary) => !summary.bodyWeight)
         .map((summary) => summary.exerciseId!)
@@ -188,10 +189,11 @@ class GraphsPageState extends State<GraphsPage>
   }
 
   Future<int> _countSelectedGraphRecords() async {
-    final keys = _selection.toList();
-    final summaries = (await _stream.first)
-        .where((summary) => keys.contains(summary.selectionKey))
-        .toList();
+    final keys = Set<String>.of(_selection.selected);
+    final summaries = filterGraphSummariesBySelection(
+      await _stream.first,
+      keys,
+    );
     var count = await countGraphSets(
       summaries
           .where((summary) => !summary.bodyWeight)
@@ -489,13 +491,11 @@ class GraphsPageState extends State<GraphsPage>
 
   Future<void> onShare() async {
     final l10n = context.l10n;
-    final copy = _selection.toList();
+    final copy = Set<String>.of(_selection.selected);
     setState(() {
       _selection.clear();
     });
-    final sets = (await _stream.first)
-        .where((exerciseSet) => copy.contains(exerciseSet.selectionKey))
-        .toList();
+    final sets = filterGraphSummariesBySelection(await _stream.first, copy);
     final text = sets
         .map(
           (exerciseSet) =>

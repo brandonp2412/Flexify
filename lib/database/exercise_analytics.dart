@@ -43,6 +43,14 @@ class GraphExerciseSummary {
   final String? category;
 }
 
+List<GraphExerciseSummary> filterGraphSummariesBySelection(
+  Iterable<GraphExerciseSummary> summaries,
+  Set<String> selection,
+) => [
+  for (final summary in summaries)
+    if (selection.contains(summary.selectionKey)) summary,
+];
+
 typedef Rpm = ({String name, double rpm, double weight});
 
 String _periodKey(DateTime value, Period period) {
