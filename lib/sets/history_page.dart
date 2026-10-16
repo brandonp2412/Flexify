@@ -68,40 +68,26 @@ List<HistoryDay> getHistoryDays(List<ExerciseSetView> exerciseSets) {
 
 List<HistoryDayGroup> getHistoryDayGroups(List<ExerciseSetView> exerciseSets) {
   final groups = <HistoryDayGroup>[];
-  final byDay = <int, HistoryDayGroup>{};
-  final byDayExercise = <int, Map<String, HistoryDay>>{};
   int? lastDayKey;
-  HistoryDayGroup? lastGroup;
-  Map<String, HistoryDay>? lastExercises;
+  HistoryDayGroup? group;
+  Map<String, HistoryDay>? exercises;
   for (final exerciseSet in exerciseSets) {
     final created = exerciseSet.created;
     final dayKey = created.year * 512 + created.month * 32 + created.day;
-    var group = dayKey == lastDayKey ? lastGroup : byDay[dayKey];
-    Map<String, HistoryDay> exercises;
-    if (group == null) {
+    if (dayKey != lastDayKey) {
       group = HistoryDayGroup(
         day: DateTime(created.year, created.month, created.day),
         exercises: [],
       );
-      byDay[dayKey] = group;
       groups.add(group);
-      exercises = byDayExercise[dayKey] = <String, HistoryDay>{};
-    } else {
-      exercises = dayKey == lastDayKey
-          ? lastExercises!
-          : byDayExercise[dayKey]!;
+      exercises = <String, HistoryDay>{};
+      lastDayKey = dayKey;
     }
-    lastDayKey = dayKey;
-    lastGroup = group;
-    lastExercises = exercises;
-    var exercise = exercises[exerciseSet.name];
+    final name = exerciseSet.name;
+    var exercise = exercises![name];
     if (exercise == null) {
-      exercise = HistoryDay(
-        name: exerciseSet.name,
-        exerciseSets: [],
-        day: group.day,
-      );
-      exercises[exerciseSet.name] = exercise;
+      exercise = HistoryDay(name: name, exerciseSets: [], day: group!.day);
+      exercises[name] = exercise;
       group.exercises.add(exercise);
     }
     exercise.exerciseSets.add(exerciseSet);
