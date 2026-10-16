@@ -74,6 +74,7 @@ List<HistoryDayGroup> getHistoryDayGroups(List<ExerciseSetView> exerciseSets) {
     final created = exerciseSet.created;
     final dayKey = created.year * 512 + created.month * 32 + created.day;
     var group = byDay[dayKey];
+    Map<String, HistoryDay> exercises;
     if (group == null) {
       group = HistoryDayGroup(
         day: DateTime(created.year, created.month, created.day),
@@ -81,8 +82,10 @@ List<HistoryDayGroup> getHistoryDayGroups(List<ExerciseSetView> exerciseSets) {
       );
       byDay[dayKey] = group;
       groups.add(group);
+      exercises = byDayExercise[dayKey] = <String, HistoryDay>{};
+    } else {
+      exercises = byDayExercise[dayKey]!;
     }
-    final exercises = byDayExercise.putIfAbsent(dayKey, () => {});
     var exercise = exercises[exerciseSet.name];
     if (exercise == null) {
       exercise = HistoryDay(
