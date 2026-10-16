@@ -10,7 +10,7 @@ import 'package:flexify/graph/strength_data.dart';
 import 'package:flexify/main.dart';
 
 class GraphExerciseSummary {
-  const GraphExerciseSummary({
+  GraphExerciseSummary({
     required this.exerciseId,
     required this.bodyWeight,
     required this.name,
@@ -23,11 +23,12 @@ class GraphExerciseSummary {
     required this.created,
     this.image,
     this.category,
-  });
+  }) : normalizedName = name.toLowerCase();
 
   final int? exerciseId;
   final bool bodyWeight;
   final String name;
+  final String normalizedName;
 
   String get selectionKey =>
       bodyWeight ? 'body-weight' : 'exercise:$exerciseId';

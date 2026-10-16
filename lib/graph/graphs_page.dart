@@ -41,7 +41,7 @@ void applyGraphSortToNewestFirstSummaries(
     case GraphSort.name:
       final keyed = [
         for (final summary in summaries)
-          (summary: summary, key: summary.name.toLowerCase()),
+          (summary: summary, key: summary.normalizedName),
       ];
       keyed.sort((a, b) => a.key.compareTo(b.key));
       for (var i = 0; i < summaries.length; i++) {
@@ -346,7 +346,7 @@ class GraphsPageState extends State<GraphsPage>
 
             for (final term in terms) {
               stream = stream.where(
-                (exerciseSet) => exerciseSet.name.toLowerCase().contains(term),
+                (exerciseSet) => exerciseSet.normalizedName.contains(term),
               );
             }
 
