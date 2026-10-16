@@ -9,6 +9,19 @@ class PlanExerciseEntry {
   const PlanExerciseEntry({required this.planExercise, required this.exercise});
 }
 
+Map<int, List<PlanExerciseEntry>> groupEnabledPlanExercisesByPlan(
+  Iterable<PlanExerciseEntry> entries,
+) {
+  final grouped = <int, List<PlanExerciseEntry>>{};
+  for (final entry in entries) {
+    if (!entry.planExercise.enabled) continue;
+    grouped
+        .putIfAbsent(entry.planExercise.planId, () => <PlanExerciseEntry>[])
+        .add(entry);
+  }
+  return grouped;
+}
+
 Stream<List<PlanExerciseEntry>> watchPlanExerciseEntries(
   AppDatabase database,
   int planId,

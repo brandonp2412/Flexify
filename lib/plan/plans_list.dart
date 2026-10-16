@@ -9,6 +9,7 @@ import 'package:flexify/main.dart';
 import 'package:flexify/plan/edit_plan_page.dart';
 import 'package:flexify/plan/plan_queries.dart';
 import 'package:flexify/plan/plan_tile.dart';
+import 'package:flexify/plan/workout_sessions.dart';
 import 'package:flexify/responsive.dart';
 import 'package:flexify/platform_page_route.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,7 @@ import 'package:provider/provider.dart';
 
 class PlansList extends StatefulWidget {
   final List<Plan>? plans;
+  final List<PlanExerciseEntry>? exercises;
   final GlobalKey<NavigatorState> navKey;
   final Set<int> selected;
   final Function(int) onSelect;
@@ -25,6 +27,7 @@ class PlansList extends StatefulWidget {
   const PlansList({
     super.key,
     required this.plans,
+    required this.exercises,
     required this.navKey,
     required this.selected,
     required this.onSelect,
@@ -68,6 +71,9 @@ class _PlansListState extends State<PlansList> {
 
   Widget _buildList(BuildContext context, List<PlanCount> planCounts) {
     final countsByPlan = {for (final count in planCounts) count.planId: count};
+    final exercisesByPlan = widget.exercises == null
+        ? null
+        : groupEnabledPlanExercisesByPlan(widget.exercises!);
     final searchLabel = widget.search.trim();
     final noneFound = Padding(
       padding: const EdgeInsets.only(top: appSearchHeight),
@@ -126,6 +132,9 @@ class _PlansListState extends State<PlansList> {
             key: Key(plan.id.toString()),
             child: PlanTile(
               plan: plan,
+              exercises: exercisesByPlan == null
+                  ? null
+                  : exercisesByPlan[plan.id] ?? const <PlanExerciseEntry>[],
               weekday: weekday,
               index: index,
               navigatorKey: widget.navKey,
@@ -165,6 +174,9 @@ class _PlansListState extends State<PlansList> {
         return ResponsiveContent(
           child: PlanTile(
             plan: plan,
+            exercises: exercisesByPlan == null
+                ? null
+                : exercisesByPlan[plan.id] ?? const <PlanExerciseEntry>[],
             weekday: weekday,
             index: index,
             navigatorKey: widget.navKey,

@@ -173,9 +173,11 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
             stream: _planExercisesStream,
             builder: (context, exercisesSnapshot) {
               final plans = plansSnapshot.data ?? const <Plan>[];
-              final exercises =
-                  exercisesSnapshot.data ?? const <PlanExerciseEntry>[];
-              final filtered = _filterPlans(plans, exercises);
+              final exercises = exercisesSnapshot.data;
+              final filtered = _filterPlans(
+                plans,
+                exercises ?? const <PlanExerciseEntry>[],
+              );
 
               return Scaffold(
                 resizeToAvoidBottomInset: false,
@@ -200,6 +202,7 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
                       child: PlansList(
                         scroll: _scroll,
                         plans: plansSnapshot.hasData ? filtered : null,
+                        exercises: exercises,
                         navKey: widget.navKey,
                         selected: _selection.selected,
                         search: _search,

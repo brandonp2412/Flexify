@@ -1,7 +1,6 @@
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/l10n/l10n.dart';
-import 'package:flexify/main.dart';
 import 'package:flexify/plan/plan_queries.dart';
 import 'package:flexify/plan/start_plan_page.dart';
 import 'package:flexify/plan/workout_sessions.dart';
@@ -14,6 +13,7 @@ import 'package:provider/provider.dart';
 
 class PlanTile extends StatefulWidget {
   final Plan plan;
+  final List<PlanExerciseEntry>? exercises;
   final String weekday;
   final int index;
   final GlobalKey<NavigatorState> navigatorKey;
@@ -24,6 +24,7 @@ class PlanTile extends StatefulWidget {
   const PlanTile({
     super.key,
     required this.plan,
+    required this.exercises,
     required this.weekday,
     required this.index,
     required this.navigatorKey,
@@ -37,32 +38,6 @@ class PlanTile extends StatefulWidget {
 }
 
 class _PlanTileState extends State<PlanTile> {
-  late Stream<List<PlanExerciseEntry>> _exercisesStream;
-  List<PlanExerciseEntry>? _latestExercises;
-
-  @override
-  void initState() {
-    super.initState();
-    _exercisesStream = _getExercises();
-    dbVersion.addListener(_onDbChanged);
-  }
-
-  @override
-  void dispose() {
-    dbVersion.removeListener(_onDbChanged);
-    super.dispose();
-  }
-
-  void _onDbChanged() {
-    setState(() {
-      _latestExercises = null;
-      _exercisesStream = _getExercises();
-    });
-  }
-
-  Stream<List<PlanExerciseEntry>> _getExercises() =>
-      watchPlanExerciseEntries(db, widget.plan.id);
-
   @override
   Widget build(BuildContext context) {
     Widget title = Text(context.l10n.daily);
@@ -150,25 +125,18 @@ class _PlanTileState extends State<PlanTile> {
         ),
         subtitle: Padding(
           padding: const EdgeInsets.only(top: 4),
-          child: StreamBuilder(
-            stream: _exercisesStream,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                _latestExercises = snapshot.data!;
-                return Text(
-                  snapshot.data!.map((e) => e.exercise.name).join('  •  '),
+          child: widget.exercises == null
+              ? Text(context.l10n.loadingExercises)
+              : Text(
+                  widget.exercises!
+                      .map((entry) => entry.exercise.name)
+                      .join('  •  '),
                   maxLines: desktop ? 2 : null,
                   overflow: desktop ? TextOverflow.ellipsis : null,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: colors.onSurfaceVariant,
                   ),
-                );
-              } else if (snapshot.hasError) {
-                return Text(context.l10n.unexpectedError);
-              }
-              return Text(context.l10n.loadingExercises);
-            },
-          ),
+                ),
         ),
         leading: leading,
         trailing: Builder(
@@ -234,7 +202,7 @@ class _PlanTileState extends State<PlanTile> {
               settings: RouteSettings(name: 'start-plan:${widget.plan.id}'),
               builder: (context) => StartPlanPage(
                 plan: widget.plan,
-                initialExercises: _latestExercises,
+                initialExercises: widget.exercises,
               ),
             ),
           );

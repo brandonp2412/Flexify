@@ -2,17 +2,18 @@ import 'package:drift/drift.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/l10n/generated/app_localizations.dart';
 import 'package:flexify/main.dart';
-import 'package:flexify/plan/plan_tile.dart';
+import 'package:flexify/plan/plans_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 
+import 'mock_tab_controller.dart';
 import 'mock_tests.dart';
 
 void main() async {
   await mockTests();
 
-  testWidgets('PlanTile refreshes its exercise list after db is swapped and '
+  testWidgets('PlansPage refreshes its exercise list after db is swapped and '
       'dbVersion bumps, without the widget being remounted (#315)', (
     WidgetTester tester,
   ) async {
@@ -50,17 +51,7 @@ void main() async {
         child: MaterialApp(
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
-          home: Scaffold(
-            body: PlanTile(
-              plan: Plan(days: 'Monday', id: 1, sequence: null, title: null),
-              weekday: 'Monday',
-              index: 0,
-              navigatorKey: GlobalKey<NavigatorState>(),
-              selected: const {},
-              count: null,
-              onSelect: (_) {},
-            ),
-          ),
+          home: PlansPage(tabController: MockTabController()),
         ),
       ),
     );
