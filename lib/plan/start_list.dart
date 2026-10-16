@@ -79,9 +79,7 @@ class _StartListState extends State<StartList> {
 
   @override
   Widget build(BuildContext context) {
-    final max = context.select<Setting, int>(
-      (settings) => settings.maxSets,
-    );
+    final max = context.select<Setting, int>((settings) => settings.maxSets);
     final trailing = context.select<Setting, PlanTrailing>(
       (settings) => PlanTrailing.values.byName(
         settings.planTrailing.replaceFirst('PlanTrailing.', ''),

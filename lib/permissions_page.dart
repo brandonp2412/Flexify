@@ -39,9 +39,7 @@ class _PermissionsPageState extends State<PermissionsPage> {
                 title: Text(context.l10n.restTimers),
                 onTap: () {
                   db.settings.update().write(
-                    SettingsCompanion(
-                      restTimers: Value(!settings.restTimers),
-                    ),
+                    SettingsCompanion(restTimers: Value(!settings.restTimers)),
                   );
                 },
                 trailing: Switch(

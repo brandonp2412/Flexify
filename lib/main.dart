@@ -129,25 +129,24 @@ MethodChannel androidChannel = const MethodChannel(
   "com.presley.flexify/android",
 );
 
-Widget appProviders(Setting initialSettings) =>
-    ValueListenableBuilder<int>(
-      valueListenable: dbVersion,
-      builder: (context, version, child) => MultiProvider(
-        key: ValueKey(version),
-        providers: [
-          StreamProvider<Setting>(
-            initialData: initialSettings,
-            create: (context) => db.watchSettings(),
-          ),
-          ChangeNotifierProxyProvider<Setting, TimerState>(
-            create: (context) => TimerState(),
-            update: (context, settings, previous) =>
-                previous!..setKeepScreenOn(settings.keepScreenOn),
-          ),
-        ],
-        child: const App(),
+Widget appProviders(Setting initialSettings) => ValueListenableBuilder<int>(
+  valueListenable: dbVersion,
+  builder: (context, version, child) => MultiProvider(
+    key: ValueKey(version),
+    providers: [
+      StreamProvider<Setting>(
+        initialData: initialSettings,
+        create: (context) => db.watchSettings(),
       ),
-    );
+      ChangeNotifierProxyProvider<Setting, TimerState>(
+        create: (context) => TimerState(),
+        update: (context, settings, previous) =>
+            previous!..setKeepScreenOn(settings.keepScreenOn),
+      ),
+    ],
+    child: const App(),
+  ),
+);
 
 class App extends StatelessWidget {
   static final _lightScheme = ColorScheme.fromSeed(

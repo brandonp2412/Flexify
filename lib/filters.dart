@@ -245,8 +245,7 @@ class _FiltersState extends State<Filters> {
                             )
                           : null,
                       subtitle: Selector<Setting, String>(
-                        selector: (p0, settings) =>
-                            settings.shortDateFormat,
+                        selector: (p0, settings) => settings.shortDateFormat,
                         builder: (context, shortDateFormat, child) =>
                             widget.startDate != null
                             ? Text(
@@ -275,8 +274,7 @@ class _FiltersState extends State<Filters> {
                       leading: const Icon(Icons.calendar_month),
                       title: Text(context.l10n.endDate),
                       subtitle: Selector<Setting, String>(
-                        selector: (p0, settings) =>
-                            settings.shortDateFormat,
+                        selector: (p0, settings) => settings.shortDateFormat,
                         builder: (context, shortDateFormat, child) =>
                             widget.endDate != null
                             ? Text(

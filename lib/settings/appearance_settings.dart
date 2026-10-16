@@ -22,8 +22,7 @@ List<Widget> getAppearanceSettings(
     l10n.languageSystemDefault,
     ...selectableLocales.map((locale) => localeDisplayName(l10n, locale)),
   ].join(' ').toLowerCase();
-  final selectedLocale =
-      canonicalLocaleOverride(settings.localeOverride) ?? '';
+  final selectedLocale = canonicalLocaleOverride(settings.localeOverride) ?? '';
 
   return [
     if (languageSearchText.contains(normalizedTerm))
@@ -144,9 +143,7 @@ List<Widget> getAppearanceSettings(
                 ? const Icon(Icons.color_lens)
                 : const Icon(Icons.color_lens_outlined),
             onTap: () => db.settings.update().write(
-              SettingsCompanion(
-                systemColors: Value(!settings.systemColors),
-              ),
+              SettingsCompanion(systemColors: Value(!settings.systemColors)),
             ),
             trailing: Switch(
               value: settings.systemColors,

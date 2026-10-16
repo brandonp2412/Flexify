@@ -51,12 +51,8 @@ class _SettingsPageState extends State<SettingsPage>
       filtered.addAll(
         getAppearanceSettings(context, _searchCtrl.text, settings),
       );
-      filtered.addAll(
-        getFormatSettings(context, _searchCtrl.text, settings),
-      );
-      filtered.addAll(
-        getWorkoutSettings(context, _searchCtrl.text, settings),
-      );
+      filtered.addAll(getFormatSettings(context, _searchCtrl.text, settings));
+      filtered.addAll(getWorkoutSettings(context, _searchCtrl.text, settings));
       if (_player.isAvailable)
         filtered.addAll(
           getTimerSettings(

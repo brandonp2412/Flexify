@@ -1252,9 +1252,7 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('Appearance changes write through live Setting', (
-    tester,
-  ) async {
+  testWidgets('Appearance changes write through live Setting', (tester) async {
     await _pumpIsolatedApp(tester, surfaceSize: const Size(900, 900));
     await _openSettingsSection(tester, 'Appearance');
 

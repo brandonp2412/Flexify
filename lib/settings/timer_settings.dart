@@ -450,9 +450,8 @@ class _TimerSettingsState extends State<TimerSettings> {
     )).inMinutes.toString(),
   );
   late final _secCtrl = TextEditingController(
-    text:
-        ((Duration(milliseconds: _settings.timerDuration)).inSeconds % 60)
-            .toString(),
+    text: ((Duration(milliseconds: _settings.timerDuration)).inSeconds % 60)
+        .toString(),
   );
 
   final SafeAudioPlayer _player = SafeAudioPlayer(enabled: !kIsWeb);

@@ -56,8 +56,7 @@ class _ExerciseTileState extends State<ExerciseTile> {
                   child: Column(
                     children: [
                       Selector<Setting, int?>(
-                        selector: (context, settings) =>
-                            settings.warmupSets,
+                        selector: (context, settings) => settings.warmupSets,
                         builder: (context, value, child) => TextField(
                           controller: _warmup,
                           keyboardType: const TextInputType.numberWithOptions(

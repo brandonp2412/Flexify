@@ -90,8 +90,7 @@ class _ExerciseModalState extends State<ExerciseModal> {
                     child: Column(
                       children: [
                         Selector<Setting, int?>(
-                          selector: (context, settings) =>
-                              settings.warmupSets,
+                          selector: (context, settings) => settings.warmupSets,
                           builder: (context, value, child) => TextField(
                             controller: warmupController,
                             keyboardType: const TextInputType.numberWithOptions(
@@ -108,8 +107,7 @@ class _ExerciseModalState extends State<ExerciseModal> {
                         ),
                         const SizedBox(height: 16),
                         Selector<Setting, int>(
-                          selector: (context, settings) =>
-                              settings.maxSets,
+                          selector: (context, settings) => settings.maxSets,
                           builder: (context, value, child) => TextField(
                             controller: maxController,
                             keyboardType: const TextInputType.numberWithOptions(

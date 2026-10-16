@@ -20,6 +20,11 @@ void main() {
         created: DateTime(2026, 10, 16).subtract(Duration(days: i ~/ 20)),
       ),
     );
+    final grouped = getHistoryDayGroups(items);
+    expect(grouped.length, 50);
+    expect(grouped.first.exercises.length, 20);
+    expect(grouped.first.exercises.first.exerciseSets.first.id, 0);
+    expect(grouped.last.exercises.last.exerciseSets.last.id, 999);
     final cache = HistoryGroupingCache();
     for (var i = 0; i < 50; i++) {
       cache.get(items);
@@ -35,5 +40,11 @@ void main() {
     }
     timer.stop();
     print('GROUP_BENCHMARK_US=${timer.elapsedMicroseconds}');
+    final uncached = Stopwatch()..start();
+    for (var i = 0; i < 1000; i++) {
+      getHistoryDayGroups(items);
+    }
+    uncached.stop();
+    print('GROUP_UNCACHED_US=${uncached.elapsedMicroseconds}');
   });
 }

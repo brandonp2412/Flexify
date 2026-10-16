@@ -349,8 +349,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
                       },
                     ),
                   ),
-                  selector: (context, settings) =>
-                      settings.showBodyWeight,
+                  selector: (context, settings) => settings.showBodyWeight,
                 ),
                 const SizedBox(height: 12),
                 Selector<Setting, bool>(
@@ -372,8 +371,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
                 ),
                 const SizedBox(height: 12),
                 Selector<Setting, bool>(
-                  selector: (context, settings) =>
-                      settings.showCategories,
+                  selector: (context, settings) => settings.showCategories,
                   builder: (context, showCategories, child) => Visibility(
                     visible: showCategories,
                     child: StreamBuilder<List<String>>(
@@ -444,8 +442,7 @@ class _EditSetsPageState extends State<EditSetsPage> {
                       onTap: () => _selectDate(),
                     );
                   },
-                  selector: (context, settings) =>
-                      settings.longDateFormat,
+                  selector: (context, settings) => settings.longDateFormat,
                 ),
               ],
             ),
