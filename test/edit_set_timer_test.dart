@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:drift/drift.dart';
+import 'package:flexify/native_timer_wrapper.dart';
 import 'package:flexify/sets/edit_set_page.dart';
 import 'package:flexify/timer/timer_state.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'mock_tests.dart';
@@ -107,4 +111,44 @@ void main() {
       timerState.dispose();
     },
   );
+
+  test('desktop timers never invoke the Android wakelock plugin', () async {
+    if (Platform.isAndroid) return;
+    debugDefaultTargetPlatformOverride = TargetPlatform.android;
+    final messenger =
+        TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger;
+    const channel =
+        'dev.flutter.pigeon.wakelock_plus_platform_interface.WakelockPlusApi.toggle';
+    var calls = 0;
+    messenger.setMockMessageHandler(channel, (message) async {
+      calls++;
+      return null;
+    });
+    final timerState = TimerState();
+    try {
+      await timerState.startTimer(
+        'Rest',
+        const Duration(seconds: 30),
+        '',
+        false,
+        false,
+      );
+      timerState.setKeepScreenOn(false);
+      timerState.updateTimer(
+        NativeTimerWrapper(
+          const Duration(seconds: 30),
+          Duration.zero,
+          DateTime.now(),
+          NativeTimerState.paused,
+        ),
+      );
+      await timerState.stopTimer();
+      await Future<void>.delayed(Duration.zero);
+      expect(calls, 0);
+    } finally {
+      timerState.dispose();
+      messenger.setMockMessageHandler(channel, null);
+      debugDefaultTargetPlatformOverride = null;
+    }
+  });
 }

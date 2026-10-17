@@ -3,8 +3,8 @@ import 'dart:io';
 
 import 'package:flexify/audio/safe_audio_player.dart';
 import 'package:flexify/crash_logger.dart';
-import 'package:flexify/main.dart';
 import 'package:flexify/logging.dart';
+import 'package:flexify/main.dart';
 import 'package:flexify/native_timer_wrapper.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -65,7 +65,7 @@ class TimerState extends ChangeNotifier {
 
   void setKeepScreenOn(bool value) {
     _keepScreenOn = value;
-    if (!value) {
+    if (!value && !kIsWeb && Platform.isAndroid) {
       WakelockPlus.disable().catchError((error, stackTrace) {
         talker.handle(error, stackTrace, 'Failed to disable wakelock');
       });
@@ -179,7 +179,7 @@ class TimerState extends ChangeNotifier {
   ]) async {
     talker.info('Starting rest timer for ${rest.inSeconds} seconds');
     _target = target;
-    if (_keepScreenOn) {
+    if (_keepScreenOn && !kIsWeb && Platform.isAndroid) {
       WakelockPlus.enable().catchError((error, stackTrace) {
         talker.handle(error, stackTrace, 'Failed to enable wakelock');
       });
@@ -298,13 +298,13 @@ class TimerState extends ChangeNotifier {
     talker.info('Stopping rest timer');
     _target = 'timer';
     updateTimer(NativeTimerWrapper.emptyTimer());
-    WakelockPlus.disable().catchError((error, stackTrace) {
-      talker.handle(error, stackTrace, 'Failed to disable wakelock');
-    });
     if (kIsWeb || !Platform.isAndroid) {
       player.stop();
       next?.cancel();
     } else {
+      WakelockPlus.disable().catchError((error, stackTrace) {
+        talker.handle(error, stackTrace, 'Failed to disable wakelock');
+      });
       androidChannel.invokeMethod('stop');
     }
   }
@@ -321,8 +321,10 @@ class TimerState extends ChangeNotifier {
 
   void updateTimer(NativeTimerWrapper updated) {
     timer = updated;
-    if (updated.state == NativeTimerState.expired ||
-        updated.state == NativeTimerState.paused) {
+    if ((updated.state == NativeTimerState.expired ||
+            updated.state == NativeTimerState.paused) &&
+        !kIsWeb &&
+        Platform.isAndroid) {
       WakelockPlus.disable().catchError((error, stackTrace) {
         talker.handle(error, stackTrace, 'Failed to disable wakelock');
       });
