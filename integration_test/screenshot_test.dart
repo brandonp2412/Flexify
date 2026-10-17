@@ -142,28 +142,32 @@ void main() {
   late AppDatabase database;
 
   testWidgets('Prepare screenshot fixtures', (tester) async {
-    database = createIntegrationTestDatabase();
-    app.db = database;
-    app.androidChannel = const MethodChannel('com.presley.flexify/timer');
-    IntegrationTestWidgetsFlutterBinding.instance.defaultBinaryMessenger
-        .setMockMethodCallHandler(app.androidChannel, (message) => null);
+    await tester.runAsync(() async {
+      print('Initializing screenshot fixtures');
+      database = createIntegrationTestDatabase();
+      app.db = database;
+      app.androidChannel = const MethodChannel('com.presley.flexify/timer');
+      IntegrationTestWidgetsFlutterBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(app.androidChannel, (message) => null);
 
-    await app.db.delete(app.db.exerciseSets).go();
-    await app.db.delete(app.db.workouts).go();
-    await app.db.delete(app.db.planExercises).go();
-    await app.db.delete(app.db.plans).go();
+      await app.db.delete(app.db.exerciseSets).go();
+      await app.db.delete(app.db.workouts).go();
+      await app.db.delete(app.db.planExercises).go();
+      await app.db.delete(app.db.plans).go();
 
-    await seedGraphFixtures(app.db);
-    await db.plans.insertAll(screenshotPlans);
-    for (final entry in screenshotPlanExercises.entries) {
-      for (final exercise in entry.value) {
-        await insertPlanExerciseFixture(
-          db,
-          planId: entry.key,
-          exercise: exercise,
-        );
+      await seedGraphFixtures(app.db);
+      await db.plans.insertAll(screenshotPlans);
+      for (final entry in screenshotPlanExercises.entries) {
+        for (final exercise in entry.value) {
+          await insertPlanExerciseFixture(
+            db,
+            planId: entry.key,
+            exercise: exercise,
+          );
+        }
       }
-    }
+      print('Screenshot fixtures initialized');
+    });
   });
 
   tearDownAll(() async {
