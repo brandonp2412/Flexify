@@ -22,12 +22,24 @@ class ExerciseTile extends StatefulWidget {
 }
 
 class _ExerciseTileState extends State<ExerciseTile> {
-  late final _max = TextEditingController(
-    text: widget.planExercise.maxSets.value?.toString(),
-  );
-  late final _warmup = TextEditingController(
-    text: widget.planExercise.warmupSets.value?.toString(),
-  );
+  late final TextEditingController _max;
+  late final TextEditingController _warmup;
+
+  @override
+  void initState() {
+    super.initState();
+    final settings = context.read<Setting>();
+    _max = TextEditingController(
+      text:
+          widget.planExercise.maxSets.value?.toString() ??
+          settings.maxSets.toString(),
+    );
+    _warmup = TextEditingController(
+      text:
+          widget.planExercise.warmupSets.value?.toString() ??
+          (settings.warmupSets ?? 0).toString(),
+    );
+  }
 
   @override
   void dispose() {
@@ -73,7 +85,6 @@ class _ExerciseTileState extends State<ExerciseTile> {
                           decoration: InputDecoration(
                             labelText: context.l10n.warmupSets,
                             border: const OutlineInputBorder(),
-                            hintText: (value ?? 0).toString(),
                           ),
                         ),
                       ),
@@ -99,7 +110,6 @@ class _ExerciseTileState extends State<ExerciseTile> {
                           decoration: InputDecoration(
                             labelText: context.l10n.workingSetsMax,
                             border: const OutlineInputBorder(),
-                            hintText: value.toString(),
                           ),
                         ),
                       ),

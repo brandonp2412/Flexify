@@ -32,12 +32,7 @@ List<Widget> getTimerSettings(
       Tooltip(
         message: l10n.restTimersDescription,
         child: ListTile(
-          title: Text(
-            l10n.restTimers,
-            textAlign: isDesktopLayout(context)
-                ? TextAlign.start
-                : TextAlign.center,
-          ),
+          title: Text(l10n.restTimers, textAlign: TextAlign.start),
           leading: settings.restTimers
               ? const Icon(Icons.timer)
               : const Icon(Icons.timer_outlined),
@@ -80,12 +75,7 @@ List<Widget> getTimerSettings(
       Tooltip(
         message: l10n.vibrateDescription,
         child: ListTile(
-          title: Text(
-            l10n.vibrate,
-            textAlign: isDesktopLayout(context)
-                ? TextAlign.start
-                : TextAlign.center,
-          ),
+          title: Text(l10n.vibrate, textAlign: TextAlign.start),
           leading: settings.vibrate
               ? const Icon(Icons.vibration)
               : const Icon(Icons.vibration_outlined),
@@ -131,12 +121,7 @@ List<Widget> getTimerSettings(
       Tooltip(
         message: l10n.enableSoundDescription,
         child: ListTile(
-          title: Text(
-            l10n.enableSound,
-            textAlign: isDesktopLayout(context)
-                ? TextAlign.start
-                : TextAlign.center,
-          ),
+          title: Text(l10n.enableSound, textAlign: TextAlign.start),
           leading: settings.enableSound
               ? const Icon(Icons.music_note)
               : const Icon(Icons.music_note_outlined),
@@ -155,12 +140,7 @@ List<Widget> getTimerSettings(
       Tooltip(
         message: l10n.keepRingingDescription,
         child: ListTile(
-          title: Text(
-            l10n.keepRinging,
-            textAlign: isDesktopLayout(context)
-                ? TextAlign.start
-                : TextAlign.center,
-          ),
+          title: Text(l10n.keepRinging, textAlign: TextAlign.start),
           leading: settings.keepRinging
               ? const Icon(Icons.notifications_active)
               : const Icon(Icons.notifications_none),
@@ -179,12 +159,7 @@ List<Widget> getTimerSettings(
       Tooltip(
         message: l10n.keepScreenOnDescription,
         child: ListTile(
-          title: Text(
-            l10n.keepScreenOn,
-            textAlign: isDesktopLayout(context)
-                ? TextAlign.start
-                : TextAlign.center,
-          ),
+          title: Text(l10n.keepScreenOn, textAlign: TextAlign.start),
           leading: settings.keepScreenOn
               ? const Icon(Icons.light_mode)
               : const Icon(Icons.light_mode_outlined),
@@ -219,15 +194,13 @@ List<Widget> getTimerSettings(
           child: Column(
             children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   const Icon(Icons.public),
                   const SizedBox(width: 8),
                   Text(
                     l10n.globalDefault,
-                    textAlign: isDesktopLayout(context)
-                        ? TextAlign.start
-                        : TextAlign.center,
+                    textAlign: TextAlign.start,
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                 ],
@@ -388,15 +361,13 @@ class _ProgressPositionSettingState extends State<_ProgressPositionSetting> {
       child: Padding(
         padding: const EdgeInsets.fromLTRB(8, 4, 8, 8),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
               padding: const EdgeInsets.only(bottom: 4),
               child: Text(
                 context.l10n.progressBarPosition,
-                textAlign: isDesktopLayout(context)
-                    ? TextAlign.start
-                    : TextAlign.center,
+                textAlign: TextAlign.start,
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
             ),
@@ -680,15 +651,11 @@ class _TimerSettingsState extends State<TimerSettings> {
                 ListTile(
                   title: Text(
                     context.l10n.timerSettings,
-                    textAlign: isDesktopLayout(context)
-                        ? TextAlign.start
-                        : TextAlign.center,
+                    textAlign: TextAlign.start,
                   ),
                   subtitle: Text(
                     context.l10n.audioFeaturesUnavailable,
-                    textAlign: isDesktopLayout(context)
-                        ? TextAlign.start
-                        : TextAlign.center,
+                    textAlign: TextAlign.start,
                   ),
                 ),
               ],

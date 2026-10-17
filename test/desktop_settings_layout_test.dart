@@ -1,5 +1,9 @@
+import 'package:drift/drift.dart' hide isNull;
 import 'package:flexify/responsive.dart';
 import 'package:flexify/settings/appearance_settings.dart';
+import 'package:flexify/settings/data_settings.dart';
+import 'package:flexify/settings/tab_settings.dart';
+import 'package:flexify/settings/timer_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -24,5 +28,62 @@ void main() {
     expect(find.byType(ResponsiveSettingsList), findsOneWidget);
     expect(find.byType(Card), findsWidgets);
     expect(tester.takeException(), isNull);
+  });
+
+  for (final page in <Widget>[
+    const AppearanceSettings(),
+    const TimerSettings(),
+    const TabSettings(),
+    const DataSettings(),
+  ]) {
+    testWidgets('${page.runtimeType} is readable at an 850px window', (
+      WidgetTester tester,
+    ) async {
+      final harness = await FlexifyTestHarness.create();
+      await harness.pump(tester, page, surfaceSize: const Size(850, 900));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(Card), findsWidgets);
+      expect(tester.getSize(find.byType(Card).first).width, lessThan(740));
+      expect(tester.takeException(), isNull);
+    });
+  }
+
+  testWidgets('Reordering tabs still updates persisted order', (
+    WidgetTester tester,
+  ) async {
+    final harness = await FlexifyTestHarness.create();
+    await harness.pump(
+      tester,
+      const TabSettings(),
+      surfaceSize: const Size(850, 900),
+    );
+    await tester.pumpAndSettle();
+
+    final historyHandle = find.descendant(
+      of: find.byKey(const Key('HistoryPage')),
+      matching: find.byIcon(Icons.drag_handle),
+    );
+    await tester.drag(historyHandle, const Offset(0, 150));
+    await tester.pumpAndSettle();
+
+    final settings = await harness.database.settings.select().getSingle();
+    expect(settings.tabs.split(','), isNot(startsWith('HistoryPage')));
+  });
+
+  testWidgets('Data management presents actions as list rows', (
+    WidgetTester tester,
+  ) async {
+    final harness = await FlexifyTestHarness.create();
+    await harness.pump(
+      tester,
+      const DataSettings(),
+      surfaceSize: const Size(850, 900),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.widgetWithText(ListTile, 'Export data'), findsOneWidget);
+    expect(find.widgetWithText(ListTile, 'Import data'), findsOneWidget);
+    expect(find.widgetWithText(ListTile, 'Delete records'), findsOneWidget);
   });
 }

@@ -48,10 +48,32 @@ void main() {
     expect(find.text('Default graph metric'), findsNothing);
 
     await tester.scrollUntilVisible(find.text('Graphs'), 200);
+    await Scrollable.ensureVisible(
+      tester.element(find.text('Graphs')),
+      alignment: 0.5,
+    );
+    await tester.pumpAndSettle();
     await tester.tap(find.text('Graphs'));
     await tester.pumpAndSettle();
 
     expect(find.text('Default graph metric'), findsOneWidget);
+  });
+
+  testWidgets('Plan warmup setting displays an actual zero', (
+    WidgetTester tester,
+  ) async {
+    await render(tester);
+    await tester.enterText(find.bySemanticsLabel('Search...'), 'Warmup sets');
+    await tester.pumpAndSettle();
+    final field = tester.widget<TextField>(
+      find.byWidgetPredicate(
+        (widget) =>
+            widget is TextField &&
+            widget.decoration?.labelText == 'Warmup sets',
+      ),
+    );
+    expect(field.controller?.text, '0');
+    expect(field.decoration?.hintText, isNull);
   });
 
   testWidgets('SettingsPage changes theme', (WidgetTester tester) async {

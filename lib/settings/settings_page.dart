@@ -317,10 +317,13 @@ class _SettingsPageState extends State<SettingsPage>
 
     _settings = context.read<Setting>();
     _maxSets = TextEditingController(text: _settings.maxSets.toString());
-    _warmupSets = TextEditingController(text: _settings.warmupSets?.toString());
+    _warmupSets = TextEditingController(
+      text: (_settings.warmupSets ?? 0).toString(),
+    );
     _minutes = TextEditingController(
-      text: Duration(milliseconds: _settings.timerDuration).inMinutes
-          .toString(),
+      text: Duration(
+        milliseconds: _settings.timerDuration,
+      ).inMinutes.toString(),
     );
     _seconds = TextEditingController(
       text: (Duration(milliseconds: _settings.timerDuration).inSeconds % 60)

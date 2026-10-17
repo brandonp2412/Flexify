@@ -105,12 +105,7 @@ List<Widget> getDataSettings(
         Platform.isAndroid)
       ListTile(
         key: const Key('automaticBackupTile'),
-        title: Text(
-          l10n.automaticBackup,
-          textAlign: isDesktopLayout(context)
-              ? TextAlign.start
-              : TextAlign.center,
-        ),
+        title: Text(l10n.automaticBackup, textAlign: TextAlign.start),
         leading: settings.automaticBackups
             ? const Icon(Icons.timer)
             : const Icon(Icons.timer_outlined),
@@ -125,17 +120,10 @@ List<Widget> getDataSettings(
         !kIsWeb &&
         Platform.isAndroid)
       ListTile(
-        title: Text(
-          l10n.appPermissions,
-          textAlign: isDesktopLayout(context)
-              ? TextAlign.start
-              : TextAlign.center,
-        ),
+        title: Text(l10n.appPermissions, textAlign: TextAlign.start),
         subtitle: Text(
           l10n.appPermissionsDescription,
-          textAlign: isDesktopLayout(context)
-              ? TextAlign.start
-              : TextAlign.center,
+          textAlign: TextAlign.start,
         ),
         leading: const Icon(Icons.admin_panel_settings_outlined),
         onTap: () => showAppPermissionsDialog(context),

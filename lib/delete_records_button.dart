@@ -14,8 +14,8 @@ class DeleteRecordsButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextButton.icon(
-      onPressed: () {
+    return ListTile(
+      onTap: () {
         showModalBottomSheet(
           useRootNavigator: true,
           context: context,
@@ -150,8 +150,15 @@ class DeleteRecordsButton extends StatelessWidget {
           },
         );
       },
-      icon: const Icon(Icons.delete),
-      label: Text(context.l10n.deleteRecords),
+      leading: Icon(
+        Icons.delete_outline_rounded,
+        color: Theme.of(context).colorScheme.error,
+      ),
+      title: Text(
+        context.l10n.deleteRecords,
+        style: TextStyle(color: Theme.of(context).colorScheme.error),
+      ),
+      trailing: const Icon(Icons.chevron_right_rounded),
     );
   }
 }

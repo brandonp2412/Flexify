@@ -27,14 +27,11 @@ List<Widget> getPlanSettings(
           message: l10n.warmupSetsDescription,
           child: TextField(
             controller: warmup,
-            decoration: InputDecoration(
-              labelText: l10n.warmupSets,
-              hintText: '0',
-            ),
+            decoration: InputDecoration(labelText: l10n.warmupSets),
             keyboardType: const TextInputType.numberWithOptions(decimal: false),
             onTap: () => selectAll(warmup),
             onChanged: (value) => db.settings.update().write(
-              SettingsCompanion(warmupSets: Value(int.tryParse(value))),
+              SettingsCompanion(warmupSets: Value(int.tryParse(value) ?? 0)),
             ),
           ),
         ),
@@ -75,9 +72,7 @@ List<Widget> getPlanSettings(
                 message: l10n.planTrailingDisplayDescription,
                 child: Text(
                   l10n.planTrailingDisplay,
-                  textAlign: isDesktopLayout(context)
-                      ? TextAlign.start
-                      : TextAlign.center,
+                  textAlign: TextAlign.start,
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
               ),
@@ -170,7 +165,7 @@ class _PlanSettingsState extends State<PlanSettings> {
   late final _max = TextEditingController(text: _settings.maxSets.toString());
 
   late final _warmup = TextEditingController(
-    text: _settings.warmupSets?.toString(),
+    text: (_settings.warmupSets ?? 0).toString(),
   );
 
   @override

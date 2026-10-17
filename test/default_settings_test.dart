@@ -19,5 +19,6 @@ void main() {
     expect(settings.keepScreenOn, isFalse);
     expect(settings.showNotes, isFalse);
     expect(settings.restTimers, isFalse);
+    expect(settings.warmupSets, 0);
   });
 }

@@ -78,64 +78,45 @@ class DesktopSurface extends StatelessWidget {
   }
 }
 
-/// Presents settings as a compact two-column card surface on desktop while
-/// preserving the existing mobile list layout.
+/// Keeps settings readable at every window width.
 class ResponsiveSettingsList extends StatelessWidget {
   final List<Widget> children;
   final double maxWidth;
+  final bool grouped;
 
   const ResponsiveSettingsList({
     super.key,
     required this.children,
-    this.maxWidth = desktopWideContentMaxWidth,
+    this.maxWidth = 720,
+    this.grouped = true,
   });
 
   @override
   Widget build(BuildContext context) {
-    if (!isDesktopLayout(context)) {
-      return ListView(
-        padding: const EdgeInsets.only(bottom: 116),
-        children: children,
-      );
-    }
-
-    final colors = Theme.of(context).colorScheme;
-    return ResponsiveContent(
-      maxWidth: maxWidth,
-      desktopPadding: const EdgeInsets.fromLTRB(32, 12, 32, 32),
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          const gap = 16.0;
-          final tileWidth = (constraints.maxWidth - gap) / 2;
-          return SingleChildScrollView(
-            padding: const EdgeInsets.only(bottom: 24),
-            child: Wrap(
-              spacing: gap,
-              runSpacing: gap,
-              children: children
-                  .map(
-                    (child) => SizedBox(
-                      width: tileWidth,
-                      child: Card(
-                        margin: EdgeInsets.zero,
-                        color: colors.surfaceContainerLow,
-                        clipBehavior: Clip.antiAlias,
-                        child: ConstrainedBox(
-                          constraints: const BoxConstraints(minHeight: 88),
-                          child: Center(
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 4),
-                              child: child,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  )
-                  .toList(),
+    final content = grouped
+        ? [
+            Card(
+              margin: EdgeInsets.zero,
+              color: Theme.of(context).colorScheme.surfaceContainerLow,
+              clipBehavior: Clip.antiAlias,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                child: Column(children: children),
+              ),
             ),
-          );
-        },
+          ]
+        : children;
+    return Align(
+      alignment: Alignment.topCenter,
+      child: ConstrainedBox(
+        constraints: BoxConstraints(maxWidth: maxWidth),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          child: ListView(
+            padding: const EdgeInsets.only(top: 12, bottom: 116),
+            children: content,
+          ),
+        ),
       ),
     );
   }

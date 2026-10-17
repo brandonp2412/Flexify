@@ -58,165 +58,107 @@ class _TabSettingsState extends State<TabSettings> {
   @override
   Widget build(BuildContext context) {
     final settings = context.watch<Setting>();
+    final labels = <String, (IconData, String)>{
+      'HistoryPage': (Icons.history, context.l10n.navHistory),
+      'PlansPage': (Icons.calendar_today_outlined, context.l10n.navPlans),
+      'GraphsPage': (Icons.insights_rounded, context.l10n.navGraphs),
+      'TimerPage': (Icons.timer_outlined, context.l10n.navTimer),
+      'SettingsPage': (Icons.settings_outlined, context.l10n.navSettings),
+    };
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(title: Text(context.l10n.tabs)),
-      body: Padding(
-        padding: const EdgeInsets.all(8),
-        child: Column(
-          children: [
-            ListTile(
-              title: Row(
-                children: [
-                  const Icon(Icons.swipe),
-                  SizedBox(width: 8),
-                  Text(context.l10n.swipeBetweenTabs),
-                ],
-              ),
-              onTap: () => db.settings.update().write(
-                SettingsCompanion(
-                  scrollableTabs: Value(!settings.scrollableTabs),
-                ),
-              ),
-              leading: Switch(
-                value: settings.scrollableTabs,
-                onChanged: (value) {
-                  db.settings.update().write(
-                    SettingsCompanion(scrollableTabs: Value(value)),
-                  );
-                },
-              ),
-            ),
-            Expanded(
-              child: ReorderableListView.builder(
-                padding: const EdgeInsets.only(bottom: 116),
-                onReorderItem: (oldIndex, newIndex) {
-                  final temp = _tabs[oldIndex];
-                  setState(() {
-                    _tabs.removeAt(oldIndex);
-                    _tabs.insert(newIndex, temp);
-                  });
-
-                  (db.settings.update().write(
-                    SettingsCompanion(
-                      tabs: Value(
-                        _tabs
-                            .where((tab) => tab.enabled)
-                            .map((tab) => tab.name)
-                            .join(','),
+      body: Align(
+        alignment: Alignment.topCenter,
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 720),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: ListView(
+              padding: const EdgeInsets.only(top: 12, bottom: 116),
+              children: [
+                Card(
+                  margin: EdgeInsets.zero,
+                  color: Theme.of(context).colorScheme.surfaceContainerLow,
+                  child: ListTile(
+                    leading: const Icon(Icons.swipe),
+                    title: Text(context.l10n.swipeBetweenTabs),
+                    trailing: Switch(
+                      value: settings.scrollableTabs,
+                      onChanged: (value) => db.settings.update().write(
+                        SettingsCompanion(scrollableTabs: Value(value)),
                       ),
                     ),
-                  ));
-                },
-                itemBuilder: (context, index) {
-                  final tab = _tabs[index];
-                  if (tab.name == 'HistoryPage') {
-                    return ListTile(
-                      key: Key(tab.name),
-                      onTap: () => setTab(tab.name, !tab.enabled),
-                      leading: Switch(
-                        value: tab.enabled,
-                        onChanged: (value) => setTab(tab.name, value),
+                    onTap: () => db.settings.update().write(
+                      SettingsCompanion(
+                        scrollableTabs: Value(!settings.scrollableTabs),
                       ),
-                      title: Row(
-                        children: [
-                          const Icon(Icons.history),
-                          SizedBox(width: 8),
-                          Text(context.l10n.navHistory),
-                        ],
-                      ),
-                      trailing: ReorderableDragStartListener(
-                        index: index,
-                        child: const Icon(Icons.drag_handle),
-                      ),
-                    );
-                  } else if (tab.name == 'PlansPage') {
-                    return ListTile(
-                      key: Key(tab.name),
-                      onTap: () => setTab(tab.name, !tab.enabled),
-                      leading: Switch(
-                        value: tab.enabled,
-                        onChanged: (value) => setTab(tab.name, value),
-                      ),
-                      title: Row(
-                        children: [
-                          const Icon(Icons.calendar_today_outlined),
-                          SizedBox(width: 8),
-                          Text(context.l10n.navPlans),
-                        ],
-                      ),
-                      trailing: ReorderableDragStartListener(
-                        index: index,
-                        child: const Icon(Icons.drag_handle),
-                      ),
-                    );
-                  } else if (tab.name == 'GraphsPage') {
-                    return ListTile(
-                      key: Key(tab.name),
-                      onTap: () => setTab(tab.name, !tab.enabled),
-                      leading: Switch(
-                        value: tab.enabled,
-                        onChanged: (value) => setTab(tab.name, value),
-                      ),
-                      title: Row(
-                        children: [
-                          const Icon(Icons.insights_rounded),
-                          SizedBox(width: 8),
-                          Text(context.l10n.navGraphs),
-                        ],
-                      ),
-                      trailing: ReorderableDragStartListener(
-                        index: index,
-                        child: const Icon(Icons.drag_handle),
-                      ),
-                    );
-                  } else if (tab.name == 'TimerPage') {
-                    return ListTile(
-                      key: Key(tab.name),
-                      onTap: () => setTab(tab.name, !tab.enabled),
-                      leading: Switch(
-                        value: tab.enabled,
-                        onChanged: (value) => setTab(tab.name, value),
-                      ),
-                      title: Row(
-                        children: [
-                          const Icon(Icons.timer),
-                          SizedBox(width: 8),
-                          Text(context.l10n.navTimer),
-                        ],
-                      ),
-                      trailing: ReorderableDragStartListener(
-                        index: index,
-                        child: const Icon(Icons.drag_handle),
-                      ),
-                    );
-                  } else if (tab.name == 'SettingsPage') {
-                    return ListTile(
-                      key: Key(tab.name),
-                      onTap: () => setTab(tab.name, !tab.enabled),
-                      leading: Switch(
-                        value: tab.enabled,
-                        onChanged: (value) => setTab(tab.name, value),
-                      ),
-                      title: Row(
-                        children: [
-                          const Icon(Icons.settings),
-                          SizedBox(width: 8),
-                          Text(context.l10n.navSettings),
-                        ],
-                      ),
-                      trailing: ReorderableDragStartListener(
-                        index: index,
-                        child: const Icon(Icons.drag_handle),
-                      ),
-                    );
-                  } else
-                    return ErrorWidget(context.l10n.invalidTabSettings);
-                },
-                itemCount: _tabs.length,
-              ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Card(
+                  margin: EdgeInsets.zero,
+                  color: Theme.of(context).colorScheme.surfaceContainerLow,
+                  clipBehavior: Clip.antiAlias,
+                  child: ReorderableListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    buildDefaultDragHandles: false,
+                    itemCount: _tabs.length,
+                    onReorderItem: (oldIndex, newIndex) {
+                      setState(() {
+                        final moved = _tabs.removeAt(oldIndex);
+                        _tabs.insert(newIndex, moved);
+                      });
+                      db.settings.update().write(
+                        SettingsCompanion(
+                          tabs: Value(
+                            _tabs
+                                .where((tab) => tab.enabled)
+                                .map((tab) => tab.name)
+                                .join(','),
+                          ),
+                        ),
+                      );
+                    },
+                    itemBuilder: (context, index) {
+                      final tab = _tabs[index];
+                      final details = labels[tab.name];
+                      if (details == null) {
+                        return ListTile(
+                          key: Key(tab.name),
+                          title: Text(context.l10n.invalidTabSettings),
+                        );
+                      }
+                      return ListTile(
+                        key: Key(tab.name),
+                        leading: Icon(details.$1),
+                        title: Text(details.$2),
+                        onTap: () => setTab(tab.name, !tab.enabled),
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Switch(
+                              value: tab.enabled,
+                              onChanged: (value) => setTab(tab.name, value),
+                            ),
+                            const SizedBox(width: 12),
+                            ReorderableDragStartListener(
+                              index: index,
+                              child: const Icon(Icons.drag_handle),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );

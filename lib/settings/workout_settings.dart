@@ -361,7 +361,6 @@ class _WorkoutSettingsState extends State<WorkoutSettings> {
   @override
   Widget build(BuildContext context) {
     _settings = context.watch<Setting>();
-    final desktop = isDesktopLayout(context);
     final settings = getWorkoutSettingGroups(context, '', _settings);
 
     Widget section(
@@ -371,7 +370,6 @@ class _WorkoutSettingsState extends State<WorkoutSettings> {
     }) {
       final rows = <Widget>[
         for (var index = 0; index < children.length; index++) ...[
-          if (index > 0) const Divider(height: 1),
           children[index],
         ],
       ];
@@ -397,9 +395,8 @@ class _WorkoutSettingsState extends State<WorkoutSettings> {
               ],
             );
 
-      if (desktop) return content;
       return Card(
-        margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+        margin: const EdgeInsets.symmetric(vertical: 6),
         clipBehavior: Clip.antiAlias,
         child: content,
       );
@@ -409,6 +406,7 @@ class _WorkoutSettingsState extends State<WorkoutSettings> {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(title: Text(context.l10n.workouts)),
       body: ResponsiveSettingsList(
+        grouped: false,
         children: [
           section(null, settings.tracking),
           section(context.l10n.navHistory, settings.history),

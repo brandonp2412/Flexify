@@ -55,8 +55,12 @@ class _ExerciseModalState extends State<ExerciseModal> {
         .getSingle()
         .then((planExercise) {
           if (!mounted) return;
-          _max.text = planExercise.maxSets?.toString() ?? '';
-          _warmup.text = planExercise.warmupSets?.toString() ?? '';
+          _max.text =
+              planExercise.maxSets?.toString() ??
+              context.read<Setting>().maxSets.toString();
+          _warmup.text =
+              planExercise.warmupSets?.toString() ??
+              (context.read<Setting>().warmupSets ?? 0).toString();
 
           setState(() {
             _timers = planExercise.timers;
@@ -101,7 +105,6 @@ class _ExerciseModalState extends State<ExerciseModal> {
                             decoration: InputDecoration(
                               labelText: dialogContext.l10n.warmupSets,
                               border: const OutlineInputBorder(),
-                              hintText: (value ?? 0).toString(),
                             ),
                           ),
                         ),
@@ -118,7 +121,6 @@ class _ExerciseModalState extends State<ExerciseModal> {
                             decoration: InputDecoration(
                               labelText: dialogContext.l10n.workingSetsMax,
                               border: const OutlineInputBorder(),
-                              hintText: value.toString(),
                             ),
                           ),
                         ),

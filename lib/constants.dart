@@ -61,6 +61,7 @@ final defaultSettings = SettingsCompanion.insert(
   shortDateFormat: 'd/M/yy',
   timerDuration: const Duration(minutes: 3, seconds: 30).inMilliseconds,
   maxSets: 3,
+  warmupSets: const Value(0),
   vibrate: true,
   restTimers: false,
   showUnits: false,

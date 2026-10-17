@@ -102,12 +102,7 @@ List<Widget> getAppearanceSettings(
           leading: settings.themeMode == 'ThemeMode.amoled'
               ? const Icon(Icons.contrast)
               : const Icon(Icons.contrast_outlined),
-          title: Text(
-            l10n.pureBlackAmoled,
-            textAlign: isDesktopLayout(context)
-                ? TextAlign.start
-                : TextAlign.center,
-          ),
+          title: Text(l10n.pureBlackAmoled, textAlign: TextAlign.start),
           onTap: () => db.settings.update().write(
             SettingsCompanion(
               themeMode: Value(
@@ -133,12 +128,7 @@ List<Widget> getAppearanceSettings(
         child: Tooltip(
           message: l10n.systemColorSchemeDescription,
           child: ListTile(
-            title: Text(
-              l10n.systemColorScheme,
-              textAlign: isDesktopLayout(context)
-                  ? TextAlign.start
-                  : TextAlign.center,
-            ),
+            title: Text(l10n.systemColorScheme, textAlign: TextAlign.start),
             leading: settings.systemColors
                 ? const Icon(Icons.color_lens)
                 : const Icon(Icons.color_lens_outlined),
@@ -158,12 +148,7 @@ List<Widget> getAppearanceSettings(
       Tooltip(
         message: l10n.showImagesDescription,
         child: ListTile(
-          title: Text(
-            l10n.showImages,
-            textAlign: isDesktopLayout(context)
-                ? TextAlign.start
-                : TextAlign.center,
-          ),
+          title: Text(l10n.showImages, textAlign: TextAlign.start),
           leading: settings.showImages
               ? const Icon(Icons.image)
               : const Icon(Icons.image_outlined),
@@ -182,12 +167,7 @@ List<Widget> getAppearanceSettings(
       Tooltip(
         message: l10n.showGlobalProgressDescription,
         child: ListTile(
-          title: Text(
-            l10n.showGlobalProgress,
-            textAlign: isDesktopLayout(context)
-                ? TextAlign.start
-                : TextAlign.center,
-          ),
+          title: Text(l10n.showGlobalProgress, textAlign: TextAlign.start),
           leading: settings.showGlobalProgress
               ? const Icon(Icons.public)
               : const Icon(Icons.public_outlined),
@@ -208,12 +188,7 @@ List<Widget> getAppearanceSettings(
       Tooltip(
         message: l10n.peekGraphDescription,
         child: ListTile(
-          title: Text(
-            l10n.peekGraph,
-            textAlign: isDesktopLayout(context)
-                ? TextAlign.start
-                : TextAlign.center,
-          ),
+          title: Text(l10n.peekGraph, textAlign: TextAlign.start),
           leading: settings.peekGraph
               ? const Icon(Icons.visibility)
               : const Icon(Icons.visibility_outlined),
@@ -232,12 +207,7 @@ List<Widget> getAppearanceSettings(
       Tooltip(
         message: l10n.curveLineGraphsDescription,
         child: ListTile(
-          title: Text(
-            l10n.curveLineGraphs,
-            textAlign: isDesktopLayout(context)
-                ? TextAlign.start
-                : TextAlign.center,
-          ),
+          title: Text(l10n.curveLineGraphs, textAlign: TextAlign.start),
           leading: settings.curveLines
               ? const Icon(Icons.insights)
               : const Icon(Icons.insights_outlined),
@@ -252,15 +222,17 @@ List<Widget> getAppearanceSettings(
           ),
         ),
       ),
-    if (matches([l10n.curveSmoothness]))
+    if (settings.curveLines && matches([l10n.curveSmoothness]))
       Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            l10n.curveSmoothness,
-            textAlign: isDesktopLayout(context)
-                ? TextAlign.start
-                : TextAlign.center,
-            style: Theme.of(context).textTheme.bodyLarge,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Text(
+              l10n.curveSmoothness,
+              textAlign: TextAlign.start,
+              style: Theme.of(context).textTheme.bodyLarge,
+            ),
           ),
           Slider(
             value: settings.curveSmoothness ?? 0.35,
@@ -307,7 +279,8 @@ List<Widget> getAppearanceSettings(
                 ),
               ),
               const SizedBox(height: 12),
-              TextField(
+              TextFormField(
+                initialValue: l10n.inputStyle,
                 decoration: InputDecoration(labelText: l10n.inputStyle),
                 readOnly: true,
               ),

@@ -48,8 +48,8 @@ class ImportData extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextButton.icon(
-      onPressed: () {
+    return ListTile(
+      onTap: () {
         showModalBottomSheet(
           useRootNavigator: true,
           context: context,
@@ -78,8 +78,9 @@ class ImportData extends StatelessWidget {
           },
         );
       },
-      icon: const Icon(Icons.upload),
-      label: Text(context.l10n.importData),
+      leading: const Icon(Icons.upload_outlined),
+      title: Text(context.l10n.importData),
+      trailing: const Icon(Icons.chevron_right_rounded),
     );
   }
 

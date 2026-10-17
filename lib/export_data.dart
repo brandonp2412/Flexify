@@ -27,8 +27,8 @@ class _ExportDataState extends State<ExportData> {
 
   @override
   Widget build(BuildContext context) {
-    return TextButton.icon(
-      onPressed: () {
+    return ListTile(
+      onTap: () {
         showModalBottomSheet(
           context: context,
           useRootNavigator: true,
@@ -122,14 +122,15 @@ class _ExportDataState extends State<ExportData> {
           },
         );
       },
-      icon: const Icon(Icons.download),
-      label: exporting
+      leading: exporting
           ? const SizedBox(
-              height: 20,
-              width: 20,
-              child: CircularProgressIndicator(),
+              height: 24,
+              width: 24,
+              child: CircularProgressIndicator(strokeWidth: 2),
             )
-          : Text(context.l10n.exportData),
+          : const Icon(Icons.download_outlined),
+      title: Text(context.l10n.exportData),
+      trailing: const Icon(Icons.chevron_right_rounded),
     );
   }
 }
