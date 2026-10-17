@@ -25,16 +25,14 @@ Flexify is a private, offline-first workout tracker for logging gym sessions and
 ## Screenshots
 
 <p align="center">
+  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/4_en-US.png" alt="Flexify plan progress with exercises, sets, and weights" width="360" />
+  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/5_en-US.png" alt="Flexify exercise graph showing dumbbell shoulder press progress" width="360" />
+  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/8_en-US.png" alt="Flexify rest timer showing time remaining" width="360" />
+  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/7_en-US.png" alt="Flexify workout screen showing selected days and exercises" width="360" />
   <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/1_en-US.png" alt="Flexify workout plans screen with scheduled workouts and exercises" width="360" />
   <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/2_en-US.png" alt="Flexify graphs screen showing exercise performance records" width="360" />
   <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/3_en-US.png" alt="Flexify settings screen with appearance, data, plans, timers, and workouts options" width="360" />
-  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/4_en-US.png" alt="Flexify workout plan editor with exercises, sets, and weights" width="360" />
-</p>
-<p align="center">
-  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/5_en-US.png" alt="Flexify exercise graph showing dumbbell shoulder press progress" width="360" />
   <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/6_en-US.png" alt="Flexify history screen listing recorded exercise sets and weights" width="360" />
-  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/7_en-US.png" alt="Flexify workout screen showing selected days and exercises" width="360" />
-  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/8_en-US.png" alt="Flexify rest timer showing time remaining" width="360" />
 </p>
 
 ## Build from source
