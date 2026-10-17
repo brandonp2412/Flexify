@@ -6,7 +6,7 @@ import 'package:flexify/plan/workout_sessions.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'mock_tests.dart';
-import 'support/fixtures.dart';
+import '../integration_test/support/fixtures.dart';
 
 Future<ExerciseSetView> addMirroredSet({
   required int exerciseId,

@@ -11,7 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 
-import '../test/support/fixtures.dart';
+import 'support/fixtures.dart';
 
 Finder _textFieldWithLabel(String label) => find.descendant(
   of: find.byWidgetPredicate(

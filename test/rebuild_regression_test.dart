@@ -29,9 +29,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 
-import 'mock_tab_controller.dart';
+import '../integration_test/support/mock_tab_controller.dart';
 import 'mock_tests.dart';
-import 'support/fixtures.dart';
+import '../integration_test/support/fixtures.dart';
 
 // ---------------------------------------------------------------------------
 // Helpers

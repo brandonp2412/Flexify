@@ -18,9 +18,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:provider/provider.dart';
 
-import '../test/mock_tab_controller.dart';
-import '../test/support/fixtures.dart';
-import '../test/support/graph_fixtures.dart';
+import 'support/mock_tab_controller.dart';
+import 'support/fixtures.dart';
+import 'support/graph_fixtures.dart';
 import 'test_database.dart';
 
 Future<void> appWrapper(

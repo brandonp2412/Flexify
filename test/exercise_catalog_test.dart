@@ -7,7 +7,7 @@ import 'package:flexify/plan/plan_queries.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'mock_tests.dart';
-import 'support/fixtures.dart';
+import '../integration_test/support/fixtures.dart';
 
 void main() {
   setUp(() => db = testDb());

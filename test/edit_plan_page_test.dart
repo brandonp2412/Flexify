@@ -4,7 +4,7 @@ import 'package:flexify/plan/edit_plan_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'support/fixtures.dart';
+import '../integration_test/support/fixtures.dart';
 import 'support/test_app.dart';
 
 Future<void> scrollTo(WidgetTester tester, FinderBase<Element> finder) {

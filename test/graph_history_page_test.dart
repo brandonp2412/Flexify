@@ -3,8 +3,8 @@ import 'package:flexify/graph/graph_history_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'mock_tab_controller.dart';
-import 'support/fixtures.dart';
+import '../integration_test/support/mock_tab_controller.dart';
+import '../integration_test/support/fixtures.dart';
 import 'support/test_app.dart';
 
 void main() {

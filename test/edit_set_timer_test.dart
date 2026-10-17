@@ -7,7 +7,7 @@ import 'package:flexify/timer/timer_state.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'support/fixtures.dart';
+import '../integration_test/support/fixtures.dart';
 import 'support/test_app.dart';
 
 void main() {
