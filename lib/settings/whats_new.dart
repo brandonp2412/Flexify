@@ -244,7 +244,7 @@ class _WhatsNewState extends State<WhatsNew> {
         icon: const Icon(Icons.favorite_outline),
         onPressed: () async {
           const url = 'https://github.com/sponsors/brandonp2412';
-          if (await canLaunchUrlString(url)) await launchUrlString(url);
+          await launchUrlString(url);
         },
         label: Text(context.l10n.donate),
       ),

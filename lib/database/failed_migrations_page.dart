@@ -54,8 +54,7 @@ class FailedMigrationsPage extends StatelessWidget {
                       },
                     ).toString();
 
-                    if (await canLaunchUrlString(url))
-                      await launchUrlString(url);
+                    await launchUrlString(url);
                   },
                   label: Text(context.l10n.createIssue),
                   icon: Image.asset(

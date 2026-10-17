@@ -55,7 +55,7 @@ class AboutPage extends StatelessWidget {
             ),
             onTap: () async {
               const url = 'https://github.com/brandonp2412/Flexify/releases';
-              if (await canLaunchUrlString(url)) await launchUrlString(url);
+              await launchUrlString(url);
             },
           ),
           ListTile(
@@ -67,7 +67,7 @@ class AboutPage extends StatelessWidget {
             ),
             onTap: () async {
               const url = 'https://github.com/brandonp2412';
-              if (await canLaunchUrlString(url)) await launchUrlString(url);
+              await launchUrlString(url);
             },
           ),
           ListTile(
@@ -77,7 +77,7 @@ class AboutPage extends StatelessWidget {
             onTap: () async {
               const url =
                   'https://brandonp2412.github.io/Flexify/privacy-policy.html';
-              if (await canLaunchUrlString(url)) await launchUrlString(url);
+              await launchUrlString(url);
             },
           ),
           ListTile(
@@ -90,7 +90,7 @@ class AboutPage extends StatelessWidget {
             onTap: () async {
               const url =
                   'https://github.com/brandonp2412/Flexify?tab=MIT-1-ov-file#readme';
-              if (await canLaunchUrlString(url)) await launchUrlString(url);
+              await launchUrlString(url);
             },
           ),
           ListTile(
@@ -103,7 +103,7 @@ class AboutPage extends StatelessWidget {
             ),
             onTap: () async {
               const url = 'https://github.com/brandonp2412/Flexify';
-              if (await canLaunchUrlString(url)) await launchUrlString(url);
+              await launchUrlString(url);
             },
           ),
           ListTile(
@@ -113,7 +113,7 @@ class AboutPage extends StatelessWidget {
             onTap: () async {
               const url =
                   'https://play.google.com/store/apps/details?id=com.presley.flexify';
-              if (await canLaunchUrlString(url)) await launchUrlString(url);
+              await launchUrlString(url);
             },
           ),
           ListTile(
@@ -124,7 +124,7 @@ class AboutPage extends StatelessWidget {
               final version = (await info).version;
               final url =
                   'https://github.com/brandonp2412/Flexify/issues/new?labels=Bug&body=App version: $version';
-              if (await canLaunchUrlString(url)) await launchUrlString(url);
+              await launchUrlString(url);
             },
           ),
         ],
