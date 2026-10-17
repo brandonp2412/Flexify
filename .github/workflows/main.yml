@@ -18,7 +18,6 @@ permissions:
 
 env:
   PUB_SUMMARY_ONLY: true
-  KOTLIN_VERSION: "2.1.0"
 
 # Keep scheduled/manual releases separate from push checks. A new push must
 # never cancel an in-progress release, especially during the version bump.
