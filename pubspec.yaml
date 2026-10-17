@@ -11,7 +11,6 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   talker_flutter: 5.1.20
-  cupertino_icons: ^2.0.0
   drift: ^2.35.2
   path_provider: ^2.1.2
   path: ^1.8.3
@@ -27,7 +26,6 @@ dependencies:
   audioplayers: ^6.5.0
   package_info_plus: ^10.2.1
   url_launcher: ^6.2.6
-  badges: ^4.0.1
   wakelock_plus: ^1.7.0
   flutter_local_notifications: ^22.2.0
   msvcredist:
@@ -46,7 +44,6 @@ dev_dependencies:
     sdk: flutter
   flutter_lints: ^6.0.0
   image: ^4.8.0
-  mockito: ^5.4.4
   build_runner: ^2.15.1
   flutter_launcher_icons: ^0.14.4
   flutter_local_notifications_platform_interface: ^12.1.0

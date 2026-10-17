@@ -114,14 +114,6 @@ packages:
       url: "https://github.com/bluefireteam/audioplayers.git"
     source: git
     version: "4.4.1"
-  badges:
-    dependency: "direct main"
-    description:
-      name: badges
-      sha256: "4d53519c5883c74974b8efd2ea3cef85bab17b79406b83b91a022285c46e5560"
-      url: "https://pub.dev"
-    source: hosted
-    version: "4.0.1"
   boolean_selector:
     dependency: transitive
     description:
@@ -226,14 +218,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.0"
-  code_builder:
-    dependency: transitive
-    description:
-      name: code_builder
-      sha256: "811709c1badd02fc054039a13f66e0db1961865f9a314175f68c3eaeebec786f"
-      url: "https://pub.dev"
-    source: hosted
-    version: "4.13.0"
   collection:
     dependency: transitive
     description:
@@ -282,22 +266,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "8.0.0"
-  cupertino_icons:
-    dependency: "direct main"
-    description:
-      name: cupertino_icons
-      sha256: b7cc2390aac296c083bea762859413eb1cf5b630c70e0c7e4d831018f762a8b2
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.0"
-  cupertino_ui:
-    dependency: transitive
-    description:
-      name: cupertino_ui
-      sha256: "8e14acc2817ff469b925b0e275ab85ecc6c769621360dd0af1331c47f916e247"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.1.3"
   dart_style:
     dependency: transitive
     description:
@@ -669,14 +637,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.13.0"
-  material_ui:
-    dependency: transitive
-    description:
-      name: material_ui
-      sha256: "27ea1af251a79728ee63068417f2ab469d294931a9bb8366ba8b85b0ef839060"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.7.0"
   meta:
     dependency: transitive
     description:
@@ -693,14 +653,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.0"
-  mockito:
-    dependency: "direct dev"
-    description:
-      name: mockito
-      sha256: "6c1970612452260366064d4df80fdb3eece1ec5e52610ae34a0e51f2f3d8e64f"
-      url: "https://pub.dev"
-    source: hosted
-    version: "5.8.1"
   msix:
     dependency: "direct dev"
     description:
@@ -1342,4 +1294,4 @@ packages:
     version: "2.2.4"
 sdks:
   dart: ">=3.13.0 <4.0.0"
-  flutter: ">=3.47.0"
+  flutter: ">=3.44.8"
