@@ -3,6 +3,8 @@ import 'package:flexify/database/database.dart';
 import 'package:flexify/plan/workout_sessions.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'benchmark_results.dart';
+
 import '../../test/mock_tests.dart';
 
 int median(List<int> values) {
@@ -88,9 +90,11 @@ void main() {
     final legacySamples = await measure(legacy);
     final sharedSamples = await measure(shared);
 
-    print('PLAN_STREAM_PER_TILE_US=$legacySamples');
-    print('PLAN_STREAM_PER_TILE_MEDIAN_US=${median(legacySamples)}');
-    print('PLAN_STREAM_SHARED_US=$sharedSamples');
-    print('PLAN_STREAM_SHARED_MEDIAN_US=${median(sharedSamples)}');
+    recordBenchmark('plan_exercise_stream_benchmark', {
+      'PLAN_STREAM_PER_TILE_US': legacySamples,
+      'PLAN_STREAM_PER_TILE_MEDIAN_US': median(legacySamples),
+      'PLAN_STREAM_SHARED_US': sharedSamples,
+      'PLAN_STREAM_SHARED_MEDIAN_US': median(sharedSamples),
+    });
   });
 }

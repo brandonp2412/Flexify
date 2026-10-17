@@ -1,6 +1,8 @@
 import 'package:flexify/sets/edit_set_page.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'benchmark_results.dart';
+
 Iterable<String> legacyFilter(Iterable<String> options, String search) {
   final terms = search
       .toLowerCase()
@@ -63,11 +65,11 @@ void main() {
       () => filterExerciseNameOptions(options, 'bench press variation'),
     );
 
-    print('EDIT_SET_AUTOCOMPLETE_LEGACY_US=$legacySamples');
-    print('EDIT_SET_AUTOCOMPLETE_LEGACY_MEDIAN_US=${median(legacySamples)}');
-    print('EDIT_SET_AUTOCOMPLETE_OPTIMIZED_US=$optimizedSamples');
-    print(
-      'EDIT_SET_AUTOCOMPLETE_OPTIMIZED_MEDIAN_US=${median(optimizedSamples)}',
-    );
+    recordBenchmark('edit_set_autocomplete_benchmark', {
+      'EDIT_SET_AUTOCOMPLETE_LEGACY_US': legacySamples,
+      'EDIT_SET_AUTOCOMPLETE_LEGACY_MEDIAN_US': median(legacySamples),
+      'EDIT_SET_AUTOCOMPLETE_OPTIMIZED_US': optimizedSamples,
+      'EDIT_SET_AUTOCOMPLETE_OPTIMIZED_MEDIAN_US': median(optimizedSamples),
+    });
   });
 }

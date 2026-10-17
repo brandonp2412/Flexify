@@ -1,6 +1,8 @@
 import 'package:flexify/graph/strength_data.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'benchmark_results.dart';
+
 int median(List<int> values) {
   final sorted = List<int>.of(values)..sort();
   return sorted[sorted.length ~/ 2];
@@ -70,9 +72,11 @@ void main() {
       expect(indexedLookup(query), same(legacyLookup(query)));
     }
 
-    print('GLOBAL_TOOLTIP_LEGACY_US=$samples');
-    print('GLOBAL_TOOLTIP_LEGACY_MEDIAN_US=${median(samples)}');
-    print('GLOBAL_TOOLTIP_INDEXED_US=$indexedSamples');
-    print('GLOBAL_TOOLTIP_INDEXED_MEDIAN_US=${median(indexedSamples)}');
+    recordBenchmark('global_progress_tooltip_benchmark', {
+      'GLOBAL_TOOLTIP_LEGACY_US': samples,
+      'GLOBAL_TOOLTIP_LEGACY_MEDIAN_US': median(samples),
+      'GLOBAL_TOOLTIP_INDEXED_US': indexedSamples,
+      'GLOBAL_TOOLTIP_INDEXED_MEDIAN_US': median(indexedSamples),
+    });
   });
 }

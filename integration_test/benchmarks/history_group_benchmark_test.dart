@@ -2,6 +2,8 @@ import 'package:flexify/database/database.dart';
 import 'package:flexify/sets/history_page.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'benchmark_results.dart';
+
 void main() {
   test('repeated history grouping benchmark', () {
     final items = List.generate(
@@ -39,12 +41,16 @@ void main() {
       cache.get(items);
     }
     timer.stop();
-    print('GROUP_BENCHMARK_US=${timer.elapsedMicroseconds}');
+
     final uncached = Stopwatch()..start();
     for (var i = 0; i < 1000; i++) {
       getHistoryDayGroups(items);
     }
     uncached.stop();
-    print('GROUP_UNCACHED_US=${uncached.elapsedMicroseconds}');
+
+    recordBenchmark('history_group_benchmark', {
+      'GROUP_BENCHMARK_US': timer.elapsedMicroseconds,
+      'GROUP_UNCACHED_US': uncached.elapsedMicroseconds,
+    });
   });
 }

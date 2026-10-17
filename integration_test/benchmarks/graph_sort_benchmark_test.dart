@@ -3,6 +3,8 @@ import 'package:flexify/database/exercise_analytics.dart';
 import 'package:flexify/graph/graphs_page.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'benchmark_results.dart';
+
 void main() {
   test('graph summary sort benchmark', () {
     final source = List.generate(
@@ -50,7 +52,7 @@ void main() {
       applyGraphSortToNewestFirstSummaries(List.of(source), GraphSort.dateAsc);
     }
     ascendingTimer.stop();
-    print('GRAPH_ASC_US=${ascendingTimer.elapsedMicroseconds}');
+
     final ascending = List.of(source);
     applyGraphSortToNewestFirstSummaries(ascending, GraphSort.dateAsc);
     for (var i = 1; i < ascending.length; i++) {
@@ -74,7 +76,10 @@ void main() {
       );
     }
 
-    print(['GRAPH_DESC_US', descTimer.elapsedMicroseconds].join('='));
-    print(['GRAPH_NAME_US', nameTimer.elapsedMicroseconds].join('='));
+    recordBenchmark('graph_sort_benchmark', {
+      'GRAPH_ASC_US': ascendingTimer.elapsedMicroseconds,
+      'GRAPH_DESC_US': descTimer.elapsedMicroseconds,
+      'GRAPH_NAME_US': nameTimer.elapsedMicroseconds,
+    });
   });
 }

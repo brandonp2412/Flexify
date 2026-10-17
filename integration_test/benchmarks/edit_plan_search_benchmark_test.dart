@@ -2,6 +2,8 @@ import 'package:flexify/database/database.dart';
 import 'package:flexify/plan/plan_queries.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'benchmark_results.dart';
+
 List<PlanExerciseDraft> legacyFilter(
   List<PlanExerciseDraft> exercises,
   String search,
@@ -60,9 +62,11 @@ void main() {
       (items, search) => filterPlanExerciseDrafts(items, search),
     );
 
-    print('EDIT_PLAN_SEARCH_LEGACY_US=$legacySamples');
-    print('EDIT_PLAN_SEARCH_LEGACY_MEDIAN_US=${median(legacySamples)}');
-    print('EDIT_PLAN_SEARCH_OPTIMIZED_US=$optimizedSamples');
-    print('EDIT_PLAN_SEARCH_OPTIMIZED_MEDIAN_US=${median(optimizedSamples)}');
+    recordBenchmark('edit_plan_search_benchmark', {
+      'EDIT_PLAN_SEARCH_LEGACY_US': legacySamples,
+      'EDIT_PLAN_SEARCH_LEGACY_MEDIAN_US': median(legacySamples),
+      'EDIT_PLAN_SEARCH_OPTIMIZED_US': optimizedSamples,
+      'EDIT_PLAN_SEARCH_OPTIMIZED_MEDIAN_US': median(optimizedSamples),
+    });
   });
 }

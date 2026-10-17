@@ -2,6 +2,8 @@ import 'package:flexify/database/exercise_analytics.dart';
 import 'package:flexify/graph/graphs_page.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'benchmark_results.dart';
+
 List<GraphExerciseSummary> baseline(
   List<GraphExerciseSummary> source,
   String search,
@@ -58,19 +60,19 @@ void main() {
       filterGraphSummaries(const [], '', null);
     }
     emptySearch.stop();
-    print('GRAPH_EMPTY_SEARCH_US=${emptySearch.elapsedMicroseconds}');
+
     final categoryOnly = Stopwatch()..start();
     for (var i = 0; i < 200; i++) {
       filterGraphSummaries(source, '', 'Upper');
     }
     categoryOnly.stop();
-    print('GRAPH_CATEGORY_ONLY_US=${categoryOnly.elapsedMicroseconds}');
+
     final allItems = Stopwatch()..start();
     for (var i = 0; i < 200; i++) {
       filterGraphSummaries(source, '', null);
     }
     allItems.stop();
-    print('GRAPH_ALL_ITEMS_US=${allItems.elapsedMicroseconds}');
+
     final oldTime = Stopwatch()..start();
     for (var i = 0; i < 100; i++) {
       baseline(source, 'bench press variation', 'Upper');
@@ -81,7 +83,13 @@ void main() {
       filterGraphSummaries(source, 'bench press variation', 'Upper');
     }
     newTime.stop();
-    print('GRAPH_FILTER_BASELINE_US=${oldTime.elapsedMicroseconds}');
-    print('GRAPH_FILTER_OPTIMIZED_US=${newTime.elapsedMicroseconds}');
+
+    recordBenchmark('graph_filter_benchmark', {
+      'GRAPH_EMPTY_SEARCH_US': emptySearch.elapsedMicroseconds,
+      'GRAPH_CATEGORY_ONLY_US': categoryOnly.elapsedMicroseconds,
+      'GRAPH_ALL_ITEMS_US': allItems.elapsedMicroseconds,
+      'GRAPH_FILTER_BASELINE_US': oldTime.elapsedMicroseconds,
+      'GRAPH_FILTER_OPTIMIZED_US': newTime.elapsedMicroseconds,
+    });
   });
 }

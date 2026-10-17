@@ -37,8 +37,7 @@ final talker = TalkerFlutter.init(
 
 void _talkerOutput(String message) {
   if (kIsWeb) {
-    // ignore: avoid_print
-    print(message);
+    debugPrint(message);
     return;
   }
 

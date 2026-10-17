@@ -1,6 +1,8 @@
 import 'package:flexify/database/exercise_analytics.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'benchmark_results.dart';
+
 int median(List<int> values) {
   final sorted = List<int>.of(values)..sort();
   return sorted[sorted.length ~/ 2];
@@ -57,9 +59,12 @@ void main() {
 
     final legacySamples = measure(legacy);
     final setSamples = measure(proposed);
-    print('GRAPH_SELECTION_LIST_US=$legacySamples');
-    print('GRAPH_SELECTION_LIST_MEDIAN_US=${median(legacySamples)}');
-    print('GRAPH_SELECTION_SET_US=$setSamples');
-    print('GRAPH_SELECTION_SET_MEDIAN_US=${median(setSamples)}');
+
+    recordBenchmark('graph_selection_benchmark', {
+      'GRAPH_SELECTION_LIST_US': legacySamples,
+      'GRAPH_SELECTION_LIST_MEDIAN_US': median(legacySamples),
+      'GRAPH_SELECTION_SET_US': setSamples,
+      'GRAPH_SELECTION_SET_MEDIAN_US': median(setSamples),
+    });
   });
 }
