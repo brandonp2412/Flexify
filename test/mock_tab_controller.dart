@@ -17,9 +17,6 @@ class MockTabController extends ChangeNotifier implements TabController {
   Animation<double> get animation => AlwaysStoppedAnimation(0.0);
 
   @override
-  bool get hasListeners => super.hasListeners;
-
-  @override
   int get length => 2;
 
   @override
@@ -27,15 +24,6 @@ class MockTabController extends ChangeNotifier implements TabController {
 
   @override
   set offset(double value) {}
-
-  @override
-  void notifyListeners() {
-    super.notifyListeners();
-  }
-
-  void reset() {}
-
-  set indexIsChanging(bool value) {}
 
   @override
   bool get indexIsChanging => false;
