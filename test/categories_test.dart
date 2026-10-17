@@ -41,7 +41,7 @@ void main() {
 
       await renameCategory(category, 'Upper body');
 
-      final updated = await getExerciseById(exercise.id);
+      final updated = await findExerciseByIdFixture(db, exercise.id);
       expect(await getExerciseCategoryName(updated!), 'Upper body');
       final history = await getExerciseSets(db, search: 'Bench press');
       expect(history.single.category, 'Upper body');
@@ -64,7 +64,7 @@ void main() {
 
       await mergeCategory(chest, upperBody);
 
-      final updated = await getExerciseById(exercise.id);
+      final updated = await findExerciseByIdFixture(db, exercise.id);
       expect(updated!.categoryId, upperBody.id);
       final history = await getExerciseSets(db, search: 'Bench press');
       expect(history.single.category, 'Upper body');
@@ -81,7 +81,10 @@ void main() {
             .getSingle(),
       );
 
-      expect((await getExerciseById(exercise.id))!.categoryId, isNull);
+      expect(
+        (await findExerciseByIdFixture(db, exercise.id))!.categoryId,
+        isNull,
+      );
       final history = await getExerciseSets(db, search: 'Bench press');
       expect(history.single.category, isNull);
     },

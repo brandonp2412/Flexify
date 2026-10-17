@@ -4,6 +4,13 @@ import 'package:flexify/database/exercise_set_repository.dart';
 
 final testNow = DateTime(2026, 1, 15, 12);
 
+Future<Exercise?> findExerciseByIdFixture(AppDatabase database, int id) {
+  return (database.exercises.select()..where(
+        (exercise) => exercise.id.equals(id) & exercise.archived.equals(false),
+      ))
+      .getSingleOrNull();
+}
+
 ExerciseSetView exerciseSetFixture(
   String name, {
   double reps = 5,

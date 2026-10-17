@@ -7,6 +7,7 @@ import 'package:flexify/plan/plan_queries.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'mock_tests.dart';
+import 'support/fixtures.dart';
 
 void main() {
   setUp(() => db = testDb());
@@ -70,7 +71,7 @@ void main() {
         displayUnit: 'kg',
       );
 
-      final renamed = await getExerciseById(exercise.id);
+      final renamed = await findExerciseByIdFixture(db, exercise.id);
       expect(renamed!.name, 'Renamed stable lift');
       expect(
         (await (db.exerciseSets.select()
@@ -118,7 +119,7 @@ void main() {
       notes: 'Keep elbows tucked',
     );
 
-    final updated = await getExerciseById(exercise.id);
+    final updated = await findExerciseByIdFixture(db, exercise.id);
     expect(updated!.displayUnit, 'lb');
     expect(updated.image, '/tmp/config.png');
     expect(updated.defaultRestDurationMs, 120000);
@@ -200,8 +201,8 @@ void main() {
       category: 'Merged',
     );
 
-    expect(await getExerciseById(source.id), null);
-    final merged = await getExerciseById(target.id);
+    expect(await findExerciseByIdFixture(db, source.id), null);
+    final merged = await findExerciseByIdFixture(db, target.id);
     expect(merged, isA<Exercise>());
     expect(merged!.displayUnit, 'lb');
     expect(await getExerciseCategoryName(merged), 'Merged');

@@ -21,13 +21,6 @@ Future<Exercise?> getExerciseByName(String name) {
       .getSingleOrNull();
 }
 
-Future<Exercise?> getExerciseById(int id) {
-  return (db.exercises.select()..where(
-        (exercise) => exercise.id.equals(id) & exercise.archived.equals(false),
-      ))
-      .getSingleOrNull();
-}
-
 Future<List<String>> getExerciseNames() {
   return (db.exercises.select()
         ..where((exercise) => exercise.archived.equals(false))

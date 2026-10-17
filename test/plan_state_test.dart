@@ -32,7 +32,7 @@ void main() {
         ),
       );
 
-      final counts = await getGymCounts(planId, workout.id);
+      final counts = await watchGymCounts(planId, workout.id).first;
 
       expect(counts, hasLength(1));
       expect(counts.single.exerciseId, exercise.id);
@@ -70,7 +70,7 @@ void main() {
       ),
     ]);
 
-    final counts = await getGymCounts(planId, active.id);
+    final counts = await watchGymCounts(planId, active.id).first;
 
     expect(counts.single.count, 1);
   });

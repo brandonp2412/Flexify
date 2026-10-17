@@ -190,9 +190,6 @@ Stream<List<GymCount>> watchGymCounts(int planId, int workoutId) {
       );
 }
 
-Future<List<GymCount>> getGymCounts(int planId, int workoutId) =>
-    watchGymCounts(planId, workoutId).first;
-
 Future<List<PlanExerciseDraft>> loadPlanExerciseDrafts(
   PlansCompanion plan,
 ) async {
