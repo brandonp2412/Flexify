@@ -25,9 +25,7 @@ device_type="${device_type:-desktop}"
 
 echo "Running screenshot tests with Chrome..."
 
-# Set environment variables for device type and platform
 export FLEXIFY_DEVICE_TYPE="$device_type"
-export FLEXIFY_WEB="true"
 
 dart_define=()
 if [ -n "$only" ]; then

@@ -198,7 +198,6 @@ jobs:
       contents: write
     outputs:
       version: ${{ steps.bump.outputs.version }}
-      build_number: ${{ steps.bump.outputs.build_number }}
       changelog_number: ${{ steps.bump.outputs.changelog_number }}
       commit_sha: ${{ steps.commit-push.outputs.commit_sha }}
     steps:
@@ -248,7 +247,6 @@ jobs:
           NEW_MSIX="${M[0]}.${M[1]}.$((${M[2]} + 1)).${M[3]}"
 
           echo "version=$NEW_VERSION" >> "$GITHUB_OUTPUT"
-          echo "build_number=$NEW_BUILD" >> "$GITHUB_OUTPUT"
           echo "changelog_number=$CHANGELOG_NUMBER" >> "$GITHUB_OUTPUT"
 
           sed -i "s/^version: .*/version: $NEW_VERSION+$NEW_BUILD/" pubspec.yaml
