@@ -22,7 +22,6 @@ ExerciseSetView exerciseSetFixture(
   String? category,
   String? notes,
   int? planId,
-  bool hidden = false,
 }) {
   return ExerciseSetView(
     id: 0,
@@ -48,7 +47,6 @@ ExerciseSetView exerciseSetModelFixture({
   double weight = 3,
   String unit = 'kg',
   DateTime? created,
-  bool hidden = false,
   double bodyWeight = 0,
   double duration = 0,
   double distance = 0,

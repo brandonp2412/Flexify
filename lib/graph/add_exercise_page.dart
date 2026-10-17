@@ -195,7 +195,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
           ),
         ),
         floatingActionButton: AppFab(
-          onPressed: () => save(_unit),
+          onPressed: save,
           label: Text(context.l10n.actionSave),
           icon: const Icon(Icons.save),
         ),
@@ -239,7 +239,7 @@ class _AddExercisePageState extends State<AddExercisePage> {
     });
   }
 
-  Future<void> save(String unit) async {
+  Future<void> save() async {
     if (!_key.currentState!.validate()) return;
 
     if (settings.strengthUnit != 'last-entry' && !_cardio)
