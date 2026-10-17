@@ -10,9 +10,7 @@ import 'package:provider/provider.dart';
 import 'mock_tab_controller.dart';
 import 'mock_tests.dart';
 
-void main() async {
-  await mockTests();
-
+void main() {
   testWidgets('PlansPage refreshes its exercise list after db is swapped and '
       'dbVersion bumps, without the widget being remounted (#315)', (
     WidgetTester tester,

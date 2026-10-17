@@ -161,7 +161,6 @@ void main() {
   testWidgets('all translated locale choices survive app provider restart', (
     tester,
   ) async {
-    await mockTests();
     final database = testDb();
     db = database;
     addTearDown(database.close);
@@ -212,7 +211,6 @@ void main() {
   testWidgets('app applies persisted locale changes without restart', (
     tester,
   ) async {
-    await mockTests();
     final database = testDb();
     db = database;
     addTearDown(database.close);

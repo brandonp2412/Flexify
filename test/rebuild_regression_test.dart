@@ -91,8 +91,7 @@ Future<ExerciseSetView> insertSet(String name, {int minutesAgo = 0}) =>
 // ---------------------------------------------------------------------------
 
 void main() {
-  setUp(() async {
-    await mockTests();
+  setUp(() {
     db = testDb();
   });
 

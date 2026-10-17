@@ -13,7 +13,6 @@ import 'mock_tests.dart';
 
 void main() {
   testWidgets('renders app access dialog', (tester) async {
-    await mockTests();
     app.db = testDb();
     await app.db.settings.update().write(
       const SettingsCompanion(

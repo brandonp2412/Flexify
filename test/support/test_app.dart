@@ -16,7 +16,7 @@ class FlexifyTestHarness {
   final TimerState timerState;
 
   static Future<FlexifyTestHarness> create({TimerState? timerState}) async {
-    await mockTests();
+    TestWidgetsFlutterBinding.ensureInitialized();
     final database = testDb();
     db = database;
 

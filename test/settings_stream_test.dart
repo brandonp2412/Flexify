@@ -10,7 +10,6 @@ void main() {
   testWidgets('Drift settings row updates provider subscribers', (
     tester,
   ) async {
-    await mockTests();
     final database = testDb();
     addTearDown(database.close);
     final initial = await database.settings.select().getSingle();
