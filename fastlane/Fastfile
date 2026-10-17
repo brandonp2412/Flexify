@@ -1,39 +1,6 @@
 default_platform(:android)
 
 platform :android do
-  desc "Runs all the tests"
-  lane :test do
-    gradle(task: "test")
-  end
-
-  desc "Deploy a new version to the Google Play"
-  lane :deploy do
-    pubspec_yaml = File.open("../../pubspec.yaml", "r")
-    pubspec_content = pubspec_yaml.read
-    pubspec_yaml.close
-    version_match = pubspec_content.match(/version: .*?(\d+\.\d+\.\d+)\+(\d+)/)
-    new_build_number = version_match[2].to_i + 1
-    new_pubspec_content = pubspec_content.gsub(/version: .*?(\d+\.\d+\.\d+)\+(\d+)/, "version: #{version_match[1]}+#{new_build_number}")
-    File.open("../../pubspec.yaml", "w") { |file| file.write(new_pubspec_content) }
-
-    gradle(task: "bundle", build_type: 'Release', flags: "--quiet")
-
-    git_commit(
-      path: "../pubspec.yaml",
-      message: "Bump build number to #{new_build_number}"
-    )
-
-    metadata(track: "production")
-
-    upload_to_play_store(
-      track: 'production',
-      aab: '../build/app/outputs/bundle/release/app-release.aab',
-      skip_upload_metadata: true,
-      skip_upload_images: true,
-      skip_upload_screenshots: true
-    )
-  end
-
   desc "Upload the complete Google Play store listing without a binary release"
   lane :metadata do |options|
     upload_to_play_store(
