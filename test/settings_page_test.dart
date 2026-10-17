@@ -37,6 +37,23 @@ void main() {
     expect(find.widgetWithText(ListTile, 'Show units'), findsOne);
   });
 
+  testWidgets('Workout settings reveal graph options on demand', (
+    WidgetTester tester,
+  ) async {
+    await render(tester);
+    await tester.tap(find.text('Workouts'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Show body weight'), findsOneWidget);
+    expect(find.text('Default graph metric'), findsNothing);
+
+    await tester.scrollUntilVisible(find.text('Graphs'), 200);
+    await tester.tap(find.text('Graphs'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Default graph metric'), findsOneWidget);
+  });
+
   testWidgets('SettingsPage changes theme', (WidgetTester tester) async {
     await render(tester);
 

@@ -235,6 +235,7 @@ class _SettingsPageState extends State<SettingsPage>
                               (category) => ListTile(
                                 leading: Icon(category.$1),
                                 title: Text(category.$2),
+                                subtitle: Text(category.$3),
                                 onTap: () => _openCategory(category.$4),
                               ),
                             )
@@ -250,22 +251,10 @@ class _SettingsPageState extends State<SettingsPage>
 
   List<(IconData, String, String, Widget)> get _categories => [
     (
-      Icons.color_lens_rounded,
-      context.l10n.appearance,
-      context.l10n.appearanceDescription,
-      const AppearanceSettings(),
-    ),
-    (
-      Icons.storage_rounded,
-      context.l10n.dataManagement,
-      context.l10n.dataManagementDescription,
-      const DataSettings(),
-    ),
-    (
-      Icons.format_bold_rounded,
-      context.l10n.formats,
-      context.l10n.formatsDescription,
-      const FormatSettings(),
+      Icons.fitness_center_rounded,
+      context.l10n.workouts,
+      context.l10n.workoutsDescription,
+      const WorkoutSettings(),
     ),
     (
       Icons.calendar_today_rounded,
@@ -274,22 +263,34 @@ class _SettingsPageState extends State<SettingsPage>
       const PlanSettings(),
     ),
     (
-      Icons.tab_rounded,
-      context.l10n.tabs,
-      context.l10n.tabsDescription,
-      const TabSettings(),
-    ),
-    (
       Icons.timer_rounded,
       context.l10n.timers,
       context.l10n.timersDescription,
       const TimerSettings(),
     ),
     (
-      Icons.fitness_center_rounded,
-      context.l10n.workouts,
-      context.l10n.workoutsDescription,
-      const WorkoutSettings(),
+      Icons.color_lens_rounded,
+      context.l10n.appearance,
+      context.l10n.appearanceDescription,
+      const AppearanceSettings(),
+    ),
+    (
+      Icons.format_bold_rounded,
+      context.l10n.formats,
+      context.l10n.formatsDescription,
+      const FormatSettings(),
+    ),
+    (
+      Icons.tab_rounded,
+      context.l10n.tabs,
+      context.l10n.tabsDescription,
+      const TabSettings(),
+    ),
+    (
+      Icons.storage_rounded,
+      context.l10n.dataManagement,
+      context.l10n.dataManagementDescription,
+      const DataSettings(),
     ),
   ];
 
@@ -318,9 +319,8 @@ class _SettingsPageState extends State<SettingsPage>
     _maxSets = TextEditingController(text: _settings.maxSets.toString());
     _warmupSets = TextEditingController(text: _settings.warmupSets?.toString());
     _minutes = TextEditingController(
-      text: Duration(
-        milliseconds: _settings.timerDuration,
-      ).inMinutes.toString(),
+      text: Duration(milliseconds: _settings.timerDuration).inMinutes
+          .toString(),
     );
     _seconds = TextEditingController(
       text: (Duration(milliseconds: _settings.timerDuration).inSeconds % 60)
