@@ -36,23 +36,14 @@ if (-not $chromeDriverRunning) {
 $env:FLEXIFY_DEVICE_TYPE = $deviceType
 $env:FLUTTER_DRIVER_DEVICE = "chrome"
 
-try {
-    # Run Flutter drive command targeting Chrome
-    flutter drive --profile --driver=test_driver/integration_test.dart `
-        --target=integration_test/screenshot_test.dart `
-        -d chrome
+# Run Flutter drive command targeting Chrome
+flutter drive --profile --driver=test_driver/integration_test.dart `
+    --target=integration_test/screenshot_test.dart `
+    -d chrome
 
-    if ($LASTEXITCODE -eq 0) {
-        Write-Host "Screenshot tests completed successfully!"
-    } else {
-        Write-Host "Screenshot tests failed with exit code $LASTEXITCODE"
-        exit $LASTEXITCODE
-    }
-} finally {
-    # Optionally stop ChromeDriver if we started it
-    # Uncomment the next lines if you want to auto-stop ChromeDriver
-    # if ($chromeDriverProcess) {
-    #     Stop-Process -Id $chromeDriverProcess.Id -Force
-    #     Write-Host "ChromeDriver stopped"
-    # }
+if ($LASTEXITCODE -eq 0) {
+    Write-Host "Screenshot tests completed successfully!"
+} else {
+    Write-Host "Screenshot tests failed with exit code $LASTEXITCODE"
+    exit $LASTEXITCODE
 }
