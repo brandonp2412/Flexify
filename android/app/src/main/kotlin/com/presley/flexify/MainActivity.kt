@@ -169,15 +169,6 @@ class MainActivity : FlutterActivity() {
                     pick(dbPath)
                 }
 
-                "runBackupNow" -> {
-                    if (!BuildConfig.DEBUG) {
-                        result.notImplemented()
-                        return@setMethodCallHandler
-                    }
-                    sendBroadcast(Intent(this, BackupReceiver::class.java))
-                    result.success(null)
-                }
-
                 "setBackupLocalizations" -> {
                     val keys = listOf(
                         "backupChannelName",
@@ -199,17 +190,6 @@ class MainActivity : FlutterActivity() {
                     val (automaticBackups, backupPath) = getSettings(context)
                     if (automaticBackups && backupPath != null) scheduleBackups(context)
                     result.success(true)
-                }
-
-                "getProgress" -> {
-                    if (timerBound && timerService?.flexifyTimer?.isRunning() == true)
-                        result.success(
-                            intArrayOf(
-                                timerService?.flexifyTimer!!.getRemainingSeconds(),
-                                timerService?.flexifyTimer!!.getDurationSeconds()
-                            )
-                        )
-                    else result.success(intArrayOf(0, 0))
                 }
 
                 "add" -> {

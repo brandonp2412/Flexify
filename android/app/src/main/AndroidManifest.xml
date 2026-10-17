@@ -41,8 +41,6 @@
             android:name="flutterEmbedding"
             android:value="2" />
 
-        <activity android:name=".StopAlarm" />
-
         <service
             android:name=".TimerService"
             android:exported="false"
