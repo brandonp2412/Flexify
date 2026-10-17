@@ -11,10 +11,12 @@ import 'package:flexify/l10n/generated/app_localizations.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/responsive.dart';
+import 'package:flexify/settings/backup_archive.dart';
 import 'package:flexify/storage/app_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
@@ -141,8 +143,21 @@ List<Widget> getDataSettings(
     if (matches([l10n.shareDatabase]) && !kIsWeb && !Platform.isLinux)
       TextButton.icon(
         onPressed: () async {
-          final dbPath = (await getDatabaseFile()).path;
-          await SharePlus.instance.share(ShareParams(files: [XFile(dbPath)]));
+          final workingDirectory = await (await getTemporaryDirectory())
+              .createTemp('flexify-share-');
+          try {
+            final archive = await createBackupArchive(
+              databasePath: (await getDatabaseFile()).path,
+              workingDirectory: workingDirectory,
+            );
+            await SharePlus.instance.share(
+              ShareParams(
+                files: [XFile(archive.path, mimeType: 'application/zip')],
+              ),
+            );
+          } finally {
+            await workingDirectory.delete(recursive: true);
+          }
         },
         label: Text(l10n.shareDatabase),
         icon: const Icon(Icons.share),

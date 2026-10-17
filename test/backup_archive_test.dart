@@ -50,6 +50,56 @@ void main() {
     expect(restoredImagePath, p.join(storageDirectory.path, '0_progress.jpg'));
     expect(File(restoredImagePath).readAsBytesSync(), [1, 2, 3, 4]);
   });
+  test('backup includes committed records in a live WAL database', () async {
+    final root = await Directory.systemTemp.createTemp('flexify-wal-backup-');
+    addTearDown(() => root.delete(recursive: true));
+    final databasePath = p.join(root.path, backupDatabaseName);
+    final exportDirectory = await Directory(
+      p.join(root.path, 'export'),
+    ).create();
+    final importDirectory = await Directory(
+      p.join(root.path, 'import'),
+    ).create();
+    final storageDirectory = await Directory(
+      p.join(root.path, 'storage'),
+    ).create();
+
+    final writer = sqlite3.open(databasePath);
+    try {
+      writer.execute(
+        'CREATE TABLE workout (id INTEGER PRIMARY KEY, name TEXT)',
+      );
+      writer.execute("INSERT INTO workout (name) VALUES ('initial')");
+      writer.execute('PRAGMA journal_mode = WAL');
+      writer.execute('PRAGMA wal_autocheckpoint = 0');
+      writer.execute("INSERT INTO workout (name) VALUES ('latest')");
+
+      final archive = await createBackupArchive(
+        databasePath: databasePath,
+        workingDirectory: exportDirectory,
+      );
+      final restored = await extractBackupArchive(
+        archiveFile: archive,
+        workingDirectory: importDirectory,
+        storageDirectory: storageDirectory,
+      );
+      final imported = sqlite3.open(restored.path);
+      try {
+        expect(
+          imported
+              .select('SELECT name FROM workout ORDER BY id')
+              .map((row) => row['name'])
+              .toList(),
+          ['initial', 'latest'],
+        );
+      } finally {
+        imported.close();
+      }
+    } finally {
+      writer.close();
+    }
+  });
+
   test('missing database in backup uses typed validation error', () async {
     final root = await Directory.systemTemp.createTemp(
       'flexify-backup-invalid-',

@@ -8,6 +8,7 @@ import 'package:flexify/app_permissions_dialog.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/database/exercise_catalog.dart';
 import 'package:flexify/data_portability/graph_csv.dart';
+import 'package:flexify/data_portability/import_issue.dart';
 import 'package:flexify/l10n/generated/app_localizations.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
@@ -99,34 +100,12 @@ class ImportData extends StatelessWidget {
       final packageInfo = await PackageInfo.fromPlatform();
       final version = packageInfo.version;
 
-      final title = Uri.encodeComponent(
-        'Import failed: ${e.toString().split('\n').first}',
+      final url = buildImportIssueUrl(
+        kind: 'database',
+        error: e,
+        stackTrace: stackTrace,
+        version: version,
       );
-      final body = Uri.encodeComponent('''
-# Describe the bug
-Failed to import a database.
-
-# Error
-```
-${e.toString()}
-```
-
-# Stack trace
-```
-${stackTrace.toString()}
-```
-
-# App version
-$version
-
-# Steps to reproduce
-1. Go to import database
-2. Select file
-3. See error
-''');
-
-      final url =
-          'https://github.com/brandonp2412/Flexify/issues/new?title=$title&body=$body';
 
       final displayError = _localizedImportError(e, l10n);
       toast(
@@ -135,10 +114,7 @@ $version
         action: SnackBarAction(
           label: l10n.actionReport,
           onPressed: () async {
-            await launchUrl(
-              Uri.parse(url),
-              mode: LaunchMode.externalApplication,
-            );
+            await launchUrl(url, mode: LaunchMode.externalApplication);
           },
         ),
       );
@@ -387,34 +363,12 @@ $version
       final packageInfo = await PackageInfo.fromPlatform();
       final version = packageInfo.version;
 
-      final title = Uri.encodeComponent(
-        'Import failed: ${e.toString().split('\n').first}',
+      final url = buildImportIssueUrl(
+        kind: 'plans',
+        error: e,
+        stackTrace: stackTrace,
+        version: version,
       );
-      final body = Uri.encodeComponent('''
-# Describe the bug
-Failed to import plans.
-
-# Error
-```
-${e.toString()}
-```
-
-# Stack trace
-```
-${stackTrace.toString()}
-```
-
-# App version
-$version
-
-# Steps to reproduce
-1. Go to import plans
-2. Select file
-3. See error
-''');
-
-      final url =
-          'https://github.com/brandonp2412/Flexify/issues/new?title=$title&body=$body';
 
       toast(
         l10n.failedToImportPlans(_localizedImportError(e, l10n)),
@@ -422,10 +376,7 @@ $version
         action: SnackBarAction(
           label: l10n.actionReport,
           onPressed: () async {
-            await launchUrl(
-              Uri.parse(url),
-              mode: LaunchMode.externalApplication,
-            );
+            await launchUrl(url, mode: LaunchMode.externalApplication);
           },
         ),
       );
