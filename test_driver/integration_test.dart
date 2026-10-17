@@ -10,6 +10,7 @@ Future<void> main() async => await integrationDriver(
     if (deviceType == null || deviceType.isEmpty)
       throw "FLEXIFY_DEVICE_TYPE must be set, so integration driver knows where to save screenshots.";
     final isWeb =
+        deviceType == 'desktop' ||
         Platform.environment["FLUTTER_WEB"] == "true" ||
         args?.toString().contains("chrome") == true ||
         args?.toString().contains("web") == true ||
@@ -38,6 +39,7 @@ Future<void> main() async => await integrationDriver(
                 : toRgbPng(image))
           : image,
     );
+    stdout.writeln('Saved ${imgFile.path} (${image.length} bytes)');
     return true;
   },
   writeResponseOnFailure: true,

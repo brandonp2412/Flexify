@@ -141,7 +141,7 @@ void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
   late AppDatabase database;
 
-  setUpAll(() async {
+  testWidgets('Prepare screenshot fixtures', (tester) async {
     database = createIntegrationTestDatabase();
     app.db = database;
     app.androidChannel = const MethodChannel('com.presley.flexify/timer');
