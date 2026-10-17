@@ -136,13 +136,12 @@ class ImportData extends StatelessWidget {
     final tempDirectory = await getTemporaryDirectory();
     final workingDirectory = await tempDirectory.createTemp('flexify-import-');
     try {
-      final sourceFile = p.extension(selectedFile.path).toLowerCase() == '.zip'
-          ? await extractBackupArchive(
-              archiveFile: selectedFile,
-              workingDirectory: workingDirectory,
-              storageDirectory: storageDirectory,
-            )
-          : selectedFile;
+      final sourceFile = await prepareBackupDatabase(
+        selectedFile: selectedFile,
+        workingDirectory: workingDirectory,
+        storageDirectory: storageDirectory,
+      );
+      validateBackupDatabaseFile(sourceFile);
 
       final candidateDatabase = File(
         p.join(workingDirectory.path, 'candidate-$backupDatabaseName'),

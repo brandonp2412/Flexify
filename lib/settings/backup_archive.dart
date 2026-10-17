@@ -21,6 +21,66 @@ final class MissingBackupDatabaseException implements Exception {
   const MissingBackupDatabaseException();
 }
 
+void validateBackupDatabaseFile(File file) {
+  if (!file.existsSync()) {
+    throw const FormatException('Backup database file does not exist');
+  }
+
+  BackupDatabase? database;
+  try {
+    database = openBackupDatabase(file.path);
+    final tables = database
+        .select(
+          "SELECT name FROM sqlite_master WHERE type = 'table' "
+          "AND name IN ('plans', 'gym_sets', 'exercises')",
+        )
+        .map((row) => row['name'])
+        .toSet();
+    if (!tables.contains('plans') ||
+        (!tables.contains('gym_sets') && !tables.contains('exercises')) ||
+        database.select('PRAGMA quick_check').single['quick_check'] != 'ok') {
+      throw const FormatException(
+        'Selected file is not a Flexify database backup',
+      );
+    }
+  } on FormatException {
+    rethrow;
+  } catch (_) {
+    throw const FormatException(
+      'Selected file is not a Flexify database backup',
+    );
+  } finally {
+    database?.close();
+  }
+}
+
+Future<File> prepareBackupDatabase({
+  required File selectedFile,
+  required Directory workingDirectory,
+  required Directory storageDirectory,
+}) async {
+  if (p.extension(selectedFile.path).toLowerCase() == '.zip') {
+    return extractBackupArchive(
+      archiveFile: selectedFile,
+      workingDirectory: workingDirectory,
+      storageDirectory: storageDirectory,
+    );
+  }
+
+  validateBackupDatabaseFile(selectedFile);
+  final snapshot = File(
+    p.join(workingDirectory.path, 'imported-$backupDatabaseName'),
+  );
+  final escapedPath = snapshot.path.replaceAll("'", "''");
+  final source = openBackupDatabase(selectedFile.path);
+  try {
+    source.execute("VACUUM INTO '$escapedPath'");
+  } finally {
+    source.close();
+  }
+  return snapshot;
+}
+
 Future<File> createBackupArchive({
   required String databasePath,
   required Directory workingDirectory,
