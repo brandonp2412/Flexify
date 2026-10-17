@@ -6,13 +6,6 @@ param(
 $ErrorActionPreference = "Stop"
 $PSNativeCommandUseErrorActionPreference = $false
 
-function Set-FinalizedOutput([bool]$finalized) {
-  if ($env:GITHUB_OUTPUT) {
-    $value = $finalized.ToString().ToLowerInvariant()
-    Add-Content -Path $env:GITHUB_OUTPUT -Value "finalized=$value"
-  }
-}
-
 function Invoke-StoreCommand([string[]]$Arguments) {
   $output = @(& msstore @Arguments 2>&1)
   $exitCode = $LASTEXITCODE
@@ -36,8 +29,6 @@ function ConvertFrom-StoreJson($Output, [string]$Description) {
   return $text.Substring($jsonStart, $jsonEnd - $jsonStart + 1) |
     ConvertFrom-Json
 }
-
-Set-FinalizedOutput $false
 
 $pollResult = Invoke-StoreCommand @(
   "submission", "poll", $ProductId, "--verbose"
@@ -83,7 +74,6 @@ try {
 
 $submissionId = $application.LastPublishedApplicationSubmission.Id
 if (-not $submissionId) {
-  Set-FinalizedOutput $true
   Write-Host "No published Microsoft Store submission exists yet; there is no rollout to finalize."
   exit 0
 }
@@ -109,7 +99,6 @@ if (
   -not $rollout.IsPackageRollout -or
   $rollout.PackageRolloutStatus -eq "PackageRolloutComplete"
 ) {
-  Set-FinalizedOutput $true
   Write-Host "No active Microsoft Store package rollout remains."
   exit 0
 }
@@ -124,6 +113,5 @@ if ($finalizeResult.ExitCode -ne 0) {
   exit $finalizeResult.ExitCode
 }
 
-Set-FinalizedOutput $true
 Write-Host "Finalized the active Microsoft Store package rollout."
 exit 0
