@@ -1,3 +1,0 @@
-• feat(l10n): thêm metadata ngôn ngữ cho cửa hàng
-• feat(l10n): thêm metadata cửa hàng cho các ngôn ngữ mới
-• fix(l10n): đồng bộ ghi chú phát hành 2.2.27

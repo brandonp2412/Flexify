@@ -1,7 +1,0 @@
-• fix(ci): lengkapi riwayat catatan rilis yang dilokalkan
-• fix(l10n): lengkapi metadata rilis Portugis Brasil
-• fix(l10n): lengkapi metadata rilis Prancis
-• fix(l10n): lengkapi metadata rilis Jerman
-• fix(l10n): lengkapi metadata rilis Jepang
-• fix(l10n): sinkronkan metadata rilis Spanyol
-• fix: pulihkan ikon aplikasi dumbbell

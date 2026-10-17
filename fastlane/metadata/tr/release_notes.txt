@@ -1,7 +1,0 @@
-• fix(ci): yerelleştirilmiş sürüm notu geçmişini tamamla
-• fix(l10n): Brezilya Portekizcesi sürüm meta verilerini tamamla
-• fix(l10n): Fransızca sürüm meta verilerini tamamla
-• fix(l10n): Almanca sürüm meta verilerini tamamla
-• fix(l10n): Japonca sürüm meta verilerini tamamla
-• fix(l10n): İspanyolca sürüm meta verilerini eşitle
-• fix: dambıl uygulama simgesini geri yükle

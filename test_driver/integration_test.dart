@@ -9,8 +9,6 @@ Future<void> main() async => await integrationDriver(
     final deviceType = Platform.environment["FLEXIFY_DEVICE_TYPE"];
     if (deviceType == null || deviceType.isEmpty)
       throw "FLEXIFY_DEVICE_TYPE must be set, so integration driver knows where to save screenshots.";
-    final isIos = Platform.environment["FLEXIFY_IS_IOS"];
-
     final isWeb =
         Platform.environment["FLUTTER_WEB"] == "true" ||
         args?.toString().contains("chrome") == true ||
@@ -28,17 +26,13 @@ Future<void> main() async => await integrationDriver(
       imgFile = await File(
         'fastlane/screenshots/$deviceType-$name.png',
       ).create(recursive: true);
-    } else if (isIos != null) {
-      imgFile = await File(
-        'fastlane/screenshots/$deviceType-$name.png',
-      ).create(recursive: true);
     } else {
       imgFile = await File(
         'fastlane/metadata/android/$storeLocale/images/$deviceType/$name.png',
       ).create(recursive: true);
     }
     await imgFile.writeAsBytes(
-      !isWeb && isIos == null
+      !isWeb
           ? (deviceType == 'phoneScreenshots'
                 ? trimPhoneStatusBar(image)
                 : toRgbPng(image))

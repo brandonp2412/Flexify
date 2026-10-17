@@ -224,29 +224,11 @@ const _playStoreLocaleByAppLocale = <String, String>{
   'zh_TW': 'zh-TW',
 };
 
-const _appStoreLocaleByAppLocale = <String, String>{
-  'ar': 'ar-SA',
-  'de': 'de-DE',
-  'es': 'es-ES',
-  'fr': 'fr-FR',
-  'it': 'it',
-  'ja': 'ja',
-  'ko': 'ko',
-  'nl': 'nl-NL',
-  'pl': 'pl',
-  'pt_BR': 'pt-BR',
-  'tr': 'tr',
-  'ru': 'ru',
-  'hi': 'hi',
-  'zh_CN': 'zh-Hans',
-  'zh_TW': 'zh-Hant',
-};
-
 const _storeFallbackOnlyAppLocales = <String>{'pt', 'zh'};
 
-// These locales currently ship in-app but do not yet have the complete
-// historical store assets required by the full store-localization checks.
-const _appOnlyLocales = <String>{
+// These locales ship in-app but do not yet have the complete historical
+// Google Play assets required by the full store-localization checks.
+const _playListingOnlyAppLocales = <String>{
   'id',
   'vi',
   'bn',
@@ -271,16 +253,6 @@ const _playListingLocaleByAppLocale = <String, String>{
   'pt_PT': 'pt-PT',
 };
 
-const _appStoreListingLocaleByAppLocale = <String, String>{
-  'ar': 'ar-SA',
-  'id': 'id',
-  'vi': 'vi',
-  'th': 'th',
-  'ms': 'ms',
-  'uk': 'uk',
-  'pt_PT': 'pt-PT',
-};
-
 final _playStoreLocales = _playStoreLocaleByAppLocale.values.toSet();
 
 // Google Play uses default-language graphics when localized graphics are omitted.
@@ -290,11 +262,6 @@ const _playStoreScreenshotFallbackLocales = <String>{'ar', 'zh-TW', 'hi-IN'};
 final _changelogCatalogLocales = <String>{
   ..._playStoreLocaleByAppLocale.keys,
   'pt_PT',
-};
-
-final _appStoreLocales = <String>{
-  'en-AU',
-  ..._appStoreLocaleByAppLocale.values,
 };
 
 Map<String, dynamic> _readArb(File file) =>
@@ -423,7 +390,7 @@ void main() {
     }
   });
 
-  test('store locale mappings cover every shipped translated locale', () {
+  test('Play Store locale mappings cover every shipped translated locale', () {
     final translatedAppLocales =
         Directory('lib/l10n')
             .listSync()
@@ -435,7 +402,10 @@ void main() {
             )
             .map((file) => _readArb(file)['@@locale'] as String)
             .toSet()
-          ..removeAll({..._storeFallbackOnlyAppLocales, ..._appOnlyLocales});
+          ..removeAll({
+            ..._storeFallbackOnlyAppLocales,
+            ..._playListingOnlyAppLocales,
+          });
 
     expect(
       _playStoreLocaleByAppLocale.keys.toSet(),
@@ -443,15 +413,9 @@ void main() {
       reason:
           'Every shipped translated app locale must map to Google Play metadata.',
     );
-    expect(
-      _appStoreLocaleByAppLocale.keys.toSet(),
-      translatedAppLocales,
-      reason:
-          'Every shipped translated app locale must map to App Store metadata.',
-    );
   });
 
-  test('listing-only locale store copy is localized and release-ready', () {
+  test('listing-only Play Store copy is localized and release-ready', () {
     const playListingFiles = <String, int>{
       'title.txt': 30,
       'short_description.txt': 80,
@@ -490,51 +454,6 @@ void main() {
           equals(
             File(
               'fastlane/metadata/android/en-US/changelogs/4393.txt',
-            ).readAsStringSync().trim(),
-          ),
-        ),
-      );
-    }
-
-    for (final entry in _appStoreListingLocaleByAppLocale.entries) {
-      final directory = Directory('fastlane/metadata/${entry.value}');
-      for (final filename in const [
-        'name.txt',
-        'keywords.txt',
-        'description.txt',
-        'release_notes.txt',
-        'support_url.txt',
-        'marketing_url.txt',
-        'privacy_url.txt',
-      ]) {
-        final file = File('${directory.path}/$filename');
-        expect(
-          file.existsSync(),
-          isTrue,
-          reason: '${entry.value} must provide $filename.',
-        );
-        expect(
-          file.readAsStringSync().trim(),
-          isNotEmpty,
-          reason: '${entry.value}/$filename must not be empty.',
-        );
-      }
-      expect(
-        File('${directory.path}/description.txt').readAsStringSync().trim(),
-        isNot(
-          equals(
-            File(
-              'fastlane/metadata/en-AU/description.txt',
-            ).readAsStringSync().trim(),
-          ),
-        ),
-      );
-      expect(
-        File('${directory.path}/release_notes.txt').readAsStringSync().trim(),
-        isNot(
-          equals(
-            File(
-              'fastlane/metadata/en-AU/release_notes.txt',
             ).readAsStringSync().trim(),
           ),
         ),
@@ -600,69 +519,6 @@ void main() {
           File('${directory.path}/${index}_$locale.png').existsSync(),
           isTrue,
           reason: 'Missing Play Store screenshot $index for $locale.',
-        );
-      }
-    }
-  });
-
-  test('App Store metadata covers every shipped locale', () {
-    for (final locale in _appStoreLocales) {
-      final directory = Directory('fastlane/metadata/$locale');
-      expect(
-        directory.existsSync(),
-        isTrue,
-        reason: 'Missing App Store metadata directory for $locale.',
-      );
-
-      for (final filename in const [
-        'name.txt',
-        'keywords.txt',
-        'description.txt',
-        'release_notes.txt',
-        'support_url.txt',
-        'marketing_url.txt',
-        'privacy_url.txt',
-      ]) {
-        final file = File('${directory.path}/$filename');
-        expect(
-          file.existsSync(),
-          isTrue,
-          reason: 'Missing $filename for App Store locale $locale.',
-        );
-        expect(
-          file.readAsStringSync().trim(),
-          isNotEmpty,
-          reason: '$filename for $locale must not be empty.',
-        );
-      }
-    }
-  });
-
-  test('App Store textual metadata is localized where English has copy', () {
-    const translatedFiles = <String>[
-      'description.txt',
-      'keywords.txt',
-      'release_notes.txt',
-      'subtitle.txt',
-      'promotional_text.txt',
-    ];
-
-    for (final filename in translatedFiles) {
-      final english = File(
-        'fastlane/metadata/en-AU/$filename',
-      ).readAsStringSync().trim();
-      if (english.isEmpty) continue;
-
-      for (final locale in _appStoreLocales.where(
-        (locale) => locale != 'en-AU',
-      )) {
-        final localized = File(
-          'fastlane/metadata/$locale/$filename',
-        ).readAsStringSync().trim();
-        expect(
-          localized,
-          allOf(isNotEmpty, isNot(equals(english))),
-          reason: '$filename for App Store locale $locale must be localized.',
         );
       }
     }
@@ -775,28 +631,6 @@ void main() {
       }
     }
   });
-
-  test(
-    'App Store release notes are localized for every non-English locale',
-    () {
-      final english = File(
-        'fastlane/metadata/en-AU/release_notes.txt',
-      ).readAsStringSync().trim();
-
-      for (final locale in _appStoreLocales.where(
-        (locale) => locale != 'en-AU',
-      )) {
-        final notes = File(
-          'fastlane/metadata/$locale/release_notes.txt',
-        ).readAsStringSync().trim();
-        expect(
-          notes,
-          allOf(isNotEmpty, isNot(equals(english))),
-          reason: '$locale must localize current App Store release notes.',
-        );
-      }
-    },
-  );
 
   test('regional fallback ARBs stay in sync', () {
     const fallbackLocales = {'pt': 'pt_PT', 'zh': 'zh_CN'};

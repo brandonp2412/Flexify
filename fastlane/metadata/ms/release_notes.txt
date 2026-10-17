@@ -1,3 +1,0 @@
-• feat(l10n): tambah lagi metadata bahasa gedung
-• feat(l10n): tambah metadata gedung untuk bahasa yang baru ditambah
-• fix(l10n): segerakkan nota keluaran 2.2.27

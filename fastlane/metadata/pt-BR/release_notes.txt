@@ -1,1 +1,0 @@
-• fix(l10n): traduzir as notas de versão mais recentes

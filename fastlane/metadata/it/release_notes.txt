@@ -1,3 +1,0 @@
-• feat(l10n): aggiungere altri metadati delle lingue dello store
-• feat(l10n): aggiungere i metadati dello store per le lingue recenti
-• fix(l10n): sincronizzare le note di rilascio 2.2.27

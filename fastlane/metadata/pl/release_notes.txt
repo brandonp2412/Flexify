@@ -1,7 +1,0 @@
-• fix(ci): uzupełnij historię zlokalizowanych informacji o wydaniu
-• fix(l10n): uzupełnij metadane wydania dla brazylijskiego portugalskiego
-• fix(l10n): uzupełnij metadane wydania dla języka francuskiego
-• fix(l10n): uzupełnij metadane wydania dla języka niemieckiego
-• fix(l10n): uzupełnij metadane wydania dla języka japońskiego
-• fix(l10n): zsynchronizuj metadane wydania dla języka hiszpańskiego
-• fix: przywróć ikonę aplikacji z hantlem

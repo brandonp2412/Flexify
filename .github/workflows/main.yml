@@ -199,6 +199,7 @@ jobs:
     outputs:
       version: ${{ steps.bump.outputs.version }}
       build_number: ${{ steps.bump.outputs.build_number }}
+      changelog_number: ${{ steps.bump.outputs.changelog_number }}
       commit_sha: ${{ steps.commit-push.outputs.commit_sha }}
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
@@ -248,6 +249,7 @@ jobs:
 
           echo "version=$NEW_VERSION" >> "$GITHUB_OUTPUT"
           echo "build_number=$NEW_BUILD" >> "$GITHUB_OUTPUT"
+          echo "changelog_number=$CHANGELOG_NUMBER" >> "$GITHUB_OUTPUT"
 
           sed -i "s/^version: .*/version: $NEW_VERSION+$NEW_BUILD/" pubspec.yaml
           sed -i "s/msix_version: .*/msix_version: $NEW_MSIX/" pubspec.yaml
@@ -269,9 +271,6 @@ jobs:
             | sed 's/^/• /' > "$CHANGELOG_FILE"
 
           [ -s "$CHANGELOG_FILE" ] || echo "• Bug fixes and improvements" > "$CHANGELOG_FILE"
-
-          mkdir -p fastlane/metadata/en-AU
-          cp "$CHANGELOG_FILE" fastlane/metadata/en-AU/release_notes.txt
 
           mkdir -p assets/changelogs
           cp "$CHANGELOG_FILE" "assets/changelogs/$(date +%s).txt"
@@ -551,7 +550,7 @@ jobs:
         with:
           tag_name: ${{ needs.version-bump.outputs.version }}
           name: ${{ needs.version-bump.outputs.version }}
-          body_path: fastlane/metadata/en-AU/release_notes.txt
+          body_path: fastlane/metadata/android/en-US/changelogs/${{ needs.version-bump.outputs.changelog_number }}.txt
           files: |
             android-builds/flutter-apk/app-*-release.apk
             android-builds/flutter-apk/flexify.apk
