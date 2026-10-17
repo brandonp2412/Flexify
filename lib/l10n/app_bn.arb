@@ -545,21 +545,6 @@
       }
     }
   },
-  "invalidCsvDataType": "সারি {row}-এ {field}-এর ডেটা টাইপ সঠিক নয়: {type}",
-  "@invalidCsvDataType": {
-    "description": "Validation error for an unsupported value type in an imported CSV row.",
-    "placeholders": {
-      "field": {
-        "type": "String"
-      },
-      "row": {
-        "type": "int"
-      },
-      "type": {
-        "type": "String"
-      }
-    }
-  },
   "expectedIntegerPlanId": "পূর্ণসংখ্যার plan id প্রত্যাশিত ছিল, পাওয়া গেছে \"{value}\"",
   "@expectedIntegerPlanId": {
     "description": "Validation error for a non-integer plan identifier in an imported CSV file.",
@@ -992,10 +977,6 @@
   "oneRepMaxEstimate": "এক রেপ সর্বোচ্চ (আনুমানিক)",
   "@oneRepMaxEstimate": {
     "description": "Label for an estimated one-repetition maximum."
-  },
-  "valueLabel": "মান",
-  "@valueLabel": {
-    "description": "Generic numeric value field label."
   },
   "amountWithUnit": "পরিমাণ ({unit})",
   "@amountWithUnit": {
@@ -1580,19 +1561,6 @@
     "placeholders": {
       "count": {
         "type": "int"
-      }
-    }
-  },
-  "unitsConflict": "এককের দ্বন্দ্ব",
-  "@unitsConflict": {
-    "description": "Title for an exercise unit conversion conflict dialog."
-  },
-  "unitsConflictDescription": "আপনার সব রেকর্ডে একই একক নেই। এতে সব একক {unit}-এ রূপান্তর হবে। আপনি কি নিশ্চিত?",
-  "@unitsConflictDescription": {
-    "description": "Explanation before converting mixed exercise units.",
-    "placeholders": {
-      "unit": {
-        "type": "String"
       }
     }
   },

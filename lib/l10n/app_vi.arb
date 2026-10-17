@@ -545,21 +545,6 @@
       }
     }
   },
-  "invalidCsvDataType": "Kiểu dữ liệu {field} không hợp lệ trong hàng {row}: {type}",
-  "@invalidCsvDataType": {
-    "description": "Validation error for an unsupported value type in an imported CSV row.",
-    "placeholders": {
-      "field": {
-        "type": "String"
-      },
-      "row": {
-        "type": "int"
-      },
-      "type": {
-        "type": "String"
-      }
-    }
-  },
   "expectedIntegerPlanId": "ID kế hoạch phải là số nguyên, nhận được \"{value}\"",
   "@expectedIntegerPlanId": {
     "description": "Validation error for a non-integer plan identifier in an imported CSV file.",
@@ -992,10 +977,6 @@
   "oneRepMaxEstimate": "1RM (ước tính)",
   "@oneRepMaxEstimate": {
     "description": "Label for an estimated one-repetition maximum."
-  },
-  "valueLabel": "Giá trị",
-  "@valueLabel": {
-    "description": "Generic numeric value field label."
   },
   "amountWithUnit": "Số lượng ({unit})",
   "@amountWithUnit": {
@@ -1580,19 +1561,6 @@
     "placeholders": {
       "count": {
         "type": "int"
-      }
-    }
-  },
-  "unitsConflict": "Xung đột đơn vị",
-  "@unitsConflict": {
-    "description": "Title for an exercise unit conversion conflict dialog."
-  },
-  "unitsConflictDescription": "Không phải tất cả hồ sơ của bạn đều có cùng đơn vị. Điều này sẽ chuyển đổi tất cả các đơn vị thành {unit}. Bạn có chắc không?",
-  "@unitsConflictDescription": {
-    "description": "Explanation before converting mixed exercise units.",
-    "placeholders": {
-      "unit": {
-        "type": "String"
       }
     }
   },

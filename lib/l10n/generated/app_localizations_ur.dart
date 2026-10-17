@@ -427,11 +427,6 @@ class AppLocalizationsUr extends AppLocalizations {
   }
 
   @override
-  String invalidCsvDataType(String field, int row, String type) {
-    return 'قطار $row میں $field کا ڈیٹا ٹائپ غلط ہے: $type';
-  }
-
-  @override
   String expectedIntegerPlanId(String value) {
     return 'صحیح عدد plan id درکار تھا، ملا \"$value\"';
   }
@@ -749,9 +744,6 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get oneRepMaxEstimate => 'ایک ریپ زیادہ سے زیادہ (تخمینہ)';
-
-  @override
-  String get valueLabel => 'قدر';
 
   @override
   String amountWithUnit(String unit) {
@@ -1205,14 +1197,6 @@ class AppLocalizationsUr extends AppLocalizations {
   @override
   String updateConflictDescription(int count) {
     return 'آپ کا نیا نام پہلے ہی $count ریکارڈز میں موجود ہے۔ کیا آپ کو یقین ہے؟';
-  }
-
-  @override
-  String get unitsConflict => 'اکائیوں کا تنازع';
-
-  @override
-  String unitsConflictDescription(String unit) {
-    return 'آپ کے تمام ریکارڈز میں ایک ہی اکائی نہیں ہے۔ اس سے تمام اکائیاں $unit میں تبدیل ہو جائیں گی۔ کیا آپ کو یقین ہے؟';
   }
 
   @override

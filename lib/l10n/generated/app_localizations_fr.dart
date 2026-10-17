@@ -431,11 +431,6 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String invalidCsvDataType(String field, int row, String type) {
-    return 'Type de données $field non valide à la ligne $row : $type';
-  }
-
-  @override
   String expectedIntegerPlanId(String value) {
     return 'Un identifiant de programme entier était attendu, valeur reçue : \"$value\"';
   }
@@ -752,9 +747,6 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get oneRepMaxEstimate => 'Maximum sur 1 répétition (estimé)';
-
-  @override
-  String get valueLabel => 'Valeur';
 
   @override
   String amountWithUnit(String unit) {
@@ -1215,14 +1207,6 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String updateConflictDescription(int count) {
     return 'Le nouveau nom existe déjà pour $count enregistrements. Continuer ?';
-  }
-
-  @override
-  String get unitsConflict => 'Conflit d’unités';
-
-  @override
-  String unitsConflictDescription(String unit) {
-    return 'Tous vos enregistrements n’utilisent pas la même unité. Toutes les unités seront converties en $unit. Continuer ?';
   }
 
   @override

@@ -426,11 +426,6 @@ class AppLocalizationsId extends AppLocalizations {
   }
 
   @override
-  String invalidCsvDataType(String field, int row, String type) {
-    return 'Tipe data $field tidak valid dalam baris $row: $type';
-  }
-
-  @override
   String expectedIntegerPlanId(String value) {
     return 'ID rencana harus berupa bilangan bulat, tetapi diperoleh \"$value\"';
   }
@@ -747,9 +742,6 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get oneRepMaxEstimate => 'Maksimum 1 repetisi (perkiraan)';
-
-  @override
-  String get valueLabel => 'Nilai';
 
   @override
   String amountWithUnit(String unit) {
@@ -1205,14 +1197,6 @@ class AppLocalizationsId extends AppLocalizations {
   @override
   String updateConflictDescription(int count) {
     return 'Nama baru Anda sudah digunakan oleh $count catatan. Anda yakin?';
-  }
-
-  @override
-  String get unitsConflict => 'Konflik satuan';
-
-  @override
-  String unitsConflictDescription(String unit) {
-    return 'Tidak semua catatan Anda menggunakan satuan yang sama. Semua satuan akan dikonversi ke $unit. Anda yakin?';
   }
 
   @override

@@ -554,21 +554,6 @@
       }
     }
   },
-  "invalidCsvDataType": "Некоректний тип даних {field} у рядку {row}: {type}",
-  "@invalidCsvDataType": {
-    "description": "Validation error for an unsupported value type in an imported CSV row.",
-    "placeholders": {
-      "field": {
-        "type": "String"
-      },
-      "row": {
-        "type": "int"
-      },
-      "type": {
-        "type": "String"
-      }
-    }
-  },
   "expectedIntegerPlanId": "Очікувався цілий ідентифікатор плану, отримано «{value}»",
   "@expectedIntegerPlanId": {
     "description": "Validation error for a non-integer plan identifier in an imported CSV file.",
@@ -1001,10 +986,6 @@
   "oneRepMaxEstimate": "Максимум на одне повторення (оцінка)",
   "@oneRepMaxEstimate": {
     "description": "Label for an estimated one-repetition maximum."
-  },
-  "valueLabel": "Значення",
-  "@valueLabel": {
-    "description": "Generic numeric value field label."
   },
   "amountWithUnit": "Кількість ({unit})",
   "@amountWithUnit": {
@@ -1589,19 +1570,6 @@
     "placeholders": {
       "count": {
         "type": "int"
-      }
-    }
-  },
-  "unitsConflict": "Конфлікт одиниць",
-  "@unitsConflict": {
-    "description": "Title for an exercise unit conversion conflict dialog."
-  },
-  "unitsConflictDescription": "Не всі записи мають однакову одиницю. Усі одиниці буде перетворено на {unit}. Продовжити?",
-  "@unitsConflictDescription": {
-    "description": "Explanation before converting mixed exercise units.",
-    "placeholders": {
-      "unit": {
-        "type": "String"
       }
     }
   },

@@ -545,21 +545,6 @@
       }
     }
   },
-  "invalidCsvDataType": "قطار {row} میں {field} کا ڈیٹا ٹائپ غلط ہے: {type}",
-  "@invalidCsvDataType": {
-    "description": "Validation error for an unsupported value type in an imported CSV row.",
-    "placeholders": {
-      "field": {
-        "type": "String"
-      },
-      "row": {
-        "type": "int"
-      },
-      "type": {
-        "type": "String"
-      }
-    }
-  },
   "expectedIntegerPlanId": "صحیح عدد plan id درکار تھا، ملا \"{value}\"",
   "@expectedIntegerPlanId": {
     "description": "Validation error for a non-integer plan identifier in an imported CSV file.",
@@ -992,10 +977,6 @@
   "oneRepMaxEstimate": "ایک ریپ زیادہ سے زیادہ (تخمینہ)",
   "@oneRepMaxEstimate": {
     "description": "Label for an estimated one-repetition maximum."
-  },
-  "valueLabel": "قدر",
-  "@valueLabel": {
-    "description": "Generic numeric value field label."
   },
   "amountWithUnit": "مقدار ({unit})",
   "@amountWithUnit": {
@@ -1580,19 +1561,6 @@
     "placeholders": {
       "count": {
         "type": "int"
-      }
-    }
-  },
-  "unitsConflict": "اکائیوں کا تنازع",
-  "@unitsConflict": {
-    "description": "Title for an exercise unit conversion conflict dialog."
-  },
-  "unitsConflictDescription": "آپ کے تمام ریکارڈز میں ایک ہی اکائی نہیں ہے۔ اس سے تمام اکائیاں {unit} میں تبدیل ہو جائیں گی۔ کیا آپ کو یقین ہے؟",
-  "@unitsConflictDescription": {
-    "description": "Explanation before converting mixed exercise units.",
-    "placeholders": {
-      "unit": {
-        "type": "String"
       }
     }
   },

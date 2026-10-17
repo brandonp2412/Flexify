@@ -429,11 +429,6 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String invalidCsvDataType(String field, int row, String type) {
-    return 'Tipo de dado de $field inválido na linha $row: $type';
-  }
-
-  @override
   String expectedIntegerPlanId(String value) {
     return 'Era esperado um ID de plano inteiro, mas foi recebido \"$value\"';
   }
@@ -749,9 +744,6 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get oneRepMaxEstimate => 'Uma repetição máxima (estimativa)';
-
-  @override
-  String get valueLabel => 'Valor';
 
   @override
   String amountWithUnit(String unit) {
@@ -1212,14 +1204,6 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String updateConflictDescription(int count) {
     return 'O novo nome já existe em $count registos. Pretende continuar?';
-  }
-
-  @override
-  String get unitsConflict => 'Conflito de unidades';
-
-  @override
-  String unitsConflictDescription(String unit) {
-    return 'Nem todos os seus registos utilizam a mesma unidade. Isto converterá todas as unidades para $unit. Pretende continuar?';
   }
 
   @override
@@ -2016,11 +2000,6 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   }
 
   @override
-  String invalidCsvDataType(String field, int row, String type) {
-    return 'Tipo de dado de $field inválido na linha $row: $type';
-  }
-
-  @override
   String expectedIntegerPlanId(String value) {
     return 'Era esperado um ID inteiro de plano, mas foi recebido \"$value\"';
   }
@@ -2336,9 +2315,6 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get oneRepMaxEstimate => 'Uma repetição máxima (estimativa)';
-
-  @override
-  String get valueLabel => 'Valor';
 
   @override
   String amountWithUnit(String unit) {
@@ -2798,14 +2774,6 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   @override
   String updateConflictDescription(int count) {
     return 'Seu novo nome já existe em $count registros. Deseja continuar?';
-  }
-
-  @override
-  String get unitsConflict => 'Conflito de unidades';
-
-  @override
-  String unitsConflictDescription(String unit) {
-    return 'Nem todos os seus registros usam a mesma unidade. Isso converterá todas as unidades para $unit. Deseja continuar?';
   }
 
   @override
@@ -3601,11 +3569,6 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   }
 
   @override
-  String invalidCsvDataType(String field, int row, String type) {
-    return 'Tipo de dado de $field inválido na linha $row: $type';
-  }
-
-  @override
   String expectedIntegerPlanId(String value) {
     return 'Era esperado um ID de plano inteiro, mas foi recebido \"$value\"';
   }
@@ -3921,9 +3884,6 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
 
   @override
   String get oneRepMaxEstimate => 'Uma repetição máxima (estimativa)';
-
-  @override
-  String get valueLabel => 'Valor';
 
   @override
   String amountWithUnit(String unit) {
@@ -4384,14 +4344,6 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   @override
   String updateConflictDescription(int count) {
     return 'O novo nome já existe em $count registos. Pretende continuar?';
-  }
-
-  @override
-  String get unitsConflict => 'Conflito de unidades';
-
-  @override
-  String unitsConflictDescription(String unit) {
-    return 'Nem todos os seus registos utilizam a mesma unidade. Isto converterá todas as unidades para $unit. Pretende continuar?';
   }
 
   @override

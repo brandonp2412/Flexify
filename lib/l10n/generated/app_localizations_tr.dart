@@ -425,11 +425,6 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String invalidCsvDataType(String field, int row, String type) {
-    return '$row. satırdaki $field veri türü geçersiz: $type';
-  }
-
-  @override
   String expectedIntegerPlanId(String value) {
     return 'Integer tipinde plan ID\'si bekleniyordu, \"$value\" alındı';
   }
@@ -745,9 +740,6 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get oneRepMaxEstimate => '1 Tekrar Maks (1RM) tahmini';
-
-  @override
-  String get valueLabel => 'Değer';
 
   @override
   String amountWithUnit(String unit) {
@@ -1205,14 +1197,6 @@ class AppLocalizationsTr extends AppLocalizations {
   @override
   String updateConflictDescription(int count) {
     return 'Yeni adın $count kayıt için zaten mevcut. Emin misin?';
-  }
-
-  @override
-  String get unitsConflict => 'Birim Çakışması';
-
-  @override
-  String unitsConflictDescription(String unit) {
-    return 'Tüm kayıtların aynı birime sahip değil. Bu işlem tüm birimleri $unit cinsine dönüştürecek. Emin misin?';
   }
 
   @override

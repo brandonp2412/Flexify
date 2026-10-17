@@ -409,11 +409,6 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
-  String invalidCsvDataType(String field, int row, String type) {
-    return '$row行目の$fieldのデータ型が無効です: $type';
-  }
-
-  @override
   String expectedIntegerPlanId(String value) {
     return 'プランIDには整数が必要ですが、\"$value\" が指定されました';
   }
@@ -728,9 +723,6 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get oneRepMaxEstimate => '1RM（推定）';
-
-  @override
-  String get valueLabel => '値';
 
   @override
   String amountWithUnit(String unit) {
@@ -1175,14 +1167,6 @@ class AppLocalizationsJa extends AppLocalizations {
   @override
   String updateConflictDescription(int count) {
     return '新しい名前はすでに$count件の記録で使われています。続行しますか？';
-  }
-
-  @override
-  String get unitsConflict => '単位の競合';
-
-  @override
-  String unitsConflictDescription(String unit) {
-    return 'すべての記録で同じ単位が使われていません。すべての単位を$unitに変換します。続行しますか？';
   }
 
   @override

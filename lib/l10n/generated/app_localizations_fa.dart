@@ -422,11 +422,6 @@ class AppLocalizationsFa extends AppLocalizations {
   }
 
   @override
-  String invalidCsvDataType(String field, int row, String type) {
-    return 'نوع داده $field در ردیف $row نامعتبر است: $type';
-  }
-
-  @override
   String expectedIntegerPlanId(String value) {
     return 'برای plan id عدد صحیح انتظار می‌رفت، اما \"$value\" دریافت شد';
   }
@@ -743,9 +738,6 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get oneRepMaxEstimate => 'حداکثر یک تکرار (تخمین)';
-
-  @override
-  String get valueLabel => 'مقدار';
 
   @override
   String amountWithUnit(String unit) {
@@ -1199,14 +1191,6 @@ class AppLocalizationsFa extends AppLocalizations {
   @override
   String updateConflictDescription(int count) {
     return 'نام جدید شما از قبل برای $count رکورد وجود دارد. مطمئنید؟';
-  }
-
-  @override
-  String get unitsConflict => 'تعارض واحدها';
-
-  @override
-  String unitsConflictDescription(String unit) {
-    return 'همه رکوردهای شما واحد یکسانی ندارند. این کار همه واحدها را به $unit تبدیل می‌کند. مطمئنید؟';
   }
 
   @override

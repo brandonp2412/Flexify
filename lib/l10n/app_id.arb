@@ -545,21 +545,6 @@
       }
     }
   },
-  "invalidCsvDataType": "Tipe data {field} tidak valid dalam baris {row}: {type}",
-  "@invalidCsvDataType": {
-    "description": "Validation error for an unsupported value type in an imported CSV row.",
-    "placeholders": {
-      "field": {
-        "type": "String"
-      },
-      "row": {
-        "type": "int"
-      },
-      "type": {
-        "type": "String"
-      }
-    }
-  },
   "expectedIntegerPlanId": "ID rencana harus berupa bilangan bulat, tetapi diperoleh \"{value}\"",
   "@expectedIntegerPlanId": {
     "description": "Validation error for a non-integer plan identifier in an imported CSV file.",
@@ -992,10 +977,6 @@
   "oneRepMaxEstimate": "Maksimum 1 repetisi (perkiraan)",
   "@oneRepMaxEstimate": {
     "description": "Label for an estimated one-repetition maximum."
-  },
-  "valueLabel": "Nilai",
-  "@valueLabel": {
-    "description": "Generic numeric value field label."
   },
   "amountWithUnit": "Jumlah ({unit})",
   "@amountWithUnit": {
@@ -1580,19 +1561,6 @@
     "placeholders": {
       "count": {
         "type": "int"
-      }
-    }
-  },
-  "unitsConflict": "Konflik satuan",
-  "@unitsConflict": {
-    "description": "Title for an exercise unit conversion conflict dialog."
-  },
-  "unitsConflictDescription": "Tidak semua catatan Anda menggunakan satuan yang sama. Semua satuan akan dikonversi ke {unit}. Anda yakin?",
-  "@unitsConflictDescription": {
-    "description": "Explanation before converting mixed exercise units.",
-    "placeholders": {
-      "unit": {
-        "type": "String"
       }
     }
   },

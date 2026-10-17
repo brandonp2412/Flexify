@@ -429,11 +429,6 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
-  String invalidCsvDataType(String field, int row, String type) {
-    return 'Ongeldig gegevenstype voor $field in rij $row: $type';
-  }
-
-  @override
   String expectedIntegerPlanId(String value) {
     return 'Een geheel getal als schema-ID verwacht, ontvangen: \"$value\"';
   }
@@ -749,9 +744,6 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get oneRepMaxEstimate => '1RM (schatting)';
-
-  @override
-  String get valueLabel => 'Waarde';
 
   @override
   String amountWithUnit(String unit) {
@@ -1209,14 +1201,6 @@ class AppLocalizationsNl extends AppLocalizations {
   @override
   String updateConflictDescription(int count) {
     return 'Je nieuwe naam bestaat al voor $count records. Weet je het zeker?';
-  }
-
-  @override
-  String get unitsConflict => 'Eenhedenconflict';
-
-  @override
-  String unitsConflictDescription(String unit) {
-    return 'Niet al je records gebruiken dezelfde eenheid. Hiermee worden alle eenheden geconverteerd naar $unit. Weet je het zeker?';
   }
 
   @override

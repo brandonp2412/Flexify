@@ -430,11 +430,6 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
-  String invalidCsvDataType(String field, int row, String type) {
-    return 'Ungültiger Datentyp für $field in Zeile $row: $type';
-  }
-
-  @override
   String expectedIntegerPlanId(String value) {
     return 'Für die Plan-ID wurde eine Ganzzahl erwartet, erhalten: \"$value\"';
   }
@@ -751,9 +746,6 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get oneRepMaxEstimate => '1RM (Schätzung)';
-
-  @override
-  String get valueLabel => 'Wert';
 
   @override
   String amountWithUnit(String unit) {
@@ -1213,14 +1205,6 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String updateConflictDescription(int count) {
     return 'Der neue Name ist bereits bei $count Einträgen vorhanden. Trotzdem fortfahren?';
-  }
-
-  @override
-  String get unitsConflict => 'Einheitenkonflikt';
-
-  @override
-  String unitsConflictDescription(String unit) {
-    return 'Nicht alle Einträge verwenden dieselbe Einheit. Dadurch werden alle Einheiten in $unit umgerechnet. Fortfahren?';
   }
 
   @override

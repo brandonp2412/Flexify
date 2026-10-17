@@ -422,11 +422,6 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
-  String invalidCsvDataType(String field, int row, String type) {
-    return 'Kiểu dữ liệu $field không hợp lệ trong hàng $row: $type';
-  }
-
-  @override
   String expectedIntegerPlanId(String value) {
     return 'ID kế hoạch phải là số nguyên, nhận được \"$value\"';
   }
@@ -742,9 +737,6 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get oneRepMaxEstimate => '1RM (ước tính)';
-
-  @override
-  String get valueLabel => 'Giá trị';
 
   @override
   String amountWithUnit(String unit) {
@@ -1202,14 +1194,6 @@ class AppLocalizationsVi extends AppLocalizations {
   @override
   String updateConflictDescription(int count) {
     return 'Tên mới của bạn đã tồn tại trong bản ghi $count. Bạn có chắc không?';
-  }
-
-  @override
-  String get unitsConflict => 'Xung đột đơn vị';
-
-  @override
-  String unitsConflictDescription(String unit) {
-    return 'Không phải tất cả hồ sơ của bạn đều có cùng đơn vị. Điều này sẽ chuyển đổi tất cả các đơn vị thành $unit. Bạn có chắc không?';
   }
 
   @override

@@ -410,11 +410,6 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
-  String invalidCsvDataType(String field, int row, String type) {
-    return '$row행의 $field 데이터 형식이 잘못되었습니다: $type';
-  }
-
-  @override
   String expectedIntegerPlanId(String value) {
     return '플랜 ID는 정수여야 하지만 \"$value\"이(가) 입력되었습니다';
   }
@@ -729,9 +724,6 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get oneRepMaxEstimate => '1RM (추정)';
-
-  @override
-  String get valueLabel => '값';
 
   @override
   String amountWithUnit(String unit) {
@@ -1176,14 +1168,6 @@ class AppLocalizationsKo extends AppLocalizations {
   @override
   String updateConflictDescription(int count) {
     return '새 이름이 이미 $count개의 기록에 존재합니다. 계속할까요?';
-  }
-
-  @override
-  String get unitsConflict => '단위 충돌';
-
-  @override
-  String unitsConflictDescription(String unit) {
-    return '모든 기록의 단위가 같지 않습니다. 모든 단위를 $unit(으)로 변환합니다. 계속할까요?';
   }
 
   @override

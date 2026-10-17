@@ -407,11 +407,6 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String invalidCsvDataType(String field, int row, String type) {
-    return '第 $row 行的 $field 数据类型无效：$type';
-  }
-
-  @override
   String expectedIntegerPlanId(String value) {
     return '计划 ID 应为整数，但收到“$value”';
   }
@@ -726,9 +721,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get oneRepMaxEstimate => '1RM（估算）';
-
-  @override
-  String get valueLabel => '数值';
 
   @override
   String amountWithUnit(String unit) {
@@ -1171,14 +1163,6 @@ class AppLocalizationsZh extends AppLocalizations {
   @override
   String updateConflictDescription(int count) {
     return '新名称已存在于 $count 条记录中。确定要继续吗？';
-  }
-
-  @override
-  String get unitsConflict => '单位冲突';
-
-  @override
-  String unitsConflictDescription(String unit) {
-    return '并非所有记录都使用相同单位。此操作会将所有单位转换为 $unit。确定要继续吗？';
   }
 
   @override
@@ -1907,11 +1891,6 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
   }
 
   @override
-  String invalidCsvDataType(String field, int row, String type) {
-    return '第 $row 行的 $field 数据类型无效：$type';
-  }
-
-  @override
   String expectedIntegerPlanId(String value) {
     return '计划 ID 应为整数，但收到“$value”';
   }
@@ -2226,9 +2205,6 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
 
   @override
   String get oneRepMaxEstimate => '1RM（估算）';
-
-  @override
-  String get valueLabel => '数值';
 
   @override
   String amountWithUnit(String unit) {
@@ -2671,14 +2647,6 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
   @override
   String updateConflictDescription(int count) {
     return '新名称已存在于 $count 条记录中。确定要继续吗？';
-  }
-
-  @override
-  String get unitsConflict => '单位冲突';
-
-  @override
-  String unitsConflictDescription(String unit) {
-    return '并非所有记录都使用相同单位。此操作会将所有单位转换为 $unit。确定要继续吗？';
   }
 
   @override
@@ -3407,11 +3375,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   }
 
   @override
-  String invalidCsvDataType(String field, int row, String type) {
-    return '第 $row 行的 $field 資料類型無效：$type';
-  }
-
-  @override
   String expectedIntegerPlanId(String value) {
     return '計畫 ID 應為整數，但收到“$value”';
   }
@@ -3726,9 +3689,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get oneRepMaxEstimate => '1RM（估算）';
-
-  @override
-  String get valueLabel => '數值';
 
   @override
   String amountWithUnit(String unit) {
@@ -4171,14 +4131,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   @override
   String updateConflictDescription(int count) {
     return '新名稱已存在於 $count 筆紀錄中。確定要繼續嗎？';
-  }
-
-  @override
-  String get unitsConflict => '單位衝突';
-
-  @override
-  String unitsConflictDescription(String unit) {
-    return '並非所有記錄都使用相同單位。此操作會將所有單位轉換為 $unit。確定要繼續嗎？';
   }
 
   @override

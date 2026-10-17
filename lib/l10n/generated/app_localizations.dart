@@ -888,12 +888,6 @@ abstract class AppLocalizations {
   /// **'Invalid {field} value in row {row}: {value}'**
   String invalidCsvValue(String field, int row, String value);
 
-  /// Validation error for an unsupported value type in an imported CSV row.
-  ///
-  /// In en, this message translates to:
-  /// **'Invalid {field} data type in row {row}: {type}'**
-  String invalidCsvDataType(String field, int row, String type);
-
   /// Validation error for a non-integer plan identifier in an imported CSV file.
   ///
   /// In en, this message translates to:
@@ -1505,12 +1499,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'One rep max (estimate)'**
   String get oneRepMaxEstimate;
-
-  /// Generic numeric value field label.
-  ///
-  /// In en, this message translates to:
-  /// **'Value'**
-  String get valueLabel;
 
   /// Amount field label including the selected unit.
   ///
@@ -2267,18 +2255,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Your new name exists already for {count} records. Are you sure?'**
   String updateConflictDescription(int count);
-
-  /// Title for an exercise unit conversion conflict dialog.
-  ///
-  /// In en, this message translates to:
-  /// **'Units conflict'**
-  String get unitsConflict;
-
-  /// Explanation before converting mixed exercise units.
-  ///
-  /// In en, this message translates to:
-  /// **'Not all of your records have the same unit. This will convert all units to {unit}. Are you sure?'**
-  String unitsConflictDescription(String unit);
 
   /// Generic duration label.
   ///

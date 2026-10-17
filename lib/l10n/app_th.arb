@@ -545,21 +545,6 @@
       }
     }
   },
-  "invalidCsvDataType": "ชนิดข้อมูล {field} ในแถว {row} ไม่ถูกต้อง: {type}",
-  "@invalidCsvDataType": {
-    "description": "Validation error for an unsupported value type in an imported CSV row.",
-    "placeholders": {
-      "field": {
-        "type": "String"
-      },
-      "row": {
-        "type": "int"
-      },
-      "type": {
-        "type": "String"
-      }
-    }
-  },
   "expectedIntegerPlanId": "คาดว่า plan id เป็นจำนวนเต็ม แต่ได้ \"{value}\"",
   "@expectedIntegerPlanId": {
     "description": "Validation error for a non-integer plan identifier in an imported CSV file.",
@@ -992,10 +977,6 @@
   "oneRepMaxEstimate": "หนึ่งครั้งสูงสุด (ประมาณการ)",
   "@oneRepMaxEstimate": {
     "description": "Label for an estimated one-repetition maximum."
-  },
-  "valueLabel": "ค่า",
-  "@valueLabel": {
-    "description": "Generic numeric value field label."
   },
   "amountWithUnit": "ปริมาณ ({unit})",
   "@amountWithUnit": {
@@ -1580,19 +1561,6 @@
     "placeholders": {
       "count": {
         "type": "int"
-      }
-    }
-  },
-  "unitsConflict": "หน่วยขัดแย้งกัน",
-  "@unitsConflict": {
-    "description": "Title for an exercise unit conversion conflict dialog."
-  },
-  "unitsConflictDescription": "รายการของคุณไม่ได้ใช้หน่วยเดียวกันทั้งหมด การดำเนินการนี้จะแปลงหน่วยทั้งหมดเป็น {unit} คุณแน่ใจหรือไม่?",
-  "@unitsConflictDescription": {
-    "description": "Explanation before converting mixed exercise units.",
-    "placeholders": {
-      "unit": {
-        "type": "String"
       }
     }
   },

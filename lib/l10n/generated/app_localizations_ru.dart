@@ -430,11 +430,6 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
-  String invalidCsvDataType(String field, int row, String type) {
-    return 'Недопустимый тип данных $field в строке $row: $type';
-  }
-
-  @override
   String expectedIntegerPlanId(String value) {
     return 'Ожидался целочисленный идентификатор плана, получено «$value»';
   }
@@ -751,9 +746,6 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get oneRepMaxEstimate => 'Максимум на одно повторение (оценка)';
-
-  @override
-  String get valueLabel => 'Значение';
 
   @override
   String amountWithUnit(String unit) {
@@ -1221,14 +1213,6 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String updateConflictDescription(int count) {
     return 'Новое имя уже используется в $count записях. Продолжить?';
-  }
-
-  @override
-  String get unitsConflict => 'Конфликт единиц измерения';
-
-  @override
-  String unitsConflictDescription(String unit) {
-    return 'Не все записи используют одну единицу измерения. Все значения будут преобразованы в $unit. Продолжить?';
   }
 
   @override

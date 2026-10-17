@@ -421,11 +421,6 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
-  String invalidCsvDataType(String field, int row, String type) {
-    return 'نوع بيانات $field غير صالح في الصف $row: $type';
-  }
-
-  @override
   String expectedIntegerPlanId(String value) {
     return 'كان متوقعًا معرّف خطة صحيحًا، لكن تم الحصول على \"$value\"';
   }
@@ -741,9 +736,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get oneRepMaxEstimate => 'الحد الأقصى لتكرار واحد (تقديري)';
-
-  @override
-  String get valueLabel => 'القيمة';
 
   @override
   String amountWithUnit(String unit) {
@@ -1196,14 +1188,6 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String updateConflictDescription(int count) {
     return 'اسمك الجديد موجود بالفعل في $count سجلات. هل أنت متأكد؟';
-  }
-
-  @override
-  String get unitsConflict => 'تعارض الوحدات';
-
-  @override
-  String unitsConflictDescription(String unit) {
-    return 'لا تستخدم جميع سجلاتك الوحدة نفسها. سيحوّل هذا جميع الوحدات إلى $unit. هل أنت متأكد؟';
   }
 
   @override

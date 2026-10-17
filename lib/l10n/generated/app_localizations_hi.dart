@@ -424,11 +424,6 @@ class AppLocalizationsHi extends AppLocalizations {
   }
 
   @override
-  String invalidCsvDataType(String field, int row, String type) {
-    return 'पंक्ति $row में अमान्य $field डेटा प्रकार: $type';
-  }
-
-  @override
   String expectedIntegerPlanId(String value) {
     return 'पूर्णांक प्लान आईडी अपेक्षित थी, मिला \"$value\"';
   }
@@ -744,9 +739,6 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get oneRepMaxEstimate => 'एक रेप अधिकतम (अनुमान)';
-
-  @override
-  String get valueLabel => 'मान';
 
   @override
   String amountWithUnit(String unit) {
@@ -1200,14 +1192,6 @@ class AppLocalizationsHi extends AppLocalizations {
   @override
   String updateConflictDescription(int count) {
     return 'आपका नया नाम पहले से $count रिकॉर्ड के लिए मौजूद है। क्या आप सुनिश्चित हैं?';
-  }
-
-  @override
-  String get unitsConflict => 'इकाइयों का टकराव';
-
-  @override
-  String unitsConflictDescription(String unit) {
-    return 'आपके सभी रिकॉर्ड की इकाई एक जैसी नहीं है। इससे सभी इकाइयाँ $unit में बदल जाएँगी। क्या आप सुनिश्चित हैं?';
   }
 
   @override

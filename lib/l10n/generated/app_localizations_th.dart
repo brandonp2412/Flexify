@@ -423,11 +423,6 @@ class AppLocalizationsTh extends AppLocalizations {
   }
 
   @override
-  String invalidCsvDataType(String field, int row, String type) {
-    return 'ชนิดข้อมูล $field ในแถว $row ไม่ถูกต้อง: $type';
-  }
-
-  @override
   String expectedIntegerPlanId(String value) {
     return 'คาดว่า plan id เป็นจำนวนเต็ม แต่ได้ \"$value\"';
   }
@@ -742,9 +737,6 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get oneRepMaxEstimate => 'หนึ่งครั้งสูงสุด (ประมาณการ)';
-
-  @override
-  String get valueLabel => 'ค่า';
 
   @override
   String amountWithUnit(String unit) {
@@ -1201,14 +1193,6 @@ class AppLocalizationsTh extends AppLocalizations {
   @override
   String updateConflictDescription(int count) {
     return 'ชื่อใหม่ของคุณมีอยู่แล้วใน $count รายการ คุณแน่ใจหรือไม่?';
-  }
-
-  @override
-  String get unitsConflict => 'หน่วยขัดแย้งกัน';
-
-  @override
-  String unitsConflictDescription(String unit) {
-    return 'รายการของคุณไม่ได้ใช้หน่วยเดียวกันทั้งหมด การดำเนินการนี้จะแปลงหน่วยทั้งหมดเป็น $unit คุณแน่ใจหรือไม่?';
   }
 
   @override
