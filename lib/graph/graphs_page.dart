@@ -115,7 +115,6 @@ class GraphsPageState extends State<GraphsPage>
   String _search = '';
   String? _category;
   final _scroll = ScrollController();
-  bool extendFab = true;
   int _total = 0;
   GraphSort _sort = GraphSort.dateDesc;
 

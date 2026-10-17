@@ -383,14 +383,4 @@ class ImportData extends StatelessWidget {
       );
     }
   }
-
-  bool parseBool(dynamic value) {
-    if (value is bool) return value;
-    if (value is String) {
-      final lower = value.toLowerCase();
-      return lower == 'true' || lower == '1';
-    }
-    if (value is num) return value != 0;
-    return false;
-  }
 }
