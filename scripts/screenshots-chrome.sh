@@ -72,7 +72,7 @@ if [ -z "$only" ]; then
 fi
 
 # Run Flutter drive command targeting Chrome
-flutter drive --profile --driver=test_driver/integration_test.dart \
+flutter drive --driver=test_driver/integration_test.dart \
     --target=integration_test/screenshot_test.dart \
     "${dart_define[@]}" \
     -d web-server --browser-name=chrome "${headless_flag[@]}" "${chrome_binary[@]}"
