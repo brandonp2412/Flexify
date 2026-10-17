@@ -82,10 +82,6 @@ android {
     compileSdkVersion 37
     ndkVersion = "28.2.13676358"
 
-    buildFeatures {
-        buildConfig true
-    }
-
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
@@ -96,10 +92,6 @@ android {
         compilerOptions {
             jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
         }
-    }
-
-    sourceSets {
-        main.kotlin.srcDirs += 'src/main/kotlin'
     }
 
     defaultConfig {
@@ -147,22 +139,16 @@ android {
            if (keystorePropertiesFile.exists()) {
                signingConfig = signingConfigs.release
            }
-           // Reproducible builds
-           buildConfigField "long", "BUILD_TIME", "0L"
        }
        debug {
            if (keystorePropertiesFile.exists()) {
                signingConfig = signingConfigs.release
            }
-           // Reproducible builds
-           buildConfigField "long", "BUILD_TIME", "0L"
        }
        release {
            if (keystorePropertiesFile.isFile()) {
                signingConfig = signingConfigs.release
            }
-           // Reproducible builds
-           buildConfigField "long", "BUILD_TIME", "0L"
        }
    }
    // https://github.com/brandonp2412/Flexify/issues/125

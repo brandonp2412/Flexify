@@ -6,11 +6,14 @@ import android.content.Intent
 
 class BootReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
-        if (intent.action == "android.intent.action.BOOT_COMPLETED") {
-            val (automaticBackups, backupPath) = getSettings(context)
-            if (!automaticBackups || backupPath == null) return
-            scheduleBackups(context)
-        }
+        if (
+            intent.action != Intent.ACTION_BOOT_COMPLETED &&
+            intent.action != Intent.ACTION_MY_PACKAGE_REPLACED
+        ) return
+
+        val (automaticBackups, backupPath) = getSettings(context)
+        if (!automaticBackups || backupPath == null) return
+        scheduleBackups(context)
     }
 }
 
