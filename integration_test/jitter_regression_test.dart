@@ -92,15 +92,6 @@ Future<Map<String, dynamic>> _measureFrames(
     binding.reportData![reportKey] as Map<Object?, Object?>,
   );
 
-  final buildMisses = report['missed_frame_build_budget_count'];
-  final rasterMisses = report['missed_frame_rasterizer_budget_count'];
-  final worstBuild = report['worst_frame_build_time_millis'];
-  final worstRaster = report['worst_frame_rasterizer_time_millis'];
-  debugPrint(
-    '$reportKey: build misses=$buildMisses, raster misses=$rasterMisses, '
-    'worst build=${worstBuild}ms, worst raster=${worstRaster}ms',
-  );
-
   return report;
 }
 
@@ -245,18 +236,6 @@ void main() {
           (report['missed_frame_build_budget_count'] as int) +
           (report['missed_frame_rasterizer_budget_count'] as int),
     );
-    final worstBuildMs = reports
-        .map((report) => report['worst_frame_build_time_millis'] as double)
-        .reduce((a, b) => a > b ? a : b);
-    final worstRasterMs = reports
-        .map((report) => report['worst_frame_rasterizer_time_millis'] as double)
-        .reduce((a, b) => a > b ? a : b);
-
-    debugPrint(
-      'back_navigation: missed frames across 4 pops=$totalMissedFrames, '
-      'worst build=${worstBuildMs}ms, worst raster=${worstRasterMs}ms',
-    );
-
     expect(
       totalMissedFrames,
       0,

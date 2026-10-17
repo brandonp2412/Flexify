@@ -135,9 +135,6 @@ void main() {
       await insertSet('Squat');
       final frames = await countFramesToSettle(tester);
 
-      // Measured baseline: 2 frames (one for StreamBuilder, one for
-      // HistoryList's setState in didUpdateWidget).
-      print('[perf] Insert record → UI settle: $frames frames');
       expect(
         frames,
         lessThan(4),
@@ -156,8 +153,6 @@ void main() {
     await deleteExerciseSets(db, [id]);
     final frames = await countFramesToSettle(tester);
 
-    // Measured baseline: 2 frames, same as insert.
-    print('[perf] Delete record → UI settle: $frames frames');
     expect(frames, lessThan(4), reason: 'Delete settled in $frames frames');
   });
 
@@ -176,9 +171,6 @@ void main() {
     await tester.longPress(find.text('5 x 100 kg'));
     final frames = await countFramesToSettle(tester);
 
-    print(
-      '[perf] Enter selection mode: $frames frames (~31 longpress + ~10 AnimatedSwitcher)',
-    );
     expect(
       frames,
       lessThan(45),
@@ -201,9 +193,6 @@ void main() {
     await tester.tap(find.text('5 x 100 kg'));
     final frames = await countFramesToSettle(tester);
 
-    print(
-      '[perf] Exit selection mode: $frames frames (~10 AnimatedSwitcher in reverse)',
-    );
     expect(
       frames,
       lessThan(45),
