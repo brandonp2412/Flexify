@@ -654,10 +654,6 @@ class _FlexLineChartScale extends CartesianScale {
   }
 }
 
-String graphYAxisLabel(double value, {bool percentage = false}) => percentage
-    ? '${ChartFormatting.format(value)}%'
-    : ChartFormatting.format(value);
-
 class _FlexLineChartRenderer extends ChartRenderer
     implements InteractiveRenderer {
   final List<FlexLineChartSeries> series;

@@ -44,40 +44,6 @@ class ResponsiveContent extends StatelessWidget {
   }
 }
 
-/// Adds the standard desktop surface treatment around wide-screen content.
-class DesktopSurface extends StatelessWidget {
-  final Widget child;
-  final EdgeInsetsGeometry padding;
-  final double maxWidth;
-
-  const DesktopSurface({
-    super.key,
-    required this.child,
-    this.padding = const EdgeInsets.all(20),
-    this.maxWidth = desktopContentMaxWidth,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    if (!isDesktopLayout(context)) return child;
-    final colors = Theme.of(context).colorScheme;
-    return ResponsiveContent(
-      maxWidth: maxWidth,
-      child: Container(
-        padding: padding,
-        decoration: BoxDecoration(
-          color: colors.surfaceContainerLow,
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(
-            color: colors.outlineVariant.withValues(alpha: .45),
-          ),
-        ),
-        child: child,
-      ),
-    );
-  }
-}
-
 /// Keeps settings readable at every window width.
 class ResponsiveSettingsList extends StatelessWidget {
   final List<Widget> children;

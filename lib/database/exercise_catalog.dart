@@ -43,9 +43,6 @@ Stream<List<Exercise>> watchExerciseCatalog() {
       .watch();
 }
 
-Stream<List<String>> watchExerciseNames() =>
-    watchExerciseCatalog().map((rows) => rows.map((row) => row.name).toList());
-
 Future<String?> getExerciseCategoryName(Exercise exercise) async {
   final categoryId = exercise.categoryId;
   if (categoryId == null) return null;

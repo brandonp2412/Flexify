@@ -41,33 +41,6 @@ class HistoryDayGroup {
   HistoryDayGroup({required this.day, required this.exercises});
 }
 
-List<HistoryDay> getHistoryDays(List<ExerciseSetView> exerciseSets) {
-  final byExercise = <String, Map<int, HistoryDay>>{};
-  final list = <HistoryDay>[];
-  for (final exerciseSet in exerciseSets) {
-    final created = exerciseSet.created;
-    final dayKey = created.year * 512 + created.month * 32 + created.day;
-    var days = byExercise[exerciseSet.name];
-    if (days == null) {
-      days = <int, HistoryDay>{};
-      byExercise[exerciseSet.name] = days;
-    }
-    final existing = days[dayKey];
-    if (existing == null) {
-      final hd = HistoryDay(
-        name: exerciseSet.name,
-        exerciseSets: [exerciseSet],
-        day: DateTime(created.year, created.month, created.day),
-      );
-      days[dayKey] = hd;
-      list.add(hd);
-    } else {
-      existing.exerciseSets.add(exerciseSet);
-    }
-  }
-  return list;
-}
-
 List<HistoryDayGroup> getHistoryDayGroups(List<ExerciseSetView> exerciseSets) {
   final groups = <HistoryDayGroup>[];
   int? lastDayKey;

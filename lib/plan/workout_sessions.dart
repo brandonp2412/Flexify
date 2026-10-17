@@ -236,12 +236,3 @@ Future<ExerciseSetView?> getStartPlanPrefillById(
   if (manual == null) return null;
   return getExerciseSetById(database, manual.id);
 }
-
-double? canonicalLoadKg(String unit, double value) {
-  return switch (unit) {
-    'kg' => value,
-    'lb' => value * 0.45359237,
-    'stone' => value * 6.35029318,
-    _ => null,
-  };
-}
