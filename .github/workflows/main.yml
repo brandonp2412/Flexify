@@ -189,9 +189,42 @@ jobs:
           if-no-files-found: error
           retention-days: 7
 
+  generate-desktop-screenshots:
+    needs: release-gate
+    if: ${{ !cancelled() && (github.event_name != 'schedule' || needs.release-gate.outputs.should_release == 'true') && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          persist-credentials: false
+
+      - name: Setup Flutter from submodule
+        run: |
+          git submodule update --init --recursive flutter
+          chmod +x flutter/bin/*
+          echo "$PWD/flutter/bin" >> "$GITHUB_PATH"
+          flutter/bin/flutter config --no-analytics
+          flutter/bin/flutter config --enable-web
+
+      - name: Get Flutter dependencies
+        run: flutter pub get --enforce-lockfile
+
+      - name: Capture desktop screenshots
+        timeout-minutes: 20
+        run: ./scripts/screenshots-chrome.sh desktop
+
+      - name: Upload desktop screenshots
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: screenshots-desktop
+          path: fastlane/screenshots/desktop-*_en-US.png
+          if-no-files-found: error
+          retention-days: 7
+
   version-bump:
-    if: ${{ (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && needs.release-gate.outputs.should_release == 'true' }}
-    needs: [release-gate, quality-checks, generate-screenshots]
+    if: ${{ always() && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && needs.release-gate.outputs.should_release == 'true' && needs.quality-checks.result == 'success' }}
+    needs: [release-gate, quality-checks, generate-screenshots, generate-desktop-screenshots]
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -208,21 +241,48 @@ jobs:
 
       - name: Download phone screenshots
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        continue-on-error: true
         with:
           name: screenshots-phoneScreenshots
           path: fastlane/metadata/android/en-US/images/phoneScreenshots
 
       - name: Download seven-inch screenshots
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        continue-on-error: true
         with:
           name: screenshots-sevenInchScreenshots
           path: fastlane/metadata/android/en-US/images/sevenInchScreenshots
 
       - name: Download ten-inch screenshots
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        continue-on-error: true
         with:
           name: screenshots-tenInchScreenshots
           path: fastlane/metadata/android/en-US/images/tenInchScreenshots
+
+      - name: Download desktop screenshots
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        continue-on-error: true
+        with:
+          name: screenshots-desktop
+          path: fastlane/screenshots
+
+      - name: Check screenshot assets and sync desktop copies
+        run: |
+          for device in phoneScreenshots sevenInchScreenshots tenInchScreenshots; do
+            for number in {1..8}; do
+              test -s "fastlane/metadata/android/en-US/images/$device/${number}_en-US.png"
+            done
+          done
+          mkdir -p fastlane/metadata/android/en-US/images/desktop
+          for number in {1..8}; do
+            image="fastlane/screenshots/desktop-${number}_en-US.png"
+            test -s "$image"
+            cp "$image" "fastlane/metadata/android/en-US/images/desktop/${number}_en-US.png"
+          done
+          if [[ "${{ needs.generate-screenshots.result }}" != success || "${{ needs.generate-desktop-screenshots.result }}" != success ]]; then
+            echo "::warning::Screenshot generation failed; using previously committed images where necessary."
+          fi
 
       - name: Configure Git
         run: |
@@ -278,7 +338,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           RELEASE_VERSION: ${{ steps.bump.outputs.version }}
         run: |
-          git add pubspec.yaml fastlane/metadata assets/changelogs
+          git add pubspec.yaml fastlane/metadata fastlane/screenshots assets/changelogs
           git commit -m "Release $RELEASE_VERSION [skip ci]"
           gh auth setup-git
           git push origin main
