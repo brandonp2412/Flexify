@@ -75,7 +75,7 @@ fi
 flutter drive --profile --driver=test_driver/integration_test.dart \
     --target=integration_test/screenshot_test.dart \
     "${dart_define[@]}" \
-    -d chrome "${headless_flag[@]}" "${chrome_binary[@]}"
+    -d web-server --browser-name=chrome "${headless_flag[@]}" "${chrome_binary[@]}"
 
 if [ -z "$only" ]; then
     for number in {1..8}; do
