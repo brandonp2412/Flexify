@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
-# The single source of truth for "is this app OK": refreshes the akahu
-# client, formats, auto-fixes lints, then analyzes and tests. Used by both
-# .githooks/pre-push and release.yml's test job, so there's exactly one
-# place that defines what passing means.
+# Shared quality check used by CI: generate code, format, fix, analyze, and test.
 set -euo pipefail
 
 repo_root=$(git rev-parse --show-toplevel)
