@@ -30,3 +30,16 @@ subprojects {
 tasks.register("clean", Delete) {
     delete rootProject.buildDir
 }
+
+// AGP resolves default R8 rules before Flutter redirects the module build directory.
+gradle.projectsEvaluated {
+    def release = project(':app').extensions.getByName('android').buildTypes.getByName('release')
+    def defaultRulesDir = new File(project(':app').layout.buildDirectory.get().asFile,
+            'intermediates/default_proguard_files/global')
+    def rules = release.proguardFiles.collect { file ->
+        file.path.contains('/android/app/build/intermediates/default_proguard_files/global/')
+                ? new File(defaultRulesDir, file.name) : file
+    }
+    release.proguardFiles.clear()
+    release.proguardFiles.addAll(rules)
+}

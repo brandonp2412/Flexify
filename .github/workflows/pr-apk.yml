@@ -70,7 +70,7 @@ jobs:
           flutter/bin/flutter config --no-analytics
 
       - name: Get dependencies
-        run: flutter pub get
+        run: flutter pub get --enforce-lockfile
 
       - name: Run build_runner
         run: dart run build_runner build -d

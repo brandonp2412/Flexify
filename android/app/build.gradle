@@ -238,6 +238,8 @@ flutter {
 }
 
 dependencies {
+    // Flutter generates a release registrant for integration_test but omits its dev-only classpath.
+    releaseImplementation project(':integration_test')
     implementation 'androidx.appcompat:appcompat:1.7.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.2.2'
     implementation 'androidx.documentfile:documentfile:1.1.0'

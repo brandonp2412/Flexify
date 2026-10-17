@@ -11,7 +11,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   talker_flutter: 5.1.20
-  cupertino_icons: ^1.0.2
+  cupertino_icons: ^2.0.0
   drift: ^2.35.2
   path_provider: ^2.1.2
   path: ^1.8.3
@@ -22,12 +22,12 @@ dependencies:
   dynamic_color: ^1.9.0
   sqlite3: ^3.5.1
   archive: ^4.0.2
-  file_picker: ^12.0.0-beta.7
+  file_picker: ^13.1.0
   share_plus: ^13.3.0
   audioplayers: ^6.5.0
   package_info_plus: ^10.2.1
   url_launcher: ^6.2.6
-  badges: ^3.1.2
+  badges: ^4.0.1
   wakelock_plus: ^1.7.0
   flutter_local_notifications: ^22.2.0
   msvcredist:
@@ -39,6 +39,7 @@ dependencies:
   drift_dev: ^2.35.1
   drafter: ^0.3.0
 dev_dependencies:
+  cross_file: ^0.3.5+5
   integration_test:
     sdk: flutter
   flutter_test:

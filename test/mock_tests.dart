@@ -1,3 +1,4 @@
+import 'package:cross_file/cross_file.dart';
 import 'dart:io';
 
 import 'package:drift/drift.dart';
@@ -13,36 +14,54 @@ import 'package:path_provider_platform_interface/path_provider_platform_interfac
 
 /// Lets tests point [FilePicker.pickFiles] at a fixture file on disk
 /// without a real OS file-picker dialog.
+final class FakePickedFile extends PlatformFile {
+  FakePickedFile(this.filePath);
+
+  final String filePath;
+  File get _file => File(filePath);
+
+  @override
+  String get name => p.basename(filePath);
+
+  @override
+  Uri get uri => Uri.file(filePath);
+
+  @override
+  XFile get xFile => XFile(filePath);
+
+  @override
+  int? lengthSync() => _file.lengthSync();
+
+  @override
+  Future<int?> length() => _file.length();
+
+  @override
+  Future<Uint8List> readAsBytes() => _file.readAsBytes();
+
+  @override
+  Stream<Uint8List> readAsByteStream() =>
+      _file.openRead().map(Uint8List.fromList);
+}
+
 class FakeFilePickerPlatform extends FilePickerPlatform {
   FakeFilePickerPlatform(this.filePath);
 
   final String filePath;
 
   @override
-  Future<FilePickerResult?> pickFiles({
+  Future<List<PlatformFile>> pickFiles({
     String? dialogTitle,
     String? initialDirectory,
     FileType type = FileType.any,
     List<String>? allowedExtensions,
     Function(FilePickerStatus)? onFileLoading,
     int compressionQuality = 0,
-    bool allowMultiple = false,
-    bool withData = false,
-    bool withReadStream = false,
-    bool lockParentWindow = false,
-    bool readSequential = false,
-    bool cancelUploadOnWindowBlur = true,
-    AndroidSAFOptions? androidSafOptions,
-  }) async {
-    final file = File(filePath);
-    return FilePickerResult([
-      PlatformFile(
-        path: filePath,
-        name: p.basename(filePath),
-        size: file.lengthSync(),
-      ),
-    ]);
-  }
+    AndroidOptions androidOptions = const AndroidOptions(),
+    DarwinOptions darwinOptions = const DarwinOptions(),
+    WindowsOptions windowsOptions = const WindowsOptions(),
+    LinuxOptions linuxOptions = const LinuxOptions(),
+    WebOptions webOptions = const WebOptions(),
+  }) async => [FakePickedFile(filePath)];
 }
 
 /// Supplies isolated documents and application support paths for tests.

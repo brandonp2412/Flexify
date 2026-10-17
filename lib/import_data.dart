@@ -124,9 +124,9 @@ class ImportData extends StatelessWidget {
 
   Future<void> _importDatabaseNative(AppLocalizations l10n) async {
     final result = await FilePicker.pickFiles();
-    if (result == null) return;
+    if (result.isEmpty) return;
 
-    final selectedFile = File(result.files.single.path!);
+    final selectedFile = File(result.single.path!);
     if (!await selectedFile.exists()) {
       throw _ImportValidationException(l10n.selectedFileDoesNotExist);
     }
@@ -225,11 +225,11 @@ class ImportData extends StatelessWidget {
   }
 
   Future<void> _importDatabaseWeb(AppLocalizations l10n) async {
-    FilePickerResult? result = await FilePicker.pickFiles();
-    if (result == null) return;
+    final result = await FilePicker.pickFiles();
+    if (result.isEmpty) return;
 
     try {
-      await result.files.single.readAsBytes();
+      await result.single.readAsBytes();
     } catch (_) {
       throw _ImportValidationException(l10n.couldNotReadFileData);
     }
@@ -243,9 +243,9 @@ class ImportData extends StatelessWidget {
 
     try {
       final result = await FilePicker.pickFiles();
-      if (result == null) return;
+      if (result.isEmpty) return;
 
-      final fileBytes = await result.files.single.readAsBytes();
+      final fileBytes = await result.single.readAsBytes();
       String csvContent;
       if (kIsWeb) {
         csvContent = String.fromCharCodes(fileBytes);
@@ -286,11 +286,11 @@ class ImportData extends StatelessWidget {
     Navigator.pop(context);
 
     try {
-      FilePickerResult? result = await FilePicker.pickFiles();
-      if (result == null) return;
+      final result = await FilePicker.pickFiles();
+      if (result.isEmpty) return;
 
       String csvContent;
-      final fileBytes = await result.files.single.readAsBytes();
+      final fileBytes = await result.single.readAsBytes();
       if (kIsWeb) {
         csvContent = String.fromCharCodes(fileBytes);
       } else {

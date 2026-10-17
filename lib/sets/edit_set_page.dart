@@ -747,7 +747,7 @@ class _EditSetPageState extends State<EditSetPage> {
 
   void pick() async {
     final result = await FilePicker.pickFiles();
-    final path = result?.files.single.path;
+    final path = (result.isEmpty ? null : result.single.path);
     if (path == null || !mounted) return;
 
     _markDirty();

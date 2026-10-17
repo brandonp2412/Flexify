@@ -332,7 +332,7 @@ jobs:
           export PUB_CACHE=$(pwd)/.pub-cache
           echo "PUB_CACHE=$(pwd)/.pub-cache" >> "$GITHUB_ENV"
           flutter/bin/flutter config --no-analytics
-          flutter/bin/flutter pub get
+          flutter/bin/flutter pub get --enforce-lockfile
 
       - name: Install pinned Android NDK with recovery
         working-directory: /home/brandon/flexify
@@ -408,7 +408,7 @@ jobs:
           flutter/bin/flutter config --no-analytics
 
       - name: Get Flutter dependencies
-        run: flutter pub get
+        run: flutter pub get --enforce-lockfile
 
       - name: Install Linux dependencies
         run: |
@@ -450,7 +450,7 @@ jobs:
           flutter\bin\flutter config --no-analytics
 
       - name: Get Flutter dependencies
-        run: flutter pub get
+        run: flutter pub get --enforce-lockfile
 
       - name: Run build_runner
         run: dart run build_runner build -d
@@ -492,7 +492,7 @@ jobs:
           flutter/bin/flutter config --no-analytics
 
       - name: Get Flutter dependencies
-        run: flutter pub get
+        run: flutter pub get --enforce-lockfile
 
       - name: Enable web support
         run: flutter config --enable-web
@@ -580,7 +580,7 @@ jobs:
           flutter\bin\flutter config --no-analytics
 
       - name: Get Flutter dependencies
-        run: flutter pub get
+        run: flutter pub get --enforce-lockfile
 
       - name: Run build_runner
         run: dart run build_runner build -d
