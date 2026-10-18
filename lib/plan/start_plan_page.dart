@@ -29,9 +29,9 @@ import 'package:provider/provider.dart';
 
 class StartPlanPage extends StatefulWidget {
   final Plan plan;
-  final List<PlanExerciseEntry>? initialExercises;
+  final List<PlanExerciseEntry>? initial;
 
-  const StartPlanPage({super.key, required this.plan, this.initialExercises});
+  const StartPlanPage({super.key, required this.plan, this.initial});
 
   @override
   createState() => _StartPlanPageState();
@@ -62,7 +62,7 @@ class _StartPlanPageState extends State<StartPlanPage>
   ExerciseSetView? _prefill;
 
   Exercise? get _currentExercise =>
-      _exercise ?? widget.initialExercises?.firstOrNull?.exercise;
+      _exercise ?? widget.initial?.firstOrNull?.exercise;
   bool get _cardio => _prefill?.cardio ?? _currentExercise?.kind == 'cardio';
   String? get _image =>
       _prefill != null ? _prefill!.image : _currentExercise?.image;
@@ -84,7 +84,7 @@ class _StartPlanPageState extends State<StartPlanPage>
   Widget _buildPage(BuildContext context, Workout? workout) {
     return StreamBuilder<List<PlanExerciseEntry>>(
       stream: _stream,
-      initialData: widget.initialExercises,
+      initialData: widget.initial,
       builder: (context, snapshot) {
         if (snapshot.data == null) {
           return Scaffold(
@@ -167,7 +167,7 @@ class _StartPlanPageState extends State<StartPlanPage>
                 ],
               ),
               body: ResponsiveContent(
-                maxWidth: desktopWideContentMaxWidth,
+                maxWidth: wideMaxWidth,
                 desktopPadding: const EdgeInsets.fromLTRB(32, 16, 32, 32),
                 mobilePadding: const EdgeInsets.all(8),
                 child: Form(
@@ -449,7 +449,7 @@ class _StartPlanPageState extends State<StartPlanPage>
         ? snapshot.data![_selected].exercise.name
         : '';
     final showNotes = context.read<Setting>().showNotes;
-    final hasNextTextField = _cardio || showNotes;
+    final hasNextField = _cardio || showNotes;
 
     return StepperField(
       controller: _weight,
@@ -467,7 +467,7 @@ class _StartPlanPageState extends State<StartPlanPage>
           ),
         ),
       ),
-      textInputAction: hasNextTextField
+      textInputAction: hasNextField
           ? TextInputAction.next
           : TextInputAction.done,
       onFieldSubmitted: (_) async {
@@ -613,9 +613,9 @@ class _StartPlanPageState extends State<StartPlanPage>
 
     _workoutFuture = resumeOrStartWorkout(db, widget.plan.id);
 
-    final initialExercises = widget.initialExercises;
-    if (initialExercises != null && initialExercises.isNotEmpty) {
-      final exercise = initialExercises.first.exercise;
+    final initial = widget.initial;
+    if (initial != null && initial.isNotEmpty) {
+      final exercise = initial.first.exercise;
       _unit = exercise.displayUnit;
     }
 
@@ -759,7 +759,7 @@ class _StartPlanPageState extends State<StartPlanPage>
           ? _prefill!.category
           : await getExerciseCategoryName(entry.exercise);
       if (!mounted) return;
-      final exerciseSetDraft = ExerciseSetView(
+      final draft = ExerciseSetView(
         id: 0,
         bodyWeight: bodyWeight ?? 0,
         cardio: _cardio,
@@ -798,13 +798,13 @@ class _StartPlanPageState extends State<StartPlanPage>
         );
       }
 
-      final finishedExercise =
+      final finished =
           count == (max ?? settings.maxSets) &&
           _selected < snapshot.data!.length - 1;
 
       final exerciseSet = await insertExerciseSet(
         db,
-        exerciseSet: exerciseSetDraft,
+        exerciseSet: draft,
         exerciseId: exerciseId,
         workoutId: workout.id,
         bodyWeightKg: bodyWeightKg,
@@ -815,7 +815,7 @@ class _StartPlanPageState extends State<StartPlanPage>
         _updateExerciseSetTextFields(exerciseSet);
         _lastSaved = DateTime.now();
       });
-      if (finishedExercise) await select(_selected + 1);
+      if (finished) await select(_selected + 1);
 
       if (!settings.notifications) return;
 
@@ -824,7 +824,7 @@ class _StartPlanPageState extends State<StartPlanPage>
       final random = Random();
       final randomMessage = messages[random.nextInt(messages.length)];
       if (mounted && random.nextDouble() < 0.3)
-        rootScaffoldMessenger.currentState!.showSnackBar(
+        messengerKey.currentState!.showSnackBar(
           SnackBar(
             content: Text(randomMessage),
             behavior: SnackBarBehavior.floating,
@@ -898,7 +898,7 @@ class _StartPlanPageState extends State<StartPlanPage>
     final weightSet = await getLatestBodyWeight(db);
     if (!mounted) return;
     if (weightSet == null) {
-      rootScaffoldMessenger.currentState!.showSnackBar(
+      messengerKey.currentState!.showSnackBar(
         SnackBar(
           content: Text(context.l10n.noWeightEnteredYet),
           behavior: SnackBarBehavior.floating,

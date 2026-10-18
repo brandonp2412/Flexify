@@ -18,48 +18,48 @@ class TimerState extends ChangeNotifier {
   bool justExpired = false;
   bool _keepScreenOn = true;
   String _target = 'timer';
-  String? _notificationTarget;
+  String? _pendingTarget;
 
   FlutterLocalNotificationsPlugin? _notifications;
   String _timerUpTitle = '';
-  String _openNotificationLabel = '';
+  String _openLabel = '';
   String _stopLabel = '';
-  String _addOneMinuteLabel = '';
+  String _addMinuteLabel = '';
   String _restTimerTitle = '';
   String _timerChannelName = '';
-  String _timerChannelDescription = '';
-  String _timerFinishedChannelName = '';
-  String _timerFinishedChannelDescription = '';
-  String _timerFinishedTitle = '';
-  String _exactAlarmRequestUnavailable = '';
+  String _timerChannelDesc = '';
+  String _doneChannel = '';
+  String _doneChannelDesc = '';
+  String _doneTitle = '';
+  String _alarmUnavailable = '';
 
   bool get keepScreenOn => _keepScreenOn;
 
   void setNotificationLocalizations({
-    required String timerUpTitle,
-    required String openNotificationLabel,
+    required String upTitle,
+    required String openLabel,
     required String stopLabel,
-    required String addOneMinuteLabel,
-    required String restTimerTitle,
-    required String timerChannelName,
-    required String timerChannelDescription,
-    required String timerFinishedChannelName,
-    required String timerFinishedChannelDescription,
-    required String timerFinishedTitle,
-    required String exactAlarmRequestUnavailable,
+    required String addMinuteLabel,
+    required String restTitle,
+    required String timerChannel,
+    required String timerDesc,
+    required String doneChannel,
+    required String doneDesc,
+    required String doneTitle,
+    required String alarmUnavailable,
   }) {
-    _timerUpTitle = timerUpTitle;
+    _timerUpTitle = upTitle;
     _stopLabel = stopLabel;
-    _addOneMinuteLabel = addOneMinuteLabel;
-    _restTimerTitle = restTimerTitle;
-    _timerChannelName = timerChannelName;
-    _timerChannelDescription = timerChannelDescription;
-    _timerFinishedChannelName = timerFinishedChannelName;
-    _timerFinishedChannelDescription = timerFinishedChannelDescription;
-    _timerFinishedTitle = timerFinishedTitle;
-    _exactAlarmRequestUnavailable = exactAlarmRequestUnavailable;
-    if (_openNotificationLabel == openNotificationLabel) return;
-    _openNotificationLabel = openNotificationLabel;
+    _addMinuteLabel = addMinuteLabel;
+    _restTimerTitle = restTitle;
+    _timerChannelName = timerChannel;
+    _timerChannelDesc = timerDesc;
+    _doneChannel = doneChannel;
+    _doneChannelDesc = doneDesc;
+    _doneTitle = doneTitle;
+    _alarmUnavailable = alarmUnavailable;
+    if (_openLabel == openLabel) return;
+    _openLabel = openLabel;
     _notifications = null;
   }
 
@@ -108,14 +108,14 @@ class TimerState extends ChangeNotifier {
   }
 
   String? consumeNotificationTarget() {
-    final target = _notificationTarget;
-    _notificationTarget = null;
+    final target = _pendingTarget;
+    _pendingTarget = null;
     return target;
   }
 
   void _setNotificationTarget(String? target) {
     if (target == null || target.isEmpty) return;
-    _notificationTarget = target;
+    _pendingTarget = target;
     notifyListeners();
   }
 
@@ -141,14 +141,14 @@ class TimerState extends ChangeNotifier {
       'keepRinging': keepRinging,
       'target': _target,
       'stopLabel': _stopLabel,
-      'addOneMinuteLabel': _addOneMinuteLabel,
+      'addOneMinuteLabel': _addMinuteLabel,
       'restTimerTitle': _restTimerTitle,
       'timerChannelName': _timerChannelName,
-      'timerChannelDescription': _timerChannelDescription,
-      'timerFinishedChannelName': _timerFinishedChannelName,
-      'timerFinishedChannelDescription': _timerFinishedChannelDescription,
-      'timerFinishedTitle': _timerFinishedTitle,
-      'exactAlarmRequestUnavailable': _exactAlarmRequestUnavailable,
+      'timerChannelDescription': _timerChannelDesc,
+      'timerFinishedChannelName': _doneChannel,
+      'timerFinishedChannelDescription': _doneChannelDesc,
+      'timerFinishedTitle': _doneTitle,
+      'exactAlarmRequestUnavailable': _alarmUnavailable,
     };
     if (!kIsWeb && Platform.isAndroid) {
       androidChannel.invokeMethod('add', args);
@@ -201,14 +201,14 @@ class TimerState extends ChangeNotifier {
       'keepRinging': keepRinging,
       'target': target,
       'stopLabel': _stopLabel,
-      'addOneMinuteLabel': _addOneMinuteLabel,
+      'addOneMinuteLabel': _addMinuteLabel,
       'restTimerTitle': _restTimerTitle,
       'timerChannelName': _timerChannelName,
-      'timerChannelDescription': _timerChannelDescription,
-      'timerFinishedChannelName': _timerFinishedChannelName,
-      'timerFinishedChannelDescription': _timerFinishedChannelDescription,
-      'timerFinishedTitle': _timerFinishedTitle,
-      'exactAlarmRequestUnavailable': _exactAlarmRequestUnavailable,
+      'timerChannelDescription': _timerChannelDesc,
+      'timerFinishedChannelName': _doneChannel,
+      'timerFinishedChannelDescription': _doneChannelDesc,
+      'timerFinishedTitle': _doneTitle,
+      'exactAlarmRequestUnavailable': _alarmUnavailable,
     };
     if (!kIsWeb && Platform.isAndroid) {
       await androidChannel.invokeMethod('timer', args);
@@ -248,9 +248,7 @@ class TimerState extends ChangeNotifier {
   Future<FlutterLocalNotificationsPlugin?> _getNotifications() async {
     if (_notifications != null) return _notifications;
 
-    final linux = LinuxInitializationSettings(
-      defaultActionName: _openNotificationLabel,
-    );
+    final linux = LinuxInitializationSettings(defaultActionName: _openLabel);
     const darwin = DarwinInitializationSettings();
     final init = InitializationSettings(
       linux: linux,

@@ -5,20 +5,20 @@ import 'package:path_provider/path_provider.dart';
 import 'package:sqlite3/sqlite3.dart';
 
 const databaseFileName = 'flexify.sqlite';
-final _pendingMigrations = <String, Future<File>>{};
+final _migrations = <String, Future<File>>{};
 
 Future<File> getDatabaseFile() async {
   final support = await getApplicationSupportDirectory();
   final path = p.join(support.path, databaseFileName);
-  final pending = _pendingMigrations[path];
+  final pending = _migrations[path];
   if (pending != null) return pending;
 
   final migration = _resolveDatabaseFile(support);
-  _pendingMigrations[path] = migration;
+  _migrations[path] = migration;
   try {
     return await migration;
   } finally {
-    _pendingMigrations.remove(path);
+    _migrations.remove(path);
   }
 }
 

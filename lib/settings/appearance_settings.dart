@@ -16,16 +16,16 @@ List<Widget> getAppearanceSettings(
   final normalizedTerm = term.trim().toLowerCase();
   bool matches(Iterable<String> values) =>
       values.join(' ').toLowerCase().contains(normalizedTerm);
-  final languageSearchText = [
+  final localeTerms = [
     l10n.settingsLanguage,
     l10n.settingsLanguageDescription,
     l10n.languageSystemDefault,
     ...selectableLocales.map((locale) => localeDisplayName(l10n, locale)),
   ].join(' ').toLowerCase();
-  final selectedLocale = validLocaleOverride(settings.localeOverride) ?? '';
+  final selectedLocale = validLocale(settings.localeOverride) ?? '';
 
   return [
-    if (languageSearchText.contains(normalizedTerm))
+    if (localeTerms.contains(normalizedTerm))
       Padding(
         padding: const EdgeInsets.fromLTRB(8, 4, 8, 8),
         child: Column(
@@ -42,7 +42,7 @@ List<Widget> getAppearanceSettings(
                 ),
                 ...selectableLocales.map(
                   (locale) => DropdownMenuItem(
-                    value: localeIdentifier(locale),
+                    value: localeTag(locale),
                     child: Text(localeDisplayName(l10n, locale)),
                   ),
                 ),

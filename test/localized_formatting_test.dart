@@ -36,8 +36,8 @@ void main() {
       formattingApp(
         const Locale('en'),
         (context) =>
-            '${formatDisplayNumber(context, 12.345, maximumFractionDigits: 0)}|'
-            '${formatDisplayNumber(context, 12.345, maximumFractionDigits: 2)}',
+            '${formatDisplayNumber(context, 12.345, maxDigits: 0)}|'
+            '${formatDisplayNumber(context, 12.345, maxDigits: 2)}',
       ),
     );
 

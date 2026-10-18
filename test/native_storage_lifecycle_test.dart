@@ -30,7 +30,7 @@ void main() {
     root = await Directory.systemTemp.createTemp('flexify-storage-lifecycle-');
     documents = await Directory(p.join(root.path, 'documents')).create();
     support = Directory(p.join(root.path, 'support'));
-    legacyFile = File(p.join(documents.path, backupDatabaseName));
+    legacyFile = File(p.join(documents.path, backupDbName));
     image = File(p.join(documents.path, 'progress.jpg'));
     await image.writeAsBytes([1, 2, 3, 4]);
     originalProvider = PathProviderPlatform.instance;
@@ -226,7 +226,7 @@ Future<void> main(List<String> args) async {
     await Future<void>.delayed(const Duration(milliseconds: 200));
     expect(finished, isFalse);
     expect(
-      await File(p.join(support.path, backupDatabaseName)).exists(),
+      await File(p.join(support.path, backupDbName)).exists(),
       isFalse,
     );
     process.stdin.writeln('release');
@@ -422,7 +422,7 @@ Future<void> main(List<String> args) async {
       );
       expect(await legacyFile.readAsString(), 'not a SQLite database');
       expect(
-        await File(p.join(support.path, backupDatabaseName)).exists(),
+        await File(p.join(support.path, backupDbName)).exists(),
         isFalse,
       );
     },

@@ -31,7 +31,7 @@ class MainActivity : FlutterActivity() {
     private var timerBound = false
     private var timerService: TimerService? = null
     private var pendingPickResult: MethodChannel.Result? = null
-    private var pendingNotificationTarget: String? = null
+    private var pendingTarget: String? = null
 
     private val timerConnection = object : ServiceConnection {
         override fun onServiceConnected(className: ComponentName, service: IBinder) {
@@ -46,7 +46,7 @@ class MainActivity : FlutterActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        pendingNotificationTarget = intent?.getStringExtra(TIMER_TARGET_EXTRA)
+        pendingTarget = intent?.getStringExtra(TIMER_TARGET_EXTRA)
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
         val controller = WindowInsetsControllerCompat(window, window.decorView)
@@ -139,8 +139,8 @@ class MainActivity : FlutterActivity() {
                 "timer" -> {
                     val title = call.argument<String>("title")!!
                     val timestamp = call.argument<Long>("timestamp")!!
-                    val threeMinutesThirtySeconds = 210000
-                    val restMs = call.argument<Int>("restMs") ?: threeMinutesThirtySeconds
+                    val defaultRestMs = 210000
+                    val restMs = call.argument<Int>("restMs") ?: defaultRestMs
                     val alarmSound = call.argument<String>("alarmSound")!!
                     val vibrate = call.argument<Boolean>("vibrate")!!
                     val keepRinging = call.argument<Boolean>("keepRinging") ?: false
@@ -158,8 +158,8 @@ class MainActivity : FlutterActivity() {
                 }
 
                 "getNotificationTarget" -> {
-                    val target = pendingNotificationTarget
-                    pendingNotificationTarget = null
+                    val target = pendingTarget
+                    pendingTarget = null
                     result.success(target)
                 }
 
@@ -266,14 +266,14 @@ class MainActivity : FlutterActivity() {
         super.onNewIntent(intent)
         setIntent(intent)
         val target = intent.getStringExtra(TIMER_TARGET_EXTRA) ?: return
-        if (channel == null) pendingNotificationTarget = target
+        if (channel == null) pendingTarget = target
         else channel?.invokeMethod("notificationTap", target)
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
         timerService?.apply {
-            mainActivityVisible = hasFocus
+            activityVisible = hasFocus
             updateTimerNotificationRefreshRate()
         }
     }

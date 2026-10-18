@@ -48,7 +48,7 @@ class FlexifyTimer(private var msTimerDuration: Long) {
     fun expire() {
         state = State.Expired
         msTimerDuration = 0
-        totalTimerDuration = 0
+        totalMs = 0
     }
 
     fun getRemainingSeconds(): Int {
@@ -63,7 +63,7 @@ class FlexifyTimer(private var msTimerDuration: Long) {
         val wasRunning = isRunning()
         if (wasRunning) stop(context)
         msTimerDuration += milli
-        totalTimerDuration += milli
+        totalMs += milli
         if (wasRunning) start(context, exactAlarmRequestUnavailable = exactAlarmRequestUnavailable)
     }
 
@@ -76,7 +76,7 @@ class FlexifyTimer(private var msTimerDuration: Long) {
     }
 
     fun getDurationSeconds(): Int {
-        return (totalTimerDuration / 1000).toInt()
+        return (totalMs / 1000).toInt()
     }
 
     fun getRemainingMillis(): Long {
@@ -87,8 +87,8 @@ class FlexifyTimer(private var msTimerDuration: Long) {
 
     fun generateMethodChannelPayload(): LongArray {
         return longArrayOf(
-            totalTimerDuration,
-            totalTimerDuration - getRemainingMillis(),
+            totalMs,
+            totalMs - getRemainingMillis(),
             System.currentTimeMillis(),
             state.ordinal.toLong()
         )
@@ -185,7 +185,7 @@ class FlexifyTimer(private var msTimerDuration: Long) {
     private var endTime: Long = 0
     private var previousSeconds: Int = 0
     private var state: State = State.Paused
-    private var totalTimerDuration: Long = msTimerDuration
+    private var totalMs: Long = msTimerDuration
 
 
     companion object {

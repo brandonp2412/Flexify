@@ -16,8 +16,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
-final rootScaffoldMessenger = GlobalKey<ScaffoldMessengerState>();
-String? _lastSyncedBackupLocale;
+final messengerKey = GlobalKey<ScaffoldMessengerState>();
+String? _backupLocale;
 
 class _NoAnimationPageTransitionsBuilder extends PageTransitionsBuilder {
   const _NoAnimationPageTransitionsBuilder();
@@ -33,14 +33,14 @@ class _NoAnimationPageTransitionsBuilder extends PageTransitionsBuilder {
 }
 
 PageTransitionsTheme _pageTransitionsTheme() {
-  final desktopPlatform =
+  final desktop =
       !kIsWeb &&
       {
         TargetPlatform.linux,
         TargetPlatform.macOS,
         TargetPlatform.windows,
       }.contains(defaultTargetPlatform);
-  if (!desktopPlatform) return const PageTransitionsTheme();
+  if (!desktop) return const PageTransitionsTheme();
 
   const noAnimation = _NoAnimationPageTransitionsBuilder();
   return const PageTransitionsTheme(
@@ -57,8 +57,8 @@ PageTransitionsTheme _pageTransitionsTheme() {
 
 void _syncBackupLocalizations(AppLocalizations l10n) {
   if (kIsWeb || defaultTargetPlatform != TargetPlatform.android) return;
-  if (_lastSyncedBackupLocale == l10n.localeName) return;
-  _lastSyncedBackupLocale = l10n.localeName;
+  if (_backupLocale == l10n.localeName) return;
+  _backupLocale = l10n.localeName;
   unawaited(
     androidChannel
         .invokeMethod<bool>('setBackupLocalizations', {
@@ -79,7 +79,7 @@ void _syncBackupLocalizations(AppLocalizations l10n) {
         .then<void>(
           (_) {},
           onError: (Object error, StackTrace stackTrace) {
-            _lastSyncedBackupLocale = null;
+            _backupLocale = null;
             talker.handle(
               error,
               stackTrace,
@@ -199,7 +199,7 @@ class App extends StatelessWidget {
 
     return DynamicColorBuilder(
       builder: (lightDynamic, darkDynamic) {
-        final currentBrightness =
+        final brightness =
             themeMode == 'ThemeMode.dark' ||
                 themeMode == 'ThemeMode.amoled' ||
                 (themeMode == 'ThemeMode.system' &&
@@ -210,11 +210,10 @@ class App extends StatelessWidget {
 
         SystemChrome.setSystemUIOverlayStyle(
           SystemUiOverlayStyle(
-            statusBarIconBrightness: currentBrightness == Brightness.dark
+            statusBarIconBrightness: brightness == Brightness.dark
                 ? Brightness.light
                 : Brightness.dark,
-            systemNavigationBarIconBrightness:
-                currentBrightness == Brightness.dark
+            systemNavigationBarIconBrightness: brightness == Brightness.dark
                 ? Brightness.light
                 : Brightness.dark,
             statusBarColor: Colors.transparent,
@@ -224,7 +223,7 @@ class App extends StatelessWidget {
 
         return MaterialApp(
           debugShowCheckedModeBanner: false,
-          scaffoldMessengerKey: rootScaffoldMessenger,
+          scaffoldMessengerKey: messengerKey,
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           localeListResolutionCallback: resolveSystemLocale,
@@ -233,19 +232,17 @@ class App extends StatelessWidget {
           builder: (context, child) {
             _syncBackupLocalizations(context.l10n);
             context.read<TimerState>().setNotificationLocalizations(
-              timerUpTitle: context.l10n.timerUp,
-              openNotificationLabel: context.l10n.openNotification,
+              upTitle: context.l10n.timerUp,
+              openLabel: context.l10n.openNotification,
               stopLabel: context.l10n.actionStop,
-              addOneMinuteLabel: context.l10n.addOneMinuteNotification,
-              restTimerTitle: context.l10n.restTimer,
-              timerChannelName: context.l10n.timerChannelName,
-              timerChannelDescription: context.l10n.timerChannelDescription,
-              timerFinishedChannelName: context.l10n.timerFinishedChannelName,
-              timerFinishedChannelDescription:
-                  context.l10n.timerFinishedChannelDescription,
-              timerFinishedTitle: context.l10n.timerFinished,
-              exactAlarmRequestUnavailable:
-                  context.l10n.exactAlarmRequestUnavailable,
+              addMinuteLabel: context.l10n.addOneMinuteNotification,
+              restTitle: context.l10n.restTimer,
+              timerChannel: context.l10n.timerChannelName,
+              timerDesc: context.l10n.timerChannelDescription,
+              doneChannel: context.l10n.timerFinishedChannelName,
+              doneDesc: context.l10n.timerFinishedChannelDescription,
+              doneTitle: context.l10n.timerFinished,
+              alarmUnavailable: context.l10n.exactAlarmRequestUnavailable,
             );
             return KeyboardUnfocusWrapper(
               child: child ?? const SizedBox.shrink(),
@@ -305,7 +302,7 @@ class KeyboardUnfocusWrapper extends StatefulWidget {
 
 class _KeyboardUnfocusWrapperState extends State<KeyboardUnfocusWrapper>
     with WidgetsBindingObserver {
-  double _previousBottomInset = 0.0;
+  double _lastInset = 0.0;
 
   @override
   void initState() {
@@ -329,10 +326,10 @@ class _KeyboardUnfocusWrapperState extends State<KeyboardUnfocusWrapper>
         .first
         .viewInsets
         .bottom;
-    if (_previousBottomInset > 0.0 && bottomInset == 0.0) {
+    if (_lastInset > 0.0 && bottomInset == 0.0) {
       FocusManager.instance.primaryFocus?.unfocus();
     }
-    _previousBottomInset = bottomInset;
+    _lastInset = bottomInset;
   }
 
   @override

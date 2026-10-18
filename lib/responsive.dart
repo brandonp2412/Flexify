@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 const double desktopBreakpoint = 900;
-const double desktopContentMaxWidth = 1040;
-const double desktopWideContentMaxWidth = 1240;
-const double desktopDataContentMaxWidth = 1440;
+const double desktopMaxWidth = 1040;
+const double wideMaxWidth = 1240;
+const double dataMaxWidth = 1440;
 
 /// Whether the current window should use Flexify's desktop layout.
 bool isDesktopLayout(BuildContext context) =>
@@ -20,7 +20,7 @@ class ResponsiveContent extends StatelessWidget {
   const ResponsiveContent({
     super.key,
     required this.child,
-    this.maxWidth = desktopContentMaxWidth,
+    this.maxWidth = desktopMaxWidth,
     this.mobilePadding = EdgeInsets.zero,
     this.desktopPadding = const EdgeInsets.symmetric(horizontal: 24),
     this.alignment = Alignment.topCenter,

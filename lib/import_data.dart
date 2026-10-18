@@ -108,7 +108,7 @@ class ImportData extends StatelessWidget {
       );
 
       final displayError = _localizedImportError(e, l10n);
-      rootScaffoldMessenger.currentState!.showSnackBar(
+      messengerKey.currentState!.showSnackBar(
         SnackBar(
           content: Text(l10n.failedToImportDatabase(displayError)),
           behavior: SnackBarBehavior.floating,
@@ -138,57 +138,57 @@ class ImportData extends StatelessWidget {
     }
 
     final liveDatabase = await getDatabaseFile();
-    final storageDirectory = liveDatabase.parent;
+    final storageDir = liveDatabase.parent;
     final tempDirectory = await getTemporaryDirectory();
-    final workingDirectory = await tempDirectory.createTemp('flexify-import-');
+    final workDir = await tempDirectory.createTemp('flexify-import-');
     try {
       final sourceFile = await prepareBackupDatabase(
         selectedFile: selectedFile,
-        workingDirectory: workingDirectory,
-        storageDirectory: storageDirectory,
+        workingDirectory: workDir,
+        storageDirectory: storageDir,
       );
       validateBackupDatabaseFile(sourceFile);
 
-      final candidateDatabase = File(
-        p.join(workingDirectory.path, 'candidate-$backupDatabaseName'),
+      final candidateFile = File(
+        p.join(workDir.path, 'candidate-$backupDbName'),
       );
-      await sourceFile.copy(candidateDatabase.path);
+      await sourceFile.copy(candidateFile.path);
 
-      final candidateDb = AppDatabase.forPath(candidateDatabase.path);
+      final candidateDb = AppDatabase.forPath(candidateFile.path);
       try {
         // Opening the candidate performs every required migration and the
         // migration strategy's foreign-key validation before the live
         // database is touched.
         await candidateDb.customSelect('SELECT 1').get();
-        final foreignKeyViolations = await candidateDb
+        final violations = await candidateDb
             .customSelect('PRAGMA foreign_key_check')
             .get();
-        if (foreignKeyViolations.isNotEmpty) {
+        if (violations.isNotEmpty) {
           throw StateError('Foreign key violations in imported database');
         }
       } finally {
         await candidateDb.close();
       }
 
-      final rollbackDatabase = File(
-        p.join(workingDirectory.path, 'rollback-$backupDatabaseName'),
+      final rollbackFile = File(
+        p.join(workDir.path, 'rollback-$backupDbName'),
       );
 
       await db.close();
       if (await liveDatabase.exists()) {
-        await liveDatabase.copy(rollbackDatabase.path);
+        await liveDatabase.copy(rollbackFile.path);
       }
 
       try {
-        await candidateDatabase.copy(liveDatabase.path);
+        await candidateFile.copy(liveDatabase.path);
         db = AppDatabase.persistent();
         await db.customSelect('SELECT 1').get();
       } catch (_) {
         try {
           await db.close();
         } catch (_) {}
-        if (await rollbackDatabase.exists()) {
-          await rollbackDatabase.copy(liveDatabase.path);
+        if (await rollbackFile.exists()) {
+          await rollbackFile.copy(liveDatabase.path);
         } else if (await liveDatabase.exists()) {
           await liveDatabase.delete();
         }
@@ -200,7 +200,7 @@ class ImportData extends StatelessWidget {
       dbVersion.value++;
       talker.info('Imported Flexify data and image backup');
     } finally {
-      await workingDirectory.delete(recursive: true);
+      await workDir.delete(recursive: true);
     }
 
     // Permission state belongs to this Android install, not to the imported
@@ -274,7 +274,7 @@ class ImportData extends StatelessWidget {
 
       if (!ctx.mounted) return;
       Navigator.pop(ctx);
-      rootScaffoldMessenger.currentState!.showSnackBar(
+      messengerKey.currentState!.showSnackBar(
         SnackBar(
           content: Text(l10n.graphDataImported),
           behavior: SnackBarBehavior.floating,
@@ -289,7 +289,7 @@ class ImportData extends StatelessWidget {
       talker.handle(e, stackTrace, 'Failed to import graph data');
       if (!ctx.mounted) return;
 
-      rootScaffoldMessenger.currentState!.showSnackBar(
+      messengerKey.currentState!.showSnackBar(
         SnackBar(
           content: Text(
             l10n.failedToImportGraphs(_localizedImportError(e, l10n)),
@@ -332,7 +332,7 @@ class ImportData extends StatelessWidget {
         throw _ImportValidationException(l10n.csvNeedsDataRow);
 
       final plansToInsert = <PlansCompanion>[];
-      final planExercisesToInsert = <PlanExercisesCompanion>[];
+      final links = <PlanExercisesCompanion>[];
 
       for (final row in csvList.skip(1)) {
         final idStr = row[0].toString().trim();
@@ -359,7 +359,7 @@ class ImportData extends StatelessWidget {
             cardio: false,
             displayUnit: 'kg',
           );
-          planExercisesToInsert.add(
+          links.add(
             PlanExercisesCompanion.insert(
               planId: id,
               exerciseId: exercise.id,
@@ -373,15 +373,15 @@ class ImportData extends StatelessWidget {
       await db.planExercises.deleteAll();
       await db.plans.deleteAll();
       await db.plans.insertAll(plansToInsert);
-      await db.planExercises.insertAll(planExercisesToInsert);
+      await db.planExercises.insertAll(links);
       talker.info(
-        'Imported ${plansToInsert.length} plans and ${planExercisesToInsert.length} exercises',
+        'Imported ${plansToInsert.length} plans and ${links.length} exercises',
       );
 
       if (!ctx.mounted) return;
       Navigator.pop(ctx);
 
-      rootScaffoldMessenger.currentState!.showSnackBar(
+      messengerKey.currentState!.showSnackBar(
         SnackBar(
           content: Text(l10n.plansImported),
           behavior: SnackBarBehavior.floating,
@@ -405,7 +405,7 @@ class ImportData extends StatelessWidget {
         version: version,
       );
 
-      rootScaffoldMessenger.currentState!.showSnackBar(
+      messengerKey.currentState!.showSnackBar(
         SnackBar(
           content: Text(
             l10n.failedToImportPlans(_localizedImportError(e, l10n)),

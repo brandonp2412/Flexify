@@ -31,10 +31,10 @@ class CrashLogger {
     final logger = CrashLogger._(file);
     _instance = logger;
 
-    final previousFlutterOnError = FlutterError.onError;
+    final oldHandler = FlutterError.onError;
     FlutterError.onError = (details) {
       logger.record(details.exception, details.stack, context: 'FlutterError');
-      previousFlutterOnError?.call(details);
+      oldHandler?.call(details);
     };
 
     PlatformDispatcher.instance.onError = (error, stack) {

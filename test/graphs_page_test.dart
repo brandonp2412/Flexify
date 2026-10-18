@@ -36,10 +36,7 @@ void main() {
     expect(find.text('Search graphs...'), findsOne);
     expect(find.text('Global progress'), findsOne);
     final list = tester.widget<ListView>(find.byType(ListView));
-    expect(
-      (list.padding! as EdgeInsets).bottom,
-      floatingActionButtonListPadding,
-    );
+    expect((list.padding! as EdgeInsets).bottom, fabListPadding);
   });
 
   testWidgets('GraphsPage shows empty state when global progress is disabled', (

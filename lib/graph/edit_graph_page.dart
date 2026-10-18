@@ -30,12 +30,12 @@ class _EditGraphPageState extends State<EditGraphPage> {
   final TextEditingController seconds = TextEditingController();
   final key = GlobalKey<FormState>();
 
-  bool _hasUnsavedChanges = false;
+  bool _dirty = false;
   bool _allowPop = false;
 
   void _markDirty() {
-    if (_hasUnsavedChanges) return;
-    setState(() => _hasUnsavedChanges = true);
+    if (_dirty) return;
+    setState(() => _dirty = true);
   }
 
   Future<void> _confirmDiscard(Object? result) async {
@@ -72,9 +72,9 @@ class _EditGraphPageState extends State<EditGraphPage> {
   @override
   Widget build(BuildContext context) {
     return PopScope(
-      canPop: _allowPop || !_hasUnsavedChanges,
+      canPop: _allowPop || !_dirty,
       onPopInvokedWithResult: (didPop, result) {
-        if (didPop || _allowPop || !_hasUnsavedChanges) return;
+        if (didPop || _allowPop || !_dirty) return;
         unawaited(_confirmDiscard(result));
       },
       child: Scaffold(

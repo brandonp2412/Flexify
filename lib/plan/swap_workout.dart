@@ -17,21 +17,21 @@ class SwapWorkout extends StatefulWidget {
 }
 
 class _SwapWorkoutState extends State<SwapWorkout> {
-  late Stream<List<Exercise>> _distinctExercises;
-  final TextEditingController _searchController = TextEditingController();
+  late Stream<List<Exercise>> _exercises;
+  final TextEditingController _searchCtrl = TextEditingController();
   String _searchQuery = '';
-  Set<int> _unavailableExerciseIds = const {};
+  Set<int> _usedIds = const {};
 
   @override
   void initState() {
     super.initState();
-    _searchController.addListener(() {
+    _searchCtrl.addListener(() {
       setState(() {
-        _searchQuery = _searchController.text;
+        _searchQuery = _searchCtrl.text;
       });
     });
 
-    _distinctExercises = watchExerciseCatalog();
+    _exercises = watchExerciseCatalog();
     _loadUnavailableExercises();
   }
 
@@ -49,7 +49,7 @@ class _SwapWorkoutState extends State<SwapWorkout> {
 
     if (!mounted) return;
     setState(() {
-      _unavailableExerciseIds = enabled
+      _usedIds = enabled
           .where((row) => row.id != source.id)
           .map((row) => row.exerciseId)
           .toSet();
@@ -58,7 +58,7 @@ class _SwapWorkoutState extends State<SwapWorkout> {
 
   @override
   void dispose() {
-    _searchController.dispose();
+    _searchCtrl.dispose();
     super.dispose();
   }
 
@@ -112,7 +112,7 @@ class _SwapWorkoutState extends State<SwapWorkout> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextField(
-              controller: _searchController,
+              controller: _searchCtrl,
               decoration: InputDecoration(
                 labelText: context.l10n.searchExercises,
                 border: const OutlineInputBorder(),
@@ -132,7 +132,7 @@ class _SwapWorkoutState extends State<SwapWorkout> {
           ),
           Expanded(
             child: StreamBuilder<List<Exercise>>(
-              stream: _distinctExercises,
+              stream: _exercises,
               builder: (context, snapshot) {
                 if (snapshot.hasError) {
                   return Center(child: Text(context.l10n.unexpectedError));
@@ -144,7 +144,7 @@ class _SwapWorkoutState extends State<SwapWorkout> {
                 final exercises = snapshot.data!
                     .where(
                       (exercise) =>
-                          !_unavailableExerciseIds.contains(exercise.id) &&
+                          !_usedIds.contains(exercise.id) &&
                           exercise.name.toLowerCase().contains(
                             _searchQuery.toLowerCase(),
                           ),

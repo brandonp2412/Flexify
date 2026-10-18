@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 const double bottomNavHeight = 80;
 
 /// Bottom inset that keeps scrollable content clear of the mobile FAB.
-const double floatingActionButtonListPadding = bottomNavHeight + 80;
+const double fabListPadding = bottomNavHeight + 80;
 
 /// Variant 1: "Pill dock" — a compact centered pill where the selected tab
 /// expands horizontally to reveal its label while unselected tabs collapse

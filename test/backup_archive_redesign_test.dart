@@ -17,7 +17,7 @@ void main() {
       final documents = Directory(p.join(root.path, 'documents'))..createSync();
       final export = Directory(p.join(root.path, 'export'))..createSync();
       final imported = Directory(p.join(root.path, 'import'))..createSync();
-      final databasePath = p.join(root.path, backupDatabaseName);
+      final databasePath = p.join(root.path, backupDbName);
 
       final exerciseImage = File(p.join(root.path, 'exercise.jpg'))
         ..writeAsBytesSync([1, 2, 3]);

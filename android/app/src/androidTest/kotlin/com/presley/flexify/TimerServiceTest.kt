@@ -105,12 +105,12 @@ class TimerServiceTest {
     fun dismissingFinishedNotificationDoesNotStopActiveTimer() {
         startAndBindTimer("Exercise A")
         expireActiveTimer()
-        val finishedDeleteIntent = activeNotificationDeleteIntent(TimerService.FINISHED_ID)
+        val deleteIntent = activeNotificationDeleteIntent(TimerService.FINISHED_ID)
 
         val service = startAndBindTimer("Exercise B")
         assertTrue(service.flexifyTimer.isRunning())
 
-        finishedDeleteIntent.send()
+        deleteIntent.send()
         Thread.sleep(200)
 
         assertTrue(

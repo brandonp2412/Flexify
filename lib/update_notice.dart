@@ -2,10 +2,10 @@ import 'dart:io';
 
 import 'package:path_provider/path_provider.dart';
 
-const updateNoticeCooldown = Duration(days: 14);
+const updateCooldown = Duration(days: 14);
 
 bool isUpdateNoticeDue(DateTime now, DateTime? lastShown) =>
-    lastShown == null || now.difference(lastShown) >= updateNoticeCooldown;
+    lastShown == null || now.difference(lastShown) >= updateCooldown;
 
 Future<bool> claimUpdateNotice({File? storage, DateTime? at}) async {
   final file =

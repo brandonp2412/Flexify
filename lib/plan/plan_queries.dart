@@ -11,11 +11,9 @@ List<Plan> filterPlans(
 ) {
   if (search.isEmpty) return plans;
 
-  final normalizedSearch = search.toLowerCase();
-  final matchingPlanIds = exercises
-      .where(
-        (entry) => entry.exercise.name.toLowerCase().contains(normalizedSearch),
-      )
+  final query = search.toLowerCase();
+  final planIds = exercises
+      .where((entry) => entry.exercise.name.toLowerCase().contains(query))
       .map((entry) => entry.planExercise.planId)
       .toSet();
 
@@ -26,20 +24,20 @@ List<Plan> filterPlans(
         .map(localizeDay)
         .join(' ')
         .toLowerCase();
-    return plan.title?.toLowerCase().contains(normalizedSearch) == true ||
-        plan.days.toLowerCase().contains(normalizedSearch) ||
-        localizedDays.contains(normalizedSearch) ||
-        matchingPlanIds.contains(plan.id);
+    return plan.title?.toLowerCase().contains(query) == true ||
+        plan.days.toLowerCase().contains(query) ||
+        localizedDays.contains(query) ||
+        planIds.contains(plan.id);
   }).toList();
 }
 
 class PlanExerciseDraft {
   PlanExerciseDraft({required this.planExercise, required this.exerciseName})
-    : normalizedExerciseName = exerciseName.toLowerCase();
+    : nameLower = exerciseName.toLowerCase();
 
   final PlanExercisesCompanion planExercise;
   final String exerciseName;
-  final String normalizedExerciseName;
+  final String nameLower;
 
   PlanExerciseDraft copyWithPlanExercise(PlanExercisesCompanion value) =>
       PlanExerciseDraft(planExercise: value, exerciseName: exerciseName);
@@ -49,10 +47,10 @@ List<PlanExerciseDraft> filterPlanExerciseDrafts(
   Iterable<PlanExerciseDraft> exercises,
   String search,
 ) {
-  final normalizedSearch = search.toLowerCase();
+  final query = search.toLowerCase();
   return [
     for (final exercise in exercises)
-      if (exercise.normalizedExerciseName.contains(normalizedSearch)) exercise,
+      if (exercise.nameLower.contains(query)) exercise,
   ];
 }
 

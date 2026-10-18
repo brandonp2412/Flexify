@@ -39,19 +39,19 @@ class _LineChartAxisLabel {
   const _LineChartAxisLabel(this.x, this.text, {this.column});
 }
 
-const _lineChartEdgePaddingFraction = 0.02;
-const _axisLabelFontSize = 12.0;
-const _axisLabelFontWeight = FontWeight.w600;
-const _xAxisLabelMinGap = 12.0;
+const _edgePadFraction = 0.02;
+const _labelSize = 12.0;
+const _labelWeight = FontWeight.w600;
+const _axisLabelGap = 12.0;
 const _chartTopInset = 24.0;
-const _chartBottomInset = 16.0;
-const _chartBottomLabelInset = 38.0;
-const _tooltipPadding = 8.0;
-const _tooltipRowHeight = 16.0;
+const _bottomInset = 16.0;
+const _bottomLabelInset = 38.0;
+const _tipPadding = 8.0;
+const _rowHeight = 16.0;
 const _tooltipDotGap = 8.0;
 const _tooltipFontSize = 10.0;
-const _tooltipSwatchSize = 8.0;
-const _tooltipSwatchGap = 6.0;
+const _swatchSize = 8.0;
+const _swatchGap = 6.0;
 
 void _drawFlexTooltip(
   Canvas canvas, {
@@ -82,15 +82,13 @@ void _drawFlexTooltip(
       fontSize: _tooltipFontSize,
     );
     final rowWidth =
-        textWidth +
-        (row.swatch == null ? 0 : _tooltipSwatchSize + _tooltipSwatchGap);
+        textWidth + (row.swatch == null ? 0 : _swatchSize + _swatchGap);
     maxWidth = max(maxWidth, rowWidth);
   }
 
-  final titleHeight = hasTitle ? _tooltipRowHeight : 0.0;
-  final boxWidth = maxWidth + _tooltipPadding * 2;
-  final boxHeight =
-      titleHeight + rows.length * _tooltipRowHeight + _tooltipPadding * 2;
+  final titleHeight = hasTitle ? _rowHeight : 0.0;
+  final boxWidth = maxWidth + _tipPadding * 2;
+  final boxHeight = titleHeight + rows.length * _rowHeight + _tipPadding * 2;
   var left = anchor.dx + 12;
   if (left + boxWidth > container.width) {
     left = anchor.dx - 12 - boxWidth;
@@ -108,36 +106,36 @@ void _drawFlexTooltip(
     Paint()..color = background,
   );
 
-  var rowTop = top + _tooltipPadding;
+  var rowTop = top + _tipPadding;
   if (hasTitle) {
     drawChartText(
       canvas,
       title,
-      Offset(left + _tooltipPadding, rowTop + _tooltipRowHeight / 2),
+      Offset(left + _tipPadding, rowTop + _rowHeight / 2),
       color: mutedTextColor,
       fontSize: _tooltipFontSize,
       weight: FontWeight.w600,
       v: VAlign.center,
     );
-    rowTop += _tooltipRowHeight;
+    rowTop += _rowHeight;
   }
   for (final row in rows) {
-    final rowCenter = rowTop + _tooltipRowHeight / 2;
-    var textX = left + _tooltipPadding;
+    final rowCenter = rowTop + _rowHeight / 2;
+    var textX = left + _tipPadding;
     if (row.swatch case final color?) {
       canvas.drawRRect(
         RRect.fromRectAndRadius(
           Rect.fromLTWH(
             textX,
-            rowCenter - _tooltipSwatchSize / 2,
-            _tooltipSwatchSize,
-            _tooltipSwatchSize,
+            rowCenter - _swatchSize / 2,
+            _swatchSize,
+            _swatchSize,
           ),
           const Radius.circular(2),
         ),
         Paint()..color = color,
       );
-      textX += _tooltipSwatchSize + _tooltipSwatchGap;
+      textX += _swatchSize + _swatchGap;
     }
     drawChartText(
       canvas,
@@ -147,7 +145,7 @@ void _drawFlexTooltip(
       fontSize: _tooltipFontSize,
       v: VAlign.center,
     );
-    rowTop += _tooltipRowHeight;
+    rowTop += _rowHeight;
   }
 }
 
@@ -162,7 +160,7 @@ void _drawFlexTooltip(
     maxY = center + 0.5;
   }
 
-  final padding = (maxY - minY) * _lineChartEdgePaddingFraction;
+  final padding = (maxY - minY) * _edgePadFraction;
   return (minY - padding, maxY + padding);
 }
 
@@ -181,10 +179,10 @@ class FlexLineChart extends StatelessWidget {
       _calculateYBounds(points);
 
   @visibleForTesting
-  static double get axisLabelFontSize => _axisLabelFontSize;
+  static double get axisLabelFontSize => _labelSize;
 
   @visibleForTesting
-  static FontWeight get axisLabelFontWeight => _axisLabelFontWeight;
+  static FontWeight get axisLabelFontWeight => _labelWeight;
 
   @visibleForTesting
   static double tooltipTopForMarks(
@@ -195,9 +193,7 @@ class FlexLineChart extends StatelessWidget {
     if (markYs.isEmpty) return 0;
 
     final tooltipHeight =
-        (hasTitle ? _tooltipRowHeight : 0) +
-        rowCount * _tooltipRowHeight +
-        _tooltipPadding * 2;
+        (hasTitle ? _rowHeight : 0) + rowCount * _rowHeight + _tipPadding * 2;
     return markYs.reduce(min) - tooltipHeight - _tooltipDotGap;
   }
 
@@ -237,21 +233,17 @@ class FlexLineChart extends StatelessWidget {
     // Keep that adaptive label count, but choose the middle labels nearest
     // evenly spaced visual targets instead of packing them left-to-right.
     final balanced = <int>[first];
-    var previousOrderPosition = 0;
+    var prevPos = 0;
     final span = centers[last] - centers[first];
 
     for (var slot = 1; slot < packed.length - 1; slot++) {
       final target = centers[first] + span * slot / (packed.length - 1);
       final remainingSlots = packed.length - 1 - slot;
-      final maxOrderPosition = order.length - 1 - remainingSlots;
-      var bestOrderPosition = -1;
+      final maxPos = order.length - 1 - remainingSlots;
+      var bestPos = -1;
       var bestDistance = double.infinity;
 
-      for (
-        var position = previousOrderPosition + 1;
-        position <= maxOrderPosition;
-        position++
-      ) {
+      for (var position = prevPos + 1; position <= maxPos; position++) {
         final index = order[position];
         final previous = balanced.last;
         final left = centers[index] - widths[index] / 2;
@@ -261,17 +253,17 @@ class FlexLineChart extends StatelessWidget {
         final distance = (centers[index] - target).abs();
         if (distance <= bestDistance) {
           bestDistance = distance;
-          bestOrderPosition = position;
+          bestPos = position;
         }
       }
 
-      if (bestOrderPosition < 0) {
+      if (bestPos < 0) {
         packed.sort();
         return packed;
       }
 
-      balanced.add(order[bestOrderPosition]);
-      previousOrderPosition = bestOrderPosition;
+      balanced.add(order[bestPos]);
+      prevPos = bestPos;
     }
 
     balanced.add(last);
@@ -686,9 +678,7 @@ class _FlexLineChartRenderer extends ChartRenderer
 
   ChartBounds _bounds(Size size) {
     final left = showLeftLabels ? 48.0 : 8.0;
-    final bottom = showBottomLabels
-        ? _chartBottomLabelInset
-        : _chartBottomInset;
+    final bottom = showBottomLabels ? _bottomLabelInset : _bottomInset;
     return ChartBounds.insets(
       size,
       left: left,
@@ -864,8 +854,8 @@ class _FlexLineChartRenderer extends ChartRenderer
           ChartFormatting.format(value),
           Offset(bounds.left - 7, y),
           color: axisLabelColor,
-          fontSize: _axisLabelFontSize,
-          weight: _axisLabelFontWeight,
+          fontSize: _labelSize,
+          weight: _labelWeight,
           h: HAlign.end,
           v: VAlign.center,
         );
@@ -881,8 +871,8 @@ class _FlexLineChartRenderer extends ChartRenderer
       widths.add(
         measureChartText(
           label.text,
-          fontSize: _axisLabelFontSize,
-          weight: _axisLabelFontWeight,
+          fontSize: _labelSize,
+          weight: _labelWeight,
           color: axisLabelColor,
         ),
       );
@@ -890,7 +880,7 @@ class _FlexLineChartRenderer extends ChartRenderer
     final keep = FlexLineChart.selectXAxisLabelIndices(
       centers,
       widths,
-      _xAxisLabelMinGap,
+      _axisLabelGap,
     ).toSet();
     for (var i = 0; i < xLabels.length; i++) {
       if (!keep.contains(i)) continue;
@@ -899,8 +889,8 @@ class _FlexLineChartRenderer extends ChartRenderer
         xLabels[i].text,
         Offset(centers[i], bounds.bottom + 15),
         color: axisLabelColor,
-        fontSize: _axisLabelFontSize,
-        weight: _axisLabelFontWeight,
+        fontSize: _labelSize,
+        weight: _labelWeight,
         h: HAlign.center,
         v: VAlign.center,
       );

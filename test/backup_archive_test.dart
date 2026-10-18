@@ -22,7 +22,7 @@ void main() {
       ..createSync();
     final importDirectory = Directory(p.join(root.path, 'import'))
       ..createSync();
-    final databasePath = p.join(root.path, backupDatabaseName);
+    final databasePath = p.join(root.path, backupDbName);
     final image = File(p.join(root.path, 'progress.jpg'))
       ..writeAsBytesSync([1, 2, 3, 4]);
 
@@ -57,7 +57,7 @@ void main() {
   test('backup includes committed records in a live WAL database', () async {
     final root = await Directory.systemTemp.createTemp('flexify-wal-backup-');
     addTearDown(() => root.delete(recursive: true));
-    final databasePath = p.join(root.path, backupDatabaseName);
+    final databasePath = p.join(root.path, backupDbName);
     final exportDirectory = await Directory(
       p.join(root.path, 'export'),
     ).create();

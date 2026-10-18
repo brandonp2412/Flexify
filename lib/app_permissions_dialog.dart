@@ -34,9 +34,9 @@ class _AppPermissionsDialog extends StatefulWidget {
 }
 
 class _AppPermissionsDialogState extends State<_AppPermissionsDialog> {
-  bool _notificationGranted = false;
-  bool _batteryOptimizationDisabled = false;
-  bool _exactAlarmGranted = false;
+  bool _notificationsOk = false;
+  bool _batteryExempt = false;
+  bool _alarmsOk = false;
 
   @override
   void initState() {
@@ -45,16 +45,15 @@ class _AppPermissionsDialogState extends State<_AppPermissionsDialog> {
   }
 
   Future<void> _refreshPermissionStatus() async {
-    final notificationGranted = await Permission.notification.isGranted;
-    final batteryOptimizationDisabled =
-        await Permission.ignoreBatteryOptimizations.isGranted;
-    final exactAlarmGranted = await Permission.scheduleExactAlarm.isGranted;
+    final notificationsOk = await Permission.notification.isGranted;
+    final batteryExempt = await Permission.ignoreBatteryOptimizations.isGranted;
+    final alarmsOk = await Permission.scheduleExactAlarm.isGranted;
     if (!mounted) return;
 
     setState(() {
-      _notificationGranted = notificationGranted;
-      _batteryOptimizationDisabled = batteryOptimizationDisabled;
-      _exactAlarmGranted = exactAlarmGranted;
+      _notificationsOk = notificationsOk;
+      _batteryExempt = batteryExempt;
+      _alarmsOk = alarmsOk;
     });
   }
 
@@ -76,9 +75,9 @@ class _AppPermissionsDialogState extends State<_AppPermissionsDialog> {
   @override
   Widget build(BuildContext context) {
     final settings = widget.settings ?? context.watch<Setting>();
-    final needsTimerAccess = settings.restTimers;
-    final needsNotifications = settings.notifications || needsTimerAccess;
-    final hasRequirements = needsNotifications || needsTimerAccess;
+    final needsTimer = settings.restTimers;
+    final needsAlerts = settings.notifications || needsTimer;
+    final needed = needsAlerts || needsTimer;
     final colors = Theme.of(context).colorScheme;
     final l10n = context.l10n;
 
@@ -128,37 +127,36 @@ class _AppPermissionsDialogState extends State<_AppPermissionsDialog> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              if (needsNotifications)
+              if (needsAlerts)
                 _AccessCard(
                   icon: Icons.notifications_outlined,
                   title: l10n.notifications,
-                  description: needsTimerAccess
+                  description: needsTimer
                       ? l10n.timerProgressAndRestAlerts
                       : l10n.enabledNotificationsDescription,
-                  granted: _notificationGranted,
+                  granted: _notificationsOk,
                   onRequest: _requestNotification,
                 ),
-              if (needsNotifications && needsTimerAccess)
-                const SizedBox(height: 10),
-              if (needsTimerAccess)
+              if (needsAlerts && needsTimer) const SizedBox(height: 10),
+              if (needsTimer)
                 _AccessCard(
                   icon: Icons.battery_saver_outlined,
                   title: l10n.backgroundActivity,
                   description: l10n.backgroundActivityDescription,
-                  granted: _batteryOptimizationDisabled,
+                  granted: _batteryExempt,
                   onRequest: () =>
                       _request(Permission.ignoreBatteryOptimizations),
                 ),
-              if (needsTimerAccess) const SizedBox(height: 10),
-              if (needsTimerAccess)
+              if (needsTimer) const SizedBox(height: 10),
+              if (needsTimer)
                 _AccessCard(
                   icon: Icons.alarm_outlined,
                   title: l10n.exactAlarms,
                   description: l10n.exactAlarmsDescription,
-                  granted: _exactAlarmGranted,
+                  granted: _alarmsOk,
                   onRequest: () => _request(Permission.scheduleExactAlarm),
                 ),
-              if (!hasRequirements)
+              if (!needed)
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(

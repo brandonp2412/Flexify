@@ -9,7 +9,7 @@ double displayBodyWeight(String unit, double weightKg) {
   };
 }
 
-double? bodyWeightInKg(String unit, double value) {
+double? toKg(String unit, double value) {
   return switch (unit) {
     'kg' => value,
     'lb' => value * 0.45359237,

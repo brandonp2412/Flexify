@@ -120,9 +120,7 @@ class _PlansListState extends State<PlansList> {
         buildDefaultDragHandles: !isDesktopLayout(context),
         itemCount: filteredPlans.length,
         padding: EdgeInsets.only(
-          bottom: isDesktopLayout(context)
-              ? 32
-              : floatingActionButtonListPadding,
+          bottom: isDesktopLayout(context) ? 32 : fabListPadding,
           top: appSearchHeight + 8,
         ),
         itemBuilder: (context, index) {
@@ -165,7 +163,7 @@ class _PlansListState extends State<PlansList> {
       controller: widget.scroll,
       itemCount: filteredPlans.length,
       padding: EdgeInsets.only(
-        bottom: isDesktopLayout(context) ? 32 : floatingActionButtonListPadding,
+        bottom: isDesktopLayout(context) ? 32 : fabListPadding,
         top: appSearchHeight + 8,
       ),
       itemBuilder: (context, index) {

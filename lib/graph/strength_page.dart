@@ -417,7 +417,7 @@ class _StrengthPageState extends State<StrengthPage> {
                     refreshSheet();
                   },
                   timeBasedXAxis: useTimeBasedXAxis,
-                  onTimeBasedXAxisChanged: (value) {
+                  onTimeAxisChange: (value) {
                     setState(() {
                       useTimeBasedXAxis = value;
                     });
@@ -464,11 +464,7 @@ class _StrengthPageState extends State<StrengthPage> {
     String format,
   ) {
     final created = formatDisplayDate(context, row.created, format);
-    final value = formatDisplayNumber(
-      context,
-      row.value,
-      minimumFractionDigits: 2,
-    );
+    final value = formatDisplayNumber(context, row.value, minDigits: 2);
     final displayUnit = displayMeasurementUnit(context.l10n, _targetUnit);
     return switch (selectedMetric) {
       StrengthMetric.bestReps ||

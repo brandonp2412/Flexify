@@ -43,18 +43,18 @@ class BackupReceiver : BroadcastReceiver() {
 
             val backupUri = Uri.parse(backupPath)
             val channelId = "backup_channel"
-            var notificationBuilder = NotificationCompat.Builder(context, channelId)
+            var builder = NotificationCompat.Builder(context, channelId)
                 .setSmallIcon(R.drawable.baseline_arrow_downward_24)
                 .setAutoCancel(true)
 
-            val notificationManager = NotificationManagerCompat.from(context)
+            val manager = NotificationManagerCompat.from(context)
             val channel = NotificationChannel(
                 channelId,
                 getBackupLocalization(context, "backupChannelName"),
                 NotificationManager.IMPORTANCE_DEFAULT
             )
             channel.description = getBackupLocalization(context, "backupChannelDescription")
-            notificationManager.createNotificationChannel(channel)
+            manager.createNotificationChannel(channel)
 
             if (ActivityCompat.checkSelfPermission(
                     context,
@@ -79,7 +79,7 @@ class BackupReceiver : BroadcastReceiver() {
                 return
             }
 
-            notificationBuilder = notificationBuilder.setContentText(file.name)
+            builder = builder.setContentText(file.name)
 
             val openIntent = Intent().apply {
                 action = Intent.ACTION_GET_CONTENT
@@ -91,7 +91,7 @@ class BackupReceiver : BroadcastReceiver() {
                 openIntent,
                 PendingIntent.FLAG_IMMUTABLE
             )
-            notificationBuilder = notificationBuilder.setContentIntent(pendingOpen)
+            builder = builder.setContentIntent(pendingOpen)
 
             val shareIntent = Intent().apply {
                 action = Intent.ACTION_SEND
@@ -105,7 +105,7 @@ class BackupReceiver : BroadcastReceiver() {
                 shareIntent,
                 PendingIntent.FLAG_IMMUTABLE
             )
-            notificationBuilder = notificationBuilder.addAction(
+            builder = builder.addAction(
                 R.drawable.baseline_arrow_downward_24,
                 getBackupLocalization(context, "shareLabel"),
                 pendingShare
@@ -138,10 +138,10 @@ class BackupReceiver : BroadcastReceiver() {
                         }
                     }
                 }
-                notificationBuilder = notificationBuilder.setContentTitle(
+                builder = builder.setContentTitle(
                     getBackupLocalization(context, "backupCompletedTitle")
                 )
-                notificationManager.notify(2, notificationBuilder.build())
+                manager.notify(2, builder.build())
             } finally {
                 temporaryDatabase.delete()
             }

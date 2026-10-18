@@ -114,7 +114,7 @@ class _GroupHistoryState extends State<GroupHistory> {
     return ListView.builder(
       itemCount: widget.days.length,
       padding: EdgeInsets.only(
-        bottom: desktop ? 32 : floatingActionButtonListPadding,
+        bottom: desktop ? 32 : fabListPadding,
         top: appSearchHeight + 8,
       ),
       controller: widget.scroll,
@@ -203,7 +203,7 @@ class _GroupHistoryState extends State<GroupHistory> {
     final count = formatDisplayNumber(
       context,
       exercise.exerciseSets.length,
-      maximumFractionDigits: 0,
+      maxDigits: 0,
     );
 
     return ExpansionTile(
@@ -238,7 +238,7 @@ class _GroupHistoryState extends State<GroupHistory> {
     String incline = '';
     if (exerciseSet.incline != null && exerciseSet.incline! > 0) {
       incline =
-          '@ ${formatDisplayPercent(context, exerciseSet.incline! / 100, maximumFractionDigits: 0)}';
+          '@ ${formatDisplayPercent(context, exerciseSet.incline! / 100, maxDigits: 0)}';
     }
 
     Widget? leading;

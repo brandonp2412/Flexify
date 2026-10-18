@@ -5,7 +5,7 @@ import 'package:path/path.dart' as p;
 
 import 'backup_database.dart';
 
-const backupDatabaseName = 'flexify.sqlite';
+const backupDbName = 'flexify.sqlite';
 
 const _imageColumns = <(String, String)>[
   ('exercises', 'image'),
@@ -69,7 +69,7 @@ Future<File> prepareBackupDatabase({
 
   validateBackupDatabaseFile(selectedFile);
   final snapshot = File(
-    p.join(workingDirectory.path, 'imported-$backupDatabaseName'),
+    p.join(workingDirectory.path, 'imported-$backupDbName'),
   );
   final escapedPath = snapshot.path.replaceAll("'", "''");
   final source = openBackupDatabase(selectedFile.path);
@@ -85,7 +85,7 @@ Future<File> createBackupArchive({
   required String databasePath,
   required Directory workingDirectory,
 }) async {
-  final databaseCopy = File(p.join(workingDirectory.path, backupDatabaseName));
+  final databaseCopy = File(p.join(workingDirectory.path, backupDbName));
   final escapedPath = databaseCopy.path.replaceAll("'", "''");
   final source = openBackupDatabase(databasePath);
   try {
@@ -128,7 +128,7 @@ Future<File> createBackupArchive({
 
   final archiveFile = File(p.join(workingDirectory.path, 'flexify-backup.zip'));
   final encoder = ZipFileEncoder()..create(archiveFile.path);
-  await encoder.addFile(databaseCopy, backupDatabaseName);
+  await encoder.addFile(databaseCopy, backupDbName);
   for (final entry in existingImages.entries) {
     await encoder.addFile(File(entry.key), entry.value);
   }
@@ -147,12 +147,12 @@ Future<File> extractBackupArchive({
     for (final entry in archive) {
       if (!entry.isFile) continue;
       final name = p.posix.normalize(entry.name);
-      final isDatabase = name == backupDatabaseName;
+      final isDatabase = name == backupDbName;
       final isImage = p.posix.dirname(name) == 'images';
       if (!isDatabase && !isImage) continue;
 
       final outputPath = isDatabase
-          ? p.join(workingDirectory.path, backupDatabaseName)
+          ? p.join(workingDirectory.path, backupDbName)
           : p.join(storageDirectory.path, p.posix.basename(name));
       final output = OutputFileStream(outputPath);
       output.writeStream(entry.getContent()!);
@@ -163,7 +163,7 @@ Future<File> extractBackupArchive({
     await input.close();
   }
 
-  final databaseFile = File(p.join(workingDirectory.path, backupDatabaseName));
+  final databaseFile = File(p.join(workingDirectory.path, backupDbName));
   if (!databaseFile.existsSync()) {
     throw const MissingBackupDatabaseException();
   }

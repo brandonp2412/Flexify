@@ -198,7 +198,7 @@ class _PlanTrailingPreview extends StatelessWidget {
   Widget _buildTrailing(BuildContext context) {
     return switch (trailing) {
       PlanTrailing.count => Text(
-        formatDisplayNumber(context, 5, maximumFractionDigits: 0),
+        formatDisplayNumber(context, 5, maxDigits: 0),
         style: const TextStyle(fontSize: 16),
       ),
       PlanTrailing.percent => Text(
@@ -206,7 +206,7 @@ class _PlanTrailingPreview extends StatelessWidget {
         style: const TextStyle(fontSize: 16),
       ),
       PlanTrailing.ratio => Text(
-        '${formatDisplayNumber(context, 5, maximumFractionDigits: 0)} / ${formatDisplayNumber(context, 6, maximumFractionDigits: 0)}',
+        '${formatDisplayNumber(context, 5, maxDigits: 0)} / ${formatDisplayNumber(context, 6, maxDigits: 0)}',
         style: const TextStyle(fontSize: 16),
       ),
       PlanTrailing.reorder => const Icon(Icons.drag_handle),

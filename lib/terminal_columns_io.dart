@@ -1,7 +1,7 @@
 import 'dart:io';
 
 int? _cachedColumns;
-int _lastProbeMillis = 0;
+int _lastProbe = 0;
 
 int? currentTerminalColumns() {
   try {
@@ -9,8 +9,8 @@ int? currentTerminalColumns() {
   } catch (_) {}
   if (!Platform.isLinux) return _environmentColumns();
   final now = DateTime.now().millisecondsSinceEpoch;
-  if (now - _lastProbeMillis < 500) return _cachedColumns;
-  _lastProbeMillis = now;
+  if (now - _lastProbe < 500) return _cachedColumns;
+  _lastProbe = now;
   try {
     final result = Process.runSync('stty', const ['-F', '/dev/tty', 'size']);
     if (result.exitCode == 0) {

@@ -166,7 +166,7 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
             )
           : null,
       body: ResponsiveContent(
-        maxWidth: desktopDataContentMaxWidth,
+        maxWidth: dataMaxWidth,
         desktopPadding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
         child: StreamBuilder(
           stream: stream,
@@ -355,12 +355,12 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
 
   void onAdd() async {
     final settings = context.read<Setting>();
-    final exerciseSetsFuture = stream.first;
-    final bodyWeightFuture = settings.showBodyWeight
+    final setsFuture = stream.first;
+    final weightFuture = settings.showBodyWeight
         ? getLatestBodyWeight(db)
         : Future<BodyWeight?>.value();
-    final exerciseSets = await exerciseSetsFuture;
-    final latestBodyWeight = await bodyWeightFuture;
+    final exerciseSets = await setsFuture;
+    final lastWeight = await weightFuture;
 
     ExerciseSetView exerciseSet =
         exerciseSets.firstOrNull ??
@@ -389,12 +389,9 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
       exerciseSet = exerciseSet.copyWith(unit: settings.cardioUnit);
     }
 
-    if (latestBodyWeight != null) {
+    if (lastWeight != null) {
       exerciseSet = exerciseSet.copyWith(
-        bodyWeight: displayBodyWeight(
-          exerciseSet.unit,
-          latestBodyWeight.weightKg,
-        ),
+        bodyWeight: displayBodyWeight(exerciseSet.unit, lastWeight.weightKg),
       );
     }
 

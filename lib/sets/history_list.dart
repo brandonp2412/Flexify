@@ -126,12 +126,10 @@ class _HistoryListState extends State<HistoryList> {
     int index,
     bool showImages,
   ) {
-    final previousExerciseSet = index > 0
-        ? _current.elementAtOrNull(index - 1)
-        : null;
+    final previous = index > 0 ? _current.elementAtOrNull(index - 1) : null;
     final bool showDivider =
-        previousExerciseSet != null &&
-        !DateUtils.isSameDay(exerciseSet.created, previousExerciseSet.created);
+        previous != null &&
+        !DateUtils.isSameDay(exerciseSet.created, previous.created);
 
     final minutes = exerciseSet.duration.floor();
     final seconds = ((exerciseSet.duration * 60) % 60)
@@ -145,7 +143,7 @@ class _HistoryListState extends State<HistoryList> {
     String incline = '';
     if (exerciseSet.incline != null && exerciseSet.incline! > 0) {
       incline =
-          '@ ${formatDisplayPercent(context, exerciseSet.incline! / 100, maximumFractionDigits: 0)}';
+          '@ ${formatDisplayPercent(context, exerciseSet.incline! / 100, maxDigits: 0)}';
     }
 
     Widget? leading;
@@ -204,7 +202,7 @@ class _HistoryListState extends State<HistoryList> {
           Container(
             color:
                 (widget.selected.contains(exerciseSet.id) &&
-                    widget.selected.contains(previousExerciseSet.id))
+                    widget.selected.contains(previous.id))
                 ? Theme.of(context).colorScheme.primary.withValues(alpha: .18)
                 : Colors.transparent,
             child: Padding(
@@ -217,11 +215,7 @@ class _HistoryListState extends State<HistoryList> {
                   Selector<Setting, String>(
                     selector: (context, settings) => settings.shortDateFormat,
                     builder: (context, value, child) => Text(
-                      formatDisplayDate(
-                        context,
-                        previousExerciseSet.created,
-                        value,
-                      ),
+                      formatDisplayDate(context, previous.created, value),
                     ),
                   ),
                   const SizedBox(width: 4),
@@ -298,7 +292,7 @@ class _HistoryListState extends State<HistoryList> {
             );
             if (!desktop) return tile;
             return ResponsiveContent(
-              maxWidth: desktopDataContentMaxWidth,
+              maxWidth: dataMaxWidth,
               child: GestureDetector(
                 behavior: HitTestBehavior.opaque,
                 onSecondaryTapDown: (details) =>
@@ -327,7 +321,7 @@ class _HistoryListState extends State<HistoryList> {
     return ListView.builder(
       padding: EdgeInsets.only(
         top: widget.topPadding,
-        bottom: isDesktopLayout(context) ? 32 : floatingActionButtonListPadding,
+        bottom: isDesktopLayout(context) ? 32 : fabListPadding,
       ),
       controller: widget.scroll,
       itemCount: _current.length,

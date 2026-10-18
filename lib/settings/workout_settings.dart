@@ -149,7 +149,7 @@ getWorkoutSettingGroups(BuildContext context, String term, Setting settings) {
                 ),
               );
               if (!settings.notifications)
-                rootScaffoldMessenger.currentState!.showSnackBar(
+                messengerKey.currentState!.showSnackBar(
                   SnackBar(
                     content: Text(l10n.positiveMessagesEnabled),
                     behavior: SnackBarBehavior.floating,

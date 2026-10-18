@@ -97,7 +97,7 @@ void main() {
 
     await harness.pump(
       tester,
-      StartPlanPage(plan: plan, initialExercises: exercises),
+      StartPlanPage(plan: plan, initial: exercises),
       surfaceSize: const Size(1200, 800),
     );
 

@@ -131,12 +131,13 @@ List<Widget> getDataSettings(
     if (matches([l10n.shareDatabase]) && !kIsWeb && !Platform.isLinux)
       TextButton.icon(
         onPressed: () async {
-          final workingDirectory = await (await getTemporaryDirectory())
-              .createTemp('flexify-share-');
+          final workDir = await (await getTemporaryDirectory()).createTemp(
+            'flexify-share-',
+          );
           try {
             final archive = await createBackupArchive(
               databasePath: (await getDatabaseFile()).path,
-              workingDirectory: workingDirectory,
+              workingDirectory: workDir,
             );
             await SharePlus.instance.share(
               ShareParams(
@@ -144,7 +145,7 @@ List<Widget> getDataSettings(
               ),
             );
           } finally {
-            await workingDirectory.delete(recursive: true);
+            await workDir.delete(recursive: true);
           }
         },
         label: Text(l10n.shareDatabase),

@@ -22,7 +22,7 @@ class WeightPage extends StatefulWidget {
 class _WeightPageState extends State<WeightPage> {
   final TextEditingController _ctrl = TextEditingController();
   BodyWeight? _previousWeight;
-  bool _previousWeightLoaded = false;
+  bool _weightLoaded = false;
   String? _unit;
   String? _image;
   final _key = GlobalKey<FormState>();
@@ -39,7 +39,7 @@ class _WeightPageState extends State<WeightPage> {
   @override
   Widget build(BuildContext context) {
     final displayUnit = _unit ?? 'kg';
-    final previousWeightText = !_previousWeightLoaded
+    final lastWeightText = !_weightLoaded
         ? ''
         : _previousWeight == null
         ? context.l10n.noWeightEnteredYet
@@ -88,8 +88,8 @@ class _WeightPageState extends State<WeightPage> {
               ),
               const SizedBox(height: 12),
               TextFormField(
-                key: ValueKey(previousWeightText),
-                initialValue: previousWeightText,
+                key: ValueKey(lastWeightText),
+                initialValue: lastWeightText,
                 decoration: InputDecoration(
                   labelText: context.l10n.previousWeight,
                 ),
@@ -160,7 +160,7 @@ class _WeightPageState extends State<WeightPage> {
 
           final value = parseDisplayNumber(context, _ctrl.text)!;
           final unit = _unit ?? 'kg';
-          final weightKg = bodyWeightInKg(unit, value);
+          final weightKg = toKg(unit, value);
           if (weightKg == null) return;
           await recordBodyWeight(
             db,
@@ -193,7 +193,7 @@ class _WeightPageState extends State<WeightPage> {
 
       setState(() {
         _previousWeight = value;
-        _previousWeightLoaded = true;
+        _weightLoaded = true;
 
         _unit = settings.strengthUnit == 'last-entry'
             ? 'kg'

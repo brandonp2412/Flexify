@@ -39,7 +39,7 @@ class _TabSettingsState extends State<TabSettings> {
 
   void setTab(String name, bool enabled) {
     if (!enabled && _tabs.where((tab) => tab.enabled == true).length == 1) {
-      rootScaffoldMessenger.currentState!.showSnackBar(
+      messengerKey.currentState!.showSnackBar(
         SnackBar(
           content: Text(context.l10n.atLeastOneTab),
           behavior: SnackBarBehavior.floating,

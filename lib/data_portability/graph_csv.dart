@@ -414,7 +414,7 @@ Future<GraphCsvImportResult> _importLegacy(
     await database.bodyWeights.deleteAll();
 
     for (final weight in legacyWeights) {
-      final kg = loadInKg(weight.unit, weight.value);
+      final kg = loadKg(weight.unit, weight.value);
       if (kg == null) continue;
       await database.bodyWeights.insertOne(
         BodyWeightsCompanion.insert(timestamp: weight.timestamp, weightKg: kg),
@@ -459,14 +459,14 @@ Future<GraphCsvImportResult> _importLegacy(
       );
       final bodyWeightKg = rawBodyWeight == 0 || bodyWeightUnit == null
           ? null
-          : loadInKg(bodyWeightUnit, rawBodyWeight);
+          : loadKg(bodyWeightUnit, rawBodyWeight);
 
       await database.exerciseSets.insertOne(
         ExerciseSetsCompanion.insert(
           exerciseId: exerciseIds[row.string('name', required: true)]!,
           timestamp: timestamp,
           reps: Value(row.number('reps')),
-          loadKg: Value(loadInKg(unit, row.number('weight') ?? 0)),
+          loadKg: Value(loadKg(unit, row.number('weight') ?? 0)),
           durationMs: Value(
             row.has('duration')
                 ? ((row.number('duration') ?? 0) * 60000).round()
@@ -474,7 +474,7 @@ Future<GraphCsvImportResult> _importLegacy(
           ),
           distanceMetres: Value(
             row.has('distance')
-                ? distanceInMetres(unit, row.number('distance') ?? 0)
+                ? distanceMetres(unit, row.number('distance') ?? 0)
                 : null,
           ),
           incline: Value(row.number('incline')),

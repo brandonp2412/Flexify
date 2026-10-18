@@ -74,16 +74,15 @@ class _TimerPageWidget extends StatefulWidget {
 
 class _TimerPageWidgetState extends State<_TimerPageWidget>
     with WidgetsBindingObserver {
-  DateTime? _stopwatchStartedAt;
-  Duration _stopwatchAccumulated = Duration.zero;
-  bool _stopwatchRunning = false;
+  DateTime? _startedAt;
+  Duration _elapsed = Duration.zero;
+  bool _running = false;
 
   Duration get _stopwatchElapsed {
-    if (!_stopwatchRunning || _stopwatchStartedAt == null) {
-      return _stopwatchAccumulated;
+    if (!_running || _startedAt == null) {
+      return _elapsed;
     }
-    return _stopwatchAccumulated +
-        DateTime.now().difference(_stopwatchStartedAt!);
+    return _elapsed + DateTime.now().difference(_startedAt!);
   }
 
   @override
@@ -102,32 +101,32 @@ class _TimerPageWidgetState extends State<_TimerPageWidget>
 
   void _startStopwatch() {
     setState(() {
-      _stopwatchStartedAt = DateTime.now();
-      _stopwatchRunning = true;
+      _startedAt = DateTime.now();
+      _running = true;
     });
   }
 
   void _pauseStopwatch() {
     setState(() {
-      _stopwatchAccumulated = _stopwatchElapsed;
-      _stopwatchStartedAt = null;
-      _stopwatchRunning = false;
+      _elapsed = _stopwatchElapsed;
+      _startedAt = null;
+      _running = false;
     });
   }
 
   void _restartStopwatch() {
     setState(() {
-      _stopwatchAccumulated = Duration.zero;
-      _stopwatchStartedAt = _stopwatchRunning ? DateTime.now() : null;
+      _elapsed = Duration.zero;
+      _startedAt = _running ? DateTime.now() : null;
     });
   }
 
   void _onTimerStateChanged() {
-    if (widget.timerState.timer.total > Duration.zero && _stopwatchRunning) {
+    if (widget.timerState.timer.total > Duration.zero && _running) {
       setState(() {
-        _stopwatchRunning = false;
-        _stopwatchStartedAt = null;
-        _stopwatchAccumulated = Duration.zero;
+        _running = false;
+        _startedAt = null;
+        _elapsed = Duration.zero;
       });
     }
     if (!widget.timerState.justExpired) return;
@@ -138,7 +137,7 @@ class _TimerPageWidgetState extends State<_TimerPageWidget>
     if (!kIsWeb && Platform.isAndroid) return;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
-      rootScaffoldMessenger.currentState!.showSnackBar(
+      messengerKey.currentState!.showSnackBar(
         SnackBar(
           content: Text(context.l10n.timerFinishedToast),
           behavior: SnackBarBehavior.floating,
@@ -163,7 +162,7 @@ class _TimerPageWidgetState extends State<_TimerPageWidget>
     }
 
     final timer = widget.timerState.timer;
-    final countdownActive = timer.total > Duration.zero;
+    final hasCountdown = timer.total > Duration.zero;
     final desktop = isDesktopLayout(context);
 
     Widget? desktopAction;
@@ -173,26 +172,24 @@ class _TimerPageWidgetState extends State<_TimerPageWidget>
         icon: const Icon(Icons.stop_rounded),
         label: Text(context.l10n.stopTimer),
       );
-    } else if (!countdownActive) {
+    } else if (!hasCountdown) {
       desktopAction = FilledButton.icon(
-        onPressed: _stopwatchRunning ? _pauseStopwatch : _startStopwatch,
-        icon: Icon(_stopwatchRunning ? Icons.pause_rounded : Icons.play_arrow),
+        onPressed: _running ? _pauseStopwatch : _startStopwatch,
+        icon: Icon(_running ? Icons.pause_rounded : Icons.play_arrow),
         label: Text(
-          _stopwatchRunning
-              ? context.l10n.actionPause
-              : context.l10n.startStopwatch,
+          _running ? context.l10n.actionPause : context.l10n.startStopwatch,
         ),
       );
     }
 
-    final timerVisual = countdownActive
+    final timerVisual = hasCountdown
         ? TimerCircularProgressIndicator(
             trailingControl: desktop ? desktopAction : null,
           )
         : StopwatchProgressIndicator(
-            startedAt: _stopwatchStartedAt,
-            accumulated: _stopwatchAccumulated,
-            isRunning: _stopwatchRunning,
+            startedAt: _startedAt,
+            accumulated: _elapsed,
+            isRunning: _running,
             timerState: widget.timerState,
             onRestart: _restartStopwatch,
             trailingControl: desktop ? desktopAction : null,
@@ -230,15 +227,13 @@ class _TimerPageWidgetState extends State<_TimerPageWidget>
               icon: const Icon(Icons.stop),
               label: Text(context.l10n.actionStop),
             )
-          : countdownActive
+          : hasCountdown
           ? const SizedBox()
           : AppFab(
-              onPressed: _stopwatchRunning ? _pauseStopwatch : _startStopwatch,
-              icon: Icon(_stopwatchRunning ? Icons.pause : Icons.play_arrow),
+              onPressed: _running ? _pauseStopwatch : _startStopwatch,
+              icon: Icon(_running ? Icons.pause : Icons.play_arrow),
               label: Text(
-                _stopwatchRunning
-                    ? context.l10n.actionPause
-                    : context.l10n.actionStart,
+                _running ? context.l10n.actionPause : context.l10n.actionStart,
               ),
             ),
     );

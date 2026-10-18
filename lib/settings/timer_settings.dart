@@ -314,7 +314,7 @@ class _ProgressPositionSetting extends StatefulWidget {
 
 class _ProgressPositionSettingState extends State<_ProgressPositionSetting> {
   Timer? _previewTimer;
-  TimerState? _previewTimerState;
+  TimerState? _previewState;
 
   void _triggerPreview() {
     final timerState = context.read<TimerState>();
@@ -324,7 +324,7 @@ class _ProgressPositionSettingState extends State<_ProgressPositionSetting> {
     }
 
     _previewTimer?.cancel();
-    _previewTimerState = timerState;
+    _previewState = timerState;
     const previewDuration = Duration(seconds: 3);
     timerState.updateTimer(
       NativeTimerWrapper(
@@ -337,7 +337,7 @@ class _ProgressPositionSettingState extends State<_ProgressPositionSetting> {
     _previewTimer = Timer(previewDuration, () {
       if (!mounted) return;
       timerState.updateTimer(NativeTimerWrapper.emptyTimer());
-      _previewTimerState = null;
+      _previewState = null;
       _previewTimer = null;
     });
   }
@@ -345,9 +345,9 @@ class _ProgressPositionSettingState extends State<_ProgressPositionSetting> {
   @override
   void dispose() {
     _previewTimer?.cancel();
-    if (_previewTimerState != null) {
-      _previewTimerState!.updateTimer(NativeTimerWrapper.emptyTimer());
-      _previewTimerState = null;
+    if (_previewState != null) {
+      _previewState!.updateTimer(NativeTimerWrapper.emptyTimer());
+      _previewState = null;
     }
     super.dispose();
   }
@@ -424,9 +424,9 @@ class _TimerSettingsState extends State<TimerSettings> {
   );
 
   final SafeAudioPlayer _player = SafeAudioPlayer(enabled: !kIsWeb);
-  List<Exercise> _exercisesWithCustomTimers = [];
-  final Map<String, TextEditingController> _minuteControllers = {};
-  final Map<String, TextEditingController> _secondControllers = {};
+  List<Exercise> _customExercises = [];
+  final Map<String, TextEditingController> _minuteFields = {};
+  final Map<String, TextEditingController> _secondFields = {};
 
   @override
   void initState() {
@@ -447,17 +447,17 @@ class _TimerSettingsState extends State<TimerSettings> {
     if (!mounted) return;
 
     setState(() {
-      _exercisesWithCustomTimers = exercises;
+      _customExercises = exercises;
 
       for (final result in exercises) {
         final exerciseName = result.name;
         final restMs = result.defaultRestDurationMs;
         if (restMs != null) {
           final duration = Duration(milliseconds: restMs);
-          _minuteControllers[exerciseName] = TextEditingController(
+          _minuteFields[exerciseName] = TextEditingController(
             text: duration.inMinutes.toString(),
           );
-          _secondControllers[exerciseName] = TextEditingController(
+          _secondFields[exerciseName] = TextEditingController(
             text: (duration.inSeconds % 60).toString(),
           );
         }
@@ -488,10 +488,10 @@ class _TimerSettingsState extends State<TimerSettings> {
 
     if (!mounted) return;
     if (duration == null) {
-      _minuteControllers.remove(exerciseName)?.dispose();
-      _secondControllers.remove(exerciseName)?.dispose();
+      _minuteFields.remove(exerciseName)?.dispose();
+      _secondFields.remove(exerciseName)?.dispose();
       setState(() {
-        _exercisesWithCustomTimers.removeWhere((e) => e.name == exerciseName);
+        _customExercises.removeWhere((e) => e.name == exerciseName);
       });
     }
   }
@@ -502,10 +502,10 @@ class _TimerSettingsState extends State<TimerSettings> {
         .write(const ExercisesCompanion(defaultRestDurationMs: Value(null)));
     if (!mounted) return;
 
-    _minuteControllers.remove(exerciseName)?.dispose();
-    _secondControllers.remove(exerciseName)?.dispose();
+    _minuteFields.remove(exerciseName)?.dispose();
+    _secondFields.remove(exerciseName)?.dispose();
     setState(() {
-      _exercisesWithCustomTimers.removeWhere((e) => e.name == exerciseName);
+      _customExercises.removeWhere((e) => e.name == exerciseName);
     });
   }
 
@@ -536,13 +536,13 @@ class _TimerSettingsState extends State<TimerSettings> {
             ),
           ),
           const SizedBox(height: 16),
-          ..._exercisesWithCustomTimers.map((exercise) {
+          ..._customExercises.map((exercise) {
             final exerciseName = exercise.name;
-            if (_minuteControllers[exerciseName] == null ||
-                _secondControllers[exerciseName] == null)
+            if (_minuteFields[exerciseName] == null ||
+                _secondFields[exerciseName] == null)
               return const SizedBox();
-            final minController = _minuteControllers[exerciseName]!;
-            final secController = _secondControllers[exerciseName]!;
+            final minController = _minuteFields[exerciseName]!;
+            final secController = _secondFields[exerciseName]!;
 
             return Card(
               margin: const EdgeInsets.only(bottom: 12),
@@ -642,8 +642,7 @@ class _TimerSettingsState extends State<TimerSettings> {
                   _player,
                   context,
                 ),
-                if (_exercisesWithCustomTimers.isNotEmpty)
-                  _buildPerExerciseSection(),
+                if (_customExercises.isNotEmpty) _buildPerExerciseSection(),
               ]
             : [
                 ListTile(
@@ -666,10 +665,10 @@ class _TimerSettingsState extends State<TimerSettings> {
     _minCtrl.dispose();
     _secCtrl.dispose();
 
-    for (final controller in _minuteControllers.values) {
+    for (final controller in _minuteFields.values) {
       controller.dispose();
     }
-    for (final controller in _secondControllers.values) {
+    for (final controller in _secondFields.values) {
       controller.dispose();
     }
 

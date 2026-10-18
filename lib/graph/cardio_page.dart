@@ -161,11 +161,7 @@ class _CardioPageState extends State<CardioPage> {
     CardioData row,
     String format,
   ) {
-    String text = formatDisplayNumber(
-      context,
-      row.value,
-      minimumFractionDigits: 2,
-    );
+    String text = formatDisplayNumber(context, row.value, minDigits: 2);
     final created = formatDisplayDate(context, row.created, format);
     switch (selectedMetric) {
       case CardioMetric.pace:
@@ -509,7 +505,7 @@ class _CardioPageState extends State<CardioPage> {
                     refreshSheet();
                   },
                   timeBasedXAxis: useTimeBasedXAxis,
-                  onTimeBasedXAxisChanged: (value) {
+                  onTimeAxisChange: (value) {
                     setState(() {
                       useTimeBasedXAxis = value;
                     });

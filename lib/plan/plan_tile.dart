@@ -171,11 +171,7 @@ class _PlanTileState extends State<PlanTile> {
 
             if (trailing == PlanTrailing.count)
               return Text(
-                formatDisplayNumber(
-                  context,
-                  count.total,
-                  maximumFractionDigits: 0,
-                ),
+                formatDisplayNumber(context, count.total, maxDigits: 0),
                 style: const TextStyle(fontSize: 16),
               );
 
@@ -186,7 +182,7 @@ class _PlanTileState extends State<PlanTile> {
               );
             else
               return Text(
-                "${formatDisplayNumber(context, count.total, maximumFractionDigits: 0)} / ${formatDisplayNumber(context, count.maxSets, maximumFractionDigits: 0)}",
+                "${formatDisplayNumber(context, count.total, maxDigits: 0)} / ${formatDisplayNumber(context, count.maxSets, maxDigits: 0)}",
                 style: const TextStyle(fontSize: 16),
               );
           },
@@ -202,7 +198,7 @@ class _PlanTileState extends State<PlanTile> {
               settings: RouteSettings(name: 'start-plan:${widget.plan.id}'),
               builder: (context) => StartPlanPage(
                 plan: widget.plan,
-                initialExercises: widget.exercises,
+                initial: widget.exercises,
               ),
             ),
           );

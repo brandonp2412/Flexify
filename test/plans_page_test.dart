@@ -24,7 +24,7 @@ void main() {
     final list = tester.widget<ReorderableListView>(
       find.byType(ReorderableListView),
     );
-    expect(list.padding!.bottom, floatingActionButtonListPadding);
+    expect(list.padding!.bottom, fabListPadding);
   });
 
   testWidgets('PlansPage add button', (WidgetTester tester) async {

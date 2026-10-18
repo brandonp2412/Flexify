@@ -451,7 +451,7 @@ class _GlobalProgressPageState extends State<GlobalProgressPage> {
     final formattedValue = formatDisplayNumber(
       context,
       row.value,
-      minimumFractionDigits: 2,
+      minDigits: 2,
     );
     final displayUnit = displayMeasurementUnit(context.l10n, targetUnit);
 
@@ -463,7 +463,7 @@ class _GlobalProgressPageState extends State<GlobalProgressPage> {
       case StrengthMetric.oneRepMax:
         return "$formattedValue$displayUnit";
       case StrengthMetric.bestWeight:
-        return "${formatDisplayNumber(context, row.reps, maximumFractionDigits: 0)} × $formattedValue$displayUnit";
+        return "${formatDisplayNumber(context, row.reps, maxDigits: 0)} × $formattedValue$displayUnit";
     }
   }
 }

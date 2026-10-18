@@ -72,7 +72,7 @@ class GraphOptionsControls extends StatelessWidget {
   final int maxLimit;
   final ValueChanged<int> onLimitChanged;
   final bool? timeBasedXAxis;
-  final ValueChanged<bool>? onTimeBasedXAxisChanged;
+  final ValueChanged<bool>? onTimeAxisChange;
 
   const GraphOptionsControls({
     super.key,
@@ -91,7 +91,7 @@ class GraphOptionsControls extends StatelessWidget {
     required this.maxLimit,
     required this.onLimitChanged,
     this.timeBasedXAxis,
-    this.onTimeBasedXAxisChanged,
+    this.onTimeAxisChange,
   });
 
   @override
@@ -166,20 +166,19 @@ class GraphOptionsControls extends StatelessWidget {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (timeBasedXAxis != null &&
-                  onTimeBasedXAxisChanged != null) ...[
+              if (timeBasedXAxis != null && onTimeAxisChange != null) ...[
                 Expanded(
                   flex: 2,
                   child: _CompactSwitch(
                     label: context.l10n.useTimeBasedXAxis,
                     value: timeBasedXAxis!,
-                    onChanged: onTimeBasedXAxisChanged!,
+                    onChanged: onTimeAxisChange!,
                   ),
                 ),
                 const SizedBox(width: 12),
               ],
               Expanded(
-                flex: timeBasedXAxis != null && onTimeBasedXAxisChanged != null
+                flex: timeBasedXAxis != null && onTimeAxisChange != null
                     ? 5
                     : 1,
                 child: const GraphCurveSettings(compact: true),
@@ -251,12 +250,12 @@ class GraphOptionsControls extends StatelessWidget {
           maxLimit: maxLimit,
           onChanged: onLimitChanged,
         ),
-        if (timeBasedXAxis != null && onTimeBasedXAxisChanged != null)
+        if (timeBasedXAxis != null && onTimeAxisChange != null)
           SwitchListTile(
             contentPadding: EdgeInsets.zero,
             title: Text(context.l10n.useTimeBasedXAxis),
             value: timeBasedXAxis!,
-            onChanged: onTimeBasedXAxisChanged,
+            onChanged: onTimeAxisChange,
           ),
         const GraphCurveSettings(),
       ],

@@ -7,7 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
-const _changelogCatalogByLocale = <String, String>{
+const _catalog = <String, String>{
   'de': 'de',
   'es': 'es',
   'fr': 'fr',
@@ -35,8 +35,7 @@ Future<Map<String, String>> loadLocalizedChangelogCatalog(
   Locale locale,
 ) async {
   final catalogLocale =
-      _changelogCatalogByLocale[locale.toLanguageTag()] ??
-      _changelogCatalogByLocale[locale.languageCode];
+      _catalog[locale.toLanguageTag()] ?? _catalog[locale.languageCode];
   if (catalogLocale == null) return const {};
 
   final path = 'assets/changelogs/l10n/$catalogLocale.json';
@@ -78,7 +77,7 @@ class Changelog {
 class _WhatsNewState extends State<WhatsNew> {
   static const _pageSize = 10;
   List<Changelog> _changelogs = [];
-  List<String> _changelogFiles = [];
+  List<String> _files = [];
   int _page = 0;
   bool _isLoading = true;
   String? _loadedLocale;
@@ -96,7 +95,7 @@ class _WhatsNewState extends State<WhatsNew> {
     final files = await _getChangelogFiles(context);
     if (!mounted) return;
     setState(() {
-      _changelogFiles = files;
+      _files = files;
       _page = 0;
       _isLoading = true;
     });
@@ -138,7 +137,7 @@ class _WhatsNewState extends State<WhatsNew> {
     final bundle = DefaultAssetBundle.of(context);
     final manifest = await AssetManifest.loadFromAssetBundle(bundle);
     final assets = manifest.listAssets().toSet();
-    final localizedChangelogs = await loadLocalizedChangelogCatalog(
+    final translations = await loadLocalizedChangelogCatalog(
       bundle,
       assets,
       locale,
@@ -154,8 +153,7 @@ class _WhatsNewState extends State<WhatsNew> {
           continue;
         }
 
-        final content =
-            localizedChangelogs[filename] ?? await bundle.loadString(path);
+        final content = translations[filename] ?? await bundle.loadString(path);
         result.add(
           Changelog(
             name: filename,
@@ -177,13 +175,13 @@ class _WhatsNewState extends State<WhatsNew> {
   }
 
   Future<void> _setPage(int page) async {
-    final pageCount = (_changelogFiles.length / _pageSize).ceil();
+    final pageCount = (_files.length / _pageSize).ceil();
     if (page < 0 || page >= pageCount) return;
     setState(() {
       _page = page;
       _isLoading = true;
     });
-    final logs = await _loadChangelogPage(context, _changelogFiles, page);
+    final logs = await _loadChangelogPage(context, _files, page);
     if (!mounted || _page != page) return;
     setState(() {
       _changelogs = logs;
@@ -219,7 +217,7 @@ class _WhatsNewState extends State<WhatsNew> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              if (_changelogFiles.isNotEmpty)
+              if (_files.isNotEmpty)
                 Flexible(
                   child: FittedBox(
                     fit: BoxFit.scaleDown,
@@ -237,12 +235,11 @@ class _WhatsNewState extends State<WhatsNew> {
                           ).previousPageTooltip,
                         ),
                         Text(
-                          '${_page + 1} / ${(_changelogFiles.length / _pageSize).ceil()}',
+                          '${_page + 1} / ${(_files.length / _pageSize).ceil()}',
                         ),
                         IconButton(
                           onPressed:
-                              _page + 1 <
-                                  (_changelogFiles.length / _pageSize).ceil()
+                              _page + 1 < (_files.length / _pageSize).ceil()
                               ? () => _setPage(_page + 1)
                               : null,
                           icon: const Icon(Icons.chevron_right),

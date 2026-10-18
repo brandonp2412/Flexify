@@ -30,7 +30,7 @@ void main() {
                 maxLimit: 100,
                 onLimitChanged: (_) {},
                 timeBasedXAxis: false,
-                onTimeBasedXAxisChanged: (_) {},
+                onTimeAxisChange: (_) {},
               ),
             ),
           ),

@@ -53,12 +53,12 @@ class EditSetPage extends StatefulWidget {
 }
 
 class _EditSetPageState extends State<EditSetPage> {
-  bool _hasUnsavedChanges = false;
+  bool _dirty = false;
   bool _allowPop = false;
 
   void _markDirty() {
-    if (_hasUnsavedChanges) return;
-    setState(() => _hasUnsavedChanges = true);
+    if (_dirty) return;
+    setState(() => _dirty = true);
   }
 
   Future<void> _confirmDiscard(Object? result) async {
@@ -106,7 +106,7 @@ class _EditSetPageState extends State<EditSetPage> {
   int? restMs;
   String? _image;
   String? _category;
-  bool _ormUpdateScheduled = false;
+  bool _updatePending = false;
 
   late String _unit;
   late bool _cardio;
@@ -167,9 +167,9 @@ class _EditSetPageState extends State<EditSetPage> {
     );
 
     return PopScope(
-      canPop: _allowPop || !_hasUnsavedChanges,
+      canPop: _allowPop || !_dirty,
       onPopInvokedWithResult: (didPop, result) {
-        if (didPop || _allowPop || !_hasUnsavedChanges) return;
+        if (didPop || _allowPop || !_dirty) return;
         unawaited(_confirmDiscard(result));
       },
       child: Scaffold(
@@ -487,13 +487,13 @@ class _EditSetPageState extends State<EditSetPage> {
               fieldViewBuilder:
                   (
                     BuildContext context,
-                    TextEditingController textEditingController,
+                    TextEditingController ctrl,
                     FocusNode focusNode,
                     VoidCallback onFieldSubmitted,
                   ) {
-                    _categoryCtrl = textEditingController;
+                    _categoryCtrl = ctrl;
                     return TextFormField(
-                      controller: textEditingController,
+                      controller: ctrl,
                       focusNode: focusNode,
                       decoration: InputDecoration(
                         labelText: context.l10n.categoryLabel,
@@ -673,17 +673,17 @@ class _EditSetPageState extends State<EditSetPage> {
       fieldViewBuilder:
           (
             BuildContext context,
-            TextEditingController textEditingController,
+            TextEditingController ctrl,
             FocusNode focusNode,
             VoidCallback onFieldSubmitted,
           ) {
-            _nameCtrl = textEditingController;
+            _nameCtrl = ctrl;
             return TextFormField(
               decoration: InputDecoration(labelText: context.l10n.nameLabel),
-              controller: textEditingController,
+              controller: ctrl,
               textInputAction: TextInputAction.next,
               onTap: () {
-                selectAll(textEditingController);
+                selectAll(ctrl);
               },
               focusNode: focusNode,
               onFieldSubmitted: (String value) {
@@ -725,8 +725,8 @@ class _EditSetPageState extends State<EditSetPage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    if (_ormUpdateScheduled) return;
-    _ormUpdateScheduled = true;
+    if (_updatePending) return;
+    _updatePending = true;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) setORM();
     });
@@ -782,7 +782,7 @@ class _EditSetPageState extends State<EditSetPage> {
     );
 
     if (_category != null) await createCategory(_category!);
-    final exerciseDefinition = await syncExerciseDefinition(
+    final exercise = await syncExerciseDefinition(
       name: _name,
       cardio: _cardio,
       displayUnit: _unit,
@@ -800,7 +800,7 @@ class _EditSetPageState extends State<EditSetPage> {
         db,
         id: widget.exerciseSet.id,
         exerciseSet: exerciseSet,
-        exerciseId: exerciseDefinition.id,
+        exerciseId: exercise.id,
       );
       if (!mounted) return;
       talker.info('Updated workout set');
@@ -811,7 +811,7 @@ class _EditSetPageState extends State<EditSetPage> {
     final inserted = await insertExerciseSet(
       db,
       exerciseSet: exerciseSet,
-      exerciseId: exerciseDefinition.id,
+      exerciseId: exercise.id,
     );
     talker.info('Created workout set');
 
@@ -821,7 +821,7 @@ class _EditSetPageState extends State<EditSetPage> {
         final random = Random();
         final randomMessage = messages[random.nextInt(messages.length)];
         if (mounted)
-          rootScaffoldMessenger.currentState!.showSnackBar(
+          messengerKey.currentState!.showSnackBar(
             SnackBar(
               content: Text(randomMessage),
               behavior: SnackBarBehavior.floating,
@@ -894,7 +894,7 @@ class _EditSetPageState extends State<EditSetPage> {
         ? parsedWeight / (1.0278 - (0.0278 * parsedReps))
         : parsedWeight * (1.0278 - (0.0278 * parsedReps));
     _orm.text =
-        "${formatDisplayNumber(context, estimate, minimumFractionDigits: 2)} $_unit";
+        "${formatDisplayNumber(context, estimate, minDigits: 2)} $_unit";
   }
 
   List<DropdownMenuItem<String>> getUnitItems(BuildContext context) {

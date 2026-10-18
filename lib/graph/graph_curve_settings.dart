@@ -21,7 +21,7 @@ class GraphCurveSettings extends StatelessWidget {
         void onCurveChanged(bool value) => db.settings.update().write(
           SettingsCompanion(curveLines: Value(value)),
         );
-        final onSmoothnessChanged = settings.curveLines
+        final onChange = settings.curveLines
             ? (double value) => db.settings.update().write(
                 SettingsCompanion(curveSmoothness: Value(value)),
               )
@@ -93,7 +93,7 @@ class GraphCurveSettings extends StatelessWidget {
                         inactiveColor: colorScheme.primary.withValues(
                           alpha: 0.24,
                         ),
-                        onChanged: onSmoothnessChanged,
+                        onChanged: onChange,
                       ),
                     ),
                   ),
@@ -102,11 +102,7 @@ class GraphCurveSettings extends StatelessWidget {
                 SizedBox(
                   width: 42,
                   child: Text(
-                    formatDisplayPercent(
-                      context,
-                      smoothness,
-                      maximumFractionDigits: 0,
-                    ),
+                    formatDisplayPercent(context, smoothness, maxDigits: 0),
                     textAlign: TextAlign.end,
                     style: theme.textTheme.labelLarge,
                   ),
@@ -135,13 +131,7 @@ class GraphCurveSettings extends StatelessWidget {
                     color: Theme.of(context).colorScheme.onSurfaceVariant,
                   ),
                 ),
-                Text(
-                  formatDisplayPercent(
-                    context,
-                    smoothness,
-                    maximumFractionDigits: 0,
-                  ),
-                ),
+                Text(formatDisplayPercent(context, smoothness, maxDigits: 0)),
               ],
             ),
             Slider(
@@ -152,7 +142,7 @@ class GraphCurveSettings extends StatelessWidget {
               inactiveColor: Theme.of(
                 context,
               ).colorScheme.primary.withValues(alpha: 0.24),
-              onChanged: onSmoothnessChanged,
+              onChanged: onChange,
             ),
           ],
         );

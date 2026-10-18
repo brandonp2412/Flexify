@@ -58,7 +58,7 @@ class AppEmptyState extends StatelessWidget {
       ),
     );
 
-    final interactiveContent = onAction == null
+    final tappable = onAction == null
         ? content
         : Semantics(
             button: true,
@@ -70,6 +70,6 @@ class AppEmptyState extends StatelessWidget {
             ),
           );
 
-    return Center(child: SingleChildScrollView(child: interactiveContent));
+    return Center(child: SingleChildScrollView(child: tappable));
   }
 }

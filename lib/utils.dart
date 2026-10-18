@@ -9,8 +9,8 @@ import 'package:timeago/timeago.dart' as timeago;
 
 final _dateFormat = <(String, String), DateFormat>{};
 final _numberFormat = <(String, int, int), NumberFormat>{};
-final _editableNumberFormat = <String, NumberFormat>{};
-final _parseNumberFormat = <String, NumberFormat>{};
+final _editableFormat = <String, NumberFormat>{};
+final _parseFormat = <String, NumberFormat>{};
 final _percentFormat = <(String, int), NumberFormat>{};
 
 String _localeName(BuildContext context) =>
@@ -28,22 +28,22 @@ String formatDisplayDate(BuildContext context, DateTime value, String pattern) {
 String formatDisplayNumber(
   BuildContext context,
   num value, {
-  int minimumFractionDigits = 0,
-  int maximumFractionDigits = 2,
+  int minDigits = 0,
+  int maxDigits = 2,
 }) {
   final locale = _localeName(context);
   final formatter = _numberFormat.putIfAbsent(
-    (locale, minimumFractionDigits, maximumFractionDigits),
+    (locale, minDigits, maxDigits),
     () => NumberFormat.decimalPattern(locale)
-      ..minimumFractionDigits = minimumFractionDigits
-      ..maximumFractionDigits = maximumFractionDigits,
+      ..minimumFractionDigits = minDigits
+      ..maximumFractionDigits = maxDigits,
   );
   return formatter.format(value);
 }
 
 String formatEditableNumber(BuildContext context, num value) {
   final locale = _localeName(context);
-  return _editableNumberFormat
+  return _editableFormat
       .putIfAbsent(locale, () => NumberFormat('0.##', locale))
       .format(value);
 }
@@ -57,7 +57,7 @@ double? parseDisplayNumber(BuildContext context, String value) {
 
   try {
     final locale = _localeName(context);
-    return _parseNumberFormat
+    return _parseFormat
         .putIfAbsent(locale, () => NumberFormat.decimalPattern(locale))
         .parse(input)
         .toDouble();
@@ -69,23 +69,21 @@ double? parseDisplayNumber(BuildContext context, String value) {
 String formatDisplayPercent(
   BuildContext context,
   num ratio, {
-  int maximumFractionDigits = 2,
+  int maxDigits = 2,
 }) {
   final locale = _localeName(context);
-  final formatter = _percentFormat.putIfAbsent(
-    (locale, maximumFractionDigits),
-    () =>
-        NumberFormat.percentPattern(locale)
-          ..maximumFractionDigits = maximumFractionDigits,
-  );
+  final formatter = _percentFormat.putIfAbsent((
+    locale,
+    maxDigits,
+  ), () => NumberFormat.percentPattern(locale)..maximumFractionDigits = maxDigits);
   return formatter.format(ratio);
 }
 
-bool _relativeTimeLocalesRegistered = false;
+bool _timeLocalesReady = false;
 
 void _registerRelativeTimeLocales() {
-  if (_relativeTimeLocalesRegistered) return;
-  _relativeTimeLocalesRegistered = true;
+  if (_timeLocalesReady) return;
+  _timeLocalesReady = true;
   timeago.setLocaleMessages('de', timeago.DeMessages());
   timeago.setLocaleMessages('fr', timeago.FrMessages());
   timeago.setLocaleMessages('it', timeago.ItMessages());
@@ -97,9 +95,9 @@ void _registerRelativeTimeLocales() {
   final portuguese = timeago.PtBrMessages();
   timeago.setLocaleMessages('pt', portuguese);
   timeago.setLocaleMessages('pt_BR', portuguese);
-  final simplifiedChinese = timeago.ZhCnMessages();
-  timeago.setLocaleMessages('zh', simplifiedChinese);
-  timeago.setLocaleMessages('zh_CN', simplifiedChinese);
+  final zhMessages = timeago.ZhCnMessages();
+  timeago.setLocaleMessages('zh', zhMessages);
+  timeago.setLocaleMessages('zh_CN', zhMessages);
   timeago.setLocaleMessages('zh_TW', timeago.ZhMessages());
 }
 

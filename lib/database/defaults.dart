@@ -68,7 +68,7 @@ const defaultPlans = [
   PlansCompanion(id: Value(3), days: Value('Friday')),
 ];
 
-const defaultPlanExerciseNames = <(int, String)>[
+const defaultPlanNames = <(int, String)>[
   (1, 'Barbell bench press'),
   (1, 'Squat'),
   (1, 'Lat pull-down'),

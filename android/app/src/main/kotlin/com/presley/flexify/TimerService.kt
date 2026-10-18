@@ -41,7 +41,7 @@ class TimerService : Service() {
     private var mediaPlayer: MediaPlayer? = null
     private var vibrator: Vibrator? = null
     private val binder = LocalBinder()
-    private var currentDescription = ""
+    private var description = ""
     private var currentTarget = "timer"
     private var alarmSound: String? = null
     private var shouldVibrate = true
@@ -49,12 +49,12 @@ class TimerService : Service() {
     private var stopLabel = ""
     private var addOneMinuteLabel = ""
     private var timerChannelName = ""
-    private var timerChannelDescription = ""
-    private var timerFinishedChannelName = ""
-    private var timerFinishedChannelDescription = ""
-    private var timerFinishedTitle = ""
-    private var exactAlarmRequestUnavailable = ""
-    var mainActivityVisible = true
+    private var timerDesc = ""
+    private var doneChannel = ""
+    private var doneDesc = ""
+    private var doneTitle = ""
+    private var alarmUnavailable = ""
+    var activityVisible = true
     var flexifyTimer: FlexifyTimer = FlexifyTimer.emptyTimer()
 
     override fun onBind(intent: Intent): IBinder {
@@ -77,20 +77,20 @@ class TimerService : Service() {
                 vibrator?.cancel()
 
                 if (intent != null && intent.action == STOP_BROADCAST_INTERNAL) updateAppUI()
-                val notificationManager = NotificationManagerCompat.from(this@TimerService)
-                notificationManager.cancel(ONGOING_ID)
+                val manager = NotificationManagerCompat.from(this@TimerService)
+                manager.cancel(ONGOING_ID)
                 stopForeground(STOP_FOREGROUND_REMOVE)
                 stopSelf()
             }
         }
 
-    private val finishedStopReceiver =
+    private val doneStopReceiver =
         object : BroadcastReceiver() {
             override fun onReceive(context: Context?, intent: Intent?) {
                 mediaPlayer?.stop()
                 vibrator?.cancel()
-                val notificationManager = NotificationManagerCompat.from(this@TimerService)
-                notificationManager.cancel(FINISHED_ID)
+                val manager = NotificationManagerCompat.from(this@TimerService)
+                manager.cancel(FINISHED_ID)
             }
         }
 
@@ -110,7 +110,7 @@ class TimerService : Service() {
                 flexifyTimer.increaseDuration(
                     applicationContext,
                     FlexifyTimer.ONE_MINUTE_MILLI,
-                    exactAlarmRequestUnavailable
+                    alarmUnavailable
                 )
                 updateNotification(flexifyTimer.getRemainingSeconds())
 
@@ -142,7 +142,7 @@ class TimerService : Service() {
 
         ContextCompat.registerReceiver(
             applicationContext,
-            finishedStopReceiver, IntentFilter().apply {
+            doneStopReceiver, IntentFilter().apply {
                 addAction(STOP_FINISHED_INTERNAL)
             },
             ContextCompat.RECEIVER_NOT_EXPORTED
@@ -176,7 +176,7 @@ class TimerService : Service() {
     }
 
     private fun getDelay(startTime: Long): Long {
-        if (mainActivityVisible) return 20
+        if (activityVisible) return 20
 
         val delay = flexifyTimer.getRemainingMillis() % 1000
         return if (SystemClock.elapsedRealtime() - startTime + delay > 980) 20 else delay
@@ -193,7 +193,7 @@ class TimerService : Service() {
         flexifyTimer.start(
             applicationContext,
             if (timeStamp > 0) System.currentTimeMillis() - timeStamp else 0,
-            exactAlarmRequestUnavailable
+            alarmUnavailable
         )
 
         @SuppressLint("WrongConstant")
@@ -227,7 +227,7 @@ class TimerService : Service() {
     }
 
     private fun onTimerStart(intent: Intent?) {
-        currentDescription = intent?.getStringExtra("description").orEmpty()
+        description = intent?.getStringExtra("description").orEmpty()
         currentTarget = intent?.getStringExtra(MainActivity.TIMER_TARGET_EXTRA) ?: "timer"
         alarmSound = intent?.getStringExtra("alarmSound")
             ?: "android.resource://$packageName/${R.raw.argon}"
@@ -236,12 +236,12 @@ class TimerService : Service() {
         stopLabel = intent?.getStringExtra("stopLabel").orEmpty()
         addOneMinuteLabel = intent?.getStringExtra("addOneMinuteLabel").orEmpty()
         timerChannelName = intent?.getStringExtra("timerChannelName").orEmpty()
-        timerChannelDescription = intent?.getStringExtra("timerChannelDescription").orEmpty()
-        timerFinishedChannelName = intent?.getStringExtra("timerFinishedChannelName").orEmpty()
-        timerFinishedChannelDescription =
+        timerDesc = intent?.getStringExtra("timerChannelDescription").orEmpty()
+        doneChannel = intent?.getStringExtra("timerFinishedChannelName").orEmpty()
+        doneDesc =
             intent?.getStringExtra("timerFinishedChannelDescription").orEmpty()
-        timerFinishedTitle = intent?.getStringExtra("timerFinishedTitle").orEmpty()
-        exactAlarmRequestUnavailable =
+        doneTitle = intent?.getStringExtra("timerFinishedTitle").orEmpty()
+        alarmUnavailable =
             intent?.getStringExtra("exactAlarmRequestUnavailable").orEmpty()
         val duration = intent?.getIntExtra("milliseconds", 0) ?: (3 * 60 * 1000)
         val timestamp = intent?.getLongExtra("timeStamp", 0) ?: 0
@@ -261,7 +261,7 @@ class TimerService : Service() {
         if (timerRunnable != null) timerHandler.removeCallbacks(timerRunnable!!)
         applicationContext.unregisterReceiver(stopReceiver)
         applicationContext.unregisterReceiver(addReceiver)
-        applicationContext.unregisterReceiver(finishedStopReceiver)
+        applicationContext.unregisterReceiver(doneStopReceiver)
         mediaPlayer?.stop()
         mediaPlayer?.release()
         vibrator?.cancel()
@@ -357,8 +357,8 @@ class TimerService : Service() {
                 PendingIntent.FLAG_MUTABLE
             )
 
-        val notificationBuilder = NotificationCompat.Builder(this, channelId)
-            .setContentTitle(currentDescription)
+        val builder = NotificationCompat.Builder(this, channelId)
+            .setContentTitle(description)
             .setContentText(formatTime(timeLeftInSeconds))
             .setSmallIcon(R.drawable.outline_timer_24)
             .setProgress(flexifyTimer.getDurationSeconds(), timeLeftInSeconds, false)
@@ -372,7 +372,7 @@ class TimerService : Service() {
             .addAction(R.drawable.ic_baseline_stop_24, stopLabel, stopPending)
             .addAction(R.drawable.ic_baseline_stop_24, addOneMinuteLabel, addPending)
 
-        val notificationManager = NotificationManagerCompat.from(this)
+        val manager = NotificationManagerCompat.from(this)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
                 channelId,
@@ -382,12 +382,12 @@ class TimerService : Service() {
             channel.setSound(null, null)
             channel.setBypassDnd(true)
             channel.enableVibration(false)
-            channel.description = timerChannelDescription
+            channel.description = timerDesc
             channel.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
-            notificationManager.createNotificationChannel(channel)
+            manager.createNotificationChannel(channel)
         }
 
-        return notificationBuilder
+        return builder
     }
 
     private fun vibrate() {
@@ -408,21 +408,21 @@ class TimerService : Service() {
 
     private fun notifyFinished() {
         val channelId = "finished_channel"
-        val notificationManager = NotificationManagerCompat.from(this)
+        val manager = NotificationManagerCompat.from(this)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel =
                 NotificationChannel(
                     channelId,
-                    timerFinishedChannelName,
+                    doneChannel,
                     NotificationManager.IMPORTANCE_HIGH
                 ).apply {
                     setSound(null, null)
                     setBypassDnd(true)
                     enableVibration(false)
-                    description = timerFinishedChannelDescription
+                    description = doneDesc
                     lockscreenVisibility = Notification.VISIBILITY_PUBLIC
                 }
-            notificationManager.createNotificationChannel(channel)
+            manager.createNotificationChannel(channel)
         }
 
         val contentIntent = Intent(this, MainActivity::class.java).apply {
@@ -454,8 +454,8 @@ class TimerService : Service() {
             )
 
         val builder = NotificationCompat.Builder(this, channelId)
-            .setContentTitle(timerFinishedTitle)
-            .setContentText(currentDescription)
+            .setContentTitle(doneTitle)
+            .setContentText(description)
             .setSmallIcon(R.drawable.outline_timer_24)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setCategory(NotificationCompat.CATEGORY_ALARM)
@@ -473,11 +473,11 @@ class TimerService : Service() {
         ) {
             return
         }
-        notificationManager.notify(FINISHED_ID, builder.build())
+        manager.notify(FINISHED_ID, builder.build())
     }
 
     private fun updateNotification(seconds: Int) {
-        val notificationManager = NotificationManagerCompat.from(this)
+        val manager = NotificationManagerCompat.from(this)
         val notification = getProgress(seconds)
         if (ActivityCompat.checkSelfPermission(
                 this,
@@ -486,7 +486,7 @@ class TimerService : Service() {
         ) {
             return
         }
-        notificationManager.notify(ONGOING_ID, notification.build())
+        manager.notify(ONGOING_ID, notification.build())
     }
 
     @SuppressLint("DefaultLocale")

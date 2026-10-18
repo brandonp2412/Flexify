@@ -28,8 +28,8 @@ class EditPlanPage extends StatefulWidget {
 class _EditPlanPageState extends State<EditPlanPage> {
   List<bool> _days = [];
   List<PlanExerciseDraft> _exercises = [];
-  bool _loadingExercises = true;
-  bool _hasUnsavedChanges = false;
+  bool _loading = true;
+  bool _dirty = false;
   bool _allowPop = false;
   String _search = '';
 
@@ -60,7 +60,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
         return a.exerciseName.compareTo(b.exerciseName);
       });
       _search = '';
-      _hasUnsavedChanges = true;
+      _dirty = true;
     });
     _searchCtrl.text = '';
   }
@@ -81,9 +81,9 @@ class _EditPlanPageState extends State<EditPlanPage> {
     final colors = Theme.of(context).colorScheme;
 
     return PopScope(
-      canPop: _allowPop || !_hasUnsavedChanges,
+      canPop: _allowPop || !_dirty,
       onPopInvokedWithResult: (didPop, result) {
-        if (didPop || _allowPop || !_hasUnsavedChanges) return;
+        if (didPop || _allowPop || !_dirty) return;
         unawaited(_confirmDiscard(result));
       },
       child: Scaffold(
@@ -185,7 +185,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
                 ),
               ),
               const SizedBox(height: 6),
-              if (_loadingExercises)
+              if (_loading)
                 const Padding(
                   padding: EdgeInsets.all(24),
                   child: Center(child: CircularProgressIndicator()),
@@ -220,7 +220,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
                       if (id == -1) return;
                       setState(() {
                         _exercises[id] = pe.copyWithPlanExercise(value);
-                        _hasUnsavedChanges = true;
+                        _dirty = true;
                       });
                     },
                   ),
@@ -257,7 +257,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
     if (widget.plan.id.present) {
       _loadExercises();
     } else {
-      _loadingExercises = false;
+      _loading = false;
     }
   }
 
@@ -266,13 +266,13 @@ class _EditPlanPageState extends State<EditPlanPage> {
     if (!mounted) return;
     setState(() {
       _exercises = exercises;
-      _loadingExercises = false;
+      _loading = false;
     });
   }
 
   void _markDirty() {
-    if (_hasUnsavedChanges) return;
-    setState(() => _hasUnsavedChanges = true);
+    if (_dirty) return;
+    setState(() => _dirty = true);
   }
 
   Future<void> _confirmDiscard(Object? result) async {
@@ -324,7 +324,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
       if (_days[i]) selected.add(weekdays[i]);
 
     if (selected.isEmpty && _titleCtrl.text.isEmpty) {
-      rootScaffoldMessenger.currentState!.showSnackBar(
+      messengerKey.currentState!.showSnackBar(
         SnackBar(
           content: Text(context.l10n.selectDays),
           behavior: SnackBarBehavior.floating,
@@ -339,7 +339,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
     }
 
     if (_exercises.where((draft) => draft.planExercise.enabled.value).isEmpty) {
-      rootScaffoldMessenger.currentState!.showSnackBar(
+      messengerKey.currentState!.showSnackBar(
         SnackBar(
           content: Text(context.l10n.selectExercises),
           behavior: SnackBarBehavior.floating,

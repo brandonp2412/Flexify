@@ -151,14 +151,14 @@ class _StartListState extends State<StartList> {
 
       case PlanTrailing.ratio:
         trail = Text(
-          "${formatDisplayNumber(context, count, maximumFractionDigits: 0)} / ${formatDisplayNumber(context, max, maximumFractionDigits: 0)}",
+          "${formatDisplayNumber(context, count, maxDigits: 0)} / ${formatDisplayNumber(context, max, maxDigits: 0)}",
           style: const TextStyle(fontSize: 16),
         );
         break;
 
       case PlanTrailing.count:
         trail = Text(
-          formatDisplayNumber(context, count, maximumFractionDigits: 0),
+          formatDisplayNumber(context, count, maxDigits: 0),
           style: const TextStyle(fontSize: 16),
         );
         break;
@@ -254,7 +254,7 @@ class _StartListState extends State<StartList> {
                               (trailing == PlanTrailing.reorder ||
                                   trailing == PlanTrailing.none)) ...[
                             Text(
-                              '${formatDisplayNumber(context, count, maximumFractionDigits: 0)} / ${formatDisplayNumber(context, max, maximumFractionDigits: 0)}',
+                              '${formatDisplayNumber(context, count, maxDigits: 0)} / ${formatDisplayNumber(context, max, maxDigits: 0)}',
                               style: Theme.of(context).textTheme.labelLarge
                                   ?.copyWith(color: colors.onSurfaceVariant),
                             ),

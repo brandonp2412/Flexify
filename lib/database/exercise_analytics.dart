@@ -184,12 +184,12 @@ List<List<ExerciseSetView>> _groupSets(
 }
 
 double _loadInUnit(ExerciseSetView set, String target) {
-  final kg = loadInKg(set.unit, set.weight);
+  final kg = loadKg(set.unit, set.weight);
   return displayLoad(target, kg);
 }
 
 double _distanceInUnit(ExerciseSetView set, String target) {
-  final metres = distanceInMetres(set.unit, set.distance);
+  final metres = distanceMetres(set.unit, set.distance);
   return displayDistance(target, metres);
 }
 

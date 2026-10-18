@@ -9,8 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 
-const double _timerFaceFontSize = 60;
-const double _timerControlsSpacing = 8;
+const double _faceFontSize = 60;
+const double _controlGap = 8;
 
 class TimerCircularProgressIndicator extends StatefulWidget {
   final Widget? trailingControl;
@@ -300,7 +300,7 @@ class _StopwatchProgressIndicatorState extends State<StopwatchProgressIndicator>
           maxCircleSize,
           math.min(availableHeight, availableWidth),
         );
-        const timeFontSize = _timerFaceFontSize;
+        const timeFontSize = _faceFontSize;
 
         return Column(
           mainAxisSize: MainAxisSize.min,
@@ -334,7 +334,7 @@ class _StopwatchProgressIndicatorState extends State<StopwatchProgressIndicator>
                 ],
               ),
             ),
-            const SizedBox(height: _timerControlsSpacing),
+            const SizedBox(height: _controlGap),
             Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -430,8 +430,7 @@ class _TimerProgressIndicatorState extends State<TimerProgressIndicator>
           return const SizedBox.shrink();
         }
 
-        final currentProgress =
-            elapsed.inMilliseconds / duration.inMilliseconds;
+        final progress = elapsed.inMilliseconds / duration.inMilliseconds;
 
         final isNewTimer =
             _lastDuration != duration ||
@@ -452,7 +451,7 @@ class _TimerProgressIndicatorState extends State<TimerProgressIndicator>
           visible: true,
           child: TweenAnimationBuilder<double>(
             key: _animationKey,
-            tween: Tween<double>(begin: 1.0 - currentProgress, end: 0.0),
+            tween: Tween<double>(begin: 1.0 - progress, end: 0.0),
             duration: remaining,
             builder: (context, value, child) {
               return LinearProgressIndicator(value: value);
@@ -544,13 +543,13 @@ class _TimerCircularProgressIndicatorTile extends StatelessWidget {
                   _TimeWithMilliseconds(
                     time: generateTitleText(remaining),
                     duration: remaining,
-                    fontSize: _timerFaceFontSize,
+                    fontSize: _faceFontSize,
                     color: onSurface,
                   ),
                 ],
               ),
             ),
-            const SizedBox(height: _timerControlsSpacing),
+            const SizedBox(height: _controlGap),
             Column(
               mainAxisSize: MainAxisSize.min,
               children: [

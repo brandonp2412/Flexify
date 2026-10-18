@@ -316,7 +316,7 @@ class AppDatabase extends _$AppDatabase {
             mode: InsertMode.insertOrIgnore,
           );
         }
-        final defaultCategoryIds = {
+        final categoryIds = {
           for (final category in await categories.select().get())
             category.name: category.id,
         };
@@ -328,21 +328,21 @@ class AppDatabase extends _$AppDatabase {
                 name: entry.$1,
                 kind: 'strength',
                 displayUnit: 'kg',
-                categoryId: Value(defaultCategoryIds[entry.$2]),
+                categoryId: Value(categoryIds[entry.$2]),
               ),
             ),
           );
           batch.insertAll(plans, defaultPlans);
         });
-        final defaultExerciseIds = {
+        final exerciseIds = {
           for (final exercise in await exercises.select().get())
             exercise.name: exercise.id,
         };
         await planExercises.insertAll(
-          defaultPlanExerciseNames.map(
+          defaultPlanNames.map(
             (entry) => PlanExercisesCompanion.insert(
               planId: entry.$1,
-              exerciseId: defaultExerciseIds[entry.$2]!,
+              exerciseId: exerciseIds[entry.$2]!,
               enabled: true,
             ),
           ),
@@ -1083,10 +1083,10 @@ class AppDatabase extends _$AppDatabase {
             await upgrade(m, from, to);
 
             if (to == schemaVersion) {
-              final foreignKeyViolations = await customSelect(
+              final violations = await customSelect(
                 'PRAGMA foreign_key_check',
               ).get();
-              if (foreignKeyViolations.isNotEmpty) {
+              if (violations.isNotEmpty) {
                 throw StateError('Foreign key violations after migration');
               }
             }

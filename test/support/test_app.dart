@@ -52,7 +52,7 @@ class FlexifyTestHarness {
           ChangeNotifierProvider.value(value: effectiveTimerState),
         ],
         child: MaterialApp(
-          scaffoldMessengerKey: rootScaffoldMessenger,
+          scaffoldMessengerKey: messengerKey,
           locale: locale ?? const Locale('en'),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,

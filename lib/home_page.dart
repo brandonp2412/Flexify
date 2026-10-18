@@ -28,7 +28,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   late TabController _controller;
-  late final PageController _desktopPageController;
+  late final PageController _pages;
   late final TimerState _timerState;
   final GlobalKey<PlansPageState> _plansPageKey = GlobalKey<PlansPageState>();
 
@@ -39,7 +39,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     final setting = context.read<Setting>().tabs;
     final tabs = setting.split(',');
     _controller = TabController(length: tabs.length, vsync: this);
-    _desktopPageController = PageController();
+    _pages = PageController();
     _timerState = context.read<TimerState>();
     _timerState.addListener(_handleTimerNotificationTarget);
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -51,20 +51,20 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       final buildNumber = int.tryParse(pkg.buildNumber);
       if (buildNumber == null) return;
       final settings = await (db.settings.select()..limit(1)).getSingle();
-      final previousBuildNumber = settings.buildNumber;
+      final oldBuild = settings.buildNumber;
       await db.settings.update().write(
         SettingsCompanion(buildNumber: Value(buildNumber)),
       );
 
-      if (previousBuildNumber == null ||
-          buildNumber <= previousBuildNumber ||
+      if (oldBuild == null ||
+          buildNumber <= oldBuild ||
           !mounted ||
           !await claimUpdateNotice()) {
         return;
       }
 
       if (mounted)
-        rootScaffoldMessenger.currentState!.showSnackBar(
+        messengerKey.currentState!.showSnackBar(
           SnackBar(
             content: Text(context.l10n.newVersion(pkg.version)),
             behavior: SnackBarBehavior.floating,
@@ -88,8 +88,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     if (_controller.index != index) {
       _controller.index = index;
     }
-    if (_desktopPageController.hasClients) {
-      _desktopPageController.jumpToPage(index);
+    if (_pages.hasClients) {
+      _pages.jumpToPage(index);
     }
   }
 
@@ -154,7 +154,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   void dispose() {
     _timerState.removeListener(_handleTimerNotificationTarget);
     _controller.dispose();
-    _desktopPageController.dispose();
+    _pages.dispose();
     super.dispose();
   }
 
@@ -163,7 +163,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     final tabs = state.tabs.split(',');
 
     if (tabs.length == 1) {
-      rootScaffoldMessenger.currentState!.showSnackBar(
+      messengerKey.currentState!.showSnackBar(
         SnackBar(
           content: Text(context.l10n.cannotHideAllTabs),
           behavior: SnackBarBehavior.floating,
@@ -234,7 +234,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       SettingsCompanion(tabs: Value(tabs.join(','))),
     );
     if (context.mounted)
-      rootScaffoldMessenger.currentState!.showSnackBar(
+      messengerKey.currentState!.showSnackBar(
         SnackBar(
           content: Text(context.l10n.removedTab(label)),
           behavior: SnackBarBehavior.floating,
@@ -266,8 +266,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         vsync: this,
       );
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted && _desktopPageController.hasClients) {
-          _desktopPageController.jumpToPage(index);
+        if (mounted && _pages.hasClients) {
+          _pages.jumpToPage(index);
         }
       });
     }
@@ -293,7 +293,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       children: [
         if (desktop)
           PageView(
-            controller: _desktopPageController,
+            controller: _pages,
             physics: const NeverScrollableScrollPhysics(),
             onPageChanged: (index) {
               if (_controller.index != index) _controller.index = index;

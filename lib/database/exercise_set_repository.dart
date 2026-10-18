@@ -13,7 +13,7 @@ double displayLoad(String unit, double? loadKg) {
 }
 
 /// Converts a displayed load to kilograms.
-double? loadInKg(String unit, double value) {
+double? loadKg(String unit, double value) {
   return switch (unit) {
     'kg' => value,
     'lb' => value * 0.45359237,
@@ -33,7 +33,7 @@ double displayDistance(String unit, double? distanceMetres) {
 }
 
 /// Converts a displayed distance to metres.
-double? distanceInMetres(String unit, double value) {
+double? distanceMetres(String unit, double value) {
   return switch (unit) {
     'm' => value,
     'km' => value * 1000,
@@ -346,11 +346,11 @@ Future<ExerciseSetView> insertExerciseSet(
   int? workoutId,
   double? bodyWeightKg,
 }) async {
-  final resolvedBodyWeightKg =
+  final storedWeightKg =
       bodyWeightKg ??
       (exerciseSet.bodyWeight == 0
           ? null
-          : bodyWeightInKg(exerciseSet.unit, exerciseSet.bodyWeight)) ??
+          : toKg(exerciseSet.unit, exerciseSet.bodyWeight)) ??
       (await getLatestBodyWeight(database))?.weightKg;
 
   final id = await database.exerciseSets.insertOne(
@@ -359,13 +359,13 @@ Future<ExerciseSetView> insertExerciseSet(
       workoutId: Value(workoutId),
       timestamp: exerciseSet.created,
       reps: Value(exerciseSet.reps),
-      loadKg: Value(loadInKg(exerciseSet.unit, exerciseSet.weight)),
+      loadKg: Value(loadKg(exerciseSet.unit, exerciseSet.weight)),
       durationMs: Value((exerciseSet.duration * 60000).round()),
       distanceMetres: Value(
-        distanceInMetres(exerciseSet.unit, exerciseSet.distance),
+        distanceMetres(exerciseSet.unit, exerciseSet.distance),
       ),
       incline: Value(exerciseSet.incline?.toDouble()),
-      bodyWeightKg: Value(resolvedBodyWeightKg),
+      bodyWeightKg: Value(storedWeightKg),
       notes: Value(exerciseSet.notes),
     ),
   );
@@ -386,17 +386,17 @@ Future<void> updateExerciseSet(
           exerciseId: Value(exerciseId),
           timestamp: Value(exerciseSet.created),
           reps: Value(exerciseSet.reps),
-          loadKg: Value(loadInKg(exerciseSet.unit, exerciseSet.weight)),
+          loadKg: Value(loadKg(exerciseSet.unit, exerciseSet.weight)),
           durationMs: Value((exerciseSet.duration * 60000).round()),
           distanceMetres: Value(
-            distanceInMetres(exerciseSet.unit, exerciseSet.distance),
+            distanceMetres(exerciseSet.unit, exerciseSet.distance),
           ),
           incline: Value(exerciseSet.incline?.toDouble()),
           bodyWeightKg: Value(
             bodyWeightKg ??
                 (exerciseSet.bodyWeight == 0
                     ? null
-                    : bodyWeightInKg(exerciseSet.unit, exerciseSet.bodyWeight)),
+                    : toKg(exerciseSet.unit, exerciseSet.bodyWeight)),
           ),
           notes: Value(exerciseSet.notes),
         ),

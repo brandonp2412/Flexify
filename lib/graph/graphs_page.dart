@@ -263,7 +263,7 @@ class GraphsPageState extends State<GraphsPage>
       return "${formatDisplayNumber(context, row.value)} ${displayMeasurementUnit(context.l10n, row.unit)} / ${context.l10n.minutesShort}";
     }
 
-    return "${formatDisplayNumber(context, row.reps, maximumFractionDigits: 0)} × ${formatDisplayNumber(context, row.value, minimumFractionDigits: 2)}${displayMeasurementUnit(context.l10n, unit)} $created";
+    return "${formatDisplayNumber(context, row.reps, maxDigits: 0)} × ${formatDisplayNumber(context, row.value, minDigits: 2)}${displayMeasurementUnit(context.l10n, unit)} $created";
   }
 
   Widget getPeek(
@@ -335,7 +335,7 @@ class GraphsPageState extends State<GraphsPage>
             )
           : null,
       body: ResponsiveContent(
-        maxWidth: desktopDataContentMaxWidth,
+        maxWidth: dataMaxWidth,
         desktopPadding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
         child: StreamBuilder(
           stream: _stream,
@@ -360,15 +360,15 @@ class GraphsPageState extends State<GraphsPage>
                         selector: (context, settings) =>
                             settings.showGlobalProgress,
                         builder: (context, showGlobal, child) {
-                          final globalSearchTerms =
+                          final progressTerms =
                               '${context.l10n.globalProgress} ${context.l10n.navGraphs}'
                                   .toLowerCase();
-                          final globalProgressVisible =
+                          final showProgress =
                               showGlobal &&
                               _category == null &&
-                              globalSearchTerms.contains(_search.toLowerCase());
+                              progressTerms.contains(_search.toLowerCase());
                           final showEmpty =
-                              exerciseSets.isEmpty && !globalProgressVisible;
+                              exerciseSets.isEmpty && !showProgress;
                           return Expanded(
                             child: showEmpty
                                 ? Padding(
@@ -533,11 +533,11 @@ class GraphsPageState extends State<GraphsPage>
     List<GraphExerciseSummary> exerciseSets,
     bool showGlobalProgress,
   ) {
-    final globalSearchTerms =
+    final progressTerms =
         '${context.l10n.globalProgress} ${context.l10n.navGraphs}'
             .toLowerCase();
     final showGlobal =
-        globalSearchTerms.contains(_search.toLowerCase()) &&
+        progressTerms.contains(_search.toLowerCase()) &&
         _category == null &&
         showGlobalProgress;
     final settings = context.read<Setting>();
@@ -645,11 +645,11 @@ class GraphsPageState extends State<GraphsPage>
       return _desktopGraphList(exerciseSets, showGlobalProgress);
     }
     var itemCount = exerciseSets.length;
-    final globalSearchTerms =
+    final progressTerms =
         '${context.l10n.globalProgress} ${context.l10n.navGraphs}'
             .toLowerCase();
     final showGlobal =
-        globalSearchTerms.contains(_search.toLowerCase()) &&
+        progressTerms.contains(_search.toLowerCase()) &&
         _category == null &&
         showGlobalProgress;
     if (showGlobal) itemCount++;
@@ -663,7 +663,7 @@ class GraphsPageState extends State<GraphsPage>
       itemCount: itemCount,
       controller: _scroll,
       padding: EdgeInsets.only(
-        bottom: isDesktopLayout(context) ? 32 : floatingActionButtonListPadding,
+        bottom: isDesktopLayout(context) ? 32 : fabListPadding,
         top: appSearchHeight + 8,
       ),
       itemBuilder: (context, index) {

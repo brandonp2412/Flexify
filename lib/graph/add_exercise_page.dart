@@ -20,12 +20,12 @@ class AddExercisePage extends StatefulWidget {
 }
 
 class _AddExercisePageState extends State<AddExercisePage> {
-  bool _hasUnsavedChanges = false;
+  bool _dirty = false;
   bool _allowPop = false;
 
   void _markDirty() {
-    if (_hasUnsavedChanges) return;
-    setState(() => _hasUnsavedChanges = true);
+    if (_dirty) return;
+    setState(() => _dirty = true);
   }
 
   Future<void> _confirmDiscard(Object? result) async {
@@ -74,9 +74,9 @@ class _AddExercisePageState extends State<AddExercisePage> {
     settings = context.watch<Setting>();
 
     return PopScope(
-      canPop: _allowPop || !_hasUnsavedChanges,
+      canPop: _allowPop || !_dirty,
       onPopInvokedWithResult: (didPop, result) {
-        if (didPop || _allowPop || !_hasUnsavedChanges) return;
+        if (didPop || _allowPop || !_dirty) return;
         unawaited(_confirmDiscard(result));
       },
       child: Scaffold(

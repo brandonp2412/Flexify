@@ -102,7 +102,7 @@ class _PlansPageWidget extends StatefulWidget {
 class _PlansPageWidgetState extends State<_PlansPageWidget> {
   String _search = '';
   late Stream<List<Plan>> _plansStream;
-  late Stream<List<PlanExerciseEntry>> _planExercisesStream;
+  late Stream<List<PlanExerciseEntry>> _exerciseStream;
 
   final _selection = <int>{};
   final _scroll = ScrollController();
@@ -123,7 +123,7 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
 
   void _createStreams() {
     _plansStream = watchPlans();
-    _planExercisesStream = watchAllPlanExerciseEntries(db);
+    _exerciseStream = watchAllPlanExerciseEntries(db);
   }
 
   void _onDatabaseChanged() {
@@ -156,7 +156,7 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
       stream: _plansStream,
       builder: (context, plansSnapshot) =>
           StreamBuilder<List<PlanExerciseEntry>>(
-            stream: _planExercisesStream,
+            stream: _exerciseStream,
             builder: (context, exercisesSnapshot) {
               final plans = plansSnapshot.data ?? const <Plan>[];
               final exercises = exercisesSnapshot.data;
@@ -223,10 +223,10 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
                                   .join(', ');
                               final planExercises =
                                   await getPlanExerciseEntries(db, plan.id);
-                              final exerciseSummary = planExercises
+                              final summary = planExercises
                                   .map((entry) => '- ${entry.exercise.name}')
                                   .join('\n');
-                              return '$days:\n$exerciseSummary';
+                              return '$days:\n$summary';
                             }),
                           );
 

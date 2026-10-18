@@ -94,14 +94,14 @@ class _ExportDataState extends State<ExportData> {
                       Navigator.pop(context);
                       setState(() => exporting = true);
                       final tempDirectory = await getTemporaryDirectory();
-                      final workingDirectory = await tempDirectory.createTemp(
+                      final workDir = await tempDirectory.createTemp(
                         'flexify-export-',
                       );
                       try {
                         final databaseFile = await getDatabaseFile();
                         final archive = await createBackupArchive(
                           databasePath: databaseFile.path,
-                          workingDirectory: workingDirectory,
+                          workingDirectory: workDir,
                         );
                         await FilePicker.saveFile(
                           fileName: 'flexify-backup.zip',
@@ -111,7 +111,7 @@ class _ExportDataState extends State<ExportData> {
                         );
                         talker.info('Exported Flexify data and image backup');
                       } finally {
-                        await workingDirectory.delete(recursive: true);
+                        await workDir.delete(recursive: true);
                         if (mounted) setState(() => exporting = false);
                       }
                     },
