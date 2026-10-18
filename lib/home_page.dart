@@ -14,6 +14,7 @@ import 'package:flexify/timer/timer_page.dart';
 import 'package:flexify/timer/timer_progress_widgets.dart';
 import 'package:flexify/timer/timer_state.dart';
 import 'package:flexify/utils.dart';
+import 'package:flexify/update_notice.dart';
 import 'package:flexify/platform_page_route.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -56,7 +57,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         SettingsCompanion(buildNumber: Value(buildNumber)),
       );
 
-      if (previousBuildNumber == null || buildNumber == previousBuildNumber) {
+      if (previousBuildNumber == null ||
+          buildNumber <= previousBuildNumber ||
+          !mounted ||
+          !await claimUpdateNotice()) {
         return;
       }
 
