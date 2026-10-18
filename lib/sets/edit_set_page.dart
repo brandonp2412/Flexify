@@ -489,7 +489,7 @@ class _EditSetPageState extends State<EditSetPage> {
                     BuildContext context,
                     TextEditingController ctrl,
                     FocusNode focusNode,
-                    VoidCallback onFieldSubmitted,
+                    VoidCallback onSubmit,
                   ) {
                     _categoryCtrl = ctrl;
                     return TextFormField(
@@ -675,7 +675,7 @@ class _EditSetPageState extends State<EditSetPage> {
             BuildContext context,
             TextEditingController ctrl,
             FocusNode focusNode,
-            VoidCallback onFieldSubmitted,
+            VoidCallback onSubmit,
           ) {
             _nameCtrl = ctrl;
             return TextFormField(
@@ -687,7 +687,7 @@ class _EditSetPageState extends State<EditSetPage> {
               },
               focusNode: focusNode,
               onFieldSubmitted: (String value) {
-                onFieldSubmitted();
+                onSubmit();
               },
               onChanged: (value) {
                 _markDirty();

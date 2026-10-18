@@ -53,7 +53,7 @@ List<Widget> getFormatSettings(
       l10n.stoneUnit,
     ]))
       Padding(
-        padding: kSettingsInputPadding,
+        padding: settingsPadding,
         child: DropdownButtonFormField<String>(
           decoration: InputDecoration(labelText: l10n.strengthUnit),
           initialValue: settings.strengthUnit,
@@ -77,7 +77,7 @@ List<Widget> getFormatSettings(
       l10n.kilocaloriesUnit,
     ]))
       Padding(
-        padding: kSettingsInputPadding,
+        padding: settingsPadding,
         child: DropdownButtonFormField<String>(
           decoration: InputDecoration(labelText: l10n.cardioUnit),
           initialValue: settings.cardioUnit,
@@ -94,7 +94,7 @@ List<Widget> getFormatSettings(
       ),
     if (matches([l10n.longDateFormat(''), l10n.longDateFormatDescription]))
       Padding(
-        padding: kSettingsInputPadding,
+        padding: settingsPadding,
         child: Tooltip(
           message: l10n.longDateFormatDescription,
           child: Builder(
@@ -131,7 +131,7 @@ List<Widget> getFormatSettings(
       ),
     if (matches([l10n.shortDateFormat(''), l10n.shortDateFormatDescription]))
       Padding(
-        padding: kSettingsInputPadding,
+        padding: settingsPadding,
         child: Tooltip(
           message: l10n.shortDateFormatDescription,
           child: DropdownButtonFormField<String>(

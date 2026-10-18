@@ -50,7 +50,7 @@ class _CardioPageState extends State<CardioPage> {
   DateTime? start;
   DateTime? end;
   DateTime lastTap = DateTime(0);
-  late bool useTimeBasedXAxis;
+  late bool timeAxis;
   Timer? _refreshTimer;
   Timer? _notesDebounce;
   final _notesCtrl = TextEditingController();
@@ -62,7 +62,7 @@ class _CardioPageState extends State<CardioPage> {
     _targetUnit = widget.initialUnit;
     _exerciseName = widget.initialName;
     final settings = context.read<Setting>();
-    useTimeBasedXAxis = settings.defaultGraphTimeBasedXAxis;
+    timeAxis = settings.defaultGraphTimeBasedXAxis;
     limit = settings.defaultGraphLimit;
     metric = _isWeightUnit(_targetUnit)
         ? CardioMetric.weight
@@ -103,7 +103,7 @@ class _CardioPageState extends State<CardioPage> {
         orElse: () => period,
       );
       limit = pref.graphLimit;
-      useTimeBasedXAxis = pref.graphTimeBasedXAxis;
+      timeAxis = pref.graphTimeBasedXAxis;
       _notesCtrl.text = pref.notes ?? '';
     });
     setData();
@@ -117,7 +117,7 @@ class _CardioPageState extends State<CardioPage> {
       metric: metric.name,
       period: period.name,
       limit: limit,
-      timeBasedXAxis: useTimeBasedXAxis,
+      timeBasedXAxis: timeAxis,
       notes: _notesCtrl.text.isEmpty ? null : _notesCtrl.text,
     );
   }
@@ -281,7 +281,7 @@ class _CardioPageState extends State<CardioPage> {
       final value = double.parse(row.value.toStringAsFixed(1));
       points.add(
         FlexLineChartPoint(
-          useTimeBasedXAxis
+          timeAxis
               ? row.created.millisecondsSinceEpoch.toDouble()
               : index.toDouble(),
           value,
@@ -374,14 +374,14 @@ class _CardioPageState extends State<CardioPage> {
                           ),
                           onPointSelected: touchLine,
                           dates: _data.map((row) => row.created).toList(),
-                          timeBasedXAxis: useTimeBasedXAxis,
+                          timeBasedXAxis: timeAxis,
                         ),
                       ),
               ),
               const SizedBox(height: 8),
               GraphActionButtons(
-                onHistoryPressed: _showHistory,
-                onOptionsPressed: _showOptions,
+                onHistory: _showHistory,
+                onOptions: _showOptions,
               ),
               const SizedBox(height: 8),
               Padding(
@@ -504,10 +504,10 @@ class _CardioPageState extends State<CardioPage> {
                     _savePreferences();
                     refreshSheet();
                   },
-                  timeBasedXAxis: useTimeBasedXAxis,
+                  timeBasedXAxis: timeAxis,
                   onTimeAxisChange: (value) {
                     setState(() {
-                      useTimeBasedXAxis = value;
+                      timeAxis = value;
                     });
                     _savePreferences();
                     refreshSheet();

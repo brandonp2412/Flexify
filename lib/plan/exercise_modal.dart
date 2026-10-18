@@ -81,7 +81,7 @@ class _ExerciseModalState extends State<ExerciseModal> {
               rootNavigator: true,
             ).context;
             final maxController = TextEditingController(text: _max.text);
-            final warmupController = TextEditingController(text: _warmup.text);
+            final warmupCtrl = TextEditingController(text: _warmup.text);
             var timers = _timers;
             Navigator.pop(context);
 
@@ -96,11 +96,11 @@ class _ExerciseModalState extends State<ExerciseModal> {
                         Selector<Setting, int?>(
                           selector: (context, settings) => settings.warmupSets,
                           builder: (context, value, child) => TextField(
-                            controller: warmupController,
+                            controller: warmupCtrl,
                             keyboardType: const TextInputType.numberWithOptions(
                               decimal: false,
                             ),
-                            onTap: () => selectAll(warmupController),
+                            onTap: () => selectAll(warmupCtrl),
                             onChanged: changeWarmup,
                             decoration: InputDecoration(
                               labelText: dialogContext.l10n.warmupSets,
@@ -153,7 +153,7 @@ class _ExerciseModalState extends State<ExerciseModal> {
               },
             );
             maxController.dispose();
-            warmupController.dispose();
+            warmupCtrl.dispose();
           },
         ),
         if (widget.hasData)

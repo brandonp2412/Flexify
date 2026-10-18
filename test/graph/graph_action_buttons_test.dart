@@ -18,8 +18,8 @@ void main() {
           child: SizedBox(
             width: width,
             child: GraphActionButtons(
-              onHistoryPressed: () => historyTaps++,
-              onOptionsPressed: () => optionsTaps++,
+              onHistory: () => historyTaps++,
+              onOptions: () => optionsTaps++,
             ),
           ),
         ),

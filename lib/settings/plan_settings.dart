@@ -22,7 +22,7 @@ List<Widget> getPlanSettings(
   return [
     if (matches([l10n.warmupSets, l10n.warmupSetsDescription]))
       Padding(
-        padding: kSettingsInputPadding,
+        padding: settingsPadding,
         child: Tooltip(
           message: l10n.warmupSetsDescription,
           child: TextField(
@@ -38,7 +38,7 @@ List<Widget> getPlanSettings(
       ),
     if (matches([l10n.setsPerExerciseMax, l10n.setsPerExerciseDescription]))
       Padding(
-        padding: kSettingsInputPadding,
+        padding: settingsPadding,
         child: Tooltip(
           message: l10n.setsPerExerciseDescription,
           child: TextField(

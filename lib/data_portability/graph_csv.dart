@@ -331,11 +331,11 @@ Future<GraphCsvImportResult> _importV2(
     for (final row in records.where(
       (row) => row.string('recordType') == 'exerciseSet',
     )) {
-      final sourceExerciseId = row.integer('exerciseId', required: true)!;
-      final exerciseId = exerciseIds[sourceExerciseId];
+      final sourceId = row.integer('exerciseId', required: true)!;
+      final exerciseId = exerciseIds[sourceId];
       if (exerciseId == null) {
         throw GraphCsvImportException(
-          'Exercise set references missing exercise $sourceExerciseId.',
+          'Exercise set references missing exercise $sourceId.',
         );
       }
       final sourceWorkoutId = row.integer('workoutId');
@@ -401,9 +401,7 @@ Future<GraphCsvImportResult> _importLegacy(
           .toList()
         ..sort((a, b) => a.timestamp.compareTo(b.timestamp));
 
-  final latestWeightUnit = legacyWeights.isEmpty
-      ? null
-      : legacyWeights.last.unit;
+  final weightUnit = legacyWeights.isEmpty ? null : legacyWeights.last.unit;
   final exerciseIds = <String, int>{};
   var setCount = 0;
   var bodyWeightCount = 0;
@@ -455,7 +453,7 @@ Future<GraphCsvImportResult> _importLegacy(
       final bodyWeightUnit = _legacyBodyWeightUnit(
         legacyWeights,
         timestamp,
-        latestWeightUnit,
+        weightUnit,
       );
       final bodyWeightKg = rawBodyWeight == 0 || bodyWeightUnit == null
           ? null

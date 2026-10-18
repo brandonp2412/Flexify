@@ -253,7 +253,7 @@ getWorkoutSettingGroups(BuildContext context, String term, Setting settings) {
         l10n.distanceCardio,
       ]))
         Padding(
-          padding: kSettingsInputPadding,
+          padding: settingsPadding,
           child: DropdownButtonFormField<String>(
             decoration: InputDecoration(labelText: l10n.defaultGraphMetric),
             initialValue: settings.defaultGraphMetric,
@@ -284,7 +284,7 @@ getWorkoutSettingGroups(BuildContext context, String term, Setting settings) {
         l10n.yearly,
       ]))
         Padding(
-          padding: kSettingsInputPadding,
+          padding: settingsPadding,
           child: DropdownButtonFormField<String>(
             decoration: InputDecoration(labelText: l10n.defaultGraphPeriod),
             initialValue: settings.defaultGraphPeriod,
@@ -301,7 +301,7 @@ getWorkoutSettingGroups(BuildContext context, String term, Setting settings) {
         ),
       if (matches([l10n.defaultGraphLimit]))
         Padding(
-          padding: kSettingsInputPadding,
+          padding: settingsPadding,
           child: DropdownButtonFormField<int>(
             decoration: InputDecoration(labelText: l10n.defaultGraphLimit),
             initialValue: settings.defaultGraphLimit,

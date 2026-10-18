@@ -104,12 +104,12 @@ Future<Exercise> syncExerciseDefinition({
 }
 
 Future<void> _mergePlanExerciseReferences({
-  required int sourceExerciseId,
-  required int targetExerciseId,
+  required int sourceId,
+  required int targetId,
 }) async {
   final sourceRows =
       await (db.planExercises.select()
-            ..where((row) => row.exerciseId.equals(sourceExerciseId)))
+            ..where((row) => row.exerciseId.equals(sourceId)))
           .get();
 
   for (final source in sourceRows) {
@@ -117,14 +117,14 @@ Future<void> _mergePlanExerciseReferences({
         await (db.planExercises.select()..where(
               (row) =>
                   row.planId.equals(source.planId) &
-                  row.exerciseId.equals(targetExerciseId),
+                  row.exerciseId.equals(targetId),
             ))
             .getSingleOrNull();
 
     if (target == null) {
       await (db.planExercises.update()
             ..where((row) => row.id.equals(source.id)))
-          .write(PlanExercisesCompanion(exerciseId: Value(targetExerciseId)));
+          .write(PlanExercisesCompanion(exerciseId: Value(targetId)));
       continue;
     }
 
@@ -187,8 +187,8 @@ Future<void> updateExerciseDefinition({
 
   await db.transaction(() async {
     await _mergePlanExerciseReferences(
-      sourceExerciseId: exerciseId,
-      targetExerciseId: target.id,
+      sourceId: exerciseId,
+      targetId: target.id,
     );
     await (db.exerciseSets.update()
           ..where((row) => row.exerciseId.equals(exerciseId)))

@@ -157,12 +157,12 @@ class GraphsPageState extends State<GraphsPage>
         .where((summary) => !summary.bodyWeight)
         .map((summary) => summary.exerciseId!)
         .toList();
-    final deleteBodyWeight = summaries.any((summary) => summary.bodyWeight);
+    final deleteWeight = summaries.any((summary) => summary.bodyWeight);
 
     setState(_selection.clear);
 
     await db.transaction(() async {
-      if (deleteBodyWeight) {
+      if (deleteWeight) {
         await db.bodyWeights.deleteAll();
       }
       if (exerciseIds.isNotEmpty) {
@@ -531,7 +531,7 @@ class GraphsPageState extends State<GraphsPage>
 
   Widget _desktopGraphList(
     List<GraphExerciseSummary> exerciseSets,
-    bool showGlobalProgress,
+    bool showProgress,
   ) {
     final progressTerms =
         '${context.l10n.globalProgress} ${context.l10n.navGraphs}'
@@ -539,7 +539,7 @@ class GraphsPageState extends State<GraphsPage>
     final showGlobal =
         progressTerms.contains(_search.toLowerCase()) &&
         _category == null &&
-        showGlobalProgress;
+        showProgress;
     final settings = context.read<Setting>();
     final showPeekGraph =
         settings.peekGraph && exerciseSets.firstOrNull != null;
@@ -637,12 +637,9 @@ class GraphsPageState extends State<GraphsPage>
     );
   }
 
-  Widget graphList(
-    List<GraphExerciseSummary> exerciseSets,
-    bool showGlobalProgress,
-  ) {
+  Widget graphList(List<GraphExerciseSummary> exerciseSets, bool showProgress) {
     if (isDesktopLayout(context)) {
-      return _desktopGraphList(exerciseSets, showGlobalProgress);
+      return _desktopGraphList(exerciseSets, showProgress);
     }
     var itemCount = exerciseSets.length;
     final progressTerms =
@@ -651,7 +648,7 @@ class GraphsPageState extends State<GraphsPage>
     final showGlobal =
         progressTerms.contains(_search.toLowerCase()) &&
         _category == null &&
-        showGlobalProgress;
+        showProgress;
     if (showGlobal) itemCount++;
 
     final settings = context.read<Setting>();

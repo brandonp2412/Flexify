@@ -170,9 +170,7 @@ class ImportData extends StatelessWidget {
         await candidateDb.close();
       }
 
-      final rollbackFile = File(
-        p.join(workDir.path, 'rollback-$backupDbName'),
-      );
+      final rollbackFile = File(p.join(workDir.path, 'rollback-$backupDbName'));
 
       await db.close();
       if (await liveDatabase.exists()) {
@@ -213,14 +211,10 @@ class ImportData extends StatelessWidget {
       ),
     );
 
-    final importedSettings = await (db.settings.select()..limit(1)).getSingle();
+    final settings = await (db.settings.select()..limit(1)).getSingle();
 
     if (!ctx.mounted) return;
-    await showAppPermissionsDialog(
-      ctx,
-      required: true,
-      settings: importedSettings,
-    );
+    await showAppPermissionsDialog(ctx, required: true, settings: settings);
 
     if (!ctx.mounted) return;
     Navigator.of(

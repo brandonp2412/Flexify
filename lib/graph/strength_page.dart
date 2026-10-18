@@ -45,7 +45,7 @@ class _StrengthPageState extends State<StrengthPage> {
   late List<StrengthData> _data;
   late String _targetUnit;
   late String _exerciseName;
-  late bool useTimeBasedXAxis;
+  late bool timeAxis;
   Timer? _refreshTimer;
   Timer? _notesDebounce;
 
@@ -65,7 +65,7 @@ class _StrengthPageState extends State<StrengthPage> {
     _targetUnit = widget.initialUnit;
     _exerciseName = widget.initialName;
     final settings = context.read<Setting>();
-    useTimeBasedXAxis = settings.defaultGraphTimeBasedXAxis;
+    timeAxis = settings.defaultGraphTimeBasedXAxis;
     limit = settings.defaultGraphLimit;
     metric = StrengthMetric.values.firstWhere(
       (m) => m.name == settings.defaultGraphMetric,
@@ -99,7 +99,7 @@ class _StrengthPageState extends State<StrengthPage> {
         orElse: () => period,
       );
       limit = pref.graphLimit;
-      useTimeBasedXAxis = pref.graphTimeBasedXAxis;
+      timeAxis = pref.graphTimeBasedXAxis;
       _notesCtrl.text = pref.notes ?? '';
     });
     setData();
@@ -114,7 +114,7 @@ class _StrengthPageState extends State<StrengthPage> {
       metric: metric.name,
       period: period.name,
       limit: limit,
-      timeBasedXAxis: useTimeBasedXAxis,
+      timeBasedXAxis: timeAxis,
       notes: _notesCtrl.text.isEmpty ? null : _notesCtrl.text,
     );
   }
@@ -216,7 +216,7 @@ class _StrengthPageState extends State<StrengthPage> {
     for (var index = 0; index < _data.length; index++) {
       points.add(
         FlexLineChartPoint(
-          useTimeBasedXAxis
+          timeAxis
               ? _data[index].created.millisecondsSinceEpoch.toDouble()
               : index.toDouble(),
           _data[index].value,
@@ -289,14 +289,14 @@ class _StrengthPageState extends State<StrengthPage> {
                             shortDateFormat,
                           ),
                           onPointSelected: touchLine,
-                          timeBasedXAxis: useTimeBasedXAxis,
+                          timeBasedXAxis: timeAxis,
                         ),
                       ),
               ),
               const SizedBox(height: 8),
               GraphActionButtons(
-                onHistoryPressed: _showHistory,
-                onOptionsPressed: _showOptions,
+                onHistory: _showHistory,
+                onOptions: _showOptions,
               ),
               const SizedBox(height: 8),
               if (showNotes) ...[
@@ -416,10 +416,10 @@ class _StrengthPageState extends State<StrengthPage> {
                     _savePreferences();
                     refreshSheet();
                   },
-                  timeBasedXAxis: useTimeBasedXAxis,
+                  timeBasedXAxis: timeAxis,
                   onTimeAxisChange: (value) {
                     setState(() {
-                      useTimeBasedXAxis = value;
+                      timeAxis = value;
                     });
                     _savePreferences();
                     refreshSheet();

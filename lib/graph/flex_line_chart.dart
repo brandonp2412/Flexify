@@ -374,7 +374,7 @@ class FlexLineChart extends StatelessWidget {
         curveSmoothness: settings.curveSmoothness ?? 0.35,
         fillFirstSeries: true,
         showLeftLabels: hideLeft != true,
-        showBottomLabels: hideBottom != true,
+        bottomLabels: hideBottom != true,
         xLabels: labels,
         uniformXCount: timeBasedXAxis ? null : points.length,
         axisLabelColor: colorScheme.onSurface,
@@ -390,7 +390,7 @@ class FlexGroupedLineChart extends StatelessWidget {
   final List<String> xLabels;
   final String Function(int seriesIndex, int xIndex) tooltipText;
   final bool showLeftLabels;
-  final bool showBottomLabels;
+  final bool bottomLabels;
 
   const FlexGroupedLineChart({
     super.key,
@@ -398,7 +398,7 @@ class FlexGroupedLineChart extends StatelessWidget {
     required this.xLabels,
     required this.tooltipText,
     this.showLeftLabels = true,
-    this.showBottomLabels = false,
+    this.bottomLabels = false,
   });
 
   @override
@@ -418,7 +418,7 @@ class FlexGroupedLineChart extends StatelessWidget {
         curveSmoothness: settings.curveSmoothness ?? 0.35,
         fillFirstSeries: false,
         showLeftLabels: showLeftLabels,
-        showBottomLabels: showBottomLabels,
+        bottomLabels: bottomLabels,
         xLabels: [
           for (var i = 0; i < xLabels.length; i++)
             _LineChartAxisLabel(i.toDouble(), xLabels[i], column: i),
@@ -656,7 +656,7 @@ class _FlexLineChartRenderer extends ChartRenderer
   final double curveSmoothness;
   final bool fillFirstSeries;
   final bool showLeftLabels;
-  final bool showBottomLabels;
+  final bool bottomLabels;
   final List<_LineChartAxisLabel> xLabels;
   final int? uniformXCount;
   final Color axisLabelColor;
@@ -669,7 +669,7 @@ class _FlexLineChartRenderer extends ChartRenderer
     required this.curveSmoothness,
     required this.fillFirstSeries,
     required this.showLeftLabels,
-    required this.showBottomLabels,
+    required this.bottomLabels,
     required this.xLabels,
     required this.uniformXCount,
     required this.axisLabelColor,
@@ -678,7 +678,7 @@ class _FlexLineChartRenderer extends ChartRenderer
 
   ChartBounds _bounds(Size size) {
     final left = showLeftLabels ? 48.0 : 8.0;
-    final bottom = showBottomLabels ? _bottomLabelInset : _bottomInset;
+    final bottom = bottomLabels ? _bottomLabelInset : _bottomInset;
     return ChartBounds.insets(
       size,
       left: left,
@@ -862,7 +862,7 @@ class _FlexLineChartRenderer extends ChartRenderer
       }
     }
 
-    if (!showBottomLabels || xLabels.isEmpty) return;
+    if (!bottomLabels || xLabels.isEmpty) return;
     final centers = <double>[];
     final widths = <double>[];
     for (final label in xLabels) {

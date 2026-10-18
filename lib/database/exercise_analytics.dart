@@ -63,10 +63,10 @@ String _periodKey(DateTime value, Period period) {
     case Period.week:
       final jan1 = DateTime(date.year);
       final dayOfYear = date.difference(jan1).inDays;
-      final firstMondayOffset = (8 - jan1.weekday) % 7;
-      final week = dayOfYear < firstMondayOffset
+      final mondayOffset = (8 - jan1.weekday) % 7;
+      final week = dayOfYear < mondayOffset
           ? 0
-          : 1 + ((dayOfYear - firstMondayOffset) ~/ 7);
+          : 1 + ((dayOfYear - mondayOffset) ~/ 7);
       return '${date.year}-$week';
   }
 }

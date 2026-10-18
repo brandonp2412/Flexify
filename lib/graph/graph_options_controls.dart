@@ -23,13 +23,13 @@ class GraphOptionsButton extends StatelessWidget {
 }
 
 class GraphActionButtons extends StatelessWidget {
-  final VoidCallback onHistoryPressed;
-  final VoidCallback onOptionsPressed;
+  final VoidCallback onHistory;
+  final VoidCallback onOptions;
 
   const GraphActionButtons({
     super.key,
-    required this.onHistoryPressed,
-    required this.onOptionsPressed,
+    required this.onHistory,
+    required this.onOptions,
   });
 
   @override
@@ -41,13 +41,13 @@ class GraphActionButtons extends StatelessWidget {
       children: [
         TextButton.icon(
           key: const Key('graph-history-button'),
-          onPressed: onHistoryPressed,
+          onPressed: onHistory,
           icon: const Icon(Icons.history),
           label: Text(context.l10n.navHistory),
         ),
         TextButton.icon(
           key: const Key('graph-options-button'),
-          onPressed: onOptionsPressed,
+          onPressed: onOptions,
           icon: const Icon(Icons.tune),
           label: Text(context.l10n.options),
         ),

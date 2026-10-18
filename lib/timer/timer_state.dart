@@ -26,7 +26,7 @@ class TimerState extends ChangeNotifier {
   String _stopLabel = '';
   String _addMinuteLabel = '';
   String _restTimerTitle = '';
-  String _timerChannelName = '';
+  String _channelName = '';
   String _timerChannelDesc = '';
   String _doneChannel = '';
   String _doneChannelDesc = '';
@@ -52,7 +52,7 @@ class TimerState extends ChangeNotifier {
     _stopLabel = stopLabel;
     _addMinuteLabel = addMinuteLabel;
     _restTimerTitle = restTitle;
-    _timerChannelName = timerChannel;
+    _channelName = timerChannel;
     _timerChannelDesc = timerDesc;
     _doneChannel = doneChannel;
     _doneChannelDesc = doneDesc;
@@ -143,7 +143,7 @@ class TimerState extends ChangeNotifier {
       'stopLabel': _stopLabel,
       'addOneMinuteLabel': _addMinuteLabel,
       'restTimerTitle': _restTimerTitle,
-      'timerChannelName': _timerChannelName,
+      'timerChannelName': _channelName,
       'timerChannelDescription': _timerChannelDesc,
       'timerFinishedChannelName': _doneChannel,
       'timerFinishedChannelDescription': _doneChannelDesc,
@@ -203,7 +203,7 @@ class TimerState extends ChangeNotifier {
       'stopLabel': _stopLabel,
       'addOneMinuteLabel': _addMinuteLabel,
       'restTimerTitle': _restTimerTitle,
-      'timerChannelName': _timerChannelName,
+      'timerChannelName': _channelName,
       'timerChannelDescription': _timerChannelDesc,
       'timerFinishedChannelName': _doneChannel,
       'timerFinishedChannelDescription': _doneChannelDesc,
