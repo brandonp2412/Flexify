@@ -32,6 +32,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   late final PageController _desktopPageController;
   late final TimerState _timerState;
   final GlobalKey<PlansPageState> _plansPageKey = GlobalKey<PlansPageState>();
+  final _nestedPages = <String, bool>{};
+
+  void _onNestedPageChanged(String tab, bool nested) {
+    if (!mounted || (_nestedPages[tab] ?? false) == nested) return;
+    setState(() => _nestedPages[tab] = nested);
+  }
 
   @override
   void initState() {
@@ -244,13 +250,30 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     final desktop = isDesktopLayout(context);
     final pages = tabs.map((tab) {
       if (tab == 'HistoryPage') {
-        return HistoryPage(tabController: _controller);
+        return HistoryPage(
+          tabController: _controller,
+          onNestedNavigationChanged: (nested) =>
+              _onNestedPageChanged('HistoryPage', nested),
+        );
       } else if (tab == 'PlansPage') {
-        return PlansPage(key: _plansPageKey, tabController: _controller);
+        return PlansPage(
+          key: _plansPageKey,
+          tabController: _controller,
+          onNestedNavigationChanged: (nested) =>
+              _onNestedPageChanged('PlansPage', nested),
+        );
       } else if (tab == 'GraphsPage') {
-        return GraphsPage(tabController: _controller);
+        return GraphsPage(
+          tabController: _controller,
+          onNestedNavigationChanged: (nested) =>
+              _onNestedPageChanged('GraphsPage', nested),
+        );
       } else if (tab == 'TimerPage') {
-        return TimerPage(tabController: _controller);
+        return TimerPage(
+          tabController: _controller,
+          onNestedNavigationChanged: (nested) =>
+              _onNestedPageChanged('TimerPage', nested),
+        );
       } else if (tab == 'SettingsPage') {
         return const SettingsPage();
       } else {
@@ -307,6 +330,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             child: ValueListenableBuilder(
               valueListenable: _controller.animation!,
               builder: (context, value, child) {
+                final tab = tabs[value.round().clamp(0, tabs.length - 1)];
+                if (_nestedPages[tab] ?? false) return const SizedBox.shrink();
                 return BottomNav(
                   tabs: tabs,
                   currentIndex: value.round(),

@@ -19,6 +19,7 @@ import 'package:flexify/selection_controller.dart';
 import 'package:flexify/utils.dart';
 import 'package:flexify/platform_page_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flexify/tab_navigation_observer.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -64,8 +65,13 @@ List<GraphExerciseSummary> filterGraphSummaries(
 
 class GraphsPage extends StatefulWidget {
   final TabController tabController;
+  final ValueChanged<bool>? onNestedNavigationChanged;
 
-  const GraphsPage({super.key, required this.tabController});
+  const GraphsPage({
+    super.key,
+    required this.tabController,
+    this.onNestedNavigationChanged,
+  });
 
   @override
   createState() => GraphsPageState();
@@ -112,6 +118,9 @@ class GraphsPageState extends State<GraphsPage>
 
   final _selection = SelectionController<String>();
   final GlobalKey<NavigatorState> navKey = GlobalKey<NavigatorState>();
+  late final _navVisibilityObserver = TabNavigationObserver(
+    (visible) => widget.onNestedNavigationChanged?.call(visible),
+  );
   String _search = '';
   String? _category;
   final _scroll = ScrollController();
@@ -140,6 +149,7 @@ class GraphsPageState extends State<GraphsPage>
       },
       child: Navigator(
         key: navKey,
+        observers: [_navVisibilityObserver],
         onGenerateRoute: (settings) => FlexPageRoute(
           builder: (context) => graphsPage(),
           settings: settings,
