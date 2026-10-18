@@ -1,6 +1,6 @@
 import 'package:drift/drift.dart';
 
-/// A timestamped body-weight measurement stored canonically in kilograms.
+/// A timestamped body-weight measurement stored in kilograms.
 @TableIndex.sql(
   'CREATE INDEX body_weights_timestamp '
   'ON body_weights (timestamp DESC, id DESC)',

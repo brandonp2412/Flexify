@@ -12,7 +12,7 @@ Widget localizedTitleApp(Locale locale) => MaterialApp(
 );
 
 void main() {
-  testWidgets('loads canonical English localization', (tester) async {
+  testWidgets('loads English localization', (tester) async {
     await tester.pumpWidget(localizedTitleApp(const Locale('en')));
 
     expect(find.text('Flexify'), findsOneWidget);

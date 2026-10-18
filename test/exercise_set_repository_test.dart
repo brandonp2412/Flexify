@@ -74,7 +74,7 @@ void main() {
   }
 
   test(
-    'CRUD stores only canonical exercise-set data in exercise_sets',
+    'CRUD stores only base-unit exercise-set data in exercise_sets',
     () async {
       final exerciseId = await addExercise(
         name: 'Cutover Bench',

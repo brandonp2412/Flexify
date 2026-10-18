@@ -2,7 +2,7 @@ import 'package:drift/drift.dart';
 import 'package:flexify/database/exercises.dart';
 import 'package:flexify/database/workouts.dart';
 
-/// One exercise set with metrics stored in canonical units.
+/// One exercise set with metrics stored in base units.
 @TableIndex(name: 'exercise_sets_timestamp', columns: {#timestamp, #id})
 @TableIndex.sql(
   'CREATE INDEX exercise_sets_exercise_timestamp '

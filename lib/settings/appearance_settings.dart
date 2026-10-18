@@ -22,7 +22,7 @@ List<Widget> getAppearanceSettings(
     l10n.languageSystemDefault,
     ...selectableLocales.map((locale) => localeDisplayName(l10n, locale)),
   ].join(' ').toLowerCase();
-  final selectedLocale = canonicalLocaleOverride(settings.localeOverride) ?? '';
+  final selectedLocale = validLocaleOverride(settings.localeOverride) ?? '';
 
   return [
     if (languageSearchText.contains(normalizedTerm))

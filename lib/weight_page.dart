@@ -160,7 +160,7 @@ class _WeightPageState extends State<WeightPage> {
 
           final value = parseDisplayNumber(context, _ctrl.text)!;
           final unit = _unit ?? 'kg';
-          final weightKg = canonicalBodyWeightKg(unit, value);
+          final weightKg = bodyWeightInKg(unit, value);
           if (weightKg == null) return;
           await recordBodyWeight(
             db,

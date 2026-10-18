@@ -34,7 +34,7 @@ const selectableLocales = <Locale>[
   Locale('uk'),
 ];
 
-/// Returns the canonical identifier persisted for a supported [locale].
+/// Returns the persisted identifier for a supported [locale].
 String localeIdentifier(Locale locale) => locale.toLanguageTag();
 
 /// Resolves system locales while keeping English as the final fallback.
@@ -71,8 +71,8 @@ Locale? localeOverrideFromIdentifier(String? identifier) {
   return null;
 }
 
-/// Returns the valid canonical stored identifier, or null for system default.
-String? canonicalLocaleOverride(String? identifier) =>
+/// Returns the valid stored identifier, or null for system default.
+String? validLocaleOverride(String? identifier) =>
     localeOverrideFromIdentifier(identifier)?.toLanguageTag();
 
 /// Returns a stable display name for a locale exposed by Flexify.

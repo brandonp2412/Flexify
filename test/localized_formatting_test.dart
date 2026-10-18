@@ -57,7 +57,7 @@ void main() {
     expect(find.text('1234.5'), findsOneWidget);
   });
 
-  testWidgets('keeps canonical decimal input parse-safe in any locale', (
+  testWidgets('keeps normalized decimal input parse-safe in any locale', (
     tester,
   ) async {
     await tester.pumpWidget(

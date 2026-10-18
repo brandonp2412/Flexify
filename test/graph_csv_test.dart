@@ -23,7 +23,7 @@ void main() {
   }
 
   test(
-    'new graph CSV round-trips canonical history and relationships',
+    'new graph CSV round-trips historical records and relationships',
     () async {
       final source = await emptyDatabase();
       final target = await emptyDatabase();
@@ -129,7 +129,7 @@ void main() {
     },
   );
 
-  test('legacy graph CSV imports into redesigned canonical tables', () async {
+  test('legacy graph CSV imports into redesigned base-unit tables', () async {
     final database = await emptyDatabase();
     addTearDown(database.close);
 

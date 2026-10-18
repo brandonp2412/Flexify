@@ -18,7 +18,7 @@ void main() {
   tearDown(() => database.close());
 
   test(
-    'redesign cutover removes legacy tables and keeps canonical set columns',
+    'redesign cutover removes legacy tables and keeps base-unit set columns',
     () async {
       final legacyColumns = await database
           .customSelect('PRAGMA table_info(gym_sets)')

@@ -2,7 +2,7 @@ import 'package:drift/drift.dart';
 import 'package:flexify/database/body_weight_repository.dart';
 import 'package:flexify/database/database.dart';
 
-/// Converts a stored canonical load to the exercise display unit.
+/// Converts a stored load in kilograms to the exercise display unit.
 double displayLoad(String unit, double? loadKg) {
   if (loadKg == null) return 0;
   return switch (unit) {
@@ -12,8 +12,8 @@ double displayLoad(String unit, double? loadKg) {
   };
 }
 
-/// Converts a displayed load to canonical kilograms.
-double? canonicalExerciseSetLoad(String unit, double value) {
+/// Converts a displayed load to kilograms.
+double? loadInKg(String unit, double value) {
   return switch (unit) {
     'kg' => value,
     'lb' => value * 0.45359237,
@@ -22,7 +22,7 @@ double? canonicalExerciseSetLoad(String unit, double value) {
   };
 }
 
-/// Converts a stored canonical distance to the exercise display unit.
+/// Converts a stored distance in metres to the exercise display unit.
 double displayDistance(String unit, double? distanceMetres) {
   if (distanceMetres == null) return 0;
   return switch (unit) {
@@ -32,8 +32,8 @@ double displayDistance(String unit, double? distanceMetres) {
   };
 }
 
-/// Converts a displayed distance to canonical metres.
-double? canonicalExerciseSetDistance(String unit, double value) {
+/// Converts a displayed distance to metres.
+double? distanceInMetres(String unit, double value) {
   return switch (unit) {
     'm' => value,
     'km' => value * 1000,
@@ -350,7 +350,7 @@ Future<ExerciseSetView> insertExerciseSet(
       bodyWeightKg ??
       (exerciseSet.bodyWeight == 0
           ? null
-          : canonicalBodyWeightKg(exerciseSet.unit, exerciseSet.bodyWeight)) ??
+          : bodyWeightInKg(exerciseSet.unit, exerciseSet.bodyWeight)) ??
       (await getLatestBodyWeight(database))?.weightKg;
 
   final id = await database.exerciseSets.insertOne(
@@ -359,12 +359,10 @@ Future<ExerciseSetView> insertExerciseSet(
       workoutId: Value(workoutId),
       timestamp: exerciseSet.created,
       reps: Value(exerciseSet.reps),
-      loadKg: Value(
-        canonicalExerciseSetLoad(exerciseSet.unit, exerciseSet.weight),
-      ),
+      loadKg: Value(loadInKg(exerciseSet.unit, exerciseSet.weight)),
       durationMs: Value((exerciseSet.duration * 60000).round()),
       distanceMetres: Value(
-        canonicalExerciseSetDistance(exerciseSet.unit, exerciseSet.distance),
+        distanceInMetres(exerciseSet.unit, exerciseSet.distance),
       ),
       incline: Value(exerciseSet.incline?.toDouble()),
       bodyWeightKg: Value(resolvedBodyWeightKg),
@@ -388,25 +386,17 @@ Future<void> updateExerciseSet(
           exerciseId: Value(exerciseId),
           timestamp: Value(exerciseSet.created),
           reps: Value(exerciseSet.reps),
-          loadKg: Value(
-            canonicalExerciseSetLoad(exerciseSet.unit, exerciseSet.weight),
-          ),
+          loadKg: Value(loadInKg(exerciseSet.unit, exerciseSet.weight)),
           durationMs: Value((exerciseSet.duration * 60000).round()),
           distanceMetres: Value(
-            canonicalExerciseSetDistance(
-              exerciseSet.unit,
-              exerciseSet.distance,
-            ),
+            distanceInMetres(exerciseSet.unit, exerciseSet.distance),
           ),
           incline: Value(exerciseSet.incline?.toDouble()),
           bodyWeightKg: Value(
             bodyWeightKg ??
                 (exerciseSet.bodyWeight == 0
                     ? null
-                    : canonicalBodyWeightKg(
-                        exerciseSet.unit,
-                        exerciseSet.bodyWeight,
-                      )),
+                    : bodyWeightInKg(exerciseSet.unit, exerciseSet.bodyWeight)),
           ),
           notes: Value(exerciseSet.notes),
         ),

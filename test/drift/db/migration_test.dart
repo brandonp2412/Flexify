@@ -889,7 +889,7 @@ void main() {
   });
 
   test(
-    'migration from v60 to v61 backfills canonical history exactly once',
+    'migration from v60 to v61 backfills historical records exactly once',
     () async {
       const dayOne = 1704888000;
       const dayTwo = dayOne + 108000;
