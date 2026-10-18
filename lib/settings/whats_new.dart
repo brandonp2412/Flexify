@@ -194,7 +194,6 @@ class _WhatsNewState extends State<WhatsNew> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButtonAnimator: FloatingActionButtonAnimator.noAnimation,
       appBar: AppBar(title: Text(context.l10n.whatsNewTitle)),
       body: Column(
         children: [
@@ -202,7 +201,6 @@ class _WhatsNewState extends State<WhatsNew> {
             child: _isLoading
                 ? const Center(child: CircularProgressIndicator())
                 : ListView.builder(
-                    padding: const EdgeInsets.only(bottom: 116),
                     itemBuilder: (context, index) => ListTile(
                       title: Text(_changelogs[index].created),
                       subtitle: Text(_changelogs[index].content),
@@ -239,14 +237,25 @@ class _WhatsNewState extends State<WhatsNew> {
             ),
         ],
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        heroTag: null,
-        icon: const Icon(Icons.favorite_outline),
-        onPressed: () async {
-          const url = 'https://github.com/sponsors/brandonp2412';
-          await launchUrlString(url);
-        },
-        label: Text(context.l10n.donate),
+      bottomNavigationBar: SafeArea(
+        top: false,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              FloatingActionButton.extended(
+                heroTag: null,
+                icon: const Icon(Icons.favorite_outline),
+                onPressed: () async {
+                  const url = 'https://github.com/sponsors/brandonp2412';
+                  await launchUrlString(url);
+                },
+                label: Text(context.l10n.donate),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
