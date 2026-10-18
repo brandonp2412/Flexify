@@ -5,7 +5,7 @@ void main() {
   test('disabled audio player stays inert', () async {
     final player = SafeAudioPlayer(enabled: false);
 
-    expect(player.isAvailable, isFalse);
+    expect(player.enabled, isFalse);
     await player.playAsset('argon.mp3');
     await player.playFile('/tmp/alarm.mp3');
     await player.stop();

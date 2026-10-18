@@ -11,7 +11,6 @@ import 'package:flexify/plan/plans_list.dart';
 import 'package:flexify/plan/start_plan_page.dart';
 import 'package:flexify/plan/workout_sessions.dart';
 import 'package:flexify/responsive.dart';
-import 'package:flexify/selection_controller.dart';
 import 'package:flexify/platform_page_route.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -105,7 +104,7 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
   late Stream<List<Plan>> _plansStream;
   late Stream<List<PlanExerciseEntry>> _planExercisesStream;
 
-  final _selection = SelectionController<int>();
+  final _selection = <int>{};
   final _scroll = ScrollController();
 
   @override
@@ -193,10 +192,12 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
                         plans: plansSnapshot.hasData ? filtered : null,
                         exercises: exercises,
                         navKey: widget.navKey,
-                        selected: _selection.selected,
+                        selected: _selection,
                         search: _search,
                         onSelect: (id) {
-                          setState(() => _selection.toggle(id));
+                          setState(() {
+                            if (!_selection.remove(id)) _selection.add(id);
+                          });
                         },
                       ),
                     ),
@@ -246,7 +247,7 @@ class _PlansPageWidgetState extends State<_PlansPageWidget> {
                           );
                         },
                         onSelectAll: () => setState(() {
-                          _selection.setAll(filtered.map((plan) => plan.id));
+                          _selection.addAll(filtered.map((plan) => plan.id));
                         }),
                         onEdit: () async {
                           final plan = plans

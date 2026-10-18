@@ -123,8 +123,7 @@ class _TimerPageWidgetState extends State<_TimerPageWidget>
   }
 
   void _onTimerStateChanged() {
-    if (widget.timerState.timer.getDuration() > Duration.zero &&
-        _stopwatchRunning) {
+    if (widget.timerState.timer.total > Duration.zero && _stopwatchRunning) {
       setState(() {
         _stopwatchRunning = false;
         _stopwatchStartedAt = null;
@@ -164,7 +163,7 @@ class _TimerPageWidgetState extends State<_TimerPageWidget>
     }
 
     final timer = widget.timerState.timer;
-    final countdownActive = timer.getDuration() > Duration.zero;
+    final countdownActive = timer.total > Duration.zero;
     final desktop = isDesktopLayout(context);
 
     Widget? desktopAction;

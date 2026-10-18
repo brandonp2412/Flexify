@@ -138,7 +138,7 @@ class _EditSetPageState extends State<EditSetPage> {
 
     if (!mounted) return;
     if (showBodyWeight) {
-      final bodyWeight = await getBodyWeight();
+      final bodyWeight = await getLatestBodyWeight(db);
       if (!mounted) return;
       updateFields(
         bodyWeight == null

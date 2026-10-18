@@ -134,7 +134,7 @@ class TimerState extends ChangeNotifier {
     final updated = timer.increaseDuration(const Duration(minutes: 1));
     updateTimer(updated);
     final args = {
-      'timestamp': updated.getTimeStamp(),
+      'timestamp': updated.stamp.millisecondsSinceEpoch,
       'alarmSound': alarmSound,
       'vibrate': vibrate,
       'enableSound': enableSound,
@@ -193,7 +193,7 @@ class TimerState extends ChangeNotifier {
     updateTimer(timer);
     final args = {
       'title': title,
-      'timestamp': timer.getTimeStamp(),
+      'timestamp': timer.stamp.millisecondsSinceEpoch,
       'restMs': rest.inMilliseconds,
       'alarmSound': alarmSound,
       'vibrate': vibrate,
@@ -227,7 +227,7 @@ class TimerState extends ChangeNotifier {
     bool enableSound,
     bool keepRinging,
   ) async {
-    final duration = timer.getDuration();
+    final duration = timer.total;
     justExpired = true;
     updateTimer(
       NativeTimerWrapper(

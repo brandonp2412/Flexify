@@ -1,6 +1,5 @@
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/responsive.dart';
-import 'package:flexify/selection_controller.dart';
 import 'package:flexify/settings/settings_page.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/weight_page.dart';
@@ -23,7 +22,7 @@ enum _AppSearchMenuAction {
 }
 
 class AppSearch extends StatefulWidget {
-  final SelectionController controller;
+  final Set<Object> controller;
   final ValueChanged<String> onChange;
   final VoidCallback onSelectAll;
   final Future<void> Function() onDelete;

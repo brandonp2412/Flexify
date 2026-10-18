@@ -1,5 +1,4 @@
 import 'package:drift/drift.dart';
-import 'package:flexify/database/body_weight_repository.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/main.dart';
 import 'package:flutter/foundation.dart';
@@ -7,14 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:timeago/timeago.dart' as timeago;
-
-Future<BodyWeight?> getBodyWeight() => getLatestBodyWeight(db);
-
-bool isSameDay(DateTime date1, DateTime date2) {
-  return date1.year == date2.year &&
-      date1.month == date2.month &&
-      date1.day == date2.day;
-}
 
 final _dateFormat = <(String, String), DateFormat>{};
 final _numberFormat = <(String, int, int), NumberFormat>{};

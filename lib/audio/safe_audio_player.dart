@@ -12,9 +12,6 @@ class SafeAudioPlayer {
   final bool enabled;
   AudioPlayer? _player;
 
-  /// Whether audio controls should be exposed on this platform.
-  bool get isAvailable => enabled;
-
   Future<AudioPlayer?> _getPlayer() async {
     if (!enabled) return null;
     if (_player != null) return _player;

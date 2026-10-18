@@ -713,7 +713,7 @@ class _StartPlanPageState extends State<StartPlanPage>
       final settings = context.read<Setting>();
       final timerState = context.read<TimerState>();
       if (settings.showBodyWeight) {
-        final weightEntry = await getBodyWeight();
+        final weightEntry = await getLatestBodyWeight(db);
         if (weightEntry != null) {
           bodyWeightKg = weightEntry.weightKg;
           bodyWeight = displayBodyWeight(_unit, weightEntry.weightKg);
@@ -895,7 +895,7 @@ class _StartPlanPageState extends State<StartPlanPage>
   }
 
   void useBodyWeight() async {
-    final weightSet = await getBodyWeight();
+    final weightSet = await getLatestBodyWeight(db);
     if (!mounted) return;
     if (weightSet == null) {
       rootScaffoldMessenger.currentState!.showSnackBar(

@@ -131,7 +131,7 @@ class _HistoryListState extends State<HistoryList> {
         : null;
     final bool showDivider =
         previousExerciseSet != null &&
-        !isSameDay(exerciseSet.created, previousExerciseSet.created);
+        !DateUtils.isSameDay(exerciseSet.created, previousExerciseSet.created);
 
     final minutes = exerciseSet.duration.floor();
     final seconds = ((exerciseSet.duration * 60) % 60)

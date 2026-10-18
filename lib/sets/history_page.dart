@@ -11,7 +11,6 @@ import 'package:flexify/filters.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/responsive.dart';
-import 'package:flexify/selection_controller.dart';
 import 'package:flexify/sets/edit_set_page.dart';
 import 'package:flexify/sets/edit_sets_page.dart';
 import 'package:flexify/sets/group_history.dart';
@@ -136,7 +135,7 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
   final weightGt = TextEditingController();
   final weightLt = TextEditingController();
   final scroll = ScrollController();
-  final _selection = SelectionController<int>();
+  final _selection = <int>{};
   final _historyGroups = HistoryGroupingCache();
 
   String search = '';
@@ -215,10 +214,11 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
                                   days: dayGroups,
                                   onSelect: (id) {
                                     setState(() {
-                                      _selection.toggle(id);
+                                      if (!_selection.remove(id))
+                                        _selection.add(id);
                                     });
                                   },
-                                  selected: _selection.selected,
+                                  selected: _selection,
                                   onNext: () {
                                     setState(() {
                                       limit += 100;
@@ -233,10 +233,11 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
                                   sets: snapshot.data!,
                                   onSelect: (id) {
                                     setState(() {
-                                      _selection.toggle(id);
+                                      if (!_selection.remove(id))
+                                        _selection.add(id);
                                     });
                                   },
-                                  selected: _selection.selected,
+                                  selected: _selection,
                                   onNext: () {
                                     setState(() {
                                       limit += 100;
@@ -322,7 +323,7 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
                       setStream();
                     },
                     onDelete: () async {
-                      await deleteExerciseSets(db, _selection.selected);
+                      await deleteExerciseSets(db, _selection);
                       setState(() {
                         _selection.clear();
                       });
@@ -356,7 +357,7 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
     final settings = context.read<Setting>();
     final exerciseSetsFuture = stream.first;
     final bodyWeightFuture = settings.showBodyWeight
-        ? getBodyWeight()
+        ? getLatestBodyWeight(db)
         : Future<BodyWeight?>.value();
     final exerciseSets = await exerciseSetsFuture;
     final latestBodyWeight = await bodyWeightFuture;
@@ -471,7 +472,7 @@ class _HistoryPageWidgetState extends State<_HistoryPageWidget> {
     final exerciseSets = await _filteredSets();
     if (!mounted) return;
     setState(() {
-      _selection.setAll(exerciseSets.map((exerciseSet) => exerciseSet.id));
+      _selection.addAll(exerciseSets.map((exerciseSet) => exerciseSet.id));
     });
   }
 

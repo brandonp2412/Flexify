@@ -632,7 +632,7 @@ class _TimerSettingsState extends State<TimerSettings> {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(title: Text(context.l10n.timers)),
       body: ResponsiveSettingsList(
-        children: _player.isAvailable
+        children: _player.enabled
             ? [
                 ...getTimerSettings(
                   '',

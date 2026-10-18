@@ -11,18 +11,14 @@ class NativeTimerWrapper {
 
   NativeTimerWrapper(this.total, this.elapsed, this.stamp, this.state);
 
-  Duration getDuration() => total;
-
   Duration getElapsed() => total != Duration.zero
       ? DateTime.now().difference(stamp) + elapsed
       : Duration.zero;
 
   Duration getRemaining() {
-    final remaining = getDuration() - getElapsed();
+    final remaining = total - getElapsed();
     return remaining.isNegative ? Duration.zero : remaining;
   }
-
-  int getTimeStamp() => stamp.millisecondsSinceEpoch;
 
   NativeTimerWrapper increaseDuration(Duration increase) => isRunning()
       ? NativeTimerWrapper(
@@ -40,14 +36,6 @@ class NativeTimerWrapper {
           NativeTimerState.running,
         );
   bool isRunning() => state == NativeTimerState.running;
-  bool update() {
-    if (state == NativeTimerState.running &&
-        (getDuration() - getElapsed()).inMilliseconds <= 0) {
-      state == NativeTimerState.expired;
-    }
-    return state != NativeTimerState.running;
-  }
-
   static NativeTimerWrapper emptyTimer() => NativeTimerWrapper(
     Duration.zero,
     Duration.zero,

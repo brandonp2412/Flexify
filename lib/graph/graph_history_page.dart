@@ -5,7 +5,6 @@ import 'package:flexify/database/exercise_set_repository.dart';
 import 'package:flexify/empty_state.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
-import 'package:flexify/selection_controller.dart';
 import 'package:flexify/sets/edit_sets_page.dart';
 import 'package:flexify/sets/history_list.dart';
 import 'package:flexify/platform_page_route.dart';
@@ -32,7 +31,7 @@ class GraphHistoryPage extends StatefulWidget {
 
 class _GraphHistoryPageState extends State<GraphHistoryPage> {
   late List<ExerciseSetView> _sets;
-  final _selection = SelectionController<int>();
+  final _selection = <int>{};
   int limit = 20;
   final scroll = ScrollController();
 
@@ -60,8 +59,10 @@ class _GraphHistoryPageState extends State<GraphHistoryPage> {
             return HistoryList(
               scroll: scroll,
               sets: _sets,
-              onSelect: (id) => setState(() => _selection.toggle(id)),
-              selected: _selection.selected,
+              onSelect: (id) => setState(() {
+                if (!_selection.remove(id)) _selection.add(id);
+              }),
+              selected: _selection,
               onNext: () {
                 setState(() {
                   limit += 10;
@@ -92,7 +93,7 @@ class _GraphHistoryPageState extends State<GraphHistoryPage> {
           tooltip: context.l10n.selectAll,
           icon: const Icon(Icons.done_all),
           onPressed: () => setState(
-            () => _selection.setAll(_sets.map((exerciseSet) => exerciseSet.id)),
+            () => _selection.addAll(_sets.map((exerciseSet) => exerciseSet.id)),
           ),
         ),
         if (!widget.bodyWeight)

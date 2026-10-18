@@ -188,7 +188,7 @@ class _WeightPageState extends State<WeightPage> {
     super.initState();
     final settings = context.read<Setting>();
 
-    getBodyWeight().then((value) {
+    getLatestBodyWeight(db).then((value) {
       if (!mounted) return;
 
       setState(() {

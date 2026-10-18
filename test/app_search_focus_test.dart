@@ -1,5 +1,4 @@
 import 'package:flexify/app_search.dart';
-import 'package:flexify/selection_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -8,7 +7,7 @@ import 'support/test_app.dart';
 void main() {
   testWidgets('AppSearch padding taps focus the search field', (tester) async {
     final harness = await FlexifyTestHarness.create();
-    final selection = SelectionController<String>();
+    final selection = <String>{};
 
     await harness.pump(
       tester,
@@ -44,7 +43,7 @@ void main() {
     tester,
   ) async {
     final harness = await FlexifyTestHarness.create();
-    final selection = SelectionController<String>()..add('plan');
+    final selection = <String>{}..add('plan');
 
     await harness.pump(
       tester,
@@ -82,7 +81,7 @@ void main() {
     tester,
   ) async {
     final harness = await FlexifyTestHarness.create();
-    final selection = SelectionController<String>();
+    final selection = <String>{};
     var selectedAll = false;
 
     await harness.pump(

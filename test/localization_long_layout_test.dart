@@ -8,7 +8,6 @@ import 'package:flexify/l10n/generated/app_localizations.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/session_sets.dart';
 import 'package:flexify/plan/workout_sessions.dart';
-import 'package:flexify/selection_controller.dart';
 import 'package:flexify/settings/appearance_settings.dart';
 import 'package:flexify/settings/plan_settings.dart';
 import 'package:flexify/timer/timer_page.dart';
@@ -125,7 +124,7 @@ void main() {
     const locale = Locale('pl');
     final l10n = lookupAppLocalizations(locale);
     final harness = await FlexifyTestHarness.create();
-    final selection = SelectionController<String>()..add('User entry');
+    final selection = <String>{}..add('User entry');
 
     await harness.pump(
       tester,

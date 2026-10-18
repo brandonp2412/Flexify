@@ -15,7 +15,6 @@ import 'package:flexify/graphs_filters.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/responsive.dart';
-import 'package:flexify/selection_controller.dart';
 import 'package:flexify/utils.dart';
 import 'package:flexify/platform_page_route.dart';
 import 'package:flutter/material.dart';
@@ -110,7 +109,7 @@ class GraphsPageState extends State<GraphsPage>
     return _peekFuture!;
   }
 
-  final _selection = SelectionController<String>();
+  final _selection = <String>{};
   final GlobalKey<NavigatorState> navKey = GlobalKey<NavigatorState>();
   String _search = '';
   String? _category;
@@ -149,7 +148,7 @@ class GraphsPageState extends State<GraphsPage>
   }
 
   Future<void> onDelete() async {
-    final keys = Set<String>.of(_selection.selected);
+    final keys = Set<String>.of(_selection);
     final summaries = filterGraphSummariesBySelection(
       await _stream.first,
       keys,
@@ -181,7 +180,7 @@ class GraphsPageState extends State<GraphsPage>
   }
 
   Future<int> _countSelectedGraphRecords() async {
-    final keys = Set<String>.of(_selection.selected);
+    final keys = Set<String>.of(_selection);
     final summaries = filterGraphSummariesBySelection(
       await _stream.first,
       keys,
@@ -229,7 +228,7 @@ class GraphsPageState extends State<GraphsPage>
     if (confirmed != true || !mounted) return;
 
     setState(() {
-      _selection.setAll([summary.selectionKey]);
+      _selection.addAll([summary.selectionKey]);
     });
     await onDelete();
   }
@@ -440,7 +439,7 @@ class GraphsPageState extends State<GraphsPage>
                     },
                     onDelete: () async => onDelete(),
                     onSelectAll: () => setState(() {
-                      _selection.setAll(
+                      _selection.addAll(
                         exerciseSets.map(
                           (exerciseSet) => exerciseSet.selectionKey,
                         ),
@@ -484,7 +483,7 @@ class GraphsPageState extends State<GraphsPage>
 
   Future<void> onShare() async {
     final l10n = context.l10n;
-    final copy = Set<String>.of(_selection.selected);
+    final copy = Set<String>.of(_selection);
     setState(() {
       _selection.clear();
     });
@@ -546,11 +545,11 @@ class GraphsPageState extends State<GraphsPage>
         settings.peekGraph && exerciseSets.firstOrNull != null;
 
     Widget graphTile(GraphExerciseSummary exerciseSet) => GraphTile(
-      selected: _selection.selected,
+      selected: _selection,
       exerciseSet: exerciseSet,
       onSelect: (key) async {
         setState(() {
-          _selection.toggle(key);
+          if (!_selection.remove(key)) _selection.add(key);
         });
         final total = await _countSelectedGraphRecords();
         if (!mounted) return;
@@ -744,11 +743,11 @@ class GraphsPageState extends State<GraphsPage>
 
         return ResponsiveContent(
           child: GraphTile(
-            selected: _selection.selected,
+            selected: _selection,
             exerciseSet: exerciseSet,
             onSelect: (key) async {
               setState(() {
-                _selection.toggle(key);
+                if (!_selection.remove(key)) _selection.add(key);
               });
               final total = await _countSelectedGraphRecords();
               if (!mounted) return;

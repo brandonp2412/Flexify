@@ -42,20 +42,6 @@ double? canonicalExerciseSetDistance(String unit, double value) {
   };
 }
 
-double _displayBodyWeight(String unit, double? bodyWeightKg) {
-  if (bodyWeightKg == null) return 0;
-  return switch (unit) {
-    'lb' => bodyWeightKg / 0.45359237,
-    'stone' => bodyWeightKg / 6.35029318,
-    _ => bodyWeightKg,
-  };
-}
-
-double? _canonicalBodyWeight(String unit, double value) {
-  if (value == 0) return null;
-  return canonicalExerciseSetLoad(unit, value);
-}
-
 ExerciseSetView _toExerciseSetView(AppDatabase database, TypedResult row) {
   final set = row.readTable(database.exerciseSets);
   final exercise = row.readTable(database.exercises);
@@ -65,7 +51,9 @@ ExerciseSetView _toExerciseSetView(AppDatabase database, TypedResult row) {
 
   return ExerciseSetView(
     id: set.id,
-    bodyWeight: _displayBodyWeight(unit, set.bodyWeightKg),
+    bodyWeight: set.bodyWeightKg == null
+        ? 0
+        : displayBodyWeight(unit, set.bodyWeightKg!),
     cardio: exercise.kind == 'cardio',
     category: category?.name,
     created: set.timestamp.toLocal(),
@@ -360,7 +348,9 @@ Future<ExerciseSetView> insertExerciseSet(
 }) async {
   final resolvedBodyWeightKg =
       bodyWeightKg ??
-      _canonicalBodyWeight(exerciseSet.unit, exerciseSet.bodyWeight) ??
+      (exerciseSet.bodyWeight == 0
+          ? null
+          : canonicalBodyWeightKg(exerciseSet.unit, exerciseSet.bodyWeight)) ??
       (await getLatestBodyWeight(database))?.weightKg;
 
   final id = await database.exerciseSets.insertOne(
@@ -411,7 +401,12 @@ Future<void> updateExerciseSet(
           incline: Value(exerciseSet.incline?.toDouble()),
           bodyWeightKg: Value(
             bodyWeightKg ??
-                _canonicalBodyWeight(exerciseSet.unit, exerciseSet.bodyWeight),
+                (exerciseSet.bodyWeight == 0
+                    ? null
+                    : canonicalBodyWeightKg(
+                        exerciseSet.unit,
+                        exerciseSet.bodyWeight,
+                      )),
           ),
           notes: Value(exerciseSet.notes),
         ),

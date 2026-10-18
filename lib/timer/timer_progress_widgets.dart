@@ -44,7 +44,7 @@ class _TimerCircularProgressIndicatorState
     super.didChangeDependencies();
 
     final timerState = Provider.of<TimerState>(context);
-    final duration = timerState.timer.getDuration();
+    final duration = timerState.timer.total;
     final remaining = timerState.timer.getRemaining();
     final isActive = duration > Duration.zero && remaining > Duration.zero;
 
@@ -78,7 +78,7 @@ class _TimerCircularProgressIndicatorState
   @override
   Widget build(BuildContext context) {
     final timerState = Provider.of<TimerState>(context);
-    final duration = timerState.timer.getDuration();
+    final duration = timerState.timer.total;
     final elapsed = timerState.timer.getElapsed();
     final remaining = timerState.timer.getRemaining();
 
@@ -419,7 +419,7 @@ class _TimerProgressIndicatorState extends State<TimerProgressIndicator>
   Widget build(BuildContext context) {
     return Consumer<TimerState>(
       builder: (context, timerState, child) {
-        final duration = timerState.timer.getDuration();
+        final duration = timerState.timer.total;
         final elapsed = timerState.timer.getElapsed();
         final remaining = timerState.timer.getRemaining();
 
