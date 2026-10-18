@@ -14,7 +14,6 @@ import 'package:flexify/plan/exercise_tile.dart';
 import 'package:flexify/plan/plan_queries.dart';
 import 'package:flexify/platform_page_route.dart';
 import 'package:flexify/responsive.dart';
-import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
 
 class EditPlanPage extends StatefulWidget {
@@ -324,11 +323,35 @@ class _EditPlanPageState extends State<EditPlanPage> {
     for (int i = 0; i < _days.length; i++)
       if (_days[i]) selected.add(weekdays[i]);
 
-    if (selected.isEmpty && _titleCtrl.text.isEmpty)
-      return toast(context.l10n.selectDays);
+    if (selected.isEmpty && _titleCtrl.text.isEmpty) {
+      rootScaffoldMessenger.currentState!.showSnackBar(
+        SnackBar(
+          content: Text(context.l10n.selectDays),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(24),
+          ),
+          duration: const Duration(seconds: 4),
+          persist: false,
+        ),
+      );
+      return;
+    }
 
-    if (_exercises.where((draft) => draft.planExercise.enabled.value).isEmpty)
-      return toast(context.l10n.selectExercises);
+    if (_exercises.where((draft) => draft.planExercise.enabled.value).isEmpty) {
+      rootScaffoldMessenger.currentState!.showSnackBar(
+        SnackBar(
+          content: Text(context.l10n.selectExercises),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(24),
+          ),
+          duration: const Duration(seconds: 4),
+          persist: false,
+        ),
+      );
+      return;
+    }
 
     var newPlan = PlansCompanion.insert(
       days: selected.join(','),

@@ -5,7 +5,6 @@ import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/responsive.dart';
 import 'package:flexify/settings/category_management_page.dart';
-import 'package:flexify/utils.dart';
 import 'package:flexify/platform_page_route.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -149,7 +148,18 @@ getWorkoutSettingGroups(BuildContext context, String term, Setting settings) {
                   notifications: Value(!settings.notifications),
                 ),
               );
-              if (!settings.notifications) toast(l10n.positiveMessagesEnabled);
+              if (!settings.notifications)
+                rootScaffoldMessenger.currentState!.showSnackBar(
+                  SnackBar(
+                    content: Text(l10n.positiveMessagesEnabled),
+                    behavior: SnackBarBehavior.floating,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(24),
+                    ),
+                    duration: const Duration(seconds: 4),
+                    persist: false,
+                  ),
+                );
             },
             trailing: Switch(
               value: settings.notifications,

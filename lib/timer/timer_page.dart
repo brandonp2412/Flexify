@@ -2,12 +2,12 @@ import 'dart:io';
 
 import 'package:flexify/app_fab.dart';
 import 'package:flexify/l10n/l10n.dart';
+import 'package:flexify/main.dart';
 import 'package:flexify/responsive.dart';
 import 'package:flexify/settings/settings_page.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/timer/timer_progress_widgets.dart';
 import 'package:flexify/timer/timer_state.dart';
-import 'package:flexify/utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flexify/platform_page_route.dart';
 import 'package:flutter/material.dart';
@@ -139,11 +139,19 @@ class _TimerPageWidgetState extends State<_TimerPageWidget>
     if (!kIsWeb && Platform.isAndroid) return;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
-      toast(
-        context.l10n.timerFinishedToast,
-        action: SnackBarAction(
-          label: context.l10n.actionStop,
-          onPressed: widget.timerState.stopTimer,
+      rootScaffoldMessenger.currentState!.showSnackBar(
+        SnackBar(
+          content: Text(context.l10n.timerFinishedToast),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(24),
+          ),
+          action: SnackBarAction(
+            label: context.l10n.actionStop,
+            onPressed: widget.timerState.stopTimer,
+          ),
+          duration: const Duration(seconds: 4),
+          persist: false,
         ),
       );
     });

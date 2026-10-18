@@ -2,7 +2,6 @@ import 'package:drift/drift.dart' hide Column;
 import 'package:flexify/database/database.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
-import 'package:flexify/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -39,8 +38,20 @@ class _TabSettingsState extends State<TabSettings> {
   }
 
   void setTab(String name, bool enabled) {
-    if (!enabled && _tabs.where((tab) => tab.enabled == true).length == 1)
-      return toast(context.l10n.atLeastOneTab);
+    if (!enabled && _tabs.where((tab) => tab.enabled == true).length == 1) {
+      rootScaffoldMessenger.currentState!.showSnackBar(
+        SnackBar(
+          content: Text(context.l10n.atLeastOneTab),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(24),
+          ),
+          duration: const Duration(seconds: 4),
+          persist: false,
+        ),
+      );
+      return;
+    }
     final index = _tabs.indexWhere((tappedTab) => tappedTab.name == name);
     setState(() {
       _tabs[index] = (name: name, enabled: enabled);

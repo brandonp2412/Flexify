@@ -6,6 +6,7 @@ import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/plans_page.dart';
 import 'package:flexify/plan/start_plan_page.dart';
+import 'package:flexify/platform_page_route.dart';
 import 'package:flexify/responsive.dart';
 import 'package:flexify/sets/history_page.dart';
 import 'package:flexify/settings/settings_page.dart';
@@ -13,9 +14,7 @@ import 'package:flexify/settings/whats_new.dart';
 import 'package:flexify/timer/timer_page.dart';
 import 'package:flexify/timer/timer_progress_widgets.dart';
 import 'package:flexify/timer/timer_state.dart';
-import 'package:flexify/utils.dart';
 import 'package:flexify/update_notice.dart';
-import 'package:flexify/platform_page_route.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
@@ -65,13 +64,21 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       }
 
       if (mounted)
-        toast(
-          context.l10n.newVersion(pkg.version),
-          action: SnackBarAction(
-            label: context.l10n.changes,
-            onPressed: () => Navigator.of(
-              context,
-            ).push(FlexPageRoute(builder: (context) => const WhatsNew())),
+        rootScaffoldMessenger.currentState!.showSnackBar(
+          SnackBar(
+            content: Text(context.l10n.newVersion(pkg.version)),
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(24),
+            ),
+            action: SnackBarAction(
+              label: context.l10n.changes,
+              onPressed: () => Navigator.of(
+                context,
+              ).push(FlexPageRoute(builder: (context) => const WhatsNew())),
+            ),
+            duration: const Duration(seconds: 4),
+            persist: false,
           ),
         );
     });
@@ -155,7 +162,20 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     final state = context.read<Setting>();
     final tabs = state.tabs.split(',');
 
-    if (tabs.length == 1) return toast(context.l10n.cannotHideAllTabs);
+    if (tabs.length == 1) {
+      rootScaffoldMessenger.currentState!.showSnackBar(
+        SnackBar(
+          content: Text(context.l10n.cannotHideAllTabs),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(24),
+          ),
+          duration: const Duration(seconds: 4),
+          persist: false,
+        ),
+      );
+      return;
+    }
 
     final label = BottomNav.labelForTab(context, tab);
     final confirmed = await showModalBottomSheet<bool>(
@@ -213,7 +233,18 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     await db.settings.update().write(
       SettingsCompanion(tabs: Value(tabs.join(','))),
     );
-    if (context.mounted) toast(context.l10n.removedTab(label));
+    if (context.mounted)
+      rootScaffoldMessenger.currentState!.showSnackBar(
+        SnackBar(
+          content: Text(context.l10n.removedTab(label)),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(24),
+          ),
+          duration: const Duration(seconds: 4),
+          persist: false,
+        ),
+      );
   }
 
   @override

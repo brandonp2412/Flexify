@@ -8,19 +8,6 @@ import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
-void toast(String message, {SnackBarAction? action, Duration? duration}) {
-  rootScaffoldMessenger.currentState!.showSnackBar(
-    SnackBar(
-      content: Text(message),
-      behavior: SnackBarBehavior.floating,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-      action: action,
-      duration: duration ?? const Duration(seconds: 4),
-      persist: false,
-    ),
-  );
-}
-
 Future<BodyWeight?> getBodyWeight() => getLatestBodyWeight(db);
 
 bool isSameDay(DateTime date1, DateTime date2) {
@@ -29,18 +16,18 @@ bool isSameDay(DateTime date1, DateTime date2) {
       date1.day == date2.day;
 }
 
-final _dateFormatters = <(String, String), DateFormat>{};
-final _numberFormatters = <(String, int, int), NumberFormat>{};
-final _editableNumberFormatters = <String, NumberFormat>{};
-final _parseNumberFormatters = <String, NumberFormat>{};
-final _percentFormatters = <(String, int), NumberFormat>{};
+final _dateFormat = <(String, String), DateFormat>{};
+final _numberFormat = <(String, int, int), NumberFormat>{};
+final _editableNumberFormat = <String, NumberFormat>{};
+final _parseNumberFormat = <String, NumberFormat>{};
+final _percentFormat = <(String, int), NumberFormat>{};
 
 String _localeName(BuildContext context) =>
     Localizations.localeOf(context).toLanguageTag();
 
 String formatDisplayDate(BuildContext context, DateTime value, String pattern) {
   final locale = _localeName(context);
-  final formatter = _dateFormatters.putIfAbsent((
+  final formatter = _dateFormat.putIfAbsent((
     locale,
     pattern,
   ), () => DateFormat(pattern, locale));
@@ -54,7 +41,7 @@ String formatDisplayNumber(
   int maximumFractionDigits = 2,
 }) {
   final locale = _localeName(context);
-  final formatter = _numberFormatters.putIfAbsent(
+  final formatter = _numberFormat.putIfAbsent(
     (locale, minimumFractionDigits, maximumFractionDigits),
     () => NumberFormat.decimalPattern(locale)
       ..minimumFractionDigits = minimumFractionDigits
@@ -65,7 +52,7 @@ String formatDisplayNumber(
 
 String formatEditableNumber(BuildContext context, num value) {
   final locale = _localeName(context);
-  return _editableNumberFormatters
+  return _editableNumberFormat
       .putIfAbsent(locale, () => NumberFormat('0.##', locale))
       .format(value);
 }
@@ -79,7 +66,7 @@ double? parseDisplayNumber(BuildContext context, String value) {
 
   try {
     final locale = _localeName(context);
-    return _parseNumberFormatters
+    return _parseNumberFormat
         .putIfAbsent(locale, () => NumberFormat.decimalPattern(locale))
         .parse(input)
         .toDouble();
@@ -94,7 +81,7 @@ String formatDisplayPercent(
   int maximumFractionDigits = 2,
 }) {
   final locale = _localeName(context);
-  final formatter = _percentFormatters.putIfAbsent(
+  final formatter = _percentFormat.putIfAbsent(
     (locale, maximumFractionDigits),
     () =>
         NumberFormat.percentPattern(locale)
