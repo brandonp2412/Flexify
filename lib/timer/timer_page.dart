@@ -11,22 +11,14 @@ import 'package:flexify/utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flexify/platform_page_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flexify/tab_navigation_observer.dart';
 import 'package:provider/provider.dart';
 
 class TimerPage extends StatefulWidget {
   final int? total;
   final int? progress;
   final TabController? tabController;
-  final ValueChanged<bool>? onNestedNavigationChanged;
 
-  const TimerPage({
-    super.key,
-    this.total,
-    this.progress,
-    this.tabController,
-    this.onNestedNavigationChanged,
-  });
+  const TimerPage({super.key, this.total, this.progress, this.tabController});
 
   @override
   createState() => TimerPageState();
@@ -35,9 +27,6 @@ class TimerPage extends StatefulWidget {
 class TimerPageState extends State<TimerPage>
     with AutomaticKeepAliveClientMixin {
   final GlobalKey<NavigatorState> _navKey = GlobalKey<NavigatorState>();
-  late final _navVisibilityObserver = TabNavigationObserver(
-    (visible) => widget.onNestedNavigationChanged?.call(visible),
-  );
 
   @override
   bool get wantKeepAlive => true;
@@ -59,7 +48,6 @@ class TimerPageState extends State<TimerPage>
       },
       child: Navigator(
         key: _navKey,
-        observers: [_navVisibilityObserver],
         onGenerateRoute: (settings) => FlexPageRoute(
           builder: (context) => _TimerPageWidget(
             timerState: timerState,

@@ -14,7 +14,6 @@ import 'package:flexify/responsive.dart';
 import 'package:flexify/selection_controller.dart';
 import 'package:flexify/platform_page_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flexify/tab_navigation_observer.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -39,13 +38,8 @@ class _PlansNavigatorObserver extends NavigatorObserver {
 
 class PlansPage extends StatefulWidget {
   final TabController tabController;
-  final ValueChanged<bool>? onNestedNavigationChanged;
 
-  const PlansPage({
-    super.key,
-    required this.tabController,
-    this.onNestedNavigationChanged,
-  });
+  const PlansPage({super.key, required this.tabController});
 
   @override
   State<PlansPage> createState() => PlansPageState();
@@ -55,9 +49,6 @@ class PlansPageState extends State<PlansPage>
     with AutomaticKeepAliveClientMixin {
   final GlobalKey<NavigatorState> navKey = GlobalKey<NavigatorState>();
   final _routeObserver = _PlansNavigatorObserver();
-  late final _navVisibilityObserver = TabNavigationObserver(
-    (visible) => widget.onNestedNavigationChanged?.call(visible),
-  );
 
   @override
   bool get wantKeepAlive => true;
@@ -90,7 +81,7 @@ class PlansPageState extends State<PlansPage>
       },
       child: Navigator(
         key: navKey,
-        observers: [_routeObserver, _navVisibilityObserver],
+        observers: [_routeObserver],
         onGenerateRoute: (settings) => FlexPageRoute(
           builder: (context) => _PlansPageWidget(navKey: navKey),
           settings: settings,

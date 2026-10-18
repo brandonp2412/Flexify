@@ -19,7 +19,6 @@ import 'package:flexify/sets/history_list.dart';
 import 'package:flexify/utils.dart';
 import 'package:flexify/platform_page_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flexify/tab_navigation_observer.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -84,13 +83,8 @@ class HistoryGroupingCache {
 
 class HistoryPage extends StatefulWidget {
   final TabController tabController;
-  final ValueChanged<bool>? onNestedNavigationChanged;
 
-  const HistoryPage({
-    super.key,
-    required this.tabController,
-    this.onNestedNavigationChanged,
-  });
+  const HistoryPage({super.key, required this.tabController});
 
   @override
   createState() => HistoryPageState();
@@ -99,9 +93,6 @@ class HistoryPage extends StatefulWidget {
 class HistoryPageState extends State<HistoryPage>
     with AutomaticKeepAliveClientMixin {
   final GlobalKey<NavigatorState> _navKey = GlobalKey<NavigatorState>();
-  late final _navVisibilityObserver = TabNavigationObserver(
-    (visible) => widget.onNestedNavigationChanged?.call(visible),
-  );
 
   @override
   bool get wantKeepAlive => true;
@@ -119,7 +110,6 @@ class HistoryPageState extends State<HistoryPage>
       },
       child: Navigator(
         key: _navKey,
-        observers: [_navVisibilityObserver],
         onGenerateRoute: (settings) => FlexPageRoute(
           builder: (context) => _HistoryPageWidget(navigatorKey: _navKey),
           settings: settings,

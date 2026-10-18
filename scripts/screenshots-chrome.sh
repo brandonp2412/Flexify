@@ -72,7 +72,7 @@ if [ -z "$only" ]; then
 fi
 
 # Run Flutter drive command targeting Chrome
-if timeout --signal=TERM --kill-after=5s 240s flutter drive \
+if timeout --signal=TERM --kill-after=5s 180s flutter drive \
     --driver=test_driver/integration_test.dart \
     --target=integration_test/screenshot_test.dart \
     "${dart_define[@]}" \
@@ -81,7 +81,19 @@ if timeout --signal=TERM --kill-after=5s 240s flutter drive \
 else
     code=$?
     echo "Flutter driver failed with exit status $code"
-    tail -n 100 /tmp/flexify-chromedriver.log || true
+    sessions=$(curl -fsS --max-time 3 http://localhost:4444/sessions || true)
+    session=$(jq -r '.value[0].id // empty' <<< "$sessions" 2>/dev/null || true)
+    if [ -n "$session" ]; then
+        echo "ChromeDriver session: $session"
+        curl -fsS --max-time 5 -X POST -H 'Content-Type: application/json' \
+            -d '{"type":"browser"}' "http://localhost:4444/session/$session/se/log" \
+            | jq -r '.value[]?.message // empty' | tail -n 80 || true
+        curl -fsS --max-time 5 "http://localhost:4444/session/$session/source" \
+            | jq -r '.value // empty' | head -c 4000 || true
+        curl -fsS --max-time 10 "http://localhost:4444/session/$session/screenshot" \
+            | jq -r '.value // empty' | base64 -d > fastlane/screenshots/desktop-debug.png || true
+    fi
+    tail -n 35 /tmp/flexify-chromedriver.log || true
     exit "$code"
 fi
 
