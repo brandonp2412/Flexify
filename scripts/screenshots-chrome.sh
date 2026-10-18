@@ -51,7 +51,7 @@ trap cleanup EXIT
 
 if ! curl -s -o /dev/null http://localhost:4444/status; then
     echo "Starting chromedriver on port 4444..."
-    chromedriver --port=4444 >/tmp/flexify-chromedriver.log 2>&1 &
+    chromedriver --verbose --port=4444 >/tmp/flexify-chromedriver.log 2>&1 &
     chromedriver_pid=$!
 
     for _ in $(seq 1 20); do
@@ -72,10 +72,18 @@ if [ -z "$only" ]; then
 fi
 
 # Run Flutter drive command targeting Chrome
-flutter drive --driver=test_driver/integration_test.dart \
+if timeout --signal=TERM --kill-after=5s 360s flutter drive \
+    --driver=test_driver/integration_test.dart \
     --target=integration_test/screenshot_test.dart \
     "${dart_define[@]}" \
-    -d chrome "${headless_flag[@]}" "${chrome_binary[@]}"
+    -d chrome "${headless_flag[@]}" "${chrome_binary[@]}"; then
+    :
+else
+    code=$?
+    echo "Flutter driver failed with exit status $code"
+    tail -n 100 /tmp/flexify-chromedriver.log || true
+    exit "$code"
+fi
 
 if [ -z "$only" ]; then
     for number in {1..8}; do
