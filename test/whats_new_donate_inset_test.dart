@@ -29,7 +29,7 @@ void main() {
         ),
       ),
     );
-    await tester.pump();
+    await tester.pumpAndSettle();
 
     final scaffold = tester.widget<Scaffold>(find.byType(Scaffold));
     expect(scaffold.floatingActionButton, isNull);
@@ -38,6 +38,17 @@ void main() {
     final donate = find.byType(FloatingActionButton);
     expect(donate, findsOneWidget);
     expect(tester.getBottomRight(donate).dy, lessThanOrEqualTo(780 - 32));
+
+    final nextPage = find.byTooltip('Next page');
+    expect(nextPage, findsOneWidget);
+    expect(
+      tester.getTopRight(nextPage).dx,
+      lessThan(tester.getTopLeft(donate).dx),
+    );
+    expect(
+      (tester.getCenter(nextPage).dy - tester.getCenter(donate).dy).abs(),
+      lessThan(1),
+    );
     expect(tester.takeException(), isNull);
   });
 }

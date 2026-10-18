@@ -193,6 +193,8 @@ class _WhatsNewState extends State<WhatsNew> {
 
   @override
   Widget build(BuildContext context) {
+    final nestedTabRoute =
+        Navigator.of(context) != Navigator.of(context, rootNavigator: true);
     return Scaffold(
       appBar: AppBar(title: Text(context.l10n.whatsNewTitle)),
       body: Column(
@@ -208,42 +210,52 @@ class _WhatsNewState extends State<WhatsNew> {
                     itemCount: _changelogs.length,
                   ),
           ),
-          if (_changelogFiles.isNotEmpty)
-            Padding(
-              padding: const EdgeInsets.only(bottom: 8),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  IconButton(
-                    onPressed: _page > 0 ? () => _setPage(_page - 1) : null,
-                    icon: const Icon(Icons.chevron_left),
-                    tooltip: MaterialLocalizations.of(
-                      context,
-                    ).previousPageTooltip,
-                  ),
-                  Text(
-                    '${_page + 1} / ${(_changelogFiles.length / _pageSize).ceil()}',
-                  ),
-                  IconButton(
-                    onPressed:
-                        _page + 1 < (_changelogFiles.length / _pageSize).ceil()
-                        ? () => _setPage(_page + 1)
-                        : null,
-                    icon: const Icon(Icons.chevron_right),
-                    tooltip: MaterialLocalizations.of(context).nextPageTooltip,
-                  ),
-                ],
-              ),
-            ),
         ],
       ),
       bottomNavigationBar: SafeArea(
         top: false,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+          padding: EdgeInsets.fromLTRB(16, 8, 16, nestedTabRoute ? 88 : 16),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              if (_changelogFiles.isNotEmpty)
+                Flexible(
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    alignment: Alignment.centerLeft,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          onPressed: _page > 0
+                              ? () => _setPage(_page - 1)
+                              : null,
+                          icon: const Icon(Icons.chevron_left),
+                          tooltip: MaterialLocalizations.of(
+                            context,
+                          ).previousPageTooltip,
+                        ),
+                        Text(
+                          '${_page + 1} / ${(_changelogFiles.length / _pageSize).ceil()}',
+                        ),
+                        IconButton(
+                          onPressed:
+                              _page + 1 <
+                                  (_changelogFiles.length / _pageSize).ceil()
+                              ? () => _setPage(_page + 1)
+                              : null,
+                          icon: const Icon(Icons.chevron_right),
+                          tooltip: MaterialLocalizations.of(
+                            context,
+                          ).nextPageTooltip,
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+              else
+                const Spacer(),
               FloatingActionButton.extended(
                 heroTag: null,
                 icon: const Icon(Icons.favorite_outline),
