@@ -271,12 +271,9 @@ class TimerService : Service() {
     fun battery(requestUnavailableMessage: String) {
         val powerManager =
             applicationContext.getSystemService(Context.POWER_SERVICE) as PowerManager
-        val ignoring =
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-                powerManager.isIgnoringBatteryOptimizations(
-                    applicationContext.packageName
-                )
-            else true
+        val ignoring = powerManager.isIgnoringBatteryOptimizations(
+            applicationContext.packageName
+        )
         if (ignoring) return
         val intent = Intent(android.provider.Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS)
         intent.data = Uri.parse("package:" + applicationContext.packageName)
