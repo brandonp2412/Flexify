@@ -226,25 +226,25 @@ class TimerService : Service() {
         if (timeStamp == 0.toLong()) updateAppUI()
     }
 
-    private fun onTimerStart(intent: Intent?) {
-        description = intent?.getStringExtra("description").orEmpty()
-        currentTarget = intent?.getStringExtra(MainActivity.TIMER_TARGET_EXTRA) ?: "timer"
-        alarmSound = intent?.getStringExtra("alarmSound")
+    private fun onTimerStart(intent: Intent) {
+        description = intent.getStringExtra("description").orEmpty()
+        currentTarget = intent.getStringExtra(MainActivity.TIMER_TARGET_EXTRA) ?: "timer"
+        alarmSound = intent.getStringExtra("alarmSound")
             ?: "android.resource://$packageName/${R.raw.argon}"
-        shouldVibrate = intent?.getBooleanExtra("vibrate", true) ?: true
-        shouldKeepRinging = intent?.getBooleanExtra("keepRinging", false) ?: false
-        stopLabel = intent?.getStringExtra("stopLabel").orEmpty()
-        addOneMinuteLabel = intent?.getStringExtra("addOneMinuteLabel").orEmpty()
-        timerChannelName = intent?.getStringExtra("timerChannelName").orEmpty()
-        timerDesc = intent?.getStringExtra("timerChannelDescription").orEmpty()
-        doneChannel = intent?.getStringExtra("timerFinishedChannelName").orEmpty()
+        shouldVibrate = intent.getBooleanExtra("vibrate", true)
+        shouldKeepRinging = intent.getBooleanExtra("keepRinging", false)
+        stopLabel = intent.getStringExtra("stopLabel").orEmpty()
+        addOneMinuteLabel = intent.getStringExtra("addOneMinuteLabel").orEmpty()
+        timerChannelName = intent.getStringExtra("timerChannelName").orEmpty()
+        timerDesc = intent.getStringExtra("timerChannelDescription").orEmpty()
+        doneChannel = intent.getStringExtra("timerFinishedChannelName").orEmpty()
         doneDesc =
-            intent?.getStringExtra("timerFinishedChannelDescription").orEmpty()
-        doneTitle = intent?.getStringExtra("timerFinishedTitle").orEmpty()
+            intent.getStringExtra("timerFinishedChannelDescription").orEmpty()
+        doneTitle = intent.getStringExtra("timerFinishedTitle").orEmpty()
         alarmUnavailable =
-            intent?.getStringExtra("exactAlarmRequestUnavailable").orEmpty()
-        val duration = intent?.getIntExtra("milliseconds", 0) ?: (3 * 60 * 1000)
-        val timestamp = intent?.getLongExtra("timeStamp", 0) ?: 0
+            intent.getStringExtra("exactAlarmRequestUnavailable").orEmpty()
+        val duration = intent.getIntExtra("milliseconds", 0)
+        val timestamp = intent.getLongExtra("timeStamp", 0)
         startTimer(duration.toLong(), timestamp)
     }
 
