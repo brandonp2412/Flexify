@@ -163,9 +163,8 @@ class MainActivity : FlutterActivity() {
                 }
 
                 "pick" -> {
-                    val dbPath = call.argument<String>("dbPath")!!
                     pendingPickResult = result
-                    pick(dbPath)
+                    pick()
                 }
 
                 "setBackupLocalizations" -> {
@@ -333,8 +332,7 @@ class MainActivity : FlutterActivity() {
         context.startForegroundService(intent)
     }
 
-    private fun pick(path: String) {
-        Log.d("MainActivity.pick", "dbPath=$path")
+    private fun pick() {
         activity.startActivityForResult(Intent(Intent.ACTION_OPEN_DOCUMENT_TREE), WRITE_REQUEST_CODE)
     }
 
