@@ -72,10 +72,7 @@ Future<void> tapBackup(bool value, AppLocalizations l10n) async {
   }
 
   try {
-    final dbPath = (await getDatabaseFile()).path;
-    final selectedPath = await androidChannel.invokeMethod<String>('pick', {
-      'dbPath': dbPath,
-    });
+    final selectedPath = await androidChannel.invokeMethod<String>('pick');
     if (selectedPath == null) return;
 
     await db.settings.update().write(
