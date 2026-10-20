@@ -1564,4 +1564,9 @@ class AppLocalizationsMs extends AppLocalizations {
   String setNumber(int number) {
     return 'Set ke-$number';
   }
+
+  @override
+  String previousPerformance(String date, String sets) {
+    return 'Sebelum ini $date · $sets';
+  }
 }

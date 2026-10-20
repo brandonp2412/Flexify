@@ -1542,4 +1542,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String setNumber(int number) {
     return 'المجموعة $number';
   }
+
+  @override
+  String previousPerformance(String date, String sets) {
+    return 'سابقاً $date · $sets';
+  }
 }

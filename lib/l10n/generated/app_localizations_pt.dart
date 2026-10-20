@@ -1576,6 +1576,11 @@ class AppLocalizationsPt extends AppLocalizations {
   String setNumber(int number) {
     return 'Série $number';
   }
+
+  @override
+  String previousPerformance(String date, String sets) {
+    return 'Anteriormente $date · $sets';
+  }
 }
 
 /// The translations for Portuguese, as used in Brazil (`pt_BR`).
@@ -3141,6 +3146,11 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   @override
   String setNumber(int number) {
     return 'Série $number';
+  }
+
+  @override
+  String previousPerformance(String date, String sets) {
+    return 'Anteriormente $date · $sets';
   }
 }
 
@@ -4715,5 +4725,10 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   @override
   String setNumber(int number) {
     return 'Série $number';
+  }
+
+  @override
+  String previousPerformance(String date, String sets) {
+    return 'Anteriormente $date · $sets';
   }
 }

@@ -488,5 +488,6 @@
   "nothingMatchesPlanSearch": "Niets komt overeen met “{query}”. Je kunt dit als nieuw schema aanmaken.",
   "createPlan": "Schema aanmaken",
   "createNamedPlan": "“{name}” aanmaken",
-  "setNumber": "Set {number}"
+  "setNumber": "Set {number}",
+  "previousPerformance": "Vorige keer {date} · {sets}"
 }

@@ -1486,6 +1486,11 @@ class AppLocalizationsZh extends AppLocalizations {
   String setNumber(int number) {
     return '第 $number 组';
   }
+
+  @override
+  String previousPerformance(String date, String sets) {
+    return '之前 $date · $sets';
+  }
 }
 
 /// The translations for Chinese, as used in China (`zh_CN`).
@@ -2970,6 +2975,11 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
   String setNumber(int number) {
     return '第 $number 组';
   }
+
+  @override
+  String previousPerformance(String date, String sets) {
+    return '之前 $date · $sets';
+  }
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -4453,5 +4463,10 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   @override
   String setNumber(int number) {
     return '第 $number 組';
+  }
+
+  @override
+  String previousPerformance(String date, String sets) {
+    return '之前 $date · $sets';
   }
 }

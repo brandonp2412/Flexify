@@ -246,6 +246,80 @@ Future<List<ExerciseSetView>> getExerciseSetsForExercise(
   return rows.map((row) => _toExerciseSetView(database, row)).toList();
 }
 
+class PreviousExerciseDay {
+  const PreviousExerciseDay({required this.day, required this.sets});
+
+  final DateTime day;
+  final List<ExerciseSetView> sets;
+}
+
+/// Sets from the last day each exercise was trained before [now], keyed by
+/// exercise id. Exercises without earlier sets are absent.
+Future<Map<int, PreviousExerciseDay>> getPreviousExerciseDays(
+  AppDatabase database, {
+  required Iterable<int> exerciseIds,
+  DateTime? now,
+}) async {
+  final ids = exerciseIds.toSet();
+  if (ids.isEmpty) return {};
+
+  final reference = (now ?? DateTime.now()).toLocal();
+  final startOfToday = DateTime(reference.year, reference.month, reference.day);
+  final latestTimestamp = database.exerciseSets.timestamp.max();
+
+  final latest =
+      await (database.selectOnly(database.exerciseSets)
+            ..addColumns([database.exerciseSets.exerciseId, latestTimestamp])
+            ..where(
+              database.exerciseSets.exerciseId.isIn(ids) &
+                  database.exerciseSets.timestamp.isSmallerThanValue(
+                    startOfToday,
+                  ),
+            )
+            ..groupBy([database.exerciseSets.exerciseId]))
+          .get();
+
+  final days = <int, DateTime>{};
+  for (final row in latest) {
+    final timestamp = row.read(latestTimestamp);
+    final exerciseId = row.read(database.exerciseSets.exerciseId);
+    if (timestamp == null || exerciseId == null) continue;
+    final local = timestamp.toLocal();
+    days[exerciseId] = DateTime(local.year, local.month, local.day);
+  }
+  if (days.isEmpty) return {};
+
+  Expression<bool>? previousDayFilter;
+  for (final entry in days.entries) {
+    final day = entry.value;
+    final dayFilter =
+        database.exerciseSets.exerciseId.equals(entry.key) &
+        database.exerciseSets.timestamp.isBiggerOrEqualValue(day) &
+        database.exerciseSets.timestamp.isSmallerThanValue(
+          DateTime(day.year, day.month, day.day + 1),
+        );
+    previousDayFilter = previousDayFilter == null
+        ? dayFilter
+        : previousDayFilter | dayFilter;
+  }
+
+  final rows = await (_exerciseSetQuery(
+    database,
+    order: OrderingMode.asc,
+  )..where(previousDayFilter!)).get();
+
+  final grouped = <int, List<ExerciseSetView>>{};
+  for (final row in rows) {
+    final exerciseId = row.readTable(database.exerciseSets).exerciseId;
+    (grouped[exerciseId] ??= []).add(_toExerciseSetView(database, row));
+  }
+
+  return {
+    for (final entry in grouped.entries)
+      entry.key: PreviousExerciseDay(day: days[entry.key]!, sets: entry.value),
+  };
+}
+
 Future<ExerciseSetView?> getExerciseSetForExerciseAt(
   AppDatabase database, {
   required String exerciseName,

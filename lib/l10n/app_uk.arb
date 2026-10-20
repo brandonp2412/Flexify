@@ -2013,5 +2013,6 @@
         "type": "int"
       }
     }
-  }
+  },
+  "previousPerformance": "Раніше {date} · {sets}"
 }

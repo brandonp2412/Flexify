@@ -488,5 +488,6 @@
   "nothingMatchesPlanSearch": "沒有與“{query}”符合的內容。你可以將其建立為新計畫。",
   "createPlan": "建立計畫",
   "createNamedPlan": "建立“{name}”",
-  "setNumber": "第 {number} 組"
+  "setNumber": "第 {number} 組",
+  "previousPerformance": "之前 {date} · {sets}"
 }

@@ -488,5 +488,6 @@
   "nothingMatchesPlanSearch": "Keine Treffer für „{query}“. Du kannst daraus einen neuen Plan erstellen.",
   "createPlan": "Plan erstellen",
   "createNamedPlan": "„{name}“ erstellen",
-  "setNumber": "Satz {number}"
+  "setNumber": "Satz {number}",
+  "previousPerformance": "Zuletzt {date} · {sets}"
 }

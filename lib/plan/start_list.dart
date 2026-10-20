@@ -4,6 +4,7 @@ import 'package:flexify/constants.dart';
 import 'package:flexify/custom_set_indicator.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/database/exercise_set_repository.dart';
+import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/exercise_modal.dart';
 import 'package:flexify/plan/plan_queries.dart';
@@ -20,6 +21,7 @@ class StartList extends StatefulWidget {
   final int selected;
   final Future<void> Function(int) onSelect;
   final List<GymCount> counts;
+  final Map<int, PreviousExerciseDay> previous;
   final Plan plan;
   final int? workoutId;
 
@@ -29,6 +31,7 @@ class StartList extends StatefulWidget {
     required this.selected,
     required this.onSelect,
     required this.counts,
+    required this.previous,
     required this.plan,
     required this.workoutId,
   });
@@ -85,6 +88,9 @@ class _StartListState extends State<StartList> {
         settings.planTrailing.replaceFirst('PlanTrailing.', ''),
       ),
     );
+    final shortDateFormat = context.select<Setting, String>(
+      (settings) => settings.shortDateFormat,
+    );
     final counts = widget.counts;
     final desktop = isDesktopLayout(context);
 
@@ -94,7 +100,7 @@ class _StartListState extends State<StartList> {
         buildDefaultDragHandles: !desktop,
         padding: EdgeInsets.only(bottom: desktop ? 24 : _bottomPadding),
         itemBuilder: (context, index) =>
-            itemBuilder(context, index, max, trailing, counts),
+            itemBuilder(context, index, max, trailing, counts, shortDateFormat),
         onReorderItem: (oldIndex, newIndex) async {
           final item = widget.exercises.removeAt(oldIndex);
           widget.exercises.insert(newIndex, item);
@@ -116,7 +122,7 @@ class _StartListState extends State<StartList> {
         padding: EdgeInsets.only(bottom: desktop ? 24 : _bottomPadding),
         itemCount: widget.exercises.length,
         itemBuilder: (context, index) =>
-            itemBuilder(context, index, max, trailing, counts),
+            itemBuilder(context, index, max, trailing, counts, shortDateFormat),
       );
   }
 
@@ -126,6 +132,7 @@ class _StartListState extends State<StartList> {
     int maxSets,
     PlanTrailing trailing,
     List<GymCount> counts,
+    String shortDateFormat,
   ) {
     final exercise = widget.exercises[index];
     final idx = counts.indexWhere(
@@ -177,6 +184,13 @@ class _StartListState extends State<StartList> {
 
     final colors = Theme.of(context).colorScheme;
     final selected = index == widget.selected;
+    final previous = widget.previous[exercise.exercise.id];
+    final previousText = previous == null || previous.sets.isEmpty
+        ? null
+        : _previousSummary(context, previous, shortDateFormat);
+    final previousStyle = Theme.of(
+      context,
+    ).textTheme.bodySmall?.copyWith(color: colors.onSurfaceVariant);
 
     Future<void> showActions() => showModalBottomSheet<void>(
       useRootNavigator: true,
@@ -230,16 +244,29 @@ class _StartListState extends State<StartList> {
                             const SizedBox(width: 12),
                           ],
                           Expanded(
-                            child: Text(
-                              exercise.exercise.name,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: Theme.of(context).textTheme.titleMedium
-                                  ?.copyWith(
-                                    fontWeight: selected
-                                        ? FontWeight.w700
-                                        : FontWeight.w600,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  exercise.exercise.name,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: Theme.of(context).textTheme.titleMedium
+                                      ?.copyWith(
+                                        fontWeight: selected
+                                            ? FontWeight.w700
+                                            : FontWeight.w600,
+                                      ),
+                                ),
+                                if (previousText != null)
+                                  Text(
+                                    previousText,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: previousStyle,
                                   ),
+                              ],
                             ),
                           ),
                           if (!compact) const SizedBox(width: 12),
@@ -284,6 +311,14 @@ class _StartListState extends State<StartList> {
               ListTile(
                 onTap: () => tap(index, counts),
                 trailing: trail,
+                subtitle: previousText == null
+                    ? null
+                    : Text(
+                        previousText,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: previousStyle,
+                      ),
                 title: Row(
                   children: [
                     RadioGroup<bool>(
@@ -308,4 +343,42 @@ class _StartListState extends State<StartList> {
       child: content,
     );
   }
+}
+
+String _previousSummary(
+  BuildContext context,
+  PreviousExerciseDay previous,
+  String shortDateFormat,
+) {
+  final date = formatDisplayDate(context, previous.day, shortDateFormat);
+  return context.l10n.previousPerformance(
+    date,
+    _previousSets(context, previous.sets),
+  );
+}
+
+String _previousSets(BuildContext context, List<ExerciseSetView> sets) {
+  final unit = displayMeasurementUnit(context.l10n, sets.first.unit);
+  final values = sets
+      .map((set) {
+        final weight = formatDisplayNumber(context, set.weight);
+        if (set.cardio) {
+          final minutes = set.duration.floor();
+          final seconds = ((set.duration * 60) % 60).floor().toString().padLeft(
+            2,
+            '0',
+          );
+          final value =
+              set.unit == 'kg' || set.unit == 'lb' || set.unit == 'stone'
+              ? '$weight $unit'
+              : '${formatDisplayNumber(context, set.distance)} $unit';
+          final incline = set.incline != null && set.incline! > 0
+              ? ' @ ${formatDisplayPercent(context, set.incline! / 100, maxDigits: 0)}'
+              : '';
+          return '$value / $minutes:$seconds$incline';
+        }
+        return '${formatDisplayNumber(context, set.reps)}×$weight';
+      })
+      .join(', ');
+  return sets.first.cardio ? values : '$values $unit';
 }

@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:flexify/database/database.dart';
+import 'package:flexify/database/exercise_set_repository.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/workout_sessions.dart';
 
@@ -186,6 +187,31 @@ Stream<List<GymCount>> watchGymCounts(int planId, int workoutId) {
             )
             .toList(),
       );
+}
+
+Stream<Map<int, PreviousExerciseDay>> watchPreviousExerciseDays(int planId) {
+  return db
+      .customSelect(
+        'SELECT 1',
+        readsFrom: {db.planExercises, db.exerciseSets, db.workouts},
+      )
+      .watch()
+      .asyncMap((_) async {
+        final rows =
+            await (db.selectOnly(db.planExercises)
+                  ..addColumns([db.planExercises.exerciseId])
+                  ..where(
+                    db.planExercises.planId.equals(planId) &
+                        db.planExercises.enabled.equals(true),
+                  ))
+                .get();
+        return getPreviousExerciseDays(
+          db,
+          exerciseIds: rows.map(
+            (row) => row.read(db.planExercises.exerciseId)!,
+          ),
+        );
+      });
 }
 
 Future<List<PlanExerciseDraft>> loadPlanExerciseDrafts(

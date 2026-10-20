@@ -2004,5 +2004,6 @@
         "type": "int"
       }
     }
-  }
+  },
+  "previousPerformance": "پہلے {date} · {sets}"
 }

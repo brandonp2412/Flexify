@@ -2013,5 +2013,17 @@
         "type": "int"
       }
     }
+  },
+  "previousPerformance": "Previously {date} · {sets}",
+  "@previousPerformance": {
+    "description": "Summary of the last day an exercise was trained.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "sets": {
+        "type": "String"
+      }
+    }
   }
 }

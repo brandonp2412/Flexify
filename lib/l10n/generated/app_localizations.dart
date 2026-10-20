@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:intl/intl.dart' as intl;
 
 import 'app_localizations_ar.dart';
 import 'app_localizations_bn.dart';
@@ -82,7 +83,8 @@ import 'app_localizations_zh.dart';
 /// be consistent with the languages listed in the AppLocalizations.supportedLocales
 /// property.
 abstract class AppLocalizations {
-  AppLocalizations(String locale) : localeName = locale.replaceAll('-', '_');
+  AppLocalizations(String locale)
+    : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   final String localeName;
 
@@ -2877,6 +2879,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Set {number}'**
   String setNumber(int number);
+
+  /// Summary of the last day an exercise was trained.
+  ///
+  /// In en, this message translates to:
+  /// **'Previously {date} · {sets}'**
+  String previousPerformance(String date, String sets);
 }
 
 class _AppLocalizationsDelegate

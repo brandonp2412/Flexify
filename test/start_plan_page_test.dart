@@ -294,6 +294,60 @@ void main() {
     );
   });
 
+  testWidgets('StartPlanPage shows the previous day summary per exercise', (
+    WidgetTester tester,
+  ) async {
+    final harness = await FlexifyTestHarness.create();
+    final database = harness.database;
+    final yesterday = DateTime.now().subtract(const Duration(days: 1));
+
+    await insertExerciseSetFixture(
+      database,
+      'Bench press',
+      created: DateTime(yesterday.year, yesterday.month, yesterday.day, 9),
+      reps: 8,
+      weight: 90,
+    );
+    await insertExerciseSetFixture(
+      database,
+      'Bench press',
+      created: DateTime(yesterday.year, yesterday.month, yesterday.day, 9, 5),
+      reps: 6,
+      weight: 95,
+    );
+
+    final id = await database.plans.insertOne(planFixture(title: 'Push day'));
+    await insertPlanExerciseFixture(
+      database,
+      planId: id,
+      exercise: 'Bench press',
+      sequence: 0,
+    );
+    await insertPlanExerciseFixture(
+      database,
+      planId: id,
+      exercise: 'Cable fly',
+      sequence: 1,
+    );
+    final plan =
+        await (database.plans.select()..where((plan) => plan.id.equals(id)))
+            .getSingle();
+
+    await harness.pump(tester, StartPlanPage(plan: plan));
+    await tester.pumpAndSettle();
+
+    expect(find.textContaining('Previously'), findsOneWidget);
+    expect(find.textContaining('8×90, 6×95 kg'), findsOneWidget);
+    expect(find.textContaining('Cable fly'), findsOneWidget);
+
+    await tester.binding.setSurfaceSize(const Size(1200, 800));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    await tester.pumpAndSettle();
+
+    expect(find.textContaining('Previously'), findsOneWidget);
+    expect(find.textContaining('8×90, 6×95 kg'), findsOneWidget);
+  });
+
   testWidgets('all translated locales complete the core workout save flow', (
     WidgetTester tester,
   ) async {

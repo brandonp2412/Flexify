@@ -1575,4 +1575,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String setNumber(int number) {
     return 'Serie $number';
   }
+
+  @override
+  String previousPerformance(String date, String sets) {
+    return 'Anteriormente $date · $sets';
+  }
 }

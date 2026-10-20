@@ -69,6 +69,8 @@ class _StartPlanPageState extends State<StartPlanPage>
 
   Stream<List<PlanExerciseEntry>>? _stream;
   Stream<List<GymCount>>? _gymCountsStream;
+  StreamSubscription<Map<int, PreviousExerciseDay>>? _previousDaysSub;
+  Map<int, PreviousExerciseDay> _previousDays = const {};
   StreamSubscription<Plan?>? _planSub;
   String _unit = 'kg';
 
@@ -135,6 +137,7 @@ class _StartPlanPageState extends State<StartPlanPage>
                     selected: _selected,
                     onSelect: select,
                     counts: counts,
+                    previous: _previousDays,
                     plan: widget.plan,
                     workoutId: workout?.id,
                   );
@@ -585,6 +588,7 @@ class _StartPlanPageState extends State<StartPlanPage>
     WidgetsBinding.instance.removeObserver(this);
     dbVersion.removeListener(_reloadDatabaseStreams);
     _planSub?.cancel();
+    _previousDaysSub?.cancel();
 
     super.dispose();
   }
@@ -668,6 +672,13 @@ class _StartPlanPageState extends State<StartPlanPage>
       _gymCountsStream = _workoutFuture.asStream().asyncExpand(
         (workout) => watchGymCounts(widget.plan.id, workout.id),
       );
+      _previousDaysSub?.cancel();
+      _previousDaysSub = watchPreviousExerciseDays(widget.plan.id).listen((
+        previous,
+      ) {
+        if (!mounted) return;
+        setState(() => _previousDays = previous);
+      });
     });
   }
 

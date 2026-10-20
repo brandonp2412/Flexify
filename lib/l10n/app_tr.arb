@@ -488,5 +488,6 @@
   "nothingMatchesPlanSearch": "“{query}” ile eşleşen sonuç yok. Bunu yeni bir plan olarak oluşturabilirsin.",
   "createPlan": "Plan Oluştur",
   "createNamedPlan": "“{name}” Oluştur",
-  "setNumber": "{number}. Set"
+  "setNumber": "{number}. Set",
+  "previousPerformance": "Önce {date} · {sets}"
 }

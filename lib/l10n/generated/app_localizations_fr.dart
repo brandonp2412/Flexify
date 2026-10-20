@@ -1581,4 +1581,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String setNumber(int number) {
     return 'Série $number';
   }
+
+  @override
+  String previousPerformance(String date, String sets) {
+    return 'Auparavant $date · $sets';
+  }
 }
