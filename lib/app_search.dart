@@ -28,7 +28,6 @@ class AppSearch extends StatefulWidget {
   final Future<void> Function() onDelete;
   final Future<void> Function() onEdit;
   final Future<void> Function() onShare;
-  final VoidCallback? onRefresh;
   final Widget? filter;
   final String? confirmText;
   final String? hintText;
@@ -41,7 +40,6 @@ class AppSearch extends StatefulWidget {
     required this.onDelete,
     required this.onEdit,
     required this.onShare,
-    this.onRefresh,
     this.filter,
     this.confirmText,
     this.hintText,
@@ -85,8 +83,6 @@ class _AppSearchState extends State<AppSearch> {
         await Navigator.of(
           context,
         ).push(FlexPageRoute(builder: (context) => const SettingsPage()));
-        if (!mounted) return;
-        widget.onRefresh?.call();
         break;
     }
   }

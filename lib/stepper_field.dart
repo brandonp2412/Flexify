@@ -3,13 +3,12 @@ import 'package:flutter/material.dart';
 
 /// A numeric [TextFormField] flanked by `-` / `+` buttons for keyboard-free
 /// entry. Tapping a button adjusts the value by [step]; long-pressing adjusts
-/// it by [longPressStep] (defaults to four times [step]) for larger jumps.
+/// it by four times [step] for larger jumps.
 /// The value is clamped to be non-negative and formatted via [toString].
 class StepperField extends StatelessWidget {
   final TextEditingController controller;
   final String labelText;
   final double step;
-  final double? longPressStep;
   final Widget? suffixIcon;
   final FocusNode? focusNode;
   final TextInputAction? textInputAction;
@@ -22,7 +21,6 @@ class StepperField extends StatelessWidget {
     required this.controller,
     required this.labelText,
     required this.step,
-    this.longPressStep,
     this.suffixIcon,
     this.focusNode,
     this.textInputAction,
@@ -45,7 +43,7 @@ class StepperField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final big = longPressStep ?? step * 4;
+    final big = step * 4;
 
     return TextFormField(
       controller: controller,
