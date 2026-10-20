@@ -1,4 +1,6 @@
 {
+  "showUpdateNotices": "Güncelleme bildirimlerini göster",
+  "@showUpdateNotices": {"description": "Whether to show update notices after upgrading the app."},
   "@@locale": "tr",
   "appTitle": "Flexify",
   "settingsLanguage": "Dil",

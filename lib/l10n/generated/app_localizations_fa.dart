@@ -9,6 +9,9 @@ class AppLocalizationsFa extends AppLocalizations {
   AppLocalizationsFa([String locale = 'fa']) : super(locale);
 
   @override
+  String get showUpdateNotices => 'نمایش اعلان‌های به‌روزرسانی';
+
+  @override
   String get appTitle => 'Flexify';
 
   @override

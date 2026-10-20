@@ -9,6 +9,9 @@ class AppLocalizationsZh extends AppLocalizations {
   AppLocalizationsZh([String locale = 'zh']) : super(locale);
 
   @override
+  String get showUpdateNotices => '显示更新通知';
+
+  @override
   String get appTitle => 'Flexify';
 
   @override
@@ -1493,6 +1496,9 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
   AppLocalizationsZhCn() : super('zh_CN');
 
   @override
+  String get showUpdateNotices => '显示更新通知';
+
+  @override
   String get appTitle => 'Flexify';
 
   @override
@@ -2975,6 +2981,9 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
 class AppLocalizationsZhTw extends AppLocalizationsZh {
   AppLocalizationsZhTw() : super('zh_TW');
+
+  @override
+  String get showUpdateNotices => '顯示更新通知';
 
   @override
   String get appTitle => 'Flexify';

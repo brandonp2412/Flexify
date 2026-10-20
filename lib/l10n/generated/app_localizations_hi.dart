@@ -9,6 +9,9 @@ class AppLocalizationsHi extends AppLocalizations {
   AppLocalizationsHi([String locale = 'hi']) : super(locale);
 
   @override
+  String get showUpdateNotices => 'अपडेट की सूचनाएँ दिखाएँ';
+
+  @override
   String get appTitle => 'Flexify';
 
   @override

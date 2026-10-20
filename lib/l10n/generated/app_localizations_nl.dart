@@ -9,6 +9,9 @@ class AppLocalizationsNl extends AppLocalizations {
   AppLocalizationsNl([String locale = 'nl']) : super(locale);
 
   @override
+  String get showUpdateNotices => 'Updatemeldingen tonen';
+
+  @override
   String get appTitle => 'Flexify';
 
   @override

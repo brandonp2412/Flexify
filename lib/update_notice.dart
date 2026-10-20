@@ -24,3 +24,24 @@ Future<bool> claimUpdateNotice({File? storage, DateTime? at}) async {
   await file.writeAsString('${now.millisecondsSinceEpoch}', flush: true);
   return true;
 }
+
+/// Whether to show update announcements after app upgrades.
+Future<bool> updateNoticesEnabled({File? storage}) async {
+  final file =
+      storage ??
+      File(
+        '${(await getApplicationSupportDirectory()).path}${Platform.pathSeparator}show_update_notices',
+      );
+  return !await file.exists() || (await file.readAsString()).trim() != 'false';
+}
+
+/// Saves the user's update announcement preference.
+Future<void> setUpdateNoticesEnabled(bool enabled, {File? storage}) async {
+  final file =
+      storage ??
+      File(
+        '${(await getApplicationSupportDirectory()).path}${Platform.pathSeparator}show_update_notices',
+      );
+  await file.parent.create(recursive: true);
+  await file.writeAsString('$enabled', flush: true);
+}

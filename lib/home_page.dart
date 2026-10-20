@@ -59,6 +59,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       if (oldBuild == null ||
           buildNumber <= oldBuild ||
           !mounted ||
+          !await updateNoticesEnabled() ||
           !await claimUpdateNotice()) {
         return;
       }

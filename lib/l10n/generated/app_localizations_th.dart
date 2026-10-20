@@ -9,6 +9,9 @@ class AppLocalizationsTh extends AppLocalizations {
   AppLocalizationsTh([String locale = 'th']) : super(locale);
 
   @override
+  String get showUpdateNotices => 'แสดงการแจ้งเตือนการอัปเดต';
+
+  @override
   String get appTitle => 'Flexify';
 
   @override

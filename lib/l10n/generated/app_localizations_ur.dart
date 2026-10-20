@@ -9,6 +9,9 @@ class AppLocalizationsUr extends AppLocalizations {
   AppLocalizationsUr([String locale = 'ur']) : super(locale);
 
   @override
+  String get showUpdateNotices => 'اپ ڈیٹ کی اطلاعات دکھائیں';
+
+  @override
   String get appTitle => 'Flexify';
 
   @override

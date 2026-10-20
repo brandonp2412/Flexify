@@ -9,6 +9,9 @@ class AppLocalizationsEs extends AppLocalizations {
   AppLocalizationsEs([String locale = 'es']) : super(locale);
 
   @override
+  String get showUpdateNotices => 'Mostrar avisos de actualización';
+
+  @override
   String get appTitle => 'Flexify';
 
   @override

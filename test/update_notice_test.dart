@@ -4,6 +4,21 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flexify/update_notice.dart';
 
 void main() {
+  test(
+    'update notice preference defaults on and persists both states',
+    () async {
+      final directory = await Directory.systemTemp.createTemp();
+      addTearDown(() => directory.delete(recursive: true));
+      final storage = File('${directory.path}${Platform.pathSeparator}enabled');
+
+      expect(await updateNoticesEnabled(storage: storage), isTrue);
+      await setUpdateNoticesEnabled(false, storage: storage);
+      expect(await updateNoticesEnabled(storage: storage), isFalse);
+      await setUpdateNoticesEnabled(true, storage: storage);
+      expect(await updateNoticesEnabled(storage: storage), isTrue);
+    },
+  );
+
   test('notice timestamp persists across launches', () async {
     final directory = await Directory.systemTemp.createTemp();
     addTearDown(() => directory.delete(recursive: true));

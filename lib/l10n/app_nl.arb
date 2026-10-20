@@ -1,4 +1,6 @@
 {
+  "showUpdateNotices": "Updatemeldingen tonen",
+  "@showUpdateNotices": {"description": "Whether to show update notices after upgrading the app."},
   "@@locale": "nl",
   "appTitle": "Flexify",
   "settingsLanguage": "Taal",

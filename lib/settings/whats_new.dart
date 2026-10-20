@@ -1,3 +1,4 @@
+import 'package:flexify/update_notice.dart';
 import 'dart:convert';
 
 import 'package:flexify/l10n/l10n.dart';
@@ -77,10 +78,35 @@ class Changelog {
 class _WhatsNewState extends State<WhatsNew> {
   static const _pageSize = 10;
   List<Changelog> _changelogs = [];
+  bool _showUpdateNotices = true;
   List<String> _files = [];
   int _page = 0;
   bool _isLoading = true;
   String? _loadedLocale;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUpdateNoticePreference();
+  }
+
+  Future<void> _loadUpdateNoticePreference() async {
+    try {
+      final enabled = await updateNoticesEnabled();
+      if (mounted) setState(() => _showUpdateNotices = enabled);
+    } catch (error) {
+      debugPrint('Unable to load update notice preference: $error');
+    }
+  }
+
+  Future<void> _setUpdateNotices(bool enabled) async {
+    try {
+      await setUpdateNoticesEnabled(enabled);
+      if (mounted) setState(() => _showUpdateNotices = enabled);
+    } catch (error) {
+      debugPrint('Unable to save update notice preference: $error');
+    }
+  }
 
   @override
   void didChangeDependencies() {
@@ -197,6 +223,11 @@ class _WhatsNewState extends State<WhatsNew> {
       appBar: AppBar(title: Text(context.l10n.whatsNewTitle)),
       body: Column(
         children: [
+          SwitchListTile.adaptive(
+            title: Text(context.l10n.showUpdateNotices),
+            value: _showUpdateNotices,
+            onChanged: _setUpdateNotices,
+          ),
           Expanded(
             child: _isLoading
                 ? const Center(child: CircularProgressIndicator())

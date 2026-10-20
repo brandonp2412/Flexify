@@ -1,4 +1,6 @@
 {
+  "showUpdateNotices": "अपडेट की सूचनाएँ दिखाएँ",
+  "@showUpdateNotices": {"description": "Whether to show update notices after upgrading the app."},
   "@@locale": "hi",
   "appTitle": "Flexify",
   "@appTitle": {

@@ -9,6 +9,9 @@ class AppLocalizationsBn extends AppLocalizations {
   AppLocalizationsBn([String locale = 'bn']) : super(locale);
 
   @override
+  String get showUpdateNotices => 'আপডেটের বিজ্ঞপ্তি দেখান';
+
+  @override
   String get appTitle => 'Flexify';
 
   @override

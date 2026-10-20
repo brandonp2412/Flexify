@@ -1,4 +1,6 @@
 {
+  "showUpdateNotices": "Paparkan notis kemas kini",
+  "@showUpdateNotices": {"description": "Whether to show update notices after upgrading the app."},
   "@@locale": "ms",
   "appTitle": "Flexify",
   "@appTitle": {

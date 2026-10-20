@@ -1,4 +1,6 @@
 {
+  "showUpdateNotices": "更新通知を表示",
+  "@showUpdateNotices": {"description": "Whether to show update notices after upgrading the app."},
   "@@locale": "ja",
   "appTitle": "Flexify",
   "settingsLanguage": "言語",

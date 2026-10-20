@@ -1,4 +1,6 @@
 {
+  "showUpdateNotices": "Hiện thông báo cập nhật",
+  "@showUpdateNotices": {"description": "Whether to show update notices after upgrading the app."},
   "@@locale": "vi",
   "appTitle": "Flexify",
   "@appTitle": {

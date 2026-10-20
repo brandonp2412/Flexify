@@ -9,6 +9,9 @@ class AppLocalizationsAr extends AppLocalizations {
   AppLocalizationsAr([String locale = 'ar']) : super(locale);
 
   @override
+  String get showUpdateNotices => 'إظهار إشعارات التحديث';
+
+  @override
   String get appTitle => 'Flexify';
 
   @override

@@ -9,6 +9,9 @@ class AppLocalizationsPt extends AppLocalizations {
   AppLocalizationsPt([String locale = 'pt']) : super(locale);
 
   @override
+  String get showUpdateNotices => 'Mostrar avisos de atualização';
+
+  @override
   String get appTitle => 'Flexify';
 
   @override
@@ -1583,6 +1586,9 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   AppLocalizationsPtBr() : super('pt_BR');
 
   @override
+  String get showUpdateNotices => 'Mostrar avisos de atualização';
+
+  @override
   String get appTitle => 'Flexify';
 
   @override
@@ -3147,6 +3153,9 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 /// The translations for Portuguese, as used in Portugal (`pt_PT`).
 class AppLocalizationsPtPt extends AppLocalizationsPt {
   AppLocalizationsPtPt() : super('pt_PT');
+
+  @override
+  String get showUpdateNotices => 'Mostrar avisos de atualização';
 
   @override
   String get appTitle => 'Flexify';

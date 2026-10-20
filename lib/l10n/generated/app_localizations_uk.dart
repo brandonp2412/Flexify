@@ -9,6 +9,9 @@ class AppLocalizationsUk extends AppLocalizations {
   AppLocalizationsUk([String locale = 'uk']) : super(locale);
 
   @override
+  String get showUpdateNotices => 'Показувати сповіщення про оновлення';
+
+  @override
   String get appTitle => 'Flexify';
 
   @override
