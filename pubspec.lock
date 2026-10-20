@@ -243,7 +243,7 @@ packages:
     source: hosted
     version: "3.1.2"
   cross_file:
-    dependency: "direct dev"
+    dependency: transitive
     description:
       name: cross_file
       sha256: f141ea4f277af142a0356955707f6556f37b03947d39d55585981a06ca437bd6
@@ -437,7 +437,7 @@ packages:
     source: hosted
     version: "8.0.2"
   flutter_local_notifications_platform_interface:
-    dependency: "direct dev"
+    dependency: transitive
     description:
       name: flutter_local_notifications_platform_interface
       sha256: "43c3761d916c9bd3d5c7ebbc44d82f4990329840c0c5d62ad5260cc1b5d399bd"
