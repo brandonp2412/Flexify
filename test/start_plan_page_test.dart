@@ -961,6 +961,10 @@ void main() {
       lessThan(1),
     );
     expect(
+      (tester.getSize(card).height - tester.getSize(fab).height).abs(),
+      lessThan(1),
+    );
+    expect(
       tester.getBottomLeft(fab).dy,
       closeTo(
         tester.getBottomLeft(find.byType(Scaffold).first).dy -

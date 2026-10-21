@@ -199,7 +199,10 @@ class _SetChip extends StatelessWidget {
           ),
         ),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+          padding: EdgeInsets.symmetric(
+            horizontal: 12.0,
+            vertical: repsFirst ? 10 : 8,
+          ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
