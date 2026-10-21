@@ -58,7 +58,6 @@ class _StartPlanPageState extends State<StartPlanPage>
   int _selected = 0;
   int _selectionRequest = 0;
   DateTime? _lastSaved;
-  bool _saving = false;
   Exercise? _exercise;
   ExerciseSetView? _prefill;
 
@@ -160,7 +159,7 @@ class _StartPlanPageState extends State<StartPlanPage>
                     Padding(
                       padding: const EdgeInsets.only(right: 16),
                       child: FilledButton.icon(
-                        onPressed: () async => await save(snapshot, counts),
+                        onPressed: () async => await _save(snapshot, counts),
                         icon: const Icon(Icons.save_rounded),
                         label: Text(context.l10n.saveSet),
                       ),
@@ -294,7 +293,8 @@ class _StartPlanPageState extends State<StartPlanPage>
                           ),
                           const SizedBox(width: 8),
                           AppFab(
-                            onPressed: () async => await save(snapshot, counts),
+                            onPressed: () async =>
+                                await _save(snapshot, counts),
                             label: Text(context.l10n.actionSave),
                             icon: const Icon(Icons.save),
                             bottomPadding: 0,
@@ -434,7 +434,7 @@ class _StartPlanPageState extends State<StartPlanPage>
                 if (showNotes) {
                   _focusAndSelect(_notesFocus, _notes);
                 } else {
-                  await save(snapshot, counts);
+                  await _save(snapshot, counts);
                 }
               },
               validator: (value) {
@@ -486,7 +486,7 @@ class _StartPlanPageState extends State<StartPlanPage>
         } else if (showNotes) {
           _focusAndSelect(_notesFocus, _notes);
         } else {
-          await save(snapshot, counts);
+          await _save(snapshot, counts);
         }
       },
       validator: (value) {
@@ -542,7 +542,7 @@ class _StartPlanPageState extends State<StartPlanPage>
               maxLines: 3,
               textInputAction: TextInputAction.done,
               decoration: InputDecoration(labelText: context.l10n.notesLabel),
-              onFieldSubmitted: (_) async => await save(snapshot, counts),
+              onFieldSubmitted: (_) async => await _save(snapshot, counts),
             ),
           ],
         ),
@@ -670,7 +670,7 @@ class _StartPlanPageState extends State<StartPlanPage>
     final stream = watchPlanExerciseEntries(db, widget.plan.id).map((
       exercises,
     ) {
-      unawaited(_selectFromEntries(exercises, _selected));
+      unawaited(_tapExercise(exercises, _selected));
       return exercises;
     });
     setState(() {
@@ -681,7 +681,7 @@ class _StartPlanPageState extends State<StartPlanPage>
     });
   }
 
-  void _updateExerciseSetTextFields(ExerciseSetView exerciseSet) {
+  void _update(ExerciseSetView exerciseSet) {
     final settings = context.read<Setting>();
     if (settings.strengthUnit == 'last-entry' && !exerciseSet.cardio ||
         settings.cardioUnit == 'last-entry' && exerciseSet.cardio)
@@ -701,156 +701,151 @@ class _StartPlanPageState extends State<StartPlanPage>
     _notes.text = exerciseSet.notes ?? "";
   }
 
-  Future<void> save(
+  Future<void> _save(
     AsyncSnapshot<List<PlanExerciseEntry>> snapshot,
     List<GymCount> counts,
   ) async {
-    if (_saving) return;
     if (!_key.currentState!.validate()) return;
     if (snapshot.data == null || snapshot.data!.isEmpty) return;
     if (_selected >= snapshot.data!.length) return;
 
-    _saving = true;
-    try {
-      final workout = await _workoutFuture;
-      if (!mounted) return;
+    final workout = await _workoutFuture;
+    if (!mounted) return;
 
-      final entry = snapshot.data![_selected];
-      final exerciseId = entry.exercise.id;
-      final exercise = entry.exercise.name;
-      double? bodyWeight;
-      double? bodyWeightKg;
-      final settings = context.read<Setting>();
-      final timerState = context.read<TimerState>();
-      if (settings.showBodyWeight) {
-        final weightEntry = await getLatestBodyWeight(db);
-        if (weightEntry != null) {
-          bodyWeightKg = weightEntry.weightKg;
-          bodyWeight = displayBodyWeight(_unit, weightEntry.weightKg);
-        }
+    final entry = snapshot.data![_selected];
+    final exerciseId = entry.exercise.id;
+    final exercise = entry.exercise.name;
+    double? bodyWeight;
+    double? bodyWeightKg;
+    final settings = context.read<Setting>();
+    final timerState = context.read<TimerState>();
+    if (settings.showBodyWeight) {
+      final weightEntry = await getLatestBodyWeight(db);
+      if (weightEntry != null) {
+        bodyWeightKg = weightEntry.weightKg;
+        bodyWeight = displayBodyWeight(_unit, weightEntry.weightKg);
       }
-      if (settings.showBodyWeight && bodyWeight == null) {
-        final lastSet = await getLast(exercise);
-        bodyWeight = lastSet?.bodyWeight;
-      }
-
-      if (settings.notifications && !settings.notificationPermissionRequested) {
-        await requestNotificationPermission();
-      }
-
-      if (!settings.explainedPermissions &&
-          settings.restTimers &&
-          !kIsWeb &&
-          defaultTargetPlatform == TargetPlatform.android &&
-          mounted) {
-        await Navigator.of(
-          context,
-        ).push(FlexPageRoute(builder: (context) => const PermissionsPage()));
-      }
-
-      if (!mounted) return;
-      final index = counts.indexWhere(
-        (element) => element.exerciseId == exerciseId,
-      );
-
-      int? max;
-      double? restMs;
-      int warmupSets = 0;
-      bool peTimers = true;
-      if (index != -1) {
-        max = counts[index].maxSets;
-        restMs = counts[index].restMs?.toDouble();
-        warmupSets = counts[index].warmupSets ?? 0;
-        peTimers = counts[index].timers;
-      }
-
-      final created = DateTime.now().toLocal();
-      final category = _prefill != null
-          ? _prefill!.category
-          : await getExerciseCategoryName(entry.exercise);
-      if (!mounted) return;
-      final draft = ExerciseSetView(
-        id: 0,
-        bodyWeight: bodyWeight ?? 0,
-        cardio: _cardio,
-        category: category,
-        created: created,
-        distance: parseDisplayNumber(context, _distance.text) ?? 0,
-        duration:
-            (int.tryParse(_seconds.text) ?? 0) / 60 +
-            (int.tryParse(_minutes.text) ?? 0),
-        image: _image,
-        incline: int.tryParse(_incline.text),
-        name: exercise,
-        notes: _notes.text,
-        planId: widget.plan.id,
-        reps: parseDisplayNumber(context, _reps.text) ?? 0,
-        restMs: restMs?.toInt(),
-        unit: _unit,
-        weight: parseDisplayNumber(context, _weight.text) ?? 0,
-      );
-
-      var count = 0;
-      if (index != -1) count = counts[index].count;
-      count++;
-
-      restMs ??= settings.timerDuration.toDouble();
-
-      if (settings.restTimers && count > warmupSets && peTimers) {
-        timerState.startTimer(
-          "$exercise ($count/${max ?? settings.maxSets})",
-          Duration(milliseconds: restMs.toInt()),
-          settings.alarmSound,
-          settings.vibrate,
-          settings.enableSound,
-          "plan:${widget.plan.id}",
-          settings.keepRinging,
-        );
-      }
-
-      final finished =
-          count == (max ?? settings.maxSets) &&
-          _selected < snapshot.data!.length - 1;
-
-      final exerciseSet = await insertExerciseSet(
-        db,
-        exerciseSet: draft,
-        exerciseId: exerciseId,
-        workoutId: workout.id,
-        bodyWeightKg: bodyWeightKg,
-      );
-      if (!mounted) return;
-      final messages = positiveReinforcementMessages(context.l10n);
-      setState(() {
-        _updateExerciseSetTextFields(exerciseSet);
-        _lastSaved = DateTime.now();
-      });
-      if (finished) await select(_selected + 1);
-
-      if (!settings.notifications) return;
-
-      final best = await isBestExerciseSet(db, exerciseSet);
-      if (!best) return;
-      final random = Random();
-      final randomMessage = messages[random.nextInt(messages.length)];
-      if (mounted && random.nextDouble() < 0.3)
-        messengerKey.currentState!.showSnackBar(
-          SnackBar(
-            content: Text(randomMessage),
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(24),
-            ),
-            duration: const Duration(seconds: 4),
-            persist: false,
-          ),
-        );
-    } finally {
-      _saving = false;
     }
+    if (settings.showBodyWeight && bodyWeight == null) {
+      final lastSet = await getLast(exercise);
+      bodyWeight = lastSet?.bodyWeight;
+    }
+
+    if (settings.notifications && !settings.notificationPermissionRequested) {
+      await requestNotificationPermission();
+    }
+
+    if (!settings.explainedPermissions &&
+        settings.restTimers &&
+        !kIsWeb &&
+        defaultTargetPlatform == TargetPlatform.android &&
+        mounted) {
+      await Navigator.of(
+        context,
+      ).push(FlexPageRoute(builder: (context) => const PermissionsPage()));
+    }
+
+    if (!mounted) return;
+    final index = counts.indexWhere(
+      (element) => element.exerciseId == exerciseId,
+    );
+
+    int? max;
+    double? restMs;
+    int warmupSets = 0;
+    bool peTimers = true;
+    if (index != -1) {
+      max = counts[index].maxSets;
+      restMs = counts[index].restMs?.toDouble();
+      warmupSets = counts[index].warmupSets ?? 0;
+      peTimers = counts[index].timers;
+    }
+
+    final created = DateTime.now().toLocal();
+    final category = _prefill != null
+        ? _prefill!.category
+        : await getExerciseCategoryName(entry.exercise);
+    if (!mounted) return;
+    final draft = ExerciseSetView(
+      id: 0,
+      bodyWeight: bodyWeight ?? 0,
+      cardio: _cardio,
+      category: category,
+      created: created,
+      distance: parseDisplayNumber(context, _distance.text) ?? 0,
+      duration:
+          (int.tryParse(_seconds.text) ?? 0) / 60 +
+          (int.tryParse(_minutes.text) ?? 0),
+      image: _image,
+      incline: int.tryParse(_incline.text),
+      name: exercise,
+      notes: _notes.text,
+      planId: widget.plan.id,
+      reps: parseDisplayNumber(context, _reps.text) ?? 0,
+      restMs: restMs?.toInt(),
+      unit: _unit,
+      weight: parseDisplayNumber(context, _weight.text) ?? 0,
+    );
+
+    var count = 0;
+    if (index != -1) count = counts[index].count;
+    count++;
+
+    restMs ??= settings.timerDuration.toDouble();
+
+    if (settings.restTimers && count > warmupSets && peTimers) {
+      timerState.startTimer(
+        "$exercise ($count/${max ?? settings.maxSets})",
+        Duration(milliseconds: restMs.toInt()),
+        settings.alarmSound,
+        settings.vibrate,
+        settings.enableSound,
+        "plan:${widget.plan.id}",
+        settings.keepRinging,
+      );
+    }
+
+    final finished =
+        count == (max ?? settings.maxSets) &&
+        _selected < snapshot.data!.length - 1;
+
+    final exerciseSet = await insertExerciseSet(
+      db,
+      exerciseSet: draft,
+      exerciseId: exerciseId,
+      workoutId: workout.id,
+      bodyWeightKg: bodyWeightKg,
+    );
+    if (!mounted) return;
+    final messages = positiveReinforcementMessages(context.l10n);
+    setState(() {
+      _update(exerciseSet);
+      _lastSaved = DateTime.now();
+    });
+    if (finished) await select(_selected + 1);
+
+    if (!settings.notifications) return;
+
+    final best = await isBestExerciseSet(db, exerciseSet);
+    if (!best) return;
+
+    final random = Random();
+    final randomMessage = messages[random.nextInt(messages.length)];
+    if (mounted && random.nextDouble() < 0.3)
+      messengerKey.currentState!.showSnackBar(
+        SnackBar(
+          content: Text(randomMessage),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(24),
+          ),
+          duration: const Duration(seconds: 4),
+          persist: false,
+        ),
+      );
   }
 
-  Future<void> _selectFromEntries(
+  Future<void> _tapExercise(
     List<PlanExerciseEntry> exercises,
     int index,
   ) async {
@@ -861,7 +856,7 @@ class _StartPlanPageState extends State<StartPlanPage>
       setState(() {
         _selected = 0;
         _exercise = null;
-        _clearExerciseSetTextFields();
+        _clear();
       });
       return;
     }
@@ -874,13 +869,14 @@ class _StartPlanPageState extends State<StartPlanPage>
     }
     final last = await getFirstOfLastSession(exercise.id);
     if (!mounted || request != _selectionRequest) return;
+
     setState(() {
       _selected = selected;
       _exercise = exercise;
       if (last != null) {
-        _updateExerciseSetTextFields(last);
+        _update(last);
       } else {
-        _clearExerciseSetTextFields();
+        _clear();
         _unit = exercise.displayUnit;
       }
     });
@@ -888,10 +884,10 @@ class _StartPlanPageState extends State<StartPlanPage>
 
   Future<void> select(int index) async {
     final exercises = await getPlanExerciseEntries(db, widget.plan.id);
-    await _selectFromEntries(exercises, index);
+    await _tapExercise(exercises, index);
   }
 
-  void _clearExerciseSetTextFields() {
+  void _clear() {
     final settings = context.read<Setting>();
     _unit = settings.strengthUnit == 'last-entry'
         ? 'kg'
