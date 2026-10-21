@@ -280,8 +280,12 @@ void main() {
     final floatingRow = find.byKey(const Key('start-plan-floating-row'));
     expect(floatingRow, findsOneWidget);
     final scaffold = tester.widget<Scaffold>(find.byType(Scaffold));
-    expect(scaffold.floatingActionButton, isNull);
-    expect(scaffold.bottomNavigationBar, isNotNull);
+    expect(scaffold.floatingActionButton, isNotNull);
+    expect(scaffold.bottomNavigationBar, isNull);
+    expect(
+      scaffold.floatingActionButtonLocation,
+      FloatingActionButtonLocation.endFloat,
+    );
     expect(
       (tester.widget<Padding>(floatingRow).padding as EdgeInsets).bottom,
       bottomNavHeight,
@@ -297,77 +301,93 @@ void main() {
     );
   });
 
-  testWidgets('StartPlanPage shows the previous day summary per exercise', (
-    WidgetTester tester,
-  ) async {
-    final harness = await FlexifyTestHarness.create();
-    final database = harness.database;
-    final yesterday = DateTime.now().subtract(const Duration(days: 1));
+  testWidgets(
+    'StartPlanPage previews previous sets until a current set is saved',
+    (WidgetTester tester) async {
+      final harness = await FlexifyTestHarness.create();
+      final database = harness.database;
+      final yesterday = DateTime.now().subtract(const Duration(days: 1));
 
-    await insertExerciseSetFixture(
-      database,
-      'Bench press',
-      created: DateTime(yesterday.year, yesterday.month, yesterday.day, 9),
-      reps: 8,
-      weight: 90,
-    );
-    await insertExerciseSetFixture(
-      database,
-      'Bench press',
-      created: DateTime(yesterday.year, yesterday.month, yesterday.day, 9, 5),
-      reps: 6,
-      weight: 95,
-    );
-    await insertExerciseSetFixture(
-      database,
-      'Cable fly',
-      created: DateTime(yesterday.year, yesterday.month, yesterday.day, 10),
-      reps: 12,
-      weight: 30,
-    );
+      await insertExerciseSetFixture(
+        database,
+        'Bench press',
+        created: DateTime(yesterday.year, yesterday.month, yesterday.day, 9),
+        reps: 8,
+        weight: 90,
+      );
+      await insertExerciseSetFixture(
+        database,
+        'Bench press',
+        created: DateTime(yesterday.year, yesterday.month, yesterday.day, 9, 5),
+        reps: 6,
+        weight: 95,
+      );
+      await insertExerciseSetFixture(
+        database,
+        'Cable fly',
+        created: DateTime(yesterday.year, yesterday.month, yesterday.day, 10),
+        reps: 12,
+        weight: 30,
+      );
 
-    final id = await database.plans.insertOne(planFixture(title: 'Push day'));
-    await insertPlanExerciseFixture(
-      database,
-      planId: id,
-      exercise: 'Bench press',
-      sequence: 0,
-    );
-    await insertPlanExerciseFixture(
-      database,
-      planId: id,
-      exercise: 'Cable fly',
-      sequence: 1,
-    );
-    final plan =
-        await (database.plans.select()..where((plan) => plan.id.equals(id)))
-            .getSingle();
+      final id = await database.plans.insertOne(planFixture(title: 'Push day'));
+      await insertPlanExerciseFixture(
+        database,
+        planId: id,
+        exercise: 'Bench press',
+        sequence: 0,
+      );
+      await insertPlanExerciseFixture(
+        database,
+        planId: id,
+        exercise: 'Cable fly',
+        sequence: 1,
+      );
+      final plan =
+          await (database.plans.select()..where((plan) => plan.id.equals(id)))
+              .getSingle();
 
-    await harness.pump(tester, StartPlanPage(plan: plan));
-    await tester.pumpAndSettle();
+      await harness.pump(
+        tester,
+        StartPlanPage(plan: plan),
+        surfaceSize: const Size(430, 900),
+      );
+      await tester.pumpAndSettle();
 
-    expect(find.textContaining('Previously'), findsOneWidget);
-    expect(find.textContaining('8×90, 6×95 kg'), findsOneWidget);
-    expect(find.textContaining('12×30 kg'), findsNothing);
+      expect(find.byKey(const Key('previous-performance-0')), findsNothing);
+      expect(find.byKey(const Key('previous-set-scroll')), findsOneWidget);
+      final saveFab = tester.getRect(find.byType(FloatingActionButton));
+      final previews = tester.getRect(
+        find.byKey(const Key('start-plan-set-preview')),
+      );
+      expect(saveFab.right, closeTo(414, 1));
+      expect(saveFab.bottom, closeTo(900 - 16 - bottomNavHeight, 1));
+      expect(previews.left, closeTo(16, 1));
+      expect(previews.right, lessThanOrEqualTo(saveFab.left));
+      expect(find.text('8 × 90 kg'), findsOneWidget);
+      expect(find.text('6 × 95 kg'), findsOneWidget);
+      expect(find.text('12 × 30 kg'), findsNothing);
 
-    await tester.drag(find.byKey(const Key('Cable fly')), const Offset(160, 0));
-    await tester.pumpAndSettle();
-    expect(find.textContaining('Previously'), findsOneWidget);
-    expect(find.textContaining('12×30 kg'), findsOneWidget);
-    expect(find.textContaining('8×90, 6×95 kg'), findsNothing);
+      await tester.tap(find.text('Cable fly'));
+      await tester.pumpAndSettle();
+      expect(find.text('12 × 30 kg'), findsOneWidget);
+      expect(find.text('8 × 90 kg'), findsNothing);
 
-    await tester.tap(find.text('Bench press'));
-    await tester.pumpAndSettle();
-    expect(find.textContaining('8×90, 6×95 kg'), findsOneWidget);
-    expect(find.textContaining('12×30 kg'), findsNothing);
+      await tester.tap(find.text('Bench press'));
+      await tester.pumpAndSettle();
+      expect(find.text('8 × 90 kg'), findsOneWidget);
 
-    await tester.binding.setSurfaceSize(const Size(1200, 800));
-    addTearDown(() => tester.binding.setSurfaceSize(null));
-    await tester.pumpAndSettle();
+      await tester.enterText(textFieldWithLabel('Reps'), '10');
+      await tester.enterText(textFieldWithLabel('Weight (kg)'), '100');
+      await tester.tap(find.text('Save'));
+      await tester.pumpAndSettle();
 
-    expect(find.textContaining('Previously'), findsOneWidget);
-    expect(find.textContaining('8×90, 6×95 kg'), findsOneWidget);
-  });
+      expect(find.byKey(const Key('previous-set-scroll')), findsNothing);
+      expect(find.byKey(const Key('session-set-scroll')), findsOneWidget);
+      expect(find.text('10 × 100 kg'), findsOneWidget);
+      expect(find.text('8 × 90 kg'), findsNothing);
+    },
+  );
 
   testWidgets('all translated locales complete the core workout save flow', (
     WidgetTester tester,

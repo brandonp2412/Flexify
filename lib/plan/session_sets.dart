@@ -7,6 +7,7 @@ import 'package:flexify/sets/edit_set_page.dart';
 import 'package:flexify/utils.dart';
 import 'package:flexify/platform_page_route.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 /// Strong/Hevy-style strip of the sets already logged in the active workout
 /// for the selected exercise.
@@ -14,12 +15,14 @@ class SessionSets extends StatefulWidget {
   final int exerciseId;
   final int workoutId;
   final bool compact;
+  final PreviousExerciseDay? previous;
 
   const SessionSets({
     super.key,
     required this.exerciseId,
     required this.workoutId,
     this.compact = false,
+    this.previous,
   });
 
   @override
@@ -77,12 +80,20 @@ class _SessionSetsState extends State<SessionSets> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
+      key: ValueKey((widget.exerciseId, widget.workoutId)),
       stream: _stream,
       builder: (context, snapshot) {
         final sets = snapshot.data;
         if (sets != null && sets.isNotEmpty) _scrollToNewest(sets.length);
 
-        if (sets == null || sets.isEmpty) return const SizedBox.shrink();
+        if (sets == null) return const SizedBox.shrink();
+        if (sets.isEmpty) {
+          final previous = widget.previous;
+          if (previous == null || previous.sets.isEmpty) {
+            return const SizedBox.shrink();
+          }
+          return _buildPreviousChips(previous);
+        }
 
         if (!widget.compact) return _buildChips(sets);
 
@@ -93,6 +104,34 @@ class _SessionSetsState extends State<SessionSets> {
           child: _buildChips(sets),
         );
       },
+    );
+  }
+
+  Widget _buildPreviousChips(PreviousExerciseDay previous) {
+    final shortDateFormat = context.read<Setting>().shortDateFormat;
+    final date = formatDisplayDate(context, previous.day, shortDateFormat);
+    final colors = Theme.of(context).colorScheme;
+    return SingleChildScrollView(
+      key: const Key('previous-set-scroll'),
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: [
+          Icon(Icons.history_rounded, size: 18, color: colors.onSurfaceVariant),
+          const SizedBox(width: 4),
+          Text(date, style: TextStyle(color: colors.onSurfaceVariant)),
+          const SizedBox(width: 8),
+          for (var i = 0; i < previous.sets.length; i++)
+            Padding(
+              padding: const EdgeInsets.only(right: 8),
+              child: _SetChip(
+                previousSet: previous.sets[i],
+                number: i + 1,
+                best: false,
+                repsFirst: widget.compact,
+              ),
+            ),
+        ],
+      ),
     );
   }
 
@@ -152,51 +191,59 @@ class _SessionSetsState extends State<SessionSets> {
 }
 
 class _SetChip extends StatelessWidget {
-  final ExerciseSetView exerciseSet;
+  final ExerciseSetView? exerciseSet;
+  final PreviousExerciseSet? previousSet;
   final int number;
   final bool best;
   final bool repsFirst;
 
   const _SetChip({
-    required this.exerciseSet,
+    this.exerciseSet,
+    this.previousSet,
     required this.number,
     required this.best,
     required this.repsFirst,
   });
 
   String _value(BuildContext context) {
-    final unit = displayMeasurementUnit(context.l10n, exerciseSet.unit);
-    if (exerciseSet.cardio &&
-        (exerciseSet.unit == 'kg' ||
-            exerciseSet.unit == 'lb' ||
-            exerciseSet.unit == 'stone')) {
-      final minutes = exerciseSet.duration.floor();
-      final seconds = ((exerciseSet.duration * 60) % 60)
-          .floor()
-          .toString()
-          .padLeft(2, '0');
-      return "${formatDisplayNumber(context, exerciseSet.weight)} $unit / $minutes:$seconds";
+    final set = exerciseSet;
+    final previous = previousSet;
+    final unitCode = set?.unit ?? previous!.unit;
+    final unit = displayMeasurementUnit(context.l10n, unitCode);
+    final cardio = set?.cardio ?? previous!.cardio;
+    final weightValue = set?.weight ?? previous!.weight;
+    if (cardio &&
+        (unitCode == 'kg' || unitCode == 'lb' || unitCode == 'stone')) {
+      final duration = set?.duration ?? previous!.duration;
+      final minutes = duration.floor();
+      final seconds = ((duration * 60) % 60).floor().toString().padLeft(2, '0');
+      return "${formatDisplayNumber(context, weightValue)} $unit / $minutes:$seconds";
     }
-    if (exerciseSet.cardio) {
-      return "${formatDisplayNumber(context, exerciseSet.distance)} $unit";
+    if (cardio) {
+      final distance = set?.distance ?? previous!.distance;
+      return "${formatDisplayNumber(context, distance)} $unit";
     }
-    final weight = "${formatDisplayNumber(context, exerciseSet.weight)} $unit";
-    final reps = formatDisplayNumber(context, exerciseSet.reps);
+    final weight = "${formatDisplayNumber(context, weightValue)} $unit";
+    final reps = formatDisplayNumber(context, set?.reps ?? previous!.reps);
     return repsFirst ? "$reps × $weight" : "$weight × $reps";
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final currentSet = exerciseSet;
     return Card(
       margin: EdgeInsets.zero,
+      color: exerciseSet == null ? theme.colorScheme.surfaceContainerLow : null,
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
-        onTap: () => Navigator.of(context).push(
-          FlexPageRoute(
-            builder: (context) => EditSetPage(exerciseSet: exerciseSet),
-          ),
-        ),
+        onTap: currentSet == null
+            ? null
+            : () => Navigator.of(context).push(
+                FlexPageRoute(
+                  builder: (context) => EditSetPage(exerciseSet: currentSet),
+                ),
+              ),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
           child: Column(

@@ -1,9 +1,9 @@
 import 'package:drift/drift.dart' hide Column;
+import 'package:flexify/bottom_nav.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/custom_set_indicator.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/database/exercise_set_repository.dart';
-import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/exercise_modal.dart';
 import 'package:flexify/plan/plan_queries.dart';
@@ -20,8 +20,6 @@ class StartList extends StatefulWidget {
   final int selected;
   final Future<void> Function(int) onSelect;
   final List<GymCount> counts;
-  final Map<int, PreviousExerciseDay> previous;
-  final Plan plan;
   final int? workoutId;
 
   const StartList({
@@ -30,8 +28,6 @@ class StartList extends StatefulWidget {
     required this.selected,
     required this.onSelect,
     required this.counts,
-    required this.previous,
-    required this.plan,
     required this.workoutId,
   });
 
@@ -42,42 +38,11 @@ class StartList extends StatefulWidget {
 typedef Tapped = ({int index, DateTime dateTime});
 
 class _StartListState extends State<StartList> {
-  static const _bottomPadding = 16.0;
+  static const _bottomPadding = bottomNavHeight + 80.0;
 
   Tapped lastTap = (index: 0, dateTime: DateTime(0));
-  int? _historyPeekIndex;
-  double _swipeDistance = 0;
-
-  @override
-  void didUpdateWidget(covariant StartList oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (oldWidget.selected != widget.selected ||
-        oldWidget.plan.id != widget.plan.id) {
-      _historyPeekIndex = null;
-    }
-  }
-
-  void _selectExercise(int index) {
-    if (_historyPeekIndex != null) setState(() => _historyPeekIndex = null);
-    widget.onSelect(index);
-  }
-
-  void _endSwipe(int index) {
-    if (_swipeDistance > 36 &&
-        (widget
-                .previous[widget.exercises[index].exercise.id]
-                ?.sets
-                .isNotEmpty ??
-            false)) {
-      setState(() => _historyPeekIndex = index);
-    } else if (_swipeDistance < -36 && _historyPeekIndex != null) {
-      setState(() => _historyPeekIndex = null);
-    }
-    _swipeDistance = 0;
-  }
-
   void tap(int index, List<GymCount> counts) async {
-    _selectExercise(index);
+    widget.onSelect(index);
     final count = counts.elementAtOrNull(index);
     if (count == null) return;
     if (counts.elementAtOrNull(index)?.count == 0) return;
@@ -114,9 +79,6 @@ class _StartListState extends State<StartList> {
         settings.planTrailing.replaceFirst('PlanTrailing.', ''),
       ),
     );
-    final shortDateFormat = context.select<Setting, String>(
-      (settings) => settings.shortDateFormat,
-    );
     final counts = widget.counts;
     final desktop = isDesktopLayout(context);
 
@@ -126,7 +88,7 @@ class _StartListState extends State<StartList> {
         buildDefaultDragHandles: !desktop,
         padding: EdgeInsets.only(bottom: desktop ? 24 : _bottomPadding),
         itemBuilder: (context, index) =>
-            itemBuilder(context, index, max, trailing, counts, shortDateFormat),
+            itemBuilder(context, index, max, trailing, counts),
         onReorderItem: (oldIndex, newIndex) async {
           final item = widget.exercises.removeAt(oldIndex);
           widget.exercises.insert(newIndex, item);
@@ -148,7 +110,7 @@ class _StartListState extends State<StartList> {
         padding: EdgeInsets.only(bottom: desktop ? 24 : _bottomPadding),
         itemCount: widget.exercises.length,
         itemBuilder: (context, index) =>
-            itemBuilder(context, index, max, trailing, counts, shortDateFormat),
+            itemBuilder(context, index, max, trailing, counts),
       );
   }
 
@@ -158,7 +120,6 @@ class _StartListState extends State<StartList> {
     int maxSets,
     PlanTrailing trailing,
     List<GymCount> counts,
-    String shortDateFormat,
   ) {
     final exercise = widget.exercises[index];
     final idx = counts.indexWhere(
@@ -210,45 +171,6 @@ class _StartListState extends State<StartList> {
 
     final colors = Theme.of(context).colorScheme;
     final selected = index == widget.selected;
-    final previous = widget.previous[exercise.exercise.id];
-    final showPrevious = index == (_historyPeekIndex ?? widget.selected);
-    final previousText =
-        !showPrevious || previous == null || previous.sets.isEmpty
-        ? null
-        : _previousSummary(context, previous, shortDateFormat);
-    final previousStyle = Theme.of(
-      context,
-    ).textTheme.bodySmall?.copyWith(color: colors.onSurfaceVariant);
-    final previousPanel = previousText == null
-        ? null
-        : Container(
-            key: Key('previous-performance-$index'),
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-            decoration: BoxDecoration(
-              color: colors.surfaceContainerHighest.withValues(alpha: .55),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(
-                  Icons.history_rounded,
-                  size: 16,
-                  color: colors.onSurfaceVariant,
-                ),
-                const SizedBox(width: 8),
-                Flexible(
-                  child: Text(
-                    previousText,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: previousStyle,
-                  ),
-                ),
-              ],
-            ),
-          );
-
     Future<void> showActions() => showModalBottomSheet<void>(
       useRootNavigator: true,
       context: context,
@@ -259,7 +181,7 @@ class _StartListState extends State<StartList> {
           exerciseName: exercise.exercise.name,
           workoutId: widget.workoutId,
           hasData: count > 0,
-          onSelect: () => _selectExercise(index),
+          onSelect: () => widget.onSelect(index),
         ),
       ),
     );
@@ -316,10 +238,6 @@ class _StartListState extends State<StartList> {
                                             : FontWeight.w600,
                                       ),
                                 ),
-                                if (previousPanel != null) ...[
-                                  const SizedBox(height: 6),
-                                  previousPanel,
-                                ],
                               ],
                             ),
                           ),
@@ -365,18 +283,12 @@ class _StartListState extends State<StartList> {
               ListTile(
                 onTap: () => tap(index, counts),
                 trailing: trail,
-                subtitle: previousPanel == null
-                    ? null
-                    : Padding(
-                        padding: const EdgeInsets.only(top: 6),
-                        child: previousPanel,
-                      ),
                 title: Row(
                   children: [
                     RadioGroup<bool>(
                       groupValue: true,
                       onChanged: (value) {
-                        _selectExercise(index);
+                        widget.onSelect(index);
                       },
                       child: Radio<bool>(value: selected),
                     ),
@@ -392,49 +304,7 @@ class _StartListState extends State<StartList> {
     return GestureDetector(
       key: Key(exercise.exercise.name),
       onLongPress: showActions,
-      onHorizontalDragStart: (_) => _swipeDistance = 0,
-      onHorizontalDragUpdate: (details) =>
-          _swipeDistance += details.primaryDelta ?? 0,
-      onHorizontalDragEnd: (_) => _endSwipe(index),
       child: content,
     );
   }
-}
-
-String _previousSummary(
-  BuildContext context,
-  PreviousExerciseDay previous,
-  String shortDateFormat,
-) {
-  final date = formatDisplayDate(context, previous.day, shortDateFormat);
-  return context.l10n.previousPerformance(
-    date,
-    _previousSets(context, previous.sets),
-  );
-}
-
-String _previousSets(BuildContext context, List<PreviousExerciseSet> sets) {
-  final unit = displayMeasurementUnit(context.l10n, sets.first.unit);
-  final values = sets
-      .map((set) {
-        final weight = formatDisplayNumber(context, set.weight);
-        if (set.cardio) {
-          final minutes = set.duration.floor();
-          final seconds = ((set.duration * 60) % 60).floor().toString().padLeft(
-            2,
-            '0',
-          );
-          final value =
-              set.unit == 'kg' || set.unit == 'lb' || set.unit == 'stone'
-              ? '$weight $unit'
-              : '${formatDisplayNumber(context, set.distance)} $unit';
-          final incline = set.incline != null && set.incline! > 0
-              ? ' @ ${formatDisplayPercent(context, set.incline! / 100, maxDigits: 0)}'
-              : '';
-          return '$value / $minutes:$seconds$incline';
-        }
-        return '${formatDisplayNumber(context, set.reps)}×$weight';
-      })
-      .join(', ');
-  return sets.first.cardio ? values : '$values $unit';
 }

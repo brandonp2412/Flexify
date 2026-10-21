@@ -71,6 +71,7 @@ class _StartPlanPageState extends State<StartPlanPage>
   Stream<List<GymCount>>? _gymCountsStream;
   StreamSubscription<Map<int, PreviousExerciseDay>>? _previousDaysSub;
   Map<int, PreviousExerciseDay> _previousDays = const {};
+  List<PlanExerciseEntry> _visibleExercises = const [];
   StreamSubscription<Plan?>? _planSub;
   String _unit = 'kg';
 
@@ -101,6 +102,7 @@ class _StartPlanPageState extends State<StartPlanPage>
           );
         }
 
+        _visibleExercises = snapshot.data!;
         return StreamBuilder<List<GymCount>>(
           stream: _gymCountsStream,
           builder: (context, countsSnapshot) {
@@ -137,8 +139,6 @@ class _StartPlanPageState extends State<StartPlanPage>
                     selected: _selected,
                     onSelect: select,
                     counts: counts,
-                    previous: _previousDays,
-                    plan: widget.plan,
                     workoutId: workout?.id,
                   );
 
@@ -226,6 +226,11 @@ class _StartPlanPageState extends State<StartPlanPage>
                                               .exercise
                                               .id,
                                           workoutId: workout.id,
+                                          previous:
+                                              _previousDays[snapshot
+                                                  .data![_selected]
+                                                  .exercise
+                                                  .id],
                                         ),
                                       ],
                                     ],
@@ -257,26 +262,26 @@ class _StartPlanPageState extends State<StartPlanPage>
                         ),
                 ),
               ),
-              bottomNavigationBar:
+              floatingActionButtonLocation:
+                  FloatingActionButtonLocation.endFloat,
+              floatingActionButton:
                   desktop ||
                       workout == null ||
                       snapshot.data!.isEmpty ||
                       _selected >= snapshot.data!.length
                   ? null
-                  : ColoredBox(
-                      color: colors.surface,
-                      child: Padding(
-                        key: const Key('start-plan-floating-row'),
-                        padding: EdgeInsets.only(
-                          left: 16,
-                          right: 16,
-                          top: 8,
-                          bottom: MediaQuery.viewInsetsOf(context).bottom > 0
-                              ? 0
-                              : bottomNavHeight,
-                        ),
+                  : Padding(
+                      key: const Key('start-plan-floating-row'),
+                      padding: EdgeInsets.only(
+                        left: 32,
+                        bottom: MediaQuery.viewInsetsOf(context).bottom > 0
+                            ? 0
+                            : bottomNavHeight,
+                      ),
+                      child: SizedBox(
+                        width: MediaQuery.sizeOf(context).width - 32,
                         child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             Expanded(
                               child: SessionSets(
@@ -284,6 +289,11 @@ class _StartPlanPageState extends State<StartPlanPage>
                                 exerciseId:
                                     snapshot.data![_selected].exercise.id,
                                 workoutId: workout.id,
+                                previous:
+                                    _previousDays[snapshot
+                                        .data![_selected]
+                                        .exercise
+                                        .id],
                                 compact: true,
                               ),
                             ),
@@ -889,10 +899,8 @@ class _StartPlanPageState extends State<StartPlanPage>
     }
   }
 
-  Future<void> select(int index) async {
-    final exercises = await getPlanExerciseEntries(db, widget.plan.id);
-    await _selectFromEntries(exercises, index);
-  }
+  Future<void> select(int index) =>
+      _selectFromEntries(_visibleExercises, index);
 
   void _clearExerciseSetTextFields() {
     final settings = context.read<Setting>();
