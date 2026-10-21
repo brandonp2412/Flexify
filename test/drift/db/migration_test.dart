@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:drift_dev/api/migrations_native.dart';
 import 'package:flexify/database/database.dart';
+import 'package:flexify/database/exercise_set_repository.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'generated/schema.dart';
@@ -688,6 +689,60 @@ void main() {
       },
     );
   });
+  test(
+    'issue 395: a kg template makes migrated lb history display in kg',
+    () async {
+      await verifier.testWithDataIntegrity(
+        oldVersion: 59,
+        newVersion: GeneratedHelper.versions.last,
+        createOld: v59.DatabaseAtV59.new,
+        createNew: AppDatabase.new,
+        openTestedDatabase: AppDatabase.new,
+        createItems: (batch, oldDb) {
+          batch.insertAll(oldDb.gymSets, [
+            v59.GymSetsCompanion.insert(
+              id: const Value(1),
+              created: 100,
+              name: 'Bench Press',
+              reps: 0,
+              unit: 'kg',
+              weight: 0,
+              hidden: const Value(1),
+            ),
+            v59.GymSetsCompanion.insert(
+              id: const Value(2),
+              created: 200,
+              name: 'Bench Press',
+              reps: 10,
+              unit: 'lb',
+              weight: 25,
+            ),
+          ]);
+        },
+        validateItems: (newDb) async {
+          final stored = await newDb.select(newDb.exerciseSets).getSingle();
+          expect(stored.loadKg, closeTo(11.33980925, 0.000001));
+
+          final displayed = (await getExerciseSetById(newDb, stored.id))!;
+          expect(displayed.reps, 10);
+          expect(displayed.unit, 'kg');
+          expect(displayed.weight, closeTo(11.33980925, 0.000001));
+
+          await newDb.exercises.update().write(
+            const ExercisesCompanion(displayUnit: Value('lb')),
+          );
+          final restored = (await getExerciseSetById(newDb, stored.id))!;
+          expect(restored.unit, 'lb');
+          expect(restored.weight, closeTo(25, 0.000001));
+          expect(
+            (await newDb.select(newDb.exerciseSets).getSingle()).loadKg,
+            stored.loadKg,
+          );
+        },
+      );
+    },
+  );
+
   test('migration from v59 through v61 backfills identity and history', () async {
     final oldCategories = <v59.CategoriesCompanion>[
       v59.CategoriesCompanion.insert(id: const Value(10), name: 'Chest & Arms'),
