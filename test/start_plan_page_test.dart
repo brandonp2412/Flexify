@@ -356,6 +356,11 @@ void main() {
 
       expect(find.byKey(const Key('previous-performance-0')), findsNothing);
       expect(find.byKey(const Key('previous-set-scroll')), findsOneWidget);
+      expect(find.byIcon(Icons.history_rounded), findsNothing);
+      final previousCard = tester.widget<Card>(
+        find.ancestor(of: find.text('8 × 90 kg'), matching: find.byType(Card)),
+      );
+      expect(previousCard.color?.a, closeTo(0.55, 0.01));
       final saveFab = tester.getRect(find.byType(FloatingActionButton));
       final previews = tester.getRect(
         find.byKey(const Key('start-plan-set-preview')),
@@ -385,6 +390,13 @@ void main() {
       expect(find.byKey(const Key('previous-set-scroll')), findsNothing);
       expect(find.byKey(const Key('session-set-scroll')), findsOneWidget);
       expect(find.text('10 × 100 kg'), findsOneWidget);
+      final currentCard = tester.widget<Card>(
+        find.ancestor(
+          of: find.text('10 × 100 kg'),
+          matching: find.byType(Card),
+        ),
+      );
+      expect(currentCard.color, isNull);
       expect(find.text('8 × 90 kg'), findsNothing);
     },
   );

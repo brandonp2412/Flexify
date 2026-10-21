@@ -7,7 +7,6 @@ import 'package:flexify/sets/edit_set_page.dart';
 import 'package:flexify/utils.dart';
 import 'package:flexify/platform_page_route.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 /// Strong/Hevy-style strip of the sets already logged in the active workout
 /// for the selected exercise.
@@ -108,18 +107,11 @@ class _SessionSetsState extends State<SessionSets> {
   }
 
   Widget _buildPreviousChips(PreviousExerciseDay previous) {
-    final shortDateFormat = context.read<Setting>().shortDateFormat;
-    final date = formatDisplayDate(context, previous.day, shortDateFormat);
-    final colors = Theme.of(context).colorScheme;
     return SingleChildScrollView(
       key: const Key('previous-set-scroll'),
       scrollDirection: Axis.horizontal,
       child: Row(
         children: [
-          Icon(Icons.history_rounded, size: 18, color: colors.onSurfaceVariant),
-          const SizedBox(width: 4),
-          Text(date, style: TextStyle(color: colors.onSurfaceVariant)),
-          const SizedBox(width: 8),
           for (var i = 0; i < previous.sets.length; i++)
             Padding(
               padding: const EdgeInsets.only(right: 8),
@@ -234,7 +226,9 @@ class _SetChip extends StatelessWidget {
     final currentSet = exerciseSet;
     return Card(
       margin: EdgeInsets.zero,
-      color: exerciseSet == null ? theme.colorScheme.surfaceContainerLow : null,
+      color: currentSet == null
+          ? theme.colorScheme.surfaceContainerLow.withValues(alpha: 0.55)
+          : null,
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
         onTap: currentSet == null
@@ -269,7 +263,14 @@ class _SetChip extends StatelessWidget {
                   ],
                 ],
               ),
-              Text(_value(context), style: theme.textTheme.titleSmall),
+              Text(
+                _value(context),
+                style: theme.textTheme.titleSmall?.copyWith(
+                  color: currentSet == null
+                      ? theme.colorScheme.onSurfaceVariant
+                      : null,
+                ),
+              ),
             ],
           ),
         ),
