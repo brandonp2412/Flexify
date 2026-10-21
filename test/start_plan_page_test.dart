@@ -279,6 +279,9 @@ void main() {
 
     final floatingRow = find.byKey(const Key('start-plan-floating-row'));
     expect(floatingRow, findsOneWidget);
+    final scaffold = tester.widget<Scaffold>(find.byType(Scaffold));
+    expect(scaffold.floatingActionButton, isNull);
+    expect(scaffold.bottomNavigationBar, isNotNull);
     expect(
       (tester.widget<Padding>(floatingRow).padding as EdgeInsets).bottom,
       bottomNavHeight,

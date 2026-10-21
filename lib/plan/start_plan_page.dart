@@ -257,42 +257,46 @@ class _StartPlanPageState extends State<StartPlanPage>
                         ),
                 ),
               ),
-              floatingActionButtonLocation:
-                  FloatingActionButtonLocation.centerFloat,
-              floatingActionButton:
+              bottomNavigationBar:
                   desktop ||
                       workout == null ||
                       snapshot.data!.isEmpty ||
                       _selected >= snapshot.data!.length
                   ? null
-                  : Padding(
-                      key: const Key('start-plan-floating-row'),
-                      padding: EdgeInsets.only(
-                        left: 16,
-                        right: 16,
-                        bottom: MediaQuery.viewInsetsOf(context).bottom > 0
-                            ? 0
-                            : bottomNavHeight,
-                      ),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Expanded(
-                            child: SessionSets(
-                              key: const Key('start-plan-set-preview'),
-                              exerciseId: snapshot.data![_selected].exercise.id,
-                              workoutId: workout.id,
-                              compact: true,
+                  : ColoredBox(
+                      color: colors.surface,
+                      child: Padding(
+                        key: const Key('start-plan-floating-row'),
+                        padding: EdgeInsets.only(
+                          left: 16,
+                          right: 16,
+                          top: 8,
+                          bottom: MediaQuery.viewInsetsOf(context).bottom > 0
+                              ? 0
+                              : bottomNavHeight,
+                        ),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              child: SessionSets(
+                                key: const Key('start-plan-set-preview'),
+                                exerciseId:
+                                    snapshot.data![_selected].exercise.id,
+                                workoutId: workout.id,
+                                compact: true,
+                              ),
                             ),
-                          ),
-                          const SizedBox(width: 8),
-                          AppFab(
-                            onPressed: () async => await save(snapshot, counts),
-                            label: Text(context.l10n.actionSave),
-                            icon: const Icon(Icons.save),
-                            bottomPadding: 0,
-                          ),
-                        ],
+                            const SizedBox(width: 8),
+                            AppFab(
+                              onPressed: () async =>
+                                  await save(snapshot, counts),
+                              label: Text(context.l10n.actionSave),
+                              icon: const Icon(Icons.save),
+                              bottomPadding: 0,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
             );

@@ -1,5 +1,4 @@
 import 'package:drift/drift.dart' hide Column;
-import 'package:flexify/bottom_nav.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/custom_set_indicator.dart';
 import 'package:flexify/database/database.dart';
@@ -43,10 +42,7 @@ class StartList extends StatefulWidget {
 typedef Tapped = ({int index, DateTime dateTime});
 
 class _StartListState extends State<StartList> {
-  // bottomNavHeight clears the FAB; the extra 80 clears the SessionSets
-  // chip row that renders above this list on the currently selected
-  // exercise.
-  static const _bottomPadding = bottomNavHeight + 80.0;
+  static const _bottomPadding = 16.0;
 
   Tapped lastTap = (index: 0, dateTime: DateTime(0));
   int? _historyPeekIndex;
