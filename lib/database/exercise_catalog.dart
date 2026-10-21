@@ -36,6 +36,23 @@ Stream<List<Exercise>> watchExerciseCatalog() {
       .watch();
 }
 
+List<Exercise> filterExerciseCatalog(
+  Iterable<Exercise> exercises,
+  Set<int> unavailableExerciseIds,
+  String search,
+) {
+  final normalizedSearch = search.toLowerCase();
+  return [
+    for (final exercise in exercises)
+      if (!unavailableExerciseIds.contains(exercise.id) &&
+          exercise.name.toLowerCase().contains(normalizedSearch))
+        exercise,
+  ];
+}
+
+Stream<List<String>> watchExerciseNames() =>
+    watchExerciseCatalog().map((rows) => rows.map((row) => row.name).toList());
+
 Future<String?> getExerciseCategoryName(Exercise exercise) async {
   final categoryId = exercise.categoryId;
   if (categoryId == null) return null;
