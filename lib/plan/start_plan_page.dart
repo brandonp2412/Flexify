@@ -695,7 +695,7 @@ class _StartPlanPageState extends State<StartPlanPage>
     _distance.text = toString(exerciseSet.distance);
     _minutes.text = exerciseSet.duration.floor().toString();
     _seconds.text = ((exerciseSet.duration * 60) % 60).floor().toString();
-    _incline.text = exerciseSet.incline?.toString() ?? "";
+    _incline.text = exerciseSet.incline?.toString() ?? "0";
     _prefill = exerciseSet;
     _notes.text = exerciseSet.notes ?? "";
   }
@@ -898,7 +898,7 @@ class _StartPlanPageState extends State<StartPlanPage>
     _distance.text = '0';
     _minutes.text = '0';
     _seconds.text = '0';
-    _incline.text = '';
+    _incline.text = '0';
     _prefill = null;
     _notes.text = '';
   }
