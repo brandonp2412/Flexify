@@ -133,7 +133,16 @@ class _SettingsPageState extends State<SettingsPage>
                     const EdgeInsets.symmetric(horizontal: 16.0),
                   ),
                   onChanged: (_) => setState(() {}),
-                  leading: const Icon(Icons.search),
+                  leading: _searchCtrl.text.isEmpty
+                      ? const Icon(Icons.search)
+                      : IconButton(
+                          tooltip: context.l10n.clearSearch,
+                          icon: const Icon(Icons.close_rounded),
+                          onPressed: () {
+                            _searchCtrl.clear();
+                            setState(() {});
+                          },
+                        ),
                 ),
               ),
             ),
