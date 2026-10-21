@@ -118,7 +118,7 @@ class _StartPlanPageState extends State<StartPlanPage>
                 ),
               );
               if (!mounted) return;
-              await select(_selected);
+              await _select(_selected);
             }
 
             Widget exerciseList() => snapshot.data!.isEmpty
@@ -133,7 +133,7 @@ class _StartPlanPageState extends State<StartPlanPage>
                 : StartList(
                     exercises: snapshot.data!,
                     selected: _selected,
-                    onSelect: select,
+                    onSelect: _select,
                     counts: counts,
                     plan: widget.plan,
                     workoutId: workout?.id,
@@ -670,7 +670,7 @@ class _StartPlanPageState extends State<StartPlanPage>
     final stream = watchPlanExerciseEntries(db, widget.plan.id).map((
       exercises,
     ) {
-      unawaited(_tapExercise(exercises, _selected));
+      unawaited(_select(_selected, exercises: exercises));
       return exercises;
     });
     setState(() {
@@ -822,7 +822,7 @@ class _StartPlanPageState extends State<StartPlanPage>
       _update(exerciseSet);
       _lastSaved = DateTime.now();
     });
-    if (finished) await select(_selected + 1);
+    if (finished) await _select(_selected + 1);
 
     if (!settings.notifications) return;
 
@@ -845,10 +845,8 @@ class _StartPlanPageState extends State<StartPlanPage>
       );
   }
 
-  Future<void> _tapExercise(
-    List<PlanExerciseEntry> exercises,
-    int index,
-  ) async {
+  Future<void> _select(int index, {List<PlanExerciseEntry>? exercises}) async {
+    exercises ??= await getPlanExerciseEntries(db, widget.plan.id);
     if (!mounted) return;
     final request = ++_selectionRequest;
 
@@ -880,11 +878,6 @@ class _StartPlanPageState extends State<StartPlanPage>
         _unit = exercise.displayUnit;
       }
     });
-  }
-
-  Future<void> select(int index) async {
-    final exercises = await getPlanExerciseEntries(db, widget.plan.id);
-    await _tapExercise(exercises, index);
   }
 
   void _clear() {
