@@ -275,11 +275,20 @@ class _StartPlanPageState extends State<StartPlanPage>
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Expanded(
-                            child: SessionSets(
-                              key: const Key('start-plan-set-preview'),
-                              exerciseId: snapshot.data![_selected].exercise.id,
-                              workoutId: workout.id,
-                              compact: true,
+                            child: SizedBox(
+                              height: 56,
+                              child: OverflowBox(
+                                alignment: Alignment.center,
+                                minHeight: 0,
+                                maxHeight: double.infinity,
+                                child: SessionSets(
+                                  key: const Key('start-plan-set-preview'),
+                                  exerciseId:
+                                      snapshot.data![_selected].exercise.id,
+                                  workoutId: workout.id,
+                                  compact: true,
+                                ),
+                              ),
                             ),
                           ),
                           const SizedBox(width: 8),
