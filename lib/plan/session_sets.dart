@@ -108,6 +108,7 @@ class _SessionSetsState extends State<SessionSets> {
           key: const Key('session-set-scroll'),
           controller: _scrollController,
           scrollDirection: Axis.horizontal,
+          padding: const EdgeInsets.symmetric(vertical: 6),
           child: Row(
             children: [
               for (var i = 0; i < sets.length; i++)

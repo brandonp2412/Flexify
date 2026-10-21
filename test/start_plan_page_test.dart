@@ -5,6 +5,7 @@ import 'package:flexify/database/exercise_set_repository.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/l10n/generated/app_localizations.dart';
 import 'package:flexify/l10n/locale_preferences.dart';
+import 'package:flexify/plan/session_sets.dart';
 import 'package:flexify/plan/start_plan_page.dart';
 import 'package:flexify/plan/workout_sessions.dart';
 import 'package:flexify/stepper_field.dart';
@@ -908,6 +909,58 @@ void main() {
 
     expect(find.text('Set 1'), findsOne);
     expect(find.text('5 × 50 kg'), findsOne);
+  });
+
+  testWidgets('many set previews leave room below the chip cards', (
+    WidgetTester tester,
+  ) async {
+    final harness = await FlexifyTestHarness.create();
+    final database = harness.database;
+    final planId = await database.plans.insertOne(planFixture());
+    final exercise = await ensureExerciseFixture(database, 'Bench press');
+    final workout = await resumeOrStartWorkout(database, planId);
+    for (var i = 0; i < 6; i++) {
+      await insertExerciseSet(
+        database,
+        exerciseSet: exerciseSetFixture(
+          'Bench press',
+          planId: planId,
+          reps: 8,
+          weight: 20.0 + i,
+          created: DateTime.now().toLocal().add(Duration(seconds: i)),
+        ),
+        exerciseId: exercise.id,
+        workoutId: workout.id,
+      );
+    }
+
+    await harness.pump(
+      tester,
+      Scaffold(
+        body: Align(
+          alignment: Alignment.bottomLeft,
+          child: SizedBox(
+            width: 260,
+            child: SessionSets(
+              exerciseId: exercise.id,
+              workoutId: workout.id,
+              compact: true,
+            ),
+          ),
+        ),
+      ),
+      surfaceSize: const Size(390, 840),
+    );
+    await tester.pumpAndSettle();
+
+    final scroll = find.byKey(const Key('session-set-scroll'));
+    final card = find.descendant(of: scroll, matching: find.byType(Card)).last;
+    expect(find.text('Set 6'), findsOneWidget);
+    expect(
+      tester.getBottomLeft(scroll).dy - tester.getBottomLeft(card).dy,
+      greaterThanOrEqualTo(6),
+    );
+    expect(tester.takeException(), isNull);
   });
 
   testWidgets('rest timer return keeps current workout and set progress', (
