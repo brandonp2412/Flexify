@@ -315,6 +315,13 @@ void main() {
       reps: 6,
       weight: 95,
     );
+    await insertExerciseSetFixture(
+      database,
+      'Cable fly',
+      created: DateTime(yesterday.year, yesterday.month, yesterday.day, 10),
+      reps: 12,
+      weight: 30,
+    );
 
     final id = await database.plans.insertOne(planFixture(title: 'Push day'));
     await insertPlanExerciseFixture(
@@ -338,7 +345,18 @@ void main() {
 
     expect(find.textContaining('Previously'), findsOneWidget);
     expect(find.textContaining('8×90, 6×95 kg'), findsOneWidget);
-    expect(find.textContaining('Cable fly'), findsOneWidget);
+    expect(find.textContaining('12×30 kg'), findsNothing);
+
+    await tester.drag(find.byKey(const Key('Cable fly')), const Offset(160, 0));
+    await tester.pumpAndSettle();
+    expect(find.textContaining('Previously'), findsOneWidget);
+    expect(find.textContaining('12×30 kg'), findsOneWidget);
+    expect(find.textContaining('8×90, 6×95 kg'), findsNothing);
+
+    await tester.tap(find.text('Bench press'));
+    await tester.pumpAndSettle();
+    expect(find.textContaining('8×90, 6×95 kg'), findsOneWidget);
+    expect(find.textContaining('12×30 kg'), findsNothing);
 
     await tester.binding.setSurfaceSize(const Size(1200, 800));
     addTearDown(() => tester.binding.setSurfaceSize(null));

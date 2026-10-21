@@ -49,9 +49,39 @@ class _StartListState extends State<StartList> {
   static const _bottomPadding = bottomNavHeight + 80.0;
 
   Tapped lastTap = (index: 0, dateTime: DateTime(0));
+  int? _historyPeekIndex;
+  double _swipeDistance = 0;
+
+  @override
+  void didUpdateWidget(covariant StartList oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.selected != widget.selected ||
+        oldWidget.plan.id != widget.plan.id) {
+      _historyPeekIndex = null;
+    }
+  }
+
+  void _selectExercise(int index) {
+    if (_historyPeekIndex != null) setState(() => _historyPeekIndex = null);
+    widget.onSelect(index);
+  }
+
+  void _endSwipe(int index) {
+    if (_swipeDistance > 36 &&
+        (widget
+                .previous[widget.exercises[index].exercise.id]
+                ?.sets
+                .isNotEmpty ??
+            false)) {
+      setState(() => _historyPeekIndex = index);
+    } else if (_swipeDistance < -36 && _historyPeekIndex != null) {
+      setState(() => _historyPeekIndex = null);
+    }
+    _swipeDistance = 0;
+  }
 
   void tap(int index, List<GymCount> counts) async {
-    widget.onSelect(index);
+    _selectExercise(index);
     final count = counts.elementAtOrNull(index);
     if (count == null) return;
     if (counts.elementAtOrNull(index)?.count == 0) return;
@@ -185,12 +215,43 @@ class _StartListState extends State<StartList> {
     final colors = Theme.of(context).colorScheme;
     final selected = index == widget.selected;
     final previous = widget.previous[exercise.exercise.id];
-    final previousText = previous == null || previous.sets.isEmpty
+    final showPrevious = index == (_historyPeekIndex ?? widget.selected);
+    final previousText =
+        !showPrevious || previous == null || previous.sets.isEmpty
         ? null
         : _previousSummary(context, previous, shortDateFormat);
     final previousStyle = Theme.of(
       context,
     ).textTheme.bodySmall?.copyWith(color: colors.onSurfaceVariant);
+    final previousPanel = previousText == null
+        ? null
+        : Container(
+            key: Key('previous-performance-$index'),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            decoration: BoxDecoration(
+              color: colors.surfaceContainerHighest.withValues(alpha: .55),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.history_rounded,
+                  size: 16,
+                  color: colors.onSurfaceVariant,
+                ),
+                const SizedBox(width: 8),
+                Flexible(
+                  child: Text(
+                    previousText,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: previousStyle,
+                  ),
+                ),
+              ],
+            ),
+          );
 
     Future<void> showActions() => showModalBottomSheet<void>(
       useRootNavigator: true,
@@ -202,7 +263,7 @@ class _StartListState extends State<StartList> {
           exerciseName: exercise.exercise.name,
           workoutId: widget.workoutId,
           hasData: count > 0,
-          onSelect: () => widget.onSelect(index),
+          onSelect: () => _selectExercise(index),
         ),
       ),
     );
@@ -259,13 +320,10 @@ class _StartListState extends State<StartList> {
                                             : FontWeight.w600,
                                       ),
                                 ),
-                                if (previousText != null)
-                                  Text(
-                                    previousText,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: previousStyle,
-                                  ),
+                                if (previousPanel != null) ...[
+                                  const SizedBox(height: 6),
+                                  previousPanel,
+                                ],
                               ],
                             ),
                           ),
@@ -311,20 +369,18 @@ class _StartListState extends State<StartList> {
               ListTile(
                 onTap: () => tap(index, counts),
                 trailing: trail,
-                subtitle: previousText == null
+                subtitle: previousPanel == null
                     ? null
-                    : Text(
-                        previousText,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: previousStyle,
+                    : Padding(
+                        padding: const EdgeInsets.only(top: 6),
+                        child: previousPanel,
                       ),
                 title: Row(
                   children: [
                     RadioGroup<bool>(
                       groupValue: true,
                       onChanged: (value) {
-                        widget.onSelect(index);
+                        _selectExercise(index);
                       },
                       child: Radio<bool>(value: selected),
                     ),
@@ -340,6 +396,10 @@ class _StartListState extends State<StartList> {
     return GestureDetector(
       key: Key(exercise.exercise.name),
       onLongPress: showActions,
+      onHorizontalDragStart: (_) => _swipeDistance = 0,
+      onHorizontalDragUpdate: (details) =>
+          _swipeDistance += details.primaryDelta ?? 0,
+      onHorizontalDragEnd: (_) => _endSwipe(index),
       child: content,
     );
   }
