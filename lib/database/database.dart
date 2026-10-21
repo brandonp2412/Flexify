@@ -74,7 +74,17 @@ Future<void> _backfillExerciseIdentity(AppDatabase database) async {
     SELECT
       chosen.name,
       CASE WHEN chosen.cardio = 1 THEN 'cardio' ELSE 'strength' END,
-      chosen.unit,
+      COALESCE(
+        (
+          SELECT history.unit
+          FROM gym_sets AS history
+          WHERE history.name = chosen.name
+            AND history.hidden = 0
+          ORDER BY history.created DESC, history.id DESC
+          LIMIT 1
+        ),
+        chosen.unit
+      ),
       categories.id,
       chosen.image,
       chosen.rest_ms,

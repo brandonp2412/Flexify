@@ -690,7 +690,7 @@ void main() {
     );
   });
   test(
-    'issue 395: a kg template makes migrated lb history display in kg',
+    'issue 395: migration keeps logged lb units over a kg template',
     () async {
       await verifier.testWithDataIntegrity(
         oldVersion: 59,
@@ -708,6 +708,8 @@ void main() {
               unit: 'kg',
               weight: 0,
               hidden: const Value(1),
+              image: const Value('template.png'),
+              restMs: const Value(120000),
             ),
             v59.GymSetsCompanion.insert(
               id: const Value(2),
@@ -725,18 +727,77 @@ void main() {
 
           final displayed = (await getExerciseSetById(newDb, stored.id))!;
           expect(displayed.reps, 10);
-          expect(displayed.unit, 'kg');
-          expect(displayed.weight, closeTo(11.33980925, 0.000001));
+          expect(displayed.unit, 'lb');
+          expect(displayed.weight, closeTo(25, 0.000001));
+          expect(displayed.image, 'template.png');
+          expect(displayed.restMs, 120000);
 
           await newDb.exercises.update().write(
-            const ExercisesCompanion(displayUnit: Value('lb')),
+            const ExercisesCompanion(displayUnit: Value('kg')),
           );
-          final restored = (await getExerciseSetById(newDb, stored.id))!;
-          expect(restored.unit, 'lb');
-          expect(restored.weight, closeTo(25, 0.000001));
+          final converted = (await getExerciseSetById(newDb, stored.id))!;
+          expect(converted.unit, 'kg');
+          expect(converted.weight, closeTo(11.33980925, 0.000001));
           expect(
             (await newDb.select(newDb.exerciseSets).getSingle()).loadKg,
             stored.loadKg,
+          );
+        },
+      );
+    },
+  );
+
+  test(
+    'migration uses latest logged units and falls back to unused templates',
+    () async {
+      await verifier.testWithDataIntegrity(
+        oldVersion: 59,
+        newVersion: GeneratedHelper.versions.last,
+        createOld: v59.DatabaseAtV59.new,
+        createNew: AppDatabase.new,
+        openTestedDatabase: AppDatabase.new,
+        createItems: (batch, oldDb) {
+          batch.insertAll(oldDb.gymSets, [
+            for (final (id, created, unit, hidden) in [
+              (1, 400, 'kg', 1),
+              (2, 100, 'kg', 0),
+              (3, 200, 'mi', 0),
+              (4, 200, 'km', 0),
+            ])
+              v59.GymSetsCompanion.insert(
+                id: Value(id),
+                created: created,
+                name: 'Running',
+                reps: 0,
+                unit: unit,
+                weight: 0,
+                cardio: const Value(1),
+                hidden: Value(hidden),
+              ),
+            v59.GymSetsCompanion.insert(
+              id: const Value(5),
+              created: 100,
+              name: 'Unused press',
+              reps: 0,
+              unit: 'lb',
+              weight: 0,
+              hidden: const Value(1),
+            ),
+          ]);
+        },
+        validateItems: (newDb) async {
+          final exercises = await newDb.select(newDb.exercises).get();
+          expect(
+            exercises
+                .singleWhere((exercise) => exercise.name == 'Running')
+                .displayUnit,
+            'km',
+          );
+          expect(
+            exercises
+                .singleWhere((exercise) => exercise.name == 'Unused press')
+                .displayUnit,
+            'lb',
           );
         },
       );
