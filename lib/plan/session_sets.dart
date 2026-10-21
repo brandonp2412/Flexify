@@ -14,12 +14,14 @@ class SessionSets extends StatefulWidget {
   final int exerciseId;
   final int workoutId;
   final bool compact;
+  final PreviousExerciseDay? previous;
 
   const SessionSets({
     super.key,
     required this.exerciseId,
     required this.workoutId,
     this.compact = false,
+    this.previous,
   });
 
   @override
@@ -77,12 +79,20 @@ class _SessionSetsState extends State<SessionSets> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
+      key: ValueKey((widget.exerciseId, widget.workoutId)),
       stream: _stream,
       builder: (context, snapshot) {
         final sets = snapshot.data;
         if (sets != null && sets.isNotEmpty) _scrollToNewest(sets.length);
 
-        if (sets == null || sets.isEmpty) return const SizedBox.shrink();
+        if (sets == null) return const SizedBox.shrink();
+        if (sets.isEmpty) {
+          final previous = widget.previous;
+          if (previous == null || previous.sets.isEmpty) {
+            return const SizedBox.shrink();
+          }
+          return _buildPreviousChips(previous);
+        }
 
         if (!widget.compact) return _buildChips(sets);
 
@@ -93,6 +103,27 @@ class _SessionSetsState extends State<SessionSets> {
           child: _buildChips(sets),
         );
       },
+    );
+  }
+
+  Widget _buildPreviousChips(PreviousExerciseDay previous) {
+    return SingleChildScrollView(
+      key: const Key('previous-set-scroll'),
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: [
+          for (var i = 0; i < previous.sets.length; i++)
+            Padding(
+              padding: const EdgeInsets.only(right: 8),
+              child: _SetChip(
+                previousSet: previous.sets[i],
+                number: i + 1,
+                best: false,
+                repsFirst: widget.compact,
+              ),
+            ),
+        ],
+      ),
     );
   }
 
@@ -153,51 +184,61 @@ class _SessionSetsState extends State<SessionSets> {
 }
 
 class _SetChip extends StatelessWidget {
-  final ExerciseSetView exerciseSet;
+  final ExerciseSetView? exerciseSet;
+  final PreviousExerciseSet? previousSet;
   final int number;
   final bool best;
   final bool repsFirst;
 
   const _SetChip({
-    required this.exerciseSet,
+    this.exerciseSet,
+    this.previousSet,
     required this.number,
     required this.best,
     required this.repsFirst,
   });
 
   String _value(BuildContext context) {
-    final unit = displayMeasurementUnit(context.l10n, exerciseSet.unit);
-    if (exerciseSet.cardio &&
-        (exerciseSet.unit == 'kg' ||
-            exerciseSet.unit == 'lb' ||
-            exerciseSet.unit == 'stone')) {
-      final minutes = exerciseSet.duration.floor();
-      final seconds = ((exerciseSet.duration * 60) % 60)
-          .floor()
-          .toString()
-          .padLeft(2, '0');
-      return "${formatDisplayNumber(context, exerciseSet.weight)} $unit / $minutes:$seconds";
+    final set = exerciseSet;
+    final previous = previousSet;
+    final unitCode = set?.unit ?? previous!.unit;
+    final unit = displayMeasurementUnit(context.l10n, unitCode);
+    final cardio = set?.cardio ?? previous!.cardio;
+    final weightValue = set?.weight ?? previous!.weight;
+    if (cardio &&
+        (unitCode == 'kg' || unitCode == 'lb' || unitCode == 'stone')) {
+      final duration = set?.duration ?? previous!.duration;
+      final minutes = duration.floor();
+      final seconds = ((duration * 60) % 60).floor().toString().padLeft(2, '0');
+      return "${formatDisplayNumber(context, weightValue)} $unit / $minutes:$seconds";
     }
-    if (exerciseSet.cardio) {
-      return "${formatDisplayNumber(context, exerciseSet.distance)} $unit";
+    if (cardio) {
+      final distance = set?.distance ?? previous!.distance;
+      return "${formatDisplayNumber(context, distance)} $unit";
     }
-    final weight = "${formatDisplayNumber(context, exerciseSet.weight)} $unit";
-    final reps = formatDisplayNumber(context, exerciseSet.reps);
+    final weight = "${formatDisplayNumber(context, weightValue)} $unit";
+    final reps = formatDisplayNumber(context, set?.reps ?? previous!.reps);
     return repsFirst ? "$reps × $weight" : "$weight × $reps";
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final currentSet = exerciseSet;
     return Card(
       margin: EdgeInsets.zero,
+      color: currentSet == null
+          ? theme.colorScheme.surfaceContainerLow.withValues(alpha: 0.55)
+          : null,
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
-        onTap: () => Navigator.of(context).push(
-          FlexPageRoute(
-            builder: (context) => EditSetPage(exerciseSet: exerciseSet),
-          ),
-        ),
+        onTap: currentSet == null
+            ? null
+            : () => Navigator.of(context).push(
+                FlexPageRoute(
+                  builder: (context) => EditSetPage(exerciseSet: currentSet),
+                ),
+              ),
         child: Padding(
           padding: EdgeInsets.symmetric(
             horizontal: 12.0,
@@ -226,7 +267,14 @@ class _SetChip extends StatelessWidget {
                   ],
                 ],
               ),
-              Text(_value(context), style: theme.textTheme.titleSmall),
+              Text(
+                _value(context),
+                style: theme.textTheme.titleSmall?.copyWith(
+                  color: currentSet == null
+                      ? theme.colorScheme.onSurfaceVariant
+                      : null,
+                ),
+              ),
             ],
           ),
         ),

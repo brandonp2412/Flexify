@@ -1551,4 +1551,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String setNumber(int number) {
     return 'सेट $number';
   }
+
+  @override
+  String previousPerformance(String date, String sets) {
+    return 'पहले $date · $sets';
+  }
 }

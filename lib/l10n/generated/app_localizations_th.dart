@@ -1542,4 +1542,9 @@ class AppLocalizationsTh extends AppLocalizations {
   String setNumber(int number) {
     return 'เซ็ต $number';
   }
+
+  @override
+  String previousPerformance(String date, String sets) {
+    return 'ก่อนหน้านี้ $date · $sets';
+  }
 }

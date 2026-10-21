@@ -490,5 +490,6 @@
   "nothingMatchesPlanSearch": "Nessun risultato per “{query}”. Puoi crearlo come nuova scheda.",
   "createPlan": "Crea scheda",
   "createNamedPlan": "Crea “{name}”",
-  "setNumber": "Serie {number}"
+  "setNumber": "Serie {number}",
+  "previousPerformance": "Precedentemente {date} · {sets}"
 }

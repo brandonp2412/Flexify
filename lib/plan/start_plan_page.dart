@@ -57,6 +57,7 @@ class _StartPlanPageState extends State<StartPlanPage>
 
   int _selected = 0;
   int _selectionRequest = 0;
+  bool _saving = false;
   DateTime? _lastSaved;
   Exercise? _exercise;
   ExerciseSetView? _prefill;
@@ -69,6 +70,8 @@ class _StartPlanPageState extends State<StartPlanPage>
 
   Stream<List<PlanExerciseEntry>>? _stream;
   Stream<List<GymCount>>? _gymCountsStream;
+  StreamSubscription<Map<int, PreviousExerciseDay>>? _previousDaysSub;
+  Map<int, PreviousExerciseDay> _previousDays = const {};
   StreamSubscription<Plan?>? _planSub;
   String _unit = 'kg';
 
@@ -133,7 +136,8 @@ class _StartPlanPageState extends State<StartPlanPage>
                 : StartList(
                     exercises: snapshot.data!,
                     selected: _selected,
-                    onSelect: _select,
+                    onSelect: (index) =>
+                        _select(index, exercises: snapshot.data!),
                     counts: counts,
                     plan: widget.plan,
                     workoutId: workout?.id,
@@ -223,6 +227,11 @@ class _StartPlanPageState extends State<StartPlanPage>
                                               .exercise
                                               .id,
                                           workoutId: workout.id,
+                                          previous:
+                                              _previousDays[snapshot
+                                                  .data![_selected]
+                                                  .exercise
+                                                  .id],
                                         ),
                                       ],
                                     ],
@@ -286,6 +295,11 @@ class _StartPlanPageState extends State<StartPlanPage>
                                   exerciseId:
                                       snapshot.data![_selected].exercise.id,
                                   workoutId: workout.id,
+                                  previous:
+                                      _previousDays[snapshot
+                                          .data![_selected]
+                                          .exercise
+                                          .id],
                                   compact: true,
                                 ),
                               ),
@@ -595,6 +609,7 @@ class _StartPlanPageState extends State<StartPlanPage>
     WidgetsBinding.instance.removeObserver(this);
     dbVersion.removeListener(_reloadDatabaseStreams);
     _planSub?.cancel();
+    _previousDaysSub?.cancel();
 
     super.dispose();
   }
@@ -678,6 +693,13 @@ class _StartPlanPageState extends State<StartPlanPage>
       _gymCountsStream = _workoutFuture.asStream().asyncExpand(
         (workout) => watchGymCounts(widget.plan.id, workout.id),
       );
+      _previousDaysSub?.cancel();
+      _previousDaysSub = watchPreviousExerciseDays(db, widget.plan.id).listen((
+        previous,
+      ) {
+        if (!mounted) return;
+        setState(() => _previousDays = previous);
+      });
     });
   }
 
@@ -705,144 +727,150 @@ class _StartPlanPageState extends State<StartPlanPage>
     AsyncSnapshot<List<PlanExerciseEntry>> snapshot,
     List<GymCount> counts,
   ) async {
-    if (!_key.currentState!.validate()) return;
-    if (snapshot.data == null || snapshot.data!.isEmpty) return;
-    if (_selected >= snapshot.data!.length) return;
+    if (_saving) return;
+    _saving = true;
+    try {
+      if (!_key.currentState!.validate()) return;
+      if (snapshot.data == null || snapshot.data!.isEmpty) return;
+      if (_selected >= snapshot.data!.length) return;
 
-    final workout = await _workoutFuture;
-    if (!mounted) return;
+      final workout = await _workoutFuture;
+      if (!mounted) return;
 
-    final entry = snapshot.data![_selected];
-    final exerciseId = entry.exercise.id;
-    final exercise = entry.exercise.name;
-    double? bodyWeight;
-    double? bodyWeightKg;
-    final settings = context.read<Setting>();
-    final timerState = context.read<TimerState>();
-    if (settings.showBodyWeight) {
-      final weightEntry = await getLatestBodyWeight(db);
-      if (weightEntry != null) {
-        bodyWeightKg = weightEntry.weightKg;
-        bodyWeight = displayBodyWeight(_unit, weightEntry.weightKg);
+      final entry = snapshot.data![_selected];
+      final exerciseId = entry.exercise.id;
+      final exercise = entry.exercise.name;
+      double? bodyWeight;
+      double? bodyWeightKg;
+      final settings = context.read<Setting>();
+      final timerState = context.read<TimerState>();
+      if (settings.showBodyWeight) {
+        final weightEntry = await getLatestBodyWeight(db);
+        if (weightEntry != null) {
+          bodyWeightKg = weightEntry.weightKg;
+          bodyWeight = displayBodyWeight(_unit, weightEntry.weightKg);
+        }
       }
-    }
-    if (settings.showBodyWeight && bodyWeight == null) {
-      final lastSet = await getLast(exercise);
-      bodyWeight = lastSet?.bodyWeight;
-    }
+      if (settings.showBodyWeight && bodyWeight == null) {
+        final lastSet = await getLast(exercise);
+        bodyWeight = lastSet?.bodyWeight;
+      }
 
-    if (settings.notifications && !settings.notificationPermissionRequested) {
-      await requestNotificationPermission();
-    }
+      if (settings.notifications && !settings.notificationPermissionRequested) {
+        await requestNotificationPermission();
+      }
 
-    if (!settings.explainedPermissions &&
-        settings.restTimers &&
-        !kIsWeb &&
-        defaultTargetPlatform == TargetPlatform.android &&
-        mounted) {
-      await Navigator.of(
-        context,
-      ).push(FlexPageRoute(builder: (context) => const PermissionsPage()));
-    }
+      if (!settings.explainedPermissions &&
+          settings.restTimers &&
+          !kIsWeb &&
+          defaultTargetPlatform == TargetPlatform.android &&
+          mounted) {
+        await Navigator.of(
+          context,
+        ).push(FlexPageRoute(builder: (context) => const PermissionsPage()));
+      }
 
-    if (!mounted) return;
-    final index = counts.indexWhere(
-      (element) => element.exerciseId == exerciseId,
-    );
-
-    int? max;
-    double? restMs;
-    int warmupSets = 0;
-    bool peTimers = true;
-    if (index != -1) {
-      max = counts[index].maxSets;
-      restMs = counts[index].restMs?.toDouble();
-      warmupSets = counts[index].warmupSets ?? 0;
-      peTimers = counts[index].timers;
-    }
-
-    final created = DateTime.now().toLocal();
-    final category = _prefill != null
-        ? _prefill!.category
-        : await getExerciseCategoryName(entry.exercise);
-    if (!mounted) return;
-    final draft = ExerciseSetView(
-      id: 0,
-      bodyWeight: bodyWeight ?? 0,
-      cardio: _cardio,
-      category: category,
-      created: created,
-      distance: parseDisplayNumber(context, _distance.text) ?? 0,
-      duration:
-          (int.tryParse(_seconds.text) ?? 0) / 60 +
-          (int.tryParse(_minutes.text) ?? 0),
-      image: _image,
-      incline: int.tryParse(_incline.text),
-      name: exercise,
-      notes: _notes.text,
-      planId: widget.plan.id,
-      reps: parseDisplayNumber(context, _reps.text) ?? 0,
-      restMs: restMs?.toInt(),
-      unit: _unit,
-      weight: parseDisplayNumber(context, _weight.text) ?? 0,
-    );
-
-    var count = 0;
-    if (index != -1) count = counts[index].count;
-    count++;
-
-    restMs ??= settings.timerDuration.toDouble();
-
-    if (settings.restTimers && count > warmupSets && peTimers) {
-      timerState.startTimer(
-        "$exercise ($count/${max ?? settings.maxSets})",
-        Duration(milliseconds: restMs.toInt()),
-        settings.alarmSound,
-        settings.vibrate,
-        settings.enableSound,
-        "plan:${widget.plan.id}",
-        settings.keepRinging,
+      if (!mounted) return;
+      final index = counts.indexWhere(
+        (element) => element.exerciseId == exerciseId,
       );
-    }
 
-    final finished =
-        count == (max ?? settings.maxSets) &&
-        _selected < snapshot.data!.length - 1;
+      int? max;
+      double? restMs;
+      int warmupSets = 0;
+      bool peTimers = true;
+      if (index != -1) {
+        max = counts[index].maxSets;
+        restMs = counts[index].restMs?.toDouble();
+        warmupSets = counts[index].warmupSets ?? 0;
+        peTimers = counts[index].timers;
+      }
 
-    final exerciseSet = await insertExerciseSet(
-      db,
-      exerciseSet: draft,
-      exerciseId: exerciseId,
-      workoutId: workout.id,
-      bodyWeightKg: bodyWeightKg,
-    );
-    if (!mounted) return;
-    final messages = positiveReinforcementMessages(context.l10n);
-    setState(() {
-      _update(exerciseSet);
-      _lastSaved = DateTime.now();
-    });
-    if (finished) await _select(_selected + 1);
+      final created = DateTime.now().toLocal();
+      final category = _prefill != null
+          ? _prefill!.category
+          : await getExerciseCategoryName(entry.exercise);
+      if (!mounted) return;
+      final draft = ExerciseSetView(
+        id: 0,
+        bodyWeight: bodyWeight ?? 0,
+        cardio: _cardio,
+        category: category,
+        created: created,
+        distance: parseDisplayNumber(context, _distance.text) ?? 0,
+        duration:
+            (int.tryParse(_seconds.text) ?? 0) / 60 +
+            (int.tryParse(_minutes.text) ?? 0),
+        image: _image,
+        incline: int.tryParse(_incline.text),
+        name: exercise,
+        notes: _notes.text,
+        planId: widget.plan.id,
+        reps: parseDisplayNumber(context, _reps.text) ?? 0,
+        restMs: restMs?.toInt(),
+        unit: _unit,
+        weight: parseDisplayNumber(context, _weight.text) ?? 0,
+      );
 
-    if (!settings.notifications) return;
+      var count = 0;
+      if (index != -1) count = counts[index].count;
+      count++;
 
-    final best = await isBestExerciseSet(db, exerciseSet);
-    if (!best) return;
+      restMs ??= settings.timerDuration.toDouble();
 
-    final random = Random();
-    final randomMessage = messages[random.nextInt(messages.length)];
-    if (mounted && random.nextDouble() < 0.3)
-      messengerKey.currentState!.showSnackBar(
-        SnackBar(
-          content: Text(randomMessage),
-          behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(24),
+      if (settings.restTimers && count > warmupSets && peTimers) {
+        timerState.startTimer(
+          "$exercise ($count/${max ?? settings.maxSets})",
+          Duration(milliseconds: restMs.toInt()),
+          settings.alarmSound,
+          settings.vibrate,
+          settings.enableSound,
+          "plan:${widget.plan.id}",
+          settings.keepRinging,
+        );
+      }
+
+      final finished =
+          count == (max ?? settings.maxSets) &&
+          _selected < snapshot.data!.length - 1;
+
+      final exerciseSet = await insertExerciseSet(
+        db,
+        exerciseSet: draft,
+        exerciseId: exerciseId,
+        workoutId: workout.id,
+        bodyWeightKg: bodyWeightKg,
+      );
+      if (!mounted) return;
+      final messages = positiveReinforcementMessages(context.l10n);
+      setState(() {
+        _update(exerciseSet);
+        _lastSaved = DateTime.now();
+      });
+      if (finished) await _select(_selected + 1);
+
+      if (!settings.notifications) return;
+
+      final best = await isBestExerciseSet(db, exerciseSet);
+      if (!best) return;
+
+      final random = Random();
+      final randomMessage = messages[random.nextInt(messages.length)];
+      if (mounted && random.nextDouble() < 0.3)
+        messengerKey.currentState!.showSnackBar(
+          SnackBar(
+            content: Text(randomMessage),
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(24),
+            ),
+            duration: const Duration(seconds: 4),
+            persist: false,
           ),
-          duration: const Duration(seconds: 4),
-          persist: false,
-        ),
-      );
+        );
+    } finally {
+      _saving = false;
+    }
   }
 
   Future<void> _select(int index, {List<PlanExerciseEntry>? exercises}) async {

@@ -2006,5 +2006,6 @@
         "type": "int"
       }
     }
-  }
+  },
+  "previousPerformance": "Sebelum ini {date} · {sets}"
 }

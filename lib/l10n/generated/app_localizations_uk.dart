@@ -1580,4 +1580,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String setNumber(int number) {
     return 'Підхід $number';
   }
+
+  @override
+  String previousPerformance(String date, String sets) {
+    return 'Раніше $date · $sets';
+  }
 }

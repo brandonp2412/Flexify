@@ -2885,6 +2885,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Set {number}'**
   String setNumber(int number);
+
+  /// Summary of the last day an exercise was trained.
+  ///
+  /// In en, this message translates to:
+  /// **'Previously {date} · {sets}'**
+  String previousPerformance(String date, String sets);
 }
 
 class _AppLocalizationsDelegate

@@ -490,5 +490,6 @@
   "nothingMatchesPlanSearch": "「{query}」に一致する項目はありません。新しいプランとして作成できます。",
   "createPlan": "プランを作成",
   "createNamedPlan": "「{name}」を作成",
-  "setNumber": "セット {number}"
+  "setNumber": "セット {number}",
+  "previousPerformance": "前回 {date} · {sets}"
 }

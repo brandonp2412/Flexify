@@ -1583,4 +1583,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String setNumber(int number) {
     return 'Подход $number';
   }
+
+  @override
+  String previousPerformance(String date, String sets) {
+    return 'Ранее $date · $sets';
+  }
 }

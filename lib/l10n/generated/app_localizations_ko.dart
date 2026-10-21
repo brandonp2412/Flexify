@@ -1502,4 +1502,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String setNumber(int number) {
     return '세트 $number';
   }
+
+  @override
+  String previousPerformance(String date, String sets) {
+    return '이전 $date · $sets';
+  }
 }

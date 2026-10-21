@@ -490,5 +490,6 @@
   "nothingMatchesPlanSearch": "Ничто не совпадает с «{query}». Вы можете создать его как новый план.",
   "createPlan": "Создать план",
   "createNamedPlan": "Создать «{name}»",
-  "setNumber": "Подход {number}"
+  "setNumber": "Подход {number}",
+  "previousPerformance": "Ранее {date} · {sets}"
 }

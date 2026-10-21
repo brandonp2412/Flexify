@@ -2006,5 +2006,6 @@
         "type": "int"
       }
     }
-  }
+  },
+  "previousPerformance": "قبلاً {date} · {sets}"
 }

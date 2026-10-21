@@ -1558,4 +1558,9 @@ class AppLocalizationsUr extends AppLocalizations {
   String setNumber(int number) {
     return 'سیٹ $number';
   }
+
+  @override
+  String previousPerformance(String date, String sets) {
+    return 'پہلے $date · $sets';
+  }
 }

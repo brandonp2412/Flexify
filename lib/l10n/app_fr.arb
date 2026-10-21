@@ -490,5 +490,6 @@
   "nothingMatchesPlanSearch": "Aucun résultat pour « {query} ». Vous pouvez le créer comme nouveau programme.",
   "createPlan": "Créer un programme",
   "createNamedPlan": "Créer « {name} »",
-  "setNumber": "Série {number}"
+  "setNumber": "Série {number}",
+  "previousPerformance": "Auparavant {date} · {sets}"
 }

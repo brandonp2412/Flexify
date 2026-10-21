@@ -1564,4 +1564,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String setNumber(int number) {
     return 'Hiệp $number';
   }
+
+  @override
+  String previousPerformance(String date, String sets) {
+    return 'Trước đây $date · $sets';
+  }
 }

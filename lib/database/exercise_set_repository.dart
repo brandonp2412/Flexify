@@ -246,6 +246,112 @@ Future<List<ExerciseSetView>> getExerciseSetsForExercise(
   return rows.map((row) => _toExerciseSetView(database, row)).toList();
 }
 
+class PreviousExerciseSet {
+  const PreviousExerciseSet({
+    required this.cardio,
+    required this.unit,
+    required this.reps,
+    required this.weight,
+    required this.distance,
+    required this.duration,
+    required this.incline,
+  });
+
+  final bool cardio;
+  final String unit;
+  final double reps;
+  final double weight;
+  final double distance;
+  final double duration;
+  final int? incline;
+}
+
+class PreviousExerciseDay {
+  const PreviousExerciseDay({required this.day, required this.sets});
+
+  final DateTime day;
+  final List<PreviousExerciseSet> sets;
+}
+
+Stream<Map<int, PreviousExerciseDay>> watchPreviousExerciseDays(
+  AppDatabase database,
+  int planId, {
+  DateTime? now,
+}) {
+  final reference = now?.toLocal();
+  final startOfToday = reference == null
+      ? null
+      : DateTime(reference.year, reference.month, reference.day);
+  final cutoff = startOfToday == null
+      ? "CAST(strftime('%s', date('now', 'localtime'), 'utc') AS INTEGER)"
+      : '?';
+
+  return database
+      .customSelect(
+        '''
+        WITH latest_days AS (
+          SELECT pe.exercise_id,
+                 date(MAX(s.timestamp), 'unixepoch', 'localtime') AS day
+          FROM plan_exercises pe
+          JOIN exercise_sets s ON s.exercise_id = pe.exercise_id
+          WHERE pe.plan_id = ? AND pe.enabled = 1 AND s.timestamp < $cutoff
+          GROUP BY pe.exercise_id
+        )
+        SELECT latest_days.exercise_id AS exercise_id, latest_days.day AS day,
+               s.reps AS reps, s.load_kg AS load_kg,
+               s.distance_metres AS distance_metres,
+               s.duration_ms AS duration_ms, s.incline AS incline,
+               e.kind AS kind, e.display_unit AS unit
+        FROM latest_days
+        JOIN exercise_sets s ON s.exercise_id = latest_days.exercise_id
+          AND s.timestamp >= CAST(strftime('%s', latest_days.day, 'utc') AS INTEGER)
+          AND s.timestamp < CAST(strftime('%s', date(latest_days.day, '+1 day'), 'utc') AS INTEGER)
+        JOIN exercises e ON e.id = s.exercise_id
+        ORDER BY s.timestamp, s.id
+        ''',
+        variables: [
+          Variable(planId),
+          if (startOfToday != null)
+            Variable(startOfToday.millisecondsSinceEpoch ~/ 1000),
+        ],
+        readsFrom: {
+          database.planExercises,
+          database.exerciseSets,
+          database.exercises,
+        },
+      )
+      .watch()
+      .map((rows) {
+        final grouped = <int, PreviousExerciseDay>{};
+        for (final row in rows) {
+          final exerciseId = row.read<int>('exercise_id');
+          final unit = row.read<String>('unit');
+          final day = grouped.putIfAbsent(
+            exerciseId,
+            () => PreviousExerciseDay(
+              day: DateTime.parse(row.read<String>('day')),
+              sets: [],
+            ),
+          );
+          day.sets.add(
+            PreviousExerciseSet(
+              cardio: row.read<String>('kind') == 'cardio',
+              unit: unit,
+              reps: row.read<double?>('reps') ?? 0,
+              weight: displayLoad(unit, row.read<double?>('load_kg')),
+              distance: displayDistance(
+                unit,
+                row.read<double?>('distance_metres'),
+              ),
+              duration: (row.read<int?>('duration_ms') ?? 0) / 60000,
+              incline: row.read<double?>('incline')?.round(),
+            ),
+          );
+        }
+        return grouped;
+      });
+}
+
 Future<ExerciseSetView?> getExerciseSetForExerciseAt(
   AppDatabase database, {
   required String exerciseName,
