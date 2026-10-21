@@ -6,6 +6,7 @@ import 'package:flexify/database/database.dart';
 import 'package:flexify/l10n/generated/app_localizations.dart';
 import 'package:flexify/l10n/locale_preferences.dart';
 import 'package:flexify/plan/start_plan_page.dart';
+import 'package:flexify/plan/start_list.dart';
 import 'package:flexify/plan/workout_sessions.dart';
 import 'package:flexify/stepper_field.dart';
 import 'package:flexify/timer/timer_state.dart';
@@ -45,6 +46,65 @@ class RecordingTimerState extends TimerState {
 }
 
 void main() {
+  testWidgets(
+    'exercise selection applies saved values without zeroing fields',
+    (WidgetTester tester) async {
+      final harness = await FlexifyTestHarness.create();
+      final database = harness.database;
+      final planId = await database.plans.insertOne(planFixture());
+      for (final name in ['Bench press', 'Squat', 'New exercise']) {
+        await insertPlanExerciseFixture(
+          database,
+          planId: planId,
+          exercise: name,
+        );
+      }
+      final squat = await ensureExerciseFixture(database, 'Squat');
+      await insertExerciseSet(
+        database,
+        exerciseSet: exerciseSetFixture(
+          'Squat',
+          planId: planId,
+          reps: 8,
+          weight: 80,
+        ),
+        exerciseId: squat.id,
+      );
+      final plan =
+          await (database.plans.select()..where((row) => row.id.equals(planId)))
+              .getSingle();
+      await harness.pump(tester, StartPlanPage(plan: plan));
+      await tester.pumpAndSettle();
+      final controller = tester
+          .widget<EditableText>(textFieldWithLabel('Reps'))
+          .controller;
+      controller.text = '5';
+      final values = <String>[];
+      void record() => values.add(controller.text);
+      controller.addListener(record);
+      var list = tester.widget<StartList>(find.byType(StartList));
+      await tester.runAsync(
+        () => list.onSelect(
+          list.exercises.indexWhere((entry) => entry.exercise.name == 'Squat'),
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(controller.text, '8');
+      expect(values, isNot(contains('0')));
+      list = tester.widget<StartList>(find.byType(StartList));
+      await tester.runAsync(
+        () => list.onSelect(
+          list.exercises.indexWhere(
+            (entry) => entry.exercise.name == 'New exercise',
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(controller.text, '0');
+      controller.removeListener(record);
+    },
+  );
+
   testWidgets('StartPlanPage shows its page chrome on the first frame', (
     WidgetTester tester,
   ) async {

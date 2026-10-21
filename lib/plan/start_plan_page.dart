@@ -56,6 +56,7 @@ class _StartPlanPageState extends State<StartPlanPage>
   final _key = GlobalKey<FormState>();
 
   int _selected = 0;
+  int _selectionRequest = 0;
   DateTime? _lastSaved;
   bool _saving = false;
   Exercise? _exercise;
@@ -854,6 +855,7 @@ class _StartPlanPageState extends State<StartPlanPage>
     int index,
   ) async {
     if (!mounted) return;
+    final request = ++_selectionRequest;
 
     if (exercises.isEmpty) {
       setState(() {
@@ -870,17 +872,18 @@ class _StartPlanPageState extends State<StartPlanPage>
       if (_selected != selected) setState(() => _selected = selected);
       return;
     }
+    final last = await getFirstOfLastSession(exercise.id);
+    if (!mounted || request != _selectionRequest) return;
     setState(() {
       _selected = selected;
       _exercise = exercise;
-      _clearExerciseSetTextFields();
-      _unit = exercise.displayUnit;
+      if (last != null) {
+        _updateExerciseSetTextFields(last);
+      } else {
+        _clearExerciseSetTextFields();
+        _unit = exercise.displayUnit;
+      }
     });
-    final last = await getFirstOfLastSession(exercise.id);
-    if (!mounted || !identical(_exercise, exercise)) return;
-    if (last != null) {
-      setState(() => _updateExerciseSetTextFields(last));
-    }
   }
 
   Future<void> select(int index) async {
