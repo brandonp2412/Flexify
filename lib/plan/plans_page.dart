@@ -16,6 +16,26 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 
+bool matchesPlanSearch(
+  Plan plan,
+  String search,
+  Set<int> matchingPlanIds,
+  String Function(String) localizeDay,
+) {
+  if (plan.title?.toLowerCase().contains(search) == true ||
+      plan.days.toLowerCase().contains(search) ||
+      matchingPlanIds.contains(plan.id)) {
+    return true;
+  }
+  final localizedDays = plan.days
+      .split(',')
+      .where((day) => day.isNotEmpty)
+      .map(localizeDay)
+      .join(' ')
+      .toLowerCase();
+  return localizedDays.contains(search);
+}
+
 class _PlansNavigatorObserver extends NavigatorObserver {
   String? currentRouteName;
 
