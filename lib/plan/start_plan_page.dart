@@ -673,7 +673,7 @@ class _StartPlanPageState extends State<StartPlanPage>
         (workout) => watchGymCounts(widget.plan.id, workout.id),
       );
       _previousDaysSub?.cancel();
-      _previousDaysSub = watchPreviousExerciseDays(widget.plan.id).listen((
+      _previousDaysSub = watchPreviousExerciseDays(db, widget.plan.id).listen((
         previous,
       ) {
         if (!mounted) return;

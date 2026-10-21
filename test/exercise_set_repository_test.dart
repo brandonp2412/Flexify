@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:drift/drift.dart' hide isNull, isNotNull;
 import 'package:drift/native.dart';
 import 'package:flexify/database/database.dart';
@@ -42,6 +44,22 @@ void main() {
         defaultRestDurationMs: Value(restMs),
       ),
     );
+  }
+
+  Future<int> addPlan(Iterable<int> exerciseIds) async {
+    final planId = await database.plans.insertOne(
+      PlansCompanion.insert(days: 'Monday'),
+    );
+    for (final exerciseId in exerciseIds) {
+      await database.planExercises.insertOne(
+        PlanExercisesCompanion.insert(
+          enabled: true,
+          exerciseId: exerciseId,
+          planId: planId,
+        ),
+      );
+    }
+    return planId;
   }
 
   ExerciseSetView draft({
@@ -306,6 +324,7 @@ void main() {
       unit: 'kg',
       cardio: false,
     );
+    final planId = await addPlan([benchId, squatId, cableId]);
 
     for (final set in [
       (DateTime(2026, 10, 5, 18), 5.0, 80.0),
@@ -337,11 +356,11 @@ void main() {
       exerciseId: squatId,
     );
 
-    final previous = await getPreviousExerciseDays(
+    final previous = await watchPreviousExerciseDays(
       database,
-      exerciseIds: [benchId, squatId, cableId],
+      planId,
       now: DateTime(2026, 10, 10, 12),
-    );
+    ).first;
 
     expect(previous.keys.toSet(), {benchId, squatId});
     expect(previous[benchId]!.day, DateTime(2026, 10, 7));
@@ -357,6 +376,7 @@ void main() {
       unit: 'kg',
       cardio: false,
     );
+    final planId = await addPlan([exerciseId]);
     await insertExerciseSet(
       database,
       exerciseSet: draft(
@@ -369,13 +389,51 @@ void main() {
       exerciseId: exerciseId,
     );
 
-    final previous = await getPreviousExerciseDays(
+    final previous = await watchPreviousExerciseDays(
       database,
-      exerciseIds: [exerciseId],
+      planId,
       now: DateTime(2026, 10, 10, 12),
-    );
+    ).first;
 
     expect(previous, isEmpty);
+  });
+
+  test('previous days react to exercise unit changes', () async {
+    final exerciseId = await addExercise(
+      name: 'Changing Units',
+      unit: 'kg',
+      cardio: false,
+    );
+    final planId = await addPlan([exerciseId]);
+    await insertExerciseSet(
+      database,
+      exerciseSet: draft(
+        name: 'Changing Units',
+        unit: 'kg',
+        created: DateTime(2026, 10, 7),
+        reps: 8,
+        weight: 90,
+      ),
+      exerciseId: exerciseId,
+    );
+
+    final iterator = StreamIterator(
+      watchPreviousExerciseDays(database, planId, now: DateTime(2026, 10, 10)),
+    );
+    addTearDown(iterator.cancel);
+    expect(await iterator.moveNext(), isTrue);
+    expect(iterator.current[exerciseId]!.sets.single.unit, 'kg');
+
+    await (database.exercises.update()
+          ..where((exercise) => exercise.id.equals(exerciseId)))
+        .write(const ExercisesCompanion(displayUnit: Value('lb')));
+
+    expect(await iterator.moveNext(), isTrue);
+    expect(iterator.current[exerciseId]!.sets.single.unit, 'lb');
+    expect(
+      iterator.current[exerciseId]!.sets.single.weight,
+      closeTo(198.42, 0.01),
+    );
   });
 
   test('history ordering uses the timestamp index', () async {

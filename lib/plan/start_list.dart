@@ -357,7 +357,7 @@ String _previousSummary(
   );
 }
 
-String _previousSets(BuildContext context, List<ExerciseSetView> sets) {
+String _previousSets(BuildContext context, List<PreviousExerciseSet> sets) {
   final unit = displayMeasurementUnit(context.l10n, sets.first.unit);
   final values = sets
       .map((set) {
