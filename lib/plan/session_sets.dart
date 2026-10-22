@@ -15,6 +15,7 @@ class SessionSets extends StatefulWidget {
   final int workoutId;
   final bool compact;
   final PreviousExerciseDay? previous;
+  final ValueChanged<PreviousExerciseSet>? onPreviousSetTap;
 
   const SessionSets({
     super.key,
@@ -22,6 +23,7 @@ class SessionSets extends StatefulWidget {
     required this.workoutId,
     this.compact = false,
     this.previous,
+    this.onPreviousSetTap,
   });
 
   @override
@@ -117,6 +119,7 @@ class _SessionSetsState extends State<SessionSets> {
               padding: const EdgeInsets.only(right: 8),
               child: _SetChip(
                 previousSet: previous.sets[i],
+                onPreviousTap: widget.onPreviousSetTap,
                 number: i + 1,
                 best: false,
                 repsFirst: widget.compact,
@@ -186,6 +189,7 @@ class _SessionSetsState extends State<SessionSets> {
 class _SetChip extends StatelessWidget {
   final ExerciseSetView? exerciseSet;
   final PreviousExerciseSet? previousSet;
+  final ValueChanged<PreviousExerciseSet>? onPreviousTap;
   final int number;
   final bool best;
   final bool repsFirst;
@@ -193,6 +197,7 @@ class _SetChip extends StatelessWidget {
   const _SetChip({
     this.exerciseSet,
     this.previousSet,
+    this.onPreviousTap,
     required this.number,
     required this.best,
     required this.repsFirst,
@@ -227,56 +232,64 @@ class _SetChip extends StatelessWidget {
     final currentSet = exerciseSet;
     return Card(
       margin: EdgeInsets.zero,
-      color: currentSet == null
-          ? theme.colorScheme.surfaceContainerLow.withValues(alpha: 0.55)
-          : null,
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
-        onTap: currentSet == null
-            ? null
-            : () => Navigator.of(context).push(
+        onTap: currentSet != null
+            ? () => Navigator.of(context).push(
                 FlexPageRoute(
                   builder: (context) => EditSetPage(exerciseSet: currentSet),
                 ),
+              )
+            : previousSet != null && onPreviousTap != null
+            ? () => onPreviousTap!(previousSet!)
+            : null,
+        child: Stack(
+          children: [
+            Padding(
+              padding: EdgeInsets.fromLTRB(
+                12,
+                repsFirst ? 10 : 8,
+                previousSet == null ? 12 : 30,
+                repsFirst ? 10 : 8,
               ),
-        child: Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: 12.0,
-            vertical: repsFirst ? 10 : 8,
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
+              child: Column(
                 mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    context.l10n.setNumber(number),
-                    style: theme.textTheme.labelSmall?.copyWith(
-                      color: theme.colorScheme.onSurfaceVariant,
-                    ),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        context.l10n.setNumber(number),
+                        style: theme.textTheme.labelSmall?.copyWith(
+                          color: theme.colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                      if (best) ...[
+                        const SizedBox(width: 4),
+                        Icon(
+                          Icons.star,
+                          size: 12,
+                          color: theme.colorScheme.primary,
+                        ),
+                      ],
+                    ],
                   ),
-                  if (best) ...[
-                    const SizedBox(width: 4.0),
-                    Icon(
-                      Icons.star,
-                      size: 12,
-                      color: theme.colorScheme.primary,
-                    ),
-                  ],
+                  Text(_value(context), style: theme.textTheme.titleSmall),
                 ],
               ),
-              Text(
-                _value(context),
-                style: theme.textTheme.titleSmall?.copyWith(
-                  color: currentSet == null
-                      ? theme.colorScheme.onSurfaceVariant
-                      : null,
+            ),
+            if (previousSet != null)
+              Positioned(
+                top: repsFirst ? 10 : 8,
+                right: 10,
+                child: Icon(
+                  Icons.history_rounded,
+                  size: 13,
+                  color: theme.colorScheme.onSurfaceVariant,
                 ),
               ),
-            ],
-          ),
+          ],
         ),
       ),
     );

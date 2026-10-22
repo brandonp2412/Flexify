@@ -232,6 +232,7 @@ class _StartPlanPageState extends State<StartPlanPage>
                                                   .data![_selected]
                                                   .exercise
                                                   .id],
+                                          onPreviousSetTap: _fillPreviousSet,
                                         ),
                                       ],
                                     ],
@@ -300,6 +301,7 @@ class _StartPlanPageState extends State<StartPlanPage>
                                           .data![_selected]
                                           .exercise
                                           .id],
+                                  onPreviousSetTap: _fillPreviousSet,
                                   compact: true,
                                 ),
                               ),
@@ -524,6 +526,7 @@ class _StartPlanPageState extends State<StartPlanPage>
             DropdownButtonFormField<String>(
               isExpanded: true,
               decoration: InputDecoration(labelText: context.l10n.unitLabel),
+              key: ValueKey(_unit),
               initialValue: _unit,
               items: _unitItems,
               onChanged: (String? newValue) {
@@ -700,6 +703,18 @@ class _StartPlanPageState extends State<StartPlanPage>
         if (!mounted) return;
         setState(() => _previousDays = previous);
       });
+    });
+  }
+
+  void _fillPreviousSet(PreviousExerciseSet previous) {
+    setState(() {
+      _unit = previous.unit;
+      _reps.text = toString(previous.reps);
+      _weight.text = toString(previous.weight);
+      _distance.text = toString(previous.distance);
+      _minutes.text = previous.duration.floor().toString();
+      _seconds.text = ((previous.duration * 60) % 60).floor().toString();
+      _incline.text = previous.incline?.toString() ?? '0';
     });
   }
 
