@@ -14,12 +14,12 @@ import 'package:flexify/database/exercise_set_repository.dart';
 import 'package:flexify/l10n/l10n.dart';
 import 'package:flexify/logging.dart';
 import 'package:flexify/main.dart';
+import 'package:flexify/platform_page_route.dart';
 import 'package:flexify/responsive.dart';
 import 'package:flexify/settings/category_management_page.dart';
 import 'package:flexify/stepper_field.dart';
 import 'package:flexify/timer/timer_state.dart';
 import 'package:flexify/utils.dart';
-import 'package:flexify/platform_page_route.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -248,7 +248,6 @@ class _EditSetPageState extends State<EditSetPage> {
             return ListView(
               children: [
                 autocomplete(showBodyWeight),
-                const SizedBox(height: 12.0),
                 ...exerciseFields(),
                 const SizedBox(height: 12.0),
                 if (showBodyWeight) ...[
@@ -304,6 +303,7 @@ class _EditSetPageState extends State<EditSetPage> {
 
   List<Widget> buildStrengthFields() {
     return [
+      const SizedBox(height: 12.0),
       buildRepsField(),
       const SizedBox(height: 12.0),
       buildWeightField(),
