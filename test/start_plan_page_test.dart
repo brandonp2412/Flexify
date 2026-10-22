@@ -351,10 +351,28 @@ void main() {
       bottomNavHeight,
     );
 
-    tester.view.viewInsets = const FakeViewPadding(bottom: 300);
+    final initialFabBottom = tester
+        .getBottomRight(find.byType(FloatingActionButton))
+        .dy;
+    final preview = find.byKey(const Key('start-plan-set-preview'));
+    final initialPreviewCenter = tester.getCenter(preview).dy;
     addTearDown(tester.view.resetViewInsets);
+    tester.view.viewInsets = FakeViewPadding(
+      bottom: 40 * tester.view.devicePixelRatio,
+    );
     await tester.pumpAndSettle();
+    expect(
+      (tester.widget<Padding>(floatingRow).padding as EdgeInsets).bottom,
+      bottomNavHeight - 40,
+    );
+    expect(
+      tester.getBottomRight(find.byType(FloatingActionButton)).dy,
+      closeTo(initialFabBottom, 1),
+    );
+    expect(tester.getCenter(preview).dy, closeTo(initialPreviewCenter, 1));
 
+    tester.view.viewInsets = const FakeViewPadding(bottom: 300);
+    await tester.pumpAndSettle();
     expect(
       (tester.widget<Padding>(floatingRow).padding as EdgeInsets).bottom,
       0,

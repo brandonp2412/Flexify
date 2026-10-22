@@ -273,9 +273,10 @@ class _StartPlanPageState extends State<StartPlanPage>
                   padding: EdgeInsets.only(
                     left: 16,
                     right: 16,
-                    bottom: MediaQuery.viewInsetsOf(context).bottom > 0
-                        ? 0
-                        : bottomNavHeight,
+                    bottom: max(
+                      0,
+                      bottomNavHeight - MediaQuery.viewInsetsOf(context).bottom,
+                    ),
                   ),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
