@@ -47,6 +47,20 @@ ExerciseSetView _toExerciseSetView(AppDatabase database, TypedResult row) {
   final exercise = row.readTable(database.exercises);
   final category = row.readTableOrNull(database.categories);
   final workout = row.readTableOrNull(database.workouts);
+  return exerciseSetView(
+    set,
+    exercise,
+    category: category?.name,
+    planId: workout?.planId,
+  );
+}
+
+ExerciseSetView exerciseSetView(
+  ExerciseSet set,
+  Exercise exercise, {
+  String? category,
+  int? planId,
+}) {
   final unit = exercise.displayUnit;
 
   return ExerciseSetView(
@@ -55,7 +69,7 @@ ExerciseSetView _toExerciseSetView(AppDatabase database, TypedResult row) {
         ? 0
         : displayBodyWeight(unit, set.bodyWeightKg!),
     cardio: exercise.kind == 'cardio',
-    category: category?.name,
+    category: category,
     created: set.timestamp.toLocal(),
     distance: displayDistance(unit, set.distanceMetres),
     duration: (set.durationMs ?? 0) / 60000,
@@ -63,7 +77,7 @@ ExerciseSetView _toExerciseSetView(AppDatabase database, TypedResult row) {
     incline: set.incline?.round(),
     name: exercise.name,
     notes: set.notes,
-    planId: workout?.planId,
+    planId: planId,
     reps: set.reps ?? 0,
     restMs: exercise.defaultRestDurationMs,
     unit: unit,

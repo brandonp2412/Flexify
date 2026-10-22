@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:drift/drift.dart' hide isNotNull, isNull;
 import 'package:flexify/database/database.dart';
 import 'package:flexify/database/exercise_set_repository.dart';
 import 'package:flexify/main.dart';
 import 'package:flexify/plan/workout_sessions.dart';
+import 'package:flexify/plan/start_plan_data.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'mock_tests.dart';
@@ -32,6 +35,20 @@ Future<ExerciseSetView> addMirroredSet({
 void main() {
   setUp(() {
     db = testDb();
+  });
+
+  test('start page distinguishes an empty plan from a deleted plan', () async {
+    final planId = await db.plans.insertOne(planFixture());
+    final page = await watchStartPlanData(db, planId).first;
+    expect(page.plan?.id, planId);
+    expect(page.exercises, isEmpty);
+    final stream = StreamIterator(watchStartPlanData(db, planId));
+    await stream.moveNext();
+    await (db.plans.delete()..where((plan) => plan.id.equals(planId))).go();
+    await stream.moveNext();
+    expect(stream.current.plan, isNull);
+    expect(stream.current.exercises, isEmpty);
+    await stream.cancel();
   });
 
   test('workout resumes until finished, then starts a new session', () async {
@@ -166,6 +183,23 @@ void main() {
     expect(prefill, isNotNull);
     expect(prefill!.planId, planA);
     expect(prefill.weight, 40);
+
+    await insertPlanExerciseFixture(db, planId: planA, exercise: exercise.name);
+    final page = await watchStartPlanData(db, planA).first;
+    expect(page.defaults[exercise.id]?.id, prefill.id);
+    expect(page.sets[exercise.id], isNull);
+    expect(page.previous[exercise.id]?.sets.map((set) => set.weight), [45, 90]);
+    final saved = await addMirroredSet(
+      exerciseId: exercise.id,
+      exerciseName: exercise.name,
+      planId: planA,
+      workoutId: page.workout.id,
+      created: DateTime.now(),
+      weight: 50,
+    );
+    final updated = await watchStartPlanData(db, planA).first;
+    expect(updated.defaults[exercise.id]?.id, saved.id);
+    expect(updated.sets[exercise.id]?.map((set) => set.id), [saved.id]);
   });
 
   test(
@@ -191,6 +225,13 @@ void main() {
         planId: planId,
       );
       expect(prefill?.id, manual.id);
+      await insertPlanExerciseFixture(
+        db,
+        planId: planId,
+        exercise: exercise.name,
+      );
+      final page = await watchStartPlanData(db, planId).first;
+      expect(page.defaults[exercise.id]?.id, manual.id);
     },
   );
 }

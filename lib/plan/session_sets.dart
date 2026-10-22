@@ -2,7 +2,6 @@ import 'package:flexify/constants.dart';
 import 'package:flexify/database/database.dart';
 import 'package:flexify/database/exercise_set_repository.dart';
 import 'package:flexify/l10n/l10n.dart';
-import 'package:flexify/main.dart';
 import 'package:flexify/sets/edit_set_page.dart';
 import 'package:flexify/utils.dart';
 import 'package:flexify/platform_page_route.dart';
@@ -12,6 +11,7 @@ import 'package:flutter/material.dart';
 /// for the selected exercise.
 class SessionSets extends StatefulWidget {
   final int exerciseId;
+  final List<ExerciseSetView> sets;
   final int workoutId;
   final bool compact;
   final PreviousExerciseDay? previous;
@@ -20,6 +20,7 @@ class SessionSets extends StatefulWidget {
   const SessionSets({
     super.key,
     required this.exerciseId,
+    required this.sets,
     required this.workoutId,
     this.compact = false,
     this.previous,
@@ -31,15 +32,8 @@ class SessionSets extends StatefulWidget {
 }
 
 class _SessionSetsState extends State<SessionSets> {
-  late Stream<List<ExerciseSetView>> _stream;
   final ScrollController _scrollController = ScrollController();
   int _lastSetCount = 0;
-
-  @override
-  void initState() {
-    super.initState();
-    _watch();
-  }
 
   @override
   void didUpdateWidget(SessionSets oldWidget) {
@@ -47,7 +41,6 @@ class _SessionSetsState extends State<SessionSets> {
     if (oldWidget.exerciseId != widget.exerciseId ||
         oldWidget.workoutId != widget.workoutId) {
       _lastSetCount = 0;
-      _watch();
     }
   }
 
@@ -55,14 +48,6 @@ class _SessionSetsState extends State<SessionSets> {
   void dispose() {
     _scrollController.dispose();
     super.dispose();
-  }
-
-  void _watch() {
-    _stream = watchWorkoutExerciseSets(
-      db,
-      workoutId: widget.workoutId,
-      exerciseId: widget.exerciseId,
-    );
   }
 
   void _scrollToNewest(int setCount) {
@@ -80,31 +65,24 @@ class _SessionSetsState extends State<SessionSets> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
-      key: ValueKey((widget.exerciseId, widget.workoutId)),
-      stream: _stream,
-      builder: (context, snapshot) {
-        final sets = snapshot.data;
-        if (sets != null && sets.isNotEmpty) _scrollToNewest(sets.length);
+    final sets = widget.sets;
+    if (sets.isNotEmpty) _scrollToNewest(sets.length);
 
-        if (sets == null) return const SizedBox.shrink();
-        if (sets.isEmpty) {
-          final previous = widget.previous;
-          if (previous == null || previous.sets.isEmpty) {
-            return const SizedBox.shrink();
-          }
-          return _buildPreviousChips(previous);
-        }
+    if (sets.isEmpty) {
+      final previous = widget.previous;
+      if (previous == null || previous.sets.isEmpty) {
+        return const SizedBox.shrink();
+      }
+      return _buildPreviousChips(previous);
+    }
 
-        if (!widget.compact) return _buildChips(sets);
+    if (!widget.compact) return _buildChips(sets);
 
-        return AnimatedSize(
-          duration: const Duration(milliseconds: 200),
-          curve: Curves.easeOut,
-          alignment: Alignment.topCenter,
-          child: _buildChips(sets),
-        );
-      },
+    return AnimatedSize(
+      duration: const Duration(milliseconds: 200),
+      curve: Curves.easeOut,
+      alignment: Alignment.topCenter,
+      child: _buildChips(sets),
     );
   }
 

@@ -1,13 +1,11 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:drift/drift.dart' hide Column;
 import 'package:flexify/app_fab.dart';
 import 'package:flexify/bottom_nav.dart';
 import 'package:flexify/constants.dart';
 import 'package:flexify/database/body_weight_repository.dart';
 import 'package:flexify/database/database.dart';
-import 'package:flexify/database/exercise_catalog.dart';
 import 'package:flexify/database/exercise_set_repository.dart';
 import 'package:flexify/empty_state.dart';
 import 'package:flexify/l10n/l10n.dart';
@@ -17,6 +15,7 @@ import 'package:flexify/plan/edit_plan_page.dart';
 import 'package:flexify/plan/plan_queries.dart';
 import 'package:flexify/plan/session_sets.dart';
 import 'package:flexify/plan/start_list.dart';
+import 'package:flexify/plan/start_plan_data.dart';
 import 'package:flexify/plan/workout_sessions.dart';
 import 'package:flexify/platform_page_route.dart';
 import 'package:flexify/responsive.dart';
@@ -55,41 +54,37 @@ class _StartPlanPageState extends State<StartPlanPage>
   final _notesFocus = FocusNode();
   final _key = GlobalKey<FormState>();
 
-  int _selected = 0;
-  int _selectionRequest = 0;
+  int? _selectedExerciseId;
   bool _saving = false;
-  DateTime? _lastSaved;
-  Exercise? _exercise;
-  ExerciseSetView? _prefill;
+  DateTime? _lastSavedAt;
+  String _unit = 'kg';
+  StartPlanData? _data;
+  late Stream<StartPlanData> _stream;
+
+  int get _selected {
+    final exercises =
+        _data?.exercises ?? widget.initial ?? const <PlanExerciseEntry>[];
+    final index = exercises.indexWhere(
+      (entry) => entry.exercise.id == _selectedExerciseId,
+    );
+    return index < 0 ? 0 : index;
+  }
 
   Exercise? get _currentExercise =>
-      _exercise ?? widget.initial?.firstOrNull?.exercise;
-  bool get _cardio => _prefill?.cardio ?? _currentExercise?.kind == 'cardio';
-  String? get _image =>
-      _prefill != null ? _prefill!.image : _currentExercise?.image;
-
-  Stream<List<PlanExerciseEntry>>? _stream;
-  Stream<List<GymCount>>? _gymCountsStream;
-  StreamSubscription<Map<int, PreviousExerciseDay>>? _previousDaysSub;
-  Map<int, PreviousExerciseDay> _previousDays = const {};
-  StreamSubscription<Plan?>? _planSub;
-  String _unit = 'kg';
-
-  late final Future<Workout> _workoutFuture;
-  late Plan _plan = widget.plan;
+      _data?.exercises.elementAtOrNull(_selected)?.exercise ??
+      widget.initial?.firstOrNull?.exercise;
+  bool get _cardio => _currentExercise?.kind == 'cardio';
+  String? get _image => _currentExercise?.image;
 
   @override
-  Widget build(BuildContext context) => FutureBuilder<Workout>(
-    future: _workoutFuture,
-    builder: (context, snapshot) => _buildPage(context, snapshot.data),
-  );
-
-  Widget _buildPage(BuildContext context, Workout? workout) {
-    return StreamBuilder<List<PlanExerciseEntry>>(
+  Widget build(BuildContext context) {
+    return StreamBuilder<StartPlanData>(
       stream: _stream,
-      initialData: widget.initial,
       builder: (context, snapshot) {
-        if (snapshot.data == null) {
+        final data = snapshot.data;
+        final exercises = data?.exercises ?? widget.initial;
+        final workout = data?.workout;
+        if (exercises == null || snapshot.hasError) {
           return Scaffold(
             appBar: AppBar(
               title: Text(_displayTitle(context)),
@@ -98,237 +93,230 @@ class _StartPlanPageState extends State<StartPlanPage>
                 onPressed: () => Navigator.pop(context),
               ),
             ),
-            body: const Center(child: CircularProgressIndicator()),
+            body: Center(
+              child: snapshot.hasError
+                  ? AppEmptyState(
+                      icon: Icons.error_outline,
+                      title: context.l10n.errorLabel,
+                      message: snapshot.error.toString(),
+                    )
+                  : const CircularProgressIndicator(),
+            ),
           );
         }
 
-        return StreamBuilder<List<GymCount>>(
-          stream: _gymCountsStream,
-          builder: (context, countsSnapshot) {
-            final counts = countsSnapshot.data ?? const <GymCount>[];
-            final desktop = isDesktopLayout(context);
-            final colors = Theme.of(context).colorScheme;
+        final counts = <GymCount>[
+          for (final entry in exercises)
+            (
+              exerciseId: entry.exercise.id,
+              count: data?.sets[entry.exercise.id]?.length ?? 0,
+              name: entry.exercise.name,
+              maxSets: entry.planExercise.maxSets,
+              restMs: entry.exercise.defaultRestDurationMs,
+              warmupSets: entry.planExercise.warmupSets,
+              timers: entry.planExercise.timers,
+            ),
+        ];
+        final desktop = isDesktopLayout(context);
+        final colors = Theme.of(context).colorScheme;
 
-            Future<void> editPlan() async {
-              final plan =
-                  await (db.plans.select()..whereSamePrimaryKey(widget.plan))
-                      .getSingle();
-              if (!context.mounted) return;
-              await Navigator.of(context).push(
-                FlexPageRoute(
-                  builder: (context) =>
-                      EditPlanPage(plan: plan.toCompanion(false)),
-                ),
+        Future<void> editPlan() async {
+          final plan = data?.plan ?? widget.plan;
+          if (!context.mounted) return;
+          await Navigator.of(context).push(
+            FlexPageRoute(
+              builder: (context) => EditPlanPage(plan: plan.toCompanion(false)),
+            ),
+          );
+          if (!mounted) return;
+        }
+
+        Widget exerciseList() => exercises.isEmpty
+            ? AppEmptyState(
+                icon: Icons.fitness_center_rounded,
+                title: context.l10n.noExercisesYet,
+                message: context.l10n.addExerciseToPlan,
+                actionLabel: context.l10n.editPlan,
+                actionIcon: Icons.edit_rounded,
+                onAction: editPlan,
+              )
+            : StartList(
+                exercises: exercises,
+                selected: _selected,
+                onSelect: (index) async => _select(index),
+                counts: counts,
+                plan: widget.plan,
+                workoutId: workout?.id,
               );
-              if (!mounted) return;
-              await _select(_selected);
-            }
 
-            Widget exerciseList() => snapshot.data!.isEmpty
-                ? AppEmptyState(
-                    icon: Icons.fitness_center_rounded,
-                    title: context.l10n.noExercisesYet,
-                    message: context.l10n.addExerciseToPlan,
-                    actionLabel: context.l10n.editPlan,
-                    actionIcon: Icons.edit_rounded,
-                    onAction: editPlan,
-                  )
-                : StartList(
-                    exercises: snapshot.data!,
-                    selected: _selected,
-                    onSelect: (index) =>
-                        _select(index, exercises: snapshot.data!),
-                    counts: counts,
-                    plan: widget.plan,
-                    workoutId: workout?.id,
-                  );
-
-            return Scaffold(
-              floatingActionButtonAnimator:
-                  FloatingActionButtonAnimator.noAnimation,
-              resizeToAvoidBottomInset: true,
-              appBar: AppBar(
-                title: Text(_displayTitle(context)),
-                leading: IconButton(
-                  icon: const Icon(Icons.arrow_back),
-                  onPressed: () => Navigator.pop(context),
-                ),
-                actions: [
-                  IconButton(
-                    tooltip: context.l10n.editPlan,
-                    onPressed: editPlan,
-                    icon: const Icon(Icons.edit),
+        return Scaffold(
+          floatingActionButtonAnimator:
+              FloatingActionButtonAnimator.noAnimation,
+          resizeToAvoidBottomInset: true,
+          appBar: AppBar(
+            title: Text(_displayTitle(context)),
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back),
+              onPressed: () => Navigator.pop(context),
+            ),
+            actions: [
+              IconButton(
+                tooltip: context.l10n.editPlan,
+                onPressed: editPlan,
+                icon: const Icon(Icons.edit),
+              ),
+              if (desktop && exercises.isNotEmpty)
+                Padding(
+                  padding: const EdgeInsets.only(right: 16),
+                  child: FilledButton.icon(
+                    onPressed: () async => await _save(),
+                    icon: const Icon(Icons.save_rounded),
+                    label: Text(context.l10n.saveSet),
                   ),
-                  if (desktop && snapshot.data!.isNotEmpty)
-                    Padding(
-                      padding: const EdgeInsets.only(right: 16),
-                      child: FilledButton.icon(
-                        onPressed: () async => await _save(snapshot, counts),
-                        icon: const Icon(Icons.save_rounded),
-                        label: Text(context.l10n.saveSet),
-                      ),
-                    ),
-                ],
-              ),
-              body: ResponsiveContent(
-                maxWidth: wideMaxWidth,
-                desktopPadding: const EdgeInsets.fromLTRB(32, 16, 32, 32),
-                mobilePadding: const EdgeInsets.all(8),
-                child: Form(
-                  key: _key,
-                  child: desktop
-                      ? Row(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            SizedBox(
-                              width: 420,
-                              child: SingleChildScrollView(
-                                child: Container(
-                                  padding: const EdgeInsets.all(20),
-                                  decoration: BoxDecoration(
-                                    color: colors.surfaceContainerLow,
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.stretch,
-                                    children: [
-                                      Text(
-                                        snapshot.data!.isNotEmpty &&
-                                                _selected <
-                                                    snapshot.data!.length
-                                            ? snapshot
-                                                  .data![_selected]
-                                                  .exercise
-                                                  .name
-                                            : context.l10n.setDetails,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .titleLarge
-                                            ?.copyWith(
-                                              fontWeight: FontWeight.w700,
-                                            ),
-                                      ),
-                                      const SizedBox(height: 16),
-                                      if (!_cardio)
-                                        ...strengthFields(snapshot, counts),
-                                      if (_cardio)
-                                        ...cardioFields(snapshot, counts),
-                                      unitSelector(),
-                                      notesField(snapshot, counts),
-                                      if (workout != null &&
-                                          snapshot.data!.isNotEmpty &&
-                                          _selected <
-                                              snapshot.data!.length) ...[
-                                        const SizedBox(height: 16),
-                                        SessionSets(
-                                          exerciseId: snapshot
-                                              .data![_selected]
-                                              .exercise
-                                              .id,
-                                          workoutId: workout.id,
-                                          previous:
-                                              _previousDays[snapshot
-                                                  .data![_selected]
-                                                  .exercise
-                                                  .id],
-                                          onPreviousSetTap: _fillPreviousSet,
-                                        ),
-                                      ],
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: 24),
-                            Expanded(
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: colors.surfaceContainerLow,
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                clipBehavior: Clip.none,
-                                child: exerciseList(),
-                              ),
-                            ),
-                          ],
-                        )
-                      : Column(
-                          children: [
-                            if (!_cardio) ...strengthFields(snapshot, counts),
-                            if (_cardio) ...cardioFields(snapshot, counts),
-                            unitSelector(),
-                            notesField(snapshot, counts),
-                            Expanded(child: exerciseList()),
-                          ],
-                        ),
                 ),
-              ),
-              floatingActionButtonLocation:
-                  FloatingActionButtonLocation.centerFloat,
-              floatingActionButton:
-                  desktop ||
-                      workout == null ||
-                      snapshot.data!.isEmpty ||
-                      _selected >= snapshot.data!.length
-                  ? null
-                  : Padding(
-                      key: const Key('start-plan-floating-row'),
-                      padding: EdgeInsets.only(
-                        left: 16,
-                        right: 16,
-                        bottom: MediaQuery.viewInsetsOf(context).bottom > 0
-                            ? 0
-                            : bottomNavHeight,
-                      ),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Expanded(
-                            child: SizedBox(
-                              height: 56,
-                              child: OverflowBox(
-                                alignment: Alignment.center,
-                                minHeight: 0,
-                                maxHeight: double.infinity,
-                                child: SessionSets(
-                                  key: const Key('start-plan-set-preview'),
-                                  exerciseId:
-                                      snapshot.data![_selected].exercise.id,
-                                  workoutId: workout.id,
-                                  previous:
-                                      _previousDays[snapshot
-                                          .data![_selected]
-                                          .exercise
-                                          .id],
-                                  onPreviousSetTap: _fillPreviousSet,
-                                  compact: true,
-                                ),
+            ],
+          ),
+          body: ResponsiveContent(
+            maxWidth: wideMaxWidth,
+            desktopPadding: const EdgeInsets.fromLTRB(32, 16, 32, 32),
+            mobilePadding: const EdgeInsets.all(8),
+            child: Form(
+              key: _key,
+              child: desktop
+                  ? Row(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        SizedBox(
+                          width: 420,
+                          child: SingleChildScrollView(
+                            child: Container(
+                              padding: const EdgeInsets.all(20),
+                              decoration: BoxDecoration(
+                                color: colors.surfaceContainerLow,
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  Text(
+                                    exercises.isNotEmpty &&
+                                            _selected < exercises.length
+                                        ? exercises[_selected].exercise.name
+                                        : context.l10n.setDetails,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleLarge
+                                        ?.copyWith(fontWeight: FontWeight.w700),
+                                  ),
+                                  const SizedBox(height: 16),
+                                  if (!_cardio) ...strengthFields(),
+                                  if (_cardio) ...cardioFields(),
+                                  unitSelector(),
+                                  notesField(),
+                                  if (workout != null &&
+                                      exercises.isNotEmpty &&
+                                      _selected < exercises.length) ...[
+                                    const SizedBox(height: 16),
+                                    SessionSets(
+                                      exerciseId:
+                                          exercises[_selected].exercise.id,
+                                      workoutId: workout.id,
+                                      previous:
+                                          data?.previous[exercises[_selected]
+                                              .exercise
+                                              .id],
+                                      onPreviousSetTap: _fillPreviousSet,
+                                      sets:
+                                          data?.sets[_currentExercise?.id] ??
+                                          const [],
+                                    ),
+                                  ],
+                                ],
                               ),
                             ),
                           ),
-                          const SizedBox(width: 8),
-                          AppFab(
-                            onPressed: () async =>
-                                await _save(snapshot, counts),
-                            label: Text(context.l10n.actionSave),
-                            icon: const Icon(Icons.save),
-                            bottomPadding: 0,
+                        ),
+                        const SizedBox(width: 24),
+                        Expanded(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: colors.surfaceContainerLow,
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            clipBehavior: Clip.none,
+                            child: exerciseList(),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
+                    )
+                  : Column(
+                      children: [
+                        if (!_cardio) ...strengthFields(),
+                        if (_cardio) ...cardioFields(),
+                        unitSelector(),
+                        notesField(),
+                        Expanded(child: exerciseList()),
+                      ],
                     ),
-            );
-          },
+            ),
+          ),
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerFloat,
+          floatingActionButton:
+              desktop ||
+                  workout == null ||
+                  exercises.isEmpty ||
+                  _selected >= exercises.length
+              ? null
+              : Padding(
+                  key: const Key('start-plan-floating-row'),
+                  padding: EdgeInsets.only(
+                    left: 16,
+                    right: 16,
+                    bottom: MediaQuery.viewInsetsOf(context).bottom > 0
+                        ? 0
+                        : bottomNavHeight,
+                  ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: SizedBox(
+                          height: 56,
+                          child: OverflowBox(
+                            alignment: Alignment.center,
+                            minHeight: 0,
+                            maxHeight: double.infinity,
+                            child: SessionSets(
+                              key: const Key('start-plan-set-preview'),
+                              exerciseId: exercises[_selected].exercise.id,
+                              workoutId: workout.id,
+                              previous: data
+                                  ?.previous[exercises[_selected].exercise.id],
+                              onPreviousSetTap: _fillPreviousSet,
+                              sets:
+                                  data?.sets[_currentExercise?.id] ?? const [],
+                              compact: true,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      AppFab(
+                        onPressed: () async => await _save(),
+                        label: Text(context.l10n.actionSave),
+                        icon: const Icon(Icons.save),
+                        bottomPadding: 0,
+                      ),
+                    ],
+                  ),
+                ),
         );
       },
     );
   }
 
-  List<Widget> strengthFields(
-    AsyncSnapshot<List<PlanExerciseEntry>> snapshot,
-    List<GymCount> counts,
-  ) {
+  List<Widget> strengthFields() {
     return [
       StepperField(
         controller: _reps,
@@ -345,14 +333,11 @@ class _StartPlanPageState extends State<StartPlanPage>
         },
       ),
       const SizedBox(height: 8.0),
-      _weightField(snapshot, counts),
+      _weightField(),
     ];
   }
 
-  List<Widget> cardioFields(
-    AsyncSnapshot<List<PlanExerciseEntry>> snapshot,
-    List<GymCount> counts,
-  ) {
+  List<Widget> cardioFields() {
     final showNotes = context.read<Setting>().showNotes;
 
     return [
@@ -407,7 +392,7 @@ class _StartPlanPageState extends State<StartPlanPage>
       Row(
         children: [
           if (_unit == 'kg' || _unit == 'lb' || _unit == 'stone')
-            Expanded(child: _weightField(snapshot, counts))
+            Expanded(child: _weightField())
           else
             Expanded(
               child: TextFormField(
@@ -450,7 +435,7 @@ class _StartPlanPageState extends State<StartPlanPage>
                 if (showNotes) {
                   _focusAndSelect(_notesFocus, _notes);
                 } else {
-                  await _save(snapshot, counts);
+                  await _save();
                 }
               },
               validator: (value) {
@@ -466,14 +451,8 @@ class _StartPlanPageState extends State<StartPlanPage>
     ];
   }
 
-  StepperField _weightField(
-    AsyncSnapshot<List<PlanExerciseEntry>> snapshot,
-    List<GymCount> counts,
-  ) {
-    final exerciseName =
-        snapshot.data!.isNotEmpty && _selected < snapshot.data!.length
-        ? snapshot.data![_selected].exercise.name
-        : '';
+  StepperField _weightField() {
+    final exerciseName = _currentExercise?.name ?? '';
     final showNotes = context.read<Setting>().showNotes;
     final hasNextField = _cardio || showNotes;
 
@@ -502,7 +481,7 @@ class _StartPlanPageState extends State<StartPlanPage>
         } else if (showNotes) {
           _focusAndSelect(_notesFocus, _notes);
         } else {
-          await _save(snapshot, counts);
+          await _save();
         }
       },
       validator: (value) {
@@ -541,10 +520,7 @@ class _StartPlanPageState extends State<StartPlanPage>
     );
   }
 
-  Widget notesField(
-    AsyncSnapshot<List<PlanExerciseEntry>> snapshot,
-    List<GymCount> counts,
-  ) {
+  Widget notesField() {
     return Selector<Setting, bool>(
       selector: (context, settings) => settings.showNotes,
       builder: (context, showNotes, child) => Visibility(
@@ -559,7 +535,7 @@ class _StartPlanPageState extends State<StartPlanPage>
               maxLines: 3,
               textInputAction: TextInputAction.done,
               decoration: InputDecoration(labelText: context.l10n.notesLabel),
-              onFieldSubmitted: (_) async => await _save(snapshot, counts),
+              onFieldSubmitted: (_) async => await _save(),
             ),
           ],
         ),
@@ -576,10 +552,10 @@ class _StartPlanPageState extends State<StartPlanPage>
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
     if (state != AppLifecycleState.resumed) return;
-    if (!mounted || _lastSaved == null) return;
+    if (!mounted || _lastSavedAt == null) return;
 
     final settings = context.read<Setting>();
-    final difference = DateTime.now().difference(_lastSaved!);
+    final difference = DateTime.now().difference(_lastSavedAt!);
 
     if (_cardio && settings.durationEstimation) {
       _minutes.text = difference.inMinutes.toString();
@@ -611,99 +587,49 @@ class _StartPlanPageState extends State<StartPlanPage>
 
     WidgetsBinding.instance.removeObserver(this);
     dbVersion.removeListener(_reloadDatabaseStreams);
-    _planSub?.cancel();
-    _previousDaysSub?.cancel();
 
     super.dispose();
   }
-
-  Future<ExerciseSetView?> getLast(String exercise) {
-    return getLatestExerciseSet(db, exerciseName: exercise);
-  }
-
-  /// Returns the first set from the most recent training session for [exercise].
-  ///
-  /// "Most recent session" = the calendar day of the latest recorded set.
-  /// Showing the first set (rather than the last) gives a better baseline for
-  /// progressive overload when weights decrease across sets.
-  Future<ExerciseSetView?> getFirstOfLastSession(int exerciseId) =>
-      getStartPlanPrefillById(
-        db,
-        exerciseId: exerciseId,
-        planId: widget.plan.id,
-      );
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     dbVersion.addListener(_reloadDatabaseStreams);
-
-    _workoutFuture = resumeOrStartWorkout(db, widget.plan.id);
-
+    _stream = _watchData();
     final initial = widget.initial;
-    if (initial != null && initial.isNotEmpty) {
-      final exercise = initial.first.exercise;
-      _unit = exercise.displayUnit;
-    }
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted) return;
-      _bindPlanStream();
-      unawaited(_loadExercises());
-    });
+    if (initial != null && initial.isNotEmpty)
+      _unit = initial.first.exercise.displayUnit;
   }
+
+  Stream<StartPlanData> _watchData() =>
+      watchStartPlanData(db, widget.plan.id).map((data) {
+        if (!mounted) return data;
+        _data = data;
+        if (data.plan == null) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (mounted) Navigator.of(context).maybePop();
+          });
+        }
+        final index = data.exercises.indexWhere(
+          (entry) => entry.exercise.id == _selectedExerciseId,
+        );
+        _select(index < 0 ? _selected : index, rebuild: false);
+        return data;
+      });
 
   void _reloadDatabaseStreams() {
-    if (!mounted) return;
-    _bindPlanStream();
-    unawaited(_loadExercises());
-  }
-
-  void _bindPlanStream() {
-    _planSub?.cancel();
-    _planSub = watchPlan(widget.plan.id).listen((plan) {
-      if (!mounted) return;
-      if (plan == null) {
-        Navigator.of(context).maybePop();
-        return;
-      }
-      setState(() {
-        _plan = plan;
-      });
-    });
+    if (mounted) setState(() => _stream = _watchData());
   }
 
   String _displayTitle(BuildContext context) {
-    if (_plan.title?.isNotEmpty == true) return _plan.title!;
-    return _plan.days
+    final plan = _data?.plan ?? widget.plan;
+    if (plan.title?.isNotEmpty == true) return plan.title!;
+    return plan.days
         .split(',')
         .where((day) => day.trim().isNotEmpty)
         .map((day) => localizedWeekday(context.l10n, day.trim()))
         .join(', ');
-  }
-
-  Future<void> _loadExercises() async {
-    if (!mounted) return;
-    final stream = watchPlanExerciseEntries(db, widget.plan.id).map((
-      exercises,
-    ) {
-      unawaited(_select(_selected, exercises: exercises));
-      return exercises;
-    });
-    setState(() {
-      _stream = stream;
-      _gymCountsStream = _workoutFuture.asStream().asyncExpand(
-        (workout) => watchGymCounts(widget.plan.id, workout.id),
-      );
-      _previousDaysSub?.cancel();
-      _previousDaysSub = watchPreviousExerciseDays(db, widget.plan.id).listen((
-        previous,
-      ) {
-        if (!mounted) return;
-        setState(() => _previousDays = previous);
-      });
-    });
   }
 
   void _fillPreviousSet(PreviousExerciseSet previous) {
@@ -734,25 +660,25 @@ class _StartPlanPageState extends State<StartPlanPage>
     _minutes.text = exerciseSet.duration.floor().toString();
     _seconds.text = ((exerciseSet.duration * 60) % 60).floor().toString();
     _incline.text = exerciseSet.incline?.toString() ?? "0";
-    _prefill = exerciseSet;
     _notes.text = exerciseSet.notes ?? "";
   }
 
-  Future<void> _save(
-    AsyncSnapshot<List<PlanExerciseEntry>> snapshot,
-    List<GymCount> counts,
-  ) async {
+  Future<void> _save() async {
+    final data = _data;
+    if (data == null) return;
+    final exercises = data.exercises;
     if (_saving) return;
     _saving = true;
     try {
       if (!_key.currentState!.validate()) return;
-      if (snapshot.data == null || snapshot.data!.isEmpty) return;
-      if (_selected >= snapshot.data!.length) return;
+      if (exercises.isEmpty) return;
+      if (_selected >= exercises.length) return;
 
-      final workout = await _workoutFuture;
+      final workout = _data?.workout;
+      if (workout == null) return;
       if (!mounted) return;
 
-      final entry = snapshot.data![_selected];
+      final entry = exercises[_selected];
       final exerciseId = entry.exercise.id;
       final exercise = entry.exercise.name;
       double? bodyWeight;
@@ -767,7 +693,7 @@ class _StartPlanPageState extends State<StartPlanPage>
         }
       }
       if (settings.showBodyWeight && bodyWeight == null) {
-        final lastSet = await getLast(exercise);
+        final lastSet = await getLatestExerciseSet(db, exerciseName: exercise);
         bodyWeight = lastSet?.bodyWeight;
       }
 
@@ -786,25 +712,13 @@ class _StartPlanPageState extends State<StartPlanPage>
       }
 
       if (!mounted) return;
-      final index = counts.indexWhere(
-        (element) => element.exerciseId == exerciseId,
-      );
-
-      int? max;
-      double? restMs;
-      int warmupSets = 0;
-      bool peTimers = true;
-      if (index != -1) {
-        max = counts[index].maxSets;
-        restMs = counts[index].restMs?.toDouble();
-        warmupSets = counts[index].warmupSets ?? 0;
-        peTimers = counts[index].timers;
-      }
+      final max = entry.planExercise.maxSets;
+      double? restMs = entry.exercise.defaultRestDurationMs?.toDouble();
+      final warmupSets = entry.planExercise.warmupSets ?? 0;
+      final peTimers = entry.planExercise.timers;
 
       final created = DateTime.now().toLocal();
-      final category = _prefill != null
-          ? _prefill!.category
-          : await getExerciseCategoryName(entry.exercise);
+      final category = _data?.categories[exerciseId];
       if (!mounted) return;
       final draft = ExerciseSetView(
         id: 0,
@@ -827,9 +741,7 @@ class _StartPlanPageState extends State<StartPlanPage>
         weight: parseDisplayNumber(context, _weight.text) ?? 0,
       );
 
-      var count = 0;
-      if (index != -1) count = counts[index].count;
-      count++;
+      final count = (data.sets[exerciseId]?.length ?? 0) + 1;
 
       restMs ??= settings.timerDuration.toDouble();
 
@@ -847,7 +759,7 @@ class _StartPlanPageState extends State<StartPlanPage>
 
       final finished =
           count == (max ?? settings.maxSets) &&
-          _selected < snapshot.data!.length - 1;
+          _selected < exercises.length - 1;
 
       final exerciseSet = await insertExerciseSet(
         db,
@@ -860,9 +772,9 @@ class _StartPlanPageState extends State<StartPlanPage>
       final messages = positiveReinforcementMessages(context.l10n);
       setState(() {
         _update(exerciseSet);
-        _lastSaved = DateTime.now();
+        _lastSavedAt = DateTime.now();
       });
-      if (finished) await _select(_selected + 1);
+      if (finished) _select(_selected + 1);
 
       if (!settings.notifications) return;
 
@@ -888,39 +800,33 @@ class _StartPlanPageState extends State<StartPlanPage>
     }
   }
 
-  Future<void> _select(int index, {List<PlanExerciseEntry>? exercises}) async {
-    exercises ??= await getPlanExerciseEntries(db, widget.plan.id);
-    if (!mounted) return;
-    final request = ++_selectionRequest;
-
-    if (exercises.isEmpty) {
-      setState(() {
-        _selected = 0;
-        _exercise = null;
+  void _select(int index, {bool rebuild = true}) {
+    final exercises =
+        _data?.exercises ?? widget.initial ?? const <PlanExerciseEntry>[];
+    void select() {
+      if (exercises.isEmpty) {
+        _selectedExerciseId = null;
         _clear();
-      });
-      return;
-    }
-
-    final selected = index.clamp(0, exercises.length - 1);
-    final exercise = exercises[selected].exercise;
-    if (_exercise?.id == exercise.id) {
-      if (_selected != selected) setState(() => _selected = selected);
-      return;
-    }
-    final last = await getFirstOfLastSession(exercise.id);
-    if (!mounted || request != _selectionRequest) return;
-
-    setState(() {
-      _selected = selected;
-      _exercise = exercise;
-      if (last != null) {
-        _update(last);
+        return;
+      }
+      final selected = index.clamp(0, exercises.length - 1);
+      final exercise = exercises[selected].exercise;
+      if (_selectedExerciseId == exercise.id) return;
+      _selectedExerciseId = exercise.id;
+      final defaults = _data?.defaults[exercise.id];
+      if (defaults != null) {
+        _update(defaults);
       } else {
         _clear();
         _unit = exercise.displayUnit;
       }
-    });
+    }
+
+    if (rebuild) {
+      setState(select);
+    } else {
+      select();
+    }
   }
 
   void _clear() {
@@ -934,7 +840,6 @@ class _StartPlanPageState extends State<StartPlanPage>
     _minutes.text = '0';
     _seconds.text = '0';
     _incline.text = '0';
-    _prefill = null;
     _notes.text = '';
   }
 

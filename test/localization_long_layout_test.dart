@@ -273,7 +273,7 @@ void main() {
     final planId = await harness.database.plans.insertOne(planFixture());
     final definition = await ensureExerciseFixture(harness.database, exercise);
     final workout = await resumeOrStartWorkout(harness.database, planId);
-    await insertExerciseSet(
+    final saved = await insertExerciseSet(
       harness.database,
       exerciseSet: exerciseSetFixture(
         exercise,
@@ -289,7 +289,11 @@ void main() {
     await harness.pump(
       tester,
       Scaffold(
-        body: SessionSets(exerciseId: definition.id, workoutId: workout.id),
+        body: SessionSets(
+          exerciseId: definition.id,
+          workoutId: workout.id,
+          sets: [saved],
+        ),
       ),
       locale: locale,
       surfaceSize: _narrowSurface,
