@@ -362,7 +362,7 @@ void main() {
   });
 
   testWidgets(
-    'StartPlanPage previews previous sets until a current set is saved',
+    'StartPlanPage replaces history previews as current sets are saved',
     (WidgetTester tester) async {
       final harness = await FlexifyTestHarness.create();
       final database = harness.database;
@@ -472,6 +472,23 @@ void main() {
       );
       expect(currentCard.color, isNull);
       expect(find.text('8 × 90 kg'), findsNothing);
+      expect(find.text('6 × 95 kg'), findsOneWidget);
+      expect(find.byIcon(Icons.history_rounded), findsOneWidget);
+
+      await tester.tap(find.text('6 × 95 kg'));
+      await tester.pumpAndSettle();
+      expect(
+        tester.widget<EditableText>(textFieldWithLabel('Reps')).controller.text,
+        '6',
+      );
+      await tester.enterText(textFieldWithLabel('Reps'), '7');
+      await tester.tap(find.text('Save'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('10 × 100 kg'), findsOneWidget);
+      expect(find.text('7 × 95 kg'), findsOneWidget);
+      expect(find.text('6 × 95 kg'), findsNothing);
+      expect(find.byIcon(Icons.history_rounded), findsNothing);
     },
   );
 

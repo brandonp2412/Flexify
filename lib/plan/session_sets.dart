@@ -133,6 +133,21 @@ class _SessionSetsState extends State<SessionSets> {
                     repsFirst: widget.compact,
                   ),
                 ),
+              for (
+                var i = sets.length;
+                i < (widget.previous?.sets.length ?? 0);
+                i++
+              )
+                Padding(
+                  padding: const EdgeInsets.only(right: 8),
+                  child: _SetChip(
+                    previousSet: widget.previous!.sets[i],
+                    onPreviousTap: widget.onPreviousSetTap,
+                    number: i + 1,
+                    best: false,
+                    repsFirst: widget.compact,
+                  ),
+                ),
             ],
           ),
         ),
