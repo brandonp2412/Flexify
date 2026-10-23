@@ -257,7 +257,9 @@ class _EditPlanPageState extends State<EditPlanPage> {
     if (widget.plan.id.present) {
       _loadExercises();
     } else {
-      _loading = false;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) _loadExercises();
+      });
     }
   }
 

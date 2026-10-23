@@ -16,6 +16,43 @@ Future<void> scrollTo(WidgetTester tester, FinderBase<Element> finder) {
 }
 
 void main() {
+  testWidgets('EditPlanPage creates a plan using existing exercises', (
+    WidgetTester tester,
+  ) async {
+    final harness = await FlexifyTestHarness.create();
+    final database = harness.database;
+    await database.planExercises.deleteAll();
+    await database.plans.deleteAll();
+    final bench = await ensureExerciseFixture(
+      database,
+      'Regression bench press',
+    );
+
+    await harness.pump(
+      tester,
+      const EditPlanPage(plan: PlansCompanion(days: Value(''))),
+    );
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(SearchBar), 'Regression bench press');
+    await tester.pumpAndSettle();
+
+    expect(find.text('Regression bench press'), findsNWidgets(2));
+    expect(find.text('No exercises found'), findsNothing);
+
+    await tester.tap(find.text('Mon'));
+    await scrollTo(tester, find.text('Regression bench press').last);
+    await tester.tap(find.text('Regression bench press').last);
+    await tester.tap(find.text('Save'));
+    await tester.pumpAndSettle();
+
+    final plan = await database.plans.select().getSingle();
+    expect(plan.days, 'Monday');
+    final selected = await database.planExercises.select().getSingle();
+    expect(selected.planId, plan.id);
+    expect(selected.exerciseId, bench.id);
+    expect(selected.enabled, isTrue);
+  });
+
   testWidgets('EditPlanPage updates', (WidgetTester tester) async {
     final harness = await FlexifyTestHarness.create();
     final database = harness.database;
