@@ -8,14 +8,21 @@ import 'package:flutter_test/flutter_test.dart';
 import 'support/test_app.dart';
 
 void main() {
-  test('line graph gives edge strokes controlled breathing room', () {
+  test('line graph snaps axes to readable tick boundaries', () {
     final bounds = FlexLineChart.calculateYBounds(const [
       FlexLineChartPoint(0, 10),
       FlexLineChartPoint(1, 20),
     ]);
 
-    expect(bounds.$1, closeTo(9.8, 0.0001));
-    expect(bounds.$2, closeTo(20.2, 0.0001));
+    expect(bounds.$1, 7.5);
+    expect(bounds.$2, 22.5);
+
+    final positive = FlexLineChart.calculateYBounds(const [
+      FlexLineChartPoint(0, 0.2),
+      FlexLineChartPoint(1, 40.8),
+    ]);
+    expect(positive.$1, 0);
+    expect(positive.$2, 50);
   });
 
   test('axis labels keep readable type emphasis', () {

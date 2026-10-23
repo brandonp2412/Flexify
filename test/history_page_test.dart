@@ -256,6 +256,23 @@ void main() {
     expect(find.text('Settings'), findsOne);
   });
 
+  testWidgets('HistoryPage pairs recent sets on wide desktop', (tester) async {
+    final harness = await FlexifyTestHarness.create();
+    tester.view.devicePixelRatio = 1;
+    tester.view.physicalSize = const Size(1500, 900);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    addTearDown(tester.view.resetPhysicalSize);
+    await insertExerciseSetFixture(harness.database, 'Bench press');
+    await insertExerciseSetFixture(harness.database, 'Squat');
+
+    await pumpHistoryPage(tester, harness, surfaceSize: const Size(1500, 900));
+
+    final bench = tester.getTopLeft(find.text('Bench press'));
+    final squat = tester.getTopLeft(find.text('Squat'));
+    expect((bench.dy - squat.dy).abs(), lessThan(2));
+    expect((bench.dx - squat.dx).abs(), greaterThan(150));
+  });
+
   testWidgets('HistoryPage exposes desktop row actions on secondary click', (
     WidgetTester tester,
   ) async {

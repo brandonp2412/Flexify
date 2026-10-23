@@ -96,12 +96,12 @@ void main() {
     expect(last.center.dx, closeTo(container.center.dx, 8));
   });
 
-  test('single metric uses actual Y-axis values instead of percentages', () {
+  test('single metric uses rounded Y-axis values instead of percentages', () {
     final bounds = FlexLineChart.calculateYBounds([
       const FlexLineChartPoint(0, 40),
       const FlexLineChartPoint(1, 60),
     ]);
-    expect(bounds.$1, closeTo(39.6, 0.001));
-    expect(bounds.$2, closeTo(60.4, 0.001));
+    expect(bounds.$1, 35);
+    expect(bounds.$2, 65);
   });
 }

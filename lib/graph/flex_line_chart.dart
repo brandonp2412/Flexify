@@ -149,8 +149,24 @@ void _drawFlexTooltip(
   }
 }
 
-(double, double) _calculateYBounds(List<FlexLineChartPoint> points) {
-  if (points.isEmpty) return (0, 1);
+double _niceYStep(double span) {
+  final target = span / 4;
+  final magnitude = pow(10, (log(target) / ln10).floor()).toDouble();
+  final scaled = target / magnitude;
+  final nice = scaled < 1.5
+      ? 1.0
+      : scaled < 2.25
+      ? 2.0
+      : scaled < 3.75
+      ? 2.5
+      : scaled < 7.5
+      ? 5.0
+      : 10.0;
+  return nice * magnitude;
+}
+
+(double, double, double) _calculateYAxis(List<FlexLineChartPoint> points) {
+  if (points.isEmpty) return (0, 1, 0.25);
 
   var minY = points.map((point) => point.y).reduce(min);
   var maxY = points.map((point) => point.y).reduce(max);
@@ -161,7 +177,16 @@ void _drawFlexTooltip(
   }
 
   final padding = (maxY - minY) * _edgePadFraction;
-  return (minY - padding, maxY + padding);
+  final step = _niceYStep(maxY - minY);
+  var lower = ((minY - padding) / step).floor() * step;
+  final upper = ((maxY + padding) / step).ceil() * step;
+  if (minY >= 0 && lower < 0) lower = 0;
+  return (lower, upper, step);
+}
+
+(double, double) _calculateYBounds(List<FlexLineChartPoint> points) {
+  final axis = _calculateYAxis(points);
+  return (axis.$1, axis.$2);
 }
 
 class FlexLineChart extends StatelessWidget {
@@ -339,7 +364,7 @@ class FlexLineChart extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     final primary = lineColor ?? colorScheme.primary;
     final secondary = colorScheme.secondary;
-    final yBounds = calculateYBounds(points);
+    final yBounds = _calculateYAxis(points);
     final labels = <_LineChartAxisLabel>[];
 
     if (hideBottom != true) {
@@ -370,6 +395,7 @@ class FlexLineChart extends StatelessWidget {
             : null,
         minY: yBounds.$1,
         maxY: yBounds.$2,
+        yStep: yBounds.$3,
         curveLines: settings.curveLines,
         curveSmoothness: settings.curveSmoothness ?? 0.35,
         fillFirstSeries: true,
@@ -407,13 +433,14 @@ class FlexGroupedLineChart extends StatelessWidget {
     final axisLabelColor = Theme.of(context).colorScheme.onSurface;
     final points = [for (final line in series) ...line.points];
 
-    final yBounds = _calculateYBounds(points);
+    final yBounds = _calculateYAxis(points);
 
     return _FlexLineChartInteraction(
       renderer: _FlexLineChartRenderer(
         series: series,
         minY: yBounds.$1,
         maxY: yBounds.$2,
+        yStep: yBounds.$3,
         curveLines: settings.curveLines,
         curveSmoothness: settings.curveSmoothness ?? 0.35,
         fillFirstSeries: false,
@@ -652,6 +679,7 @@ class _FlexLineChartRenderer extends ChartRenderer
   final FlexLineChartSeries? trendSeries;
   final double minY;
   final double maxY;
+  final double yStep;
   final bool curveLines;
   final double curveSmoothness;
   final bool fillFirstSeries;
@@ -665,6 +693,7 @@ class _FlexLineChartRenderer extends ChartRenderer
     required this.series,
     required this.minY,
     required this.maxY,
+    required this.yStep,
     required this.curveLines,
     required this.curveSmoothness,
     required this.fillFirstSeries,
@@ -845,9 +874,9 @@ class _FlexLineChartRenderer extends ChartRenderer
 
   void _drawAxes(Canvas canvas, ChartBounds bounds) {
     if (showLeftLabels) {
-      const tickCount = 4;
+      final tickCount = ((maxY - minY) / yStep).round();
       for (var i = 0; i <= tickCount; i++) {
-        final value = minY + (maxY - minY) * i / tickCount;
+        final value = minY + yStep * i;
         final y = _yForValue(value, bounds);
         drawChartText(
           canvas,
@@ -907,6 +936,10 @@ class _FlexLineChartRenderer extends ChartRenderer
     if (size.isEmpty) return;
     final bounds = _bounds(size);
     _drawAxes(canvas, bounds);
+    canvas.save();
+    canvas.clipRect(
+      Rect.fromLTRB(bounds.left, bounds.top, bounds.right, bounds.bottom),
+    );
 
     for (var i = 0; i < series.length; i++) {
       _drawSeries(
@@ -922,6 +955,7 @@ class _FlexLineChartRenderer extends ChartRenderer
     if (trend != null && trend.points.isNotEmpty) {
       _drawDashedTrend(canvas, bounds, trend);
     }
+    canvas.restore();
   }
 
   @override

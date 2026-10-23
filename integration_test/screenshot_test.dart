@@ -358,7 +358,7 @@ void main() {
                 page: EditPlanPage(plan: plan),
               );
             },
-            tabBarState: 'GraphsPage',
+            tabBarState: 'PlansPage',
           );
         } finally {
           await (db.delete(

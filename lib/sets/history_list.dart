@@ -124,8 +124,10 @@ class _HistoryListState extends State<HistoryList> {
   Widget _buildListItem(
     ExerciseSetView exerciseSet,
     int index,
-    bool showImages,
-  ) {
+    bool showImages, {
+    bool showDayDivider = true,
+    bool showTime = false,
+  }) {
     final previous = index > 0 ? _current.elementAtOrNull(index - 1) : null;
     final bool showDivider =
         previous != null &&
@@ -198,7 +200,7 @@ class _HistoryListState extends State<HistoryList> {
 
     return Column(
       children: [
-        if (showDivider)
+        if (showDivider && showDayDivider)
           Container(
             color:
                 (widget.selected.contains(exerciseSet.id) &&
@@ -254,7 +256,11 @@ class _HistoryListState extends State<HistoryList> {
                   builder: (context, dateFormat, child) => Padding(
                     padding: const EdgeInsets.only(top: 3),
                     child: Text(
-                      dateFormat == 'timeago'
+                      showTime
+                          ? TimeOfDay.fromDateTime(
+                              exerciseSet.created,
+                            ).format(context)
+                          : dateFormat == 'timeago'
                           ? formatRelativeTime(context, exerciseSet.created)
                           : formatDisplayDate(
                               context,
@@ -299,8 +305,8 @@ class _HistoryListState extends State<HistoryList> {
                     _showContextMenu(context, details, exerciseSet),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 5,
+                    horizontal: 4,
+                    vertical: 4,
                   ),
                   child: tile,
                 ),
@@ -317,6 +323,88 @@ class _HistoryListState extends State<HistoryList> {
     final showImages = context.select<Setting, bool>(
       (settings) => settings.showImages,
     );
+
+    final wide =
+        isDesktopLayout(context) && MediaQuery.sizeOf(context).width >= 1200;
+    if (wide) {
+      final rows = <(int, int?)>[];
+      for (var index = 0; index < _current.length; index++) {
+        if (index == 0 ||
+            !DateUtils.isSameDay(
+              _current[index].created,
+              _current[index - 1].created,
+            )) {
+          rows.add((-1, index));
+        }
+        if (index + 1 < _current.length &&
+            DateUtils.isSameDay(
+              _current[index].created,
+              _current[index + 1].created,
+            )) {
+          rows.add((index, ++index));
+        } else {
+          rows.add((index, null));
+        }
+      }
+      return ListView.builder(
+        padding: EdgeInsets.only(top: widget.topPadding, bottom: 32),
+        controller: widget.scroll,
+        itemCount: rows.length,
+        itemBuilder: (context, rowIndex) {
+          final row = rows[rowIndex];
+          if (row.$1 == -1) {
+            return Padding(
+              padding: const EdgeInsets.fromLTRB(4, 18, 4, 10),
+              child: Row(
+                children: [
+                  const Icon(Icons.calendar_today_outlined, size: 17),
+                  const SizedBox(width: 10),
+                  Selector<Setting, String>(
+                    selector: (context, settings) => settings.shortDateFormat,
+                    builder: (context, dateFormat, child) => Text(
+                      formatDisplayDate(
+                        context,
+                        _current[row.$2!].created,
+                        dateFormat,
+                      ),
+                      style: Theme.of(context).textTheme.titleSmall,
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  const Expanded(child: Divider()),
+                ],
+              ),
+            );
+          }
+          return Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: _buildListItem(
+                  _current[row.$1],
+                  row.$1,
+                  showImages,
+                  showDayDivider: false,
+                  showTime: true,
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: row.$2 == null
+                    ? const SizedBox.shrink()
+                    : _buildListItem(
+                        _current[row.$2!],
+                        row.$2!,
+                        showImages,
+                        showDayDivider: false,
+                        showTime: true,
+                      ),
+              ),
+            ],
+          );
+        },
+      );
+    }
 
     return ListView.builder(
       padding: EdgeInsets.only(
