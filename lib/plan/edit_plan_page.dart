@@ -172,7 +172,10 @@ class _EditPlanPageState extends State<EditPlanPage> {
                     : Colors.transparent,
                 borderRadius: desktop ? BorderRadius.circular(14) : null,
                 child: ListTile(
-                  leading: const Icon(Icons.add_rounded),
+                  leading: IconButton(
+                    icon: const Icon(Icons.add_rounded),
+                    onPressed: addExercise,
+                  ),
                   title: Text(
                     _search.isEmpty
                         ? context.l10n.addExercise

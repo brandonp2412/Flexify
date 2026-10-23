@@ -16,6 +16,24 @@ Future<void> scrollTo(WidgetTester tester, FinderBase<Element> finder) {
 }
 
 void main() {
+  testWidgets('Add exercise icon aligns with exercise settings icons', (
+    WidgetTester tester,
+  ) async {
+    final harness = await FlexifyTestHarness.create();
+    await ensureExerciseFixture(harness.database, 'Alignment bench press');
+    await harness.pump(
+      tester,
+      const EditPlanPage(plan: PlansCompanion(days: Value(''))),
+    );
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(SearchBar), 'Alignment bench press');
+    await tester.pumpAndSettle();
+
+    final addX = tester.getCenter(find.byIcon(Icons.add_rounded).first).dx;
+    final settingsX = tester.getCenter(find.byIcon(Icons.settings).first).dx;
+    expect(addX, moreOrLessEquals(settingsX));
+  });
+
   testWidgets('EditPlanPage creates a plan using existing exercises', (
     WidgetTester tester,
   ) async {
