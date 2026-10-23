@@ -1,0 +1,10 @@
+• Avoid redundant sorting of chronological graph buckets
+• Cache best weight during strength chart selection
+• Default incline to zero instead of null
+• Delete fastlane README.md
+• Fix external link buttons on Android
+• Fix jolt when swapping from strength to cardio on a set
+• Hide tab dock while nested pages are open
+• Keep Donate action clear of system navigation
+• Keep tab dock visible and align release-note footer
+• Limit upgrade snackbars to once every 14 days
