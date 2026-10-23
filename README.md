@@ -3,9 +3,9 @@
 
 # Flexify
 
-**Track your training. See your progress.**
+**Track your training. Flex on people.**
 
-Flexify is a private, offline-first workout tracker for logging gym sessions and building strength over time.
+A private, offline-first workout tracker for logging gym sessions and building strength over time.
 
 <p>
   <a href="https://f-droid.org/packages/com.presley.flexify"><img src="docs/get-it-on-fdroid.png" alt="Get it on F-Droid" style="height: 80px !important" /></a>
