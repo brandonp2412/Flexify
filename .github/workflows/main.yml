@@ -534,7 +534,6 @@ jobs:
           path: flex-windows.zip
 
   build-and-deploy-web:
-    needs: version-bump
     runs-on: ubuntu-latest
     environment:
       name: github-pages
@@ -546,7 +545,7 @@ jobs:
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
         with:
-          ref: ${{ needs.version-bump.outputs.commit_sha }}
+          ref: ${{ github.sha }}
           persist-credentials: false
 
       - name: Setup Flutter from submodule
