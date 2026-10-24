@@ -1,9 +1,9 @@
-import 'package:flexify/l10n/l10n.dart';
-import 'package:flexify/responsive.dart';
-import 'package:flexify/settings/settings_page.dart';
-import 'package:flexify/database/database.dart';
-import 'package:flexify/weight_page.dart';
-import 'package:flexify/platform_page_route.dart';
+import 'package:flex/l10n/l10n.dart';
+import 'package:flex/responsive.dart';
+import 'package:flex/settings/settings_page.dart';
+import 'package:flex/database/database.dart';
+import 'package:flex/weight_page.dart';
+import 'package:flex/platform_page_route.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

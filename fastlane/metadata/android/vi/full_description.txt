@@ -1,6 +1,6 @@
 Ghi lại các buổi tập gym, theo dõi tiến bộ sức mạnh và giữ dữ liệu tập luyện riêng tư.
 
-Flexify là ứng dụng theo dõi tập luyện nhanh, hoạt động ngoại tuyến cho tập sức mạnh và cardio. Ghi lại hiệp, số lần lặp và mức tạ, dùng bộ hẹn giờ nghỉ để giữ nhịp, rồi xem biểu đồ tiến bộ rõ ràng sau mỗi buổi tập.
+Flex là ứng dụng theo dõi tập luyện nhanh, hoạt động ngoại tuyến cho tập sức mạnh và cardio. Ghi lại hiệp, số lần lặp và mức tạ, dùng bộ hẹn giờ nghỉ để giữ nhịp, rồi xem biểu đồ tiến bộ rõ ràng sau mỗi buổi tập.
 
 XÂY DỰNG NHẬT KÝ TẬP LUYỆN TỐT HƠN
 
@@ -12,6 +12,6 @@ XÂY DỰNG NHẬT KÝ TẬP LUYỆN TỐT HƠN
 
 RIÊNG TƯ, NHANH VÀ NGOẠI TUYẾN
 
-Flexify không yêu cầu tài khoản hoặc kết nối Internet. Dữ liệu tập luyện nằm trên thiết bị của bạn, vì vậy bạn có thể tập và ghi lại buổi tập ở bất cứ đâu. Ứng dụng là mã nguồn mở, không quảng cáo và không theo dõi.
+Flex không yêu cầu tài khoản hoặc kết nối Internet. Dữ liệu tập luyện nằm trên thiết bị của bạn, vì vậy bạn có thể tập và ghi lại buổi tập ở bất cứ đâu. Ứng dụng là mã nguồn mở, không quảng cáo và không theo dõi.
 
-Dù bạn mới bắt đầu tập gym hay đang hoàn thiện chương trình hiện có, Flexify mang đến một nhật ký tập luyện tập trung, không rườm rà.
+Dù bạn mới bắt đầu tập gym hay đang hoàn thiện chương trình hiện có, Flex mang đến một nhật ký tập luyện tập trung, không rườm rà.

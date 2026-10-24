@@ -5,7 +5,7 @@ Future<void> validateOpenDatabase(GeneratedDatabase database) async {
   if (integrity.length != 1 ||
       integrity.single.read<String>('integrity_check') != 'ok') {
     throw StateError(
-      'Flexify browser database failed integrity check: $integrity',
+      'Flex browser database failed integrity check: $integrity',
     );
   }
   final violations = await database
@@ -13,7 +13,7 @@ Future<void> validateOpenDatabase(GeneratedDatabase database) async {
       .get();
   if (violations.isNotEmpty) {
     throw StateError(
-      'Flexify browser database has foreign key violations: $violations',
+      'Flex browser database has foreign key violations: $violations',
     );
   }
 }

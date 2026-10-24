@@ -6,9 +6,9 @@ import 'phone_screenshot.dart';
 
 Future<void> main() async => await integrationDriver(
   onScreenshot: (name, image, [args]) async {
-    final deviceType = Platform.environment["FLEXIFY_DEVICE_TYPE"];
+    final deviceType = Platform.environment["FLEX_DEVICE_TYPE"];
     if (deviceType == null || deviceType.isEmpty)
-      throw "FLEXIFY_DEVICE_TYPE must be set, so integration driver knows where to save screenshots.";
+      throw "FLEX_DEVICE_TYPE must be set, so integration driver knows where to save screenshots.";
     final isWeb =
         deviceType == 'desktop' ||
         Platform.environment["FLUTTER_WEB"] == "true" ||

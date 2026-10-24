@@ -1,4 +1,4 @@
-• Hinzufügen von github-Seiten für Flexify-Web
+• Hinzufügen von github-Seiten für Flex-Web
 • Hinzufügen fehlender Wechselbogen
 • Benutzer max.
 • Löschen Sie nicht genutzte Skripte

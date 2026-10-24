@@ -1,6 +1,6 @@
-import 'package:flexify/database/database.dart';
-import 'package:flexify/plan/plan_queries.dart';
-import 'package:flexify/plan/workout_sessions.dart';
+import 'package:flex/database/database.dart';
+import 'package:flex/plan/plan_queries.dart';
+import 'package:flex/plan/workout_sessions.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

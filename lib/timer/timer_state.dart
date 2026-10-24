@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:flexify/audio/safe_audio_player.dart';
-import 'package:flexify/crash_logger.dart';
-import 'package:flexify/logging.dart';
-import 'package:flexify/main.dart';
-import 'package:flexify/native_timer_wrapper.dart';
+import 'package:flex/audio/safe_audio_player.dart';
+import 'package:flex/crash_logger.dart';
+import 'package:flex/logging.dart';
+import 'package:flex/main.dart';
+import 'package:flex/native_timer_wrapper.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
@@ -256,7 +256,7 @@ class TimerState extends ChangeNotifier {
       iOS: darwin,
       android: const AndroidInitializationSettings('ic_launcher'),
       windows: const WindowsInitializationSettings(
-        appName: 'Flexify',
+        appName: 'Flex',
         appUserModelId: 'com.presley.flexify',
         guid: '550e8400-e29b-41d4-a716-446655440000',
         iconPath: 'assets/ic_launcher.png',

@@ -1,6 +1,6 @@
 import 'package:drift/drift.dart';
-import 'package:flexify/database/exercises.dart';
-import 'package:flexify/database/plans.dart';
+import 'package:flex/database/exercises.dart';
+import 'package:flex/database/plans.dart';
 
 @TableIndex(
   name: 'plan_exercises_plan_exercise',

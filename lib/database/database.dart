@@ -1,17 +1,17 @@
 // ignore_for_file: experimental_member_use
 import 'package:drift/drift.dart';
-import 'package:flexify/constants.dart';
-import 'package:flexify/database/body_weights.dart';
-import 'package:flexify/database/categories.dart';
-import 'package:flexify/database/database.steps.dart';
-import 'package:flexify/database/defaults.dart';
-import 'package:flexify/database/exercise_sets.dart';
-import 'package:flexify/database/exercises.dart';
-import 'package:flexify/database/plan_exercises.dart';
-import 'package:flexify/database/plans.dart';
-import 'package:flexify/database/settings.dart';
-import 'package:flexify/database/workouts.dart';
-import 'package:flexify/logging.dart';
+import 'package:flex/constants.dart';
+import 'package:flex/database/body_weights.dart';
+import 'package:flex/database/categories.dart';
+import 'package:flex/database/database.steps.dart';
+import 'package:flex/database/defaults.dart';
+import 'package:flex/database/exercise_sets.dart';
+import 'package:flex/database/exercises.dart';
+import 'package:flex/database/plan_exercises.dart';
+import 'package:flex/database/plans.dart';
+import 'package:flex/database/settings.dart';
+import 'package:flex/database/workouts.dart';
+import 'package:flex/logging.dart';
 import 'package:flutter/foundation.dart';
 
 import 'database_connection_web.dart'
@@ -151,7 +151,7 @@ Future<void> _backfillExerciseHistory(AppDatabase database) async {
     ORDER BY created, id
   ''');
 
-  // Legacy plan history has no session id. Flexify's plan history already
+  // Legacy plan history has no session id. Flex's plan history already
   // treats same-plan sets on the same local calendar day as one session, so
   // migration keeps that grouping. Observed first/last set times bound the
   // workout; no unobserved start or end time is invented.
@@ -304,7 +304,7 @@ class AppDatabase extends _$AppDatabase {
   /// Opens a native database at [path], primarily for validating imports.
   AppDatabase.forPath(String path) : super(createConnectionForPath(path));
 
-  /// Opens Flexify's persistent application database.
+  /// Opens Flex's persistent application database.
   AppDatabase.persistent() : super(createPersistentConnection());
 
   @override
@@ -312,11 +312,11 @@ class AppDatabase extends _$AppDatabase {
     return MigrationStrategy(
       beforeOpen: (details) async {
         await customStatement('PRAGMA foreign_keys = ON');
-        talker.debug('Opening Flexify database schema v${details.versionNow}');
+        talker.debug('Opening Flex database schema v${details.versionNow}');
         if (kDebugMode) await validateOpenDatabase(this);
       },
       onCreate: (Migrator m) async {
-        talker.info('Creating Flexify database');
+        talker.info('Creating Flex database');
         await m.createAll();
 
         for (final categoryName
@@ -359,9 +359,7 @@ class AppDatabase extends _$AppDatabase {
         );
 
         await settings.insertOne(defaultSettings);
-        talker.info(
-          'Created Flexify database with starter plans and exercises',
-        );
+        talker.info('Created Flex database with starter plans and exercises');
       },
       onUpgrade: (m, from, to) async {
         await customStatement('PRAGMA foreign_keys = OFF');

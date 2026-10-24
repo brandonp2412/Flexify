@@ -1,4 +1,4 @@
-package com.presley.flexify
+package com.presley.flex
 
 import android.app.AlarmManager
 import android.app.PendingIntent
@@ -56,9 +56,12 @@ fun scheduleBackups(context: Context) {
 }
 
 fun getDatabaseFile(context: Context): File {
-    val supported = File(context.filesDir, "flexify.sqlite")
-    val migrationMarker = File(context.filesDir, ".flexify-storage-migrated")
-    if (supported.exists() || migrationMarker.exists()) return supported
+    val supported = File(context.filesDir, "flex.sqlite")
+    if (supported.exists()) return supported
+    val previous = File(context.filesDir, "flexify.sqlite")
+    if (previous.exists()) return previous
+    if (File(context.filesDir, ".flex-storage-migrated").exists() ||
+        File(context.filesDir, ".flexify-storage-migrated").exists()) return supported
     val legacy = File(File(context.filesDir.parentFile, "app_flutter"), "flexify.sqlite")
     return if (legacy.exists()) legacy else supported
 }

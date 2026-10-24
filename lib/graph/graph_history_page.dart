@@ -1,13 +1,13 @@
 import 'package:drift/drift.dart' hide Column;
-import 'package:flexify/database/database.dart';
-import 'package:flexify/database/exercise_analytics.dart';
-import 'package:flexify/database/exercise_set_repository.dart';
-import 'package:flexify/empty_state.dart';
-import 'package:flexify/l10n/l10n.dart';
-import 'package:flexify/main.dart';
-import 'package:flexify/sets/edit_sets_page.dart';
-import 'package:flexify/sets/history_list.dart';
-import 'package:flexify/platform_page_route.dart';
+import 'package:flex/database/database.dart';
+import 'package:flex/database/exercise_analytics.dart';
+import 'package:flex/database/exercise_set_repository.dart';
+import 'package:flex/empty_state.dart';
+import 'package:flex/l10n/l10n.dart';
+import 'package:flex/main.dart';
+import 'package:flex/sets/edit_sets_page.dart';
+import 'package:flex/sets/history_list.dart';
+import 'package:flex/platform_page_route.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

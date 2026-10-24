@@ -1,15 +1,15 @@
 import 'dart:io';
 
-import 'package:flexify/app_fab.dart';
-import 'package:flexify/l10n/l10n.dart';
-import 'package:flexify/main.dart';
-import 'package:flexify/responsive.dart';
-import 'package:flexify/settings/settings_page.dart';
-import 'package:flexify/database/database.dart';
-import 'package:flexify/timer/timer_progress_widgets.dart';
-import 'package:flexify/timer/timer_state.dart';
+import 'package:flex/app_fab.dart';
+import 'package:flex/l10n/l10n.dart';
+import 'package:flex/main.dart';
+import 'package:flex/responsive.dart';
+import 'package:flex/settings/settings_page.dart';
+import 'package:flex/database/database.dart';
+import 'package:flex/timer/timer_progress_widgets.dart';
+import 'package:flex/timer/timer_state.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flexify/platform_page_route.dart';
+import 'package:flex/platform_page_route.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

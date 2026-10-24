@@ -1,4 +1,4 @@
-import 'package:flexify/sets/history_page.dart';
+import 'package:flex/sets/history_page.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -11,7 +11,7 @@ import 'package:drift/drift.dart';
 
 Future<void> pumpHistoryPage(
   WidgetTester tester,
-  FlexifyTestHarness harness, {
+  FlexTestHarness harness, {
   Size? surfaceSize,
 }) async {
   await harness.pump(
@@ -24,7 +24,7 @@ Future<void> pumpHistoryPage(
 
 void main() {
   testWidgets('HistoryPage loads', (WidgetTester tester) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     await pumpHistoryPage(tester, harness);
 
     expect(find.text('Search history...'), findsOne);
@@ -34,7 +34,7 @@ void main() {
   testWidgets('HistoryPage loads while the tab transition is still running', (
     tester,
   ) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     await insertExerciseSetFixture(harness.database, 'Bench press');
     final controller = TabController(length: 2, initialIndex: 1, vsync: tester);
     addTearDown(controller.dispose);
@@ -51,7 +51,7 @@ void main() {
   });
 
   testWidgets('HistoryPage lists items', (WidgetTester tester) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     await insertExerciseSetFixture(
       harness.database,
       'Bench press',
@@ -86,7 +86,7 @@ void main() {
   testWidgets('HistoryPage keeps cardio weight when history is grouped', (
     WidgetTester tester,
   ) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     await insertExerciseSetFixture(
       harness.database,
       'Sled push',
@@ -109,7 +109,7 @@ void main() {
   testWidgets('HistoryPage groups every exercise of a day into one card', (
     WidgetTester tester,
   ) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     await harness.database.settings.update().write(
       testSettings(groupHistory: true),
     );
@@ -178,7 +178,7 @@ void main() {
   testWidgets('HistoryPage expands an exercise inside its day card', (
     WidgetTester tester,
   ) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     await harness.database.settings.update().write(
       testSettings(groupHistory: true),
     );
@@ -227,7 +227,7 @@ void main() {
   });
 
   testWidgets('HistoryPage tap tile', (WidgetTester tester) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     await insertExerciseSetFixture(
       harness.database,
       'Bench press',
@@ -245,7 +245,7 @@ void main() {
   });
 
   testWidgets('HistoryPage settings', (WidgetTester tester) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     await pumpHistoryPage(tester, harness);
 
     await tester.tap(find.byTooltip('Show menu'));
@@ -257,7 +257,7 @@ void main() {
   });
 
   testWidgets('HistoryPage pairs recent sets on wide desktop', (tester) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     tester.view.devicePixelRatio = 1;
     tester.view.physicalSize = const Size(1500, 900);
     addTearDown(tester.view.resetDevicePixelRatio);
@@ -276,7 +276,7 @@ void main() {
   testWidgets('HistoryPage exposes desktop row actions on secondary click', (
     WidgetTester tester,
   ) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     tester.view.devicePixelRatio = 1;
     tester.view.physicalSize = const Size(1200, 800);
     addTearDown(tester.view.resetDevicePixelRatio);
@@ -304,7 +304,7 @@ void main() {
   testWidgets('Grouped history preserves desktop row actions', (
     WidgetTester tester,
   ) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     await harness.database.settings.update().write(
       testSettings(groupHistory: true),
     );
@@ -336,7 +336,7 @@ void main() {
   });
 
   testWidgets('HistoryPage selects', (WidgetTester tester) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     await insertExerciseSetFixture(
       harness.database,
       'Bench press',
@@ -352,7 +352,7 @@ void main() {
   });
 
   testWidgets('HistoryPage deletes', (WidgetTester tester) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     await insertExerciseSetFixture(
       harness.database,
       'Bench press',
@@ -377,7 +377,7 @@ void main() {
   testWidgets(
     'HistoryPage select all includes every filtered row, not just loaded rows',
     (WidgetTester tester) async {
-      final harness = await FlexifyTestHarness.create();
+      final harness = await FlexTestHarness.create();
       for (var i = 0; i < 150; i++) {
         await insertExerciseSetFixture(
           harness.database,
@@ -417,7 +417,7 @@ void main() {
   testWidgets(
     'HistoryPage can clear selection without clearing the search filter',
     (WidgetTester tester) async {
-      final harness = await FlexifyTestHarness.create();
+      final harness = await FlexTestHarness.create();
       await insertExerciseSetFixture(
         harness.database,
         'Bench press',

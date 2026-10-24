@@ -171,7 +171,7 @@ jobs:
       - name: Generate ${{ matrix.device_type }}
         uses: reactivecircus/android-emulator-runner@a421e43855164a8197daf9d8d40fe71c6996bb0d # v2
         env:
-          FLEXIFY_DEVICE_TYPE: ${{ matrix.device_type }}
+          FLEX_DEVICE_TYPE: ${{ matrix.device_type }}
           SCREENSHOT_SCREEN_SIZE: ${{ matrix.screen_size }}
         with:
           api-level: 35
@@ -378,10 +378,10 @@ jobs:
           REPO_NAME: ${{ github.event.repository.name }}
         run: |
           cd ..
-          mv "$REPO_NAME" /home/brandon/flexify
+          mv "$REPO_NAME" /home/brandon/flex
 
       - name: Normalize Android SDK path
-        working-directory: /home/brandon/flexify
+        working-directory: /home/brandon/flex
         run: |
           sudo mkdir -p /opt/android-sdk
           sudo mount --bind "$ANDROID_HOME" /opt/android-sdk
@@ -389,32 +389,32 @@ jobs:
           echo "ANDROID_SDK_ROOT=/opt/android-sdk" >> "$GITHUB_ENV"
 
       - name: Setup Flutter from submodule and get dependencies
-        working-directory: /home/brandon/flexify
+        working-directory: /home/brandon/flex
         run: |
           git submodule update --init --recursive flutter
           chmod +x flutter/bin/*
-          echo "/home/brandon/flexify/flutter/bin" >> "$GITHUB_PATH"
+          echo "/home/brandon/flex/flutter/bin" >> "$GITHUB_PATH"
           export PUB_CACHE=$(pwd)/.pub-cache
           echo "PUB_CACHE=$(pwd)/.pub-cache" >> "$GITHUB_ENV"
           flutter/bin/flutter config --no-analytics
           flutter/bin/flutter pub get --enforce-lockfile
 
       - name: Install pinned Android NDK with recovery
-        working-directory: /home/brandon/flexify
+        working-directory: /home/brandon/flex
         run: bash ./scripts/ensure-ci-ndk.sh 28.2.13676358
 
       - name: Run build_runner
-        working-directory: /home/brandon/flexify
+        working-directory: /home/brandon/flex
         run: dart run build_runner build -d
 
       - name: Decode Android keystore
-        working-directory: /home/brandon/flexify
+        working-directory: /home/brandon/flex
         env:
           ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
         run: printf '%s' "$ANDROID_KEYSTORE_BASE64" | base64 --decode > android/app/keystore.jks
 
       - name: Tune Gradle for CI runner memory
-        working-directory: /home/brandon/flexify
+        working-directory: /home/brandon/flex
         run: |
           sed -i \
             -e 's/^org.gradle.jvmargs=.*/org.gradle.jvmargs=-Xmx3G -XX:MaxMetaspaceSize=512m -XX:ReservedCodeCacheSize=512m -XX:ActiveProcessorCount=2/' \
@@ -422,11 +422,11 @@ jobs:
             android/gradle.properties
 
       - name: Remove stale local.properties to ensure version from pubspec.yaml
-        working-directory: /home/brandon/flexify
+        working-directory: /home/brandon/flex
         run: rm -f android/local.properties
 
       - name: Build android (one ABI at a time)
-        working-directory: /home/brandon/flexify
+        working-directory: /home/brandon/flex
         env:
           ANDROID_STORE_PASSWORD: ${{ secrets.ANDROID_STORE_PASSWORD }}
           ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
@@ -440,7 +440,7 @@ jobs:
           flutter build apk --release --split-per-abi --target-platform android-arm64
           flutter build apk --release --split-per-abi --target-platform android-arm
           flutter build apk --release
-          mv build/app/outputs/flutter-apk/app-release.apk build/app/outputs/flutter-apk/flexify.apk
+          mv build/app/outputs/flutter-apk/app-release.apk build/app/outputs/flutter-apk/flex.apk
           flutter build appbundle
           ./scripts/verify-android-release-signing.sh build/app/outputs/flutter-apk/*.apk
           mkdir -p "${GITHUB_WORKSPACE}/build"
@@ -453,7 +453,7 @@ jobs:
           name: android-builds
           path: |
             build/app/outputs/flutter-apk/app-*-release.apk
-            build/app/outputs/flutter-apk/flexify.apk
+            build/app/outputs/flutter-apk/flex.apk
             build/app/outputs/bundle/release/app-release.aab
 
   build-linux:
@@ -489,14 +489,14 @@ jobs:
       - name: Create Linux zip
         run: |
           cd build/linux/x64/release/bundle
-          zip -r flexify-linux.zip .
+          zip -r flex-linux.zip .
 
       - name: Upload Linux artifacts
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           retention-days: 7
           name: linux-builds
-          path: build/linux/x64/release/bundle/flexify-linux.zip
+          path: build/linux/x64/release/bundle/flex-linux.zip
 
   build-windows:
     needs: version-bump
@@ -524,14 +524,14 @@ jobs:
         run: flutter build windows
 
       - name: Create Windows zip
-        run: Compress-Archive -Path ./build/windows/x64/runner/Release/* -DestinationPath ./flexify-windows.zip
+        run: Compress-Archive -Path ./build/windows/x64/runner/Release/* -DestinationPath ./flex-windows.zip
 
       - name: Upload Windows artifacts
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           retention-days: 7
           name: windows-builds
-          path: flexify-windows.zip
+          path: flex-windows.zip
 
   build-and-deploy-web:
     needs: version-bump
@@ -619,10 +619,10 @@ jobs:
           body_path: fastlane/metadata/android/en-US/changelogs/${{ needs.version-bump.outputs.changelog_number }}.txt
           files: |
             android-builds/flutter-apk/app-*-release.apk
-            android-builds/flutter-apk/flexify.apk
+            android-builds/flutter-apk/flex.apk
             android-builds/bundle/release/app-release.aab
-            linux-builds/flexify-linux.zip
-            windows-builds/flexify-windows.zip
+            linux-builds/flex-linux.zip
+            windows-builds/flex-windows.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

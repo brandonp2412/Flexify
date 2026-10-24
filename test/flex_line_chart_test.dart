@@ -1,6 +1,6 @@
 import 'package:drafter/drafter.dart';
 import 'package:drafter/painting.dart';
-import 'package:flexify/graph/flex_line_chart.dart';
+import 'package:flex/graph/flex_line_chart.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -82,7 +82,7 @@ void main() {
   testWidgets('dark Material theme supplies dark Drafter colors to the chart', (
     WidgetTester tester,
   ) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
 
     await harness.pump(
       tester,
@@ -127,7 +127,7 @@ void main() {
   testWidgets('line graph renders through Drafter', (
     WidgetTester tester,
   ) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
 
     await harness.pump(
       tester,
@@ -155,7 +155,7 @@ void main() {
   testWidgets('touch anywhere vertically activates nearest time-based point', (
     WidgetTester tester,
   ) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     final tooltipIndexes = <int>[];
     final selectedIndexes = <int>[];
 
@@ -201,7 +201,7 @@ void main() {
   testWidgets('tooltip stays active when selection rebuilds its parent', (
     WidgetTester tester,
   ) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     final tooltipIndexes = <int>[];
 
     await harness.pump(
@@ -247,7 +247,7 @@ void main() {
   testWidgets('drag does not scrub until the long press activates', (
     WidgetTester tester,
   ) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     final tooltipIndexes = <int>[];
 
     await harness.pump(
@@ -293,7 +293,7 @@ void main() {
   testWidgets('long press scrub wins against horizontal page swiping', (
     WidgetTester tester,
   ) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     final tooltipIndexes = <int>[];
 
     final pageController = PageController();
@@ -352,7 +352,7 @@ void main() {
   testWidgets('long press then horizontal drag scrubs the tooltip', (
     WidgetTester tester,
   ) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     final tooltipIndexes = <int>[];
 
     await harness.pump(
@@ -397,7 +397,7 @@ void main() {
   testWidgets('grouped graph touch activates all rows at nearest column', (
     WidgetTester tester,
   ) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     final tooltipIndexes = <(int, int)>[];
 
     await harness.pump(

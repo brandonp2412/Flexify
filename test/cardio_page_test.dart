@@ -1,6 +1,6 @@
-import 'package:flexify/constants.dart';
-import 'package:flexify/database/exercise_analytics.dart';
-import 'package:flexify/graph/cardio_page.dart';
+import 'package:flex/constants.dart';
+import 'package:flex/database/exercise_analytics.dart';
+import 'package:flex/graph/cardio_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -10,7 +10,7 @@ import 'support/test_app.dart';
 
 Future<void> pumpCardioPage(
   WidgetTester tester,
-  FlexifyTestHarness harness, {
+  FlexTestHarness harness, {
   Size? surfaceSize,
 }) async {
   for (final element in graphData) {
@@ -51,7 +51,7 @@ Future<void> pumpCardioPage(
 
 void main() {
   testWidgets('CardioPage displays', (WidgetTester tester) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     await pumpCardioPage(tester, harness);
 
     expect(find.text('Run'), findsOne);
@@ -67,7 +67,7 @@ void main() {
   testWidgets('CardioPage opens options from below the graph on desktop', (
     WidgetTester tester,
   ) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     tester.view.devicePixelRatio = 1;
     tester.view.physicalSize = const Size(1200, 800);
     addTearDown(tester.view.resetDevicePixelRatio);
@@ -91,7 +91,7 @@ void main() {
   });
 
   testWidgets('CardioPage edits', (WidgetTester tester) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     await pumpCardioPage(tester, harness);
 
     await tester.tap(find.byTooltip('Edit'));
@@ -100,7 +100,7 @@ void main() {
   });
 
   testWidgets('CardioPage selects metrics', (WidgetTester tester) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     await pumpCardioPage(tester, harness);
 
     var currentMetric = 'Pace (distance / time)';

@@ -1,6 +1,6 @@
 Registre seus treinos na academia, acompanhe sua evolução de força e mantenha seus dados de treino privados.
 
-Flexify é um diário de treino rápido e offline para musculação e cardio. Registre séries, repetições e pesos, use temporizadores de descanso para manter o ritmo e veja gráficos claros de progresso após cada sessão.
+Flex é um diário de treino rápido e offline para musculação e cardio. Registre séries, repetições e pesos, use temporizadores de descanso para manter o ritmo e veja gráficos claros de progresso após cada sessão.
 
 CRIE UM DIÁRIO DE TREINO MELHOR
 
@@ -12,6 +12,6 @@ CRIE UM DIÁRIO DE TREINO MELHOR
 
 PRIVADO, RÁPIDO E OFFLINE
 
-Flexify não exige conta nem conexão com a internet. Seus dados de treino ficam no seu dispositivo, para que você possa treinar e registrar sessões em qualquer lugar. O aplicativo é de código aberto e não contém anúncios nem rastreamento.
+Flex não exige conta nem conexão com a internet. Seus dados de treino ficam no seu dispositivo, para que você possa treinar e registrar sessões em qualquer lugar. O aplicativo é de código aberto e não contém anúncios nem rastreamento.
 
-Seja começando uma rotina na academia ou aperfeiçoando um programa já estabelecido, o Flexify oferece um diário de treino focado e sem distrações.
+Seja começando uma rotina na academia ou aperfeiçoando um programa já estabelecido, o Flex oferece um diário de treino focado e sem distrações.

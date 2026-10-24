@@ -1,4 +1,4 @@
-• Flexify web için github barındırma sayfalarını ekle
+• Flex web için github barındırma sayfalarını ekle
 • Kayıp değişken ekle
 • Kullanıcıya maksimum setleri temizlemesini izin verin
 • Kullanılmamış senaryoları sil

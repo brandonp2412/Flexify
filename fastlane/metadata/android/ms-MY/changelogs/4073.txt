@@ -1,7 +1,7 @@
 • Ratakan inisialisasi audio tetapan
 • Ratakan pemilihan kandungan tab
 • Port sistem sandaran mudah alih daripada FitBook
-• Utamakan pemilih tindakan Flexify berlabel
+• Utamakan pemilih tindakan Flex berlabel
 • Utamakan pemilih tindakan graf berlabel
 • Utamakan pemilih tab yang kelihatan
 • Permudahkan aliran kawalan return awal

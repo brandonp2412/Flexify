@@ -1,4 +1,4 @@
-• Añadir páginas github alojadas para la web Flexify
+• Añadir páginas github alojadas para la web Flex
 • Añadir los cambios faltantes
 • Permite al usuario despejar los conjuntos máximos
 • Eliminar los scripts no utilizados

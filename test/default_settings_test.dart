@@ -5,7 +5,7 @@ import 'support/test_app.dart';
 
 void main() {
   test('new installs keep optional features off by default', () async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     final settings = await harness.database.settings.select().getSingle();
 
     expect(settings.showUnits, isFalse);

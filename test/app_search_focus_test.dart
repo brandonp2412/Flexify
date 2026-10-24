@@ -1,4 +1,4 @@
-import 'package:flexify/app_search.dart';
+import 'package:flex/app_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -6,7 +6,7 @@ import 'support/test_app.dart';
 
 void main() {
   testWidgets('AppSearch padding taps focus the search field', (tester) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     final selection = <String>{};
 
     await harness.pump(
@@ -42,7 +42,7 @@ void main() {
   testWidgets('Clear selection menu uses deselect icon and clears selection', (
     tester,
   ) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     final selection = <String>{}..add('plan');
 
     await harness.pump(
@@ -80,7 +80,7 @@ void main() {
   testWidgets('AppSearch popup rows have one interactive surface', (
     tester,
   ) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     final selection = <String>{};
     var selectedAll = false;
 

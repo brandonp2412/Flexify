@@ -1,6 +1,6 @@
-import 'package:flexify/constants.dart';
-import 'package:flexify/database/exercise_analytics.dart';
-import 'package:flexify/main.dart';
+import 'package:flex/constants.dart';
+import 'package:flex/database/exercise_analytics.dart';
+import 'package:flex/main.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'mock_tests.dart';

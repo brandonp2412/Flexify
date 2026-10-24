@@ -1,5 +1,5 @@
-import 'package:flexify/database/database.dart';
-import 'package:flexify/database/exercise_catalog.dart';
+import 'package:flex/database/database.dart';
+import 'package:flex/database/exercise_catalog.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 List<Exercise> legacyFilter(

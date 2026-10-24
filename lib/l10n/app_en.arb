@@ -2,7 +2,7 @@
   "showUpdateNotices": "Show update notices",
   "@showUpdateNotices": {"description": "Whether to show update notices after upgrading the app."},
   "@@locale": "en",
-  "appTitle": "Flexify",
+  "appTitle": "Flex",
   "@appTitle": {
     "description": "Application title shown by the operating system and app shell."
   },
@@ -10,7 +10,7 @@
   "@settingsLanguage": {
     "description": "Title for the application language preference."
   },
-  "settingsLanguageDescription": "Choose the language used by Flexify",
+  "settingsLanguageDescription": "Choose the language used by Flex",
   "@settingsLanguageDescription": {
     "description": "Description for the application language preference."
   },
@@ -348,7 +348,7 @@
   },
   "disableBatteryOptimizations": "Disable battery optimizations",
   "@disableBatteryOptimizations": {
-    "description": "Android permission action for excluding Flexify from battery optimizations."
+    "description": "Android permission action for excluding Flex from battery optimizations."
   },
   "batteryOptimizationWarning": "Progress may pause if battery optimizations stay on.",
   "@batteryOptimizationWarning": {
@@ -456,7 +456,7 @@
   },
   "deleteDatabaseConfirmation": "Are you sure you want to delete your database? This action is not reversible and will destroy all your data.",
   "@deleteDatabaseConfirmation": {
-    "description": "Confirmation text for deleting the complete Flexify database."
+    "description": "Confirmation text for deleting the complete Flex database."
   },
   "importData": "Import data",
   "@importData": {
@@ -487,9 +487,9 @@
       }
     }
   },
-  "backupArchiveMissingDatabase": "The backup archive does not contain the Flexify database.",
+  "backupArchiveMissingDatabase": "The backup archive does not contain the Flex database.",
   "@backupArchiveMissingDatabase": {
-    "description": "Validation error shown when an imported backup archive is missing the Flexify database file."
+    "description": "Validation error shown when an imported backup archive is missing the Flex database file."
   },
   "failedToImportGraphs": "Failed to import graphs: {error}",
   "@failedToImportGraphs": {
@@ -669,7 +669,7 @@
   "@privacyPolicy": {
     "description": "Label for opening the privacy policy."
   },
-  "privacyPolicyDescription": "How Flexify handles your data",
+  "privacyPolicyDescription": "How Flex handles your data",
   "@privacyPolicyDescription": {
     "description": "Description for the privacy policy action."
   },
@@ -689,7 +689,7 @@
   "@leaveReview": {
     "description": "Label for opening the app-store review page."
   },
-  "leaveReviewDescription": "Rate Flexify on the Play Store",
+  "leaveReviewDescription": "Rate Flex on the Play Store",
   "@leaveReviewDescription": {
     "description": "Description for the app-store review action."
   },
@@ -1668,7 +1668,7 @@
   "@inputStyleDescription": {
     "description": "Description of the text input style setting."
   },
-  "automaticBackupNotificationBody": "Flexify will automatically back up your data and images to the selected folder each day.",
+  "automaticBackupNotificationBody": "Flex will automatically back up your data and images to the selected folder each day.",
   "@automaticBackupNotificationBody": {
     "description": "Notification body shown when automatic backups are enabled."
   },
@@ -1684,7 +1684,7 @@
   "@backupChannelName": {
     "description": "Android notification channel name for completed automatic backups."
   },
-  "backupChannelDescription": "Automatic backups of Flexify data and images",
+  "backupChannelDescription": "Automatic backups of Flex data and images",
   "@backupChannelDescription": {
     "description": "Android notification channel description for automatic backups."
   },

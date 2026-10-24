@@ -3,8 +3,8 @@
 import 'dart:html' as html;
 
 import 'package:drift/drift.dart';
-import 'package:flexify/database/database.dart';
-import 'package:flexify/database/database_validation_web.dart';
+import 'package:flex/database/database.dart';
+import 'package:flex/database/database_validation_web.dart';
 import 'package:flutter/widgets.dart';
 
 Future<void> main() async {

@@ -1,5 +1,5 @@
-import 'package:flexify/bottom_nav.dart';
-import 'package:flexify/responsive.dart';
+import 'package:flex/bottom_nav.dart';
+import 'package:flex/responsive.dart';
 import 'package:flutter/material.dart';
 
 class AppFab extends StatefulWidget {

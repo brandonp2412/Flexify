@@ -1,6 +1,6 @@
 import 'package:drift/drift.dart';
-import 'package:flexify/database/database.dart';
-import 'package:flexify/database/exercise_set_repository.dart';
+import 'package:flex/database/database.dart';
+import 'package:flex/database/exercise_set_repository.dart';
 
 final testNow = DateTime(2026, 1, 15, 12);
 

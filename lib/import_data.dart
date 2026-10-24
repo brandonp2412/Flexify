@@ -4,17 +4,17 @@ import 'dart:io';
 import 'package:csv/csv.dart';
 import 'package:drift/drift.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:flexify/app_permissions_dialog.dart';
-import 'package:flexify/database/database.dart';
-import 'package:flexify/database/exercise_catalog.dart';
-import 'package:flexify/data_portability/graph_csv.dart';
-import 'package:flexify/data_portability/import_issue.dart';
-import 'package:flexify/l10n/generated/app_localizations.dart';
-import 'package:flexify/l10n/l10n.dart';
-import 'package:flexify/main.dart';
-import 'package:flexify/logging.dart';
-import 'package:flexify/settings/backup_archive.dart';
-import 'package:flexify/storage/app_storage.dart';
+import 'package:flex/app_permissions_dialog.dart';
+import 'package:flex/database/database.dart';
+import 'package:flex/database/exercise_catalog.dart';
+import 'package:flex/data_portability/graph_csv.dart';
+import 'package:flex/data_portability/import_issue.dart';
+import 'package:flex/l10n/generated/app_localizations.dart';
+import 'package:flex/l10n/l10n.dart';
+import 'package:flex/main.dart';
+import 'package:flex/logging.dart';
+import 'package:flex/settings/backup_archive.dart';
+import 'package:flex/storage/app_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -86,7 +86,7 @@ class ImportData extends StatelessWidget {
   Future<void> importDatabase(BuildContext context) async {
     final l10n = ctx.l10n;
     Navigator.pop(context);
-    talker.info('Starting Flexify database import');
+    talker.info('Starting Flex database import');
 
     try {
       if (kIsWeb) {
@@ -95,7 +95,7 @@ class ImportData extends StatelessWidget {
         await _importDatabaseNative(l10n);
       }
     } catch (e, stackTrace) {
-      talker.handle(e, stackTrace, 'Failed to import Flexify database');
+      talker.handle(e, stackTrace, 'Failed to import Flex database');
       if (!ctx.mounted) return;
       final packageInfo = await PackageInfo.fromPlatform();
       final version = packageInfo.version;
@@ -140,7 +140,7 @@ class ImportData extends StatelessWidget {
     final liveDatabase = await getDatabaseFile();
     final storageDir = liveDatabase.parent;
     final tempDirectory = await getTemporaryDirectory();
-    final workDir = await tempDirectory.createTemp('flexify-import-');
+    final workDir = await tempDirectory.createTemp('flex-import-');
     try {
       final sourceFile = await prepareBackupDatabase(
         selectedFile: selectedFile,
@@ -196,7 +196,7 @@ class ImportData extends StatelessWidget {
       }
 
       dbVersion.value++;
-      talker.info('Imported Flexify data and image backup');
+      talker.info('Imported Flex data and image backup');
     } finally {
       await workDir.delete(recursive: true);
     }

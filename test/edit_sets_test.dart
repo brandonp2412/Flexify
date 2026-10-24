@@ -1,5 +1,5 @@
-import 'package:flexify/database/exercise_set_repository.dart';
-import 'package:flexify/sets/edit_sets_page.dart';
+import 'package:flex/database/exercise_set_repository.dart';
+import 'package:flex/sets/edit_sets_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -12,7 +12,7 @@ void main() {
   testWidgets('EditSetsPage cardio toggle switches fields', (
     WidgetTester tester,
   ) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     await harness.database.settings.update().write(
       testSettings(showUnits: true),
     );
@@ -72,7 +72,7 @@ void main() {
   });
 
   testWidgets('EditExerciseSets', (WidgetTester tester) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     await harness.database.settings.update().write(
       testSettings(showUnits: true),
     );

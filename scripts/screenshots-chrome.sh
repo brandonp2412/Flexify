@@ -25,7 +25,7 @@ device_type="${device_type:-desktop}"
 
 echo "Running screenshot tests with Chrome..."
 
-export FLEXIFY_DEVICE_TYPE="$device_type"
+export FLEX_DEVICE_TYPE="$device_type"
 export FLUTTER_DRIVER_DEVICE=chrome
 
 dart_define=()
@@ -36,7 +36,7 @@ if [ -n "$only" ]; then
 fi
 
 chrome_binary=()
-[ -n "${FLEXIFY_CHROME_BINARY:-}" ] && chrome_binary=(--chrome-binary="$FLEXIFY_CHROME_BINARY")
+[ -n "${FLEX_CHROME_BINARY:-}" ] && chrome_binary=(--chrome-binary="$FLEX_CHROME_BINARY")
 
 headless_flag=(--headless)
 [ "$show" -eq 1 ] && headless_flag=()
@@ -51,7 +51,7 @@ trap cleanup EXIT
 
 if ! curl -s -o /dev/null http://localhost:4444/status; then
     echo "Starting chromedriver on port 4444..."
-    chromedriver --verbose --port=4444 >/tmp/flexify-chromedriver.log 2>&1 &
+    chromedriver --verbose --port=4444 >/tmp/flex-chromedriver.log 2>&1 &
     chromedriver_pid=$!
 
     for _ in $(seq 1 20); do
@@ -93,7 +93,7 @@ else
         curl -fsS --max-time 10 "http://localhost:4444/session/$session/screenshot" \
             | jq -r '.value // empty' | base64 -d > fastlane/screenshots/desktop-debug.png || true
     fi
-    tail -n 35 /tmp/flexify-chromedriver.log || true
+    tail -n 35 /tmp/flex-chromedriver.log || true
     exit "$code"
 fi
 

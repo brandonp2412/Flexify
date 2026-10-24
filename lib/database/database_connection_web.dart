@@ -12,7 +12,7 @@ DatabaseConnection createPersistentConnection() => DatabaseConnection.delayed(
       initializeDatabase: _restoreLegacyDatabase,
     );
     if (result.chosenImplementation == WasmStorageImplementation.inMemory) {
-      throw StateError('This browser cannot persist Flexify data.');
+      throw StateError('This browser cannot persist Flex data.');
     }
     return result.resolvedExecutor;
   }),

@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flexify/update_notice.dart';
+import 'package:flex/update_notice.dart';
 
 void main() {
   test(

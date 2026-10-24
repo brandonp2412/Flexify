@@ -12,14 +12,13 @@ class AppLocalizationsMs extends AppLocalizations {
   String get showUpdateNotices => 'Paparkan notis kemas kini';
 
   @override
-  String get appTitle => 'Flexify';
+  String get appTitle => 'Flex';
 
   @override
   String get settingsLanguage => 'Bahasa';
 
   @override
-  String get settingsLanguageDescription =>
-      'Pilih bahasa yang digunakan Flexify';
+  String get settingsLanguageDescription => 'Pilih bahasa yang digunakan Flex';
 
   @override
   String get languageSystemDefault => 'Lalai sistem';
@@ -389,7 +388,7 @@ class AppLocalizationsMs extends AppLocalizations {
 
   @override
   String get backupArchiveMissingDatabase =>
-      'Arsip cadangan tidak berisi pangkalan data Flexify.';
+      'Arsip cadangan tidak berisi pangkalan data Flex.';
 
   @override
   String failedToImportGraphs(String error) {
@@ -512,7 +511,7 @@ class AppLocalizationsMs extends AppLocalizations {
   String get privacyPolicy => 'Kebijakan privasi';
 
   @override
-  String get privacyPolicyDescription => 'Cara Flexify menangani data Anda';
+  String get privacyPolicyDescription => 'Cara Flex menangani data Anda';
 
   @override
   String get licenseLabel => 'Lisensi';
@@ -527,7 +526,7 @@ class AppLocalizationsMs extends AppLocalizations {
   String get leaveReview => 'Beri ulasan';
 
   @override
-  String get leaveReviewDescription => 'Beri nilai Flexify di Play Store';
+  String get leaveReviewDescription => 'Beri nilai Flex di Play Store';
 
   @override
   String get reportBug => 'Laporkan bug';
@@ -1277,7 +1276,7 @@ class AppLocalizationsMs extends AppLocalizations {
 
   @override
   String get automaticBackupNotificationBody =>
-      'Flexify akan mencadangkan data dan gambar Anda secara automatik ke folder yang dipilih setiap hari.';
+      'Flex akan mencadangkan data dan gambar Anda secara automatik ke folder yang dipilih setiap hari.';
 
   @override
   String get backupSettingsChannel => 'Tetapan sandaran';
@@ -1291,7 +1290,7 @@ class AppLocalizationsMs extends AppLocalizations {
 
   @override
   String get backupChannelDescription =>
-      'Sandaran automatik data dan gambar Flexify';
+      'Sandaran automatik data dan gambar Flex';
 
   @override
   String get backupCompletedTitle => 'Data dan gambar berjaya dicadangkan';

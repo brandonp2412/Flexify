@@ -78,7 +78,7 @@ def signingCertificateSha256 = { signingConfig ->
 }
 
 android {
-    namespace "com.presley.flexify"
+    namespace "com.presley.flex"
     compileSdkVersion 37
     ndkVersion = "28.2.13676358"
 
@@ -151,7 +151,7 @@ android {
            }
        }
    }
-   // https://github.com/brandonp2412/Flexify/issues/125
+   // https://github.com/brandonp2412/Flex/issues/125
    dependenciesInfo {
         // Disables dependency metadata when building APKs.
         includeInApk = false
@@ -190,7 +190,7 @@ gradle.taskGraph.whenReady { taskGraph ->
             }
             throw new GradleException(
                 "Refusing to package " + productionApplicationId +
-                " without the Flexify release signing key."
+                " without the Flex release signing key."
             )
         }
 

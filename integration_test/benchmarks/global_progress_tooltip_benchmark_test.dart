@@ -1,4 +1,4 @@
-import 'package:flexify/graph/strength_data.dart';
+import 'package:flex/graph/strength_data.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'benchmark_results.dart';

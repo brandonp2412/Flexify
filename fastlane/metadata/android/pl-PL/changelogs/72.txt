@@ -1,2 +1,2 @@
-- Połączenie głównej oddziału github.com:brandonp2412/Flexify
+- Połączenie głównej oddziału github.com:brandonp2412/Flex
 - Połowiu odległości stałego pozostaje podkreślone - 1.0.64

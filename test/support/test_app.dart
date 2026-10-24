@@ -1,26 +1,26 @@
 import 'package:drift/drift.dart';
-import 'package:flexify/database/database.dart';
-import 'package:flexify/l10n/generated/app_localizations.dart';
-import 'package:flexify/main.dart';
-import 'package:flexify/timer/timer_state.dart';
+import 'package:flex/database/database.dart';
+import 'package:flex/l10n/generated/app_localizations.dart';
+import 'package:flex/main.dart';
+import 'package:flex/timer/timer_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 
 import '../mock_tests.dart';
 
-class FlexifyTestHarness {
-  FlexifyTestHarness._({required this.database, required this.timerState});
+class FlexTestHarness {
+  FlexTestHarness._({required this.database, required this.timerState});
 
   final AppDatabase database;
   final TimerState timerState;
 
-  static Future<FlexifyTestHarness> create({TimerState? timerState}) async {
+  static Future<FlexTestHarness> create({TimerState? timerState}) async {
     TestWidgetsFlutterBinding.ensureInitialized();
     final database = testDb();
     db = database;
 
-    return FlexifyTestHarness._(
+    return FlexTestHarness._(
       database: database,
       timerState: timerState ?? TimerState(),
     );

@@ -1,2 +1,2 @@
-- Fusión de la sucursal "principal" de github.com:brandonp2412/Flexify
+- Fusión de la sucursal "principal" de github.com:brandonp2412/Flex
 - Campo de distancia fija que se mantiene resaltado - 1.0.64

@@ -1,6 +1,6 @@
-import 'package:flexify/database/categories.dart';
-import 'package:flexify/database/database.dart';
-import 'package:flexify/l10n/l10n.dart';
+import 'package:flex/database/categories.dart';
+import 'package:flex/database/database.dart';
+import 'package:flex/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 /// Lets people create, rename, merge, and remove workout categories.

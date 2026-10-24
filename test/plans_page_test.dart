@@ -1,22 +1,19 @@
-import 'package:flexify/bottom_nav.dart';
-import 'package:flexify/plan/plans_page.dart';
+import 'package:flex/bottom_nav.dart';
+import 'package:flex/plan/plans_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../integration_test/support/mock_tab_controller.dart';
 import 'support/test_app.dart';
 
-Future<void> pumpPlansPage(
-  WidgetTester tester,
-  FlexifyTestHarness harness,
-) async {
+Future<void> pumpPlansPage(WidgetTester tester, FlexTestHarness harness) async {
   await harness.pump(tester, PlansPage(tabController: MockTabController()));
   await tester.pumpAndSettle();
 }
 
 void main() {
   testWidgets('PlansPage lists items', (WidgetTester tester) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     await pumpPlansPage(tester, harness);
 
     expect(find.text('Search plans...'), findsOne);
@@ -28,7 +25,7 @@ void main() {
   });
 
   testWidgets('PlansPage add button', (WidgetTester tester) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     await pumpPlansPage(tester, harness);
 
     await tester.tap(find.text('Add'));
@@ -38,7 +35,7 @@ void main() {
   });
 
   testWidgets('PlansPage tap tile', (WidgetTester tester) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     await pumpPlansPage(tester, harness);
 
     await tester.tap(find.textContaining('Barbell bench press'));
@@ -48,7 +45,7 @@ void main() {
   });
 
   testWidgets('PlansPage settings', (WidgetTester tester) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     await pumpPlansPage(tester, harness);
 
     await tester.tap(find.byTooltip('Show menu'));
@@ -60,7 +57,7 @@ void main() {
   });
 
   testWidgets('PlansPage selects', (WidgetTester tester) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     await pumpPlansPage(tester, harness);
 
     await tester.longPress(find.textContaining('Barbell bench press'));
@@ -70,7 +67,7 @@ void main() {
   });
 
   testWidgets('PlansPage deletes', (WidgetTester tester) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     await pumpPlansPage(tester, harness);
 
     await tester.longPress(find.textContaining('Barbell bench press'));

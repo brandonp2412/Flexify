@@ -14,9 +14,9 @@
     <application
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
-        android:label="Flexify">
+        android:label="Flex">
         <activity
-            android:name=".MainActivity"
+            android:name="com.presley.flex.MainActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:exported="true"
             android:hardwareAccelerated="true"
@@ -42,7 +42,7 @@
             android:value="2" />
 
         <service
-            android:name=".TimerService"
+            android:name="com.presley.flex.TimerService"
             android:exported="false"
             android:foregroundServiceType="specialUse">
             <property
@@ -51,10 +51,10 @@
         </service>
 
         <receiver
-            android:name=".BackupReceiver"
+            android:name="com.presley.flex.BackupReceiver"
             android:exported="false" />
 
-        <receiver android:name=".BootReceiver"
+        <receiver android:name="com.presley.flex.BootReceiver"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />

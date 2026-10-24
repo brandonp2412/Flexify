@@ -1,5 +1,5 @@
 • README.md aktualisieren
 • feat: Kategorieverwaltung hinzufügen
-• feat: Symbol 2 als Flexify-Startsymbol übernehmen
+• feat: Symbol 2 als Flex-Startsymbol übernehmen
 • fix: eingebettete Flutter DevTools wiederherstellen
 • fix: Flutter-Debugging in VS Code stabilisieren

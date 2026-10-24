@@ -1,4 +1,4 @@
-import 'package:flexify/l10n/generated/app_localizations.dart';
+import 'package:flex/l10n/generated/app_localizations.dart';
 import 'package:flutter/widgets.dart';
 
 /// Provides concise access to generated localizations from a widget context.

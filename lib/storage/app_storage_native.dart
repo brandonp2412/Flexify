@@ -4,7 +4,8 @@ import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:sqlite3/sqlite3.dart';
 
-const databaseFileName = 'flexify.sqlite';
+const databaseFileName = 'flex.sqlite';
+const _previousDatabaseFileName = 'flexify.sqlite';
 final _migrations = <String, Future<File>>{};
 
 Future<File> getDatabaseFile() async {
@@ -25,7 +26,7 @@ Future<File> getDatabaseFile() async {
 Future<File> _resolveDatabaseFile(Directory support) async {
   await support.create(recursive: true);
   final lock = await File(
-    p.join(support.path, '.flexify-storage.lock'),
+    p.join(support.path, '.flex-storage.lock'),
   ).open(mode: FileMode.append);
   try {
     await lock.lock(FileLock.blockingExclusive);
@@ -38,7 +39,10 @@ Future<File> _resolveDatabaseFile(Directory support) async {
 Future<File> _resolveLockedDatabaseFile(Directory support) async {
   final destination = File(p.join(support.path, databaseFileName));
   final staged = File('${destination.path}.migrating');
-  final marker = File(p.join(support.path, '.flexify-storage-migrated'));
+  final marker = File(p.join(support.path, '.flex-storage-migrated'));
+  final previousMarker = File(
+    p.join(support.path, '.flexify-storage-migrated'),
+  );
 
   if (await destination.exists()) {
     if (await staged.exists()) await staged.delete();
@@ -51,19 +55,25 @@ Future<File> _resolveLockedDatabaseFile(Directory support) async {
     return destination;
   }
 
-  final Directory documents;
-  try {
-    documents = await getApplicationDocumentsDirectory();
-  } on MissingPlatformDirectoryException {
-    return destination;
+  final previousSupport = File(p.join(support.path, _previousDatabaseFileName));
+  File? sourceFile;
+  if (await previousSupport.exists()) {
+    sourceFile = previousSupport;
+  } else if (!await previousMarker.exists()) {
+    try {
+      final documents = await getApplicationDocumentsDirectory();
+      final previousDocuments = File(
+        p.join(documents.path, _previousDatabaseFileName),
+      );
+      if (await previousDocuments.exists()) sourceFile = previousDocuments;
+    } on MissingPlatformDirectoryException {
+      return destination;
+    }
   }
-  final legacy = File(p.join(documents.path, databaseFileName));
-  if (p.equals(legacy.path, destination.path) || !await legacy.exists()) {
-    return destination;
-  }
+  if (sourceFile == null) return destination;
 
   if (await staged.exists()) await staged.delete();
-  final source = sqlite3.open(legacy.path, mode: OpenMode.readOnly);
+  final source = sqlite3.open(sourceFile.path, mode: OpenMode.readOnly);
   try {
     final escapedPath = staged.path.replaceAll("'", "''");
     source.execute("VACUUM INTO '$escapedPath'");

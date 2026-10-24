@@ -1,4 +1,4 @@
-• যোগ করুন github পেজ hosting for Flexify web
+• যোগ করুন github পেজ hosting for Flex web
 • যোগ করুন missing changelogs
 • অনুমতি দিন user to clear max সেট
 • মুছুন unused scripts

@@ -12,13 +12,13 @@ class AppLocalizationsUk extends AppLocalizations {
   String get showUpdateNotices => 'Показувати сповіщення про оновлення';
 
   @override
-  String get appTitle => 'Flexify';
+  String get appTitle => 'Flex';
 
   @override
   String get settingsLanguage => 'Мова';
 
   @override
-  String get settingsLanguageDescription => 'Виберіть мову інтерфейсу Flexify';
+  String get settingsLanguageDescription => 'Виберіть мову інтерфейсу Flex';
 
   @override
   String get languageSystemDefault => 'Системна за замовчуванням';
@@ -392,7 +392,7 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get backupArchiveMissingDatabase =>
-      'Архів резервної копії не містить бази даних Flexify.';
+      'Архів резервної копії не містить бази даних Flex.';
 
   @override
   String failedToImportGraphs(String error) {
@@ -515,7 +515,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get privacyPolicy => 'Політика конфіденційності';
 
   @override
-  String get privacyPolicyDescription => 'Як Flexify обробляє ваші дані';
+  String get privacyPolicyDescription => 'Як Flex обробляє ваші дані';
 
   @override
   String get licenseLabel => 'Ліцензія';
@@ -530,7 +530,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get leaveReview => 'Залишити відгук';
 
   @override
-  String get leaveReviewDescription => 'Оцінити Flexify у Play Store';
+  String get leaveReviewDescription => 'Оцінити Flex у Play Store';
 
   @override
   String get reportBug => 'Повідомити про помилку';
@@ -1292,7 +1292,7 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get automaticBackupNotificationBody =>
-      'Flexify автоматично створюватиме резервну копію даних і зображень у вибраній папці щодня.';
+      'Flex автоматично створюватиме резервну копію даних і зображень у вибраній папці щодня.';
 
   @override
   String get backupSettingsChannel => 'Налаштування резервного копіювання';
@@ -1306,7 +1306,7 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get backupChannelDescription =>
-      'Автоматичні резервні копії даних і зображень Flexify';
+      'Автоматичні резервні копії даних і зображень Flex';
 
   @override
   String get backupCompletedTitle =>

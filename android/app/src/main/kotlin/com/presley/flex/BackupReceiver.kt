@@ -1,4 +1,4 @@
-package com.presley.flexify
+package com.presley.flex
 
 import android.Manifest
 import android.app.NotificationChannel
@@ -72,7 +72,7 @@ class BackupReceiver : BroadcastReceiver() {
             }
 
             val yyyyMMdd = DateTimeFormatter.ofPattern("yyyy-MM-dd").format(LocalDate.now())
-            val fileName = "flexify-$yyyyMMdd.zip"
+            val fileName = "flex-$yyyyMMdd.zip"
             val file = dir.createFile("application/zip", fileName)
             if (file == null) {
                 failBackup(context, getBackupLocalization(context, "backupFailureCreateFile"))
@@ -124,7 +124,7 @@ class BackupReceiver : BroadcastReceiver() {
             }
 
             val temporaryDatabase = File.createTempFile(
-                "flexify-backup-",
+                "flex-backup-",
                 ".sqlite",
                 context.cacheDir
             )
@@ -132,7 +132,7 @@ class BackupReceiver : BroadcastReceiver() {
                 val images = createPortableDatabaseCopy(dbFile, temporaryDatabase)
                 outputStream.use { output ->
                     ZipOutputStream(BufferedOutputStream(output)).use { zip ->
-                        addFileToZip(zip, temporaryDatabase, "flexify.sqlite")
+                        addFileToZip(zip, temporaryDatabase, "flex.sqlite")
                         images.forEach { (image, archivePath) ->
                             if (image.exists()) addFileToZip(zip, image, archivePath)
                         }

@@ -1,4 +1,4 @@
-import 'package:flexify/database/exercise_analytics.dart';
+import 'package:flex/database/exercise_analytics.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'benchmark_results.dart';

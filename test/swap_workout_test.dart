@@ -1,6 +1,6 @@
 import 'package:drift/drift.dart';
-import 'package:flexify/graph/add_exercise_page.dart';
-import 'package:flexify/plan/swap_workout.dart';
+import 'package:flex/graph/add_exercise_page.dart';
+import 'package:flex/plan/swap_workout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -8,7 +8,7 @@ import 'support/test_app.dart';
 
 void main() {
   testWidgets('SwapWorkout', (WidgetTester tester) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     final plan = await (harness.database.plans.select()..limit(1)).getSingle();
     final planExercises =
         await (harness.database.planExercises.select()
@@ -53,7 +53,7 @@ void main() {
   testWidgets('SwapWorkout can create and select a new exercise', (
     WidgetTester tester,
   ) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     final plan = await (harness.database.plans.select()..limit(1)).getSingle();
     final original =
         await (harness.database.planExercises.select()

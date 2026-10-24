@@ -1,5 +1,5 @@
 • Update README.md
 • feat: add category management
-• feat: promote icon 2 as Flexify launcher icon
+• feat: promote icon 2 as Flex launcher icon
 • fix: restore embedded Flutter DevTools
 • fix: stabilize Flutter debugging in VS Code

@@ -1,9 +1,9 @@
 import 'package:drift/drift.dart';
-import 'package:flexify/database/database.dart';
-import 'package:flexify/graph/add_exercise_page.dart';
-import 'package:flexify/graph/edit_graph_page.dart';
-import 'package:flexify/sets/edit_set_page.dart';
-import 'package:flexify/sets/edit_sets_page.dart';
+import 'package:flex/database/database.dart';
+import 'package:flex/graph/add_exercise_page.dart';
+import 'package:flex/graph/edit_graph_page.dart';
+import 'package:flex/sets/edit_set_page.dart';
+import 'package:flex/sets/edit_sets_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -12,7 +12,7 @@ import 'support/test_app.dart';
 
 Future<void> _openEditor(
   WidgetTester tester,
-  FlexifyTestHarness harness,
+  FlexTestHarness harness,
   WidgetBuilder builder, {
   Size? surfaceSize,
 }) async {
@@ -42,7 +42,7 @@ void main() {
   testWidgets('AddExercise tracks non-text changes and save bypasses guard', (
     tester,
   ) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     await _openEditor(tester, harness, (_) => const AddExercisePage());
 
     await tester.tap(find.byType(Switch));
@@ -64,7 +64,7 @@ void main() {
   testWidgets('EditSet initialization does not create false unsaved changes', (
     tester,
   ) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     await _openEditor(
       tester,
       harness,
@@ -78,7 +78,7 @@ void main() {
   });
 
   testWidgets('EditSet unit changes are treated as unsaved', (tester) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     await harness.database.settings.update().write(
       testSettings(showUnits: true),
     );
@@ -103,7 +103,7 @@ void main() {
   });
 
   testWidgets('EditSets cardio changes are treated as unsaved', (tester) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     final ids = [
       (await insertExerciseSetFixture(
         harness.database,
@@ -133,7 +133,7 @@ void main() {
   testWidgets('EditGraph async rest initialization stays clean', (
     tester,
   ) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     final exercise = await ensureExerciseFixture(
       harness.database,
       'Bench press',
@@ -156,7 +156,7 @@ void main() {
   });
 
   testWidgets('EditGraph unit changes are treated as unsaved', (tester) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     await ensureExerciseFixture(harness.database, 'Bench press');
     await _openEditor(
       tester,
@@ -181,7 +181,7 @@ void main() {
   testWidgets('AddExercise name changes are treated as unsaved', (
     tester,
   ) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     await _openEditor(tester, harness, (_) => const AddExercisePage());
 
     await tester.enterText(find.bySemanticsLabel('Name'), 'Bench press');
@@ -194,7 +194,7 @@ void main() {
   testWidgets('EditSet category changes are treated as unsaved', (
     tester,
   ) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     await harness.database.settings.update().write(
       const SettingsCompanion(showCategories: Value(true)),
     );
@@ -214,7 +214,7 @@ void main() {
   });
 
   testWidgets('EditSet date changes are treated as unsaved', (tester) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     await _openEditor(
       tester,
       harness,

@@ -1,1 +1,1 @@
-• পরিবর্তন: fix: enforce one Flexify app and signing key
+• পরিবর্তন: fix: enforce one Flex app and signing key

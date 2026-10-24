@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flexify/settings/whats_new.dart';
-import 'package:flexify/l10n/generated/app_localizations.dart';
+import 'package:flex/settings/whats_new.dart';
+import 'package:flex/l10n/generated/app_localizations.dart';
 
 void main() {
   testWidgets('Donate stays above Android gesture navigation', (tester) async {

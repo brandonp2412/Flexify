@@ -1,7 +1,7 @@
 • Wykres włączenia w ruch
 • Wybór zawartości płaskich kart
 • Port przenośny system kopii zapasowej z FitBook
-• Wykrywacze działania Flexify
+• Wykrywacze działania Flex
 • Wykrywacze graficzne z oznaczeniem
 • Wybór karty widocznej
 • Uproszczenie przepływu kontroli wczesnego powrotu

@@ -2,7 +2,7 @@
   "showUpdateNotices": "إظهار إشعارات التحديث",
   "@showUpdateNotices": {"description": "Whether to show update notices after upgrading the app."},
   "@@locale": "ar",
-  "appTitle": "Flexify",
+  "appTitle": "Flex",
   "@appTitle": {
     "description": "Application title shown by the operating system and app shell."
   },
@@ -10,7 +10,7 @@
   "@settingsLanguage": {
     "description": "Title for the application language preference."
   },
-  "settingsLanguageDescription": "اختر اللغة التي يستخدمها Flexify",
+  "settingsLanguageDescription": "اختر اللغة التي يستخدمها Flex",
   "@settingsLanguageDescription": {
     "description": "Description for the application language preference."
   },
@@ -339,7 +339,7 @@
   },
   "disableBatteryOptimizations": "تعطيل تحسينات البطارية",
   "@disableBatteryOptimizations": {
-    "description": "Android permission action for excluding Flexify from battery optimizations."
+    "description": "Android permission action for excluding Flex from battery optimizations."
   },
   "batteryOptimizationWarning": "قد يتوقف التقدم مؤقتًا إذا ظلت تحسينات البطارية مفعلة.",
   "@batteryOptimizationWarning": {
@@ -447,7 +447,7 @@
   },
   "deleteDatabaseConfirmation": "هل أنت متأكد من حذف قاعدة بياناتك؟ لا يمكن التراجع عن هذا الإجراء وسيؤدي إلى حذف جميع بياناتك.",
   "@deleteDatabaseConfirmation": {
-    "description": "Confirmation text for deleting the complete Flexify database."
+    "description": "Confirmation text for deleting the complete Flex database."
   },
   "importData": "استيراد البيانات",
   "@importData": {
@@ -478,9 +478,9 @@
       }
     }
   },
-  "backupArchiveMissingDatabase": "لا يحتوي أرشيف النسخة الاحتياطية على قاعدة بيانات Flexify.",
+  "backupArchiveMissingDatabase": "لا يحتوي أرشيف النسخة الاحتياطية على قاعدة بيانات Flex.",
   "@backupArchiveMissingDatabase": {
-    "description": "Validation error shown when an imported backup archive is missing the Flexify database file."
+    "description": "Validation error shown when an imported backup archive is missing the Flex database file."
   },
   "failedToImportGraphs": "فشل استيراد الرسوم البيانية: {error}",
   "@failedToImportGraphs": {
@@ -660,7 +660,7 @@
   "@privacyPolicy": {
     "description": "Label for opening the privacy policy."
   },
-  "privacyPolicyDescription": "كيف يتعامل Flexify مع بياناتك",
+  "privacyPolicyDescription": "كيف يتعامل Flex مع بياناتك",
   "@privacyPolicyDescription": {
     "description": "Description for the privacy policy action."
   },
@@ -680,7 +680,7 @@
   "@leaveReview": {
     "description": "Label for opening the app-store review page."
   },
-  "leaveReviewDescription": "قيّم Flexify على متجر Play",
+  "leaveReviewDescription": "قيّم Flex على متجر Play",
   "@leaveReviewDescription": {
     "description": "Description for the app-store review action."
   },
@@ -1659,7 +1659,7 @@
   "@inputStyleDescription": {
     "description": "Description of the text input style setting."
   },
-  "automaticBackupNotificationBody": "سيقوم Flexify تلقائيًا بنسخ بياناتك وصورك احتياطيًا إلى المجلد المحدد كل يوم.",
+  "automaticBackupNotificationBody": "سيقوم Flex تلقائيًا بنسخ بياناتك وصورك احتياطيًا إلى المجلد المحدد كل يوم.",
   "@automaticBackupNotificationBody": {
     "description": "Notification body shown when automatic backups are enabled."
   },
@@ -1675,7 +1675,7 @@
   "@backupChannelName": {
     "description": "Android notification channel name for completed automatic backups."
   },
-  "backupChannelDescription": "نسخ احتياطية تلقائية لبيانات Flexify وصوره",
+  "backupChannelDescription": "نسخ احتياطية تلقائية لبيانات Flex وصوره",
   "@backupChannelDescription": {
     "description": "Android notification channel description for automatic backups."
   },

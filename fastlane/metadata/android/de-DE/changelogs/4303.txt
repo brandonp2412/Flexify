@@ -1,1 +1,1 @@
-• fix: eine einzige Flexify-App und einen einzigen Signaturschlüssel erzwingen
+• fix: eine einzige Flex-App und einen einzigen Signaturschlüssel erzwingen

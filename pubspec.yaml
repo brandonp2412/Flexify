@@ -1,4 +1,4 @@
-name: flexify
+name: flex
 description: Track gym progress, visualize graphs, enjoy offline support & timers
 publish_to: none
 version: 2.2.36+450
@@ -88,7 +88,7 @@ flutter_launcher_icons:
     image_path: assets/ic_launcher.png
 msix_config:
   msstore_appId: 9P13THVK7F69
-  display_name: Flexify
+  display_name: Flex
   publisher_display_name: Brandon Dick
   identity_name: FrisbeeSoftware.Flexify
   msix_version: 1.0.287.0

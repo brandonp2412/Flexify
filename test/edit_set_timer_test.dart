@@ -1,9 +1,9 @@
 import 'dart:io';
 
 import 'package:drift/drift.dart';
-import 'package:flexify/native_timer_wrapper.dart';
-import 'package:flexify/sets/edit_set_page.dart';
-import 'package:flexify/timer/timer_state.dart';
+import 'package:flex/native_timer_wrapper.dart';
+import 'package:flex/sets/edit_set_page.dart';
+import 'package:flex/timer/timer_state.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -14,7 +14,7 @@ void main() {
   testWidgets(
     'saving a set does not start a rest timer when restTimers is off (#308)',
     (WidgetTester tester) async {
-      final harness = await FlexifyTestHarness.create();
+      final harness = await FlexTestHarness.create();
       final timerState = harness.timerState;
       final settings = await (harness.database.settings.select()..limit(1))
           .getSingle();
@@ -80,7 +80,7 @@ void main() {
     'saving a set starts a rest timer using the exercise default duration '
     'when restTimers is on',
     (WidgetTester tester) async {
-      final harness = await FlexifyTestHarness.create();
+      final harness = await FlexTestHarness.create();
       final timerState = harness.timerState;
 
       await harness.database.settings.update().write(

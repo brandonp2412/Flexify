@@ -1,6 +1,6 @@
-import 'package:flexify/l10n/l10n.dart';
-import 'package:flexify/settings/whats_new.dart';
-import 'package:flexify/platform_page_route.dart';
+import 'package:flex/l10n/l10n.dart';
+import 'package:flex/settings/whats_new.dart';
+import 'package:flex/platform_page_route.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -54,7 +54,7 @@ class AboutPage extends StatelessWidget {
                   Text(snapshot.data?.version ?? "1.0.0"),
             ),
             onTap: () async {
-              const url = 'https://github.com/brandonp2412/Flexify/releases';
+              const url = 'https://github.com/brandonp2412/Flex/releases';
               await launchUrlString(url);
             },
           ),
@@ -76,7 +76,7 @@ class AboutPage extends StatelessWidget {
             subtitle: Text(context.l10n.privacyPolicyDescription),
             onTap: () async {
               const url =
-                  'https://brandonp2412.github.io/Flexify/privacy-policy.html';
+                  'https://brandonp2412.github.io/Flex/privacy-policy.html';
               await launchUrlString(url);
             },
           ),
@@ -89,7 +89,7 @@ class AboutPage extends StatelessWidget {
             ),
             onTap: () async {
               const url =
-                  'https://github.com/brandonp2412/Flexify?tab=MIT-1-ov-file#readme';
+                  'https://github.com/brandonp2412/Flex?tab=MIT-1-ov-file#readme';
               await launchUrlString(url);
             },
           ),
@@ -102,7 +102,7 @@ class AboutPage extends StatelessWidget {
                   Text(context.l10n.sourceCodeDescription),
             ),
             onTap: () async {
-              const url = 'https://github.com/brandonp2412/Flexify';
+              const url = 'https://github.com/brandonp2412/Flex';
               await launchUrlString(url);
             },
           ),
@@ -123,7 +123,7 @@ class AboutPage extends StatelessWidget {
             onTap: () async {
               final version = (await info).version;
               final url =
-                  'https://github.com/brandonp2412/Flexify/issues/new?labels=Bug&body=App version: $version';
+                  'https://github.com/brandonp2412/Flex/issues/new?labels=Bug&body=App version: $version';
               await launchUrlString(url);
             },
           ),

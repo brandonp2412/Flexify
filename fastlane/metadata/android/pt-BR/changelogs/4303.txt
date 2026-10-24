@@ -1,1 +1,1 @@
-• fix: exigir um único app Flexify e uma única chave de assinatura
+• fix: exigir um único app Flex e uma única chave de assinatura

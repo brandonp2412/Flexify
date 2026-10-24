@@ -1,7 +1,7 @@
-import 'package:flexify/constants.dart';
-import 'package:flexify/l10n/generated/app_localizations.dart';
-import 'package:flexify/l10n/l10n.dart';
-import 'package:flexify/utils.dart';
+import 'package:flex/constants.dart';
+import 'package:flex/l10n/generated/app_localizations.dart';
+import 'package:flex/l10n/l10n.dart';
+import 'package:flex/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';

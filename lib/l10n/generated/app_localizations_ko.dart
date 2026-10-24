@@ -12,13 +12,13 @@ class AppLocalizationsKo extends AppLocalizations {
   String get showUpdateNotices => '업데이트 알림 표시';
 
   @override
-  String get appTitle => 'Flexify';
+  String get appTitle => 'Flex';
 
   @override
   String get settingsLanguage => '언어';
 
   @override
-  String get settingsLanguageDescription => 'Flexify에서 사용할 언어를 선택하세요';
+  String get settingsLanguageDescription => 'Flex에서 사용할 언어를 선택하세요';
 
   @override
   String get languageSystemDefault => '시스템 기본값';
@@ -373,8 +373,7 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
-  String get backupArchiveMissingDatabase =>
-      '백업에 Flexify 데이터베이스가 포함되어 있지 않습니다.';
+  String get backupArchiveMissingDatabase => '백업에 Flex 데이터베이스가 포함되어 있지 않습니다.';
 
   @override
   String failedToImportGraphs(String error) {
@@ -496,7 +495,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get privacyPolicy => '개인정보 처리방침';
 
   @override
-  String get privacyPolicyDescription => 'Flexify의 데이터 처리 방식';
+  String get privacyPolicyDescription => 'Flex의 데이터 처리 방식';
 
   @override
   String get licenseLabel => '라이선스';
@@ -511,7 +510,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get leaveReview => '리뷰 남기기';
 
   @override
-  String get leaveReviewDescription => 'Play 스토어에서 Flexify 평가하기';
+  String get leaveReviewDescription => 'Play 스토어에서 Flex 평가하기';
 
   @override
   String get reportBug => '버그 신고';
@@ -1244,7 +1243,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get automaticBackupNotificationBody =>
-      'Flexify가 매일 선택한 폴더에 데이터와 이미지를 자동으로 백업합니다.';
+      'Flex가 매일 선택한 폴더에 데이터와 이미지를 자동으로 백업합니다.';
 
   @override
   String get backupSettingsChannel => '백업 설정';
@@ -1256,7 +1255,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get backupChannelName => '백업 채널';
 
   @override
-  String get backupChannelDescription => 'Flexify 데이터와 이미지의 자동 백업';
+  String get backupChannelDescription => 'Flex 데이터와 이미지의 자동 백업';
 
   @override
   String get backupCompletedTitle => '데이터와 이미지 백업 완료';

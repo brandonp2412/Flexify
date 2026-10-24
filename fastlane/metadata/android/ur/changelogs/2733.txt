@@ -1,4 +1,4 @@
-• Flexify web کے لیے GitHub Pages hosting شامل کریں
+• Flex web کے لیے GitHub Pages hosting شامل کریں
 • غائب changelogs شامل کریں
 • User کو max sets صاف کرنے دیں
 • Unused scripts حذف کریں

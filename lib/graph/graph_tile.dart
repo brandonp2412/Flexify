@@ -1,14 +1,14 @@
 import 'dart:io';
 
-import 'package:flexify/constants.dart';
-import 'package:flexify/database/exercise_analytics.dart';
-import 'package:flexify/graph/cardio_page.dart';
-import 'package:flexify/graph/strength_page.dart';
-import 'package:flexify/l10n/l10n.dart';
-import 'package:flexify/responsive.dart';
-import 'package:flexify/database/database.dart';
-import 'package:flexify/utils.dart';
-import 'package:flexify/platform_page_route.dart';
+import 'package:flex/constants.dart';
+import 'package:flex/database/exercise_analytics.dart';
+import 'package:flex/graph/cardio_page.dart';
+import 'package:flex/graph/strength_page.dart';
+import 'package:flex/l10n/l10n.dart';
+import 'package:flex/responsive.dart';
+import 'package:flex/database/database.dart';
+import 'package:flex/utils.dart';
+import 'package:flex/platform_page_route.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

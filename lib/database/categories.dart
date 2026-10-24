@@ -1,6 +1,6 @@
 import 'package:drift/drift.dart';
-import 'package:flexify/database/database.dart';
-import 'package:flexify/main.dart';
+import 'package:flex/database/database.dart';
+import 'package:flex/main.dart';
 
 /// Stores the reusable category names available for workout entries.
 class Categories extends Table {

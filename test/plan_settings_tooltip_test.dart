@@ -1,5 +1,5 @@
-import 'package:flexify/l10n/generated/app_localizations.dart';
-import 'package:flexify/settings/plan_settings.dart';
+import 'package:flex/l10n/generated/app_localizations.dart';
+import 'package:flex/settings/plan_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -9,7 +9,7 @@ void main() {
   testWidgets('plan trailing tooltip does not wrap the plan preview', (
     tester,
   ) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     const locale = Locale('en');
     final l10n = lookupAppLocalizations(locale);
 

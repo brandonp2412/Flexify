@@ -1,5 +1,5 @@
 • Zaktualizuj README.md
 • feat: dodaj zarządzanie kategoriami
-• feat: ustaw ikonę 2 jako ikonę uruchamiania Flexify
+• feat: ustaw ikonę 2 jako ikonę uruchamiania Flex
 • fix: przywróć wbudowane Flutter DevTools
 • fix: ustabilizuj debugowanie Fluttera w VS Code

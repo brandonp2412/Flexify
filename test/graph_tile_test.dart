@@ -1,5 +1,5 @@
-import 'package:flexify/database/exercise_analytics.dart';
-import 'package:flexify/graph/graph_tile.dart';
+import 'package:flex/database/exercise_analytics.dart';
+import 'package:flex/graph/graph_tile.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -9,7 +9,7 @@ import 'support/test_app.dart';
 
 void main() {
   testWidgets('GraphTile', (WidgetTester tester) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     await harness.pump(
       tester,
       Scaffold(
@@ -41,7 +41,7 @@ void main() {
   testWidgets('GraphTile formats body weight value', (
     WidgetTester tester,
   ) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     await harness.pump(
       tester,
       Scaffold(
@@ -73,7 +73,7 @@ void main() {
   testWidgets('GraphTile exposes desktop actions on secondary click', (
     WidgetTester tester,
   ) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     var edited = false;
     tester.view.devicePixelRatio = 1;
     tester.view.physicalSize = const Size(1200, 800);

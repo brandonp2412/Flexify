@@ -2,7 +2,7 @@
   "showUpdateNotices": "Показувати сповіщення про оновлення",
   "@showUpdateNotices": {"description": "Whether to show update notices after upgrading the app."},
   "@@locale": "uk",
-  "appTitle": "Flexify",
+  "appTitle": "Flex",
   "@appTitle": {
     "description": "Application title shown by the operating system and app shell."
   },
@@ -10,7 +10,7 @@
   "@settingsLanguage": {
     "description": "Title for the application language preference."
   },
-  "settingsLanguageDescription": "Виберіть мову інтерфейсу Flexify",
+  "settingsLanguageDescription": "Виберіть мову інтерфейсу Flex",
   "@settingsLanguageDescription": {
     "description": "Description for the application language preference."
   },
@@ -348,7 +348,7 @@
   },
   "disableBatteryOptimizations": "Вимкнути оптимізацію батареї",
   "@disableBatteryOptimizations": {
-    "description": "Android permission action for excluding Flexify from battery optimizations."
+    "description": "Android permission action for excluding Flex from battery optimizations."
   },
   "batteryOptimizationWarning": "Якщо оптимізація батареї залишиться ввімкненою, прогрес може призупинятися.",
   "@batteryOptimizationWarning": {
@@ -456,7 +456,7 @@
   },
   "deleteDatabaseConfirmation": "Ви впевнені, що хочете видалити базу даних? Цю дію не можна скасувати, і всі ваші дані буде знищено.",
   "@deleteDatabaseConfirmation": {
-    "description": "Confirmation text for deleting the complete Flexify database."
+    "description": "Confirmation text for deleting the complete Flex database."
   },
   "importData": "Імпортувати дані",
   "@importData": {
@@ -487,9 +487,9 @@
       }
     }
   },
-  "backupArchiveMissingDatabase": "Архів резервної копії не містить бази даних Flexify.",
+  "backupArchiveMissingDatabase": "Архів резервної копії не містить бази даних Flex.",
   "@backupArchiveMissingDatabase": {
-    "description": "Validation error shown when an imported backup archive is missing the Flexify database file."
+    "description": "Validation error shown when an imported backup archive is missing the Flex database file."
   },
   "failedToImportGraphs": "Не вдалося імпортувати графіки: {error}",
   "@failedToImportGraphs": {
@@ -669,7 +669,7 @@
   "@privacyPolicy": {
     "description": "Label for opening the privacy policy."
   },
-  "privacyPolicyDescription": "Як Flexify обробляє ваші дані",
+  "privacyPolicyDescription": "Як Flex обробляє ваші дані",
   "@privacyPolicyDescription": {
     "description": "Description for the privacy policy action."
   },
@@ -689,7 +689,7 @@
   "@leaveReview": {
     "description": "Label for opening the app-store review page."
   },
-  "leaveReviewDescription": "Оцінити Flexify у Play Store",
+  "leaveReviewDescription": "Оцінити Flex у Play Store",
   "@leaveReviewDescription": {
     "description": "Description for the app-store review action."
   },
@@ -1668,7 +1668,7 @@
   "@inputStyleDescription": {
     "description": "Description of the text input style setting."
   },
-  "automaticBackupNotificationBody": "Flexify автоматично створюватиме резервну копію даних і зображень у вибраній папці щодня.",
+  "automaticBackupNotificationBody": "Flex автоматично створюватиме резервну копію даних і зображень у вибраній папці щодня.",
   "@automaticBackupNotificationBody": {
     "description": "Notification body shown when automatic backups are enabled."
   },
@@ -1684,7 +1684,7 @@
   "@backupChannelName": {
     "description": "Android notification channel name for completed automatic backups."
   },
-  "backupChannelDescription": "Автоматичні резервні копії даних і зображень Flexify",
+  "backupChannelDescription": "Автоматичні резервні копії даних і зображень Flex",
   "@backupChannelDescription": {
     "description": "Android notification channel description for automatic backups."
   },

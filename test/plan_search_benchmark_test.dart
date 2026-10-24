@@ -1,5 +1,5 @@
-import 'package:flexify/database/database.dart';
-import 'package:flexify/plan/plans_page.dart';
+import 'package:flex/database/database.dart';
+import 'package:flex/plan/plans_page.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 bool legacy(

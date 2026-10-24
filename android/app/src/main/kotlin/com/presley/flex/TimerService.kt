@@ -1,4 +1,4 @@
-package com.presley.flexify
+package com.presley.flex
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -55,7 +55,7 @@ class TimerService : Service() {
     private var doneTitle = ""
     private var alarmUnavailable = ""
     var activityVisible = true
-    var flexifyTimer: FlexifyTimer = FlexifyTimer.emptyTimer()
+    var flexTimer: FlexTimer = FlexTimer.emptyTimer()
 
     override fun onBind(intent: Intent): IBinder {
         return binder
@@ -69,8 +69,8 @@ class TimerService : Service() {
         object : BroadcastReceiver() {
             override fun onReceive(context: Context?, intent: Intent?) {
                 Log.d("TimerService", "Received stop broadcast intent mediaPlayer=$mediaPlayer")
-                flexifyTimer.stop(applicationContext)
-                flexifyTimer.expire()
+                flexTimer.stop(applicationContext)
+                flexTimer.expire()
 
                 timerRunnable?.let { timerHandler.removeCallbacks(it) }
                 mediaPlayer?.stop()
@@ -102,17 +102,17 @@ class TimerService : Service() {
                 vibrator?.cancel()
 
                 val timeStamp = intent?.getLongExtra("timeStamp", 0)
-                if (flexifyTimer.isExpired()) return startTimer(
-                    FlexifyTimer.ONE_MINUTE_MILLI,
+                if (flexTimer.isExpired()) return startTimer(
+                    FlexTimer.ONE_MINUTE_MILLI,
                     timeStamp ?: 0
                 )
 
-                flexifyTimer.increaseDuration(
+                flexTimer.increaseDuration(
                     applicationContext,
-                    FlexifyTimer.ONE_MINUTE_MILLI,
+                    FlexTimer.ONE_MINUTE_MILLI,
                     alarmUnavailable
                 )
-                updateNotification(flexifyTimer.getRemainingSeconds())
+                updateNotification(flexTimer.getRemainingSeconds())
 
                 if (intent != null && intent.action == ADD_BROADCAST_INTERNAL) updateAppUI()
             }
@@ -157,9 +157,9 @@ class TimerService : Service() {
     }
 
     private fun onTimerExpired() {
-        if (flexifyTimer.isExpired()) return
-        Log.d("TimerService", "onTimerExpired duration=${flexifyTimer.getDurationSeconds()}")
-        flexifyTimer.expire()
+        if (flexTimer.isExpired()) return
+        Log.d("TimerService", "onTimerExpired duration=${flexTimer.getDurationSeconds()}")
+        flexTimer.expire()
         vibrate()
         playSound()
         NotificationManagerCompat.from(this).cancel(ONGOING_ID)
@@ -178,7 +178,7 @@ class TimerService : Service() {
     private fun getDelay(startTime: Long): Long {
         if (activityVisible) return 20
 
-        val delay = flexifyTimer.getRemainingMillis() % 1000
+        val delay = flexTimer.getRemainingMillis() % 1000
         return if (SystemClock.elapsedRealtime() - startTime + delay > 980) 20 else delay
     }
 
@@ -188,9 +188,9 @@ class TimerService : Service() {
         vibrator?.cancel()
         NotificationManagerCompat.from(this).cancel(FINISHED_ID)
 
-        flexifyTimer.stop(applicationContext)
-        flexifyTimer = FlexifyTimer(msDuration)
-        flexifyTimer.start(
+        flexTimer.stop(applicationContext)
+        flexTimer = FlexTimer(msDuration)
+        flexTimer.start(
             applicationContext,
             if (timeStamp > 0) System.currentTimeMillis() - timeStamp else 0,
             alarmUnavailable
@@ -200,24 +200,24 @@ class TimerService : Service() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
             startForeground(
                 ONGOING_ID,
-                getProgress(flexifyTimer.getRemainingSeconds()).build(),
+                getProgress(flexTimer.getRemainingSeconds()).build(),
                 FOREGROUND_SERVICE_TYPE_SPECIAL_USE
             )
         } else {
-            startForeground(ONGOING_ID, getProgress(flexifyTimer.getRemainingSeconds()).build())
+            startForeground(ONGOING_ID, getProgress(flexTimer.getRemainingSeconds()).build())
         }
 
-        Log.d("TimerService", "onTimerStart seconds=${flexifyTimer.getDurationSeconds()}")
+        Log.d("TimerService", "onTimerStart seconds=${flexTimer.getDurationSeconds()}")
 
         timerRunnable = object : Runnable {
             override fun run() {
                 val startTime = SystemClock.elapsedRealtime()
-                if (flexifyTimer.isExpired()) return
-                if (flexifyTimer.getRemainingMillis() <= 0) {
+                if (flexTimer.isExpired()) return
+                if (flexTimer.getRemainingMillis() <= 0) {
                     onTimerExpired()
                     return
                 }
-                if (flexifyTimer.hasSecondsUpdated()) updateNotification(flexifyTimer.getRemainingSeconds())
+                if (flexTimer.hasSecondsUpdated()) updateNotification(flexTimer.getRemainingSeconds())
                 timerHandler.postDelayed(this, getDelay(startTime))
             }
         }
@@ -251,7 +251,7 @@ class TimerService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         if (intent == null) return START_NOT_STICKY
         if (intent.action == TIMER_EXPIRED) {
-            if (flexifyTimer.isRunning()) onTimerExpired()
+            if (flexTimer.isRunning()) onTimerExpired()
         } else onTimerStart(intent)
         return START_NOT_STICKY
     }
@@ -358,7 +358,7 @@ class TimerService : Service() {
             .setContentTitle(description)
             .setContentText(formatTime(timeLeftInSeconds))
             .setSmallIcon(R.drawable.outline_timer_24)
-            .setProgress(flexifyTimer.getDurationSeconds(), timeLeftInSeconds, false)
+            .setProgress(flexTimer.getDurationSeconds(), timeLeftInSeconds, false)
             .setContentIntent(contentPending)
             .setCategory(NotificationCompat.CATEGORY_PROGRESS)
             .setAutoCancel(false)

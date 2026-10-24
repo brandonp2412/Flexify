@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:flexify/storage/app_storage.dart';
+import 'package:flex/storage/app_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
@@ -16,9 +16,9 @@ void main() {
   late PathProviderPlatform originalProvider;
 
   setUp(() async {
-    root = await Directory.systemTemp.createTemp('flexify-storage-');
+    root = await Directory.systemTemp.createTemp('flex-storage-');
     documents = await Directory(p.join(root.path, 'documents')).create();
-    support = Directory(p.join(root.path, 'data-home', 'flexify'));
+    support = Directory(p.join(root.path, 'data-home', 'flex'));
     originalProvider = PathProviderPlatform.instance;
     PathProviderPlatform.instance = FakePathProviderPlatform(
       documents.path,
@@ -32,6 +32,9 @@ void main() {
   });
 
   File databaseFile(Directory folder) =>
+      File(p.join(folder.path, 'flex.sqlite'));
+
+  File previousDatabaseFile(Directory folder) =>
       File(p.join(folder.path, 'flexify.sqlite'));
 
   void seed(File file, String value) {
@@ -72,7 +75,7 @@ void main() {
   test('migration preserves data and existing absolute image paths', () async {
     final image = File(p.join(documents.path, 'photo.jpg'));
     await image.writeAsBytes([1, 2, 3]);
-    final legacy = databaseFile(documents);
+    final legacy = previousDatabaseFile(documents);
     seed(legacy, image.path);
 
     final file = await getDatabaseFile();
@@ -83,7 +86,7 @@ void main() {
   });
 
   test('migration includes committed data still in the WAL', () async {
-    final legacy = databaseFile(documents);
+    final legacy = previousDatabaseFile(documents);
     final writer = sqlite3.open(legacy.path);
     try {
       writer.execute('PRAGMA journal_mode = WAL');
@@ -101,7 +104,7 @@ void main() {
 
   test('an existing support database takes precedence', () async {
     await support.create(recursive: true);
-    seed(databaseFile(documents), 'legacy');
+    seed(previousDatabaseFile(documents), 'legacy');
     seed(databaseFile(support), 'current');
     await File(
       '${databaseFile(support).path}.migrating',
@@ -113,21 +116,21 @@ void main() {
   });
 
   test('deleting a migrated database never restores the legacy copy', () async {
-    seed(databaseFile(documents), 'legacy');
+    seed(previousDatabaseFile(documents), 'legacy');
     final file = await getDatabaseFile();
     await file.delete();
 
     expect(await (await getDatabaseFile()).exists(), isFalse);
-    expect(readValue(databaseFile(documents)), 'legacy');
+    expect(readValue(previousDatabaseFile(documents)), 'legacy');
   });
 
   test('an interrupted publication resumes its committed snapshot', () async {
     await support.create(recursive: true);
-    seed(databaseFile(documents), 'legacy');
+    seed(previousDatabaseFile(documents), 'legacy');
     final staged = File('${databaseFile(support).path}.migrating');
     seed(staged, 'snapshot');
     await File(
-      p.join(support.path, '.flexify-storage-migrated'),
+      p.join(support.path, '.flex-storage-migrated'),
     ).writeAsString('');
 
     expect(readValue(await getDatabaseFile()), 'snapshot');
@@ -136,7 +139,7 @@ void main() {
 
   test('an uncommitted partial snapshot is replaced on retry', () async {
     await support.create(recursive: true);
-    seed(databaseFile(documents), 'legacy');
+    seed(previousDatabaseFile(documents), 'legacy');
     await File(
       '${databaseFile(support).path}.migrating',
     ).writeAsString('partial snapshot');
@@ -147,14 +150,14 @@ void main() {
   test(
     'migration failure keeps the source and does not create a database',
     () async {
-      final legacy = databaseFile(documents);
+      final legacy = previousDatabaseFile(documents);
       await legacy.writeAsString('invalid sqlite database');
 
       await expectLater(getDatabaseFile(), throwsA(isA<SqliteException>()));
       expect(await legacy.readAsString(), 'invalid sqlite database');
       expect(await databaseFile(support).exists(), isFalse);
       expect(
-        await File(p.join(support.path, '.flexify-storage-migrated')).exists(),
+        await File(p.join(support.path, '.flex-storage-migrated')).exists(),
         isFalse,
       );
 
@@ -164,8 +167,33 @@ void main() {
     },
   );
 
+  test('an existing support database is renamed without losing data', () async {
+    await support.create(recursive: true);
+    final previous = previousDatabaseFile(support);
+    seed(previous, 'previous version');
+
+    final current = await getDatabaseFile();
+    expect(current.path, databaseFile(support).path);
+    expect(readValue(current), 'previous version');
+    await current.delete();
+    expect(await (await getDatabaseFile()).exists(), isFalse);
+  });
+
+  test(
+    'a previously deleted database cannot be restored from documents',
+    () async {
+      await support.create(recursive: true);
+      seed(previousDatabaseFile(documents), 'deleted legacy');
+      await File(
+        p.join(support.path, '.flexify-storage-migrated'),
+      ).writeAsString('');
+
+      expect(await (await getDatabaseFile()).exists(), isFalse);
+    },
+  );
+
   test('concurrent callers share migration', () async {
-    seed(databaseFile(documents), 'legacy');
+    seed(previousDatabaseFile(documents), 'legacy');
     final files = await Future.wait(List.generate(5, (_) => getDatabaseFile()));
     expect(files.map((file) => file.path).toSet(), {
       databaseFile(support).path,

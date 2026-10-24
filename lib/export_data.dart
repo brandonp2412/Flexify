@@ -4,14 +4,14 @@ import 'package:csv/csv.dart';
 
 import 'package:drift/drift.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:flexify/data_portability/graph_csv.dart';
-import 'package:flexify/l10n/l10n.dart';
-import 'package:flexify/main.dart';
-import 'package:flexify/logging.dart';
-import 'package:flexify/plan/workout_sessions.dart';
-import 'package:flexify/settings/backup_archive.dart';
-import 'package:flexify/utils.dart';
-import 'package:flexify/storage/app_storage.dart';
+import 'package:flex/data_portability/graph_csv.dart';
+import 'package:flex/l10n/l10n.dart';
+import 'package:flex/main.dart';
+import 'package:flex/logging.dart';
+import 'package:flex/plan/workout_sessions.dart';
+import 'package:flex/settings/backup_archive.dart';
+import 'package:flex/utils.dart';
+import 'package:flex/storage/app_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -95,7 +95,7 @@ class _ExportDataState extends State<ExportData> {
                       setState(() => exporting = true);
                       final tempDirectory = await getTemporaryDirectory();
                       final workDir = await tempDirectory.createTemp(
-                        'flexify-export-',
+                        'flex-export-',
                       );
                       try {
                         final databaseFile = await getDatabaseFile();
@@ -104,12 +104,12 @@ class _ExportDataState extends State<ExportData> {
                           workingDirectory: workDir,
                         );
                         await FilePicker.saveFile(
-                          fileName: 'flexify-backup.zip',
+                          fileName: 'flex-backup.zip',
                           bytes: await archive.readAsBytes(),
                           type: FileType.custom,
                           allowedExtensions: ['zip'],
                         );
-                        talker.info('Exported Flexify data and image backup');
+                        talker.info('Exported Flex data and image backup');
                       } finally {
                         await workDir.delete(recursive: true);
                         if (mounted) setState(() => exporting = false);

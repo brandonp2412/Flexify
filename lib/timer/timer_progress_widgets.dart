@@ -1,9 +1,9 @@
 import 'dart:math' as math;
 
-import 'package:flexify/l10n/l10n.dart';
-import 'package:flexify/database/database.dart';
-import 'package:flexify/timer/timer_state.dart';
-import 'package:flexify/utils.dart';
+import 'package:flex/l10n/l10n.dart';
+import 'package:flex/database/database.dart';
+import 'package:flex/timer/timer_state.dart';
+import 'package:flex/utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';

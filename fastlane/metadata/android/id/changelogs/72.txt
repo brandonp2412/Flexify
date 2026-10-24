@@ -1,2 +1,2 @@
-- Merge branch 'main' dari github.com: brandonp2412 / Flexify
+- Merge branch 'main' dari github.com: brandonp2412 / Flex
 - Fix jarak bidang tetap disorot - 1.0.64:

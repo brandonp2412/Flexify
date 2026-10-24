@@ -1,19 +1,19 @@
 import 'dart:async';
 
 import 'package:drift/drift.dart' hide Column;
-import 'package:flexify/app_fab.dart';
-import 'package:flexify/constants.dart';
-import 'package:flexify/database/database.dart';
-import 'package:flexify/day_selector.dart';
-import 'package:flexify/empty_state.dart';
-import 'package:flexify/graph/add_exercise_page.dart';
-import 'package:flexify/l10n/l10n.dart';
-import 'package:flexify/logging.dart';
-import 'package:flexify/main.dart';
-import 'package:flexify/plan/exercise_tile.dart';
-import 'package:flexify/plan/plan_queries.dart';
-import 'package:flexify/platform_page_route.dart';
-import 'package:flexify/responsive.dart';
+import 'package:flex/app_fab.dart';
+import 'package:flex/constants.dart';
+import 'package:flex/database/database.dart';
+import 'package:flex/day_selector.dart';
+import 'package:flex/empty_state.dart';
+import 'package:flex/graph/add_exercise_page.dart';
+import 'package:flex/l10n/l10n.dart';
+import 'package:flex/logging.dart';
+import 'package:flex/main.dart';
+import 'package:flex/plan/exercise_tile.dart';
+import 'package:flex/plan/plan_queries.dart';
+import 'package:flex/platform_page_route.dart';
+import 'package:flex/responsive.dart';
 import 'package:flutter/material.dart';
 
 class EditPlanPage extends StatefulWidget {

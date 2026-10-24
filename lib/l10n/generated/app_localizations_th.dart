@@ -12,13 +12,13 @@ class AppLocalizationsTh extends AppLocalizations {
   String get showUpdateNotices => 'แสดงการแจ้งเตือนการอัปเดต';
 
   @override
-  String get appTitle => 'Flexify';
+  String get appTitle => 'Flex';
 
   @override
   String get settingsLanguage => 'ภาษา';
 
   @override
-  String get settingsLanguageDescription => 'เลือกภาษาที่ใช้ใน Flexify';
+  String get settingsLanguageDescription => 'เลือกภาษาที่ใช้ใน Flex';
 
   @override
   String get languageSystemDefault => 'ค่าเริ่มต้นของระบบ';
@@ -387,7 +387,7 @@ class AppLocalizationsTh extends AppLocalizations {
   }
 
   @override
-  String get backupArchiveMissingDatabase => 'ไฟล์สำรองไม่มีฐานข้อมูล Flexify';
+  String get backupArchiveMissingDatabase => 'ไฟล์สำรองไม่มีฐานข้อมูล Flex';
 
   @override
   String failedToImportGraphs(String error) {
@@ -509,7 +509,7 @@ class AppLocalizationsTh extends AppLocalizations {
   String get privacyPolicy => 'นโยบายความเป็นส่วนตัว';
 
   @override
-  String get privacyPolicyDescription => 'Flexify จัดการข้อมูลของคุณอย่างไร';
+  String get privacyPolicyDescription => 'Flex จัดการข้อมูลของคุณอย่างไร';
 
   @override
   String get licenseLabel => 'ใบอนุญาต';
@@ -524,7 +524,7 @@ class AppLocalizationsTh extends AppLocalizations {
   String get leaveReview => 'เขียนรีวิว';
 
   @override
-  String get leaveReviewDescription => 'ให้คะแนน Flexify บน Play Store';
+  String get leaveReviewDescription => 'ให้คะแนน Flex บน Play Store';
 
   @override
   String get reportBug => 'รายงานข้อบกพร่อง';
@@ -1270,7 +1270,7 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get automaticBackupNotificationBody =>
-      'Flexify จะสำรองข้อมูลและรูปภาพของคุณไปยังโฟลเดอร์ที่เลือกโดยอัตโนมัติทุกวัน';
+      'Flex จะสำรองข้อมูลและรูปภาพของคุณไปยังโฟลเดอร์ที่เลือกโดยอัตโนมัติทุกวัน';
 
   @override
   String get backupSettingsChannel => 'การตั้งค่าการสำรองข้อมูล';
@@ -1284,7 +1284,7 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get backupChannelDescription =>
-      'การสำรองข้อมูลและรูปภาพของ Flexify โดยอัตโนมัติ';
+      'การสำรองข้อมูลและรูปภาพของ Flex โดยอัตโนมัติ';
 
   @override
   String get backupCompletedTitle => 'สำรองข้อมูลและรูปภาพแล้ว';

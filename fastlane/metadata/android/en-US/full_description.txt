@@ -1,6 +1,6 @@
 Log your gym workouts, follow your strength progress, and keep your training private.
 
-Flexify is a fast, offline workout tracker for strength training and cardio. Record sets, reps, and weights, use rest timers to stay on pace, and review clear progress graphs after every session.
+Flex is a fast, offline workout tracker for strength training and cardio. Record sets, reps, and weights, use rest timers to stay on pace, and review clear progress graphs after every session.
 
 BUILD A BETTER TRAINING LOG
 
@@ -12,6 +12,6 @@ BUILD A BETTER TRAINING LOG
 
 PRIVATE, FAST, AND OFFLINE
 
-Flexify does not require an account or internet connection. Your workout data stays on your device, so you can train and log sessions anywhere. The app is open source and has no advertising or tracking.
+Flex does not require an account or internet connection. Your workout data stays on your device, so you can train and log sessions anywhere. The app is open source and has no advertising or tracking.
 
-Whether you are beginning a gym routine or refining an established programme, Flexify gives you a focused workout journal without clutter.
+Whether you are beginning a gym routine or refining an established programme, Flex gives you a focused workout journal without clutter.

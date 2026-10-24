@@ -1,7 +1,7 @@
-import 'package:flexify/delete_records_button.dart';
-import 'package:flexify/export_data.dart';
-import 'package:flexify/l10n/generated/app_localizations.dart';
-import 'package:flexify/l10n/l10n.dart';
+import 'package:flex/delete_records_button.dart';
+import 'package:flex/export_data.dart';
+import 'package:flex/l10n/generated/app_localizations.dart';
+import 'package:flex/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -47,7 +47,7 @@ class FailedMigrationsPage extends StatelessWidget {
                     final url = Uri(
                       scheme: 'https',
                       host: 'github.com',
-                      path: '/brandonp2412/Flexify/issues/new',
+                      path: '/brandonp2412/Flex/issues/new',
                       queryParameters: {
                         'title': context.l10n.failedMigrations,
                         'body': error.toString(),

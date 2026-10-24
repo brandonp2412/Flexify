@@ -1,15 +1,15 @@
 import 'package:drift/drift.dart' hide isNotNull, isNull;
-import 'package:flexify/bottom_nav.dart';
-import 'package:flexify/custom_set_indicator.dart';
-import 'package:flexify/database/exercise_set_repository.dart';
-import 'package:flexify/database/database.dart';
-import 'package:flexify/l10n/generated/app_localizations.dart';
-import 'package:flexify/l10n/locale_preferences.dart';
-import 'package:flexify/plan/start_plan_page.dart';
-import 'package:flexify/plan/start_list.dart';
-import 'package:flexify/plan/workout_sessions.dart';
-import 'package:flexify/stepper_field.dart';
-import 'package:flexify/timer/timer_state.dart';
+import 'package:flex/bottom_nav.dart';
+import 'package:flex/custom_set_indicator.dart';
+import 'package:flex/database/exercise_set_repository.dart';
+import 'package:flex/database/database.dart';
+import 'package:flex/l10n/generated/app_localizations.dart';
+import 'package:flex/l10n/locale_preferences.dart';
+import 'package:flex/plan/start_plan_page.dart';
+import 'package:flex/plan/start_list.dart';
+import 'package:flex/plan/workout_sessions.dart';
+import 'package:flex/stepper_field.dart';
+import 'package:flex/timer/timer_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -49,7 +49,7 @@ void main() {
   testWidgets(
     'exercise selection applies saved values without zeroing fields',
     (WidgetTester tester) async {
-      final harness = await FlexifyTestHarness.create();
+      final harness = await FlexTestHarness.create();
       final database = harness.database;
       final planId = await database.plans.insertOne(planFixture());
       for (final name in ['Bench press', 'Squat', 'New exercise']) {
@@ -108,7 +108,7 @@ void main() {
   testWidgets('StartPlanPage shows its page chrome on the first frame', (
     WidgetTester tester,
   ) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     final database = harness.database;
 
     final id = await database.plans.insertOne(
@@ -127,7 +127,7 @@ void main() {
   testWidgets('cached plan exercises render on the first frame', (
     WidgetTester tester,
   ) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     final database = harness.database;
 
     final id = await database.plans.insertOne(
@@ -176,7 +176,7 @@ void main() {
   testWidgets('strength reps remain unchanged when the app resumes', (
     WidgetTester tester,
   ) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     final database = harness.database;
     final id = await database.plans.insertOne(planFixture());
     await insertPlanExerciseFixture(
@@ -212,7 +212,7 @@ void main() {
     testWidgets('cardio duration estimation on resume, enabled=$enabled', (
       WidgetTester tester,
     ) async {
-      final harness = await FlexifyTestHarness.create();
+      final harness = await FlexTestHarness.create();
       final database = harness.database;
       final id = await database.plans.insertOne(planFixture());
       await insertPlanExerciseFixture(
@@ -260,7 +260,7 @@ void main() {
   testWidgets('StartPlanPage with no exercises does not crash on save', (
     WidgetTester tester,
   ) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     final database = harness.database;
 
     final id = await database.plans.insertOne(planFixture());
@@ -277,7 +277,7 @@ void main() {
   });
 
   testWidgets('StartPlanPage renders', (WidgetTester tester) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     final database = harness.database;
 
     await insertExerciseSetFixture(
@@ -382,7 +382,7 @@ void main() {
   testWidgets(
     'StartPlanPage replaces history previews as current sets are saved',
     (WidgetTester tester) async {
-      final harness = await FlexifyTestHarness.create();
+      final harness = await FlexTestHarness.create();
       final database = harness.database;
       final yesterday = DateTime.now().subtract(const Duration(days: 1));
 
@@ -513,7 +513,7 @@ void main() {
   testWidgets('all translated locales complete the core workout save flow', (
     WidgetTester tester,
   ) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     final database = harness.database;
 
     for (final locale in selectableLocales.where(
@@ -569,7 +569,7 @@ void main() {
   ) async {
     const exercise = 'Rapid tap bench press';
     final l10n = lookupAppLocalizations(const Locale('en'));
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     final database = harness.database;
 
     final id = await database.plans.insertOne(planFixture());
@@ -603,7 +603,7 @@ void main() {
   });
 
   testWidgets('plan progress updates preserve unsaved input', (tester) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     final database = harness.database;
     final planId = await database.plans.insertOne(planFixture());
     await insertPlanExerciseFixture(
@@ -645,7 +645,7 @@ void main() {
     const planTitle = 'Untranslated custom plan';
     const note = 'Keep tempo 3-1-1';
     final l10n = lookupAppLocalizations(locale);
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     final database = harness.database;
 
     final id = await database.plans.insertOne(planFixture(title: planTitle));
@@ -694,7 +694,7 @@ void main() {
       const locale = Locale('ja');
       const exercise = 'User-defined dragon press';
       final l10n = lookupAppLocalizations(locale);
-      final harness = await FlexifyTestHarness.create();
+      final harness = await FlexTestHarness.create();
       final database = harness.database;
 
       final id = await database.plans.insertOne(planFixture());
@@ -728,7 +728,7 @@ void main() {
   ) async {
     const originalExercise = 'Machine chest press';
     const replacementExercise = 'Dumbbell chest press';
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     final database = harness.database;
 
     final planId = await database.plans.insertOne(
@@ -848,7 +848,7 @@ void main() {
   testWidgets('StartPlanPage submit focuses notes before saving', (
     WidgetTester tester,
   ) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     final database = harness.database;
 
     final id = await database.plans.insertOne(planFixture());
@@ -895,7 +895,7 @@ void main() {
   testWidgets('StartPlanPage cardio submit follows visible fields then saves', (
     WidgetTester tester,
   ) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     final database = harness.database;
 
     final id = await database.plans.insertOne(planFixture());
@@ -943,7 +943,7 @@ void main() {
   testWidgets('StartPlanPage compact desktop exercise list does not overflow', (
     WidgetTester tester,
   ) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     final database = harness.database;
 
     final id = await database.plans.insertOne(planFixture());
@@ -979,7 +979,7 @@ void main() {
   });
 
   testWidgets('StartPlanPage saves', (WidgetTester tester) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     final database = harness.database;
 
     final id = await database.plans.insertOne(
@@ -1047,7 +1047,7 @@ void main() {
   testWidgets(
     'StartPlanPage rest timer title includes current and total sets',
     (WidgetTester tester) async {
-      final harness = await FlexifyTestHarness.create();
+      final harness = await FlexTestHarness.create();
       final database = harness.database;
       final timerState = RecordingTimerState();
 
@@ -1089,7 +1089,7 @@ void main() {
   testWidgets('StartPlanPage shows this-session sets after saving', (
     WidgetTester tester,
   ) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     final database = harness.database;
 
     final id = await database.plans.insertOne(planFixture());
@@ -1129,7 +1129,7 @@ void main() {
   testWidgets('many set previews leave room below the chip cards', (
     WidgetTester tester,
   ) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     final database = harness.database;
     final planId = await database.plans.insertOne(planFixture());
     await insertPlanExerciseFixture(
@@ -1196,7 +1196,7 @@ void main() {
     WidgetTester tester,
   ) async {
     final timerState = RecordingTimerState();
-    final harness = await FlexifyTestHarness.create(timerState: timerState);
+    final harness = await FlexTestHarness.create(timerState: timerState);
     final database = harness.database;
     final planId = await database.plans.insertOne(planFixture());
     await insertPlanExerciseFixture(
@@ -1254,7 +1254,7 @@ void main() {
   testWidgets('Start Plan leaves the workout open without a Done action', (
     WidgetTester tester,
   ) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     final database = harness.database;
     final planId = await database.plans.insertOne(planFixture());
     await insertPlanExerciseFixture(

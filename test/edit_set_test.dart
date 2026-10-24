@@ -1,5 +1,5 @@
 import 'package:drift/drift.dart';
-import 'package:flexify/sets/edit_set_page.dart';
+import 'package:flex/sets/edit_set_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -8,7 +8,7 @@ import 'support/test_app.dart';
 
 void main() {
   testWidgets('EditExerciseSet inserts', (WidgetTester tester) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     await harness.pump(
       tester,
       EditSetPage(
@@ -41,7 +41,7 @@ void main() {
   testWidgets('selecting new cardio exercise shows cardio fields', (
     WidgetTester tester,
   ) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     await ensureExerciseFixture(
       harness.database,
       'Running',
@@ -66,7 +66,7 @@ void main() {
   });
 
   testWidgets('cardio toggle switches fields', (WidgetTester tester) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     await harness.pump(
       tester,
       EditSetPage(exerciseSet: exerciseSetModelFixture()),
@@ -97,7 +97,7 @@ void main() {
   });
 
   testWidgets('cardio appears below created date', (WidgetTester tester) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     await harness.pump(
       tester,
       EditSetPage(exerciseSet: exerciseSetModelFixture()),
@@ -125,7 +125,7 @@ void main() {
   });
 
   testWidgets('EditExerciseSet updates', (WidgetTester tester) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     await harness.pump(
       tester,
       EditSetPage(
@@ -152,7 +152,7 @@ void main() {
   testWidgets('switching exercises clears note when new exercise has no note', (
     WidgetTester tester,
   ) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
 
     await insertExerciseSetFixture(
       harness.database,
@@ -205,7 +205,7 @@ void main() {
   testWidgets(
     'EditExerciseSet resizes for the keyboard so notes remain reachable',
     (WidgetTester tester) async {
-      final harness = await FlexifyTestHarness.create();
+      final harness = await FlexTestHarness.create();
       await harness.database.settings.update().write(
         testSettings(showNotes: true),
       );

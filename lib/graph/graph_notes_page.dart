@@ -1,4 +1,4 @@
-import 'package:flexify/l10n/l10n.dart';
+import 'package:flex/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 /// A full-screen editor for an exercise's notes.

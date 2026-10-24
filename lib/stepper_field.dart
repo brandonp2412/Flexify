@@ -1,4 +1,4 @@
-import 'package:flexify/utils.dart';
+import 'package:flex/utils.dart';
 import 'package:flutter/material.dart';
 
 /// A numeric [TextFormField] flanked by `-` / `+` buttons for keyboard-free

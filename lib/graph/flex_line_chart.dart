@@ -2,8 +2,8 @@ import 'dart:math';
 
 import 'package:drafter/drafter.dart';
 import 'package:drafter/painting.dart';
-import 'package:flexify/database/database.dart';
-import 'package:flexify/utils.dart';
+import 'package:flex/database/database.dart';
+import 'package:flex/utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

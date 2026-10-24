@@ -1,2 +1,2 @@
-- Merge branch 'main' dari github.com: brandonp2412 / Flexify
+- Merge branch 'main' dari github.com: brandonp2412 / Flex
 - Preview getaran ketika toggling pengaturan timer

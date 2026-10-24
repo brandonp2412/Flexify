@@ -1,7 +1,7 @@
 import 'package:drift/drift.dart';
-import 'package:flexify/database/database.dart';
-import 'package:flexify/main.dart';
-import 'package:flexify/plan/workout_sessions.dart';
+import 'package:flex/database/database.dart';
+import 'package:flex/main.dart';
+import 'package:flex/plan/workout_sessions.dart';
 
 List<Plan> filterPlans(
   List<Plan> plans,

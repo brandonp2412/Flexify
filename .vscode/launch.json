@@ -3,18 +3,18 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "flexify",
+            "name": "flex",
             "request": "launch",
             "type": "dart",
         },
         {
-            "name": "flexify (profile mode)",
+            "name": "flex (profile mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile"
         },
         {
-            "name": "flexify (release mode)",
+            "name": "flex (release mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "release"

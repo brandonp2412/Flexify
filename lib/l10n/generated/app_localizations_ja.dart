@@ -12,13 +12,13 @@ class AppLocalizationsJa extends AppLocalizations {
   String get showUpdateNotices => '更新通知を表示';
 
   @override
-  String get appTitle => 'Flexify';
+  String get appTitle => 'Flex';
 
   @override
   String get settingsLanguage => '言語';
 
   @override
-  String get settingsLanguageDescription => 'Flexifyで使用する言語を選択します';
+  String get settingsLanguageDescription => 'Flexで使用する言語を選択します';
 
   @override
   String get languageSystemDefault => 'システムのデフォルト';
@@ -372,8 +372,7 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
-  String get backupArchiveMissingDatabase =>
-      'バックアップに Flexify のデータベースが含まれていません。';
+  String get backupArchiveMissingDatabase => 'バックアップに Flex のデータベースが含まれていません。';
 
   @override
   String failedToImportGraphs(String error) {
@@ -495,7 +494,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get privacyPolicy => 'プライバシーポリシー';
 
   @override
-  String get privacyPolicyDescription => 'Flexifyによるデータの取り扱い';
+  String get privacyPolicyDescription => 'Flexによるデータの取り扱い';
 
   @override
   String get licenseLabel => 'ライセンス';
@@ -510,7 +509,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get leaveReview => 'レビューを書く';
 
   @override
-  String get leaveReviewDescription => 'Play ストアでFlexifyを評価';
+  String get leaveReviewDescription => 'Play ストアでFlexを評価';
 
   @override
   String get reportBug => 'バグを報告';
@@ -1242,7 +1241,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get automaticBackupNotificationBody =>
-      'Flexifyは毎日、データと画像を選択したフォルダーへ自動的にバックアップします。';
+      'Flexは毎日、データと画像を選択したフォルダーへ自動的にバックアップします。';
 
   @override
   String get backupSettingsChannel => 'バックアップ設定';
@@ -1254,7 +1253,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get backupChannelName => 'バックアップチャンネル';
 
   @override
-  String get backupChannelDescription => 'Flexifyのデータと画像の自動バックアップ';
+  String get backupChannelDescription => 'Flexのデータと画像の自動バックアップ';
 
   @override
   String get backupCompletedTitle => 'データと画像をバックアップしました';

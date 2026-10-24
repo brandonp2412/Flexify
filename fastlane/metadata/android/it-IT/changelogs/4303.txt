@@ -1,1 +1,1 @@
-• fix: imporre una sola app Flexify e una sola chiave di firma
+• fix: imporre una sola app Flex e una sola chiave di firma

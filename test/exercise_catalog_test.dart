@@ -1,9 +1,9 @@
 import 'package:drift/drift.dart';
-import 'package:flexify/database/database.dart';
-import 'package:flexify/database/exercise_catalog.dart';
-import 'package:flexify/database/exercise_set_repository.dart';
-import 'package:flexify/main.dart';
-import 'package:flexify/plan/plan_queries.dart';
+import 'package:flex/database/database.dart';
+import 'package:flex/database/exercise_catalog.dart';
+import 'package:flex/database/exercise_set_repository.dart';
+import 'package:flex/main.dart';
+import 'package:flex/plan/plan_queries.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'mock_tests.dart';

@@ -1,4 +1,4 @@
-package com.presley.flexify
+package com.presley.flex
 
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
@@ -19,24 +19,31 @@ class StoragePathTest {
         get() = ApplicationProvider.getApplicationContext()
 
     private val support: File
-        get() = File(context.filesDir, "flexify.sqlite")
+        get() = File(context.filesDir, "flex.sqlite")
 
     private val legacy: File
         get() = File(File(context.filesDir.parentFile, "app_flutter"), "flexify.sqlite")
 
-    private val marker: File
+    private val previousSupport: File
+        get() = File(context.filesDir, "flexify.sqlite")
+
+    private val previousMarker: File
         get() = File(context.filesDir, ".flexify-storage-migrated")
+
+    private val marker: File
+        get() = File(context.filesDir, ".flex-storage-migrated")
 
     @Before
     @After
     fun clearFixture() {
-        for (database in listOf(support, legacy)) {
+        for (database in listOf(support, legacy, previousSupport)) {
             database.delete()
             File("${database.path}-wal").delete()
             File("${database.path}-shm").delete()
             File("${database.path}-journal").delete()
         }
         marker.delete()
+        previousMarker.delete()
     }
 
     private fun seedSettings(file: File, enabled: Boolean, path: String) {
@@ -71,6 +78,13 @@ class StoragePathTest {
         seedSettings(support, true, "support")
         assertEquals(support, getDatabaseFile(context))
         assertEquals(Pair(true, "support"), getSettings(context))
+    }
+
+    @Test
+    fun previousSupportDatabaseRemainsAvailableUntilMigrated() {
+        seedSettings(previousSupport, true, "previous")
+        assertEquals(previousSupport, getDatabaseFile(context))
+        assertEquals(Pair(true, "previous"), getSettings(context))
     }
 
     @Test

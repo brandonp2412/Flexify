@@ -1,7 +1,7 @@
-import 'package:flexify/database/categories.dart';
-import 'package:flexify/l10n/l10n.dart';
-import 'package:flexify/responsive.dart';
-import 'package:flexify/database/database.dart';
+import 'package:flex/database/categories.dart';
+import 'package:flex/l10n/l10n.dart';
+import 'package:flex/responsive.dart';
+import 'package:flex/database/database.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';

@@ -1,6 +1,6 @@
 Houd je sportschooltrainingen bij, volg je krachtprogressie en houd je trainingsgegevens privé.
 
-Flexify is een snelle offline workouttracker voor krachttraining en cardio. Registreer sets, herhalingen en gewichten, gebruik rusttimers om je tempo vast te houden en bekijk na elke sessie duidelijke voortgangsgrafieken.
+Flex is een snelle offline workouttracker voor krachttraining en cardio. Registreer sets, herhalingen en gewichten, gebruik rusttimers om je tempo vast te houden en bekijk na elke sessie duidelijke voortgangsgrafieken.
 
 BOUW EEN BETER TRAININGSLOGBOEK
 
@@ -12,6 +12,6 @@ BOUW EEN BETER TRAININGSLOGBOEK
 
 PRIVÉ, SNEL EN OFFLINE
 
-Flexify vereist geen account of internetverbinding. Je trainingsgegevens blijven op je apparaat, zodat je overal kunt trainen en sessies kunt bijhouden. De app is open source en bevat geen advertenties of tracking.
+Flex vereist geen account of internetverbinding. Je trainingsgegevens blijven op je apparaat, zodat je overal kunt trainen en sessies kunt bijhouden. De app is open source en bevat geen advertenties of tracking.
 
-Of je nu net met een sportschoolroutine begint of een bestaand programma verfijnt, Flexify geeft je een doelgericht trainingsdagboek zonder onnodige afleiding.
+Of je nu net met een sportschoolroutine begint of een bestaand programma verfijnt, Flex geeft je een doelgericht trainingsdagboek zonder onnodige afleiding.

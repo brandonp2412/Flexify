@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:drift/drift.dart' hide isNull, isNotNull;
 import 'package:drift/native.dart';
-import 'package:flexify/database/database.dart';
-import 'package:flexify/database/exercise_set_repository.dart';
+import 'package:flex/database/database.dart';
+import 'package:flex/database/exercise_set_repository.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

@@ -1,2 +1,2 @@
-- Fusión de la sucursal "principal" de github.com:brandonp2412/Flexify
+- Fusión de la sucursal "principal" de github.com:brandonp2412/Flex
 - Visión de vibración al cambiar la configuración del temporizador

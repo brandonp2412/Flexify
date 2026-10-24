@@ -1,18 +1,18 @@
 import 'package:drift/drift.dart' hide isNull;
-import 'package:flexify/database/database.dart';
-import 'package:flexify/settings/settings_page.dart';
+import 'package:flex/database/database.dart';
+import 'package:flex/settings/settings_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'support/test_app.dart';
 
-Future<FlexifyTestHarness> render(
+Future<FlexTestHarness> render(
   WidgetTester tester, {
   Locale? locale,
   Size? surfaceSize,
   TextScaler? textScaler,
 }) async {
-  final harness = await FlexifyTestHarness.create();
+  final harness = await FlexTestHarness.create();
   await harness.pump(
     tester,
     const SettingsPage(),
@@ -224,7 +224,7 @@ void main() {
   });
 
   testWidgets('SettingsPage shows images', (WidgetTester tester) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     await harness.database.settings.update().write(
       const SettingsCompanion(showImages: Value(false)),
     );

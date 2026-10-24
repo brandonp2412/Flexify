@@ -1,5 +1,5 @@
 import 'package:drift/drift.dart';
-import 'package:flexify/database/database.dart';
+import 'package:flex/database/database.dart';
 
 import 'fixtures.dart';
 

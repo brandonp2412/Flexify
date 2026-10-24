@@ -1,14 +1,14 @@
-import 'package:flexify/app_fab.dart';
-import 'package:flexify/bottom_nav.dart';
-import 'package:flexify/l10n/generated/app_localizations.dart';
-import 'package:flexify/stepper_field.dart';
+import 'package:flex/app_fab.dart';
+import 'package:flex/bottom_nav.dart';
+import 'package:flex/l10n/generated/app_localizations.dart';
+import 'package:flex/stepper_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'support/test_app.dart';
 
 Future<void> _pumpNavigation(WidgetTester tester, Locale locale) async {
-  final harness = await FlexifyTestHarness.create();
+  final harness = await FlexTestHarness.create();
   await harness.pump(
     tester,
     Scaffold(
@@ -60,7 +60,7 @@ void main() {
   ) async {
     const locale = Locale('ja');
     final l10n = lookupAppLocalizations(locale);
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
 
     await harness.pump(
       tester,
@@ -88,7 +88,7 @@ void main() {
     final l10n = lookupAppLocalizations(locale);
     final controller = TextEditingController(text: '50');
     addTearDown(controller.dispose);
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
 
     await harness.pump(
       tester,

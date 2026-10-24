@@ -1,8 +1,8 @@
-• Center text in Flexify chart tooltips
+• Center text in Flex chart tooltips
 • Complete body-weight storage cutover
 • Delete codex hooks
 • Delete silly slop file
-• Fix Flexify screenshot workout fixture
+• Fix Flex screenshot workout fixture
 • Fix big space at the top of graph history
 • Fix some padding for graphs filters
 • Fix tooltip edge clamp type

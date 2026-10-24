@@ -1,4 +1,4 @@
-• Ajouter des pages github hébergées pour le web Flexify
+• Ajouter des pages github hébergées pour le web Flex
 • Ajouter des changelogs manquants
 • Permettre à l' utilisateur de dégager les ensembles max
 • Supprimer les scripts non utilisés

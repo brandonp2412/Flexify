@@ -1,7 +1,7 @@
 • Inicialización de audio de configuración plana
 • Selección de contenido de pestañas planas
 • Sistema portátil de respaldo de FitBook
-• Preferir selectores de acción Flexify etiquetados
+• Preferir selectores de acción Flex etiquetados
 • Prefiere selectores de acción de gráfico etiquetados
 • Prefiere seleccionar pestañas visibles
 • Simplificar el flujo de control de devolución temprana

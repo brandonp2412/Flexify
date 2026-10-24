@@ -1,5 +1,5 @@
 • 更新 README.md
 • feat: 添加分类管理
-• feat: 将图标 2 设为 Flexify 启动器图标
+• feat: 将图标 2 设为 Flex 启动器图标
 • fix: 恢复内嵌 Flutter DevTools
 • fix: 提升 VS Code 中 Flutter 调试的稳定性

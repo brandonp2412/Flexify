@@ -1,4 +1,4 @@
-• 添加 Github 页面托管的Flexify web
+• 添加 Github 页面托管的Flex web
 • 添加缺失的变量
 • 允许用户清除最大的设置
 • 删除未使用的脚本

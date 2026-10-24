@@ -12,13 +12,13 @@ class AppLocalizationsDe extends AppLocalizations {
   String get showUpdateNotices => 'Update-Hinweise anzeigen';
 
   @override
-  String get appTitle => 'Flexify';
+  String get appTitle => 'Flex';
 
   @override
   String get settingsLanguage => 'Sprache';
 
   @override
-  String get settingsLanguageDescription => 'Wähle die Sprache für Flexify';
+  String get settingsLanguageDescription => 'Wähle die Sprache für Flex';
 
   @override
   String get languageSystemDefault => 'Systemstandard';
@@ -392,7 +392,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get backupArchiveMissingDatabase =>
-      'Die Sicherung enthält die Flexify-Datenbank nicht.';
+      'Die Sicherung enthält die Flex-Datenbank nicht.';
 
   @override
   String failedToImportGraphs(String error) {
@@ -516,7 +516,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get privacyPolicy => 'Datenschutzerklärung';
 
   @override
-  String get privacyPolicyDescription => 'Wie Flexify mit deinen Daten umgeht';
+  String get privacyPolicyDescription => 'Wie Flex mit deinen Daten umgeht';
 
   @override
   String get licenseLabel => 'Lizenz';
@@ -531,7 +531,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get leaveReview => 'Bewertung abgeben';
 
   @override
-  String get leaveReviewDescription => 'Flexify im Play Store bewerten';
+  String get leaveReviewDescription => 'Flex im Play Store bewerten';
 
   @override
   String get reportBug => 'Fehler melden';
@@ -1285,7 +1285,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get automaticBackupNotificationBody =>
-      'Flexify sichert deine Daten und Bilder jeden Tag automatisch im ausgewählten Ordner.';
+      'Flex sichert deine Daten und Bilder jeden Tag automatisch im ausgewählten Ordner.';
 
   @override
   String get backupSettingsChannel => 'Sicherungseinstellungen';
@@ -1299,7 +1299,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get backupChannelDescription =>
-      'Automatische Sicherungen von Flexify-Daten und -Bildern';
+      'Automatische Sicherungen von Flex-Daten und -Bildern';
 
   @override
   String get backupCompletedTitle => 'Daten und Bilder gesichert';

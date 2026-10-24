@@ -1,8 +1,8 @@
 import 'package:drift/drift.dart';
-import 'package:flexify/bottom_nav.dart';
-import 'package:flexify/database/database.dart';
-import 'package:flexify/graph/graph_tile.dart';
-import 'package:flexify/graph/graphs_page.dart';
+import 'package:flex/bottom_nav.dart';
+import 'package:flex/database/database.dart';
+import 'package:flex/graph/graph_tile.dart';
+import 'package:flex/graph/graphs_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -12,7 +12,7 @@ import 'support/test_app.dart';
 
 Future<void> pumpGraphsPage(
   WidgetTester tester,
-  FlexifyTestHarness harness, {
+  FlexTestHarness harness, {
   bool withTabController = false,
   Size? surfaceSize,
 }) async {
@@ -27,7 +27,7 @@ Future<void> pumpGraphsPage(
 
 void main() {
   testWidgets('GraphsPage lists items', (WidgetTester tester) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     await harness.database.settings.update().write(
       testSettings(showGlobalProgress: true),
     );
@@ -42,7 +42,7 @@ void main() {
   testWidgets('GraphsPage shows empty state when global progress is disabled', (
     WidgetTester tester,
   ) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     await harness.database.settings.update().write(
       testSettings(showGlobalProgress: false),
     );
@@ -56,7 +56,7 @@ void main() {
   testWidgets('GraphsPage keeps global progress instead of the empty state', (
     WidgetTester tester,
   ) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     await harness.database.settings.update().write(
       testSettings(showGlobalProgress: true),
     );
@@ -70,7 +70,7 @@ void main() {
   testWidgets('GraphsPage taps barbell bench press', (
     WidgetTester tester,
   ) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     await insertExerciseSetFixture(
       harness.database,
       'Barbell bench press',
@@ -88,7 +88,7 @@ void main() {
   });
 
   testWidgets('GraphsPage taps global progress', (WidgetTester tester) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     await harness.database.settings.update().write(
       testSettings(showGlobalProgress: true),
     );
@@ -103,7 +103,7 @@ void main() {
   testWidgets('Global progress exposes options inline on desktop', (
     WidgetTester tester,
   ) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     tester.view.devicePixelRatio = 1;
     tester.view.physicalSize = const Size(1200, 800);
     addTearDown(tester.view.resetDevicePixelRatio);
@@ -138,7 +138,7 @@ void main() {
   testWidgets('GraphsPage uses a desktop grid for exercise summaries', (
     WidgetTester tester,
   ) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     tester.view.devicePixelRatio = 1;
     tester.view.physicalSize = const Size(1400, 900);
     addTearDown(tester.view.resetDevicePixelRatio);
@@ -166,7 +166,7 @@ void main() {
     testWidgets('Graphs preview reserves height only when enabled at $size', (
       WidgetTester tester,
     ) async {
-      final harness = await FlexifyTestHarness.create();
+      final harness = await FlexTestHarness.create();
       tester.view.devicePixelRatio = 1;
       tester.view.physicalSize = size;
       addTearDown(tester.view.resetDevicePixelRatio);
@@ -206,7 +206,7 @@ void main() {
   testWidgets('Desktop preview retains its query across search rebuilds', (
     WidgetTester tester,
   ) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     tester.view.devicePixelRatio = 1;
     tester.view.physicalSize = const Size(1400, 900);
     addTearDown(tester.view.resetDevicePixelRatio);
@@ -263,7 +263,7 @@ void main() {
   });
 
   testWidgets('GraphsPage settings', (WidgetTester tester) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     await pumpGraphsPage(tester, harness);
 
     await tester.tap(find.byTooltip('Show menu'));
@@ -275,7 +275,7 @@ void main() {
   });
 
   testWidgets('GraphsPage selects', (WidgetTester tester) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     await insertExerciseSetFixture(
       harness.database,
       'Barbell bent-over row',
@@ -293,7 +293,7 @@ void main() {
   });
 
   testWidgets('GraphsPage deletes', (WidgetTester tester) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     await insertExerciseSetFixture(
       harness.database,
       'Back extension',
@@ -320,7 +320,7 @@ void main() {
   testWidgets('GraphsPage delete also removes plan exercises', (
     WidgetTester tester,
   ) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     await insertExerciseSetFixture(
       harness.database,
       'Zz unique test exercise',

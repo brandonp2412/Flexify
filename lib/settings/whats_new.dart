@@ -1,8 +1,8 @@
-import 'package:flexify/update_notice.dart';
+import 'package:flex/update_notice.dart';
 import 'dart:convert';
 
-import 'package:flexify/l10n/l10n.dart';
-import 'package:flexify/logging.dart';
+import 'package:flex/l10n/l10n.dart';
+import 'package:flex/logging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';

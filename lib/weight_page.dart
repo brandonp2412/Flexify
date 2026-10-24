@@ -1,14 +1,14 @@
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
-import 'package:flexify/app_fab.dart';
-import 'package:flexify/constants.dart';
-import 'package:flexify/database/body_weight_repository.dart';
-import 'package:flexify/database/database.dart';
-import 'package:flexify/l10n/l10n.dart';
-import 'package:flexify/main.dart';
-import 'package:flexify/responsive.dart';
-import 'package:flexify/utils.dart';
+import 'package:flex/app_fab.dart';
+import 'package:flex/constants.dart';
+import 'package:flex/database/body_weight_repository.dart';
+import 'package:flex/database/database.dart';
+import 'package:flex/l10n/l10n.dart';
+import 'package:flex/main.dart';
+import 'package:flex/responsive.dart';
+import 'package:flex/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

@@ -5,7 +5,7 @@ const double desktopMaxWidth = 1040;
 const double wideMaxWidth = 1240;
 const double dataMaxWidth = 1440;
 
-/// Whether the current window should use Flexify's desktop layout.
+/// Whether the current window should use Flex's desktop layout.
 bool isDesktopLayout(BuildContext context) =>
     MediaQuery.sizeOf(context).width >= desktopBreakpoint;
 

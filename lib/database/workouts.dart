@@ -1,5 +1,5 @@
 import 'package:drift/drift.dart';
-import 'package:flexify/database/plans.dart';
+import 'package:flex/database/plans.dart';
 
 /// A concrete workout session, optionally started from a plan.
 @TableIndex.sql(

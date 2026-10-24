@@ -1,7 +1,7 @@
 import 'package:drift/drift.dart';
-import 'package:flexify/constants.dart';
-import 'package:flexify/database/exercise_analytics.dart';
-import 'package:flexify/graph/strength_page.dart';
+import 'package:flex/constants.dart';
+import 'package:flex/database/exercise_analytics.dart';
+import 'package:flex/graph/strength_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -11,7 +11,7 @@ import 'support/test_app.dart';
 
 Future<void> pumpStrengthPage(
   WidgetTester tester,
-  FlexifyTestHarness harness, {
+  FlexTestHarness harness, {
   Size? surfaceSize,
   bool bodyWeight = false,
 }) async {
@@ -48,7 +48,7 @@ Future<void> pumpStrengthPage(
 
 void main() {
   testWidgets('StrengthPage displays', (WidgetTester tester) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     await pumpStrengthPage(tester, harness);
 
     expect(find.text(screenshotExercise), findsOne);
@@ -59,7 +59,7 @@ void main() {
   testWidgets('StrengthPage opens options from below the graph on desktop', (
     WidgetTester tester,
   ) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     tester.view.devicePixelRatio = 1;
     tester.view.physicalSize = const Size(900, 800);
     addTearDown(tester.view.resetDevicePixelRatio);
@@ -83,7 +83,7 @@ void main() {
   testWidgets('Weight graph uses the shared text options button', (
     WidgetTester tester,
   ) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     await pumpStrengthPage(tester, harness, bodyWeight: true);
 
     final optionsButton = find.byKey(const Key('graph-options-button'));
@@ -103,7 +103,7 @@ void main() {
   });
 
   testWidgets('StrengthPage edits', (WidgetTester tester) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     await pumpStrengthPage(tester, harness);
 
     await tester.tap(find.byTooltip('Edit'));
@@ -113,7 +113,7 @@ void main() {
   });
 
   testWidgets('StrengthPage selects metrics', (WidgetTester tester) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     await pumpStrengthPage(tester, harness);
 
     var currentMetric = 'Best weight';

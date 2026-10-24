@@ -1,6 +1,6 @@
 import 'package:drift/drift.dart';
-import 'package:flexify/database/database.dart';
-import 'package:flexify/l10n/generated/app_localizations.dart';
+import 'package:flex/database/database.dart';
+import 'package:flex/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 

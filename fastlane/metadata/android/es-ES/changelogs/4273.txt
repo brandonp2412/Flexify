@@ -1,5 +1,5 @@
 • Actualizar README.md
 • feat: añadir gestión de categorías
-• feat: usar el icono 2 como icono de inicio de Flexify
+• feat: usar el icono 2 como icono de inicio de Flex
 • fix: restaurar las Flutter DevTools integradas
 • fix: estabilizar la depuración de Flutter en VS Code

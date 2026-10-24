@@ -1,2 +1,2 @@
-- 结合了 github.com:brandonp2412/Flexify的主要分支
+- 结合了 github.com:brandonp2412/Flex的主要分支
 - 在切换计时器设置时预览振动

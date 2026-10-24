@@ -1,16 +1,16 @@
 import 'dart:async';
 
 import 'package:drift/drift.dart' hide Column;
-import 'package:flexify/audio/safe_audio_player.dart';
+import 'package:flex/audio/safe_audio_player.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:flexify/database/database.dart';
-import 'package:flexify/l10n/l10n.dart';
-import 'package:flexify/main.dart';
-import 'package:flexify/responsive.dart';
-import 'package:flexify/logging.dart';
-import 'package:flexify/native_timer_wrapper.dart';
-import 'package:flexify/timer/timer_state.dart';
-import 'package:flexify/utils.dart';
+import 'package:flex/database/database.dart';
+import 'package:flex/l10n/l10n.dart';
+import 'package:flex/main.dart';
+import 'package:flex/responsive.dart';
+import 'package:flex/logging.dart';
+import 'package:flex/native_timer_wrapper.dart';
+import 'package:flex/timer/timer_state.dart';
+import 'package:flex/utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

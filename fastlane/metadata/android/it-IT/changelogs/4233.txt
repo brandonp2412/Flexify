@@ -1,1 +1,1 @@
-• feat: usare l'icona 08 come icona del lanciatore Flexify
+• feat: usare l'icona 08 come icona del lanciatore Flex

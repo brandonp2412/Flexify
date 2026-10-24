@@ -1,7 +1,7 @@
 • Iniziazione audio per impostazioni piatte
 • Selezione dei contenuti delle schede piatte
 • Sistema di backup portatile di FitBook
-• Preferire i selettori di azione Flexify etichettati
+• Preferire i selettori di azione Flex etichettati
 • Preferire i selettori di azione grafica etichettati
 • Preferire selezionatore di schede visibili
 • Semplificare il flusso di controllo del ritorno anticipato

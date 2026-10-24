@@ -1,4 +1,4 @@
-package com.presley.flexify
+package com.presley.flex
 
 import android.Manifest
 import android.app.NotificationManager
@@ -40,10 +40,10 @@ class TimerServiceTest {
     // Flutter engine, so that file wouldn't otherwise exist and playSound()
     // would crash with an NPE before the code under test even runs.
     @Before
-    fun seedFlexifySettingsDb() {
+    fun seedFlexSettingsDb() {
         val dbFolder = context.filesDir
         dbFolder.mkdirs()
-        val dbFile = File(dbFolder, "flexify.sqlite")
+        val dbFile = File(dbFolder, "flex.sqlite")
         SQLiteDatabase.openOrCreateDatabase(dbFile, null).use { db ->
             db.execSQL("DROP TABLE IF EXISTS settings")
             db.execSQL(
@@ -108,7 +108,7 @@ class TimerServiceTest {
         val deleteIntent = activeNotificationDeleteIntent(TimerService.FINISHED_ID)
 
         val service = startAndBindTimer("Exercise B")
-        assertTrue(service.flexifyTimer.isRunning())
+        assertTrue(service.flexTimer.isRunning())
 
         deleteIntent.send()
         Thread.sleep(200)
@@ -116,18 +116,18 @@ class TimerServiceTest {
         assertTrue(
             "Dismissing a previous exercise's finished notification must not stop " +
                 "the timer that is currently running",
-            service.flexifyTimer.isRunning(),
+            service.flexTimer.isRunning(),
         )
     }
 
     @Test
     fun dismissingOwnNotificationStopsActiveTimer() {
         val service = startAndBindTimer("Exercise A")
-        assertTrue(service.flexifyTimer.isRunning())
+        assertTrue(service.flexTimer.isRunning())
 
         activeNotificationDeleteIntent(TimerService.ONGOING_ID).send()
         Thread.sleep(200)
 
-        assertFalse(service.flexifyTimer.isRunning())
+        assertFalse(service.flexTimer.isRunning())
     }
 }

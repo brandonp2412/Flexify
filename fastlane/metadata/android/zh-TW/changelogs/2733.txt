@@ -1,4 +1,4 @@
-• 新增 Github 頁面託管的Flexify web
+• 新增 Github 頁面託管的Flex web
 • 新增缺失的變數
 • 允許使用者清除最大的設定
 • 刪除未使用的指令碼

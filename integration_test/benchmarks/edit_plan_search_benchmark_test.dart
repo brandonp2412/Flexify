@@ -1,5 +1,5 @@
-import 'package:flexify/database/database.dart';
-import 'package:flexify/plan/plan_queries.dart';
+import 'package:flex/database/database.dart';
+import 'package:flex/plan/plan_queries.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'benchmark_results.dart';

@@ -1,4 +1,4 @@
-import 'package:flexify/audio/safe_audio_player.dart';
+import 'package:flex/audio/safe_audio_player.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

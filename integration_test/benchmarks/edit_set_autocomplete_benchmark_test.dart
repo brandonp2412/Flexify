@@ -1,4 +1,4 @@
-import 'package:flexify/sets/edit_set_page.dart';
+import 'package:flex/sets/edit_set_page.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'benchmark_results.dart';

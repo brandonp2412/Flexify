@@ -2,11 +2,11 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
-import 'package:flexify/app_fab.dart';
-import 'package:flexify/database/exercise_catalog.dart';
-import 'package:flexify/l10n/l10n.dart';
-import 'package:flexify/logging.dart';
-import 'package:flexify/database/database.dart';
+import 'package:flex/app_fab.dart';
+import 'package:flex/database/exercise_catalog.dart';
+import 'package:flex/l10n/l10n.dart';
+import 'package:flex/logging.dart';
+import 'package:flex/database/database.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

@@ -33,7 +33,7 @@ if (-not $chromeDriverRunning) {
 }
 
 # Set environment variables for device type and Chrome detection
-$env:FLEXIFY_DEVICE_TYPE = $deviceType
+$env:FLEX_DEVICE_TYPE = $deviceType
 $env:FLUTTER_DRIVER_DEVICE = "chrome"
 
 # Run Flutter drive command targeting Chrome

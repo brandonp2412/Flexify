@@ -1,10 +1,10 @@
-import 'package:flexify/constants.dart';
-import 'package:flexify/database/database.dart';
-import 'package:flexify/database/exercise_set_repository.dart';
-import 'package:flexify/l10n/l10n.dart';
-import 'package:flexify/sets/edit_set_page.dart';
-import 'package:flexify/utils.dart';
-import 'package:flexify/platform_page_route.dart';
+import 'package:flex/constants.dart';
+import 'package:flex/database/database.dart';
+import 'package:flex/database/exercise_set_repository.dart';
+import 'package:flex/l10n/l10n.dart';
+import 'package:flex/sets/edit_set_page.dart';
+import 'package:flex/utils.dart';
+import 'package:flex/platform_page_route.dart';
 import 'package:flutter/material.dart';
 
 /// Strong/Hevy-style strip of the sets already logged in the active workout

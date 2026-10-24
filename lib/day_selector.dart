@@ -1,5 +1,5 @@
-import 'package:flexify/constants.dart';
-import 'package:flexify/l10n/l10n.dart';
+import 'package:flex/constants.dart';
+import 'package:flex/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class DaySelector extends StatefulWidget {

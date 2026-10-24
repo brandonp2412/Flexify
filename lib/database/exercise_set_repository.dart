@@ -1,6 +1,6 @@
 import 'package:drift/drift.dart';
-import 'package:flexify/database/body_weight_repository.dart';
-import 'package:flexify/database/database.dart';
+import 'package:flex/database/body_weight_repository.dart';
+import 'package:flex/database/database.dart';
 
 /// Converts a stored load in kilograms to the exercise display unit.
 double displayLoad(String unit, double? loadKg) {

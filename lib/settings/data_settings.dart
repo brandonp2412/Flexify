@@ -2,17 +2,17 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:drift/drift.dart';
-import 'package:flexify/app_permissions_dialog.dart';
-import 'package:flexify/database/database.dart';
-import 'package:flexify/delete_records_button.dart';
-import 'package:flexify/export_data.dart';
-import 'package:flexify/import_data.dart';
-import 'package:flexify/l10n/generated/app_localizations.dart';
-import 'package:flexify/l10n/l10n.dart';
-import 'package:flexify/main.dart';
-import 'package:flexify/responsive.dart';
-import 'package:flexify/settings/backup_archive.dart';
-import 'package:flexify/storage/app_storage.dart';
+import 'package:flex/app_permissions_dialog.dart';
+import 'package:flex/database/database.dart';
+import 'package:flex/delete_records_button.dart';
+import 'package:flex/export_data.dart';
+import 'package:flex/import_data.dart';
+import 'package:flex/l10n/generated/app_localizations.dart';
+import 'package:flex/l10n/l10n.dart';
+import 'package:flex/main.dart';
+import 'package:flex/responsive.dart';
+import 'package:flex/settings/backup_archive.dart';
+import 'package:flex/storage/app_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -129,7 +129,7 @@ List<Widget> getDataSettings(
       TextButton.icon(
         onPressed: () async {
           final workDir = await (await getTemporaryDirectory()).createTemp(
-            'flexify-share-',
+            'flex-share-',
           );
           try {
             final archive = await createBackupArchive(

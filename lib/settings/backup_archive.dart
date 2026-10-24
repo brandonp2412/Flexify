@@ -5,7 +5,8 @@ import 'package:path/path.dart' as p;
 
 import 'backup_database.dart';
 
-const backupDbName = 'flexify.sqlite';
+const backupDbName = 'flex.sqlite';
+const _previousBackupDbName = 'flexify.sqlite';
 
 const _imageColumns = <(String, String)>[
   ('exercises', 'image'),
@@ -16,7 +17,7 @@ const _imageColumns = <(String, String)>[
   ('gym_sets', 'image'),
 ];
 
-/// Signals that an imported backup archive is missing the Flexify database.
+/// Signals that an imported backup archive is missing the Flex database.
 final class MissingBackupDatabaseException implements Exception {
   const MissingBackupDatabaseException();
 }
@@ -40,15 +41,13 @@ void validateBackupDatabaseFile(File file) {
         (!tables.contains('gym_sets') && !tables.contains('exercises')) ||
         database.select('PRAGMA quick_check').single['quick_check'] != 'ok') {
       throw const FormatException(
-        'Selected file is not a Flexify database backup',
+        'Selected file is not a Flex database backup',
       );
     }
   } on FormatException {
     rethrow;
   } catch (_) {
-    throw const FormatException(
-      'Selected file is not a Flexify database backup',
-    );
+    throw const FormatException('Selected file is not a Flex database backup');
   } finally {
     database?.close();
   }
@@ -126,7 +125,7 @@ Future<File> createBackupArchive({
     backup.close();
   }
 
-  final archiveFile = File(p.join(workingDirectory.path, 'flexify-backup.zip'));
+  final archiveFile = File(p.join(workingDirectory.path, 'flex-backup.zip'));
   final encoder = ZipFileEncoder()..create(archiveFile.path);
   await encoder.addFile(databaseCopy, backupDbName);
   for (final entry in existingImages.entries) {
@@ -144,10 +143,15 @@ Future<File> extractBackupArchive({
   final input = InputFileStream(archiveFile.path);
   final archive = ZipDecoder().decodeStream(input);
   try {
+    final hasNewDatabase = archive.any(
+      (entry) => entry.isFile && p.posix.normalize(entry.name) == backupDbName,
+    );
     for (final entry in archive) {
       if (!entry.isFile) continue;
       final name = p.posix.normalize(entry.name);
-      final isDatabase = name == backupDbName;
+      final isDatabase =
+          name == backupDbName ||
+          (!hasNewDatabase && name == _previousBackupDbName);
       final isImage = p.posix.dirname(name) == 'images';
       if (!isDatabase && !isImage) continue;
 

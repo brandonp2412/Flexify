@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:flexify/settings/backup_archive.dart';
+import 'package:flex/settings/backup_archive.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:path/path.dart' as p;
 import 'package:sqlite3/sqlite3.dart';
@@ -10,7 +10,7 @@ void main() {
     'backup archive preserves redesigned relationships and image assets',
     () async {
       final root = await Directory.systemTemp.createTemp(
-        'flexify-redesign-backup-',
+        'flex-redesign-backup-',
       );
       addTearDown(() => root.delete(recursive: true));
 

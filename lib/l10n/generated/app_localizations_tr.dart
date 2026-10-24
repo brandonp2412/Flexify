@@ -12,14 +12,14 @@ class AppLocalizationsTr extends AppLocalizations {
   String get showUpdateNotices => 'Güncelleme bildirimlerini göster';
 
   @override
-  String get appTitle => 'Flexify';
+  String get appTitle => 'Flex';
 
   @override
   String get settingsLanguage => 'Dil';
 
   @override
   String get settingsLanguageDescription =>
-      'Flexify tarafından kullanılacak dili seçin.';
+      'Flex tarafından kullanılacak dili seçin.';
 
   @override
   String get languageSystemDefault => 'Sistem Varsayılanı';
@@ -388,7 +388,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get backupArchiveMissingDatabase =>
-      'Yedekleme arşivi Flexify veritabanını içermiyor.';
+      'Yedekleme arşivi Flex veritabanını içermiyor.';
 
   @override
   String failedToImportGraphs(String error) {
@@ -511,7 +511,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get privacyPolicy => 'Gizlilik Politikası';
 
   @override
-  String get privacyPolicyDescription => 'Flexify verilerini nasıl işler';
+  String get privacyPolicyDescription => 'Flex verilerini nasıl işler';
 
   @override
   String get licenseLabel => 'Lisans';
@@ -526,7 +526,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get leaveReview => 'Değerlendir';
 
   @override
-  String get leaveReviewDescription => 'Play Store\'da Flexify\'ı puanla';
+  String get leaveReviewDescription => 'Play Store\'da Flex\'ı puanla';
 
   @override
   String get reportBug => 'Hata Bildir';
@@ -1276,7 +1276,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get automaticBackupNotificationBody =>
-      'Flexify, verilerini ve görsellerini her gün otomatik olarak seçilen klasöre yedekler.';
+      'Flex, verilerini ve görsellerini her gün otomatik olarak seçilen klasöre yedekler.';
 
   @override
   String get backupSettingsChannel => 'Yedekleme Ayarları';
@@ -1290,7 +1290,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get backupChannelDescription =>
-      'Flexify verilerinin ve görsellerinin otomatik yedeklemeleri';
+      'Flex verilerinin ve görsellerinin otomatik yedeklemeleri';
 
   @override
   String get backupCompletedTitle => 'Veriler ve görseller yedeklendi';

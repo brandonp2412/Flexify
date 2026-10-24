@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:drift/drift.dart';
-import 'package:flexify/logging.dart';
+import 'package:flex/logging.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
 Future<void> testExecutable(FutureOr<void> Function() testMain) async {

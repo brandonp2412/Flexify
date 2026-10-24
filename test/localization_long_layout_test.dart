@@ -1,17 +1,17 @@
 import 'package:drift/drift.dart' hide isNull;
-import 'package:flexify/app_search.dart';
-import 'package:flexify/database/database.dart';
-import 'package:flexify/database/exercise_set_repository.dart';
-import 'package:flexify/graph/strength_data.dart';
-import 'package:flexify/graph/strength_page.dart';
-import 'package:flexify/l10n/generated/app_localizations.dart';
-import 'package:flexify/main.dart';
-import 'package:flexify/plan/session_sets.dart';
-import 'package:flexify/plan/workout_sessions.dart';
-import 'package:flexify/settings/appearance_settings.dart';
-import 'package:flexify/settings/plan_settings.dart';
-import 'package:flexify/timer/timer_page.dart';
-import 'package:flexify/timer/timer_state.dart';
+import 'package:flex/app_search.dart';
+import 'package:flex/database/database.dart';
+import 'package:flex/database/exercise_set_repository.dart';
+import 'package:flex/graph/strength_data.dart';
+import 'package:flex/graph/strength_page.dart';
+import 'package:flex/l10n/generated/app_localizations.dart';
+import 'package:flex/main.dart';
+import 'package:flex/plan/session_sets.dart';
+import 'package:flex/plan/workout_sessions.dart';
+import 'package:flex/settings/appearance_settings.dart';
+import 'package:flex/settings/plan_settings.dart';
+import 'package:flex/timer/timer_page.dart';
+import 'package:flex/timer/timer_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
@@ -75,7 +75,7 @@ void main() {
   ) async {
     const locale = Locale('pl');
     final l10n = lookupAppLocalizations(locale);
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
 
     await harness.pump(
       tester,
@@ -104,7 +104,7 @@ void main() {
   ) async {
     const locale = Locale('pl');
     final l10n = lookupAppLocalizations(locale);
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
 
     await harness.pump(
       tester,
@@ -123,7 +123,7 @@ void main() {
   testWidgets('Polish delete dialog fits narrow scaled layout', (tester) async {
     const locale = Locale('pl');
     final l10n = lookupAppLocalizations(locale);
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     final selection = <String>{}..add('User entry');
 
     await harness.pump(
@@ -161,7 +161,7 @@ void main() {
   ) async {
     const locale = Locale('pl');
     final l10n = lookupAppLocalizations(locale);
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     const exercise = 'User entered press';
     final now = DateTime.now().toLocal();
 
@@ -195,7 +195,7 @@ void main() {
   testWidgets('Polish timer actions fit narrow scaled layout', (tester) async {
     const locale = Locale('pl');
     final l10n = lookupAppLocalizations(locale);
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     final timerState = harness.timerState;
 
     await harness.pump(
@@ -229,7 +229,7 @@ void main() {
     const locale = Locale('pl');
     final l10n = lookupAppLocalizations(locale);
     final timerState = _RecordingTimerState();
-    final harness = await FlexifyTestHarness.create(timerState: timerState);
+    final harness = await FlexTestHarness.create(timerState: timerState);
     await harness.database.settings.update().write(
       const SettingsCompanion(localeOverride: Value('pl')),
     );
@@ -268,7 +268,7 @@ void main() {
   ) async {
     const locale = Locale('ja');
     final l10n = lookupAppLocalizations(locale);
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     const exercise = 'User entered exercise';
     final planId = await harness.database.plans.insertOne(planFixture());
     final definition = await ensureExerciseFixture(harness.database, exercise);

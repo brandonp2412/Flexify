@@ -1,8 +1,8 @@
 import 'package:drift/drift.dart' hide isNull;
-import 'package:flexify/database/database.dart';
-import 'package:flexify/l10n/generated/app_localizations.dart';
-import 'package:flexify/l10n/locale_preferences.dart';
-import 'package:flexify/main.dart';
+import 'package:flex/database/database.dart';
+import 'package:flex/l10n/generated/app_localizations.dart';
+import 'package:flex/l10n/locale_preferences.dart';
+import 'package:flex/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 

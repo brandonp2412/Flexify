@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:archive/archive_io.dart';
 
 import 'package:drift/native.dart';
-import 'package:flexify/database/database.dart';
-import 'package:flexify/settings/backup_archive.dart';
+import 'package:flex/database/database.dart';
+import 'package:flex/settings/backup_archive.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:path/path.dart' as p;
 import 'package:sqlite3/sqlite3.dart';
@@ -13,7 +13,7 @@ import 'drift/db/generated/schema_v18.dart' as v18;
 
 void main() {
   test('backup archive restores database and referenced images', () async {
-    final root = await Directory.systemTemp.createTemp('flexify-backup-test-');
+    final root = await Directory.systemTemp.createTemp('flex-backup-test-');
     addTearDown(() => root.delete(recursive: true));
 
     final storageDirectory = Directory(p.join(root.path, 'documents'))
@@ -55,7 +55,7 @@ void main() {
     expect(File(restoredImagePath).readAsBytesSync(), [1, 2, 3, 4]);
   });
   test('backup includes committed records in a live WAL database', () async {
-    final root = await Directory.systemTemp.createTemp('flexify-wal-backup-');
+    final root = await Directory.systemTemp.createTemp('flex-wal-backup-');
     addTearDown(() => root.delete(recursive: true));
     final databasePath = p.join(root.path, backupDbName);
     final exportDirectory = await Directory(
@@ -104,10 +104,32 @@ void main() {
     }
   });
 
-  test('missing database in backup uses typed validation error', () async {
-    final root = await Directory.systemTemp.createTemp(
-      'flexify-backup-invalid-',
+  test('archives from the previous app name remain importable', () async {
+    final root = await Directory.systemTemp.createTemp('flex-old-backup-');
+    addTearDown(() => root.delete(recursive: true));
+    final source = File(p.join(root.path, 'flexify.sqlite'));
+    final database = sqlite3.open(source.path);
+    database.execute('CREATE TABLE plans (id INTEGER PRIMARY KEY)');
+    database.execute('CREATE TABLE gym_sets (id INTEGER PRIMARY KEY)');
+    database.close();
+
+    final archiveFile = File(p.join(root.path, 'previous.zip'));
+    final encoder = ZipFileEncoder()..create(archiveFile.path);
+    await encoder.addFile(source, 'flexify.sqlite');
+    await encoder.close();
+    final working = await Directory(p.join(root.path, 'working')).create();
+    final storage = await Directory(p.join(root.path, 'storage')).create();
+    final imported = await extractBackupArchive(
+      archiveFile: archiveFile,
+      workingDirectory: working,
+      storageDirectory: storage,
     );
+    expect(p.basename(imported.path), backupDbName);
+    validateBackupDatabaseFile(imported);
+  });
+
+  test('missing database in backup uses typed validation error', () async {
+    final root = await Directory.systemTemp.createTemp('flex-backup-invalid-');
     addTearDown(() => root.delete(recursive: true));
 
     final storageDirectory = Directory(p.join(root.path, 'documents'))
@@ -131,9 +153,7 @@ void main() {
     );
   });
   test('legacy standalone SQLite backup preserves WAL data', () async {
-    final root = await Directory.systemTemp.createTemp(
-      'flexify-sqlite-import-',
-    );
+    final root = await Directory.systemTemp.createTemp('flex-sqlite-import-');
     addTearDown(() => root.delete(recursive: true));
     final working = await Directory(p.join(root.path, 'working')).create();
     final storage = await Directory(p.join(root.path, 'storage')).create();
@@ -171,9 +191,7 @@ void main() {
   });
 
   test('standalone SQLite from another app is rejected', () async {
-    final root = await Directory.systemTemp.createTemp(
-      'flexify-sqlite-invalid-',
-    );
+    final root = await Directory.systemTemp.createTemp('flex-sqlite-invalid-');
     addTearDown(() => root.delete(recursive: true));
     final source = File(p.join(root.path, 'other.sqlite'));
     final database = sqlite3.open(source.path);
@@ -189,9 +207,9 @@ void main() {
     );
   });
   test('legacy v18 SQLite backup migrates to current schema', () async {
-    final root = await Directory.systemTemp.createTemp('flexify-old-schema-');
+    final root = await Directory.systemTemp.createTemp('flex-old-schema-');
     addTearDown(() => root.delete(recursive: true));
-    final file = File(p.join(root.path, 'flexify-old.sqlite'));
+    final file = File(p.join(root.path, 'flex-old.sqlite'));
     final legacy = v18.DatabaseAtV18(NativeDatabase(file));
     await legacy.customSelect('SELECT 1 FROM gym_sets LIMIT 1').get();
     await legacy.close();

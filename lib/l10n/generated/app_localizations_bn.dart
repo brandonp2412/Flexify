@@ -12,13 +12,13 @@ class AppLocalizationsBn extends AppLocalizations {
   String get showUpdateNotices => 'আপডেটের বিজ্ঞপ্তি দেখান';
 
   @override
-  String get appTitle => 'Flexify';
+  String get appTitle => 'Flex';
 
   @override
   String get settingsLanguage => 'ভাষা';
 
   @override
-  String get settingsLanguageDescription => 'Flexify-এ ব্যবহৃত ভাষা বেছে নিন';
+  String get settingsLanguageDescription => 'Flex-এ ব্যবহৃত ভাষা বেছে নিন';
 
   @override
   String get languageSystemDefault => 'সিস্টেমের ডিফল্ট';
@@ -390,7 +390,7 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get backupArchiveMissingDatabase =>
-      'ব্যাকআপ আর্কাইভে Flexify ডেটাবেস নেই।';
+      'ব্যাকআপ আর্কাইভে Flex ডেটাবেস নেই।';
 
   @override
   String failedToImportGraphs(String error) {
@@ -512,8 +512,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get privacyPolicy => 'গোপনীয়তা নীতি';
 
   @override
-  String get privacyPolicyDescription =>
-      'Flexify কীভাবে আপনার ডেটা ব্যবহার করে';
+  String get privacyPolicyDescription => 'Flex কীভাবে আপনার ডেটা ব্যবহার করে';
 
   @override
   String get licenseLabel => 'লাইসেন্স';
@@ -528,7 +527,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get leaveReview => 'রিভিউ দিন';
 
   @override
-  String get leaveReviewDescription => 'Play Store-এ Flexify-কে রেট দিন';
+  String get leaveReviewDescription => 'Play Store-এ Flex-কে রেট দিন';
 
   @override
   String get reportBug => 'বাগ রিপোর্ট করুন';
@@ -1273,7 +1272,7 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get automaticBackupNotificationBody =>
-      'Flexify প্রতিদিন নির্বাচিত ফোল্ডারে আপনার ডেটা ও ছবি স্বয়ংক্রিয়ভাবে ব্যাকআপ করবে।';
+      'Flex প্রতিদিন নির্বাচিত ফোল্ডারে আপনার ডেটা ও ছবি স্বয়ংক্রিয়ভাবে ব্যাকআপ করবে।';
 
   @override
   String get backupSettingsChannel => 'ব্যাকআপ সেটিংস';
@@ -1287,7 +1286,7 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get backupChannelDescription =>
-      'Flexify-এর ডেটা ও ছবির স্বয়ংক্রিয় ব্যাকআপ';
+      'Flex-এর ডেটা ও ছবির স্বয়ংক্রিয় ব্যাকআপ';
 
   @override
   String get backupCompletedTitle => 'ডেটা ও ছবি ব্যাকআপ হয়েছে';

@@ -1,4 +1,4 @@
-• Add github pages hosting for Flexify web
+• Add github pages hosting for Flex web
 • Add missing changelogs
 ● السماح للمستخدم بتنظيف مجموعات الحد الأقصى
 ● تحذف النصوص غير المستخدمة

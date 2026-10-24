@@ -1,5 +1,5 @@
 • README.md bijwerken
 • feat: categoriebeheer toevoegen
-• feat: pictogram 2 gebruiken als Flexify-opstartpictogram
+• feat: pictogram 2 gebruiken als Flex-opstartpictogram
 • fix: ingebouwde Flutter DevTools herstellen
 • fix: Flutter-foutopsporing in VS Code stabiliseren

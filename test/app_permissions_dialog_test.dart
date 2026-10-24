@@ -1,10 +1,10 @@
 import 'dart:async';
 
 import 'package:drift/drift.dart';
-import 'package:flexify/app_permissions_dialog.dart';
-import 'package:flexify/database/database.dart';
-import 'package:flexify/l10n/generated/app_localizations.dart';
-import 'package:flexify/main.dart' as app;
+import 'package:flex/app_permissions_dialog.dart';
+import 'package:flex/database/database.dart';
+import 'package:flex/l10n/generated/app_localizations.dart';
+import 'package:flex/main.dart' as app;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';

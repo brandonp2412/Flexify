@@ -1,6 +1,6 @@
 # Browser persistence migration regression
 
-Flexify's web backend used the legacy `DriftWebStorage.indexedDbIfSupported('flexify_db')` SQL.js database. The current backend opens `WasmDatabase` named `flexify` and imports the old database with `initializeDatabase` **only if** the new database does not exist. The original database is not deleted.
+Flex's web backend used the legacy `DriftWebStorage.indexedDbIfSupported('flexify_db')` SQL.js database. The current backend preserves the existing `WasmDatabase` name `flexify` for data continuity and imports the old database with `initializeDatabase` **only if** the new database does not exist. The original database is not deleted.
 
 To exercise the migration with a real headless Brave/Chromium browser:
 

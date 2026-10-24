@@ -1,11 +1,11 @@
-import 'package:flexify/l10n/generated/app_localizations.dart';
+import 'package:flex/l10n/generated/app_localizations.dart';
 import 'package:flutter/widgets.dart';
 
 /// Locales that are fully translated and may be selected explicitly.
 ///
 /// Generated localizations can include language-only fallback locales, such as
 /// `pt`, that are needed for platform locale resolution but are not separate
-/// choices in Flexify's language setting.
+/// choices in Flex's language setting.
 const selectableLocales = <Locale>[
   Locale('en'),
   Locale('es'),
@@ -75,7 +75,7 @@ Locale? localeOverrideFromIdentifier(String? identifier) {
 String? validLocale(String? identifier) =>
     localeOverrideFromIdentifier(identifier)?.toLanguageTag();
 
-/// Returns a stable display name for a locale exposed by Flexify.
+/// Returns a stable display name for a locale exposed by Flex.
 String localeDisplayName(AppLocalizations l10n, Locale locale) {
   return switch (locale.toLanguageTag()) {
     'en' => l10n.languageNameEnglish,

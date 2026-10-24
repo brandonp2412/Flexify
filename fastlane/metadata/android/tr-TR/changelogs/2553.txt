@@ -1,2 +1,2 @@
-- Github.com:brandonp2412/Flexify'nin ana şubesini birleştir
+- Github.com:brandonp2412/Flex'nin ana şubesini birleştir
 - Zamanlayıcı ayarını değiştirirken ön izleme titreşim

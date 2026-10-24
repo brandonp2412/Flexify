@@ -1,1 +1,1 @@
-• feat: use icon 08 as Flexify launcher icon
+• feat: use icon 08 as Flex launcher icon

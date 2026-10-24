@@ -1,5 +1,5 @@
-import 'package:flexify/graph/flex_line_chart.dart';
-import 'package:flexify/graph/graph_metric_chips.dart';
+import 'package:flex/graph/flex_line_chart.dart';
+import 'package:flex/graph/graph_metric_chips.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 

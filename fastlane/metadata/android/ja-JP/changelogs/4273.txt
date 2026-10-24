@@ -1,5 +1,5 @@
 • README.md を更新
 • feat: カテゴリ管理を追加
-• feat: アイコン2をFlexifyのランチャーアイコンとして採用
+• feat: アイコン2をFlexのランチャーアイコンとして採用
 • fix: 組み込みのFlutter DevToolsを復元
 • fix: VS CodeでのFlutterデバッグを安定化

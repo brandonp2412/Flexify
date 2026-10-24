@@ -1,4 +1,4 @@
-import 'package:flexify/data_portability/import_issue.dart';
+import 'package:flex/data_portability/import_issue.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -10,7 +10,7 @@ void main() {
       version: '2.2.34',
     );
     expect(url.host, 'github.com');
-    expect(url.path, '/brandonp2412/Flexify/issues/new');
+    expect(url.path, '/brandonp2412/Flex/issues/new');
     expect(url.queryParameters['title'], 'Import failed: database');
     expect(url.queryParameters['body'], contains('Could not open backup'));
     expect(url.queryParameters['body'], contains('frame one'));

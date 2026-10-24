@@ -1,7 +1,7 @@
 import 'package:drift/drift.dart';
-import 'package:flexify/database/categories.dart';
-import 'package:flexify/database/database.dart';
-import 'package:flexify/main.dart';
+import 'package:flex/database/categories.dart';
+import 'package:flex/database/database.dart';
+import 'package:flex/main.dart';
 
 Future<int?> _categoryId(String? name) async {
   final trimmed = name?.trim();

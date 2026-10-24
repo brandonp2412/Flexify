@@ -153,7 +153,7 @@ abstract class AppLocalizations {
   /// Application title shown by the operating system and app shell.
   ///
   /// In en, this message translates to:
-  /// **'Flexify'**
+  /// **'Flex'**
   String get appTitle;
 
   /// Title for the application language preference.
@@ -165,7 +165,7 @@ abstract class AppLocalizations {
   /// Description for the application language preference.
   ///
   /// In en, this message translates to:
-  /// **'Choose the language used by Flexify'**
+  /// **'Choose the language used by Flex'**
   String get settingsLanguageDescription;
 
   /// Language option that follows the device or operating system locale.
@@ -630,7 +630,7 @@ abstract class AppLocalizations {
   /// **'Rest timers'**
   String get restTimers;
 
-  /// Android permission action for excluding Flexify from battery optimizations.
+  /// Android permission action for excluding Flex from battery optimizations.
   ///
   /// In en, this message translates to:
   /// **'Disable battery optimizations'**
@@ -792,7 +792,7 @@ abstract class AppLocalizations {
   /// **'Are you sure you want to delete all plans? This action is not reversible.'**
   String get deleteAllPlansConfirmation;
 
-  /// Confirmation text for deleting the complete Flexify database.
+  /// Confirmation text for deleting the complete Flex database.
   ///
   /// In en, this message translates to:
   /// **'Are you sure you want to delete your database? This action is not reversible and will destroy all your data.'**
@@ -834,10 +834,10 @@ abstract class AppLocalizations {
   /// **'Failed to import database: {error}'**
   String failedToImportDatabase(String error);
 
-  /// Validation error shown when an imported backup archive is missing the Flexify database file.
+  /// Validation error shown when an imported backup archive is missing the Flex database file.
   ///
   /// In en, this message translates to:
-  /// **'The backup archive does not contain the Flexify database.'**
+  /// **'The backup archive does not contain the Flex database.'**
   String get backupArchiveMissingDatabase;
 
   /// Toast shown when a graph CSV import fails.
@@ -1059,7 +1059,7 @@ abstract class AppLocalizations {
   /// Description for the privacy policy action.
   ///
   /// In en, this message translates to:
-  /// **'How Flexify handles your data'**
+  /// **'How Flex handles your data'**
   String get privacyPolicyDescription;
 
   /// Label for opening the software license.
@@ -1089,7 +1089,7 @@ abstract class AppLocalizations {
   /// Description for the app-store review action.
   ///
   /// In en, this message translates to:
-  /// **'Rate Flexify on the Play Store'**
+  /// **'Rate Flex on the Play Store'**
   String get leaveReviewDescription;
 
   /// Label for opening the bug-report form.
@@ -2397,7 +2397,7 @@ abstract class AppLocalizations {
   /// Notification body shown when automatic backups are enabled.
   ///
   /// In en, this message translates to:
-  /// **'Flexify will automatically back up your data and images to the selected folder each day.'**
+  /// **'Flex will automatically back up your data and images to the selected folder each day.'**
   String get automaticBackupNotificationBody;
 
   /// Notification channel name for backup settings.
@@ -2421,7 +2421,7 @@ abstract class AppLocalizations {
   /// Android notification channel description for automatic backups.
   ///
   /// In en, this message translates to:
-  /// **'Automatic backups of Flexify data and images'**
+  /// **'Automatic backups of Flex data and images'**
   String get backupChannelDescription;
 
   /// Android notification title shown after an automatic backup succeeds.

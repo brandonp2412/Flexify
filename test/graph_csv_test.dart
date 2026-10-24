@@ -1,7 +1,7 @@
 import 'package:drift/drift.dart' hide isNull;
 import 'package:drift/native.dart';
-import 'package:flexify/data_portability/graph_csv.dart';
-import 'package:flexify/database/database.dart';
+import 'package:flex/data_portability/graph_csv.dart';
+import 'package:flex/database/database.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

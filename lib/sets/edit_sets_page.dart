@@ -1,17 +1,17 @@
 import 'dart:async';
 
 import 'package:drift/drift.dart';
-import 'package:flexify/app_fab.dart';
-import 'package:flexify/constants.dart';
-import 'package:flexify/database/exercise_catalog.dart';
-import 'package:flexify/database/exercise_set_repository.dart';
-import 'package:flexify/database/categories.dart';
-import 'package:flexify/l10n/l10n.dart';
-import 'package:flexify/main.dart';
-import 'package:flexify/database/database.dart';
-import 'package:flexify/settings/category_management_page.dart';
-import 'package:flexify/utils.dart';
-import 'package:flexify/platform_page_route.dart';
+import 'package:flex/app_fab.dart';
+import 'package:flex/constants.dart';
+import 'package:flex/database/exercise_catalog.dart';
+import 'package:flex/database/exercise_set_repository.dart';
+import 'package:flex/database/categories.dart';
+import 'package:flex/l10n/l10n.dart';
+import 'package:flex/main.dart';
+import 'package:flex/database/database.dart';
+import 'package:flex/settings/category_management_page.dart';
+import 'package:flex/utils.dart';
+import 'package:flex/platform_page_route.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

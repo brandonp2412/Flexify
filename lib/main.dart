@@ -2,15 +2,15 @@ import 'dart:async';
 
 import 'package:drift/drift.dart';
 import 'package:dynamic_color/dynamic_color.dart';
-import 'package:flexify/crash_logger.dart';
-import 'package:flexify/database/database.dart';
-import 'package:flexify/database/failed_migrations_page.dart';
-import 'package:flexify/home_page.dart';
-import 'package:flexify/logging.dart';
-import 'package:flexify/l10n/generated/app_localizations.dart';
-import 'package:flexify/l10n/l10n.dart';
-import 'package:flexify/l10n/locale_preferences.dart';
-import 'package:flexify/timer/timer_state.dart';
+import 'package:flex/crash_logger.dart';
+import 'package:flex/database/database.dart';
+import 'package:flex/database/failed_migrations_page.dart';
+import 'package:flex/home_page.dart';
+import 'package:flex/logging.dart';
+import 'package:flex/l10n/generated/app_localizations.dart';
+import 'package:flex/l10n/l10n.dart';
+import 'package:flex/l10n/locale_preferences.dart';
+import 'package:flex/timer/timer_state.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -94,7 +94,7 @@ Future<void> main() async {
   runZonedGuarded(
     () async {
       WidgetsFlutterBinding.ensureInitialized();
-      talker.info('Starting Flexify');
+      talker.info('Starting Flex');
       await CrashLogger.install();
 
       Setting setting;

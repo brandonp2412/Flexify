@@ -1,4 +1,4 @@
-package com.presley.flexify
+package com.presley.flex
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -191,7 +191,7 @@ class MainActivity : FlutterActivity() {
                 }
 
                 "add" -> {
-                    if (timerService?.flexifyTimer?.isRunning() == true) {
+                    if (timerService?.flexTimer?.isRunning() == true) {
                         val intent = Intent(TimerService.ADD_BROADCAST)
                         intent.setPackage(applicationContext.packageName)
                         sendBroadcast(intent)
@@ -252,7 +252,7 @@ class MainActivity : FlutterActivity() {
             override fun onReceive(context: Context, intent: Intent) {
                 channel?.invokeMethod(
                     "tick",
-                    timerService?.flexifyTimer?.generateMethodChannelPayload()
+                    timerService?.flexTimer?.generateMethodChannelPayload()
                 )
                 if (intent.getBooleanExtra("justExpired", false)) {
                     channel?.invokeMethod("timerExpired", null)
@@ -359,7 +359,7 @@ class MainActivity : FlutterActivity() {
 
     override fun onResume() {
         super.onResume()
-        if (timerService?.flexifyTimer?.isRunning() != true) {
+        if (timerService?.flexTimer?.isRunning() != true) {
             val intent = Intent(TimerService.STOP_BROADCAST)
             intent.setPackage(applicationContext.packageName)
             sendBroadcast(intent)

@@ -1,4 +1,4 @@
-import 'package:flexify/l10n/generated/app_localizations.dart';
+import 'package:flex/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -15,7 +15,7 @@ void main() {
   testWidgets('loads English localization', (tester) async {
     await tester.pumpWidget(localizedTitleApp(const Locale('en')));
 
-    expect(find.text('Flexify'), findsOneWidget);
+    expect(find.text('Flex'), findsOneWidget);
   });
 
   testWidgets('loads a regional English locale through language fallback', (
@@ -23,7 +23,7 @@ void main() {
   ) async {
     await tester.pumpWidget(localizedTitleApp(const Locale('en', 'NZ')));
 
-    expect(find.text('Flexify'), findsOneWidget);
+    expect(find.text('Flex'), findsOneWidget);
   });
 
   testWidgets('loads Brazilian Portuguese localization', (tester) async {
@@ -121,7 +121,7 @@ void main() {
   testWidgets('falls back safely for an unsupported locale', (tester) async {
     await tester.pumpWidget(localizedTitleApp(const Locale('zz')));
 
-    expect(find.text('Flexify'), findsOneWidget);
+    expect(find.text('Flex'), findsOneWidget);
   });
 
   test('formats shared delete confirmation plurals', () {

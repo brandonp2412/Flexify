@@ -1,4 +1,4 @@
-package com.presley.flexify
+package com.presley.flex
 
 import android.app.AlarmManager
 import android.app.AlarmManager.ACTION_SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED
@@ -18,7 +18,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 
 @RequiresApi(Build.VERSION_CODES.O)
-class FlexifyTimer(private var msTimerDuration: Long) {
+class FlexTimer(private var msTimerDuration: Long) {
 
     enum class State {
         Running,
@@ -189,8 +189,8 @@ class FlexifyTimer(private var msTimerDuration: Long) {
 
 
     companion object {
-        fun emptyTimer(): FlexifyTimer {
-            return FlexifyTimer(0)
+        fun emptyTimer(): FlexTimer {
+            return FlexTimer(0)
         }
 
         const val ONE_MINUTE_MILLI: Long = 60000

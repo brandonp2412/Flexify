@@ -1,4 +1,4 @@
-• Dodaj strony github do hostingu Flexify web
+• Dodaj strony github do hostingu Flex web
 • Dodać brakujące zmiany
 • Pozwoli użytkownikowi na usuwanie maksymalnych zestawów
 • Usunięcie nieużywanych skryptów

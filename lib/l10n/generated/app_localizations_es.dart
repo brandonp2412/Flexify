@@ -12,13 +12,13 @@ class AppLocalizationsEs extends AppLocalizations {
   String get showUpdateNotices => 'Mostrar avisos de actualización';
 
   @override
-  String get appTitle => 'Flexify';
+  String get appTitle => 'Flex';
 
   @override
   String get settingsLanguage => 'Idioma';
 
   @override
-  String get settingsLanguageDescription => 'Elige el idioma que usa Flexify';
+  String get settingsLanguageDescription => 'Elige el idioma que usa Flex';
 
   @override
   String get languageSystemDefault => 'Predeterminado del sistema';
@@ -392,7 +392,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get backupArchiveMissingDatabase =>
-      'La copia de seguridad no contiene la base de datos de Flexify.';
+      'La copia de seguridad no contiene la base de datos de Flex.';
 
   @override
   String failedToImportGraphs(String error) {
@@ -516,7 +516,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get privacyPolicy => 'Política de privacidad';
 
   @override
-  String get privacyPolicyDescription => 'Cómo gestiona Flexify tus datos';
+  String get privacyPolicyDescription => 'Cómo gestiona Flex tus datos';
 
   @override
   String get licenseLabel => 'Licencia';
@@ -531,7 +531,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get leaveReview => 'Dejar una reseña';
 
   @override
-  String get leaveReviewDescription => 'Valora Flexify en Play Store';
+  String get leaveReviewDescription => 'Valora Flex en Play Store';
 
   @override
   String get reportBug => 'Informar de un error';
@@ -1285,7 +1285,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get automaticBackupNotificationBody =>
-      'Flexify hará automáticamente una copia de seguridad de tus datos e imágenes en la carpeta seleccionada cada día.';
+      'Flex hará automáticamente una copia de seguridad de tus datos e imágenes en la carpeta seleccionada cada día.';
 
   @override
   String get backupSettingsChannel => 'Ajustes de copia de seguridad';
@@ -1299,7 +1299,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get backupChannelDescription =>
-      'Copias de seguridad automáticas de los datos e imágenes de Flexify';
+      'Copias de seguridad automáticas de los datos e imágenes de Flex';
 
   @override
   String get backupCompletedTitle => 'Datos e imágenes guardados';

@@ -1,2 +1,2 @@
-- Fusion 'hoofd' deel van github.com:brandonp2412/Flexify
+- Fusion 'hoofd' deel van github.com:brandonp2412/Flex
 - Bepaalde afstandsveld blijft onderstreept - 1.0.64

@@ -12,14 +12,14 @@ class AppLocalizationsUr extends AppLocalizations {
   String get showUpdateNotices => 'اپ ڈیٹ کی اطلاعات دکھائیں';
 
   @override
-  String get appTitle => 'Flexify';
+  String get appTitle => 'Flex';
 
   @override
   String get settingsLanguage => 'زبان';
 
   @override
   String get settingsLanguageDescription =>
-      'Flexify میں استعمال ہونے والی زبان منتخب کریں';
+      'Flex میں استعمال ہونے والی زبان منتخب کریں';
 
   @override
   String get languageSystemDefault => 'سسٹم ڈیفالٹ';
@@ -390,7 +390,7 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get backupArchiveMissingDatabase =>
-      'بیک اپ آرکائیو میں Flexify ڈیٹابیس موجود نہیں ہے۔';
+      'بیک اپ آرکائیو میں Flex ڈیٹابیس موجود نہیں ہے۔';
 
   @override
   String failedToImportGraphs(String error) {
@@ -513,8 +513,7 @@ class AppLocalizationsUr extends AppLocalizations {
   String get privacyPolicy => 'رازداری کی پالیسی';
 
   @override
-  String get privacyPolicyDescription =>
-      'Flexify آپ کے ڈیٹا کو کیسے سنبھالتا ہے';
+  String get privacyPolicyDescription => 'Flex آپ کے ڈیٹا کو کیسے سنبھالتا ہے';
 
   @override
   String get licenseLabel => 'لائسنس';
@@ -529,8 +528,7 @@ class AppLocalizationsUr extends AppLocalizations {
   String get leaveReview => 'جائزہ دیں';
 
   @override
-  String get leaveReviewDescription =>
-      'Play Store پر Flexify کی درجہ بندی کریں';
+  String get leaveReviewDescription => 'Play Store پر Flex کی درجہ بندی کریں';
 
   @override
   String get reportBug => 'بگ رپورٹ کریں';
@@ -1276,7 +1274,7 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get automaticBackupNotificationBody =>
-      'Flexify ہر روز منتخب فولڈر میں آپ کے ڈیٹا اور تصاویر کا خودکار بیک اپ بنائے گا۔';
+      'Flex ہر روز منتخب فولڈر میں آپ کے ڈیٹا اور تصاویر کا خودکار بیک اپ بنائے گا۔';
 
   @override
   String get backupSettingsChannel => 'بیک اپ ترتیبات';
@@ -1290,7 +1288,7 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get backupChannelDescription =>
-      'Flexify کے ڈیٹا اور تصاویر کے خودکار بیک اپ';
+      'Flex کے ڈیٹا اور تصاویر کے خودکار بیک اپ';
 
   @override
   String get backupCompletedTitle => 'ڈیٹا اور تصاویر کا بیک اپ مکمل';

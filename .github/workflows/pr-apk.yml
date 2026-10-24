@@ -41,7 +41,7 @@ jobs:
               pull_number: prNumber,
             });
             if (pr.head.repo.full_name !== `${context.repo.owner}/${context.repo.repo}`) {
-              core.setFailed('PR APKs can only be built from branches in this repository because every APK uses the Flexify release signing key.');
+              core.setFailed('PR APKs can only be built from branches in this repository because every APK uses the Flex release signing key.');
             }
 
       # Submodules are deliberately not fetched here: actions/checkout clones
@@ -102,15 +102,15 @@ jobs:
         run: |
           flutter build apk --release
           mv build/app/outputs/flutter-apk/app-release.apk \
-            "flexify-pr-${PR_NUMBER}.apk"
-          ./scripts/verify-android-release-signing.sh "flexify-pr-${PR_NUMBER}.apk"
+            "flex-pr-${PR_NUMBER}.apk"
+          ./scripts/verify-android-release-signing.sh "flex-pr-${PR_NUMBER}.apk"
 
       - name: Upload APK artifact
         id: upload
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: flexify-pr-${{ env.PR_NUMBER }}
-          path: flexify-pr-*.apk
+          name: flex-pr-${{ env.PR_NUMBER }}
+          path: flex-pr-*.apk
           retention-days: 14
 
       - name: Add job summary
@@ -122,7 +122,7 @@ jobs:
             echo ""
             echo "[Download the APK]($ARTIFACT_URL) (zipped, expires in 14 days)."
             echo ""
-            echo "This is the normal **Flexify** app (\`com.presley.flexify\`) signed with the release key, so it updates the existing Flexify installation in place."
+            echo "This is the normal **Flex** app (\`com.presley.flexify\`) signed with the release key, so it updates the existing Flex installation in place."
           } >> "$GITHUB_STEP_SUMMARY"
 
       # The GITHUB_TOKEN on fork PRs is read-only, so commenting only works
@@ -148,7 +148,7 @@ jobs:
               '',
               `[Download the APK](${process.env.ARTIFACT_URL}) (zipped, expires in 14 days) to test this change.`,
               '',
-              `Built from ${pr.head.sha}. This is the normal **Flexify** app (\`com.presley.flexify\`) signed with the release key, so it updates the existing Flexify installation in place.`,
+              `Built from ${pr.head.sha}. This is the normal **Flex** app (\`com.presley.flexify\`) signed with the release key, so it updates the existing Flex installation in place.`,
             ].join('\n');
 
             const { data: comments } = await github.rest.issues.listComments({

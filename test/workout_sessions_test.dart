@@ -1,11 +1,11 @@
 import 'dart:async';
 
 import 'package:drift/drift.dart' hide isNotNull, isNull;
-import 'package:flexify/database/database.dart';
-import 'package:flexify/database/exercise_set_repository.dart';
-import 'package:flexify/main.dart';
-import 'package:flexify/plan/workout_sessions.dart';
-import 'package:flexify/plan/start_plan_data.dart';
+import 'package:flex/database/database.dart';
+import 'package:flex/database/exercise_set_repository.dart';
+import 'package:flex/main.dart';
+import 'package:flex/plan/workout_sessions.dart';
+import 'package:flex/plan/start_plan_data.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'mock_tests.dart';

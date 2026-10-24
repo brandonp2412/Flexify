@@ -12,11 +12,11 @@ Uri buildImportIssueUrl({
   final title = 'Import failed: $kind';
   Uri issue(String body) => Uri.https(
     'github.com',
-    '/brandonp2412/Flexify/issues/new',
+    '/brandonp2412/Flex/issues/new',
     {'title': title, 'body': body},
   );
 
-  final description = 'Failed to import $kind.\n\nFlexify version: $version';
+  final description = 'Failed to import $kind.\n\nFlex version: $version';
   final exception = trim(error.toString(), 200);
   final trace = trim(stackTrace.toString(), 500);
   final detailed = issue('''
@@ -32,5 +32,5 @@ $trace
 
   final short = issue('$description\n\nError: ${trim(exception, 120)}');
   if (short.toString().length <= 1800) return short;
-  return issue('Failed to import $kind. Flexify version: ${trim(version, 20)}');
+  return issue('Failed to import $kind. Flex version: ${trim(version, 20)}');
 }

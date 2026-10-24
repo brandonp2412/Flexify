@@ -12,14 +12,14 @@ class AppLocalizationsPt extends AppLocalizations {
   String get showUpdateNotices => 'Mostrar avisos de atualização';
 
   @override
-  String get appTitle => 'Flexify';
+  String get appTitle => 'Flex';
 
   @override
   String get settingsLanguage => 'Idioma';
 
   @override
   String get settingsLanguageDescription =>
-      'Escolha o idioma utilizado pelo Flexify';
+      'Escolha o idioma utilizado pelo Flex';
 
   @override
   String get languageSystemDefault => 'Predefinição do sistema';
@@ -391,7 +391,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get backupArchiveMissingDatabase =>
-      'A cópia de segurança não contém a base de dados do Flexify.';
+      'A cópia de segurança não contém a base de dados do Flex.';
 
   @override
   String failedToImportGraphs(String error) {
@@ -515,7 +515,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get privacyPolicy => 'Política de privacidade';
 
   @override
-  String get privacyPolicyDescription => 'Como o Flexify trata os seus dados';
+  String get privacyPolicyDescription => 'Como o Flex trata os seus dados';
 
   @override
   String get licenseLabel => 'Licença';
@@ -530,7 +530,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get leaveReview => 'Deixar uma avaliação';
 
   @override
-  String get leaveReviewDescription => 'Avalie o Flexify na Play Store';
+  String get leaveReviewDescription => 'Avalie o Flex na Play Store';
 
   @override
   String get reportBug => 'Comunicar um erro';
@@ -1284,7 +1284,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get automaticBackupNotificationBody =>
-      'O Flexify fará uma cópia de segurança automática dos seus dados e imagens na pasta selecionada todos os dias.';
+      'O Flex fará uma cópia de segurança automática dos seus dados e imagens na pasta selecionada todos os dias.';
 
   @override
   String get backupSettingsChannel => 'Definições de cópia de segurança';
@@ -1298,7 +1298,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get backupChannelDescription =>
-      'Cópias de segurança automáticas dos dados e imagens do Flexify';
+      'Cópias de segurança automáticas dos dados e imagens do Flex';
 
   @override
   String get backupCompletedTitle =>
@@ -1594,14 +1594,13 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get showUpdateNotices => 'Mostrar avisos de atualização';
 
   @override
-  String get appTitle => 'Flexify';
+  String get appTitle => 'Flex';
 
   @override
   String get settingsLanguage => 'Idioma';
 
   @override
-  String get settingsLanguageDescription =>
-      'Escolha o idioma usado pelo Flexify';
+  String get settingsLanguageDescription => 'Escolha o idioma usado pelo Flex';
 
   @override
   String get languageSystemDefault => 'Padrão do sistema';
@@ -1971,7 +1970,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get backupArchiveMissingDatabase =>
-      'O backup não contém o banco de dados do Flexify.';
+      'O backup não contém o banco de dados do Flex.';
 
   @override
   String failedToImportGraphs(String error) {
@@ -2094,7 +2093,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get privacyPolicy => 'Política de privacidade';
 
   @override
-  String get privacyPolicyDescription => 'Como o Flexify trata seus dados';
+  String get privacyPolicyDescription => 'Como o Flex trata seus dados';
 
   @override
   String get licenseLabel => 'Licença';
@@ -2109,7 +2108,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get leaveReview => 'Deixar uma avaliação';
 
   @override
-  String get leaveReviewDescription => 'Avalie o Flexify na Play Store';
+  String get leaveReviewDescription => 'Avalie o Flex na Play Store';
 
   @override
   String get reportBug => 'Relatar um bug';
@@ -2862,7 +2861,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get automaticBackupNotificationBody =>
-      'O Flexify fará backup automático dos seus dados e imagens na pasta selecionada todos os dias.';
+      'O Flex fará backup automático dos seus dados e imagens na pasta selecionada todos os dias.';
 
   @override
   String get backupSettingsChannel => 'Configurações de backup';
@@ -2876,7 +2875,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get backupChannelDescription =>
-      'Backups automáticos dos dados e imagens do Flexify';
+      'Backups automáticos dos dados e imagens do Flex';
 
   @override
   String get backupCompletedTitle => 'Backup de dados e imagens concluído';
@@ -3168,14 +3167,14 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get showUpdateNotices => 'Mostrar avisos de atualização';
 
   @override
-  String get appTitle => 'Flexify';
+  String get appTitle => 'Flex';
 
   @override
   String get settingsLanguage => 'Idioma';
 
   @override
   String get settingsLanguageDescription =>
-      'Escolha o idioma utilizado pelo Flexify';
+      'Escolha o idioma utilizado pelo Flex';
 
   @override
   String get languageSystemDefault => 'Predefinição do sistema';
@@ -3547,7 +3546,7 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
 
   @override
   String get backupArchiveMissingDatabase =>
-      'A cópia de segurança não contém a base de dados do Flexify.';
+      'A cópia de segurança não contém a base de dados do Flex.';
 
   @override
   String failedToImportGraphs(String error) {
@@ -3671,7 +3670,7 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get privacyPolicy => 'Política de privacidade';
 
   @override
-  String get privacyPolicyDescription => 'Como o Flexify trata os seus dados';
+  String get privacyPolicyDescription => 'Como o Flex trata os seus dados';
 
   @override
   String get licenseLabel => 'Licença';
@@ -3686,7 +3685,7 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get leaveReview => 'Deixar uma avaliação';
 
   @override
-  String get leaveReviewDescription => 'Avalie o Flexify na Play Store';
+  String get leaveReviewDescription => 'Avalie o Flex na Play Store';
 
   @override
   String get reportBug => 'Comunicar um erro';
@@ -4440,7 +4439,7 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
 
   @override
   String get automaticBackupNotificationBody =>
-      'O Flexify fará uma cópia de segurança automática dos seus dados e imagens na pasta selecionada todos os dias.';
+      'O Flex fará uma cópia de segurança automática dos seus dados e imagens na pasta selecionada todos os dias.';
 
   @override
   String get backupSettingsChannel => 'Definições de cópia de segurança';
@@ -4454,7 +4453,7 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
 
   @override
   String get backupChannelDescription =>
-      'Cópias de segurança automáticas dos dados e imagens do Flexify';
+      'Cópias de segurança automáticas dos dados e imagens do Flex';
 
   @override
   String get backupCompletedTitle =>

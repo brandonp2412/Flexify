@@ -1,4 +1,4 @@
-import 'package:flexify/graph/graph_options_controls.dart';
+import 'package:flex/graph/graph_options_controls.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -8,7 +8,7 @@ void main() {
   testWidgets(
     'desktop graph controls fit without overflow at a narrow desktop width',
     (WidgetTester tester) async {
-      final harness = await FlexifyTestHarness.create();
+      final harness = await FlexTestHarness.create();
 
       await harness.pump(
         tester,

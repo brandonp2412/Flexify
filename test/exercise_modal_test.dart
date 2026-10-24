@@ -1,14 +1,14 @@
 import 'package:drift/drift.dart';
-import 'package:flexify/plan/exercise_modal.dart';
-import 'package:flexify/plan/workout_sessions.dart';
+import 'package:flex/plan/exercise_modal.dart';
+import 'package:flex/plan/workout_sessions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../integration_test/support/fixtures.dart';
 import 'support/test_app.dart';
 
-Future<(FlexifyTestHarness, int)> pumpExerciseModal(WidgetTester tester) async {
-  final harness = await FlexifyTestHarness.create();
+Future<(FlexTestHarness, int)> pumpExerciseModal(WidgetTester tester) async {
+  final harness = await FlexTestHarness.create();
   final id = await harness.database.plans.insertOne(planFixture());
   final exercise = await ensureExerciseFixture(harness.database, 'Bench press');
   final planExercise = await harness.database.planExercises.insertReturning(

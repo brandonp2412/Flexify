@@ -1,10 +1,11 @@
 import 'package:csv/csv.dart';
 import 'package:drift/drift.dart';
-import 'package:flexify/database/database.dart';
-import 'package:flexify/database/exercise_set_repository.dart';
-import 'package:flexify/utils.dart';
+import 'package:flex/database/database.dart';
+import 'package:flex/database/exercise_set_repository.dart';
+import 'package:flex/utils.dart';
 
-const _format = 'flexify_graphs_v2';
+const _format = 'flex_graphs_v2';
+const _previousFormat = 'flexify_graphs_v2';
 
 const _header = <String>[
   'format',
@@ -234,7 +235,7 @@ Future<GraphCsvImportResult> _importV2(
   final records = rows.map((row) => _CsvRow(header, row)).toList();
   for (final row in records) {
     final format = row.string('format');
-    if (format != _format) {
+    if (format != _format && format != _previousFormat) {
       throw GraphCsvImportException('Unsupported graph CSV format: $format.');
     }
   }

@@ -1,6 +1,6 @@
 import 'package:drift/drift.dart';
-import 'package:flexify/plan/plans_page.dart';
-import 'package:flexify/plan/start_plan_page.dart';
+import 'package:flex/plan/plans_page.dart';
+import 'package:flex/plan/start_plan_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -37,7 +37,7 @@ void main() {
   testWidgets('plan notification reuses an open StartPlan route', (
     tester,
   ) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     addTearDown(harness.database.close);
 
     await harness.pump(tester, const _PlansHost());

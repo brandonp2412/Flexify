@@ -2,12 +2,12 @@
 
 set -euo pipefail
 
-: "${FLEXIFY_DEVICE_TYPE:?FLEXIFY_DEVICE_TYPE must be set}"
+: "${FLEX_DEVICE_TYPE:?FLEX_DEVICE_TYPE must be set}"
 : "${EMULATOR_PORT:?EMULATOR_PORT must be set}"
 
 device="emulator-$EMULATOR_PORT"
 store_locale="en-US"
-screenshot_dir="fastlane/metadata/android/$store_locale/images/${FLEXIFY_DEVICE_TYPE}"
+screenshot_dir="fastlane/metadata/android/$store_locale/images/${FLEX_DEVICE_TYPE}"
 expected_count=8
 drive_timeout="${SCREENSHOT_DRIVE_TIMEOUT:-12m}"
 drive_log="$(mktemp)"
@@ -147,7 +147,7 @@ for ((number = 1; number <= expected_count; number += 1)); do
     [[ "$drive_status" -ne 0 ]] && exit "$drive_status"
     exit 1
   fi
-  python3 - "$screenshot" "$FLEXIFY_DEVICE_TYPE" <<'PY'
+  python3 - "$screenshot" "$FLEX_DEVICE_TYPE" <<'PY'
 import struct
 import sys
 
@@ -161,7 +161,7 @@ if not (320 <= width <= 3840 and 320 <= height <= 3840 and max(width, height) <=
 if header[24:26] != bytes((8, 2)):
     raise SystemExit('Google Play screenshots must be 24-bit PNG without alpha')
 PY
-  if [[ "$FLEXIFY_DEVICE_TYPE" != phoneScreenshots && -n "${SCREENSHOT_SCREEN_SIZE:-}" ]] && ! file "$screenshot" | grep -Fq " $expected_dimensions,"; then
+  if [[ "$FLEX_DEVICE_TYPE" != phoneScreenshots && -n "${SCREENSHOT_SCREEN_SIZE:-}" ]] && ! file "$screenshot" | grep -Fq " $expected_dimensions,"; then
     echo "Screenshot has unexpected dimensions: $(file "$screenshot")" >&2
     exit 1
   fi

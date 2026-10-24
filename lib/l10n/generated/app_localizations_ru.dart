@@ -12,13 +12,13 @@ class AppLocalizationsRu extends AppLocalizations {
   String get showUpdateNotices => 'Показывать уведомления об обновлениях';
 
   @override
-  String get appTitle => 'Flexify';
+  String get appTitle => 'Flex';
 
   @override
   String get settingsLanguage => 'Язык';
 
   @override
-  String get settingsLanguageDescription => 'Выберите язык интерфейса Flexify';
+  String get settingsLanguageDescription => 'Выберите язык интерфейса Flex';
 
   @override
   String get languageSystemDefault => 'Система по умолчанию';
@@ -393,7 +393,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get backupArchiveMissingDatabase =>
-      'В архиве резервной копии нет базы данных Flexify.';
+      'В архиве резервной копии нет базы данных Flex.';
 
   @override
   String failedToImportGraphs(String error) {
@@ -516,7 +516,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get privacyPolicy => 'Политика конфиденциальности';
 
   @override
-  String get privacyPolicyDescription => 'Как Flexify обрабатывает ваши данные';
+  String get privacyPolicyDescription => 'Как Flex обрабатывает ваши данные';
 
   @override
   String get licenseLabel => 'Лицензия';
@@ -531,7 +531,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get leaveReview => 'Оставить отзыв';
 
   @override
-  String get leaveReviewDescription => 'Оцените Flexify в Play Store';
+  String get leaveReviewDescription => 'Оцените Flex в Play Store';
 
   @override
   String get reportBug => 'Сообщить об ошибке';
@@ -1293,7 +1293,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get automaticBackupNotificationBody =>
-      'Flexify будет ежедневно автоматически создавать резервную копию данных и изображений в выбранной папке.';
+      'Flex будет ежедневно автоматически создавать резервную копию данных и изображений в выбранной папке.';
 
   @override
   String get backupSettingsChannel => 'Настройки резервного копирования';
@@ -1307,7 +1307,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get backupChannelDescription =>
-      'Автоматические резервные копии данных и изображений Flexify';
+      'Автоматические резервные копии данных и изображений Flex';
 
   @override
   String get backupCompletedTitle =>

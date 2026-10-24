@@ -1,14 +1,14 @@
-import 'package:flexify/bottom_nav.dart';
-import 'package:flexify/constants.dart';
-import 'package:flexify/database/exercise_analytics.dart';
-import 'package:flexify/empty_state.dart';
-import 'package:flexify/graph/flex_line_chart.dart';
-import 'package:flexify/graph/graph_options_controls.dart';
-import 'package:flexify/graph/strength_data.dart';
-import 'package:flexify/l10n/l10n.dart';
-import 'package:flexify/responsive.dart';
-import 'package:flexify/database/database.dart';
-import 'package:flexify/utils.dart';
+import 'package:flex/bottom_nav.dart';
+import 'package:flex/constants.dart';
+import 'package:flex/database/exercise_analytics.dart';
+import 'package:flex/empty_state.dart';
+import 'package:flex/graph/flex_line_chart.dart';
+import 'package:flex/graph/graph_options_controls.dart';
+import 'package:flex/graph/strength_data.dart';
+import 'package:flex/l10n/l10n.dart';
+import 'package:flex/responsive.dart';
+import 'package:flex/database/database.dart';
+import 'package:flex/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

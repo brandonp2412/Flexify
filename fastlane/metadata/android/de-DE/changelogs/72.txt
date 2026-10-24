@@ -1,2 +1,2 @@
-- Zusammenschluss "Hauptsitz" von github.com:brandonp2412/Flexify
+- Zusammenschluss "Hauptsitz" von github.com:brandonp2412/Flex
 - Feststandsfeld, das hervorgehoben bleibt - 1.0.64

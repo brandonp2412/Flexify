@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  test('Drafter is the only chart package used by Flexify', () {
+  test('Drafter is the only chart package used by Flex', () {
     final pubspec = File('pubspec.yaml').readAsStringSync();
     const legacyPackages = <String>[
       'fl_chart',

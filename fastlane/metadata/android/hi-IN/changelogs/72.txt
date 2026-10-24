@@ -1,2 +1,2 @@
-- मर्ज शाखा 'मुख्य' github.com: brandonp2412/Flexify
+- मर्ज शाखा 'मुख्य' github.com: brandonp2412/Flex
 - दूरी क्षेत्र को हाइलाइट करना - 1.0.64

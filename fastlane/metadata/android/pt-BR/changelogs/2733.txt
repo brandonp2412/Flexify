@@ -1,4 +1,4 @@
-• Adicionar páginas github hospedagem para Flexify web
+• Adicionar páginas github hospedagem para Flex web
 • Adicionar os trocadores faltantes
 • Permitir que o usuário limpe os conjuntos máximos
 • Excluir scripts não utilizados

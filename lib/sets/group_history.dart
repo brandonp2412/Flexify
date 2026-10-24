@@ -1,17 +1,17 @@
 import 'dart:io';
 
-import 'package:flexify/app_search.dart';
-import 'package:flexify/bottom_nav.dart';
-import 'package:flexify/constants.dart';
-import 'package:flexify/database/database.dart';
-import 'package:flexify/database/exercise_set_repository.dart';
-import 'package:flexify/l10n/l10n.dart';
-import 'package:flexify/main.dart';
-import 'package:flexify/responsive.dart';
-import 'package:flexify/sets/edit_set_page.dart';
-import 'package:flexify/sets/history_page.dart';
-import 'package:flexify/utils.dart';
-import 'package:flexify/platform_page_route.dart';
+import 'package:flex/app_search.dart';
+import 'package:flex/bottom_nav.dart';
+import 'package:flex/constants.dart';
+import 'package:flex/database/database.dart';
+import 'package:flex/database/exercise_set_repository.dart';
+import 'package:flex/l10n/l10n.dart';
+import 'package:flex/main.dart';
+import 'package:flex/responsive.dart';
+import 'package:flex/sets/edit_set_page.dart';
+import 'package:flex/sets/history_page.dart';
+import 'package:flex/utils.dart';
+import 'package:flex/platform_page_route.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

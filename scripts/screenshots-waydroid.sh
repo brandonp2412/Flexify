@@ -9,7 +9,7 @@ BOOT_TIMEOUT="${BOOT_TIMEOUT:-120}"
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 # This runner targets the disposable Waydroid emulator, not a physical phone.
-export FLEXIFY_SCREENSHOT_FLUTTER="${FLEXIFY_SCREENSHOT_FLUTTER:-$PROJECT_DIR/flutter/bin/flutter}"
+export FLEX_SCREENSHOT_FLUTTER="${FLEX_SCREENSHOT_FLUTTER:-$PROJECT_DIR/flutter/bin/flutter}"
 BASE_PROP="/var/lib/waydroid/waydroid_base.prop"
 
 device=""
@@ -77,7 +77,7 @@ start_headless_compositor() {
     local before after
     before="$(ls /run/user/"$(id -u)"/wayland-*.lock 2>/dev/null || true)"
 
-    WLR_BACKENDS=headless WAYLAND_DISPLAY= dwl >/tmp/flexify-headless-dwl.log 2>&1 &
+    WLR_BACKENDS=headless WAYLAND_DISPLAY= dwl >/tmp/flex-headless-dwl.log 2>&1 &
     headless_pid=$!
 
     local i

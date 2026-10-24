@@ -12,14 +12,14 @@ class AppLocalizationsHi extends AppLocalizations {
   String get showUpdateNotices => 'अपडेट की सूचनाएँ दिखाएँ';
 
   @override
-  String get appTitle => 'Flexify';
+  String get appTitle => 'Flex';
 
   @override
   String get settingsLanguage => 'भाषा';
 
   @override
   String get settingsLanguageDescription =>
-      'Flexify में इस्तेमाल होने वाली भाषा चुनें';
+      'Flex में इस्तेमाल होने वाली भाषा चुनें';
 
   @override
   String get languageSystemDefault => 'सिस्टम डिफ़ॉल्ट';
@@ -387,7 +387,7 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get backupArchiveMissingDatabase =>
-      'बैकअप आर्काइव में Flexify डेटाबेस नहीं है।';
+      'बैकअप आर्काइव में Flex डेटाबेस नहीं है।';
 
   @override
   String failedToImportGraphs(String error) {
@@ -510,7 +510,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get privacyPolicy => 'गोपनीयता नीति';
 
   @override
-  String get privacyPolicyDescription => 'Flexify आपके डेटा को कैसे संभालता है';
+  String get privacyPolicyDescription => 'Flex आपके डेटा को कैसे संभालता है';
 
   @override
   String get licenseLabel => 'लाइसेंस';
@@ -525,7 +525,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get leaveReview => 'समीक्षा दें';
 
   @override
-  String get leaveReviewDescription => 'Play Store पर Flexify को रेट करें';
+  String get leaveReviewDescription => 'Play Store पर Flex को रेट करें';
 
   @override
   String get reportBug => 'बग रिपोर्ट करें';
@@ -1270,7 +1270,7 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get automaticBackupNotificationBody =>
-      'Flexify हर दिन चुने हुए फ़ोल्डर में आपके डेटा और चित्रों का स्वचालित बैकअप बनाएगा।';
+      'Flex हर दिन चुने हुए फ़ोल्डर में आपके डेटा और चित्रों का स्वचालित बैकअप बनाएगा।';
 
   @override
   String get backupSettingsChannel => 'बैकअप सेटिंग्स';
@@ -1284,7 +1284,7 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get backupChannelDescription =>
-      'Flexify डेटा और चित्रों के स्वचालित बैकअप';
+      'Flex डेटा और चित्रों के स्वचालित बैकअप';
 
   @override
   String get backupCompletedTitle => 'डेटा और चित्रों का बैकअप हो गया';

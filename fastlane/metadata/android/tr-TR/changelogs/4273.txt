@@ -1,5 +1,5 @@
 • README.md dosyasını güncelle
 • feat: kategori yönetimi ekle
-• feat: 2 numaralı simgeyi Flexify başlatıcı simgesi olarak kullan
+• feat: 2 numaralı simgeyi Flex başlatıcı simgesi olarak kullan
 • fix: gömülü Flutter DevTools'u geri yükle
 • fix: VS Code'da Flutter hata ayıklamasını kararlı hâle getir

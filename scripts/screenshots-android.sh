@@ -8,7 +8,7 @@ source "$SCRIPT_DIR/screenshot-names.sh"
 device="${1:?Usage: screenshots-android.sh <device-id> [device-type] [screenshot]}"
 device_type="${2:-phoneScreenshots}"
 only="${3:-}"
-screenshot_locales="${FLEXIFY_SCREENSHOT_LOCALES:-en-US}"
+screenshot_locales="${FLEX_SCREENSHOT_LOCALES:-en-US}"
 
 echo "Running screenshot tests on Android device $device..."
 
@@ -16,7 +16,7 @@ echo "Running screenshot tests on Android device $device..."
 # "cannot find symbol" errors for plugin classes in GeneratedPluginRegistrant.java
 (cd android && ./gradlew clean)
 
-export FLEXIFY_DEVICE_TYPE="$device_type"
+export FLEX_DEVICE_TYPE="$device_type"
 
 dart_define=(--dart-define=SCREENSHOT_LOCALES="$screenshot_locales")
 if [ "$screenshot_locales" != "en-US" ]; then
@@ -31,7 +31,7 @@ fi
 # --profile is required: Flutter's framework-level assertion bug in
 # PipelineOwner.flushSemantics can fire spuriously during integration tests.
 # Profile mode skips Dart asserts, bypassing it.
-"${FLEXIFY_SCREENSHOT_FLUTTER:-flutter}" drive --profile \
+"${FLEX_SCREENSHOT_FLUTTER:-flutter}" drive --profile \
     --driver=test_driver/integration_test.dart \
     --target=integration_test/screenshot_test.dart \
     "${dart_define[@]}" \

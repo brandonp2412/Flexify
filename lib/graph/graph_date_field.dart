@@ -1,6 +1,6 @@
-import 'package:flexify/l10n/l10n.dart';
-import 'package:flexify/responsive.dart';
-import 'package:flexify/utils.dart';
+import 'package:flex/l10n/l10n.dart';
+import 'package:flex/responsive.dart';
+import 'package:flex/utils.dart';
 import 'package:flutter/material.dart';
 
 /// A tappable filled control that displays a labelled date, showing the

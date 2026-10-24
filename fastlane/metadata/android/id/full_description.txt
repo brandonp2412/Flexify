@@ -1,6 +1,6 @@
 Catat latihan gym, ikuti perkembangan kekuatan, dan jaga data latihan tetap pribadi.
 
-Flexify adalah pelacak latihan cepat dan offline untuk latihan kekuatan dan kardio. Catat set, repetisi, dan beban, gunakan timer istirahat agar tempo tetap terjaga, lalu tinjau grafik progres yang jelas setelah setiap sesi.
+Flex adalah pelacak latihan cepat dan offline untuk latihan kekuatan dan kardio. Catat set, repetisi, dan beban, gunakan timer istirahat agar tempo tetap terjaga, lalu tinjau grafik progres yang jelas setelah setiap sesi.
 
 BUAT CATATAN LATIHAN YANG LEBIH BAIK
 
@@ -12,6 +12,6 @@ BUAT CATATAN LATIHAN YANG LEBIH BAIK
 
 PRIBADI, CEPAT, DAN OFFLINE
 
-Flexify tidak memerlukan akun atau koneksi internet. Data latihan tetap berada di perangkat Anda, sehingga Anda dapat berlatih dan mencatat sesi di mana saja. Aplikasi ini bersifat sumber terbuka tanpa iklan atau pelacakan.
+Flex tidak memerlukan akun atau koneksi internet. Data latihan tetap berada di perangkat Anda, sehingga Anda dapat berlatih dan mencatat sesi di mana saja. Aplikasi ini bersifat sumber terbuka tanpa iklan atau pelacakan.
 
-Baik Anda baru memulai rutinitas gym maupun menyempurnakan program yang sudah berjalan, Flexify memberi Anda jurnal latihan yang fokus tanpa keruwetan.
+Baik Anda baru memulai rutinitas gym maupun menyempurnakan program yang sudah berjalan, Flex memberi Anda jurnal latihan yang fokus tanpa keruwetan.

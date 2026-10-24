@@ -1,7 +1,7 @@
 • Initialization de l'audio des paramètres plats
 • Sélection de contenu de l'onglet plat
 • Système de sauvegarde portable porté de FitBook
-• préférer les sélecteurs d'action Flexify étiquetés
+• préférer les sélecteurs d'action Flex étiquetés
 • Préférer les sélecteurs d'action de graphes étiquetés
 • Préférer le sélecteur d' onglets visibles
 • Simplifier le flux de contrôle du retour anticipé

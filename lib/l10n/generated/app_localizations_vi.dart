@@ -12,14 +12,13 @@ class AppLocalizationsVi extends AppLocalizations {
   String get showUpdateNotices => 'Hiện thông báo cập nhật';
 
   @override
-  String get appTitle => 'Flexify';
+  String get appTitle => 'Flex';
 
   @override
   String get settingsLanguage => 'Ngôn ngữ';
 
   @override
-  String get settingsLanguageDescription =>
-      'Chọn ngôn ngữ được Flexify sử dụng';
+  String get settingsLanguageDescription => 'Chọn ngôn ngữ được Flex sử dụng';
 
   @override
   String get languageSystemDefault => 'Mặc định hệ thống';
@@ -386,7 +385,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get backupArchiveMissingDatabase =>
-      'Kho lưu trữ sao lưu không chứa cơ sở dữ liệu Flexify.';
+      'Kho lưu trữ sao lưu không chứa cơ sở dữ liệu Flex.';
 
   @override
   String failedToImportGraphs(String error) {
@@ -508,7 +507,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get privacyPolicy => 'Chính sách bảo mật';
 
   @override
-  String get privacyPolicyDescription => 'Cách Flexify xử lý dữ liệu của bạn';
+  String get privacyPolicyDescription => 'Cách Flex xử lý dữ liệu của bạn';
 
   @override
   String get licenseLabel => 'Giấy phép';
@@ -523,7 +522,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get leaveReview => 'Để lại đánh giá';
 
   @override
-  String get leaveReviewDescription => 'Xếp hạng Flexify trên Cửa hàng Play';
+  String get leaveReviewDescription => 'Xếp hạng Flex trên Cửa hàng Play';
 
   @override
   String get reportBug => 'Báo cáo lỗi';
@@ -1274,7 +1273,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get automaticBackupNotificationBody =>
-      'Flexify sẽ tự động sao lưu dữ liệu và hình ảnh của bạn vào thư mục đã chọn mỗi ngày.';
+      'Flex sẽ tự động sao lưu dữ liệu và hình ảnh của bạn vào thư mục đã chọn mỗi ngày.';
 
   @override
   String get backupSettingsChannel => 'Cài đặt sao lưu';
@@ -1288,7 +1287,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get backupChannelDescription =>
-      'Tự động sao lưu dữ liệu và hình ảnh Flexify';
+      'Tự động sao lưu dữ liệu và hình ảnh Flex';
 
   @override
   String get backupCompletedTitle => 'Sao lưu dữ liệu và hình ảnh';

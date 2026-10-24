@@ -1,9 +1,9 @@
 import 'package:drift/drift.dart' hide isNull;
-import 'package:flexify/responsive.dart';
-import 'package:flexify/settings/appearance_settings.dart';
-import 'package:flexify/settings/data_settings.dart';
-import 'package:flexify/settings/tab_settings.dart';
-import 'package:flexify/settings/timer_settings.dart';
+import 'package:flex/responsive.dart';
+import 'package:flex/settings/appearance_settings.dart';
+import 'package:flex/settings/data_settings.dart';
+import 'package:flex/settings/tab_settings.dart';
+import 'package:flex/settings/timer_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -13,7 +13,7 @@ void main() {
   testWidgets('Appearance settings use desktop card layout', (
     WidgetTester tester,
   ) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     tester.view.devicePixelRatio = 1;
     tester.view.physicalSize = const Size(1200, 900);
     addTearDown(tester.view.resetDevicePixelRatio);
@@ -39,7 +39,7 @@ void main() {
     testWidgets('${page.runtimeType} is readable at an 850px window', (
       WidgetTester tester,
     ) async {
-      final harness = await FlexifyTestHarness.create();
+      final harness = await FlexTestHarness.create();
       await harness.pump(tester, page, surfaceSize: const Size(850, 900));
       await tester.pumpAndSettle();
 
@@ -52,7 +52,7 @@ void main() {
   testWidgets('Reordering tabs still updates persisted order', (
     WidgetTester tester,
   ) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     await harness.pump(
       tester,
       const TabSettings(),
@@ -74,7 +74,7 @@ void main() {
   testWidgets('Data management presents actions as list rows', (
     WidgetTester tester,
   ) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     await harness.pump(
       tester,
       const DataSettings(),

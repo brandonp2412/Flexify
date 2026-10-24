@@ -1,4 +1,4 @@
-Tambahkan halaman github hosting untuk web Flexify
+Tambahkan halaman github hosting untuk web Flex
 Tambahkan changelogs yang hilang
 Ijinkan pengguna untuk membersihkan set maksimal
 Hapus skrip yang tak terpakai

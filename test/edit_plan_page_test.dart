@@ -1,6 +1,6 @@
 import 'package:drift/drift.dart';
-import 'package:flexify/database/database.dart';
-import 'package:flexify/plan/edit_plan_page.dart';
+import 'package:flex/database/database.dart';
+import 'package:flex/plan/edit_plan_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -19,7 +19,7 @@ void main() {
   testWidgets('Add exercise icon aligns with exercise settings icons', (
     WidgetTester tester,
   ) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     await ensureExerciseFixture(harness.database, 'Alignment bench press');
     await harness.pump(
       tester,
@@ -37,7 +37,7 @@ void main() {
   testWidgets('EditPlanPage creates a plan using existing exercises', (
     WidgetTester tester,
   ) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     final database = harness.database;
     await database.planExercises.deleteAll();
     await database.plans.deleteAll();
@@ -72,7 +72,7 @@ void main() {
   });
 
   testWidgets('EditPlanPage updates', (WidgetTester tester) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     final database = harness.database;
     final plan = planFixture(
       id: 1,
@@ -114,7 +114,7 @@ void main() {
   testWidgets('EditPlanPage preserves active workout progress', (
     WidgetTester tester,
   ) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     final database = harness.database;
     final plan = planFixture(
       id: 1,
@@ -169,7 +169,7 @@ void main() {
   });
 
   testWidgets('EditPlanPage searches', (WidgetTester tester) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     final database = harness.database;
     final plan = planFixture(
       id: 1,
@@ -202,7 +202,7 @@ void main() {
   testWidgets('EditPlanPage confirms before discarding changes', (
     WidgetTester tester,
   ) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     final database = harness.database;
     final plan = planFixture(
       id: 1,

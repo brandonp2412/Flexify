@@ -2,7 +2,7 @@
   "showUpdateNotices": "আপডেটের বিজ্ঞপ্তি দেখান",
   "@showUpdateNotices": {"description": "Whether to show update notices after upgrading the app."},
   "@@locale": "bn",
-  "appTitle": "Flexify",
+  "appTitle": "Flex",
   "@appTitle": {
     "description": "Application title shown by the operating system and app shell."
   },
@@ -10,7 +10,7 @@
   "@settingsLanguage": {
     "description": "Title for the application language preference."
   },
-  "settingsLanguageDescription": "Flexify-এ ব্যবহৃত ভাষা বেছে নিন",
+  "settingsLanguageDescription": "Flex-এ ব্যবহৃত ভাষা বেছে নিন",
   "@settingsLanguageDescription": {
     "description": "Description for the application language preference."
   },
@@ -339,7 +339,7 @@
   },
   "disableBatteryOptimizations": "ব্যাটারি অপ্টিমাইজেশন বন্ধ করুন",
   "@disableBatteryOptimizations": {
-    "description": "Android permission action for excluding Flexify from battery optimizations."
+    "description": "Android permission action for excluding Flex from battery optimizations."
   },
   "batteryOptimizationWarning": "ব্যাটারি অপ্টিমাইজেশন চালু থাকলে অগ্রগতি থেমে যেতে পারে।",
   "@batteryOptimizationWarning": {
@@ -447,7 +447,7 @@
   },
   "deleteDatabaseConfirmation": "আপনি কি নিশ্চিত যে আপনার ডেটাবেস মুছতে চান? এই কাজটি ফিরিয়ে নেওয়া যাবে না এবং আপনার সব ডেটা নষ্ট হবে।",
   "@deleteDatabaseConfirmation": {
-    "description": "Confirmation text for deleting the complete Flexify database."
+    "description": "Confirmation text for deleting the complete Flex database."
   },
   "importData": "ডেটা আমদানি করুন",
   "@importData": {
@@ -478,9 +478,9 @@
       }
     }
   },
-  "backupArchiveMissingDatabase": "ব্যাকআপ আর্কাইভে Flexify ডেটাবেস নেই।",
+  "backupArchiveMissingDatabase": "ব্যাকআপ আর্কাইভে Flex ডেটাবেস নেই।",
   "@backupArchiveMissingDatabase": {
-    "description": "Validation error shown when an imported backup archive is missing the Flexify database file."
+    "description": "Validation error shown when an imported backup archive is missing the Flex database file."
   },
   "failedToImportGraphs": "গ্রাফ আমদানি ব্যর্থ হয়েছে: {error}",
   "@failedToImportGraphs": {
@@ -660,7 +660,7 @@
   "@privacyPolicy": {
     "description": "Label for opening the privacy policy."
   },
-  "privacyPolicyDescription": "Flexify কীভাবে আপনার ডেটা ব্যবহার করে",
+  "privacyPolicyDescription": "Flex কীভাবে আপনার ডেটা ব্যবহার করে",
   "@privacyPolicyDescription": {
     "description": "Description for the privacy policy action."
   },
@@ -680,7 +680,7 @@
   "@leaveReview": {
     "description": "Label for opening the app-store review page."
   },
-  "leaveReviewDescription": "Play Store-এ Flexify-কে রেট দিন",
+  "leaveReviewDescription": "Play Store-এ Flex-কে রেট দিন",
   "@leaveReviewDescription": {
     "description": "Description for the app-store review action."
   },
@@ -1659,7 +1659,7 @@
   "@inputStyleDescription": {
     "description": "Description of the text input style setting."
   },
-  "automaticBackupNotificationBody": "Flexify প্রতিদিন নির্বাচিত ফোল্ডারে আপনার ডেটা ও ছবি স্বয়ংক্রিয়ভাবে ব্যাকআপ করবে।",
+  "automaticBackupNotificationBody": "Flex প্রতিদিন নির্বাচিত ফোল্ডারে আপনার ডেটা ও ছবি স্বয়ংক্রিয়ভাবে ব্যাকআপ করবে।",
   "@automaticBackupNotificationBody": {
     "description": "Notification body shown when automatic backups are enabled."
   },
@@ -1675,7 +1675,7 @@
   "@backupChannelName": {
     "description": "Android notification channel name for completed automatic backups."
   },
-  "backupChannelDescription": "Flexify-এর ডেটা ও ছবির স্বয়ংক্রিয় ব্যাকআপ",
+  "backupChannelDescription": "Flex-এর ডেটা ও ছবির স্বয়ংক্রিয় ব্যাকআপ",
   "@backupChannelDescription": {
     "description": "Android notification channel description for automatic backups."
   },

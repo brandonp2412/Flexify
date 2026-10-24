@@ -1,6 +1,6 @@
 import 'package:audioplayers/audioplayers.dart';
-import 'package:flexify/crash_logger.dart';
-import 'package:flexify/logging.dart';
+import 'package:flex/crash_logger.dart';
+import 'package:flex/logging.dart';
 
 /// Lazily owns one native audio player.
 ///

@@ -1,6 +1,6 @@
 import 'package:drift/drift.dart';
-import 'package:flexify/bottom_nav.dart';
-import 'package:flexify/sets/history_list.dart';
+import 'package:flex/bottom_nav.dart';
+import 'package:flex/sets/history_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -9,7 +9,7 @@ import 'support/test_app.dart';
 
 void main() {
   testWidgets('HistoryList', (WidgetTester tester) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     final scroll = ScrollController();
     addTearDown(scroll.dispose);
 
@@ -44,7 +44,7 @@ void main() {
   testWidgets('keeps leading avatar visible while selected', (
     WidgetTester tester,
   ) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     await harness.database.settings.update().write(
       testSettings(showImages: true),
     );

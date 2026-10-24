@@ -1,5 +1,5 @@
-import 'package:flexify/timer/timer_page.dart';
-import 'package:flexify/timer/timer_progress_widgets.dart';
+import 'package:flex/timer/timer_page.dart';
+import 'package:flex/timer/timer_progress_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -9,7 +9,7 @@ void main() {
   testWidgets('Timer state resets after manual stop', (
     WidgetTester tester,
   ) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     final timerState = harness.timerState;
 
     await timerState.startTimer(
@@ -54,7 +54,7 @@ void main() {
   testWidgets('TimerPage displays stop button when timer is running', (
     WidgetTester tester,
   ) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     final timerState = harness.timerState;
 
     await harness.pump(tester, const TimerPage());
@@ -83,7 +83,7 @@ void main() {
   testWidgets('Timer and stopwatch keep the same text size', (
     WidgetTester tester,
   ) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     final timerState = harness.timerState;
 
     await harness.pump(
@@ -170,7 +170,7 @@ void main() {
     addTearDown(tester.view.resetPhysicalSize);
     addTearDown(tester.view.resetDevicePixelRatio);
 
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     final timerState = harness.timerState;
 
     await harness.pump(tester, const TimerPage());
@@ -200,7 +200,7 @@ void main() {
     addTearDown(tester.view.resetPhysicalSize);
     addTearDown(tester.view.resetDevicePixelRatio);
 
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     final timerState = harness.timerState;
 
     await harness.pump(tester, const TimerPage());
@@ -246,7 +246,7 @@ void main() {
   testWidgets('timer circle stays fixed when a rest timer starts', (
     WidgetTester tester,
   ) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     final timerState = harness.timerState;
 
     await harness.pump(tester, const TimerPage());
@@ -277,7 +277,7 @@ void main() {
   testWidgets('stopwatch circle stays fixed across start and pause', (
     WidgetTester tester,
   ) async {
-    final harness = await FlexifyTestHarness.create();
+    final harness = await FlexTestHarness.create();
     final timerState = harness.timerState;
 
     await harness.pump(tester, const TimerPage());

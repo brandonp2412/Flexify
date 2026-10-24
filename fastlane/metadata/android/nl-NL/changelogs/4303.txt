@@ -1,1 +1,1 @@
-• fix: één Flexify-app en één ondertekeningssleutel afdwingen
+• fix: één Flex-app en één ondertekeningssleutel afdwingen

@@ -1,6 +1,6 @@
-import 'package:flexify/constants.dart';
-import 'package:flexify/database/exercise_analytics.dart';
-import 'package:flexify/graph/graphs_page.dart';
+import 'package:flex/constants.dart';
+import 'package:flex/database/exercise_analytics.dart';
+import 'package:flex/graph/graphs_page.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'benchmark_results.dart';

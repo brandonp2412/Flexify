@@ -1,4 +1,4 @@
-import 'package:flexify/platform_page_route.dart';
+import 'package:flex/platform_page_route.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';

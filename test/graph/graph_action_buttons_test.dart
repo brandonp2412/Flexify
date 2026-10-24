@@ -1,5 +1,5 @@
-import 'package:flexify/graph/graph_options_controls.dart';
-import 'package:flexify/l10n/generated/app_localizations.dart';
+import 'package:flex/graph/graph_options_controls.dart';
+import 'package:flex/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 

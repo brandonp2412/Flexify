@@ -1,5 +1,5 @@
-import 'package:flexify/database/exercise_set_repository.dart';
-import 'package:flexify/graph/graph_history_page.dart';
+import 'package:flex/database/exercise_set_repository.dart';
+import 'package:flex/graph/graph_history_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -11,7 +11,7 @@ void main() {
   testWidgets(
     'long press selects multiple graph history rows and deletes them',
     (WidgetTester tester) async {
-      final harness = await FlexifyTestHarness.create();
+      final harness = await FlexTestHarness.create();
       await insertExerciseSetFixture(
         harness.database,
         'Graph history test',
@@ -74,7 +74,7 @@ void main() {
   testWidgets(
     'refresh keeps exact exercise history when similar names are newer',
     (WidgetTester tester) async {
-      final harness = await FlexifyTestHarness.create();
+      final harness = await FlexTestHarness.create();
       final exact = await insertExerciseSetFixture(
         harness.database,
         'Press',

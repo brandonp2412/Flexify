@@ -2,7 +2,7 @@
   "showUpdateNotices": "اپ ڈیٹ کی اطلاعات دکھائیں",
   "@showUpdateNotices": {"description": "Whether to show update notices after upgrading the app."},
   "@@locale": "ur",
-  "appTitle": "Flexify",
+  "appTitle": "Flex",
   "@appTitle": {
     "description": "Application title shown by the operating system and app shell."
   },
@@ -10,7 +10,7 @@
   "@settingsLanguage": {
     "description": "Title for the application language preference."
   },
-  "settingsLanguageDescription": "Flexify میں استعمال ہونے والی زبان منتخب کریں",
+  "settingsLanguageDescription": "Flex میں استعمال ہونے والی زبان منتخب کریں",
   "@settingsLanguageDescription": {
     "description": "Description for the application language preference."
   },
@@ -339,7 +339,7 @@
   },
   "disableBatteryOptimizations": "بیٹری آپٹیمائزیشن بند کریں",
   "@disableBatteryOptimizations": {
-    "description": "Android permission action for excluding Flexify from battery optimizations."
+    "description": "Android permission action for excluding Flex from battery optimizations."
   },
   "batteryOptimizationWarning": "اگر بیٹری آپٹیمائزیشن فعال رہی تو پیش رفت رک سکتی ہے۔",
   "@batteryOptimizationWarning": {
@@ -447,7 +447,7 @@
   },
   "deleteDatabaseConfirmation": "کیا آپ واقعی اپنا ڈیٹابیس حذف کرنا چاہتے ہیں؟ یہ عمل واپس نہیں لیا جا سکتا اور آپ کا تمام ڈیٹا ضائع ہو جائے گا۔",
   "@deleteDatabaseConfirmation": {
-    "description": "Confirmation text for deleting the complete Flexify database."
+    "description": "Confirmation text for deleting the complete Flex database."
   },
   "importData": "ڈیٹا درآمد کریں",
   "@importData": {
@@ -478,9 +478,9 @@
       }
     }
   },
-  "backupArchiveMissingDatabase": "بیک اپ آرکائیو میں Flexify ڈیٹابیس موجود نہیں ہے۔",
+  "backupArchiveMissingDatabase": "بیک اپ آرکائیو میں Flex ڈیٹابیس موجود نہیں ہے۔",
   "@backupArchiveMissingDatabase": {
-    "description": "Validation error shown when an imported backup archive is missing the Flexify database file."
+    "description": "Validation error shown when an imported backup archive is missing the Flex database file."
   },
   "failedToImportGraphs": "گراف درآمد نہیں ہو سکے: {error}",
   "@failedToImportGraphs": {
@@ -660,7 +660,7 @@
   "@privacyPolicy": {
     "description": "Label for opening the privacy policy."
   },
-  "privacyPolicyDescription": "Flexify آپ کے ڈیٹا کو کیسے سنبھالتا ہے",
+  "privacyPolicyDescription": "Flex آپ کے ڈیٹا کو کیسے سنبھالتا ہے",
   "@privacyPolicyDescription": {
     "description": "Description for the privacy policy action."
   },
@@ -680,7 +680,7 @@
   "@leaveReview": {
     "description": "Label for opening the app-store review page."
   },
-  "leaveReviewDescription": "Play Store پر Flexify کی درجہ بندی کریں",
+  "leaveReviewDescription": "Play Store پر Flex کی درجہ بندی کریں",
   "@leaveReviewDescription": {
     "description": "Description for the app-store review action."
   },
@@ -1659,7 +1659,7 @@
   "@inputStyleDescription": {
     "description": "Description of the text input style setting."
   },
-  "automaticBackupNotificationBody": "Flexify ہر روز منتخب فولڈر میں آپ کے ڈیٹا اور تصاویر کا خودکار بیک اپ بنائے گا۔",
+  "automaticBackupNotificationBody": "Flex ہر روز منتخب فولڈر میں آپ کے ڈیٹا اور تصاویر کا خودکار بیک اپ بنائے گا۔",
   "@automaticBackupNotificationBody": {
     "description": "Notification body shown when automatic backups are enabled."
   },
@@ -1675,7 +1675,7 @@
   "@backupChannelName": {
     "description": "Android notification channel name for completed automatic backups."
   },
-  "backupChannelDescription": "Flexify کے ڈیٹا اور تصاویر کے خودکار بیک اپ",
+  "backupChannelDescription": "Flex کے ڈیٹا اور تصاویر کے خودکار بیک اپ",
   "@backupChannelDescription": {
     "description": "Android notification channel description for automatic backups."
   },

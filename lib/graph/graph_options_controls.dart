@@ -1,6 +1,6 @@
-import 'package:flexify/graph/graph_curve_settings.dart';
-import 'package:flexify/graph/graph_date_field.dart';
-import 'package:flexify/l10n/l10n.dart';
+import 'package:flex/graph/graph_curve_settings.dart';
+import 'package:flex/graph/graph_date_field.dart';
+import 'package:flex/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class GraphOptionsButton extends StatelessWidget {

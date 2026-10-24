@@ -3,9 +3,9 @@ import 'dart:io';
 
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
-import 'package:flexify/database/database.dart';
-import 'package:flexify/settings/backup_archive.dart';
-import 'package:flexify/storage/app_storage.dart';
+import 'package:flex/database/database.dart';
+import 'package:flex/settings/backup_archive.dart';
+import 'package:flex/storage/app_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
@@ -27,10 +27,10 @@ void main() {
   final openDatabases = <GeneratedDatabase>[];
 
   setUp(() async {
-    root = await Directory.systemTemp.createTemp('flexify-storage-lifecycle-');
+    root = await Directory.systemTemp.createTemp('flex-storage-lifecycle-');
     documents = await Directory(p.join(root.path, 'documents')).create();
     support = Directory(p.join(root.path, 'support'));
-    legacyFile = File(p.join(documents.path, backupDbName));
+    legacyFile = File(p.join(documents.path, 'flexify.sqlite'));
     image = File(p.join(documents.path, 'progress.jpg'));
     await image.writeAsBytes([1, 2, 3, 4]);
     originalProvider = PathProviderPlatform.instance;
@@ -208,7 +208,7 @@ Future<void> main(List<String> args) async {
 ''');
     final process = await Process.start('dart', [
       script.path,
-      p.join(support.path, '.flexify-storage.lock'),
+      p.join(support.path, '.flex-storage.lock'),
     ]);
     addTearDown(() async {
       process.kill();
@@ -225,10 +225,7 @@ Future<void> main(List<String> args) async {
     });
     await Future<void>.delayed(const Duration(milliseconds: 200));
     expect(finished, isFalse);
-    expect(
-      await File(p.join(support.path, backupDbName)).exists(),
-      isFalse,
-    );
+    expect(await File(p.join(support.path, backupDbName)).exists(), isFalse);
     process.stdin.writeln('release');
     await process.stdin.flush();
     expect(await process.exitCode, 0);
@@ -421,10 +418,7 @@ Future<void> main(List<String> args) async {
         throwsA(isA<sqlite.SqliteException>()),
       );
       expect(await legacyFile.readAsString(), 'not a SQLite database');
-      expect(
-        await File(p.join(support.path, backupDbName)).exists(),
-        isFalse,
-      );
+      expect(await File(p.join(support.path, backupDbName)).exists(), isFalse);
     },
   );
 }
